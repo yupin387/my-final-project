@@ -1,0 +1,256 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Sarabun', sans-serif;
+}
+
+body {
+    background-color: #FDF3DC;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+    background-color: #8B1A1A;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 4px solid #D4A017;
+}
+
+.navbar-title {
+    color: #FDF3DC;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.navbar-flowers {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* ===== Page Wrapper ===== */
+.page-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px;
+}
+
+/* ===== Card ===== */
+.container {
+    background: white;
+    border-radius: 20px;
+    padding: 44px 40px;
+    width: 100%;
+    max-width: 440px;
+    border: 2px solid #D4A017;
+    box-shadow: 0 8px 32px rgba(139, 26, 26, 0.12);
+}
+
+/* ===== Header ===== */
+.header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-top: 8px;
+}
+
+.header h2 {
+    font-size: 24px;
+    color: #5a1010;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.header p {
+    font-size: 14px;
+    color: #999;
+}
+
+/* ===== Role Selector ===== */
+.role-label {
+    text-align: center;
+    font-size: 13px;
+    color: #b8860b;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.role-selector {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.role-btn {
+    flex: 1;
+    padding: 11px;
+    border-radius: 8px;
+    border: 2px solid #D4A017;
+    background: white;
+    color: #8B1A1A;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.role-btn.active {
+    background: #8B1A1A;
+    color: #FDF3DC;
+    border-color: #8B1A1A;
+}
+
+.role-btn:hover:not(.active) {
+    background: #fff5e0;
+}
+
+/* ===== Alert ===== */
+.alert {
+    padding: 11px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.alert.error {
+    background: #fff0f0;
+    color: #c62828;
+    border: 1px solid #ffb3b3;
+}
+
+.alert.success {
+    background: #fff8e1;
+    color: #7a4f1e;
+    border: 1px solid #f0d080;
+}
+
+/* ===== Form ===== */
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #5a1010;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e0c070;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #fffdf5;
+    color: #333;
+    font-family: 'Sarabun', sans-serif;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #8B1A1A;
+    box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.10);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 12px 44px 12px 14px;
+    border: 1.5px solid #e0c070;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #fffdf5;
+    color: #333;
+    font-family: 'Sarabun', sans-serif;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-wrapper input:focus {
+    border-color: #8B1A1A;
+    box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.10);
+}
+
+.toggle-visibility {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    line-height: 1;
+}
+
+/* ===== Submit Button ===== */
+.btn-submit {
+    background: #8B1A1A;
+    color: #FDF3DC;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.3s, transform 0.2s;
+    letter-spacing: 0.5px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.btn-submit:hover {
+    background: #6e1414;
+    transform: translateY(-2px);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* ===== Back Link ===== */
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #8B1A1A;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.back-link a {
+    color: #666; /* สีปกติ */
+    transition: color 0.3s;
+}
+
+.back-link a:hover {
+    color: #2563eb; /* สีเมื่อเมาส์วาง */
+    text-decoration: underline;
+}

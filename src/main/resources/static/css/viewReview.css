@@ -1,0 +1,400 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+
+:root {
+    --red:          #8B1A1A;
+    --red-dark:     #5a1010;
+    --red-light:    #c62828;
+    --gold:         #D4A017;
+    --gold-light:   #f0c040;
+    --cream:        #FDF3DC;
+    --cream-mid:    #FFF8E7;
+    --cream-border: #e0c070;
+    --white:        #ffffff;
+    --text-dark:    #2a1a1a;
+    --text-mid:     #5a3a2a;
+    --text-muted:   #999;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    padding-bottom: 60px;
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+    background-color: var(--red);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--gold);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-title {
+    color: var(--cream);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.nav-item {
+    color: rgba(253,243,220,0.85);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.nav-item:hover  { background: rgba(212,160,23,0.2); }
+.nav-item.active { background: var(--gold); color: var(--red-dark); }
+
+.user-info-text {
+    display: flex;
+    flex-direction: column; /* บังคับให้เรียงซ้อนกันบน-ล่าง */
+    line-height: 1.2;       
+    text-align: left;       
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid var(--gold);
+    padding: 6px 16px 6px 8px;
+    border-radius: 50px;
+    cursor: pointer;
+    color: var(--cream);
+    white-space: nowrap;
+    position: relative;
+}
+
+.user-avatar-nav {
+    background: var(--gold);
+    color: var(--red-dark);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.user-name-nav { font-size: 0.88rem; font-weight: 700; }
+.user-role-nav { font-size: 0.7rem; color: var(--gold-light); }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: white;
+    border: 1.5px solid var(--gold);
+    border-radius: 10px;
+    min-width: 180px;
+    box-shadow: 0 6px 20px rgba(139,26,26,0.18);
+    z-index: 999;
+    overflow: hidden;
+}
+
+.dropdown-menu.show { display: block; }
+
+.dropdown-link {
+    display: flex;
+    align-items: center;
+    padding: 13px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--red-dark);
+    text-decoration: none;
+    border-bottom: 1px solid #F5EDD0;
+    transition: background 0.2s;
+}
+
+.dropdown-link:last-child { border-bottom: none; }
+.dropdown-link:hover      { background: var(--cream-mid); }
+.dropdown-link.danger     { color: var(--red-light); }
+.dropdown-link.danger:hover { background: #fff0f0; }
+
+/* ========== PAGE WRAPPER ========== */
+.page-wrapper {
+    width: 92%;
+    max-width: 860px;
+    margin: 40px auto;
+}
+
+/* ========== SECTION HEADER ========== */
+.section-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.section-title {
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--red);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.section-subtitle {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+}
+
+.gold-line {
+    width: 48px;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    margin: 10px auto 0;
+}
+
+/* ========== SUMMARY CARD ========== */
+.summary-card {
+    background: var(--white);
+    border-radius: 18px;
+    border: 1.5px solid var(--cream-border);
+    box-shadow: 0 4px 20px rgba(139,26,26,0.07);
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 28px;
+    overflow: hidden;
+}
+
+.rating-big {
+    text-align: center;
+    flex-shrink: 0;
+    min-width: 120px;
+}
+
+.rating-big h1 {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.stars-big {
+    color: var(--gold);
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+}
+
+.rating-count {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* ========== RATING BARS ========== */
+.rating-bars { flex: 1; }
+
+.rating-bars-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--red-dark);
+    margin-bottom: 10px;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 7px;
+    font-size: 13px;
+    color: var(--text-mid);
+}
+
+.bar-label { width: 48px; text-align: right; flex-shrink: 0; }
+
+.bar-track {
+    flex: 1;
+    height: 8px;
+    background: #f0e8d8;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+}
+
+/* ========== REVIEW CARD ========== */
+.review-card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1.5px solid var(--cream-border);
+    box-shadow: 0 4px 16px rgba(139,26,26,0.05);
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    transition: box-shadow 0.2s;
+}
+
+.review-card:hover {
+    box-shadow: 0 8px 28px rgba(139,26,26,0.1);
+}
+
+.review-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.reviewer-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.avatar {
+    background: var(--gold);
+    color: var(--red-dark);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.reviewer-name {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    margin-bottom: 3px;
+}
+
+.stars-review {
+    color: var(--gold);
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+}
+
+.stars-empty { color: #ddd; }
+
+.review-date {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.ceremony-badge {
+    display: inline-block;
+    background: var(--cream-mid);
+    color: var(--red-dark);
+    border: 1px solid var(--cream-border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.review-text {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.75;
+    font-style: italic;
+}
+
+.review-img {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 12px;
+    margin-top: 14px;
+    border: 1.5px solid var(--cream-border);
+    object-fit: cover;
+}
+
+/* ========== EMPTY STATE ========== */
+.empty-state {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1.5px solid var(--cream-border);
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 15px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 640px) {
+    .navbar        { padding: 12px 16px; }
+    .navbar-menu   { display: none; }
+    .summary-card  { flex-direction: column; gap: 20px; padding: 22px; }
+    .rating-bars   { width: 100%; }
+    .page-wrapper  { width: 96%; margin: 24px auto; }
+}
+
+/*เพิ่มส่วนนี้*/
+/* ส่วนครอบปุ่ม */
+.filter-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    padding: 10px;
+}
+
+/* สไตล์ปุ่มทั่วไป */
+.btn-filter {
+    padding: 8px 24px;
+    border-radius: 50px; /* ทำให้เป็นทรงแคปซูล */
+    border: 1.5px solid #D4A017;
+    background: transparent;
+    color: #D4A017;
+    text-decoration: none !important; /* บังคับให้ไม่มีขีดเส้นใต้ */
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+/* สไตล์ตอนเอาเมาส์ชี้ และตอนปุ่มถูกเลือก (Active) */
+.btn-filter:hover, 
+.btn-filter.active-link {
+    background: #D4A017;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(212, 160, 23, 0.3);
+}

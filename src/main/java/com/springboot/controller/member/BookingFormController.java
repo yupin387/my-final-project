@@ -1,0 +1,155 @@
+package com.springboot.controller.member;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.springboot.model.BookingForm;
+import com.springboot.model.Item;
+import com.springboot.model.Member;
+import com.springboot.model.QuestionsDetail;
+import com.springboot.service.BookingService;
+import com.springboot.service.ItemService;
+import com.springboot.service.QuestionsService;
+import com.springboot.service.ReviewService;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class BookingFormController {
+
+    @Autowired
+    private BookingService bookingService;
+
+    @Autowired
+    private QuestionsService questionsService;
+    
+    @Autowired
+    private ItemService itemService;
+    
+    @Autowired
+    private ReviewService reviewService;
+    
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
+    
+    // --- แก้ไขเมธอด showBookingForm ---
+    @GetMapping("/booking")
+    public String showBookingForm(Model model, HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("user");
+        if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
+
+        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(1);
+        List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
+        
+        // ปรับชื่อตัวแปรให้เป็น sanghatharnItems
+        List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
+
+        model.addAttribute("booking", new BookingForm());
+        model.addAttribute("questions", questions);
+        model.addAttribute("pintoItems", pintoItems); 
+        model.addAttribute("sanghatharnItems", sanghatharnItems); // ชื่อต้องตรงกัน
+
+        return "fillBookingForm";
+    }
+
+    // --- แก้ไขเมธอด showBookingForm2 ---
+    @GetMapping("/booking2")
+    public String showBookingForm2(Model model, HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("user");
+        if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
+
+        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(2);
+        List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
+        
+        // ปรับชื่อตัวแปรให้เป็น sanghatharnItems
+        List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
+
+        model.addAttribute("booking", new BookingForm());
+        model.addAttribute("questions", questions);
+        model.addAttribute("pintoItems", pintoItems); 
+        model.addAttribute("sanghatharnItems", sanghatharnItems); // ชื่อต้องตรงกัน
+
+        return "fillBookingForm2";
+    }
+
+    @PostMapping("/saveBooking")
+    public String saveBooking(@ModelAttribute BookingForm booking, HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("user");
+        if (loginUser == null) return "redirect:/loginMember";
+        
+        // ผูก Member เข้ากับการจอง
+        booking.setMember(loginUser);
+        
+        //  บันทึกข้อมูล (ID จะถูกเจนเป็น String BK... ใน Service)
+        BookingForm saved = bookingService.saveBooking(booking);
+        
+        return "redirect:/viewBooking/" + saved.getBookingId();
+    }
+
+    @GetMapping("/viewBooking/{id}")
+    public String viewBooking(@PathVariable String id, Model model, HttpSession session) {
+        BookingForm booking = bookingService.getBookingById(id);
+        if (booking == null) return "redirect:/home";
+
+        //  ตรวจสอบว่าการจองนี้มีการรีวิวในระบบหรือยัง
+        boolean alreadyReviewed = reviewService.hasAlreadyReviewed(id);
+        
+        model.addAttribute("booking", booking);
+        model.addAttribute("hasReview", alreadyReviewed); // ส่งค่าไปที่ JSP
+        return "viewBooking"; 
+    }
+    
+    @GetMapping("/latestBooking")
+    public String viewLatestBooking(HttpSession session) {
+        Member user = (Member) session.getAttribute("user");
+        if (user == null) return "redirect:/loginMember";
+
+        // ลองดึงข้อมูล
+        BookingForm latest = bookingService.getLatestBookingByMember(user.getMemberId());
+
+        if (latest != null && latest.getBookingId() != null) {
+            //  ถ้าเจอ ให้ส่งไปหน้าสรุป
+            return "redirect:/viewBooking/" + latest.getBookingId();
+        } else {
+            //  ถ้าไม่เจอ (เช่น สมาชิกใหม่ยังไม่เคยจอง) ให้ส่งไปหน้าจองใหม่แทน
+            return "redirect:/booking"; 
+        }
+    }
+    
+ // เพิ่มใน BookingFormController.java
+    @GetMapping("/booking/cancel/{id}")
+    public String cancelBooking(@PathVariable String id, HttpSession session, RedirectAttributes ra) {
+        Member loginUser = (Member) session.getAttribute("user");
+        if (loginUser == null) return "redirect:/loginMember";
+        
+        try {
+            // เปลี่ยนมาเรียกใช้ระบบปฏิเสธ/ยกเลิกงาน เพื่อสับเปลี่ยนสถานะเป็น Rejected หรือ Cancelled ใน DB
+            bookingService.rejectBooking(id);
+            ra.addFlashAttribute("success", "ยกเลิกรายการจองสำเร็จแล้ว");
+        } catch(Exception e) {
+            ra.addFlashAttribute("error", "เกิดข้อผิดพลาดในการยกเลิก: " + e.getMessage());
+        }
+        
+        // เด้งกลับหน้าหลัก (Home) ทันทีตามต้องการ ไม่แช่ค้างไว้ที่เดิมให้ปวดตับครับ!
+        return "redirect:/home";
+    }
+    
+    
+}

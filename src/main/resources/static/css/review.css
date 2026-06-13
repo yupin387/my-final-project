@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+
+:root {
+    --red:          #8B1A1A;
+    --red-dark:     #5a1010;
+    --red-light:    #c62828;
+    --gold:         #D4A017;
+    --gold-light:   #f0c040;
+    --cream:        #FDF3DC;
+    --cream-mid:    #FFF8E7;
+    --cream-border: #e0c070;
+    --white:        #ffffff;
+    --text-dark:    #2a1a1a;
+    --text-mid:     #5a3a2a;
+    --text-muted:   #999;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+    background-color: var(--red);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--gold);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-title {
+    color: var(--cream);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.nav-item {
+    color: rgba(253,243,220,0.85);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.nav-item:hover  { background: rgba(212,160,23,0.2); }
+.nav-item.active { background: var(--gold); color: var(--red-dark); }
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid var(--gold);
+    padding: 6px 16px 6px 8px;
+    border-radius: 50px;
+    cursor: pointer;
+    color: var(--cream);
+    white-space: nowrap;
+    position: relative;
+}
+
+.user-avatar {
+    background: var(--gold);
+    color: var(--red-dark);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.user-name { font-size: 0.88rem; font-weight: 700; }
+.user-role { font-size: 0.7rem; color: var(--gold-light); }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: white;
+    border: 1.5px solid var(--gold);
+    border-radius: 10px;
+    min-width: 180px;
+    box-shadow: 0 6px 20px rgba(139,26,26,0.18);
+    z-index: 999;
+    overflow: hidden;
+}
+
+.dropdown-menu.show { display: block; }
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 13px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--red-dark);
+    text-decoration: none;
+    border-bottom: 1px solid #F5EDD0;
+    transition: background 0.2s;
+}
+
+.dropdown-item:last-child { border-bottom: none; }
+.dropdown-item:hover      { background: var(--cream-mid); }
+.dropdown-item.danger     { color: var(--red-light); }
+.dropdown-item.danger:hover { background: #fff0f0; }
+
+/* ========== PAGE WRAPPER ========== */
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 48px 20px 60px;
+}
+
+/* ========== REVIEW CARD ========== */
+.review-card {
+    background: var(--white);
+    border-radius: 20px;
+    border: 1.5px solid var(--cream-border);
+    box-shadow: 0 8px 36px rgba(139,26,26,0.1);
+    width: 100%;
+    max-width: 560px;
+    overflow: hidden;
+}
+
+/* ========== CARD HEADER ========== */
+.review-card-header {
+    background: var(--red);
+    padding: 24px 28px 20px;
+    text-align: center;
+    border-bottom: 3px solid var(--gold);
+}
+
+.review-card-header h2 {
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--cream);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.booking-badge {
+    display: inline-block;
+    background: rgba(212,160,23,0.2);
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.ceremony-name {
+    color: rgba(253,243,220,0.75);
+    font-size: 13px;
+}
+
+/* ========== CARD BODY ========== */
+.review-card-body {
+    padding: 28px 28px 24px;
+}
+
+/* ========== SECTION LABEL ========== */
+.section-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--red-dark);
+    margin-bottom: 10px;
+}
+
+/* ========== STAR RATING ========== */
+.star-section {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.star-rating input[type="radio"] { display: none; }
+
+.star-rating label {
+    font-size: 2.4rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.15s, transform 0.15s;
+    line-height: 1;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: var(--gold);
+    transform: scale(1.15);
+}
+
+/* ========== FORM ELEMENTS ========== */
+.form-group { margin-bottom: 20px; }
+.form-group:last-child { margin-bottom: 0; }
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--cream-border);
+    border-radius: 10px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    background: #fffdf5;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.form-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+/* ========== UPLOAD AREA ========== */
+.upload-area {
+    border: 2px dashed var(--cream-border);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    background: #fffdf5;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+}
+
+.upload-area:hover {
+    border-color: var(--gold);
+    background: var(--cream-mid);
+}
+
+.upload-area input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-icon { font-size: 1.8rem; margin-bottom: 6px; }
+.upload-text { font-size: 13px; font-weight: 600; color: var(--red-dark); }
+.upload-hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+/* ========== DIVIDER ========== */
+.divider {
+    border: 0;
+    border-top: 1px solid #f0e8d8;
+    margin: 24px 0;
+}
+
+/* ========== ACTIONS ========== */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-submit {
+    flex: 2;
+    background: var(--red);
+    color: var(--cream);
+    border: none;
+    border-radius: 10px;
+    padding: 13px 0;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    letter-spacing: 0.5px;
+}
+
+.btn-submit:hover {
+    background: var(--red-dark);
+    transform: translateY(-1px);
+}
+
+.btn-skip {
+    flex: 1;
+    background: var(--white);
+    color: var(--text-muted);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 10px;
+    padding: 13px 0;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-skip:hover { background: var(--cream-mid); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 600px) {
+    .navbar        { padding: 12px 16px; }
+    .navbar-menu   { display: none; }
+    .page-wrapper  { padding: 24px 12px 48px; }
+    .review-card-body { padding: 20px 18px; }
+    .star-rating label { font-size: 2rem; }
+}

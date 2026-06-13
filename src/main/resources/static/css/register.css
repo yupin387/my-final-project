@@ -1,0 +1,147 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: #FDF3DC;
+    font-family: 'Sarabun', sans-serif;
+    min-height: 100vh;
+}
+
+/* ===== NAVBAR ===== */
+/* ใช้ชื่อ main-navbar แทน nav-bar เพื่อหลีกเลี่ยง Bootstrap conflict */
+.main-navbar {
+    background-color: #8B1A1A;
+    border-bottom: 3px solid #D4A017;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #FDF3DC;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* ===== CARD ===== */
+.reg-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 44px 36px;
+    max-width: 480px;
+    margin: 40px auto 60px;
+    border: 1.5px solid #D4A017;
+    box-shadow: 0 4px 24px rgba(139, 26, 26, 0.10);
+}
+
+/* ===== TITLE ===== */
+.card-header-section {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.title-main {
+    color: #5a1010;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.subtitle-muted {
+    color: #999;
+    font-size: 0.88rem;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* ===== DIVIDER with label ===== */
+.divider-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 24px 0 20px;
+    color: #b8860b;
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.divider-label::before,
+.divider-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: #e0c070;
+}
+
+/* ===== FORM — ใช้ชื่อ reg-label, reg-input แทน form-label, form-control ===== */
+.reg-label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #5a1010;
+    margin-bottom: 6px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.reg-input {
+    width: 100%;
+    background-color: #fffdf5;
+    border: 1.5px solid #e0c070;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.9rem;
+    color: #444;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+}
+
+.reg-input::placeholder { color: #bba870; }
+
+.reg-input:focus {
+    background-color: #fffdf5;
+    border-color: #8B1A1A;
+    box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.10);
+}
+
+/* ===== BUTTON ===== */
+.btn-reg {
+    background-color: #8B1A1A;
+    color: #FDF3DC;
+    border: none;
+    padding: 13px;
+    border-radius: 8px;
+    width: 100%;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 22px;
+    letter-spacing: 0.3px;
+    font-family: 'Sarabun', sans-serif;
+    transition: background-color 0.2s, transform 0.2s;
+    cursor: pointer;
+    display: block;
+}
+
+.btn-reg:hover {
+    background-color: #6e1414;
+    color: #FDF3DC;
+    transform: translateY(-1px);
+}
+
+/* ===== FOOTER LINK ===== */
+.footer-divider {
+    border-top: 1px solid #e0c070;
+    margin: 24px 0 18px;
+}
+
+.footer-link {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.footer-link b { color: #8B1A1A; }
+.footer-link:hover b { text-decoration: underline; }

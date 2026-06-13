@@ -1,0 +1,369 @@
+/* ===== CSS Variables ===== */
+:root {
+    --cd-bg: #FDF3DC;
+    --cd-red: #8B1A1A;
+    --cd-dark-red: #6e1414;
+    --cd-gold: #D4A017;
+    --cd-gold-light: #e0c070;
+    --cd-gold-pale: #FFF8E7;
+    --cd-text: #3a1a1a;
+    --cd-text-mid: #666;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    background-color: var(--cd-bg);
+    font-family: 'Sarabun', sans-serif;
+    color: var(--cd-text);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== NAVBAR — prefix cd- ป้องกัน Bootstrap override ===== */
+.cd-navbar {
+    background-color: var(--cd-red) !important;
+    border-bottom: 3px solid var(--cd-gold) !important;
+    padding: 20px 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+    width: 100% !important;
+}
+
+.cd-nav-title {
+    color: var(--cd-bg) !important;
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    font-family: 'Sarabun', sans-serif !important;
+}
+
+.cd-nav-links {
+    display: flex !important;
+    gap: 6px !important;
+    align-items: center !important;
+}
+
+.cd-nav-link {
+    color: var(--cd-bg) !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding: 7px 16px !important;
+    border-radius: 6px !important;
+    font-family: 'Sarabun', sans-serif !important;
+    transition: background 0.2s !important;
+}
+
+.cd-nav-link:hover {
+    background: rgba(212, 160, 23, 0.2) !important;
+}
+
+/* ===== HERO BANNER ===== */
+.cd-hero {
+    position: relative;
+    height: 420px;
+    background-size: cover;
+    background-position: center 30%;
+    background-color: #5a3a1a; /* fallback ถ้ารูปยังโหลดไม่ขึ้น */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 4px solid var(--cd-gold);
+    overflow: hidden;
+}
+
+.cd-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(60, 10, 10, 0.52) 0%,
+        rgba(60, 10, 10, 0.72) 100%
+    );
+}
+
+.cd-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+}
+
+.cd-hero-tag {
+    display: inline-block;
+    background: var(--cd-gold);
+    color: var(--cd-red);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 16px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 12px rgba(0,0,0,0.5);
+    margin-bottom: 12px;
+    line-height: 1.2;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-hero-desc {
+    font-size: 1.05rem;
+    opacity: 0.88;
+    margin-bottom: 20px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-price-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.92);
+    color: var(--cd-red);
+    padding: 10px 28px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: 2px solid var(--cd-gold);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* ===== MAIN CONTENT ===== */
+.cd-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 120px;
+}
+
+.cd-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .cd-grid { grid-template-columns: 1fr; }
+    .cd-hero-title { font-size: 2rem; }
+}
+
+/* ===== CARD ===== */
+.cd-card {
+    background: white;
+    border-radius: 14px;
+    border: 1.5px solid var(--cd-gold-light);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(139, 26, 26, 0.06);
+}
+
+.cd-card-title {
+    color: var(--cd-red);
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    border-bottom: 2px solid var(--cd-gold-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-card-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: var(--cd-gold);
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* ===== ITEM LIST ===== */
+.cd-item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cd-item-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px dashed #f0e4c8;
+    font-size: 14px;
+    color: #444;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-item-list li:last-child { border-bottom: none; }
+
+.cd-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cd-gold);
+    flex-shrink: 0;
+    margin-top: 5px;
+}
+
+.cd-item-detail {
+    color: #999;
+    font-size: 13px;
+}
+
+/* ===== SERVICE ROW ===== */
+.cd-service-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5eedd;
+    font-size: 14px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-service-row:last-child { border-bottom: none; }
+
+.cd-service-name { color: #444; }
+
+.cd-service-badge {
+    background: var(--cd-gold-pale);
+    color: var(--cd-red);
+    border: 1px solid var(--cd-gold-light);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* ===== PINTO ===== */
+.cd-pinto-sub {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 18px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-pinto-box {
+    border: 1.5px solid var(--cd-gold-light);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    background: white;
+}
+
+.cd-pinto-head {
+    background: var(--cd-gold-pale);
+    border-bottom: 1.5px solid var(--cd-gold-light);
+    padding: 13px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cd-pinto-name {
+    font-weight: 700;
+    color: var(--cd-red);
+    font-size: 15px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-pinto-price {
+    font-weight: 700;
+    color: var(--cd-red);
+    font-size: 14px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-pinto-body { padding: 16px 18px; }
+
+.cd-menu-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #b8860b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    margin-top: 12px;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-menu-label:first-child { margin-top: 0; }
+
+.cd-menu-list {
+    list-style: disc;
+    padding-left: 18px;
+    margin: 0 0 4px;
+}
+
+.cd-menu-list li {
+    font-size: 13px;
+    color: #555;
+    padding: 3px 0;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* ===== FOOTER BAR ===== */
+.cd-footer {
+    background: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 16px 0;
+    border-top: 2px solid var(--cd-gold-light);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    z-index: 1000;
+}
+
+.cd-footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cd-footer-price {
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--cd-red);
+    font-family: 'Sarabun', sans-serif;
+}
+
+.cd-btn-book {
+    background-color: var(--cd-red);
+    color: var(--cd-bg);
+    border-radius: 10px;
+    padding: 12px 36px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    transition: background 0.2s, transform 0.2s;
+    display: inline-block;
+    border: 2px solid var(--cd-gold);
+}
+
+.cd-btn-book:hover {
+    background-color: var(--cd-dark-red);
+    color: var(--cd-bg);
+    transform: translateY(-1px);
+}
