@@ -171,11 +171,11 @@ public class Run {
 
 			// 6. Member
 			memberRepo.saveAllAndFlush(
-					Arrays.asList(new Member("บุญมี", "ลุงหลู่", "boonmee@mail.com", "12345678", "0812345678"),
-							new Member("สุนีย์", "คำดี", "sunee@mail.com", "12345679", "0812345679"),
-							new Member("ประเสริฐ", "สุขใจ", "prasert@mail.com", "12345680", "0812345680"),
-							new Member("อารีย์", "บุญส่ง", "aree@mail.com", "12345681", "0812345681"),
-							new Member("ธนพล", "ศรีสุข", "thanapon@mail.com", "12345682", "0812345682")));
+					Arrays.asList(new Member("บุญมี", "ลุงหลู่", "boonmee@gmail.com", "12345678", "0812345678"),
+							new Member("สุนีย์", "คำดี", "sunee@gmail.com", "12345679", "0812345679"),
+							new Member("ประเสริฐ", "สุขใจ", "prasert@gmail.com", "12345680", "0812345680"),
+							new Member("อารีย์", "บุญส่ง", "aree@gmail.com", "12345681", "0812345681"),
+							new Member("ธนพล", "ศรีสุข", "thanapon@gmail.com", "12345682", "0812345682")));
 
 			System.out.println("\n>> --- [SYSTEM READY] DATA SEEDED SUCCESSFULLY ---");
 		} catch (Exception e) {
