@@ -142,8 +142,10 @@ body {
     background: #FFFFFF;
     border-radius: 18px;
     overflow: hidden;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 8px 32px rgba(180, 130, 0, 0.12);
+    border: 3px solid var(--gold-mid);
+    box-shadow:
+        0 0 12px rgba(212,160,23,0.35),
+        0 8px 32px rgba(180,130,0,0.15);
     width: 100%;
     max-width: 860px;
 }
@@ -249,15 +251,20 @@ body {
     font-family: 'Sarabun', sans-serif;
 }
 
+/* ปุ่มเขียนรีวิว (ปรับเป็นสีเขียวพรีเมียม) */
 .btn-review {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    box-shadow: 0 3px 10px rgba(180, 130, 0, 0.25);
+    /* เปลี่ยนจากเฉดทอง เป็นไล่เฉดเขียว */
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: #FFFFFF; /* เปลี่ยนเป็นสีขาวเพื่อให้ตัดกับสีเขียว */
+    border: none;
+    box-shadow: 0 3px 10px rgba(40, 167, 69, 0.25);
 }
+
 .btn-review:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+    background: linear-gradient(135deg, #218838, #1e7e34);
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(180, 130, 0, 0.35);
+    box-shadow: 0 5px 16px rgba(40, 167, 69, 0.35);
+    color: #FFFFFF;
 }
 
 .btn-reviewed {

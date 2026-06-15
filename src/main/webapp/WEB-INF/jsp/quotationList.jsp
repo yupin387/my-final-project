@@ -41,27 +41,31 @@
 
 <%-- ========== FLASH BANNER ========== --%>
 <c:if test="${not empty success}">
-    <div class="flash-banner flash-banner-success" id="flashBanner">
-        ✓ ${success}
-    </div>
+    <div class="flash-banner flash-banner-success" id="flashBanner">✓ ${success}</div>
 </c:if>
 <c:if test="${not empty error}">
-    <div class="flash-banner flash-banner-error" id="flashBanner">
-        ⚠ ${error}
-    </div>
+    <div class="flash-banner flash-banner-error" id="flashBanner">⚠ ${error}</div>
 </c:if>
 
-<%-- ========== PAGE CONTENT ========== --%>
+<%-- ========== PAGE WRAPPER ========== --%>
 <div class="page-wrapper">
 
+    <%-- ========== LIST HEADER ========== --%>
     <div class="list-header">
         <div>
+            <div class="section-ornament">
+                <div class="ornament-line"></div>
+                <div class="ornament-diamond-sm"></div>
+                <div class="ornament-diamond"></div>
+                <div class="ornament-diamond-sm"></div>
+                <div class="ornament-line right"></div>
+            </div>
             <h1>ใบเสนอราคา</h1>
             <p>ติดตามสถานะเอกสารและการตอบกลับของลูกค้า</p>
         </div>
     </div>
 
-    <%-- Tabs --%>
+    <%-- ========== TABS ========== --%>
     <div class="tabs-wrapper">
         <a href="?status=All"       class="tab-btn ${(param.status == 'All' || empty param.status) ? 'active' : ''}">ทั้งหมด</a>
         <a href="?status=Pending"   class="tab-btn ${param.status == 'Pending'   ? 'active' : ''}">รอยืนยัน</a>
@@ -69,6 +73,7 @@
         <a href="?status=Confirmed" class="tab-btn ${param.status == 'Confirmed' ? 'active' : ''}">ยืนยันแล้ว</a>
     </div>
 
+    <%-- ========== TABLE CARD ========== --%>
     <div class="content-card">
         <div class="card-header-bar">
             <span>รายการใบเสนอราคา</span>
@@ -117,7 +122,6 @@
                 <c:if test="${empty quotations}">
                     <tr>
                         <td colspan="5" class="empty-state">
-                          
                             <p>ไม่พบรายการใบเสนอราคาในหมวด
                                <strong>"${empty param.status ? 'ทั้งหมด' : param.status}"</strong>
                             </p>
@@ -132,6 +136,5 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/static/js/quotationList.js"></script>
-
 </body>
 </html>

@@ -83,7 +83,7 @@
                 <div class="info-grid">
                     <div class="info-group">
                         <span class="label">รหัสมอบหมาย</span>
-                        <span class="value value-id">${a.assignId}</span>
+                        <span class="value">${a.assignId}</span>
                     </div>
                     <div class="info-group">
                         <span class="label">วันที่ได้รับมอบหมาย</span>
@@ -114,7 +114,7 @@
                     </div>
                     <div class="info-group">
                         <span class="label">วันที่จัดงาน</span>
-                        <span class="value value-date-warn">
+                        <span class="value">
                             <fmt:formatDate value="${a.bookingForm.eventDate}" pattern="dd/MM/yyyy"/>
                         </span>
                     </div>

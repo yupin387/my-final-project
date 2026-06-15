@@ -253,9 +253,9 @@ body {
 }
 
 .info-box {
-    padding: 18px 22px;
-    border-right: 1px solid var(--cream-border);
-    display: flex; flex-direction: column; gap: 5px;
+    padding: 22px 26px; /* ปรับเพิ่มจากเดิม เพื่อให้ดูห่างและโปร่งขึ้น */
+    border-right: 2px solid var(--cream-border);
+    display: flex; flex-direction: column; gap: 8px; /* เพิ่ม gap เล็กน้อย */
 }
 .info-box:last-child { border-right: none; }
 
@@ -269,12 +269,14 @@ body {
 /* ========== MAIN LAYOUT & CARD ========== */
 .main-layout { display: block; animation: fadeUp 0.3s ease 0.1s both; }
 
+/* เพิ่มในส่วน PATCH หรือส่วนที่กำหนด .card */
 .card {
     background: #FFFFFF;
     border-radius: 16px;
     border: 1.5px solid var(--gold-mid);
     box-shadow: 0 8px 32px rgba(180,130,0,0.10);
     overflow: hidden;
+    margin-top: 40px; /* เพิ่มตรงนี้ครับ: เพิ่มระยะห่างจากกล่องบนให้มากขึ้น */
     margin-bottom: 20px;
     position: relative;
 }
@@ -418,20 +420,29 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
 
 /* ========== ADD ITEM BUTTON ========== */
 .btn-open-popup {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    border: none; padding: 12px 22px;
-    font-size: 15px; border-radius: 10px; cursor: pointer;
-    font-weight: 700; font-family: 'Sarabun', sans-serif;
-    display: inline-flex; align-items: center; gap: 8px;
-    margin-top: 15px; transition: all 0.2s;
-    box-shadow: 0 3px 10px rgba(180,130,0,0.25);
-}
-.btn-open-popup:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
-    transform: translateY(-1px); box-shadow: 0 5px 16px rgba(180,130,0,0.35);
+    /* ใช้โทนสีเขียวเดียวกับปุ่มบันทึก */
+    background: linear-gradient(135deg, #16A34A, #15803D);
+    color: #fff;
+    border: 2px solid #15803D;
+    padding: 12px 24px;
+    font-size: 14px; 
+    border-radius: 10px; 
+    cursor: pointer;
+    font-weight: 700; 
+    font-family: 'Sarabun', sans-serif;
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px;
+    margin-top: 20px; /* เพิ่มระยะห่างด้านบนให้ปุ่มหน่อย */
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
 }
 
+.btn-open-popup:hover {
+    background: linear-gradient(135deg, #15803D, #166534);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(22, 163, 74, 0.45);
+}
 /* ========== STICKY TOTAL BAR ========== */
 .total-bar {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
@@ -563,9 +574,15 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
 .item-pick-card:hover { border-color: var(--gold-mid); background: var(--cream-mid); }
 .item-pick-card.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
+/* ── ปรับสีติ๊กถูกให้เป็นเขียว ── */
 .item-pick-card input[type="checkbox"] {
-    margin-top: 3px; width: 18px; height: 18px;
-    accent-color: var(--gold-mid); cursor: pointer; flex-shrink: 0;
+    margin-top: 3px; 
+    width: 18px; 
+    height: 18px;
+    /* เปลี่ยนจากสีทอง เป็นสีเขียวเข้ม */
+    accent-color: #16A34A; 
+    cursor: pointer; 
+    flex-shrink: 0;
 }
 
 .item-pick-info  { flex: 1; min-width: 0; }
@@ -749,23 +766,24 @@ th {
     transform: scale(1.08);
 }
 
-/* ── ปุ่มเพิ่มรายการ: น้ำเงิน ตัดกับโทนทอง ── */
+/* แก้ไขในส่วน PATCH ด้านล่างสุด */
 .btn-open-popup {
-    background: linear-gradient(135deg, #1D4ED8, #2563EB);
+    background: linear-gradient(135deg, #16A34A, #15803D); /* แก้จากน้ำเงินเป็นเขียว */
     color: #fff;
-    border: 2px solid #1D4ED8;
+    border: 2px solid #15803D;
     padding: 12px 22px;
     font-size: 14px; border-radius: 10px; cursor: pointer;
     font-weight: 700; font-family: 'Sarabun', sans-serif;
     display: inline-flex; align-items: center; gap: 8px;
     margin-top: 15px; transition: all 0.2s;
-    box-shadow: 0 3px 10px rgba(37,99,235,0.4);
+    box-shadow: 0 3px 10px rgba(22, 163, 74, 0.35);
 }
 .btn-open-popup:hover {
-    background: linear-gradient(135deg, #1E40AF, #1D4ED8);
+    background: linear-gradient(135deg, #15803D, #166534);
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(37,99,235,0.5);
+    box-shadow: 0 5px 16px rgba(22, 163, 74, 0.45);
 }
+
 
 /* ── ปุ่มบันทึก (total bar): เขียว ── */
 .btn-submit {
