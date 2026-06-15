@@ -91,11 +91,12 @@
         <div class="cd-gold-line"></div>
     </div>
 
+    <%-- รายการอุปกรณ์ที่ใช้ในงาน — เต็มความกว้าง 2 คอลัมน์ --%>
     <div class="cd-grid">
 
         <%-- คอลัมน์ซ้าย --%>
         <div>
-            <%-- อุปกรณ์ --%>
+            <%-- รายการอุปกรณ์ --%>
             <div class="cd-card">
                 <div class="cd-card-title">รายการอุปกรณ์ที่ใช้ในงาน</div>
                 <ul class="cd-item-list">
@@ -116,73 +117,56 @@
             </div>
 
             <%-- ชุดสังฆทาน --%>
-            <div class="cd-card">
-                <div class="cd-card-title">ชุดสังฆทาน</div>
-                <p class="cd-pinto-sub">คัดสรรของใช้คุณภาพ เพื่อถวายแด่พระสงฆ์</p>
-                <c:forEach items="${sanghatanSets}" var="set">
-                    <div class="cd-pinto-box">
-                        <div class="cd-pinto-head">
-                            <span class="cd-pinto-name">${set.itemName}</span>
-                            <span class="cd-pinto-price">฿${set.pricePerUnit} / ${set.unit}</span>
-                        </div>
-                        <div class="cd-pinto-body">
-                            <div class="cd-menu-label">รายละเอียด</div>
-                            <ul class="cd-menu-list">
-                                <li>${not empty set.itemDetail ? set.itemDetail : 'ยังไม่มีรายการรายละเอียด'}</li>
-                            </ul>
-                        </div>
-                    </div>
-                </c:forEach>
-            </div>
+			<div class="cd-card">
+			    <div class="cd-card-title">ชุดสังฆทาน</div>
+			    <p class="cd-pinto-sub">คัดสรรของใช้คุณภาพ เพื่อถวายแด่พระสงฆ์</p>
+			    <div class="cd-pinto-grid">
+			        <c:forEach items="${sanghatanSets}" var="set">
+			            <div class="cd-pinto-box">
+			                <div class="cd-pinto-head">
+			                    <span class="cd-pinto-name">${set.itemName}</span>
+			                    <span class="cd-pinto-price">฿${set.pricePerUnit} / ${set.unit}</span>
+			                </div>
+			                <div class="cd-pinto-body">
+			                    <div class="cd-menu-label">รายการของ</div>
+			                    <ul class="cd-sangkhathan-detail">
+			                        <c:forEach items="${fn:split(set.itemDetail, ',')}" var="detail">
+			                            <li>${fn:trim(detail)}</li>
+			                        </c:forEach>
+			                    </ul>
+			                </div>
+			            </div>
+			        </c:forEach>
+			    </div>
+			</div>
         </div>
 
         <%-- คอลัมน์ขวา --%>
         <div>
             <%-- ปิ่นโต --%>
-            <div class="cd-card">
-                <div class="cd-card-title">ชุดภัตตาหารปิ่นโตถวายพระ</div>
-                <p class="cd-pinto-sub">ปรุงสดใหม่ทุกวัน เลือกได้ตามงบประมาณ</p>
-                <c:forEach items="${pintoSets}" var="set">
-                    <div class="cd-pinto-box">
-                        <div class="cd-pinto-head">
-                            <span class="cd-pinto-name">${set.itemName}</span>
-                            <span class="cd-pinto-price">฿${set.pricePerUnit} / ${set.unit}</span>
-                        </div>
-                        <div class="cd-pinto-body">
-                            <div class="cd-menu-label">ข้าว</div>
-                            <ul class="cd-menu-list">
-                                <c:set var="riceCount" value="0"/>
-                                <c:forEach items="${pintoMenus}" var="menu">
-                                    <c:if test="${fn:contains(menu.itemName,'ข้าว') && riceCount < 3}">
-                                        <li>${menu.itemName}</li>
-                                        <c:set var="riceCount" value="${riceCount + 1}"/>
-                                    </c:if>
-                                </c:forEach>
-                            </ul>
-                            <div class="cd-menu-label">กับข้าว</div>
-                            <ul class="cd-menu-list">
-                                <c:set var="dishCount" value="0"/>
-                                <c:forEach items="${pintoMenus}" var="menu">
-                                    <c:if test="${(fn:contains(menu.itemName,'แกง')||fn:contains(menu.itemName,'ผัด')||fn:contains(menu.itemName,'ต้ม')||fn:contains(menu.itemName,'ทอด')) && dishCount < 3}">
-                                        <li>${menu.itemName}</li>
-                                        <c:set var="dishCount" value="${dishCount + 1}"/>
-                                    </c:if>
-                                </c:forEach>
-                            </ul>
-                            <div class="cd-menu-label">ของหวาน / เครื่องดื่ม</div>
-                            <ul class="cd-menu-list">
-                                <c:set var="sweetCount" value="0"/>
-                                <c:forEach items="${pintoMenus}" var="menu">
-                                    <c:if test="${(fn:contains(menu.itemName,'ขนม')||fn:contains(menu.itemName,'น้ำ')||fn:contains(menu.itemName,'ลูกชุบ')||fn:contains(menu.itemName,'ทับทิม')) && sweetCount < 3}">
-                                        <li>${menu.itemName}</li>
-                                        <c:set var="sweetCount" value="${sweetCount + 1}"/>
-                                    </c:if>
-                                </c:forEach>
-                            </ul>
-                        </div>
-                    </div>
-                </c:forEach>
-            </div>
+			<div class="cd-card">
+			    <div class="cd-card-title">ชุดภัตตาหารปิ่นโตถวายพระ</div>
+			    <p class="cd-pinto-sub">ปรุงสดใหม่ทุกวัน เลือกได้ตามงบประมาณ</p>
+			    <div class="cd-pinto-grid">
+			        <c:forEach items="${pintoSets}" var="set">
+			            <div class="cd-pinto-box">
+			                <div class="cd-pinto-head">
+			                    <span class="cd-pinto-name">${set.itemName}</span>
+			                    <span class="cd-pinto-price">฿${set.pricePerUnit} / ${set.unit}</span>
+			                </div>
+			                <div class="cd-pinto-body">
+			                    <div class="cd-menu-label">รายการเมนู</div>
+			                    <%-- แยก itemDetail ด้วย , แล้ว render เป็น grid --%>
+			                    <ul class="cd-menu-grid">
+			                        <c:forEach items="${fn:split(set.itemDetail, ',')}" var="menuItem">
+			                            <li>${fn:trim(menuItem)}</li>
+			                        </c:forEach>
+			                    </ul>
+			                </div>
+			            </div>
+			        </c:forEach>
+			    </div>
+			</div>
 
             <%-- ค่าบริการ --%>
             <div class="cd-card">

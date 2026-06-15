@@ -168,11 +168,15 @@ body {
 
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
-    width: 92%;
-    max-width: 900px;
-    margin: 48px auto;
+    flex: 1;
+    padding: 36px 80px 72px; /* เพิ่ม Padding ซ้าย-ขวา เป็น 80px เพื่อผลักเนื้อหาให้ดูโปร่ง */
+    width: 100%;            /* ให้ใช้พื้นที่เต็มที่ */
+    max-width: 1400px;      /* ปรับค่านี้ให้กว้างขึ้น เพื่อให้การ์ดขยายตาม */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-
 /* ========== SECTION HEADER ========== */
 .section-header {
     text-align: center;
@@ -235,13 +239,25 @@ body {
 .summary-card {
     background: var(--white);
     border-radius: 20px;
-    border: 1.5px solid var(--cream-border-soft);
-    box-shadow: 0 4px 24px var(--shadow-warm);
-    padding: 32px 36px;
+
+    /* ขอบแบบของเพื่อน */
+    border: 4px solid var(--gold-mid);
+
+    box-shadow:
+        0 0 0 2px var(--gold-pale),
+        0 0 15px rgba(212,160,23,0.35),
+        0 4px 24px var(--shadow-warm);
+
+    /* ใช้ขนาดของคุณ */
+    padding: 40px 60px;
     display: flex;
     align-items: center;
-    gap: 48px;
+    gap: 80px;
     margin-bottom: 32px;
+
+    width: 100%;
+    max-width: 1200px;
+
     position: relative;
     overflow: hidden;
 }
@@ -323,13 +339,23 @@ body {
 .review-card {
     background: var(--white);
     border-radius: 18px;
-    border: 1.5px solid var(--cream-border-soft);
-    box-shadow: 0 4px 16px var(--shadow-warm);
-    padding: 24px 28px;
+    
+    /* นำสไตล์ขอบหนาและสีทองจากโค้ดเพื่อนมาใส่ */
+    border: 4px solid var(--gold-mid);
+    
+    /* นำมิติเงาซ้อน 3 ชั้นสุดหรูจากเพื่อนมาใส่ */
+    box-shadow:
+        0 0 0 2px var(--gold-pale),
+        0 0 15px rgba(212,160,23,0.35),
+        0 4px 24px var(--shadow-warm);
+        
+    /* คงความกว้างและ Padding เดิมเอาไว้ตามที่ต้องการ */
+    padding: 30px 40px;     
     margin-bottom: 20px;
+    width: 100%;            
+    max-width: 1200px;      
     position: relative;
     transition: box-shadow 0.25s, transform 0.25s;
-    overflow: hidden;
 }
 
 /* เส้นทองซ้าย */
