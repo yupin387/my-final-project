@@ -29,6 +29,20 @@
 
     --shadow-gold:   rgba(180, 130, 0, 0.12);
     --shadow-warm:   rgba(100, 70, 0, 0.08);
+
+    /* ===== Calendar status colors ===== */
+    --cal-booked-bg:     #FDE2E2;
+    --cal-booked-border: #E2685A;
+    --cal-booked-text:   #C13B2E;
+    --cal-booked-dot:    #E2685A;
+
+    --cal-free-bg:       #EEFBF1;
+    --cal-free-border:   #8FD9A8;
+    --cal-free-text:     #2F8B4F;
+
+    --cal-today-bg:      #FFD75E;
+    --cal-today-border:  #C9960C;
+    --cal-today-text:    #4A2E00;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -488,8 +502,10 @@ body {
     font-size: 0.75rem;
     font-weight: 700;
 }
+
+/* ===== Calendar cell base ===== */
 .cal-cell {
-    background: var(--cream-warm);
+    background: var(--off-white);
     border-radius: 8px;
     min-height: 40px;
     display: flex; flex-direction: column;
@@ -497,17 +513,50 @@ body {
     font-size: 0.85rem;
     color: var(--text-body);
     position: relative;
-    border: 1.5px solid transparent;
+    border: 1.5px solid var(--cream-border-soft);
     transition: all 0.2s;
 }
 .cal-cell.empty  { background: transparent; border-color: transparent; }
-.cal-cell.booked { background: #fff8e1; color: var(--brown-mid); border: 1.5px solid var(--cream-border); font-weight: 700; }
-.cal-cell.today  { background: var(--gold-glow); border-color: var(--gold-mid); font-weight: 700; color: var(--brown-dark); }
-.cal-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-mid); position: absolute; bottom: 5px; }
-.cal-cell.today .cal-dot { background: var(--gold); }
 
-.cal-legend { display: flex; gap: 15px; justify-content: center; margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); flex-wrap: wrap; }
-.legend-dot { width: 12px; height: 12px; border-radius: 4px; display: inline-block; margin-right: 5px; vertical-align: middle; }
+/* ===== Cal cell: ว่าง (default, free) ===== */
+.cal-cell.free {
+    background: var(--cal-free-bg);
+    border: 1.5px solid var(--cal-free-border);
+    color: var(--cal-free-text);
+    font-weight: 600;
+}
+
+/* ===== Cal cell: มีงานแล้ว (booked) ===== */
+.cal-cell.booked {
+    background: var(--cal-booked-bg);
+    color: var(--cal-booked-text);
+    border: 1.5px solid var(--cal-booked-border);
+    font-weight: 700;
+}
+
+/* ===== Cal cell: วันนี้ (today) — เด่นที่สุด ===== */
+.cal-cell.today {
+    background: var(--cal-today-bg);
+    border: 2px solid var(--cal-today-border);
+    font-weight: 800;
+    color: var(--cal-today-text);
+    box-shadow: 0 0 0 3px rgba(201, 150, 12, 0.18);
+    transform: scale(1.04);
+    z-index: 1;
+}
+
+.cal-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--cal-booked-dot);
+    position: absolute;
+    bottom: 5px;
+}
+.cal-cell.today .cal-dot { background: var(--cal-today-border); }
+.cal-cell.free .cal-dot  { background: var(--cal-free-border); }
+
+.cal-legend { display: flex; gap: 15px; justify-content: center; margin-top: 15px; font-size: 0.78rem; color: var(--text-muted); flex-wrap: wrap; font-weight: 600; }
+.legend-dot { width: 13px; height: 13px; border-radius: 4px; display: inline-block; margin-right: 6px; vertical-align: middle; }
 
 /* ========== CALENDAR MODAL ========== */
 .calendar-modal-overlay {

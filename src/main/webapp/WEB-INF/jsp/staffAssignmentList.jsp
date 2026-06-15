@@ -7,14 +7,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>รายการงานมอบหมาย - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/staffAssignmentList.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/staffAssignmentList.css?v=2">
 </head>
 <body>
 
     <%-- ===== Navbar ===== --%>
     <div class="navbar">
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        <div class="navbar-brand-wrap">
+            <div class="navbar-lotus">🪷</div>
+            <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        </div>
         <div class="navbar-right">
             <nav class="navbar-menu">
                 <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item active">รายการงาน</a>
@@ -34,6 +37,14 @@
     </div>
 
     <div class="page-wrapper">
+
+        <%-- ===== Flash Message ===== --%>
+        <c:if test="${not empty success}">
+            <div class="flash-banner flash-banner-success">${success}</div>
+        </c:if>
+        <c:if test="${not empty error}">
+            <div class="flash-banner flash-banner-error">${error}</div>
+        </c:if>
 
         <div class="list-header">
             <div>

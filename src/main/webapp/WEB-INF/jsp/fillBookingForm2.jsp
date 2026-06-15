@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>จองงานสืบชะตา - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=6"></head>
 <body>
 
@@ -160,15 +160,16 @@
 				    <div class="card-header">การนิมนต์พระสงฆ์</div>
 				    <div class="card-body">
 				
-				        <%-- รอบที่ 1: รูปแบบการนิมนต์ --%>
+				        <%-- รอบที่ 1: รูปแบบการนิมนต์ (ตัวควบคุมหลักของหมวด) --%>
 				        <c:forEach items="${questions}" var="q">
 				            <c:if test="${(fn:contains(q.questionsText, 'นิมนต์') || fn:contains(q.questionsText, 'พระ')) && fn:contains(q.questionsText, 'รูปแบบ')}">
 				                <div class="form-group">
 				                    <label class="form-label">${q.questionsText}</label>
 				                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-				                    <select name="details[${detailIndex}].answer" class="form-select">
+				                    <select name="details[${detailIndex}].answer" class="form-select toggle-master"
+				                            data-group="monk" data-lock-values="นิมนต์เอง">
 				                        <option value="นิมนต์เอง">นิมนต์เอง</option>
-				                        <option value="ให้ทางระบบจัดการ">ให้ทางระบบจัดการ</option>
+				                        <option value="ให้ทางระบบจัดการ">บริษัทนิมนต์ให้</option>
 				                    </select>
 				                </div>
 				                <c:set var="detailIndex" value="${detailIndex + 1}"/>
@@ -182,7 +183,8 @@
 				                    <label class="form-label">${q.questionsText}</label>
 				                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
 				                    <input type="text" name="details[${detailIndex}].answer"
-				                           class="form-control" placeholder="ระบุรายละเอียดเพิ่มเติม...">
+				                           class="form-control toggle-slave" data-group="monk"
+				                           placeholder="ระบุรายละเอียดเพิ่มเติม...">
 				                </div>
 				                <c:set var="detailIndex" value="${detailIndex + 1}"/>
 				            </c:if>
@@ -195,7 +197,8 @@
 				                    <label class="form-label">${q.questionsText}</label>
 				                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
 				                    <input type="number" name="details[${detailIndex}].answer"
-				                           class="form-control" placeholder="ระบุจำนวนพระสงฆ์">
+				                           class="form-control toggle-slave" data-group="monk"
+				                           placeholder="ระบุจำนวนพระสงฆ์">
 				                </div>
 				                <c:set var="detailIndex" value="${detailIndex + 1}"/>
 				            </c:if>
@@ -209,13 +212,14 @@
 			        <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
 			        <div class="card-body">
 			
-			            <%-- รอบที่ 1: ต้องการปิ่นโตหรือไม่ --%>
+			            <%-- รอบที่ 1: ต้องการปิ่นโตหรือไม่ (ตัวควบคุมหลักของหมวด) --%>
 			            <c:forEach items="${questions}" var="q">
 			                <c:if test="${fn:contains(q.questionsText, 'ปิ่นโต') && !fn:contains(q.questionsText, 'เลือก') && !fn:contains(q.questionsText, 'จำนวน')}">
 			                    <div class="form-group">
 			                        <label class="form-label">${q.questionsText}</label>
 			                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-			                        <select name="details[${detailIndex}].answer" class="form-select">
+			                        <select name="details[${detailIndex}].answer" class="form-select toggle-master"
+			                                data-group="pinto" data-lock-values="ไม่ต้องการ">
 			                            <option value="ไม่ต้องการ">ไม่ต้องการ</option>
 			                            <option value="ต้องการ">ต้องการ</option>
 			                        </select>
@@ -230,7 +234,7 @@
 			                    <div class="form-group">
 			                        <label class="form-label">${q.questionsText}</label>
 			                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-			                        <select name="details[${detailIndex}].answer" class="form-select">
+			                        <select name="details[${detailIndex}].answer" class="form-select toggle-slave" data-group="pinto">
 			                            <option value="ไม่ต้องการ">-- เลือกชุดปิ่นโต --</option>
 			                            <c:forEach items="${pintoItems}" var="item">
 			                                <c:if test="${fn:contains(item.itemName, 'ชุด')}">
@@ -249,8 +253,8 @@
 			                    <div class="form-group">
 			                        <label class="form-label">${q.questionsText}</label>
 			                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-			                        <input type="number" name="details[${detailIndex}].answer" class="form-control"
-			                               placeholder="ระบุจำนวนชุด..." min="0">
+			                        <input type="number" name="details[${detailIndex}].answer" class="form-control toggle-slave"
+			                               data-group="pinto" placeholder="ระบุจำนวนชุด..." min="0">
 			                    </div>
 			                    <c:set var="detailIndex" value="${detailIndex + 1}"/>
 			                </c:if>
@@ -264,13 +268,14 @@
 			        <div class="card-header">รายละเอียดสังฆทาน</div>
 			        <div class="card-body">
 			
-			            <%-- ต้องการสังฆทานหรือไม่ --%>
+			            <%-- ต้องการสังฆทานหรือไม่ (ตัวควบคุมหลักของหมวด) --%>
 			            <c:forEach items="${questions}" var="q">
 			                <c:if test="${fn:contains(q.questionsText, 'สังฆทาน') && !fn:contains(q.questionsText, 'เลือก') && !fn:contains(q.questionsText, 'จำนวน')}">
 			                    <div class="form-group">
 			                        <label class="form-label">${q.questionsText}</label>
 			                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-			                        <select name="details[${detailIndex}].answer" class="form-select">
+			                        <select name="details[${detailIndex}].answer" class="form-select toggle-master"
+			                                data-group="sanghatharn" data-lock-values="ไม่ต้องการ">
 			                            <option value="ไม่ต้องการ">ไม่ต้องการ</option>
 			                            <option value="ต้องการ">ต้องการ</option>
 			                        </select>
@@ -286,7 +291,7 @@
 						            <label class="form-label">${q.questionsText}</label>
 						            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
 						            
-						            <select name="details[${detailIndex}].answer" class="form-select" required>
+						            <select name="details[${detailIndex}].answer" class="form-select toggle-slave" data-group="sanghatharn">
 						                <option value="">-- เลือกชุดสังฆทาน --</option>
 						                
 						                <%-- ตรวจสอบชื่อตัวแปรให้ตรงกับใน Controller --%>
@@ -305,8 +310,8 @@
 			                    <div class="form-group">
 			                        <label class="form-label">${q.questionsText}</label>
 			                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-			                        <input type="number" name="details[${detailIndex}].answer" class="form-control"
-			                               placeholder="ระบุจำนวนชุด..." min="0">
+			                        <input type="number" name="details[${detailIndex}].answer" class="form-control toggle-slave"
+			                               data-group="sanghatharn" placeholder="ระบุจำนวนชุด..." min="0">
 			                    </div>
 			                    <c:set var="detailIndex" value="${detailIndex + 1}"/>
 			                </c:if>

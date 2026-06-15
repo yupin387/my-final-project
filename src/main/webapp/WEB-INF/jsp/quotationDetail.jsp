@@ -7,30 +7,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>รายละเอียดใบเสนอราคา ${q.quotationId} - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationDetail.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationDetail.css?v=2">
 </head>
 <body>
 
-<div class="navbar">
-    <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+<%-- ===== NAVBAR ===== --%>
+<nav class="navbar">
+    <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/organizer/bookings">
+        <div class="navbar-lotus">🪷</div>
+        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+    </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/organizer/bookings" class="nav-item">รายการจอง</a>
+            <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item">รายการจอง</a>
             <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/organizer/questions" class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation" class="nav-item active">ใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/organizer/questions"  class="nav-item">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item active">ใบเสนอราคา</a>
         </nav>
         <div class="user-info" onclick="toggleDropdown()">
             <div class="user-avatar">A</div>
-            <div class="user-detail"><span class="user-name">Admin Organizer</span><span class="user-role">ผู้จัดการ</span></div>
+            <div class="user-detail">
+                <span class="user-name">Admin Organizer</span>
+                <span class="user-role">ผู้จัดการ</span>
+            </div>
             <span class="arrow">▾</span>
             <div class="dropdown-menu" id="dropdownMenu">
                 <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item">ออกจากระบบ</a>
             </div>
         </div>
     </div>
-</div>
+</nav>
 
 <div class="page-wrapper">
     <c:if test="${not empty success}"><div class="flash-banner flash-banner-success">${success}</div></c:if>
@@ -42,25 +49,41 @@
         </div>
         <span class="status-badge status-${q.quotationStatus}">
             <c:choose>
-                <c:when test="${q.quotationStatus == 'Pending'}">● รอการยืนยัน</c:when>
-                <c:when test="${q.quotationStatus == 'Confirmed'}">✓ ยืนยันแล้ว</c:when>
-                <c:when test="${q.quotationStatus == 'Revised'}">↩ ต้องการแก้ไข</c:when>
+                <c:when test="${q.quotationStatus == 'Pending'}">รอการยืนยัน</c:when>
+                <c:when test="${q.quotationStatus == 'Confirmed'}">ยืนยันแล้ว</c:when>
+                <c:when test="${q.quotationStatus == 'Revised'}">ต้องการแก้ไข</c:when>
                 <c:otherwise>${q.quotationStatus}</c:otherwise>
             </c:choose>
         </span>
     </div>
 
+    <%-- INFO CARD --%>
     <div class="info-card">
         <div class="info-card-header">ข้อมูลการจองและพิธี</div>
         <div class="info-grid">
-            <div class="info-box"><span class="info-label">รหัสการจอง</span><span class="info-value highlight">${q.bookingForm.bookingId}</span></div>
-            <div class="info-box"><span class="info-label">ประเภทพิธี</span><span class="info-value">${q.bookingForm.ceremony.ceremonyName}</span></div>
-            <div class="info-box"><span class="info-label">ลูกค้า</span><span class="info-value">${q.bookingForm.member.memberFirstName} ${q.bookingForm.member.memberLastName}</span></div>
-            <div class="info-box"><span class="info-label">วันจัดงาน</span><span class="info-value"><fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></span></div>
-            <div class="info-box"><span class="info-label">เวลา</span><span class="info-value">${q.bookingForm.eventTime} น.</span></div>
+            <div class="info-box">
+                <span class="info-label">รหัสการจอง</span>
+                <span class="info-value highlight">${q.bookingForm.bookingId}</span>
+            </div>
+            <div class="info-box">
+                <span class="info-label">ประเภทพิธี</span>
+                <span class="info-value">${q.bookingForm.ceremony.ceremonyName}</span>
+            </div>
+            <div class="info-box">
+                <span class="info-label">ลูกค้า</span>
+                <span class="info-value">${q.bookingForm.member.memberFirstName} ${q.bookingForm.member.memberLastName}</span>
+            </div>
+            <div class="info-box">
+                <span class="info-label">วันจัดงาน</span>
+                <span class="info-value"><fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></span>
+            </div>
+            <div class="info-box">
+                <span class="info-label">เวลา</span>
+                <span class="info-value">${q.bookingForm.eventTime} น.</span>
+            </div>
             <div class="info-box">
                 <span class="info-label">หัวหน้างานรับผิดชอบ</span>
-                <span class="info-value highlight">
+                <span class="info-value">
                     <c:choose>
                         <c:when test="${not empty q.staff}">
                             ${q.staff.staffFirstName} ${q.staff.staffLastName}<br>
@@ -73,12 +96,13 @@
         </div>
     </div>
 
+    <%-- TABLE CARD --%>
     <div class="table-card">
         <div class="table-card-header">รายละเอียดรายการประมาณการค่าใช้จ่าย</div>
         <table>
             <thead>
                 <tr>
-                    <th width="60" style="text-align:center;">ลำดับ</th>
+                    <th width="60"  style="text-align:center;">ลำดับ</th>
                     <th>รายการและรายละเอียด</th>
                     <th width="110" style="text-align:center;">จำนวน</th>
                     <th width="130" style="text-align:right;">ราคา/หน่วย</th>
@@ -94,7 +118,8 @@
                 <c:forEach var="d" items="${details}">
                     <c:if test="${d.item != null && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
                         <tr>
-                            <td style="text-align:center; color:#888;">${count}</td> <c:set var="count" value="${count + 1}"/>
+                            <td style="text-align:center; color:#888;">${count}</td>
+                            <c:set var="count" value="${count + 1}"/>
                             <td>
                                 <strong>${d.item.itemName}</strong>
                                 <c:if test="${not empty d.item.itemDetail}">
@@ -114,7 +139,8 @@
                 <c:forEach var="d" items="${details}">
                     <c:if test="${d.item != null && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                         <tr>
-                            <td style="text-align:center; color:#888;">${count}</td> <c:set var="count" value="${count + 1}"/>
+                            <td style="text-align:center; color:#888;">${count}</td>
+                            <c:set var="count" value="${count + 1}"/>
                             <td>
                                 <strong>${d.item.itemName}</strong>
                                 <c:if test="${not empty d.item.itemDetail}">
@@ -134,7 +160,8 @@
                 <c:forEach var="d" items="${details}">
                     <c:if test="${d.item != null && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                         <tr>
-                            <td style="text-align:center; color:#888;">${count}</td> <c:set var="count" value="${count + 1}"/>
+                            <td style="text-align:center; color:#888;">${count}</td>
+                            <c:set var="count" value="${count + 1}"/>
                             <td>
                                 <strong>${d.item.itemName}</strong>
                                 <c:if test="${not empty d.item.itemDetail}">
@@ -149,12 +176,13 @@
                     </c:if>
                 </c:forEach>
 
-                <%-- หมวดบริการและการดำเนินการ (พระสงฆ์) --%>
+                <%-- หมวดบริการและการดำเนินการ --%>
                 <tr class="group-row"><td colspan="6">หมวดบริการและการดำเนินการ</td></tr>
                 <c:forEach var="d" items="${details}">
                     <c:if test="${d.item != null && d.item.itemType.itemTypeName.contains('บริการ')}">
                         <tr>
-                            <td style="text-align:center; color:#888;">${count}</td> <c:set var="count" value="${count + 1}"/>
+                            <td style="text-align:center; color:#888;">${count}</td>
+                            <c:set var="count" value="${count + 1}"/>
                             <td>
                                 <strong style="color:#222;">${d.item.itemName}</strong>
                                 <c:if test="${not empty d.item.itemDetail}">
@@ -173,11 +201,13 @@
         </table>
     </div>
 
+    <%-- TOTAL --%>
     <div class="total-card">
         <div class="total-label">ยอดเงินสุทธิทั้งสิ้น</div>
         <div class="total-amount">฿ <fmt:formatNumber value="${q.totalAmount}" pattern="#,###.00"/></div>
     </div>
 
+    <%-- BUTTONS --%>
     <div class="btn-row">
         <a href="${pageContext.request.contextPath}/organizer/quotation" class="btn btn-back">← กลับหน้ารายการ</a>
         <c:if test="${q.quotationStatus != 'Confirmed'}">

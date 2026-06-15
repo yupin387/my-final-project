@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>รายการ Item - ระบบรับจัดงานบุญ</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/itemList.css">
 </head>
 <body>
@@ -19,9 +19,12 @@
         <span id="flash-error" data-msg="${error}" style="display:none;"></span>
     </c:if>
 
-    <%-- Navbar --%>
-    <div class="navbar">
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+    <%-- ========== NAVBAR ========== --%>
+    <nav class="navbar">
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/staff/assignments">
+            <div class="lotus-icon">🪷</div>
+            <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
                 <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">รายการงาน</a>
@@ -31,24 +34,37 @@
                 <div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
                 <span class="user-name">${sessionScope.currentStaff.staffFirstName} ${sessionScope.currentStaff.staffLastName}</span>
                 <span class="arrow">▾</span>
-                     <div class="dropdown-menu" id="dropdownMenu">
+                <div class="dropdown-menu" id="dropdownMenu">
                     <a href="${pageContext.request.contextPath}/staff/profile" class="dropdown-item">โปรไฟล์</a>
                     <a href="${pageContext.request.contextPath}/headstaff/logout" class="dropdown-item danger">ออกจากระบบ</a>
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
 
+
+
+    <%-- ========== PAGE WRAPPER ========== --%>
     <div class="page-wrapper">
 
+        <%-- ========== LIST HEADER ========== --%>
         <div class="list-header">
             <div>
+                <div class="section-ornament">
+                    <div class="ornament-line"></div>
+                    <div class="ornament-diamond-sm"></div>
+                    <div class="ornament-diamond"></div>
+                    <div class="ornament-diamond-sm"></div>
+                    <div class="ornament-line right"></div>
+                </div>
                 <h1>รายการ Item</h1>
                 <p>จัดการอุปกรณ์และบริการทั้งหมดในระบบ</p>
+                <div class="gold-line"></div>
             </div>
             <a href="${pageContext.request.contextPath}/staff/items/add" class="btn-add">+ เพิ่ม Item</a>
         </div>
 
+        <%-- ========== TABS ========== --%>
         <div class="tabs-wrapper">
             <a href="?typeId=all"
                 class="tab-btn ${(empty selectedType or selectedType eq 'all') ? 'active' : ''}">ทั้งหมด</a>
@@ -60,12 +76,13 @@
             </c:forEach>
         </div>
 
+        <%-- ========== CONTENT CARD ========== --%>
         <div class="content-card">
             <div class="card-header-bar">
                 <span>รายการอุปกรณ์และบริการ</span>
                 <span class="header-count">จำนวนทั้งหมด ${items.size()} รายการ</span>
             </div>
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th width="35%">ชื่อ Item</th>
@@ -89,7 +106,6 @@
                                     <a href="${pageContext.request.contextPath}/staff/items/edit/${item.itemId}"
                                         class="btn-edit">แก้ไข</a>
 
-                                    
                                     <form action="${pageContext.request.contextPath}/staff/items/delete/${item.itemId}"
                                           method="post" style="display:inline;"
                                           onsubmit="event.preventDefault(); showDeleteModal(this);">
@@ -101,18 +117,27 @@
                     </c:forEach>
                     <c:if test="${empty items}">
                         <tr>
-                            <td colspan="4" class="empty-state">ไม่พบรายการอุปกรณ์</td>
+                            <td colspan="4" class="empty-state">🪷 ไม่พบรายการอุปกรณ์</td>
                         </tr>
                     </c:if>
                 </tbody>
             </table>
         </div>
 
-    </div>
 
+    </div><%-- /page-wrapper --%>
+
+    <%-- ========== CONFIRM DELETE MODAL ========== --%>
     <div class="modal-overlay" id="confirmModal">
         <div class="modal-box">
-            <div class="modal-icon">🗑️</div>
+            <div class="modal-ornament">
+                <div class="orn-line"></div>
+                <div class="orn-diamond-sm"></div>
+                <div class="orn-diamond"></div>
+                <div class="orn-diamond-sm"></div>
+                <div class="orn-line right"></div>
+            </div>
+            
             <div class="modal-title">ยืนยันการลบ</div>
             <div class="modal-desc">คุณต้องการลบรายการนี้ใช่หรือไม่?<br>การกระทำนี้ไม่สามารถย้อนกลับได้</div>
             <div class="modal-actions">
@@ -123,5 +148,6 @@
     </div>
 
     <script src="${pageContext.request.contextPath}/static/js/itemList.js"></script>
+
 </body>
 </html>

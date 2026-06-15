@@ -1,18 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
 
 :root {
-    --red:          #8B1A1A;
-    --red-dark:     #5a1010;
-    --red-light:    #c62828;
-    --gold:         #D4A017;
-    --gold-light:   #f0c040;
-    --cream:        #FDF3DC;
-    --cream-mid:    #FFF8E7;
-    --cream-border: #e0c070;
-    --white:        #ffffff;
-    --text-dark:    #2a1a1a;
-    --text-mid:     #5a3a2a;
-    --text-muted:   #999;
+    --gold:              #C9960C;
+    --gold-mid:          #D4A017;
+    --gold-light:        #E8BB3A;
+    --gold-pale:         #F5D97A;
+    --gold-glow:         #FDE68A;
+
+    --cream:             #FFFBF0;
+    --cream-warm:        #FFF8E1;
+    --cream-mid:         #FDF3D0;
+    --cream-border:      #E8CC70;
+    --cream-border-soft: #EDD98A;
+
+    --white:             #FFFFFF;
+
+    --text-dark:         #2C1F00;
+    --text-mid:          #5A4000;
+    --text-body:         #6B5200;
+    --text-muted:        #A08840;
+    --text-light:        #BFA060;
+
+    --brown-dark:        #4A2E00;
+    --brown-mid:         #7A5200;
+
+    --shadow-gold:       rgba(180, 130, 0, 0.12);
+    --shadow-warm:       rgba(100, 70, 0, 0.08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,25 +40,36 @@ body {
 
 /* ========== NAVBAR ========== */
 .navbar {
-    background-color: var(--red);
-    padding: 14px 32px;
+    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
+    padding: 0 36px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold);
+    border-bottom: 3px solid var(--gold-mid);
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 10000;
+    min-height: 68px;
+    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+}
+
+.navbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
 }
 
 .navbar-title {
-    color: var(--cream);
-    font-size: 24px;
+    color: var(--gold-pale);
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 22px;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     white-space: nowrap;
     text-decoration: none;
-    font-family: 'Sarabun', sans-serif;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
 }
 
 .navbar-right {
@@ -56,48 +80,45 @@ body {
 
 .navbar-menu {
     display: flex;
-    gap: 4px;
+    gap: 2px;
     align-items: center;
 }
 
 .nav-item {
-    color: rgba(253,243,220,0.85);
+    color: rgba(253, 237, 160, 0.8);
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 6px;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s;
     white-space: nowrap;
 }
 
-.nav-item:hover  { background: rgba(212,160,23,0.2); }
-.nav-item.active { background: var(--gold); color: var(--red-dark); }
+.nav-item:hover  { background: rgba(212, 160, 23, 0.18); color: var(--gold-pale); }
+.nav-item.active { background: var(--gold-mid); color: var(--brown-dark); font-weight: 700; }
 
-.user-info-text {
-    display: flex;
-    flex-direction: column; /* บังคับให้เรียงซ้อนกันบน-ล่าง */
-    line-height: 1.2;       
-    text-align: left;       
-}
-
+/* User pill */
 .user-info {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(212, 160, 23, 0.6);
+    padding: 6px 16px 6px 6px;
+    border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255,255,255,0.1);
-    border: 1.5px solid var(--gold);
-    padding: 6px 16px 6px 8px;
-    border-radius: 50px;
+    color: var(--gold-pale);
     cursor: pointer;
-    color: var(--cream);
-    white-space: nowrap;
     position: relative;
+    white-space: nowrap;
+    transition: background 0.2s;
 }
 
+.user-info:hover { background: rgba(255, 255, 255, 0.14); }
+
 .user-avatar-nav {
-    background: var(--gold);
-    color: var(--red-dark);
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: var(--brown-dark);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -109,47 +130,47 @@ body {
     flex-shrink: 0;
 }
 
-.user-name-nav { font-size: 0.88rem; font-weight: 700; }
-.user-role-nav { font-size: 0.7rem; color: var(--gold-light); }
+.user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
+.user-name-nav  { font-size: 0.88rem; font-weight: 700; color: var(--gold-pale); }
+.user-role-nav  { font-size: 0.7rem; color: rgba(253, 237, 160, 0.65); }
 
 .dropdown-menu {
     display: none;
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    background: white;
-    border: 1.5px solid var(--gold);
+    background: var(--white);
+    border: 1px solid var(--cream-border);
     border-radius: 10px;
-    min-width: 180px;
-    box-shadow: 0 6px 20px rgba(139,26,26,0.18);
-    z-index: 999;
+    min-width: 175px;
+    box-shadow: 0 8px 28px rgba(100, 70, 0, 0.14);
+    z-index: 99999;
     overflow: hidden;
 }
 
 .dropdown-menu.show { display: block; }
 
 .dropdown-link {
-    display: flex;
-    align-items: center;
-    padding: 13px 18px;
+    display: block;
+    padding: 13px 20px;
     font-size: 14px;
     font-weight: 600;
-    color: var(--red-dark);
+    color: var(--text-mid);
     text-decoration: none;
-    border-bottom: 1px solid #F5EDD0;
+    border-bottom: 1px solid var(--cream-mid);
     transition: background 0.2s;
 }
 
-.dropdown-link:last-child { border-bottom: none; }
-.dropdown-link:hover      { background: var(--cream-mid); }
-.dropdown-link.danger     { color: var(--red-light); }
-.dropdown-link.danger:hover { background: #fff0f0; }
+.dropdown-link:last-child  { border-bottom: none; }
+.dropdown-link:hover       { background: var(--cream-warm); }
+.dropdown-link.danger      { color: #c0392b; }
+.dropdown-link.danger:hover{ background: #fff5f5; }
 
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     width: 92%;
-    max-width: 860px;
-    margin: 40px auto;
+    max-width: 900px;
+    margin: 48px auto;
 }
 
 /* ========== SECTION HEADER ========== */
@@ -160,7 +181,7 @@ body {
 
 .section-title {
     font-family: 'Noto Serif Thai', serif;
-    color: var(--red);
+    color: var(--brown-dark);
     font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 6px;
@@ -172,47 +193,89 @@ body {
 }
 
 .gold-line {
-    width: 48px;
+    width: 60px;
     height: 3px;
-    background: var(--gold);
+    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-light), var(--gold-mid), transparent);
     border-radius: 2px;
-    margin: 10px auto 0;
+    margin: 12px auto 0;
+}
+
+/* ========== FILTER BUTTONS ========== */
+.filter-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.btn-filter {
+    padding: 9px 26px;
+    border-radius: 50px;
+    border: 1.5px solid var(--gold-mid);
+    background: transparent;
+    color: var(--brown-mid);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: 'Sarabun', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.btn-filter:hover,
+.btn-filter.active-link {
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: var(--brown-dark);
+    border-color: var(--gold-light);
+    box-shadow: 0 4px 12px rgba(180, 130, 0, 0.25);
+    transform: translateY(-1px);
 }
 
 /* ========== SUMMARY CARD ========== */
 .summary-card {
     background: var(--white);
-    border-radius: 18px;
-    border: 1.5px solid var(--cream-border);
-    box-shadow: 0 4px 20px rgba(139,26,26,0.07);
-    padding: 28px 32px;
+    border-radius: 20px;
+    border: 1.5px solid var(--cream-border-soft);
+    box-shadow: 0 4px 24px var(--shadow-warm);
+    padding: 32px 36px;
     display: flex;
     align-items: center;
-    gap: 40px;
-    margin-bottom: 28px;
+    gap: 48px;
+    margin-bottom: 32px;
+    position: relative;
     overflow: hidden;
+}
+
+/* เส้นทองด้านบน card */
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20px; right: 20px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold-mid), var(--gold-light), transparent);
+    border-radius: 0 0 3px 3px;
 }
 
 .rating-big {
     text-align: center;
     flex-shrink: 0;
-    min-width: 120px;
+    min-width: 130px;
 }
 
 .rating-big h1 {
     font-family: 'Noto Serif Thai', serif;
-    font-size: 3.5rem;
+    font-size: 3.8rem;
     font-weight: 700;
-    color: var(--red);
+    color: var(--brown-dark);
     line-height: 1;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .stars-big {
-    color: var(--gold);
-    font-size: 1.3rem;
+    color: var(--gold-mid);
+    font-size: 1.4rem;
     letter-spacing: 3px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .rating-count {
@@ -226,17 +289,17 @@ body {
 .rating-bars-title {
     font-weight: 700;
     font-size: 13px;
-    color: var(--red-dark);
-    margin-bottom: 10px;
+    color: var(--brown-dark);
+    margin-bottom: 12px;
 }
 
 .bar-row {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 7px;
+    margin-bottom: 8px;
     font-size: 13px;
-    color: var(--text-mid);
+    color: var(--text-body);
 }
 
 .bar-label { width: 48px; text-align: right; flex-shrink: 0; }
@@ -244,31 +307,44 @@ body {
 .bar-track {
     flex: 1;
     height: 8px;
-    background: #f0e8d8;
+    background: var(--cream-mid);
     border-radius: 10px;
     overflow: hidden;
 }
 
 .bar-fill {
     height: 100%;
-    background: var(--gold);
+    background: linear-gradient(90deg, var(--gold-mid), var(--gold-light));
     border-radius: 10px;
-    transition: width 0.4s ease;
+    transition: width 0.5s ease;
 }
 
 /* ========== REVIEW CARD ========== */
 .review-card {
     background: var(--white);
-    border-radius: 16px;
-    border: 1.5px solid var(--cream-border);
-    box-shadow: 0 4px 16px rgba(139,26,26,0.05);
-    padding: 22px 24px;
-    margin-bottom: 18px;
-    transition: box-shadow 0.2s;
+    border-radius: 18px;
+    border: 1.5px solid var(--cream-border-soft);
+    box-shadow: 0 4px 16px var(--shadow-warm);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: box-shadow 0.25s, transform 0.25s;
+    overflow: hidden;
+}
+
+/* เส้นทองซ้าย */
+.review-card::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 20px; bottom: 20px;
+    width: 3px;
+    background: linear-gradient(to bottom, transparent, var(--gold-mid), transparent);
+    border-radius: 0 2px 2px 0;
 }
 
 .review-card:hover {
-    box-shadow: 0 8px 28px rgba(139,26,26,0.1);
+    box-shadow: 0 10px 32px rgba(100, 70, 0, 0.13);
+    transform: translateY(-2px);
 }
 
 .review-top {
@@ -285,10 +361,10 @@ body {
 }
 
 .avatar {
-    background: var(--gold);
-    color: var(--red-dark);
-    width: 42px;
-    height: 42px;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: var(--brown-dark);
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -297,6 +373,7 @@ body {
     font-weight: 700;
     font-size: 1.1rem;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(180, 130, 0, 0.25);
 }
 
 .reviewer-name {
@@ -307,12 +384,12 @@ body {
 }
 
 .stars-review {
-    color: var(--gold);
+    color: var(--gold-mid);
     font-size: 0.95rem;
     letter-spacing: 2px;
 }
 
-.stars-empty { color: #ddd; }
+.stars-empty { color: var(--cream-border); }
 
 .review-date {
     font-size: 12px;
@@ -322,11 +399,11 @@ body {
 
 .ceremony-badge {
     display: inline-block;
-    background: var(--cream-mid);
-    color: var(--red-dark);
-    border: 1px solid var(--cream-border);
+    background: var(--cream-warm);
+    color: var(--brown-mid);
+    border: 1px solid var(--cream-border-soft);
     border-radius: 20px;
-    padding: 3px 12px;
+    padding: 4px 14px;
     font-size: 12px;
     font-weight: 600;
     margin-bottom: 12px;
@@ -334,8 +411,8 @@ body {
 
 .review-text {
     font-size: 14px;
-    color: var(--text-mid);
-    line-height: 1.75;
+    color: var(--text-body);
+    line-height: 1.8;
     font-style: italic;
 }
 
@@ -344,7 +421,7 @@ body {
     max-width: 320px;
     border-radius: 12px;
     margin-top: 14px;
-    border: 1.5px solid var(--cream-border);
+    border: 1.5px solid var(--cream-border-soft);
     object-fit: cover;
 }
 
@@ -352,7 +429,7 @@ body {
 .empty-state {
     background: var(--white);
     border-radius: 16px;
-    border: 1.5px solid var(--cream-border);
+    border: 1.5px solid var(--cream-border-soft);
     padding: 60px 20px;
     text-align: center;
     color: var(--text-muted);
@@ -363,38 +440,10 @@ body {
 @media (max-width: 640px) {
     .navbar        { padding: 12px 16px; }
     .navbar-menu   { display: none; }
-    .summary-card  { flex-direction: column; gap: 20px; padding: 22px; }
+    .summary-card  { flex-direction: column; gap: 24px; padding: 24px; }
     .rating-bars   { width: 100%; }
     .page-wrapper  { width: 96%; margin: 24px auto; }
+    .filter-wrapper{ gap: 8px; }
+    .btn-filter    { padding: 7px 18px; font-size: 0.85rem; }
 }
 
-/*เพิ่มส่วนนี้*/
-/* ส่วนครอบปุ่ม */
-.filter-wrapper {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 30px;
-    padding: 10px;
-}
-
-/* สไตล์ปุ่มทั่วไป */
-.btn-filter {
-    padding: 8px 24px;
-    border-radius: 50px; /* ทำให้เป็นทรงแคปซูล */
-    border: 1.5px solid #D4A017;
-    background: transparent;
-    color: #D4A017;
-    text-decoration: none !important; /* บังคับให้ไม่มีขีดเส้นใต้ */
-    font-weight: 600;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-}
-
-/* สไตล์ตอนเอาเมาส์ชี้ และตอนปุ่มถูกเลือก (Active) */
-.btn-filter:hover, 
-.btn-filter.active-link {
-    background: #D4A017;
-    color: #ffffff;
-    box-shadow: 0 4px 10px rgba(212, 160, 23, 0.3);
-}

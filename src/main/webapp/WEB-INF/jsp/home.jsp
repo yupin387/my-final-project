@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>หน้าหลัก - ระบบรับจัดงานบุญ</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css?v=5">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css?v=6">
 </head>
 <body>
 
@@ -125,9 +125,9 @@
             </div>
             <hr style="border:0;border-top:1px solid #f0e8c8;margin:18px 0 14px;">
             <div class="cal-legend">
-                <span><span class="legend-dot" style="background:#fff8e1;border:1px solid #E8CC70;"></span>มีงานแล้ว</span>
-                <span><span class="legend-dot" style="background:#FFFBF0;border:1px solid #c8e6c8;"></span>ว่าง</span>
-                <span><span class="legend-dot" style="background:#FDE68A;border:2px solid #D4A017;"></span>วันนี้</span>
+                <span><span class="legend-dot" style="background:var(--cal-booked-bg);border:1.5px solid var(--cal-booked-border);"></span>มีงานแล้ว</span>
+                <span><span class="legend-dot" style="background:var(--cal-free-bg);border:1.5px solid var(--cal-free-border);"></span>ว่าง</span>
+                <span><span class="legend-dot" style="background:var(--cal-today-bg);border:2px solid var(--cal-today-border);"></span>วันนี้</span>
             </div>
         </div>
     </div>
@@ -135,38 +135,29 @@
 
 <%-- ========== THAI KANOK DIVIDER: CALENDAR → EVENTS ========== --%>
 <svg class="thai-divider" viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block; background:linear-gradient(#fff,#FFF8E1);">
-    <!-- เส้นทองกลาง -->
     <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70" stroke-width="1" opacity="0.6"/>
-    <!-- ลายกลีบดอก -->
     <g fill="#D4A017" opacity="0.55">
-        <!-- กลาง -->
         <ellipse cx="600" cy="24" rx="18" ry="6" transform="rotate(-30 600 24)"/>
         <ellipse cx="600" cy="24" rx="18" ry="6" transform="rotate(30 600 24)"/>
         <ellipse cx="600" cy="24" rx="18" ry="6"/>
         <circle cx="600" cy="24" r="4" fill="#E8BB3A"/>
-        <!-- ซ้าย 1 -->
         <ellipse cx="480" cy="24" rx="14" ry="5" transform="rotate(-30 480 24)"/>
         <ellipse cx="480" cy="24" rx="14" ry="5" transform="rotate(30 480 24)"/>
         <circle cx="480" cy="24" r="3" fill="#E8BB3A"/>
-        <!-- ขวา 1 -->
         <ellipse cx="720" cy="24" rx="14" ry="5" transform="rotate(-30 720 24)"/>
         <ellipse cx="720" cy="24" rx="14" ry="5" transform="rotate(30 720 24)"/>
         <circle cx="720" cy="24" r="3" fill="#E8BB3A"/>
-        <!-- ซ้าย 2 -->
         <ellipse cx="360" cy="24" rx="10" ry="4" transform="rotate(-30 360 24)"/>
         <ellipse cx="360" cy="24" rx="10" ry="4" transform="rotate(30 360 24)"/>
         <circle cx="360" cy="24" r="2.5" fill="#E8BB3A"/>
-        <!-- ขวา 2 -->
         <ellipse cx="840" cy="24" rx="10" ry="4" transform="rotate(-30 840 24)"/>
         <ellipse cx="840" cy="24" rx="10" ry="4" transform="rotate(30 840 24)"/>
         <circle cx="840" cy="24" r="2.5" fill="#E8BB3A"/>
-        <!-- ริม -->
         <ellipse cx="240" cy="24" rx="7" ry="3" transform="rotate(-30 240 24)"/>
         <ellipse cx="240" cy="24" rx="7" ry="3" transform="rotate(30 240 24)"/>
         <ellipse cx="960" cy="24" rx="7" ry="3" transform="rotate(-30 960 24)"/>
         <ellipse cx="960" cy="24" rx="7" ry="3" transform="rotate(30 960 24)"/>
     </g>
-    <!-- เส้นขอบบน-ล่าง -->
     <line x1="0" y1="4"  x2="1200" y2="4"  stroke="#E8CC70" stroke-width="0.5" opacity="0.4"/>
     <line x1="0" y1="44" x2="1200" y2="44" stroke="#E8CC70" stroke-width="0.5" opacity="0.4"/>
 </svg>
@@ -226,10 +217,8 @@
 <%-- ========== THAI LOTUS DIVIDER: EVENTS → REVIEWS ========== --%>
 <svg class="thai-divider" viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;background:#ffffff;">
     <path d="M0,48 Q300,0 600,24 Q900,48 1200,0 L1200,48 Z" fill="#FFFBF0"/>
-    <!-- ลายคลื่น -->
     <path d="M0,32 Q60,16 120,32 Q180,48 240,32 Q300,16 360,32 Q420,48 480,32 Q540,16 600,32 Q660,48 720,32 Q780,16 840,32 Q900,48 960,32 Q1020,16 1080,32 Q1140,48 1200,32" stroke="#D4A017" stroke-width="1.5" fill="none" opacity="0.45"/>
     <path d="M0,20 Q60,6 120,20 Q180,34 240,20 Q300,6 360,20 Q420,34 480,20 Q540,6 600,20 Q660,34 720,20 Q780,6 840,20 Q900,34 960,20 Q1020,6 1080,20 Q1140,34 1200,20" stroke="#E8CC70" stroke-width="1" fill="none" opacity="0.35"/>
-    <!-- จุดทอง -->
     <g fill="#D4A017" opacity="0.6">
         <circle cx="120" cy="32" r="2.5"/>
         <circle cx="360" cy="32" r="2.5"/>
@@ -284,14 +273,12 @@
 <%-- ========== THAI KANOK DIVIDER: REVIEWS → GALLERY ========== --%>
 <svg class="thai-divider" viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;background:linear-gradient(#fff,#FFFBF0);">
     <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70" stroke-width="1" opacity="0.7"/>
-    <!-- ลายกนกซ้าย -->
     <g fill="none" stroke="#D4A017" stroke-width="1.2" opacity="0.5">
         <path d="M40,24 Q60,8 80,24 Q100,40 120,24"/>
         <path d="M50,24 Q70,12 90,24"/>
         <circle cx="40" cy="24" r="3" fill="#D4A017" stroke="none"/>
         <circle cx="120" cy="24" r="3" fill="#D4A017" stroke="none"/>
     </g>
-    <!-- กลาง -->
     <g fill="#D4A017" opacity="0.6">
         <path d="M570,14 Q585,4 600,14 Q615,24 600,34 Q585,44 570,34 Q555,24 570,14 Z" opacity="0.3"/>
         <ellipse cx="600" cy="24" rx="22" ry="8" transform="rotate(0 600 24)" opacity="0.2"/>
@@ -303,7 +290,6 @@
         <circle cx="520" cy="24" r="2"/>
         <circle cx="680" cy="24" r="2"/>
     </g>
-    <!-- กนกขวา -->
     <g fill="none" stroke="#D4A017" stroke-width="1.2" opacity="0.5">
         <path d="M1080,24 Q1100,8 1120,24 Q1140,40 1160,24"/>
         <path d="M1090,24 Q1110,12 1130,24"/>
@@ -359,7 +345,7 @@
         </c:forEach>
     ];
 </script>
-<script src="${pageContext.request.contextPath}/static/js/home.js?v=6"></script>
+<script src="${pageContext.request.contextPath}/static/js/home.js?v=7"></script>
 
 </body>
 </html>

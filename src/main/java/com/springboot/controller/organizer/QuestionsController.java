@@ -23,9 +23,9 @@ public class QuestionsController {
     @Autowired
     private CeremonyService ceremonyService;
 
-    // ===== แสดงรายการคำถาม =====  แก้ตรงนี้ด้วย ล่าสุด
+    //แก้ตรงนี้ล่าสุด
     @GetMapping
-    public String listQuestions(@RequestParam(required = false) String ceremonyId, 
+    public String listQuestions(@RequestParam(required = false, defaultValue = "all") String ceremonyId, 
                                 Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) {
             return "redirect:/loginorganizer";
@@ -34,13 +34,14 @@ public class QuestionsController {
         List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
         List<QuestionsDetail> questions;
 
-        if (ceremonyId != null) {
-        	questions = questionsService.getQuestionsByCeremony(Integer.parseInt(ceremonyId));
-            model.addAttribute("selectedCeremony", ceremonyId);
-        } else {
-            // กรณีนี้คือไม่ได้เลือกพิธี (ถ้าจะแสดงทั้งหมด)
+        if ("all".equals(ceremonyId)) {
+            // ดึงคำถามจากทุกพิธีมารวมกัน
             questions = questionsService.getAllQuestions();
             model.addAttribute("selectedCeremony", "all");
+        } else {
+            // ดึงเฉพาะพิธีที่เลือก
+            questions = questionsService.getQuestionsByCeremony(Integer.parseInt(ceremonyId));
+            model.addAttribute("selectedCeremony", ceremonyId);
         }
 
         model.addAttribute("ceremonies", ceremonies);

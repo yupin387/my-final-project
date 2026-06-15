@@ -6,12 +6,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>แก้ไขรายการอุปกรณ์ - ระบบรับจัดงานบุญ</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editItem.css">
 </head>
 <body>
 
-    <%-- Flash Attribute --%>
     <c:if test="${not empty success}">
         <span id="flash-success" data-msg="${success}" style="display:none;"></span>
     </c:if>
@@ -19,37 +18,43 @@
         <span id="flash-error" data-msg="${error}" style="display:none;"></span>
     </c:if>
 
-    <!-- Navbar -->
-    <div class="navbar">
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+    <%-- NAVBAR --%>
+    <nav class="navbar">
+        <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/staff/assignments" style="text-decoration:none;">
+            <div class="lotus-icon">🪷</div>
+            <span class="nav-brand-text">ระบบรับจัดงานบุญ</span>
+        </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
                 <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">รายการงาน</a>
-                <a href="${pageContext.request.contextPath}/staff/items" class="nav-item active">จัดการ Item</a>
+                <a href="${pageContext.request.contextPath}/staff/items"       class="nav-item active">จัดการ Item</a>
             </nav>
-            <div class="user-info" onclick="toggleDropdown()">
-                <div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
-                <span class="user-name">${sessionScope.currentStaff.staffFirstName} ${sessionScope.currentStaff.staffLastName}</span>
-                <span class="arrow">▾</span>
+            <div class="dropdown-wrap">
+                <div class="user-info" onclick="toggleDropdown()">
+                    <div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
+                    <div class="user-detail">
+                        <span class="user-name">${sessionScope.currentStaff.staffFirstName} ${sessionScope.currentStaff.staffLastName}</span>
+                        <span class="user-role">Head Staff</span>
+                    </div>
+                    <span class="arrow">▾</span>
+                </div>
                 <div class="dropdown-menu" id="dropdownMenu">
-                    <a href="${pageContext.request.contextPath}/staff/profile" class="dropdown-item"> โปรไฟล์</a>
-                    <a href="${pageContext.request.contextPath}/staff/logout" class="dropdown-item danger"> ออกจากระบบ</a>
+                    <a href="${pageContext.request.contextPath}/staff/profile" class="dropdown-item">โปรไฟล์</a>
+                    <a href="${pageContext.request.contextPath}/staff/logout"  class="dropdown-item danger">ออกจากระบบ</a>
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Content -->
+    <%-- PAGE --%>
     <div class="page-wrapper">
         <div class="content-card">
 
-            <!-- Card Header -->
             <div class="card-header-bar">
                 <h1>แก้ไขข้อมูลอุปกรณ์</h1>
                 <p>แก้ไขรายละเอียดอุปกรณ์และบริการในระบบ</p>
             </div>
 
-            <!-- Card Body -->
             <div class="card-body">
 
                 <c:if test="${not empty error}">
@@ -61,7 +66,7 @@
 
                     <div class="form-section">
 
-                        <!-- ประเภท Item -->
+                        <%-- ประเภท Item --%>
                         <div class="form-group">
                             <div class="section-label">ประเภท Item</div>
                             <div class="type-options">
@@ -77,7 +82,7 @@
 
                         <hr class="divider">
 
-                        <!-- ใช้กับพิธี -->
+                        <%-- ใช้กับพิธี --%>
                         <div class="form-group">
                             <div class="section-label">ใช้กับพิธีไหนได้บ้าง</div>
                             <div class="ceremony-box">
@@ -96,10 +101,10 @@
 
                         <hr class="divider">
 
-                        <!-- ชื่อ & รายละเอียด -->
+                        <%-- ชื่อ & รายละเอียด --%>
                         <div class="form-group">
                             <div class="section-label">ข้อมูล Item</div>
-                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display:flex; flex-direction:column; gap:12px;">
                                 <div class="form-group">
                                     <label>ชื่ออุปกรณ์ / บริการ</label>
                                     <input type="text" name="itemName" value="${item.itemName}" required placeholder="ระบุชื่ออุปกรณ์หรือบริการ">
@@ -113,7 +118,7 @@
 
                         <hr class="divider">
 
-                        <!-- ราคา & หน่วย -->
+                        <%-- ราคา & หน่วย --%>
                         <div class="form-group">
                             <div class="section-label">ราคาและหน่วยนับ</div>
                             <div class="form-row">
@@ -135,7 +140,6 @@
 
                         <hr class="divider">
 
-                        <!-- Buttons -->
                         <div class="form-actions">
                             <button type="submit" class="btn-submit">บันทึกการแก้ไข</button>
                             <a href="${pageContext.request.contextPath}/staff/items" class="btn-cancel">ยกเลิก</a>
@@ -144,7 +148,6 @@
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 

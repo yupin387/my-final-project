@@ -8,19 +8,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>รายละเอียดการจอง - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bookingDetail.css">
 </head>
 <body>
 
-<div class="navbar">
-    <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+<%-- ===== NAVBAR ===== --%>
+<nav class="navbar">
+    <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/organizer/bookings" style="text-decoration: none;">
+        <div class="lotus-icon">🪷</div>
+        <span class="nav-brand-text">ระบบรับจัดงานบุญ</span>
+    </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/organizer/bookings" class="nav-item active">รายการจอง</a>
+            <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item active">รายการจอง</a>
             <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/organizer/questions" class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation" class="nav-item">ใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/organizer/questions"  class="nav-item">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item">ใบเสนอราคา</a>
         </nav>
         <div class="dropdown-wrap">
             <div class="user-info" onclick="toggleDropdown()">
@@ -31,21 +35,23 @@
                 </div>
                 <span class="arrow">▾</span>
             </div>
-
             <div class="dropdown-menu" id="dropdownMenu">
                 <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
             </div>
         </div>
     </div>
-</div>
+</nav>
 
+<%-- ===== PAGE WRAPPER ===== --%>
 <div class="page-wrapper">
-    <%-- back-link ชิดซ้ายสุดของหน้า ไม่จำกัด max-width --%>
+
     <div class="back-link-row">
         <a href="${pageContext.request.contextPath}/organizer/bookings" class="back-link">⬅ กลับรายการจอง</a>
     </div>
 
     <div class="detail-card">
+
+        <%-- Card Header --%>
         <div class="card-header-bar">
             <div>
                 <span class="booking-id-badge">รหัสการจอง: ${b.bookingId}</span>
@@ -87,11 +93,13 @@
         <div class="section">
             <div class="section-title">รายละเอียดการจัดพิธี</div>
             <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'จำนวนแขก') || fn:contains(d.question.questionsText, 'อุปกรณ์')}">
+                <c:if test="${fn:contains(d.question.questionsText, 'จำนวนแขก') || fn:contains(d.question.questionsText, 'อุปกรณ์') || fn:contains(d.question.questionsText, 'จำนวนผู้') || fn:contains(d.question.questionsText, 'ผูกข้อมือ') || fn:contains(d.question.questionsText, 'บ้านใหม่')}">
                     <div class="info-row">
                         <span class="info-label">${d.question.questionsText}</span>
                         <span class="info-value">
                             <c:choose>
+                                <%-- คำถามแบบ "ต้องการ...หรือไม่" ที่ตอบ "ไม่ต้องการ" ให้แสดงคำตอบจริง --%>
+                                <c:when test="${fn:contains(d.question.questionsText, 'ต้องการ') && fn:contains(d.question.questionsText, 'หรือไม่') && d.answer == 'ไม่ต้องการ'}">ไม่ต้องการ</c:when>
                                 <c:when test="${empty d.answer || d.answer == 'ไม่ต้องการ'}">-</c:when>
                                 <c:otherwise>${d.answer}</c:otherwise>
                             </c:choose>
@@ -107,7 +115,7 @@
         <div class="section">
             <div class="section-title">การนิมนต์พระสงฆ์</div>
             <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'นิมนต์') || fn:contains(d.question.questionsText, 'พระสงฆ์')}">
+                <c:if test="${fn:contains(d.question.questionsText, 'นิมนต์') || fn:contains(d.question.questionsText, 'พระสงฆ์') || fn:contains(d.question.questionsText, 'พระ')}">
                     <div class="info-row">
                         <span class="info-label">${d.question.questionsText}</span>
                         <span class="info-value">
@@ -127,11 +135,13 @@
         <div class="section">
             <div class="section-title">ชุดภัตตาหารปิ่นโต</div>
             <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'ปิ่นโต') || fn:contains(d.question.questionsText, 'เลือกชุดปิ่นโต')}">
+                <c:if test="${fn:contains(d.question.questionsText, 'ปิ่นโต')}">
                     <div class="info-row">
                         <span class="info-label">${d.question.questionsText}</span>
                         <span class="info-value">
                             <c:choose>
+                                <%-- คำถามแบบ "ต้องการ...หรือไม่" ที่ตอบ "ไม่ต้องการ" ให้แสดงคำตอบจริง --%>
+                                <c:when test="${fn:contains(d.question.questionsText, 'ต้องการ') && fn:contains(d.question.questionsText, 'หรือไม่') && d.answer == 'ไม่ต้องการ'}">ไม่ต้องการ</c:when>
                                 <c:when test="${empty d.answer || d.answer == 'ไม่ต้องการ'}">-</c:when>
                                 <c:otherwise>${d.answer}</c:otherwise>
                             </c:choose>
@@ -147,11 +157,13 @@
         <div class="section">
             <div class="section-title">รายละเอียดสังฆทาน</div>
             <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน') || fn:contains(d.question.questionsText, 'ชุดสังฆทาน')}">
+                <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน')}">
                     <div class="info-row">
                         <span class="info-label">${d.question.questionsText}</span>
                         <span class="info-value">
                             <c:choose>
+                                <%-- คำถามแบบ "ต้องการ...หรือไม่" ที่ตอบ "ไม่ต้องการ" ให้แสดงคำตอบจริง --%>
+                                <c:when test="${fn:contains(d.question.questionsText, 'ต้องการ') && fn:contains(d.question.questionsText, 'หรือไม่') && d.answer == 'ไม่ต้องการ'}">ไม่ต้องการ</c:when>
                                 <c:when test="${empty d.answer || d.answer == 'ไม่ต้องการ'}">-</c:when>
                                 <c:otherwise>${d.answer}</c:otherwise>
                             </c:choose>
@@ -160,29 +172,31 @@
                 </c:if>
             </c:forEach>
         </div>
-        
+
+        <%-- Action Bar --%>
         <div class="action-bar">
-            <c:choose>
-                <c:when test="${b.bookingStatus == 'Pending'}">
-		            <%-- เพิ่มปุ่มรับงานกลับมา --%>
-		            <button type="button" class="btn btn-approve" 
-		                onclick="openApproveModal('${b.bookingId}', '${pageContext.request.contextPath}/organizer/bookings/approve/${b.bookingId}')">
-		                รับงานและเตรียมใบเสนอราคา
-		            </button>
-		            <button type="button" class="btn btn-reject"
-		                onclick="openRejectModal('${b.bookingId}', '${pageContext.request.contextPath}/organizer/bookings/reject/${b.bookingId}')">
-		                ปฏิเสธงาน
-		            </button>
-		        </c:when>
-                <c:when test="${b.bookingStatus == 'Approved' || b.bookingStatus == 'Quoted'}">
-                    <a href="${pageContext.request.contextPath}/organizer/quotation/create/${b.bookingId}" class="btn btn-approve">จัดการใบเสนอราคา</a>
-                </c:when>
-            </c:choose>
+            <div class="action-btn-group">
+                <c:choose>
+                    <c:when test="${b.bookingStatus == 'Pending'}">
+                        <button type="button" class="btn btn-approve"
+                            onclick="openApproveModal('${b.bookingId}', '${pageContext.request.contextPath}/organizer/bookings/approve/${b.bookingId}')">
+                            รับงานและเตรียมใบเสนอราคา
+                        </button>
+                        <button type="button" class="btn btn-reject"
+                            onclick="openRejectModal('${b.bookingId}', '${pageContext.request.contextPath}/organizer/bookings/reject/${b.bookingId}')">
+                            ปฏิเสธงาน
+                        </button>
+                    </c:when>
+                    <c:when test="${b.bookingStatus == 'Approved' || b.bookingStatus == 'Quoted'}">
+                        <a href="${pageContext.request.contextPath}/organizer/quotation/create/${b.bookingId}" class="btn btn-approve">จัดการใบเสนอราคา</a>
+                    </c:when>
+                </c:choose>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Modal -->
+<%-- Modal อนุมัติ --%>
 <div id="approveModal" class="modal-overlay" style="display: none;">
     <div class="modal-card">
         <h3 class="modal-title">ยืนยันอนุมัติการจอง</h3>
@@ -192,23 +206,24 @@
         </div>
         <p class="modal-footer-note">หลังอนุมัติสามารถทำใบเสนอราคาได้ทันที</p>
         <div class="modal-btn-group">
-            <button type="button" class="btn-cancel" onclick="closeApproveModal()">ยกเลิก</button>
-            <a id="confirmApproveLink" href="#" class="btn-confirm-approve">ยืนยันอนุมัติ</a>
+            <button type="button" class="btn-modal-cancel" onclick="closeApproveModal()">ยกเลิก</button>
+            <a id="confirmApproveLink" href="#" class="btn-modal-approve">ยืนยันอนุมัติ</a>
         </div>
     </div>
 </div>
 
+<%-- Modal ปฏิเสธ --%>
 <div id="rejectModal" class="modal-overlay" style="display: none;">
     <div class="modal-card">
         <h3 class="modal-title">ยืนยันการปฏิเสธงาน</h3>
         <p class="modal-subtitle">การดำเนินการนี้จะเปลี่ยนสถานะเป็น "ปฏิเสธแล้ว"</p>
-        <div class="modal-id-container" style="border-color:#ef9a9a; background:#fdecea;">
-            <span id="displayRejectBookingId" class="modal-id-text" style="color:#c62828;"></span>
+        <div class="modal-id-container modal-id-reject">
+            <span id="displayRejectBookingId" class="modal-id-text modal-id-text-reject"></span>
         </div>
         <p class="modal-footer-note">การปฏิเสธไม่สามารถย้อนกลับได้</p>
         <div class="modal-btn-group">
-            <button type="button" class="btn-cancel" onclick="closeRejectModal()">ยกเลิก</button>
-            <a id="confirmRejectLink" href="#" class="btn-confirm-reject">ยืนยันปฏิเสธ</a>
+            <button type="button" class="btn-modal-cancel" onclick="closeRejectModal()">ยกเลิก</button>
+            <a id="confirmRejectLink" href="#" class="btn-modal-reject">ยืนยันปฏิเสธ</a>
         </div>
     </div>
 </div>

@@ -15,7 +15,10 @@
 
 <%-- ========== NAVBAR ========== --%>
 <div class="navbar">
-    <a href="${pageContext.request.contextPath}/home" class="navbar-title">ระบบรับจัดงานบุญ</a>
+    <a href="${pageContext.request.contextPath}/home" class="navbar-title">
+        <span class="navbar-logo">🪷</span>
+        ระบบรับจัดงานบุญ
+    </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
             <a href="${pageContext.request.contextPath}/home"         class="nav-item">หน้าหลัก</a>

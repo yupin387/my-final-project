@@ -1,140 +1,283 @@
+/* ==========================================================================
+   GLOBAL
+   ========================================================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+    --gold:          #C9960C;
+    --gold-mid:      #D4A017;
+    --gold-light:    #E8BB3A;
+    --gold-pale:     #F5D97A;
+    --cream:         #FFFBF0;
+    --cream-warm:    #FFF8E1;
+    --cream-mid:     #FDF3D0;
+    --cream-border:  #E8CC70;
+    --cream-border-soft: #EDD98A;
+    --text-dark:     #2C1F00;
+    --text-mid:      #5A4000;
+    --brown-dark:    #4A2E00;
+    --brown-mid:     #7A5200;
+}
+
 body {
-    background-color: #FDF3DC;
+    background-color: var(--cream);
     font-family: 'Sarabun', sans-serif;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* ===== NAVBAR ===== */
+/* ==========================================================================
+   NAVBAR
+   ========================================================================== */
 .main-navbar {
-    background-color: #8B1A1A;
-    border-bottom: 3px solid #D4A017;
-    padding: 20px 32px;
+    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
+    padding: 0 36px;
     display: flex;
     align-items: center;
+    border-bottom: 3px solid var(--gold-mid);
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    min-height: 68px;
+    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    position: relative;
 }
 
-.nav-title {
-    font-size: 1.35rem;
+.main-navbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+}
+
+.navbar-brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.lotus-icon {
+    background: linear-gradient(135deg, #7A5200, #5C3800);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border: 1.5px solid var(--gold-mid);
+    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    flex-shrink: 0;
+}
+
+.nav-brand-text {
+    color: var(--gold-pale);
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 22px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: #FDF3DC;
-    font-family: 'Sarabun', sans-serif;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
 }
 
-/* ===== CARD ===== */
+/* ==========================================================================
+   SECTION ORNAMENT
+   ========================================================================== */
+.section-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.ornament-line {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid));
+}
+
+.ornament-line.right {
+    background: linear-gradient(90deg, var(--gold-mid), transparent);
+}
+
+.ornament-diamond {
+    width: 10px; height: 10px;
+    background: var(--gold-mid);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+.ornament-diamond-sm {
+    width: 5px; height: 5px;
+    background: var(--gold-pale);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   PAGE WRAPPER & CARD
+   ========================================================================== */
+.page-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 48px;
+}
+
 .login-card {
-    background: white;
-    border-radius: 16px;
-    padding: 40px 50px 38px;
-    max-width: 500px;
-    margin: 40px auto 60px;
-    border: 1.5px solid #D4A017;
-    box-shadow: 0 4px 24px rgba(139, 26, 26, 0.10);
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 36px 48px 40px;
+    width: 100%;
+    max-width: 480px;
+    border: 1.5px solid var(--gold-mid);
+    box-shadow: 0 8px 40px rgba(180, 130, 0, 0.13);
+    position: relative;
+    overflow: hidden;
 }
 
-/* ===== TITLE ===== */
+/* ลายประดับมุมบน */
+.login-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--gold-pale) 15%,
+        var(--gold-mid) 35%,
+        var(--gold-light) 50%,
+        var(--gold-mid) 65%,
+        var(--gold-pale) 85%,
+        transparent 100%
+    );
+}
+
+.login-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, var(--cream-mid) 0%, transparent 65%);
+    border-radius: 0 0 100% 0;
+    pointer-events: none;
+}
+
+/* Lotus decoration top center */
+.card-lotus-top {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 2px 6px rgba(180,130,0,0.3));
+}
+
+/* ==========================================================================
+   CARD HEADER
+   ========================================================================== */
 .card-header-section {
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 24px;
 }
 
 .title-main {
-    color: #5a1010;
+    color: var(--brown-dark);
+    font-family: 'Noto Serif Thai', serif;
     font-weight: 700;
-    font-size: 1.55rem;
+    font-size: 1.5rem;
     margin-bottom: 6px;
-    font-family: 'Sarabun', sans-serif;
 }
 
 .subtitle-muted {
-    color: #999;
+    color: #A08840;
     font-size: 0.88rem;
     font-family: 'Sarabun', sans-serif;
 }
 
-/* ===== DIVIDER with label ===== */
-.divider-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 24px 0 20px;
-    color: #b8860b;
-    font-size: 0.82rem;
-    font-weight: 700;
-    font-family: 'Sarabun', sans-serif;
+.gold-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-light), var(--gold-mid), transparent);
+    border-radius: 2px;
+    margin: 12px auto 0;
 }
 
-.divider-label::before,
-.divider-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background-color: #e0c070;
-}
+/* ==========================================================================
+   FORM
+   ========================================================================== */
+.login-form { display: flex; flex-direction: column; gap: 0; }
 
-/* ===== FORM ===== */
+.form-group { margin-bottom: 18px; }
+
 .login-label {
     display: block;
     font-size: 0.9rem;
     font-weight: 700;
-    color: #5a1010;
-    margin-bottom: 6px;
+    color: var(--brown-dark);
+    margin-bottom: 7px;
     font-family: 'Sarabun', sans-serif;
 }
 
 .login-input {
     width: 100%;
-    background-color: #fffdf5;
-    border: 1.5px solid #e0c070;
+    background-color: var(--cream-warm);
+    border: 1.5px solid var(--cream-border-soft);
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 11px 15px;
     font-family: 'Sarabun', sans-serif;
     font-size: 0.92rem;
-    color: #444;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    color: #333;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
     outline: none;
 }
 
-.login-input::placeholder { color: #bba870; }
+.login-input::placeholder { color: #BFA060; }
 
 .login-input:focus {
-    background-color: #fffdf5;
-    border-color: #8B1A1A;
-    box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.10);
+    background-color: #FFFFFF;
+    border-color: var(--gold-mid);
+    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15);
 }
 
-/* ===== BUTTON ===== */
+/* ==========================================================================
+   BUTTON
+   ========================================================================== */
 .btn-login {
-    background-color: #8B1A1A;
-    color: #FDF3DC;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: var(--brown-dark);
     border: none;
     padding: 13px;
-    border-radius: 8px;
+    border-radius: 10px;
     width: 100%;
     font-weight: 700;
     font-size: 1rem;
-    letter-spacing: 0.3px;
     font-family: 'Sarabun', sans-serif;
-    transition: background-color 0.2s, transform 0.2s;
     cursor: pointer;
-    display: block;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(180, 130, 0, 0.25);
+    margin-bottom: 6px;
+    margin-top: 4px;
 }
 
 .btn-login:hover {
-    background-color: #6e1414;
-    color: #FDF3DC;
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(180, 130, 0, 0.35);
 }
 
-/* ===== OR divider ===== */
+/* ==========================================================================
+   OR DIVIDER
+   ========================================================================== */
 .or-divider {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 22px 0 16px;
-    color: #b8860b;
+    margin: 20px 0 16px;
+    color: #A08840;
     font-size: 0.82rem;
     font-weight: 700;
     font-family: 'Sarabun', sans-serif;
@@ -145,35 +288,50 @@ body {
     content: '';
     flex: 1;
     height: 1px;
-    background-color: #e0c070;
+    background-color: var(--cream-border);
 }
 
-/* ===== FOOTER LINKS ===== */
+/* ==========================================================================
+   FOOTER LINKS
+   ========================================================================== */
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+
 .footer-link {
     color: #888;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-family: 'Sarabun', sans-serif;
+    transition: color 0.2s;
 }
 
 .footer-link b {
-    color: #8B1A1A;
+    color: var(--brown-mid);
     font-weight: 700;
 }
 
-.footer-link:hover b { text-decoration: underline; }
+.footer-link:hover b { text-decoration: underline; color: var(--gold-mid); }
 
 .back-link {
-    color: #8B1A1A;
+    color: var(--brown-mid);
     text-decoration: none;
     font-size: 0.88rem;
     font-weight: 600;
     font-family: 'Sarabun', sans-serif;
+    transition: color 0.2s;
+    margin-top: 4px;
+    display: inline-block;
 }
 
-.back-link:hover { text-decoration: underline; }
+.back-link:hover { color: var(--gold-mid); }
 
-/* ===== ERROR MESSAGE ===== */
+/* ==========================================================================
+   ERROR MESSAGE
+   ========================================================================== */
 .alert-login {
     background-color: #fff0f0;
     border: 1px solid #ffb3b3;
@@ -183,4 +341,13 @@ body {
     font-size: 0.88rem;
     margin-bottom: 16px;
     font-family: 'Sarabun', sans-serif;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 540px) {
+    .login-card { padding: 28px 24px 32px; }
+    .main-navbar { padding: 0 16px; }
+    .nav-brand-text { font-size: 18px; }
 }

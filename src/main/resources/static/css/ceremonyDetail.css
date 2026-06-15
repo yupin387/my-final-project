@@ -1,80 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+
 /* ===== CSS Variables ===== */
 :root {
-    --cd-bg: #FDF3DC;
-    --cd-red: #8B1A1A;
-    --cd-dark-red: #6e1414;
-    --cd-gold: #D4A017;
-    --cd-gold-light: #e0c070;
-    --cd-gold-pale: #FFF8E7;
-    --cd-text: #3a1a1a;
-    --cd-text-mid: #666;
+    --gold:              #C9960C;
+    --gold-mid:          #D4A017;
+    --gold-light:        #E8BB3A;
+    --gold-pale:         #F5D97A;
+    --gold-glow:         #FDE68A;
+
+    --cream:             #FFFBF0;
+    --cream-warm:        #FFF8E1;
+    --cream-mid:         #FDF3D0;
+    --cream-border:      #E8CC70;
+    --cream-border-soft: #EDD98A;
+
+    --white:             #FFFFFF;
+
+    --text-dark:         #2C1F00;
+    --text-mid:          #5A4000;
+    --text-body:         #6B5200;
+    --text-muted:        #A08840;
+
+    --brown-dark:        #4A2E00;
+    --brown-mid:         #7A5200;
+
+    --shadow-warm:       rgba(100, 70, 0, 0.08);
+    --shadow-gold:       rgba(180, 130, 0, 0.12);
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background-color: var(--cd-bg);
     font-family: 'Sarabun', sans-serif;
-    color: var(--cd-text);
+    background-color: var(--cream);
+    color: var(--text-dark);
     min-height: 100vh;
-    margin: 0;
-    padding: 0;
 }
 
-/* ===== NAVBAR — prefix cd- ป้องกัน Bootstrap override ===== */
+/* ========== NAVBAR ========== */
 .cd-navbar {
-    background-color: var(--cd-red) !important;
-    border-bottom: 3px solid var(--cd-gold) !important;
-    padding: 20px 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 9999 !important;
-    width: 100% !important;
+    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
+    padding: 0 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--gold-mid);
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    min-height: 68px;
+    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
 }
 
-.cd-nav-title {
-    color: var(--cd-bg) !important;
-    font-size: 1.3rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 1px !important;
-    font-family: 'Sarabun', sans-serif !important;
+.cd-navbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
 }
 
-.cd-nav-links {
-    display: flex !important;
-    gap: 6px !important;
-    align-items: center !important;
+.cd-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
 }
 
-.cd-nav-link {
-    color: var(--cd-bg) !important;
-    text-decoration: none !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    padding: 7px 16px !important;
-    border-radius: 6px !important;
-    font-family: 'Sarabun', sans-serif !important;
-    transition: background 0.2s !important;
-}
-
-.cd-nav-link:hover {
-    background: rgba(212, 160, 23, 0.2) !important;
-}
-
-/* ===== HERO BANNER ===== */
-.cd-hero {
-    position: relative;
-    height: 420px;
-    background-size: cover;
-    background-position: center 30%;
-    background-color: #5a3a1a; /* fallback ถ้ารูปยังโหลดไม่ขึ้น */
+.cd-lotus-icon {
+    background: linear-gradient(135deg, #7A5200, #5C3800);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 4px solid var(--cd-gold);
+    font-size: 24px;
+    border: 1.5px solid var(--gold-mid);
+    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    flex-shrink: 0;
+}
+
+.cd-nav-title {
+    color: var(--gold-pale);
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+}
+
+.cd-nav-links {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.cd-nav-link {
+    color: rgba(253, 237, 160, 0.8);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+
+.cd-nav-link:hover {
+    background: rgba(212, 160, 23, 0.18);
+    color: var(--gold-pale);
+}
+
+/* ========== HERO BANNER ========== */
+.cd-hero {
+    position: relative;
+    height: 440px;
+    background-size: cover;
+    background-position: center 30%;
+    background-color: #5C3800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
 }
 
@@ -83,9 +131,19 @@ body {
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(60, 10, 10, 0.52) 0%,
-        rgba(60, 10, 10, 0.72) 100%
+        rgba(40, 20, 0, 0.50) 0%,
+        rgba(60, 35, 0, 0.35) 50%,
+        rgba(30, 15, 0, 0.72) 100%
     );
+}
+
+/* เส้นทองด้านล่าง hero */
+.cd-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
 }
 
 .cd-hero-content {
@@ -93,60 +151,121 @@ body {
     z-index: 2;
     text-align: center;
     color: white;
-    padding: 0 20px;
+    padding: 0 24px;
+    max-width: 680px;
 }
 
 .cd-hero-tag {
     display: inline-block;
-    background: var(--cd-gold);
-    color: var(--cd-red);
-    font-size: 12px;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: var(--brown-dark);
+    font-size: 0.78rem;
     font-weight: 700;
-    padding: 5px 16px;
+    padding: 5px 20px;
     border-radius: 20px;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-    font-family: 'Sarabun', sans-serif;
+    margin-bottom: 18px;
+    letter-spacing: 1.5px;
+    box-shadow: 0 2px 10px rgba(180, 130, 0, 0.4);
 }
 
 .cd-hero-title {
-    font-size: 3rem;
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 2.8rem;
     font-weight: 700;
-    text-shadow: 2px 2px 12px rgba(0,0,0,0.5);
+    line-height: 1.25;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.5);
     margin-bottom: 12px;
-    line-height: 1.2;
-    font-family: 'Sarabun', sans-serif;
+    color: #FFFDF5;
 }
 
 .cd-hero-desc {
-    font-size: 1.05rem;
-    opacity: 0.88;
+    font-size: 1rem;
+    color: rgba(255, 251, 230, 0.85);
     margin-bottom: 20px;
-    max-width: 520px;
-    margin-left: auto;
-    margin-right: auto;
-    font-family: 'Sarabun', sans-serif;
+    line-height: 1.75;
+}
+
+.cd-hero-divider {
+    width: 70px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    margin: 0 auto 20px;
+    border-radius: 2px;
 }
 
 .cd-price-tag {
     display: inline-block;
-    background: rgba(255,255,255,0.92);
-    color: var(--cd-red);
-    padding: 10px 28px;
+    background: rgba(255, 251, 230, 0.92);
+    color: var(--brown-dark);
+    padding: 10px 32px;
     border-radius: 50px;
     font-weight: 700;
     font-size: 1.1rem;
-    border: 2px solid var(--cd-gold);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    border: 2px solid var(--gold-mid);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
     font-family: 'Sarabun', sans-serif;
 }
 
-/* ===== MAIN CONTENT ===== */
+/* ========== SECTION ORNAMENT ========== */
+.cd-section-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 8px;
+}
+
+.cd-ornament-line {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid));
+}
+
+.cd-ornament-line.right {
+    background: linear-gradient(90deg, var(--gold-mid), transparent);
+}
+
+.cd-ornament-diamond {
+    width: 10px; height: 10px;
+    background: var(--gold-mid);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+.cd-ornament-diamond-sm {
+    width: 5px; height: 5px;
+    background: var(--gold-pale);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+.cd-section-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.cd-section-title {
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--brown-dark);
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.cd-gold-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-light), var(--gold-mid), transparent);
+    border-radius: 2px;
+    margin: 10px auto 0;
+}
+
+/* ========== MAIN CONTENT ========== */
 .cd-container {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 40px 24px 120px;
+    padding: 48px 24px 120px;
 }
 
 .cd-grid {
@@ -158,29 +277,53 @@ body {
 @media (max-width: 768px) {
     .cd-grid { grid-template-columns: 1fr; }
     .cd-hero-title { font-size: 2rem; }
+    .cd-navbar { padding: 0 16px; }
 }
 
-/* ===== CARD ===== */
+/* ========== CARD ========== */
 .cd-card {
-    background: white;
-    border-radius: 14px;
-    border: 1.5px solid var(--cd-gold-light);
+    background: var(--white);
+    border-radius: 18px;
+    border: 1.5px solid var(--cream-border-soft);
     padding: 24px 28px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 20px rgba(139, 26, 26, 0.06);
+    box-shadow: 0 4px 20px var(--shadow-warm);
+    position: relative;
+    overflow: hidden;
+}
+
+/* เส้นทองด้านบน card */
+.cd-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20px; right: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    border-radius: 0 0 2px 2px;
+}
+
+/* มุมทองซ้ายบน */
+.cd-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--cream-mid) 0%, transparent 65%);
+    border-radius: 0 0 100% 0;
+    pointer-events: none;
 }
 
 .cd-card-title {
-    color: var(--cd-red);
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--brown-dark);
     font-weight: 700;
     font-size: 1.05rem;
     padding-bottom: 12px;
     margin-bottom: 18px;
-    border-bottom: 2px solid var(--cd-gold-light);
+    border-bottom: 1.5px solid var(--cream-border);
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: 'Sarabun', sans-serif;
 }
 
 .cd-card-title::before {
@@ -188,12 +331,12 @@ body {
     display: inline-block;
     width: 4px;
     height: 18px;
-    background: var(--cd-gold);
+    background: linear-gradient(to bottom, var(--gold-mid), var(--gold-light));
     border-radius: 2px;
     flex-shrink: 0;
 }
 
-/* ===== ITEM LIST ===== */
+/* ========== ITEM LIST ========== */
 .cd-item-list {
     list-style: none;
     padding: 0;
@@ -205,10 +348,9 @@ body {
     align-items: flex-start;
     gap: 10px;
     padding: 9px 0;
-    border-bottom: 1px dashed #f0e4c8;
+    border-bottom: 1px dashed var(--cream-border);
     font-size: 14px;
-    color: #444;
-    font-family: 'Sarabun', sans-serif;
+    color: var(--text-body);
 }
 
 .cd-item-list li:last-child { border-bottom: none; }
@@ -217,61 +359,59 @@ body {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--cd-gold);
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
     flex-shrink: 0;
     margin-top: 5px;
+    box-shadow: 0 1px 4px rgba(180, 130, 0, 0.3);
 }
 
 .cd-item-detail {
-    color: #999;
+    color: var(--text-muted);
     font-size: 13px;
 }
 
-/* ===== SERVICE ROW ===== */
+/* ========== SERVICE ROW ========== */
 .cd-service-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid #f5eedd;
+    border-bottom: 1px solid var(--cream-mid);
     font-size: 14px;
-    font-family: 'Sarabun', sans-serif;
 }
 
 .cd-service-row:last-child { border-bottom: none; }
 
-.cd-service-name { color: #444; }
+.cd-service-name { color: var(--text-body); }
 
 .cd-service-badge {
-    background: var(--cd-gold-pale);
-    color: var(--cd-red);
-    border: 1px solid var(--cd-gold-light);
+    background: var(--cream-warm);
+    color: var(--brown-mid);
+    border: 1px solid var(--cream-border-soft);
     border-radius: 20px;
-    padding: 3px 12px;
+    padding: 4px 14px;
     font-size: 12px;
     font-weight: 600;
-    font-family: 'Sarabun', sans-serif;
 }
 
-/* ===== PINTO ===== */
+/* ========== PINTO / SANGKATAN ========== */
 .cd-pinto-sub {
     font-size: 13px;
-    color: #999;
+    color: var(--text-muted);
     margin-bottom: 18px;
-    font-family: 'Sarabun', sans-serif;
 }
 
 .cd-pinto-box {
-    border: 1.5px solid var(--cd-gold-light);
-    border-radius: 12px;
+    border: 1.5px solid var(--cream-border-soft);
+    border-radius: 14px;
     overflow: hidden;
     margin-bottom: 16px;
-    background: white;
+    background: var(--white);
 }
 
 .cd-pinto-head {
-    background: var(--cd-gold-pale);
-    border-bottom: 1.5px solid var(--cd-gold-light);
+    background: linear-gradient(135deg, var(--cream-mid), var(--cream-warm));
+    border-bottom: 1.5px solid var(--cream-border);
     padding: 13px 18px;
     display: flex;
     justify-content: space-between;
@@ -279,57 +419,76 @@ body {
 }
 
 .cd-pinto-name {
+    font-family: 'Noto Serif Thai', serif;
     font-weight: 700;
-    color: var(--cd-red);
+    color: var(--brown-dark);
     font-size: 15px;
-    font-family: 'Sarabun', sans-serif;
 }
 
 .cd-pinto-price {
     font-weight: 700;
-    color: var(--cd-red);
+    color: var(--brown-mid);
     font-size: 14px;
-    font-family: 'Sarabun', sans-serif;
+    background: var(--gold-glow);
+    border: 1px solid var(--cream-border);
+    border-radius: 20px;
+    padding: 3px 12px;
 }
 
 .cd-pinto-body { padding: 16px 18px; }
 
 .cd-menu-label {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    color: #b8860b;
+    color: var(--gold-mid);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     margin-bottom: 8px;
-    margin-top: 12px;
-    font-family: 'Sarabun', sans-serif;
+    margin-top: 14px;
 }
 
 .cd-menu-label:first-child { margin-top: 0; }
 
 .cd-menu-list {
-    list-style: disc;
-    padding-left: 18px;
+    list-style: none;
+    padding: 0;
     margin: 0 0 4px;
 }
 
 .cd-menu-list li {
     font-size: 13px;
-    color: #555;
-    padding: 3px 0;
-    font-family: 'Sarabun', sans-serif;
+    color: var(--text-body);
+    padding: 4px 0;
+    padding-left: 14px;
+    position: relative;
 }
 
-/* ===== FOOTER BAR ===== */
+.cd-menu-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--gold-mid);
+}
+
+/* ========== FOOTER BAR ========== */
 .cd-footer {
-    background: white;
+    background: var(--white);
     position: fixed;
     bottom: 0;
     width: 100%;
-    padding: 16px 0;
-    border-top: 2px solid var(--cd-gold-light);
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    padding: 14px 0;
+    border-top: 2px solid var(--cream-border);
+    box-shadow: 0 -4px 20px var(--shadow-gold);
     z-index: 1000;
+}
+
+/* เส้นทองด้านบน footer bar */
+.cd-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-mid), var(--gold-pale), transparent);
 }
 
 .cd-footer-inner {
@@ -342,28 +501,30 @@ body {
 }
 
 .cd-footer-price {
+    font-family: 'Noto Serif Thai', serif;
     font-weight: 700;
     font-size: 1.15rem;
-    color: var(--cd-red);
-    font-family: 'Sarabun', sans-serif;
+    color: var(--brown-dark);
 }
 
 .cd-btn-book {
-    background-color: var(--cd-red);
-    color: var(--cd-bg);
-    border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: var(--brown-dark);
+    border-radius: 12px;
     padding: 12px 36px;
     font-weight: 700;
     font-size: 15px;
     text-decoration: none;
     font-family: 'Sarabun', sans-serif;
-    transition: background 0.2s, transform 0.2s;
+    transition: all 0.2s;
     display: inline-block;
-    border: 2px solid var(--cd-gold);
+    box-shadow: 0 4px 14px rgba(180, 130, 0, 0.28);
+    border: none;
 }
 
 .cd-btn-book:hover {
-    background-color: var(--cd-dark-red);
-    color: var(--cd-bg);
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(180, 130, 0, 0.38);
+    color: var(--brown-dark);
 }

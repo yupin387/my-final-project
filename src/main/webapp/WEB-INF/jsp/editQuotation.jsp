@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="c"   uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!DOCTYPE html>
 <html lang="th">
@@ -7,14 +7,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขใบเสนอราคา #${q.quotationId} - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=3">
 </head>
 <body>
 
 <%-- ===== NAVBAR ===== --%>
-<div class="navbar">
-    <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+<nav class="navbar">
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
+        <div class="navbar-lotus">🪷</div>
+        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+    </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
             <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item">รายการจอง</a>
@@ -34,15 +36,27 @@
             </div>
         </div>
     </div>
-</div>
+</nav>
+
+
 
 <div class="page-wrapper">
+
+    <%-- Page Title --%>
     <div class="page-title-row">
+        <div class="section-ornament">
+            <div class="ornament-line"></div>
+            <div class="ornament-diamond-sm"></div>
+            <div class="ornament-diamond"></div>
+            <div class="ornament-diamond-sm"></div>
+            <div class="ornament-line right"></div>
+        </div>
         <h1>แก้ไขใบเสนอราคา ${q.quotationId}</h1>
+        <div class="gold-line"></div>
         <p>ปรับปรุงแก้ไขรายการวัสดุและคำนวณเงินใบเสนอราคาใหม่</p>
     </div>
 
-    <%-- ===== INFO CARD ===== --%>
+    <%-- INFO CARD --%>
     <div class="info-card">
         <div class="info-grid">
             <div class="info-box">
@@ -59,9 +73,7 @@
             </div>
             <div class="info-box">
                 <span class="info-label">วันที่จัดงาน</span>
-                <span class="info-value">
-                    <fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/>
-                </span>
+                <span class="info-value"><fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></span>
             </div>
             <div class="info-box">
                 <span class="info-label">เวลา</span>
@@ -70,7 +82,7 @@
         </div>
     </div>
 
-    <%-- ===== FORM ===== --%>
+    <%-- FORM --%>
     <form id="quotationForm"
           action="${pageContext.request.contextPath}/organizer/quotation/update"
           method="post" onsubmit="return validateForm()">
@@ -83,14 +95,9 @@
 
                     <table id="mainQuotationTable">
                         <colgroup>
-                            <col class="col-no">
-                            <col class="col-item">
-                            <col class="col-qty">
-                            <col class="col-unit">
-                            <col class="col-price">
-                            <col class="col-total">
-                            <col class="col-note">
-                            <col class="col-del">
+                            <col class="col-no"><col class="col-item"><col class="col-qty">
+                            <col class="col-unit"><col class="col-price"><col class="col-total">
+                            <col class="col-note"><col class="col-del">
                         </colgroup>
                         <thead>
                             <tr>
@@ -100,12 +107,12 @@
                                 <th style="text-align:center;">หน่วย</th>
                                 <th style="text-align:right;">ราคา/หน่วย</th>
                                 <th style="text-align:right;">รวมเงิน (฿)</th>
-                                <th>หมายเหตุรายการ</th>
+                                <th>หมายเหตุ</th>
                                 <th style="text-align:center;">ลบ</th>
                             </tr>
                         </thead>
 
-                        <%-- ===== หมวดอุปกรณ์พิธีกรรม ===== --%>
+                        <%-- หมวดอุปกรณ์พิธีกรรม --%>
                         <tbody id="group-equipment">
                             <tr class="group-row"><td colspan="8">หมวดอุปกรณ์พิธีกรรม</td></tr>
                             <c:forEach var="d" items="${details}">
@@ -119,21 +126,17 @@
                                             </c:if>
                                             <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
                                         </td>
-                                        <%-- qty: JS แปลงเป็น qty-wrapper อัตโนมัติ --%>
                                         <td>
                                             <input type="number" name="extraQtys" value="${d.quantity}" min="1"
-                                                   class="qty-input" style="text-align:center;"
-                                                   onchange="calculateGrandTotal()">
+                                                   class="qty-input" style="text-align:center;" onchange="calculateGrandTotal()">
                                         </td>
                                         <td style="text-align:center;">${d.item.unit}</td>
                                         <td>
                                             <input type="number" name="extraPrices" value="${d.item.pricePerUnit}"
-                                                   step="0.01" min="0" class="price-input"
-                                                   style="text-align:right;" onchange="calculateGrandTotal()">
+                                                   step="0.01" min="0" class="price-input" style="text-align:right;"
+                                                   onchange="calculateGrandTotal()">
                                         </td>
-                                        <td style="text-align:right;" class="amount-cell">
-                                            <span class="subtotal">0.00</span>
-                                        </td>
+                                        <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
                                         <td><input type="text" name="detailNotes" value="${d.note}" class="note-input" placeholder="หมายเหตุ"></td>
                                         <td style="text-align:center;">
                                             <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
@@ -143,7 +146,7 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- ===== หมวดภัตตาหารปิ่นโต ===== --%>
+                        <%-- หมวดภัตตาหารปิ่นโต --%>
                         <tbody id="group-food">
                             <tr class="group-row"><td colspan="8">หมวดภัตตาหารปิ่นโต</td></tr>
                             <c:forEach var="d" items="${details}">
@@ -159,18 +162,15 @@
                                         </td>
                                         <td>
                                             <input type="number" name="bookingQtys" value="${d.quantity}" min="1"
-                                                   class="qty-input" style="text-align:center;"
-                                                   onchange="calculateGrandTotal()">
+                                                   class="qty-input" style="text-align:center;" onchange="calculateGrandTotal()">
                                         </td>
                                         <td style="text-align:center;">${d.item.unit}</td>
                                         <td>
                                             <input type="number" name="bookingPrices" value="${d.item.pricePerUnit}"
-                                                   step="0.01" min="0" class="price-input"
-                                                   style="text-align:right;" onchange="calculateGrandTotal()">
+                                                   step="0.01" min="0" class="price-input" style="text-align:right;"
+                                                   onchange="calculateGrandTotal()">
                                         </td>
-                                        <td style="text-align:right;" class="amount-cell">
-                                            <span class="subtotal">0.00</span>
-                                        </td>
+                                        <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
                                         <td><input type="text" name="detailNotes" value="${d.note}" class="note-input" placeholder="หมายเหตุ"></td>
                                         <td style="text-align:center;">
                                             <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
@@ -180,7 +180,7 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- ===== หมวดสังฆทาน ===== --%>
+                        <%-- หมวดสังฆทาน --%>
                         <tbody id="group-sangkathan">
                             <tr class="group-row"><td colspan="8">หมวดสังฆทาน</td></tr>
                             <c:forEach var="d" items="${details}">
@@ -196,18 +196,15 @@
                                         </td>
                                         <td>
                                             <input type="number" name="bookingQtys" value="${d.quantity}" min="1"
-                                                   class="qty-input" style="text-align:center;"
-                                                   onchange="calculateGrandTotal()">
+                                                   class="qty-input" style="text-align:center;" onchange="calculateGrandTotal()">
                                         </td>
                                         <td style="text-align:center;">${d.item.unit}</td>
                                         <td>
                                             <input type="number" name="bookingPrices" value="${d.item.pricePerUnit}"
-                                                   step="0.01" min="0" class="price-input"
-                                                   style="text-align:right;" onchange="calculateGrandTotal()">
+                                                   step="0.01" min="0" class="price-input" style="text-align:right;"
+                                                   onchange="calculateGrandTotal()">
                                         </td>
-                                        <td style="text-align:right;" class="amount-cell">
-                                            <span class="subtotal">0.00</span>
-                                        </td>
+                                        <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
                                         <td><input type="text" name="detailNotes" value="${d.note}" class="note-input" placeholder="หมายเหตุ"></td>
                                         <td style="text-align:center;">
                                             <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
@@ -217,11 +214,9 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- ===== หมวดบริการและการดำเนินการ (พระสงฆ์) ===== --%>
+                        <%-- หมวดบริการและการดำเนินการ --%>
                         <tbody id="group-service">
                             <tr class="group-row"><td colspan="8">หมวดบริการและการดำเนินการ</td></tr>
-
-                            <%-- แถวพระสงฆ์ --%>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemId == 1}">
                                     <tr class="static-row" data-item-id="1">
@@ -232,25 +227,20 @@
                                         </td>
                                         <td>
                                             <input type="number" name="extraQtys" value="${d.quantity}" min="1"
-                                                   class="qty-input" style="text-align:center;"
-                                                   onchange="calculateGrandTotal()">
+                                                   class="qty-input" style="text-align:center;" onchange="calculateGrandTotal()">
                                         </td>
                                         <td style="text-align:center;">รูป</td>
                                         <td>
                                             <input type="number" name="extraPrices" value="200.00"
-                                                   step="0.01" min="0" class="price-input"
-                                                   style="text-align:right;" onchange="calculateGrandTotal()">
+                                                   step="0.01" min="0" class="price-input" style="text-align:right;"
+                                                   onchange="calculateGrandTotal()">
                                         </td>
-                                        <td style="text-align:right;" class="amount-cell">
-                                            <span class="subtotal">0.00</span>
-                                        </td>
+                                        <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
                                         <td><input type="text" name="detailNotes" value="${d.note}" class="note-input"></td>
                                         <td style="text-align:center;">-</td>
                                     </tr>
                                 </c:if>
                             </c:forEach>
-
-                            <%-- บริการอื่นๆ ที่ไม่ใช่พระสงฆ์ --%>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemId != 1 && d.item.itemType.itemTypeName.contains('บริการ')}">
                                     <tr class="dynamic-row" data-item-id="${d.item.itemId}">
@@ -264,18 +254,15 @@
                                         </td>
                                         <td>
                                             <input type="number" name="extraQtys" value="${d.quantity}" min="1"
-                                                   class="qty-input" style="text-align:center;"
-                                                   onchange="calculateGrandTotal()">
+                                                   class="qty-input" style="text-align:center;" onchange="calculateGrandTotal()">
                                         </td>
                                         <td style="text-align:center;">${d.item.unit}</td>
                                         <td>
                                             <input type="number" name="extraPrices" value="${d.item.pricePerUnit}"
-                                                   step="0.01" min="0" class="price-input"
-                                                   style="text-align:right;" onchange="calculateGrandTotal()">
+                                                   step="0.01" min="0" class="price-input" style="text-align:right;"
+                                                   onchange="calculateGrandTotal()">
                                         </td>
-                                        <td style="text-align:right;" class="amount-cell">
-                                            <span class="subtotal">0.00</span>
-                                        </td>
+                                        <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
                                         <td><input type="text" name="detailNotes" value="${d.note}" class="note-input" placeholder="หมายเหตุ"></td>
                                         <td style="text-align:center;">
                                             <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
@@ -291,13 +278,13 @@
                         <span>＋</span> เลือกรายการวัสดุอุปกรณ์เสริมเพิ่มเติม
                     </button>
 
-                </div><%-- end card-body --%>
-            </div><%-- end card --%>
-        </div><%-- end main-layout --%>
+                </div>
+            </div>
+        </div>
     </form>
-</div><%-- end page-wrapper --%>
+</div>
 
-<%-- ===== STICKY TOTAL BAR ===== --%>
+<%-- STICKY TOTAL BAR --%>
 <div class="total-bar">
     <div class="total-bar-inner">
         <div class="total-bar-meta">
@@ -309,51 +296,35 @@
     </div>
 </div>
 
-<%-- ===== ITEM SELECTION MODAL ===== --%>
+<%-- ITEM DATA STORE (เพิ่มเข้ามา — จำเป็นสำหรับ popup เลือกสินค้า) --%>
+<div id="itemDataStore" style="display:none;">
+    <c:forEach var="item" items="${items}">
+        <div class="item-data"
+             data-id="${item.itemId}"
+             data-name="${item.itemName}"
+             data-detail="${item.itemDetail}"
+             data-unit="${item.unit}"
+             data-price="${item.pricePerUnit}"
+             data-type="${item.itemType.itemTypeName}"></div>
+    </c:forEach>
+</div>
+
+<%-- ITEM SELECTION MODAL --%>
 <div id="itemSelectionModal" class="modal-overlay">
     <div class="modal-card">
         <div class="modal-header">
-            <h3>เลือกอุปกรณ์และบริการเสริมสำหรับจัดงานบุญ</h3>
+            <h3> เลือกอุปกรณ์และบริการเสริมสำหรับจัดงานบุญ</h3>
             <button type="button" class="close-btn" onclick="closeItemModal()">✕</button>
         </div>
+        <div class="category-tabs">
+            <button type="button" class="category-tab active" data-category="all"      onclick="switchCategoryTab(this,'all')">ทั้งหมด</button>
+            <button type="button" class="category-tab"        data-category="อุปกรณ์"  onclick="switchCategoryTab(this,'อุปกรณ์')">อุปกรณ์พิธีกรรม</button>
+            <button type="button" class="category-tab"        data-category="ภัตตาหาร" onclick="switchCategoryTab(this,'ภัตตาหาร')">ภัตตาหารปิ่นโต</button>
+            <button type="button" class="category-tab"        data-category="สังฆทาน"  onclick="switchCategoryTab(this,'สังฆทาน')">สังฆทาน</button>
+            <button type="button" class="category-tab"        data-category="บริการ"   onclick="switchCategoryTab(this,'บริการ')">บริการและดำเนินการ</button>
+        </div>
         <div class="modal-body">
-            <table class="popup-table">
-                <thead>
-                    <tr>
-                        <th width="50" style="text-align:center;">เลือก</th>
-                        <th>ชื่อรายการสินค้า/งานบริการ</th>
-                        <th width="140">หมวดหมู่</th>
-                        <th width="90" style="text-align:center;">หน่วย</th>
-                        <th width="130" style="text-align:right;">ราคา/หน่วย (฿)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="item" items="${itemList}">
-                        <tr>
-                            <td style="text-align:center;">
-                                <input type="checkbox" class="popup-item-checkbox"
-                                       value="${item.itemId}"
-                                       data-name="${item.itemName}"
-                                       data-detail="${item.itemDetail}"
-                                       data-unit="${item.unit}"
-                                       data-price="${item.pricePerUnit}"
-                                       data-type="${item.itemType.itemTypeName}">
-                            </td>
-                            <td>
-                                <strong style="color:#222;">${item.itemName}</strong>
-                                <c:if test="${not empty item.itemDetail}">
-                                    <br><small style="color:#888;">${item.itemDetail}</small>
-                                </c:if>
-                            </td>
-                            <td><span class="badge-type">${item.itemType.itemTypeName}</span></td>
-                            <td style="text-align:center;">${item.unit}</td>
-                            <td style="text-align:right; font-weight:600; color:#333;">
-                                <fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###.00"/>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+            <div class="item-picker-grid" id="itemPickerGrid"></div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn-cancel-modal" onclick="closeItemModal()">ยกเลิก</button>
@@ -363,5 +334,6 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/static/js/quotationCreate.js"></script>
+
 </body>
 </html>

@@ -26,25 +26,52 @@ body {
 
 /* ========== NAVBAR ========== */
 .navbar {
-    background-color: var(--red);
-    padding: 14px 32px;
+    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
+    padding: 0 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold);
+    border-bottom: 3px solid #D4A017;
     position: sticky;
     top: 0;
     z-index: 1000;
+    min-height: 68px;
+    box-shadow: 0 4px 20px rgba(60,35,0,0.35);
+}
+
+.navbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #F5D97A, #E8BB3A, #F5D97A, transparent);
 }
 
 .navbar-title {
-    color: var(--cream);
-    font-size: 24px;
+    color: #F5D97A;
+    font-size: 22px;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     white-space: nowrap;
     text-decoration: none;
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Noto Serif Thai', serif;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-logo {
+    background: linear-gradient(135deg, #7A5200, #5C3800);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border: 1.5px solid #D4A017;
+    box-shadow: 0 0 10px rgba(212,160,23,0.3);
+    flex-shrink: 0;
 }
 
 .navbar-right {
@@ -60,7 +87,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(253,243,220,0.85);
+    color: rgba(253,237,160,0.8);
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -70,26 +97,29 @@ body {
     white-space: nowrap;
 }
 
-.nav-item:hover  { background: rgba(212,160,23,0.2); }
-.nav-item.active { background: var(--gold); color: var(--red-dark); }
+.nav-item:hover  { background: rgba(212,160,23,0.18); color: #F5D97A; }
+.nav-item.active { background: #D4A017; color: #4A2E00; font-weight: 700; }
 
 .user-info {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255,255,255,0.1);
-    border: 1.5px solid var(--gold);
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(212,160,23,0.6);
     padding: 6px 16px 6px 8px;
     border-radius: 50px;
     cursor: pointer;
-    color: var(--cream);
+    color: #F5D97A;
     white-space: nowrap;
     position: relative;
+    transition: background 0.2s;
 }
 
+.user-info:hover { background: rgba(255,255,255,0.14); }
+
 .user-avatar {
-    background: var(--gold);
-    color: var(--red-dark);
+    background: linear-gradient(135deg, #D4A017, #E8BB3A);
+    color: #4A2E00;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -102,7 +132,7 @@ body {
 }
 
 .user-name { font-size: 0.88rem; font-weight: 700; }
-.user-role { font-size: 0.7rem; color: var(--gold-light); }
+.user-role { font-size: 0.7rem; color: rgba(253,237,160,0.65); }
 
 .dropdown-menu {
     display: none;
@@ -158,10 +188,19 @@ body {
 
 /* ========== CARD HEADER ========== */
 .review-card-header {
-    background: var(--red);
+    background: linear-gradient(135deg, #3D2500 0%, #5C3800 50%, #3D2500 100%);
     padding: 24px 28px 20px;
     text-align: center;
     border-bottom: 3px solid var(--gold);
+    position: relative;
+}
+
+.review-card-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #F5D97A, #E8BB3A, #F5D97A, transparent);
 }
 
 .review-card-header h2 {
@@ -199,7 +238,7 @@ body {
     display: block;
     font-size: 13px;
     font-weight: 700;
-    color: var(--red-dark);
+    color: #5C3800;
     margin-bottom: 10px;
 }
 
@@ -294,7 +333,7 @@ textarea.form-control {
 }
 
 .upload-icon { font-size: 1.8rem; margin-bottom: 6px; }
-.upload-text { font-size: 13px; font-weight: 600; color: var(--red-dark); }
+.upload-text { font-size: 13px; font-weight: 600; color: #5C3800; }
 .upload-hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
 
 /* ========== DIVIDER ========== */
@@ -313,8 +352,8 @@ textarea.form-control {
 
 .btn-submit {
     flex: 2;
-    background: var(--red);
-    color: var(--cream);
+    background: linear-gradient(135deg, #D4A017, #E8BB3A);
+    color: #4A2E00;
     border: none;
     border-radius: 10px;
     padding: 13px 0;
@@ -322,13 +361,15 @@ textarea.form-control {
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
+    transition: all 0.2s;
     letter-spacing: 0.5px;
+    box-shadow: 0 3px 10px rgba(180,130,0,0.25);
 }
 
 .btn-submit:hover {
-    background: var(--red-dark);
+    background: linear-gradient(135deg, #E8BB3A, #F5D97A);
     transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba(180,130,0,0.35);
 }
 
 .btn-skip {

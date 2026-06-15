@@ -60,7 +60,7 @@ public class HeadStaffController {
     @GetMapping("/staff/assignments")
     public String listAssignments(Model model, HttpSession session) {
         HeadStaff currentStaff = (HeadStaff) session.getAttribute("currentStaff");
-        if (currentStaff == null) return "redirect:/loginorganizer"; // ✅ เพิ่มกลับ
+        if (currentStaff == null) return "redirect:/loginorganizer"; 
 
         List<StaffAssignment> assignments = staffAssignmentService.getAssignmentsByStaff(currentStaff.getStaffId());
         model.addAttribute("assignments", assignments);

@@ -10,16 +10,17 @@
     <title>สรุปการจอง - ระบบรับจัดงานบุญ</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">    
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewBooking.css?v=10">
 </head>
 <body>
 
 <%-- ===== Navbar ===== --%>
-<div class="navbar">
-    <a href="${pageContext.request.contextPath}/home" class="navbar-title">ระบบรับจัดงานบุญ</a>
-    
+<nav class="navbar">
+    <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
+        <div class="lotus-icon">🪷</div>
+        <span class="nav-brand-text">ระบบรับจัดงานบุญ</span>
+    </a>
     <div class="navbar-right">
         <%-- ลิงก์เมนู --%>
         <nav class="navbar-menu">
@@ -47,7 +48,7 @@
             </div>
         </div>
     </div>
-</div>
+</nav>
 
 <div class="page-wrapper">
     <div class="detail-card">
@@ -100,6 +101,8 @@
 		                <span class="info-label">${d.question.questionsText}</span>
 		                <span class="info-value">
 		                    <c:choose>
+		                        <%-- คำถามแบบ "ต้องการ...หรือไม่" ที่ตอบ "ไม่ต้องการ" ให้แสดงคำตอบจริง --%>
+		                        <c:when test="${fn:contains(d.question.questionsText, 'ต้องการ') && fn:contains(d.question.questionsText, 'หรือไม่') && d.answer == 'ไม่ต้องการ'}">ไม่ต้องการ</c:when>
 		                        <c:when test="${empty d.answer || d.answer == ''}">-</c:when>
 		                        <c:otherwise>${d.answer}</c:otherwise>
 		                    </c:choose>
@@ -141,6 +144,8 @@
 		                <span class="info-label">${d.question.questionsText}</span>
 		                <span class="info-value">
 		                    <c:choose>
+		                        <%-- คำถามแบบ "ต้องการ...หรือไม่" ที่ตอบ "ไม่ต้องการ" ให้แสดงคำตอบจริง --%>
+		                        <c:when test="${fn:contains(d.question.questionsText, 'ต้องการ') && fn:contains(d.question.questionsText, 'หรือไม่') && d.answer == 'ไม่ต้องการ'}">ไม่ต้องการ</c:when>
 		                        <c:when test="${empty d.answer || d.answer == '' || d.answer == 'ไม่ต้องการ'}">-</c:when>
 		                        <c:otherwise>${d.answer}</c:otherwise>
 		                    </c:choose>
@@ -161,6 +166,8 @@
 		                <span class="info-label">${d.question.questionsText}</span>
 		                <span class="info-value">
 		                    <c:choose>
+		                        <%-- คำถามแบบ "ต้องการ...หรือไม่" ที่ตอบ "ไม่ต้องการ" ให้แสดงคำตอบจริง --%>
+		                        <c:when test="${fn:contains(d.question.questionsText, 'ต้องการ') && fn:contains(d.question.questionsText, 'หรือไม่') && d.answer == 'ไม่ต้องการ'}">ไม่ต้องการ</c:when>
 		                        <c:when test="${empty d.answer || d.answer == '' || d.answer == 'ไม่ต้องการ'}">-</c:when>
 		                        <c:otherwise>${d.answer}</c:otherwise>
 		                    </c:choose>
