@@ -152,8 +152,13 @@ body {
     background: #FFFFFF;
     border-radius: 18px;
     overflow: hidden;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 8px 32px rgba(180, 130, 0, 0.12);
+
+    border: 3px solid var(--gold-mid);
+
+    box-shadow:
+        0 0 12px rgba(212,160,23,0.35),
+        0 8px 32px rgba(180,130,0,0.15);
+
     margin-bottom: 20px;
 }
 
@@ -397,29 +402,31 @@ tr:hover td { background: var(--cream); }
     border-top: 1.5px solid var(--cream-mid);
 }
 
-.btn-confirm {
+/* ค้นหาและเปลี่ยนทั้งหมดให้เป็นชุดนี้เพียงชุดเดียว */
+.btn-confirm-custom {
     display: block;
     width: 100%;
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    /* ใช้สีเขียว */
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white; 
     border: none;
-    padding: 14px;
+    padding: 14px 28px;
     border-radius: 10px;
     font-size: 16px;
     font-weight: 700;
     font-family: 'Sarabun', sans-serif;
     cursor: pointer;
     transition: all 0.2s;
-    margin-bottom: 20px;
-    box-shadow: 0 3px 10px rgba(180, 130, 0, 0.25);
+    flex: 1;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(40, 167, 69, 0.25);
 }
 
-.btn-confirm:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
-    transform: translateY(-2px);
-    box-shadow: 0 5px 16px rgba(180, 130, 0, 0.35);
+.btn-confirm-custom:hover {
+    background: linear-gradient(135deg, #218838, #1e7e34);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba(40, 167, 69, 0.35);
 }
-
 /* ===== Revise Section ===== */
 .revise-box {
     background: var(--cream-warm);
@@ -634,27 +641,7 @@ tr:hover td { background: var(--cream); }
 
 .btn-revise-submit:hover { background-color: #c9302c; }
 
-.btn-confirm-custom {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    border: none;
-    padding: 14px 28px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 700;
-    font-family: 'Sarabun', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s;
-    flex: 1;
-    text-align: center;
-    box-shadow: 0 3px 10px rgba(180, 130, 0, 0.25);
-}
 
-.btn-confirm-custom:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
-    transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(180, 130, 0, 0.35);
-}
 
 .flash-banner {
     padding: 14px 20px;

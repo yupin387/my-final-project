@@ -17,6 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+
+
 @Controller
 public class HeadStaffController {
 
@@ -29,7 +31,7 @@ public class HeadStaffController {
     @Autowired
     private BookingService bookingService;
 
-    // ตรวจสอบการเข้าสู่ระบบของหัวหน้างาน (เช็กทั้งรหัสผ่านและสถานะบัญชี)
+    // ตรวจสอบการเข้าสู่ระบบของหัวหน้างาน
     @PostMapping("/loginheadstaff")
     public ModelAndView login(@RequestParam String email,
                               @RequestParam String password, 
@@ -66,14 +68,13 @@ public class HeadStaffController {
         model.addAttribute("assignments", assignments);
         return "staffAssignmentList";
     }
+    
     // แสดงรายละเอียดของงานมอบหมายชิ้นที่เลือก
- // ใน HeadStaffController.java
     @GetMapping("/staff/assignments/detail/{id}")
     public String viewAssignmentDetail(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentStaff") == null) return "redirect:/loginorganizer";
 
         StaffAssignment sa;
-        // ตรวจสอบ: ถ้า id ขึ้นต้นด้วย "AN" ให้หาด้วย ID ถ้าไม่ใช่ให้หาด้วย BookingID
         if (id.startsWith("AN")) {
             sa = staffAssignmentService.getAssignmentById(id);
         } else {
@@ -84,15 +85,14 @@ public class HeadStaffController {
         return "staffAssignmentDetail";
     }
     
-
-    // บันทึกรายงานความเสียหายจากการดำเนินงาน (ส่งข้อความและรูปภาพ)
+    // บันทึกรายงานความเสียหายจากการดำเนินงาน
     @PostMapping("/staff/assignments/report-damage/save")
     public String saveReport(@RequestParam String assignId,
                              @RequestParam String reportNote,
-                             @RequestParam(value = "imageFile", required = false) MultipartFile file, 
+                             @RequestParam(value = "damageImages", required = false) MultipartFile[] files, 
                              RedirectAttributes ra) {
         try {
-            staffAssignmentService.updateDamageReport(assignId, reportNote, file);
+            staffAssignmentService.updateDamageReport(assignId, reportNote, files);
             ra.addFlashAttribute("success", "ส่งรายงานความเสียหายเรียบร้อยแล้ว");
         } catch (Exception e) {
             ra.addFlashAttribute("error", "ไม่สามารถส่งรายงานได้: " + e.getMessage());
@@ -118,7 +118,6 @@ public class HeadStaffController {
             headStaffService.updateProfile(updatedStaff);
             session.setAttribute("currentStaff", updatedStaff);
             
-           
             ra.addFlashAttribute("success", "อัปเดตข้อมูลส่วนตัวเรียบร้อยแล้ว");
             return "redirect:/staff/profile"; 
             
@@ -128,8 +127,7 @@ public class HeadStaffController {
         }
     }
     
-    
- // เพิ่มเข้ามาใน HeadStaffController
+    // แสดงหน้าจอสำหรับอัปเดตสถานะงาน
     @GetMapping("/staff/assignments/update-status/{bookingId}")
     public String showUpdateStatusForm(@PathVariable String bookingId, Model model, HttpSession session) {
         if (session.getAttribute("currentStaff") == null) return "redirect:/loginorganizer";
@@ -139,6 +137,7 @@ public class HeadStaffController {
         return "updateJobStatus";
     }
 
+    // บันทึกสถานะงานที่อัปเดตลงในระบบ
     @PostMapping("/staff/assignments/update-status/save")
     public String saveJobStatus(@RequestParam String bookingId,
                                  @RequestParam String jobStatus,

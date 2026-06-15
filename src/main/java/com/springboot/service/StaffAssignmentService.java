@@ -38,7 +38,7 @@ public class StaffAssignmentService {
     }
  
 
-    // สร้างการมอบหมายงานใหม่ โดยจะลบข้อมูลการมอบหมายเดิมของรายการจองนั้นก่อน (ถ้ามี)
+    // สร้างการมอบหมายงานใหม่ โดยจะลบข้อมูลการมอบหมายเดิมของรายการจองนั้นก่อน
     @Transactional
     public void createNewAssignment(String bookingId, int staffId) {
         BookingForm booking = bookingRepo.findById(bookingId)
@@ -93,20 +93,29 @@ public class StaffAssignmentService {
 
     // บันทึกรายงานความเสียหายหลังจบงาน พร้อมจัดการอัปโหลดรูปภาพหลักฐาน
     @Transactional
-    public void updateDamageReport(String assignId, String reportNote, MultipartFile file) throws IOException {
+    public void updateDamageReport(String assignId, String reportNote, MultipartFile[] files) throws IOException {
         StaffAssignment sa = staffAssignmentRepo.findById(assignId).orElseThrow();
         sa.setReportNote(reportNote);
 
-        if (file != null && !file.isEmpty()) {
+        if (files != null && files.length > 0) {
             String rootPath = System.getProperty("user.dir");
             File uploadDir = new File(rootPath + File.separator + "uploads" + File.separator + "report");
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
-            String fileName = file.getOriginalFilename();
-            File saveFile = new File(uploadDir.getAbsolutePath() + File.separator + fileName);
-            file.transferTo(saveFile);
+            StringBuilder reportImages = new StringBuilder();
 
-            sa.setReportImage("report/" + fileName);
+            for (MultipartFile file : files) {
+                if (file != null && !file.isEmpty()) {
+                    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                    File saveFile = new File(uploadDir.getAbsolutePath() + File.separator + fileName);
+                    file.transferTo(saveFile);
+
+                    if (reportImages.length() > 0) reportImages.append(",");
+                    reportImages.append("report/").append(fileName);
+                }
+            }
+
+            sa.setReportImage(reportImages.toString());
         }
     }
 }

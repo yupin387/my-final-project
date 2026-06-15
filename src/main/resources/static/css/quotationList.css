@@ -231,7 +231,42 @@ body {
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     flex: 1;
-    padding: 36px 40px 48px;
+    padding: 36px 40px 72px; /* ใช้ค่าเดิมหรือปรับตามความเหมาะสม */
+    max-width: 1550px;      /* เพิ่มจาก 1200px เป็น 1550px (หรือ 1600px ตามชอบ) */
+    margin: 0 auto;
+    width: 95%;             /* ให้มันกว้างเกือบเต็มจอ แต่เหลือขอบนิดๆ ให้ดูสบายตา */
+}
+/* ========== ORNAMENT ========== */
+.section-ornament {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.ornament-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-mid));
+    max-width: 60px;
+}
+
+.ornament-line.right {
+    background: linear-gradient(to left, transparent, var(--gold-mid));
+}
+
+.ornament-diamond {
+    width: 8px;
+    height: 8px;
+    background: var(--gold-mid);
+    transform: rotate(45deg);
+}
+
+.ornament-diamond-sm {
+    width: 5px;
+    height: 5px;
+    background: var(--gold-pale);
+    transform: rotate(45deg);
 }
 
 /* ========== LIST HEADER ========== */
@@ -248,21 +283,16 @@ body {
     color: var(--brown-dark);
     font-weight: 700;
     margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
-.list-header h1::before {
-    content: '';
+.list-header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-left: 2px;
+    border-bottom: 2px solid var(--gold-mid);
     display: inline-block;
-    width: 5px;
-    height: 26px;
-    background: linear-gradient(to bottom, var(--gold-light), var(--gold-mid));
-    border-radius: 3px;
+    padding-bottom: 3px;
 }
-
-.list-header p { font-size: 13px; color: var(--text-muted); }
 
 /* ========== TABS ========== */
 .tabs-wrapper {
@@ -374,7 +404,6 @@ td {
 }
 
 tr:last-child td { border-bottom: none; }
-
 tr:hover td { background: var(--cream-warm); }
 
 .quotation-id {
@@ -398,12 +427,6 @@ tr:hover td { background: var(--cream-warm); }
 }
 
 .date-cell { color: var(--text-body); }
-
-.amount-cell {
-    font-weight: 700;
-    color: var(--brown-dark);
-    font-size: 15px;
-}
 
 /* ========== STATUS BADGES ========== */
 .status-badge {
@@ -463,12 +486,6 @@ tr:hover td { background: var(--cream-warm); }
     text-align: center;
     padding: 60px 20px !important;
     color: var(--text-muted);
-}
-
-.empty-icon {
-    display: block;
-    font-size: 48px;
-    margin-bottom: 14px;
 }
 
 .empty-state p {

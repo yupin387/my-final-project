@@ -348,16 +348,18 @@ body {
 }
 
 .btn-approve {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    box-shadow: 0 3px 10px rgba(180, 130, 0, 0.25);
+    /* เปลี่ยนจากไล่เฉดทอง เป็นไล่เฉดเขียว */
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: #FFFFFF; /* เปลี่ยนตัวหนังสือเป็นสีขาว */
+    box-shadow: 0 3px 10px rgba(40, 167, 69, 0.25);
+    border: none;
 }
 
 .btn-approve:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+    background: linear-gradient(135deg, #218838, #1e7e34);
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(180, 130, 0, 0.35);
-    color: var(--brown-dark);
+    box-shadow: 0 5px 16px rgba(40, 167, 69, 0.35);
+    color: #FFFFFF;
 }
 
 .btn-reject {
@@ -463,20 +465,21 @@ body {
 .btn-modal-approve {
     padding: 10px 24px;
     border-radius: 8px;
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    /* เปลี่ยนเป็นสีเขียว */
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: #FFFFFF;
     font-weight: 700;
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     text-decoration: none;
     transition: all 0.2s;
-    box-shadow: 0 3px 10px rgba(180, 130, 0, 0.25);
+    box-shadow: 0 3px 10px rgba(40, 167, 69, 0.25);
 }
 
 .btn-modal-approve:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+    background: linear-gradient(135deg, #218838, #1e7e34);
     transform: translateY(-1px);
-    color: var(--brown-dark);
+    color: #FFFFFF;
 }
 
 .btn-modal-reject {

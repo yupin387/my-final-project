@@ -205,8 +205,12 @@ body {
 /* ===== Page Wrapper ===== */
 .page-wrapper {
     flex: 1;
-    padding: 36px 40px;
+    padding: 36px 40px 72px;
+    width: 500%;           /* ปรับจาก 92% เป็น 95% เพื่อให้กินพื้นที่มากขึ้น */
+    max-width: 1400px;    /* ปรับจาก 1100px เป็น 1400px (หรือค่าที่ต้องการ) */
+    margin: 0 auto;
 }
+
 
 /* ===== List Header ===== */
 .list-header {

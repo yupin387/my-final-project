@@ -92,7 +92,7 @@
 
         <div class="main-layout">
             <div class="card">
-                <div class="card-header">🪷 รายการสรุปค่าใช้จ่ายวัสดุและงานบริการ</div>
+                <div class="card-header">รายการสรุปค่าใช้จ่ายวัสดุและงานบริการ</div>
                 <div class="card-body">
 
                     <table id="mainQuotationTable">
@@ -260,7 +260,7 @@
             <span class="total-bar-label">ยอดรวมสุทธิทั้งสิ้น</span>
         </div>
         <div class="total-bar-amount">฿ <span id="grandTotal">0.00</span></div>
-        <button type="submit" form="quotationForm" class="btn-submit">🪷 บันทึกใบเสนอราคา</button>
+        <button type="submit" form="quotationForm" class="btn-submit"> บันทึกใบเสนอราคา</button>
     </div>
 </div>
 
@@ -281,7 +281,7 @@
 <div id="itemSelectionModal" class="modal-overlay">
     <div class="modal-card">
         <div class="modal-header">
-            <h3>🪷 เลือกอุปกรณ์และบริการเสริมสำหรับจัดงานบุญ</h3>
+            <h3> เลือกอุปกรณ์และบริการเสริมสำหรับจัดงานบุญ</h3>
             <button type="button" class="close-btn" onclick="closeItemModal()">✕</button>
         </div>
         <div class="category-tabs">

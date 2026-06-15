@@ -27,7 +27,7 @@
                     <div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
                     <div class="user-detail">
                         <span class="user-name">${sessionScope.currentStaff.staffFirstName} ${sessionScope.currentStaff.staffLastName}</span>
-                        <span class="user-role">Head Staff</span>
+                        
                     </div>
                     <span class="arrow">▾</span>
                 </div>
