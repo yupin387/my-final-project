@@ -263,31 +263,87 @@ body {
 
 /* ========== MAIN CONTENT ========== */
 .cd-container {
-    max-width: 1100px;
+    max-width: 1520px;
     margin: 0 auto;
-    padding: 48px 24px 120px;
+    padding: 48px 32px 120px;
 }
 
 .cd-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 28px;
+    align-items: start;
 }
 
-@media (max-width: 768px) {
-    .cd-grid { grid-template-columns: 1fr; }
-    .cd-hero-title { font-size: 2rem; }
-    .cd-navbar { padding: 0 16px; }
+/* เมนูปิ้นโต */
+.cd-menu-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 2px 14px;
+}
+
+.cd-menu-grid li {
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--text-body);
+    padding: 4px 0 4px 14px;
+    position: relative;
+    border-bottom: 1px dashed var(--cream-border);
+}
+
+.cd-menu-grid li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--gold-mid);
+}
+
+.cd-pinto-body {
+    padding: 14px 18px;
+}
+
+.cd-sangkhathan-detail {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 2px 14px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cd-sangkhathan-detail li {
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--text-body);
+    padding: 4px 0 4px 14px;
+    position: relative;
+    border-bottom: 1px dashed var(--cream-border);
+}
+
+.cd-sangkhathan-detail li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--gold-mid);
 }
 
 /* ========== CARD ========== */
 .cd-card {
     background: var(--white);
     border-radius: 18px;
-    border: 1.5px solid var(--cream-border-soft);
+
+    border: 3px solid var(--gold-mid);
+
     padding: 24px 28px;
     margin-bottom: 24px;
-    box-shadow: 0 4px 20px var(--shadow-warm);
+
+    box-shadow:
+        0 0 12px rgba(212,160,23,0.35),
+        0 8px 24px rgba(180,130,0,0.15);
+
     position: relative;
     overflow: hidden;
 }
@@ -320,7 +376,7 @@ body {
     font-size: 1.05rem;
     padding-bottom: 12px;
     margin-bottom: 18px;
-    border-bottom: 1.5px solid var(--cream-border);
+    border-bottom: 1.5px solid #3D2500;       /* ← เปลี่ยนตามกรอบ */
     display: flex;
     align-items: center;
     gap: 10px;
@@ -336,28 +392,32 @@ body {
     flex-shrink: 0;
 }
 
-/* ========== ITEM LIST ========== */
+/* ========== ITEM LIST (รายการอุปกรณ์) ========== */
 .cd-item-list {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;           /* ← 2 คอลัมน์ */
+    gap: 0 16px;
 }
 
 .cd-item-list li {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    padding: 9px 0;
+    gap: 8px;
+    padding: 7px 0;
     border-bottom: 1px dashed var(--cream-border);
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.4;
     color: var(--text-body);
 }
 
 .cd-item-list li:last-child { border-bottom: none; }
 
 .cd-dot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
     flex-shrink: 0;
@@ -367,7 +427,7 @@ body {
 
 .cd-item-detail {
     color: var(--text-muted);
-    font-size: 13px;
+    font-size: 12px;
 }
 
 /* ========== SERVICE ROW ========== */
@@ -378,6 +438,7 @@ body {
     padding: 10px 0;
     border-bottom: 1px solid var(--cream-mid);
     font-size: 14px;
+    gap: 16px;
 }
 
 .cd-service-row:last-child { border-bottom: none; }
@@ -392,50 +453,61 @@ body {
     padding: 4px 14px;
     font-size: 12px;
     font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
 }
 
 /* ========== PINTO / SANGKATAN ========== */
 .cd-pinto-sub {
     font-size: 13px;
     color: var(--text-muted);
-    margin-bottom: 18px;
+    margin-bottom: 14px;
+}
+
+.cd-pinto-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
 }
 
 .cd-pinto-box {
     border: 1.5px solid var(--cream-border-soft);
     border-radius: 14px;
     overflow: hidden;
-    margin-bottom: 16px;
+    margin-bottom: 0;
     background: var(--white);
+    display: flex;
+    flex-direction: column;
 }
 
 .cd-pinto-head {
     background: linear-gradient(135deg, var(--cream-mid), var(--cream-warm));
     border-bottom: 1.5px solid var(--cream-border);
-    padding: 13px 18px;
+    padding: 11px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .cd-pinto-name {
     font-family: 'Noto Serif Thai', serif;
     font-weight: 700;
     color: var(--brown-dark);
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .cd-pinto-price {
     font-weight: 700;
     color: var(--brown-mid);
-    font-size: 14px;
+    font-size: 13px;
     background: var(--gold-glow);
     border: 1px solid var(--cream-border);
     border-radius: 20px;
     padding: 3px 12px;
+    white-space: nowrap;
 }
-
-.cd-pinto-body { padding: 16px 18px; }
 
 .cd-menu-label {
     font-size: 11px;
@@ -443,8 +515,8 @@ body {
     color: var(--gold-mid);
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 8px;
-    margin-top: 14px;
+    margin-bottom: 6px;
+    margin-top: 12px;
 }
 
 .cd-menu-label:first-child { margin-top: 0; }
@@ -456,11 +528,12 @@ body {
 }
 
 .cd-menu-list li {
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--text-body);
-    padding: 4px 0;
+    padding: 3px 0;
     padding-left: 14px;
     position: relative;
+    line-height: 1.4;
 }
 
 .cd-menu-list li::before {
@@ -482,7 +555,6 @@ body {
     z-index: 1000;
 }
 
-/* เส้นทองด้านบน footer bar */
 .cd-footer::before {
     content: '';
     position: absolute;
@@ -527,4 +599,20 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(180, 130, 0, 0.38);
     color: var(--brown-dark);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+    .cd-grid {
+        grid-template-columns: 1fr;
+    }
+    .cd-pinto-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .cd-item-list {
+        grid-template-columns: 1fr;
+    }
 }

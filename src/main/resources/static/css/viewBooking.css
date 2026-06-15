@@ -251,11 +251,10 @@ body {
     font-family: 'Sarabun', sans-serif;
 }
 
-/* ปุ่มเขียนรีวิว (ปรับเป็นสีเขียวพรีเมียม) */
+/* ปุ่มเขียนรีวิว (สีเขียวพรีเมียม) */
 .btn-review {
-    /* เปลี่ยนจากเฉดทอง เป็นไล่เฉดเขียว */
     background: linear-gradient(135deg, #28a745, #218838);
-    color: #FFFFFF; /* เปลี่ยนเป็นสีขาวเพื่อให้ตัดกับสีเขียว */
+    color: #FFFFFF;
     border: none;
     box-shadow: 0 3px 10px rgba(40, 167, 69, 0.25);
 }
@@ -266,7 +265,6 @@ body {
     box-shadow: 0 5px 16px rgba(40, 167, 69, 0.35);
     color: #FFFFFF;
 }
-
 .btn-reviewed {
     background: var(--cream-mid);
     color: var(--text-muted);
