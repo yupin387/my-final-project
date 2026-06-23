@@ -44,35 +44,42 @@ public class UserController {
         return "redirect:/loginMember?successRegister"; // เปลี่ยนให้ไปหน้า Login หลังสมัครเสร็จ
     }
     
-    //แก้ตรงนี้ ล่าสุด
     @GetMapping("/home")
     public String home(Model model) {
         List<Review> allReviews = reviewService.getAllReviews();
-        
-        // คะแนนเฉลี่ยแยกตาม ceremonyId
+
+        List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
+        System.out.println("=== Ceremonies count: " + ceremonies.size());
+        ceremonies.forEach(c -> System.out.println("ID: " + c.getCeremonyId() + " Name: " + c.getCeremonyName()));
+
+        Ceremony ceremony1 = ceremonies.size() > 0 ? ceremonies.get(0) : null;
+        Ceremony ceremony2 = ceremonies.size() > 1 ? ceremonies.get(1) : null;
+
+        model.addAttribute("ceremony1", ceremony1);
+        model.addAttribute("ceremony2", ceremony2);
+
+        int id1 = ceremony1 != null ? ceremony1.getCeremonyId() : -1;
+        int id2 = ceremony2 != null ? ceremony2.getCeremonyId() : -1;
+
         double avg1 = allReviews.stream()
-            .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == 1)
+            .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == id1)
             .mapToDouble(Review::getRating).average().orElse(0.0);
-        
+
         double avg2 = allReviews.stream()
-            .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == 2)
+            .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == id2)
             .mapToDouble(Review::getRating).average().orElse(0.0);
 
         model.addAttribute("avgRating1", avg1);
         model.addAttribute("avgRating2", avg2);
 
-        // โค้ดเดิมที่มีอยู่...
-        List<Review> top2Reviews = allReviews.stream()
-            .sorted(Comparator.comparing(Review::getReviewDate).reversed())
-            .limit(2).collect(Collectors.toList());
-        model.addAttribute("reviews", top2Reviews);
+        // ✅ ลบ top2Reviews ออกแล้ว ไม่จำเป็นอีกต่อไป
 
         List<String> bookedDates = bookingService.getAllBookings().stream()
             .filter(b -> b.getBookingStatus() != null && (
                 "Approved".equals(b.getBookingStatus()) ||
                 "Confirmed".equals(b.getBookingStatus()) ||
                 "Completed".equals(b.getBookingStatus())))
-            .map(b -> { 
+            .map(b -> {
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
                 return sdf.format(b.getEventDate());
             }).collect(Collectors.toList());

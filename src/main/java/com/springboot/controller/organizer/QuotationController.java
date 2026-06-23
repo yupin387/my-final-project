@@ -108,26 +108,26 @@ public class QuotationController {
         model.addAttribute("details", details);
         return "quotationDetail";
     }
-
-    // ✅ แก้ไขแล้ว: ส่ง "items" (ไม่ใช่ "itemList") และใช้ getItemsByCeremonyId
+    
+ // แสดงหน้าฟอร์มสำหรับแก้ไขใบเสนอราคา โดยดึงข้อมูลใบเสนอราคา, รายละเอียดรายการ และรายการสินค้าตามประเภทพิธีมาแสดง
     @GetMapping("/edit/{id}")
     public String editQuotationForm(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
 
+        // ดึงข้อมูลใบเสนอราคาและรายละเอียดรายการทั้งหมดที่เกี่ยวข้องกับ ID นี้
         Quotation quotation = quotationService.getQuotationById(id);
         List<QuotationDetail> details = quotationService.getDetailsByQuotationId(id);
 
         model.addAttribute("q", quotation);
         model.addAttribute("details", details);
 
-        // ✅ แก้จาก "itemList" + getAllItems()
-        //    เป็น  "items"    + getItemsByCeremonyId()
+        // ดึงรายการสินค้าทั้งหมดที่สามารถเลือกได้ โดยกรองตามประเภทพิธี (Ceremony ID) ของการจองนั้นๆ
         int ceremonyId = quotation.getBookingForm().getCeremony().getCeremonyId();
         model.addAttribute("items", quotationService.getItemsByCeremonyId(ceremonyId));
 
         return "editQuotation";
     }
-
+    
     // อัปเดตใบเสนอราคา
     @PostMapping("/update")
     public String updateQuotation(@RequestParam String quotationId,

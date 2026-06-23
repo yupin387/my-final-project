@@ -128,7 +128,7 @@ public class QuotationService {
 	                
 	                QuotationDetail detail = new QuotationDetail();
 	                detail.setQuotation(qt);
-	                detail.setItem(item); // บันทึกความสัมพันธ์กับ Item จริงในฐานข้อมูล
+	                detail.setItem(item); 
 	                detail.setQuantity(qty);
 	                detail.setSubtotal(price * qty);
 	                if (detailNotes != null && i < detailNotes.size()) detail.setNote(detailNotes.get(i));
@@ -148,9 +148,9 @@ public class QuotationService {
 	            double price = (bPrices != null && i < bPrices.size() && bPrices.get(i) != null)
 	                           ? bPrices.get(i) : 0.0;
 
-	            // ✅ ดึง Item จริงจาก DB แทนการสร้างจำลอง
+	            
 	            Item item = itemRepo.findByItemName(name.trim()).orElse(null);
-	            if (item == null) continue; // ข้ามถ้าไม่เจอ
+	            if (item == null) continue;
 
 	            QuotationDetail detail = new QuotationDetail();
 	            detail.setQuotation(qt);
@@ -164,7 +164,7 @@ public class QuotationService {
 	        }
 	    }
 
-	    // บันทึกยอดรวมทั้งหมดลง Quotation
+	   
 	    qt.setTotalAmount(total);
 	    quotationRepo.save(qt);
 	}
@@ -192,7 +192,7 @@ public class QuotationService {
 
 			if (quotation != null && staff != null) {
 				quotation.setStaff(staff);
-				quotationRepo.save(quotation); // อย่าลืมเซฟข้อมูลพนักงานที่ถูก Assign
+				quotationRepo.save(quotation); 
 			}
 		}
 

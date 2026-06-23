@@ -483,3 +483,27 @@ textarea.form-control {
     .page-wrapper { padding: 24px 16px 40px; }
     .form-container { padding: 24px 18px 20px; }
 }
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+}
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-mid);
+    font-weight: 600;
+}
+.checkbox-label input[type="checkbox"],
+.checkbox-label input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--gold-mid);
+    cursor: pointer;
+    flex-shrink: 0;
+}

@@ -194,33 +194,38 @@ public class OrganizerController {
  // 4. มอบหมายงาน (Assign Staff)
  // ==========================================
 
- @GetMapping("/organizer/assignments/assign/{bookingId}")
- public String showAssignForm(@PathVariable String bookingId, Model model, HttpSession session) {
-     if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
-     
-     BookingForm booking = bookingService.getBookingById(bookingId);
-     model.addAttribute("b", booking);
-     model.addAttribute("staffList", quotationService.findAvailableStaff(booking.getEventDate()));
-     return "assignTask";
- }
-
- @PostMapping("/organizer/assignments/save")
- public String saveAssignment(@RequestParam String bookingId, 
-                               @RequestParam int staffId, 
-                               HttpSession session,
-                               RedirectAttributes ra) {
-     if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
-     try {
-         quotationService.assignStaffToQuotation(bookingId, staffId);
-         bookingService.assignStaffToBooking(bookingId);
-         staffAssignmentService.createNewAssignment(bookingId, staffId);
-         ra.addFlashAttribute("success", "มอบหมายงานเรียบร้อยแล้ว");
-         return "redirect:/organizer/bookings?status=Confirmed";
-     } catch (Exception e) {
-         ra.addFlashAttribute("error", "บันทึกไม่สำเร็จ: " + e.getMessage());
-         return "redirect:/organizer/assignments/assign/" + bookingId;
+ // แสดงหน้าฟอร์มสำหรับมอบหมายงานให้พนักงาน โดยดึงข้อมูลการจองและรายชื่อพนักงานที่ว่างในวันนั้นๆ มาแสดง
+    @GetMapping("/organizer/assignments/assign/{bookingId}")
+     public String showAssignForm(@PathVariable String bookingId, Model model, HttpSession session) {
+         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
+         
+         BookingForm booking = bookingService.getBookingById(bookingId);
+         model.addAttribute("b", booking);
+         // ค้นหาพนักงานที่ว่างในวันที่จัดงานจาก quotationService
+         model.addAttribute("staffList", quotationService.findAvailableStaff(booking.getEventDate()));
+         return "assignTask";
      }
- }
- 
+
+     // บันทึกข้อมูลการมอบหมายงาน โดยเชื่อมโยงพนักงานเข้ากับงานที่เลือก และอัปเดตสถานะการจองในระบบ
+     @PostMapping("/organizer/assignments/save")
+     public String saveAssignment(@RequestParam String bookingId, 
+                                   @RequestParam int staffId, 
+                                   HttpSession session,
+                                   RedirectAttributes ra) {
+         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
+         try {
+             // บันทึกการมอบหมายพนักงานเข้ากับใบเสนอราคา, การจอง และสร้างบันทึกการมอบหมายงานใหม่
+             quotationService.assignStaffToQuotation(bookingId, staffId);
+             bookingService.assignStaffToBooking(bookingId);
+             staffAssignmentService.createNewAssignment(bookingId, staffId);
+             
+             ra.addFlashAttribute("success", "มอบหมายงานเรียบร้อยแล้ว");
+             return "redirect:/organizer/bookings?status=Confirmed";
+         } catch (Exception e) {
+             // หากเกิดข้อผิดพลาด ให้ส่งข้อความแจ้งเตือนและกลับไปหน้าเดิม
+             ra.addFlashAttribute("error", "บันทึกไม่สำเร็จ: " + e.getMessage());
+             return "redirect:/organizer/assignments/assign/" + bookingId;
+         }
+     }
  
 }

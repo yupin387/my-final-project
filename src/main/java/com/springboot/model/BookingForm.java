@@ -24,6 +24,10 @@ public class BookingForm {
 
 	@Column(name = "eventaddress", nullable = false)
 	private String eventAddress;
+	
+
+	@Column(name = "addressimage")
+	private String addressImage;
 
 	@Column(name = "bookingstatus", nullable = false)
 	private String bookingStatus;
@@ -100,6 +104,16 @@ public class BookingForm {
 
 	public void setEventAddress(String eventAddress) {
 		this.eventAddress = eventAddress;
+	}
+	
+	
+
+	public String getAddressImage() {
+		return addressImage;
+	}
+
+	public void setAddressImage(String addressImage) {
+		this.addressImage = addressImage;
 	}
 
 	public String getBookingStatus() {

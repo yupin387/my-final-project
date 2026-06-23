@@ -126,7 +126,7 @@
 
                 <hr class="divider">
 
-                <%-- Address --%>
+          
                 <div class="section-heading">สถานที่จัดงาน</div>
                 <div class="address-box">${a.bookingForm.eventAddress}</div>
 

@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<!-- ===== NAVBAR (same style as home) ===== -->
+<!-- ===== NAVBAR ===== -->
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
         <div class="lotus-icon">🪷</div>

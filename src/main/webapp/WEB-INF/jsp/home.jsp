@@ -96,12 +96,12 @@
             <div class="ornament-line right"></div>
         </div>
         <div class="section-header">
-            <h2 class="section-title">ปฏิทินงานของออแกไนเซอร์</h2>
+            <h2 class="section-title">ตรวจสอบปฏิทินการจัดงาน</h2>
             <p class="section-subtitle">ดูว่าวันไหนมีงานแล้ว วันไหนยังว่างอยู่</p>
             <div class="gold-line"></div>
         </div>
         <div style="text-align:center; margin-top: 10px;">
-            <button class="btn-open-calendar" onclick="openCalendarModal()">🗓 ปฏิทิน</button>
+            <button class="btn-open-calendar" onclick="openCalendarModal()">🗓 ตรวจสอบปฏิทิน</button>
         </div>
     </div>
 
@@ -180,9 +180,9 @@
         <div class="events-grid">
             <div class="event-card">
                 <div class="event-card-icon">
-                    <img src="${pageContext.request.contextPath}/static/images/ceremony1.webp" alt="งานขึ้นบ้านใหม่">
+                    <img src="${pageContext.request.contextPath}/static/images/ceremony1.webp" alt="${ceremony1.ceremonyName}">
                 </div>
-                <h5>งานขึ้นบ้านใหม่</h5>
+                <h5>งาน${ceremony1.ceremonyName}</h5>
                 <div class="event-rating">
                     <span class="stars">
                         <c:forEach begin="1" end="${fn:substringBefore(avgRating1, '.')}">&#9733;</c:forEach>
@@ -190,15 +190,18 @@
                     </span>
                     <span class="rating-num"><fmt:formatNumber value="${avgRating1}" maxFractionDigits="1"/> / 5</span>
                 </div>
-                <p>พิธีสงฆ์เพื่อความเป็นสิริมงคลแก่บ้านใหม่และผู้อยู่อาศัย ครบถ้วนตามประเพณีล้านนา</p>
+                <p>${ceremony1.ceremonyDetail}</p>
                 <div class="event-divider"></div>
-                <a href="${pageContext.request.contextPath}/ceremony/detail/1" class="btn-detail">ดูรายละเอียด</a>
+                <div class="event-card-actions">
+                    <a href="${pageContext.request.contextPath}/ceremony/detail/${ceremony1.ceremonyId}" class="btn-detail">ดูรายละเอียด</a>
+                    <a href="${pageContext.request.contextPath}/reviews/${ceremony1.ceremonyId}" class="btn-outline-brown">ดูรีวิว</a>
+                </div>
             </div>
             <div class="event-card">
                 <div class="event-card-icon">
-                    <img src="${pageContext.request.contextPath}/static/images/ceremony2.jpg" alt="งานสืบชะตา">
+                    <img src="${pageContext.request.contextPath}/static/images/ceremony2.jpg" alt="${ceremony2.ceremonyName}">
                 </div>
-                <h5>งานสืบชะตา</h5>
+                <h5>งาน${ceremony2.ceremonyName}</h5>
                 <div class="event-rating">
                     <span class="stars">
                         <c:forEach begin="1" end="${fn:substringBefore(avgRating2, '.')}">&#9733;</c:forEach>
@@ -206,99 +209,16 @@
                     </span>
                     <span class="rating-num"><fmt:formatNumber value="${avgRating2}" maxFractionDigits="1"/> / 5</span>
                 </div>
-                <p>พิธีต่ออายุ แก้เคล็ด เสริมสิริมงคล และสร้างกำลังใจให้ชีวิตราบรื่นยั่งยืน</p>
+                <p>${ceremony2.ceremonyDetail}</p>
                 <div class="event-divider"></div>
-                <a href="${pageContext.request.contextPath}/ceremony/detail/2" class="btn-detail">ดูรายละเอียด</a>
+                <div class="event-card-actions">
+                    <a href="${pageContext.request.contextPath}/ceremony/detail/${ceremony2.ceremonyId}" class="btn-detail">ดูรายละเอียด</a>
+                    <a href="${pageContext.request.contextPath}/reviews/${ceremony2.ceremonyId}" class="btn-outline-brown">ดูรีวิว</a>
+                </div>
             </div>
         </div>
     </div>
 </section>
-
-<%-- ========== THAI LOTUS DIVIDER: EVENTS → REVIEWS ========== --%>
-<svg class="thai-divider" viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;background:#ffffff;">
-    <path d="M0,48 Q300,0 600,24 Q900,48 1200,0 L1200,48 Z" fill="#FFFBF0"/>
-    <path d="M0,32 Q60,16 120,32 Q180,48 240,32 Q300,16 360,32 Q420,48 480,32 Q540,16 600,32 Q660,48 720,32 Q780,16 840,32 Q900,48 960,32 Q1020,16 1080,32 Q1140,48 1200,32" stroke="#D4A017" stroke-width="1.5" fill="none" opacity="0.45"/>
-    <path d="M0,20 Q60,6 120,20 Q180,34 240,20 Q300,6 360,20 Q420,34 480,20 Q540,6 600,20 Q660,34 720,20 Q780,6 840,20 Q900,34 960,20 Q1020,6 1080,20 Q1140,34 1200,20" stroke="#E8CC70" stroke-width="1" fill="none" opacity="0.35"/>
-    <g fill="#D4A017" opacity="0.6">
-        <circle cx="120" cy="32" r="2.5"/>
-        <circle cx="360" cy="32" r="2.5"/>
-        <circle cx="600" cy="32" r="3.5"/>
-        <circle cx="840" cy="32" r="2.5"/>
-        <circle cx="1080" cy="32" r="2.5"/>
-    </g>
-</svg>
-
-<%-- ========== REVIEWS ========== --%>
-<section class="section-pad section-reviews">
-    <div class="container">
-        <div class="section-ornament">
-            <div class="ornament-line"></div>
-            <div class="ornament-diamond-sm"></div>
-            <div class="ornament-diamond"></div>
-            <div class="ornament-diamond-sm"></div>
-            <div class="ornament-line right"></div>
-        </div>
-        <div class="section-header">
-            <h2 class="section-title">รีวิวจากลูกค้า</h2>
-            <p class="section-subtitle">ความประทับใจจากผู้ใช้บริการจริง</p>
-            <div class="gold-line"></div>
-        </div>
-        <div class="reviews-grid">
-            <c:forEach var="review" items="${reviews}" end="1">
-                <c:set var="ratingInt" value="${fn:substringBefore(review.rating, '.')}" />
-                <div class="review-card">
-                    <div class="review-stars">
-                        <c:forEach begin="1" end="${ratingInt}">&#9733;</c:forEach>
-                        <c:forEach begin="${ratingInt + 1}" end="5">&#9734;</c:forEach>
-                    </div>
-                    <p class="review-text">"${review.comment}"</p>
-                    <c:if test="${not empty review.reviewImage}">
-                        <div class="review-img-wrapper">
-                            <img src="${pageContext.request.contextPath}/uploads/review/${review.reviewImage}" class="review-img-thumb" alt="ภาพรีวิว">
-                        </div>
-                    </c:if>
-                    <div style="margin-top:auto;">
-                        <div class="reviewer-name">คุณ ${review.bookingForm.member.memberFirstName} ${review.bookingForm.member.memberLastName}</div>
-                        <div class="review-event-type">งาน: ${review.bookingForm.ceremony.ceremonyName}</div>
-                    </div>
-                </div>
-            </c:forEach>
-        </div>
-        <div class="view-all-wrapper">
-            <a href="${pageContext.request.contextPath}/reviews" class="btn-outline-brown">ดูรีวิวทั้งหมด &rarr;</a>
-        </div>
-    </div>
-</section>
-
-<%-- ========== THAI KANOK DIVIDER: REVIEWS → GALLERY ========== --%>
-<svg class="thai-divider" viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;background:linear-gradient(#fff,#FFFBF0);">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70" stroke-width="1" opacity="0.7"/>
-    <g fill="none" stroke="#D4A017" stroke-width="1.2" opacity="0.5">
-        <path d="M40,24 Q60,8 80,24 Q100,40 120,24"/>
-        <path d="M50,24 Q70,12 90,24"/>
-        <circle cx="40" cy="24" r="3" fill="#D4A017" stroke="none"/>
-        <circle cx="120" cy="24" r="3" fill="#D4A017" stroke="none"/>
-    </g>
-    <g fill="#D4A017" opacity="0.6">
-        <path d="M570,14 Q585,4 600,14 Q615,24 600,34 Q585,44 570,34 Q555,24 570,14 Z" opacity="0.3"/>
-        <ellipse cx="600" cy="24" rx="22" ry="8" transform="rotate(0 600 24)" opacity="0.2"/>
-        <ellipse cx="600" cy="24" rx="22" ry="8" transform="rotate(60 600 24)" opacity="0.2"/>
-        <ellipse cx="600" cy="24" rx="22" ry="8" transform="rotate(120 600 24)" opacity="0.2"/>
-        <circle cx="600" cy="24" r="5" opacity="0.7"/>
-        <circle cx="560" cy="24" r="3"/>
-        <circle cx="640" cy="24" r="3"/>
-        <circle cx="520" cy="24" r="2"/>
-        <circle cx="680" cy="24" r="2"/>
-    </g>
-    <g fill="none" stroke="#D4A017" stroke-width="1.2" opacity="0.5">
-        <path d="M1080,24 Q1100,8 1120,24 Q1140,40 1160,24"/>
-        <path d="M1090,24 Q1110,12 1130,24"/>
-        <circle cx="1080" cy="24" r="3" fill="#D4A017" stroke="none"/>
-        <circle cx="1160" cy="24" r="3" fill="#D4A017" stroke="none"/>
-    </g>
-    <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#E8CC70" stroke-width="0.5" opacity="0.3"/>
-    <line x1="0" y1="42" x2="1200" y2="42" stroke="#E8CC70" stroke-width="0.5" opacity="0.3"/>
-</svg>
 
 <%-- ========== GALLERY SECTION ========== --%>
 <section class="section-pad section-gallery">

@@ -99,7 +99,7 @@ public class BookingService {
     
     // =================================================================================
 
-    // สำหรับ Organizer: ดึงรายการตามกลุ่มสถานะ (เช่น ดึงเฉพาะที่ Approved เพื่อเตรียมออกใบเสนอราคา)
+    //  ดึงรายการตามกลุ่มสถานะ (เช่น ดึงเฉพาะที่ Approved เพื่อเตรียมออกใบเสนอราคา)
     public List<BookingForm> getBookingsByStatuses(List<String> statuses) {
         return bookingRepo.findByStatusIn(statuses);
     }
@@ -126,7 +126,7 @@ public class BookingService {
         updateStatus(id, newStatus);
     }
 
-    // (Common) เมทธอดกลางสำหรับอัปเดตสถานะ (ใช้ระบบ Dirty Checking)
+    // เมทธอดกลางสำหรับอัปเดตสถานะ (ใช้ระบบ Dirty Checking)
     private void updateStatus(String id, String status) {
         BookingForm booking = bookingRepo.findById(id).orElse(null);
         if (booking != null) {

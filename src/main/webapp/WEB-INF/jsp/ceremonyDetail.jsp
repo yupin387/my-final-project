@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -40,9 +38,7 @@
         <h1 class="cd-hero-title">${ceremony.ceremonyName}</h1>
         <p class="cd-hero-desc">${ceremony.ceremonyDetail}</p>
         <div class="cd-hero-divider"></div>
-        <div class="cd-price-tag">
-            เริ่มต้น <fmt:formatNumber value="${ceremony.basePrice}" pattern="#,###"/> บาท
-        </div>
+        <div class="cd-hero-note">ราคาขึ้นอยู่กับขนาดงาน — ทางร้านจะแจ้งใบเสนอราคาภายหลัง</div>
     </div>
 </div>
 
@@ -78,7 +74,6 @@
 <%-- ========== MAIN CONTENT ========== --%>
 <div class="cd-container">
 
-    <%-- Section ornament --%>
     <div class="cd-section-ornament">
         <div class="cd-ornament-line"></div>
         <div class="cd-ornament-diamond-sm"></div>
@@ -91,96 +86,63 @@
         <div class="cd-gold-line"></div>
     </div>
 
-    <%-- รายการอุปกรณ์ที่ใช้ในงาน — เต็มความกว้าง 2 คอลัมน์ --%>
-    <div class="cd-grid">
-
-        <%-- คอลัมน์ซ้าย --%>
-        <div>
-            <%-- รายการอุปกรณ์ --%>
-            <div class="cd-card">
-                <div class="cd-card-title">รายการอุปกรณ์ที่ใช้ในงาน</div>
-                <ul class="cd-item-list">
-                    <c:forEach items="${equipments}" var="item">
-                        <li>
-                            <span class="cd-dot"></span>
-                            <span>${item.itemName}
-                                <c:if test="${not empty item.itemDetail}">
-                                    <span class="cd-item-detail">(${item.itemDetail})</span>
-                                </c:if>
-                            </span>
-                        </li>
-                    </c:forEach>
-                    <c:if test="${empty equipments}">
-                        <li><span class="cd-dot"></span><span>กำลังอัปเดตข้อมูลอุปกรณ์...</span></li>
-                    </c:if>
-                </ul>
-            </div>
-
-            <%-- ชุดสังฆทาน --%>
-			<div class="cd-card">
-			    <div class="cd-card-title">ชุดสังฆทาน</div>
-			    <p class="cd-pinto-sub">คัดสรรของใช้คุณภาพ เพื่อถวายแด่พระสงฆ์</p>
-			    <div class="cd-pinto-grid">
-			        <c:forEach items="${sanghatanSets}" var="set">
-			            <div class="cd-pinto-box">
-			                <div class="cd-pinto-head">
-			                    <span class="cd-pinto-name">${set.itemName}</span>
-			                    <span class="cd-pinto-price">฿${set.pricePerUnit} / ${set.unit}</span>
-			                </div>
-			                <div class="cd-pinto-body">
-			                    <div class="cd-menu-label">รายการของ</div>
-			                    <ul class="cd-sangkhathan-detail">
-			                        <c:forEach items="${fn:split(set.itemDetail, ',')}" var="detail">
-			                            <li>${fn:trim(detail)}</li>
-			                        </c:forEach>
-			                    </ul>
-			                </div>
-			            </div>
-			        </c:forEach>
-			    </div>
-			</div>
-        </div>
-
-        <%-- คอลัมน์ขวา --%>
-        <div>
-            <%-- ปิ่นโต --%>
-			<div class="cd-card">
-			    <div class="cd-card-title">ชุดภัตตาหารปิ่นโตถวายพระ</div>
-			    <p class="cd-pinto-sub">ปรุงสดใหม่ทุกวัน เลือกได้ตามงบประมาณ</p>
-			    <div class="cd-pinto-grid">
-			        <c:forEach items="${pintoSets}" var="set">
-			            <div class="cd-pinto-box">
-			                <div class="cd-pinto-head">
-			                    <span class="cd-pinto-name">${set.itemName}</span>
-			                    <span class="cd-pinto-price">฿${set.pricePerUnit} / ${set.unit}</span>
-			                </div>
-			                <div class="cd-pinto-body">
-			                    <div class="cd-menu-label">รายการเมนู</div>
-			                    <%-- แยก itemDetail ด้วย , แล้ว render เป็น grid --%>
-			                    <ul class="cd-menu-grid">
-			                        <c:forEach items="${fn:split(set.itemDetail, ',')}" var="menuItem">
-			                            <li>${fn:trim(menuItem)}</li>
-			                        </c:forEach>
-			                    </ul>
-			                </div>
-			            </div>
-			        </c:forEach>
-			    </div>
-			</div>
-
-            <%-- ค่าบริการ --%>
-            <div class="cd-card">
-                <div class="cd-card-title">ค่าดำเนินการและบริการ</div>
-                <c:forEach items="${services}" var="s">
-                    <div class="cd-service-row">
-                        <span class="cd-service-name">${s.itemName}</span>
-                        <span class="cd-service-badge">${s.itemDetail}</span>
-                    </div>
-                </c:forEach>
-            </div>
-        </div>
-
+    <%-- ========== โซน 1: เงื่อนไขการจอง ========== --%>
+    <div class="cd-card cd-condition-card">
+        <div class="cd-card-title">📌 เงื่อนไขการใช้บริการ</div>
+        <ul class="cd-condition-list">
+            <c:choose>
+                <c:when test="${ceremony.ceremonyId == 1}">
+                    <li>✅ ให้บริการจัดงานขึ้นบ้านใหม่ตามประเพณีภาคเหนือเท่านั้น</li>
+                </c:when>
+                <c:otherwise>
+                    <li>✅ ให้บริการจัดพิธีสืบชะตาตามประเพณีล้านนาเท่านั้น</li>
+                </c:otherwise>
+            </c:choose>
+            <li>✅ รัศมีการนิมนต์พระสงฆ์ไม่เกิน 10 กิโลเมตร</li>
+            <li>✅ ราคาขึ้นอยู่กับขนาดงานและจำนวนแขก ทางร้านจะส่งใบเสนอราคาให้หลังรับจอง</li>
+            <li>✅ กรุณากรอกข้อมูลให้ครบถ้วน เพื่อความสะดวกในการจัดเตรียม</li>
+        </ul>
     </div>
+
+    <%-- ========== โซน 2: อุปกรณ์พื้นฐานที่รวมมาให้ ========== --%>
+    <div class="cd-card">
+        <div class="cd-card-title">อุปกรณ์ที่ทางร้านเตรียมให้</div>
+        <p class="cd-pinto-sub">รายการด้านล่างนี้รวมอยู่ในบริการแล้ว ไม่มีค่าใช้จ่ายเพิ่มเติม</p>
+        <ul class="cd-item-list">
+            <c:forEach items="${equipments}" var="item">
+                <li>
+                    <span class="cd-dot"></span>
+                    <span>${item.itemName}</span>
+                </li>
+            </c:forEach>
+            <c:if test="${empty equipments}">
+                <li><span class="cd-dot"></span><span>กำลังอัปเดตข้อมูลอุปกรณ์...</span></li>
+            </c:if>
+        </ul>
+    </div>
+
+    <%-- ========== โซน 3: รายการที่เลือกเพิ่มได้ (บอกสั้นๆ ไม่แสดงรายละเอียด) ========== --%>
+    <div class="cd-card">
+        <div class="cd-card-title">รายการที่เลือกเพิ่มได้ในฟอร์มจอง</div>
+        <p class="cd-pinto-sub">สามารถเลือกเพิ่มรายการด้านล่างได้เมื่อกรอกแบบฟอร์มจองค่ะ</p>
+        <div class="cd-addon-list">
+            <div class="cd-addon-row">
+                <span class="cd-addon-icon">🍱</span>
+                <div>
+                    <div class="cd-addon-name">ชุดภัตตาหารปิ่นโตถวายพระ</div>
+                    <div class="cd-addon-desc">มีให้เลือก 5 แบบ ปรุงสดใหม่ทุกวัน</div>
+                </div>
+            </div>
+            <div class="cd-addon-row">
+                <span class="cd-addon-icon">🎁</span>
+                <div>
+                    <div class="cd-addon-name">ชุดสังฆทาน</div>
+                    <div class="cd-addon-desc">มีให้เลือก 5 แบบ คัดสรรของใช้คุณภาพถวายพระสงฆ์</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <%-- ========== LOTUS WAVE DIVIDER ========== --%>
@@ -196,8 +158,8 @@
 <%-- ========== FOOTER BAR ========== --%>
 <div class="cd-footer">
     <div class="cd-footer-inner">
-        <div class="cd-footer-price">
-            ราคาเริ่มต้น <fmt:formatNumber value="${ceremony.basePrice}" pattern="#,###"/> บาท
+        <div class="cd-footer-note">
+            💬 สนใจจองงาน? กรอกแบบฟอร์มเพื่อรับใบเสนอราคา
         </div>
         <c:choose>
             <c:when test="${ceremony.ceremonyId == 1}">

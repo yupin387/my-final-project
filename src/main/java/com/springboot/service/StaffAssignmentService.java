@@ -32,11 +32,10 @@ public class StaffAssignmentService {
         return staffAssignmentRepo.findByHeadStaff_StaffId(staffId);
     }
     
- // ใน StaffAssignmentService.java
+ // ค้นหาข้อมูลการมอบหมายงานโดยระบุจาก Booking ID ของการจองนั้นๆ
     public StaffAssignment getAssignmentByBookingId(String bookingId) {
         return staffAssignmentRepo.findByBookingForm_BookingId(bookingId);
     }
- 
 
     // สร้างการมอบหมายงานใหม่ โดยจะลบข้อมูลการมอบหมายเดิมของรายการจองนั้นก่อน
     @Transactional

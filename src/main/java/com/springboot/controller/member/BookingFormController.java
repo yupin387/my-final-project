@@ -1,6 +1,8 @@
 package com.springboot.controller.member;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.model.BookingForm;
@@ -90,30 +94,61 @@ public class BookingFormController {
     }
 
     @PostMapping("/saveBooking")
-    public String saveBooking(@ModelAttribute BookingForm booking, HttpSession session) {
+    public String saveBooking(@ModelAttribute BookingForm booking,
+                              @RequestParam(value = "imageBase64", required = false) List<String> imageBase64List,
+                              HttpSession session) throws IOException {
         Member loginUser = (Member) session.getAttribute("user");
         if (loginUser == null) return "redirect:/loginMember";
-        
-        // ผูก Member เข้ากับการจอง
+
+        // เพิ่ม log ตรงนี้
+        System.out.println("=== imageBase64List size: " + (imageBase64List != null ? imageBase64List.size() : "NULL"));
+
         booking.setMember(loginUser);
-        
-        //  บันทึกข้อมูล (ID จะถูกเจนเป็น String BK... ใน Service)
+
+        if (imageBase64List != null && !imageBase64List.isEmpty()) {
+            String uploadDir = System.getProperty("user.dir") + "/uploads/address/";
+            new java.io.File(uploadDir).mkdirs();
+
+            List<String> fileNames = new ArrayList<>();
+            for (String base64 : imageBase64List) {
+                if (base64 != null && base64.contains(",")) {
+                    String data = base64.split(",")[1];
+                    byte[] bytes = java.util.Base64.getDecoder().decode(data);
+                    String fileName = System.currentTimeMillis() + "_" + (int)(Math.random()*10000) + ".jpg";
+                    java.nio.file.Files.write(
+                        java.nio.file.Paths.get(uploadDir + fileName), bytes
+                    );
+                    fileNames.add(fileName);
+                    System.out.println("=== Saved file: " + fileName);
+                }
+            }
+            if (!fileNames.isEmpty()) {
+                booking.setAddressImage(String.join(",", fileNames));
+                System.out.println("=== addressImage set: " + booking.getAddressImage());
+            }
+        }
+
         BookingForm saved = bookingService.saveBooking(booking);
-        
         return "redirect:/viewBooking/" + saved.getBookingId();
     }
+    
 
     @GetMapping("/viewBooking/{id}")
     public String viewBooking(@PathVariable String id, Model model, HttpSession session) {
         BookingForm booking = bookingService.getBookingById(id);
         if (booking == null) return "redirect:/home";
 
-        //  ตรวจสอบว่าการจองนี้มีการรีวิวในระบบหรือยัง
         boolean alreadyReviewed = reviewService.hasAlreadyReviewed(id);
-        
+
+        // เพิ่มแค่นี้
+        List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
+        List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
+
         model.addAttribute("booking", booking);
-        model.addAttribute("hasReview", alreadyReviewed); // ส่งค่าไปที่ JSP
-        return "viewBooking"; 
+        model.addAttribute("hasReview", alreadyReviewed);
+        model.addAttribute("pintoItems", pintoItems);
+        model.addAttribute("sanghatharnItems", sanghatharnItems);
+        return "viewBooking";
     }
     
     @GetMapping("/latestBooking")

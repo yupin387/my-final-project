@@ -20,7 +20,7 @@ public class ItemService {
     @Autowired
     private CeremonyRepository ceremonyRepo;
 
-    // ดึงรายชื่ออุปกรณ์และบริการเฉพาะรายการที่ยังมีสถานะเปิดใช้งานอยู่ (Active)
+    // ดึงรายชื่ออุปกรณ์และบริการเฉพาะรายการที่ยังมีสถานะเปิดใช้งานอยู่
     public List<Item> getAllActiveItems() {
         return itemRepo.findAllActive();
     }
