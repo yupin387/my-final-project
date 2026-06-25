@@ -244,26 +244,27 @@
             <div class="gold-line"></div>
         </div>
         <div class="reviews-grid">
-            <c:forEach var="review" items="${reviews}" end="1">
-                <c:set var="ratingInt" value="${fn:substringBefore(review.rating, '.')}" />
-                <div class="review-card">
-                    <div class="review-stars">
-                        <c:forEach begin="1" end="${ratingInt}">&#9733;</c:forEach>
-                        <c:forEach begin="${ratingInt + 1}" end="5">&#9734;</c:forEach>
-                    </div>
-                    <p class="review-text">"${review.comment}"</p>
-                    <c:if test="${not empty review.reviewImage}">
-                        <div class="review-img-wrapper">
-                            <img src="${pageContext.request.contextPath}/uploads/review/${review.reviewImage}" class="review-img-thumb" alt="ภาพรีวิว">
-                        </div>
-                    </c:if>
-                    <div style="margin-top:auto;">
-                        <div class="reviewer-name">คุณ ${review.bookingForm.member.memberFirstName} ${review.bookingForm.member.memberLastName}</div>
-                        <div class="review-event-type">งาน: ${review.bookingForm.ceremony.ceremonyName}</div>
-                    </div>
-                </div>
-            </c:forEach>
-        </div>
+		    <%-- ลบ end="1" ออก เพื่อแสดงข้อมูลที่ถูกจำกัดมาแล้วจาก Controller --%>
+		    <c:forEach var="review" items="${reviews}">
+		        <c:set var="ratingInt" value="${fn:substringBefore(review.rating, '.')}" />
+		        <div class="review-card">
+		            <div class="review-stars">
+		                <c:forEach begin="1" end="${ratingInt}">&#9733;</c:forEach>
+		                <c:forEach begin="${ratingInt + 1}" end="5">&#9734;</c:forEach>
+		            </div>
+		            <p class="review-text">"${review.comment}"</p>
+		            <c:if test="${not empty review.reviewImage}">
+		                <div class="review-img-wrapper">
+		                    <img src="${pageContext.request.contextPath}/uploads/review/${review.reviewImage}" class="review-img-thumb" alt="ภาพรีวิว">
+		                </div>
+		            </c:if>
+		            <div style="margin-top:auto;">
+		                <div class="reviewer-name">คุณ ${review.bookingForm.member.memberFirstName} ${review.bookingForm.member.memberLastName}</div>
+		                <div class="review-event-type">งาน: ${review.bookingForm.ceremony.ceremonyName}</div>
+		            </div>
+		        </div>
+		    </c:forEach>
+		</div>
         <div class="view-all-wrapper">
             <a href="${pageContext.request.contextPath}/reviews" class="btn-outline-brown">ดูรีวิวทั้งหมด &rarr;</a>
         </div>

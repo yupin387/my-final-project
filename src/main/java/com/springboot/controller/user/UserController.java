@@ -47,26 +47,16 @@ public class UserController {
     //แก้ตรงนี้ ล่าสุด
     @GetMapping("/home")
     public String home(Model model) {
-        List<Review> allReviews = reviewService.getAllReviews();
-        
-        // คะแนนเฉลี่ยแยกตาม ceremonyId
-        double avg1 = allReviews.stream()
-            .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == 1)
-            .mapToDouble(Review::getRating).average().orElse(0.0);
-        
-        double avg2 = allReviews.stream()
-            .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == 2)
-            .mapToDouble(Review::getRating).average().orElse(0.0);
-
-        model.addAttribute("avgRating1", avg1);
-        model.addAttribute("avgRating2", avg2);
-
-        // โค้ดเดิมที่มีอยู่...
-        List<Review> top2Reviews = allReviews.stream()
-            .sorted(Comparator.comparing(Review::getReviewDate).reversed())
-            .limit(2).collect(Collectors.toList());
+        // 1. ดึงเฉพาะ 2 รีวิวล่าสุดจากฐานข้อมูล (เรียงจากใหม่ไปเก่า)
+        List<Review> top2Reviews = reviewService.getTop2RecentReviews();
         model.addAttribute("reviews", top2Reviews);
 
+        // 2. ดึงรีวิวทั้งหมดเพื่อใช้คำนวณคะแนนเฉลี่ยเท่านั้น
+        List<Review> allReviews = reviewService.getAllReviews();
+        model.addAttribute("avgRating1", calculateAverage(allReviews, 1));
+        model.addAttribute("avgRating2", calculateAverage(allReviews, 2));
+
+        // 3. ส่วนของปฏิทินงาน
         List<String> bookedDates = bookingService.getAllBookings().stream()
             .filter(b -> b.getBookingStatus() != null && (
                 "Approved".equals(b.getBookingStatus()) ||
@@ -74,8 +64,11 @@ public class UserController {
                 "Completed".equals(b.getBookingStatus())))
             .map(b -> { 
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-                return sdf.format(b.getEventDate());
-            }).collect(Collectors.toList());
+                return b.getEventDate() != null ? sdf.format(b.getEventDate()) : ""; 
+            })
+            .filter(date -> !date.isEmpty())
+            .collect(Collectors.toList());
+        
         model.addAttribute("bookedDates", bookedDates);
 
         return "home";
@@ -127,4 +120,15 @@ public class UserController {
         return "ceremonyDetail";
     }
     
+    private double calculateAverage(List<Review> reviews, int ceremonyId) {
+        return reviews.stream()
+            .filter(r -> r.getBookingForm() != null && 
+                         r.getBookingForm().getCeremony() != null && 
+                         r.getBookingForm().getCeremony().getCeremonyId() == ceremonyId)
+            .mapToDouble(Review::getRating)
+            .average()
+            .orElse(0.0);
+    }
+    
 }
+
