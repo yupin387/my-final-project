@@ -152,6 +152,7 @@ public class BookingForm {
 		return details;
 	}
 
+	
 	public void setDetails(List<BookingFormDetail> details) {
 		this.details = details;
 	}

@@ -22,6 +22,7 @@ public class MemberService {
     public Member getMemberById(int id) {
         return memberRepository.findById(id).orElse(null);
     }
+    
     // อัปเดตข้อมูลโปรไฟล์
     @Transactional
     public void updateProfile(Member member, String newPassword) {

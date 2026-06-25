@@ -127,7 +127,6 @@ body {
 .user-info:hover {
 	background: rgba(255, 255, 255, 0.14);
 }
-
 .user-avatar {
 	background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
 	color: var(--brown-dark);

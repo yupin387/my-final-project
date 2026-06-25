@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		}
 	});
-	
 
 	// B. จัดการ Login Alert
 	const loginAlert = document.getElementById('loginAlert');

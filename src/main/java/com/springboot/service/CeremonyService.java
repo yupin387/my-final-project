@@ -37,5 +37,6 @@ public class CeremonyService {
         ceremonyRepo.deleteById(id);
     }
     
+    
     //==============
 }

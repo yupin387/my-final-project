@@ -18,7 +18,6 @@ document.addEventListener('click', function (e) {
 });
 
 
-
 function confirmCancel(bookingId) {
     if (confirm('ต้องการยกเลิกการจองนี้ใช่หรือไม่?')) {
         window.location.href = contextPath + '/booking/cancel/' + bookingId;

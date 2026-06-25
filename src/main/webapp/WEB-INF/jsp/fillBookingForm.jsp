@@ -261,6 +261,7 @@
             </div>
         </div>
         
+        
 
         <div id="pintoDetail" style="display:none; margin-top:14px;">
             <c:forEach items="${questions}" var="q">

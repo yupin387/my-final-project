@@ -81,7 +81,6 @@ function toggleWatDetail(radio) {
 }
 
 
-
 // ===== Toggle Section (ปิ่นโต / สังฆทาน) =====
 function toggleSection(sectionId, show) {
     const el = document.getElementById(sectionId);
