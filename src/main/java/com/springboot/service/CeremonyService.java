@@ -36,4 +36,6 @@ public class CeremonyService {
     public void deleteCeremony(int id) {
         ceremonyRepo.deleteById(id);
     }
+    
+    //==============
 }

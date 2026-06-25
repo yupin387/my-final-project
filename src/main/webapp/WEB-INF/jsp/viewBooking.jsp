@@ -240,6 +240,7 @@
     </c:if>
 </div>
 
+
         <%-- Action Bar --%>
         <div class="action-bar">
             <div>
