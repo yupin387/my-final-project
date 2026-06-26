@@ -137,7 +137,6 @@ body {
     );
 }
 
-/* เส้นทองด้านล่าง hero */
 .cd-hero::after {
     content: '';
     position: absolute;
@@ -193,17 +192,15 @@ body {
     border-radius: 2px;
 }
 
-.cd-price-tag {
+.cd-hero-note {
     display: inline-block;
-    background: rgba(255, 251, 230, 0.92);
+    background: rgba(255, 251, 230, 0.85);
     color: var(--brown-dark);
-    padding: 10px 32px;
+    padding: 10px 28px;
     border-radius: 50px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    border: 2px solid var(--gold-mid);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-    font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1.5px solid var(--gold-mid);
 }
 
 /* ========== SECTION ORNAMENT ========== */
@@ -268,87 +265,20 @@ body {
     padding: 48px 32px 120px;
 }
 
-.cd-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-    align-items: start;
-}
-
-/* เมนูปิ้นโต */
-.cd-menu-grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 2px 14px;
-}
-
-.cd-menu-grid li {
-    font-size: 12.5px;
-    line-height: 1.4;
-    color: var(--text-body);
-    padding: 4px 0 4px 14px;
-    position: relative;
-    border-bottom: 1px dashed var(--cream-border);
-}
-
-.cd-menu-grid li::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: var(--gold-mid);
-}
-
-.cd-pinto-body {
-    padding: 14px 18px;
-}
-
-.cd-sangkhathan-detail {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 2px 14px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.cd-sangkhathan-detail li {
-    font-size: 12.5px;
-    line-height: 1.4;
-    color: var(--text-body);
-    padding: 4px 0 4px 14px;
-    position: relative;
-    border-bottom: 1px dashed var(--cream-border);
-}
-
-.cd-sangkhathan-detail li::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: var(--gold-mid);
-}
-
 /* ========== CARD ========== */
 .cd-card {
     background: var(--white);
     border-radius: 18px;
-
     border: 3px solid var(--gold-mid);
-
     padding: 24px 28px;
     margin-bottom: 24px;
-
     box-shadow:
         0 0 12px rgba(212,160,23,0.35),
         0 8px 24px rgba(180,130,0,0.15);
-
     position: relative;
     overflow: hidden;
 }
 
-/* เส้นทองด้านบน card */
 .cd-card::before {
     content: '';
     position: absolute;
@@ -358,7 +288,6 @@ body {
     border-radius: 0 0 2px 2px;
 }
 
-/* มุมทองซ้ายบน */
 .cd-card::after {
     content: '';
     position: absolute;
@@ -376,7 +305,7 @@ body {
     font-size: 1.05rem;
     padding-bottom: 12px;
     margin-bottom: 18px;
-    border-bottom: 1.5px solid #3D2500;       /* ← เปลี่ยนตามกรอบ */
+    border-bottom: 1.5px solid #3D2500;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -398,7 +327,7 @@ body {
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;           /* ← 2 คอลัมน์ */
+    grid-template-columns: 1fr 1fr;
     gap: 0 16px;
 }
 
@@ -425,122 +354,111 @@ body {
     box-shadow: 0 1px 4px rgba(180, 130, 0, 0.3);
 }
 
-.cd-item-detail {
-    color: var(--text-muted);
-    font-size: 12px;
+/* ========== PACKAGE CARDS (ปิ่นโต / สังฆทาน) ========== */
+.cd-pkg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: 14px;
+    margin-top: 4px;
 }
 
-/* ========== SERVICE ROW ========== */
-.cd-service-row {
+.cd-pkg-card {
+    border: 1.5px solid var(--cream-border-soft);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--white);
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.cd-pkg-card:hover {
+    box-shadow: 0 6px 20px rgba(180, 130, 0, 0.22);
+    transform: translateY(-2px);
+}
+
+.cd-pkg-img {
+    width: 100%;
+    height: 130px;
+    display: flex;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--cream-mid);
-    font-size: 14px;
-    gap: 16px;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
 }
 
-.cd-service-row:last-child { border-bottom: none; }
+.cd-pkg-img--pinto       { background: #FEF3E2; }
+.cd-pkg-img--sangkhathan { background: #F5F0FF; }
 
-.cd-service-name { color: var(--text-body); }
+.cd-pkg-img-fallback {
+    font-size: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
 
-.cd-service-badge {
-    background: var(--cream-warm);
-    color: var(--brown-mid);
-    border: 1px solid var(--cream-border-soft);
-    border-radius: 20px;
-    padding: 4px 14px;
+.cd-pkg-body {
+    padding: 11px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.cd-pkg-name {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    color: var(--brown-dark);
+    font-size: 13.5px;
+    line-height: 1.4;
+}
+
+.cd-pkg-desc {
     font-size: 12px;
-    font-weight: 600;
-    text-align: right;
-    white-space: nowrap;
+    color: var(--text-muted);
+    line-height: 1.55;
+    flex: 1;
 }
 
-/* ========== PINTO / SANGKATAN ========== */
+.cd-pkg-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brown-mid);
+    background: var(--gold-glow);
+    border: 1px solid var(--cream-border);
+    border-radius: 20px;
+    padding: 3px 14px;
+    display: inline-block;
+    margin-top: 8px;
+    align-self: flex-start;
+}
+
+/* ========== PINTO SUB LABEL ========== */
 .cd-pinto-sub {
     font-size: 13px;
     color: var(--text-muted);
     margin-bottom: 14px;
 }
 
-.cd-pinto-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+/* ========== CONDITION CARD ========== */
+.cd-condition-card {
+    margin-bottom: 28px;
 }
 
-.cd-pinto-box {
-    border: 1.5px solid var(--cream-border-soft);
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 0;
-    background: var(--white);
-    display: flex;
-    flex-direction: column;
-}
-
-.cd-pinto-head {
-    background: linear-gradient(135deg, var(--cream-mid), var(--cream-warm));
-    border-bottom: 1.5px solid var(--cream-border);
-    padding: 11px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.cd-pinto-name {
-    font-family: 'Noto Serif Thai', serif;
-    font-weight: 700;
-    color: var(--brown-dark);
-    font-size: 14px;
-}
-
-.cd-pinto-price {
-    font-weight: 700;
-    color: var(--brown-mid);
-    font-size: 13px;
-    background: var(--gold-glow);
-    border: 1px solid var(--cream-border);
-    border-radius: 20px;
-    padding: 3px 12px;
-    white-space: nowrap;
-}
-
-.cd-menu-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--gold-mid);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-    margin-top: 12px;
-}
-
-.cd-menu-label:first-child { margin-top: 0; }
-
-.cd-menu-list {
+.cd-condition-list {
     list-style: none;
     padding: 0;
-    margin: 0 0 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.cd-menu-list li {
-    font-size: 12.5px;
+.cd-condition-list li {
+    font-size: 14px;
     color: var(--text-body);
-    padding: 3px 0;
-    padding-left: 14px;
-    position: relative;
-    line-height: 1.4;
-}
-
-.cd-menu-list li::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: var(--gold-mid);
+    line-height: 1.6;
 }
 
 /* ========== FOOTER BAR ========== */
@@ -572,11 +490,10 @@ body {
     align-items: center;
 }
 
-.cd-footer-price {
-    font-family: 'Noto Serif Thai', serif;
-    font-weight: 700;
-    font-size: 1.15rem;
-    color: var(--brown-dark);
+.cd-footer-note {
+    font-size: 14px;
+    color: var(--text-mid);
+    font-weight: 600;
 }
 
 .cd-btn-book {
@@ -603,11 +520,8 @@ body {
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
-    .cd-grid {
-        grid-template-columns: 1fr;
-    }
-    .cd-pinto-grid {
-        grid-template-columns: 1fr;
+    .cd-pkg-grid {
+        grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
     }
 }
 
@@ -615,111 +529,7 @@ body {
     .cd-item-list {
         grid-template-columns: 1fr;
     }
-}
-
-/* เงื่อนไขการจอง */
-.cd-condition-card {
-    margin-bottom: 28px;
-}
-
-.cd-condition-list {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.cd-condition-list li {
-    font-size: 14px;
-    color: var(--text-body);
-    line-height: 1.6;
-}
-
-/* footer note */
-.cd-footer-note {
-    font-size: 14px;
-    color: var(--text-mid);
-    font-weight: 600;
-}
-
-/* hero note แทน price tag */
-.cd-hero-note {
-    display: inline-block;
-    background: rgba(255, 251, 230, 0.85);
-    color: var(--brown-dark);
-    padding: 10px 28px;
-    border-radius: 50px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border: 1.5px solid var(--gold-mid);
-}
-
-/* hero note */
-.cd-hero-note {
-    display: inline-block;
-    background: rgba(255, 251, 230, 0.85);
-    color: var(--brown-dark);
-    padding: 10px 28px;
-    border-radius: 50px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border: 1.5px solid var(--gold-mid);
-}
-
-/* เงื่อนไขการจอง */
-.cd-condition-card { margin-bottom: 28px; }
-
-.cd-condition-list {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-
-.cd-condition-list li {
-    font-size: 14px;
-    color: var(--text-body);
-    line-height: 1.6;
-}
-
-/* addon list */
-.cd-addon-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 8px;
-}
-
-.cd-addon-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px;
-    background: var(--cream-warm);
-    border-radius: 10px;
-    border: 1px solid var(--cream-border-soft);
-}
-
-.cd-addon-icon { font-size: 28px; }
-
-.cd-addon-name {
-    font-weight: 700;
-    color: var(--brown-dark);
-    font-size: 15px;
-}
-
-.cd-addon-desc {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 2px;
-}
-
-/* footer note */
-.cd-footer-note {
-    font-size: 14px;
-    color: var(--text-mid);
-    font-weight: 600;
+    .cd-pkg-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }

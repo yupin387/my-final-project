@@ -38,5 +38,10 @@ public class CeremonyService {
     }
     
     
-    //==============
+    //==============เพิ่มเมธอท
+ // ใน CeremonyService.java
+    public Ceremony findById(Long id) {
+        // แปลง Long เป็น int ถ้า ID ใน Repository ใช้ int
+        return ceremonyRepo.findById(id.intValue()).orElse(null);
+    }
 }

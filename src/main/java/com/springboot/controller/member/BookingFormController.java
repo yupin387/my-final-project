@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -21,10 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.model.BookingForm;
+import com.springboot.model.Ceremony;
 import com.springboot.model.Item;
 import com.springboot.model.Member;
 import com.springboot.model.QuestionsDetail;
 import com.springboot.service.BookingService;
+import com.springboot.service.CeremonyService;
 import com.springboot.service.ItemService;
 import com.springboot.service.QuestionsService;
 import com.springboot.service.ReviewService;
@@ -45,6 +48,9 @@ public class BookingFormController {
     
     @Autowired
     private ReviewService reviewService;
+    
+    @Autowired
+    private CeremonyService ceremonyService;
     
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -93,41 +99,59 @@ public class BookingFormController {
         return "fillBookingForm2";
     }
 
+    /*===========แก้===========*/
     @PostMapping("/saveBooking")
     public String saveBooking(@ModelAttribute BookingForm booking,
-                              @RequestParam(value = "imageBase64", required = false) List<String> imageBase64List,
+    		                  @RequestParam Map<String, String> allParams,
                               HttpSession session) throws IOException {
+        
         Member loginUser = (Member) session.getAttribute("user");
         if (loginUser == null) return "redirect:/loginMember";
 
-        // เพิ่ม log ตรงนี้
-        System.out.println("=== imageBase64List size: " + (imageBase64List != null ? imageBase64List.size() : "NULL"));
+        // 1. ดึง ID ออกมาจาก Object ที่ถูก bind มาแล้ว
+        // Spring จะนำค่า 1 จาก JSP ไปใส่ใน booking.getCeremony().getCeremonyId() ให้โดยอัตโนมัติ
+        if (booking.getCeremony() == null || booking.getCeremony().getCeremonyId() == 0) {
+            return "redirect:/booking?error=noCeremony";
+        }
 
+        int ceremonyId = booking.getCeremony().getCeremonyId();
+        Ceremony ceremony = ceremonyService.getCeremonyById(ceremonyId);
+        
+        // 2. set ค่ากลับเข้าไปเพื่อให้แน่ใจว่าเป็น Object ที่สมบูรณ์
+        booking.setCeremony(ceremony);
         booking.setMember(loginUser);
 
-        if (imageBase64List != null && !imageBase64List.isEmpty()) {
-            String uploadDir = System.getProperty("user.dir") + "/uploads/address/";
-            new java.io.File(uploadDir).mkdirs();
+     // รวบรวม imageBase64[0], imageBase64[1], ... จาก allParams
+        List<String> imageBase64List = new ArrayList<>();
+        for (int i = 0; ; i++) {
+            String val = allParams.get("imageBase64[" + i + "]");
+            if (val == null) break;
+            imageBase64List.add(val);
+        }
 
-            List<String> fileNames = new ArrayList<>();
-            for (String base64 : imageBase64List) {
-                if (base64 != null && base64.contains(",")) {
-                    String data = base64.split(",")[1];
-                    byte[] bytes = java.util.Base64.getDecoder().decode(data);
-                    String fileName = System.currentTimeMillis() + "_" + (int)(Math.random()*10000) + ".jpg";
-                    java.nio.file.Files.write(
-                        java.nio.file.Paths.get(uploadDir + fileName), bytes
-                    );
-                    fileNames.add(fileName);
-                    System.out.println("=== Saved file: " + fileName);
+        if (!imageBase64List.isEmpty()) {
+            try {
+                String uploadDir = System.getProperty("user.dir") + "/uploads/address/";
+                new java.io.File(uploadDir).mkdirs();
+                List<String> fileNames = new ArrayList<>();
+                for (String base64 : imageBase64List) {
+                    if (base64 != null && base64.contains(",")) {
+                        String data = base64.split(",")[1];
+                        byte[] bytes = java.util.Base64.getDecoder().decode(data);
+                        String fileName = System.currentTimeMillis() + "_"
+                                + java.util.UUID.randomUUID().toString().substring(0, 8) + ".jpg";
+                        java.nio.file.Files.write(java.nio.file.Paths.get(uploadDir + fileName), bytes);
+                        fileNames.add(fileName);
+                    }
                 }
-            }
-            if (!fileNames.isEmpty()) {
                 booking.setAddressImage(String.join(",", fileNames));
-                System.out.println("=== addressImage set: " + booking.getAddressImage());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
+        // 2. บันทึกทุกอย่างลง Database ในคราวเดียว (Transaction)
+        // ตรงนี้คือการนำค่า addressImage ที่ set ไว้ข้างบน ลงไปในตาราง booking
         BookingForm saved = bookingService.saveBooking(booking);
         return "redirect:/viewBooking/" + saved.getBookingId();
     }

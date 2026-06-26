@@ -52,6 +52,12 @@ document.addEventListener('DOMContentLoaded', function() {
         master.addEventListener('change', applyState);
         applyState();
     });
+
+    // ตั้งค่าเริ่มต้น watSameInput = 'ให้ร้านเลือกให้' (default)
+    const watSameInput = document.getElementById('watSameInput');
+    const watDiffInput = document.getElementById('watDiffInput');
+    if (watSameInput) { watSameInput.disabled = false; watSameInput.value = 'ให้ร้านเลือกให้'; }
+    if (watDiffInput) { watDiffInput.disabled = true; watDiffInput.value = ''; }
 });
 
 // ===== Toggle Monk Detail =====
@@ -72,17 +78,27 @@ function toggleWatDetail(radio) {
     if (watSame) watSame.style.display = (radio.value === 'วัดเดียวกัน') ? 'block' : 'none';
     if (watDiff) watDiff.style.display = (radio.value === 'ต่างวัด') ? 'block' : 'none';
 
-    if (radio.value === 'วัดเดียวกัน' && watDiffInput) watDiffInput.value = '';
-    if (radio.value === 'ต่างวัด' && watSameInput) watSameInput.value = '';
-    if (radio.value === 'ให้ร้านเลือกให้') {
-        if (watSameInput) watSameInput.value = '';
-        if (watDiffInput) watDiffInput.value = '';
+    if (radio.value === 'วัดเดียวกัน') {
+        if (watSameInput) { watSameInput.disabled = false; watSameInput.value = ''; }
+        if (watDiffInput) { watDiffInput.disabled = true; watDiffInput.value = ''; }
+    } else if (radio.value === 'ต่างวัด') {
+        if (watSameInput) { watSameInput.disabled = true; watSameInput.value = ''; }
+        if (watDiffInput) { watDiffInput.disabled = false; watDiffInput.value = ''; }
+    } else {
+        // ให้ร้านเลือกให้
+        if (watSameInput) { watSameInput.disabled = false; watSameInput.value = 'ให้ร้านเลือกให้'; }
+        if (watDiffInput) { watDiffInput.disabled = true; watDiffInput.value = ''; }
     }
 }
-
 
 // ===== Toggle Section (ปิ่นโต / สังฆทาน) =====
 function toggleSection(sectionId, show) {
     const el = document.getElementById(sectionId);
     if (el) el.style.display = show ? 'block' : 'none';
+}
+
+// ===== Sync hidden answer กับ radio (ใช้ใน form2) =====
+function syncAnswer(hiddenId, value) {
+    const el = document.getElementById(hiddenId);
+    if (el) el.value = value;
 }

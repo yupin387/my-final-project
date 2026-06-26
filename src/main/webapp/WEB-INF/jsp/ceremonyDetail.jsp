@@ -121,25 +121,57 @@
         </ul>
     </div>
 
-    <%-- ========== โซน 3: รายการที่เลือกเพิ่มได้ (บอกสั้นๆ ไม่แสดงรายละเอียด) ========== --%>
+    <%-- ========== โซน 3: ชุดปิ่นโต ========== --%>
     <div class="cd-card">
-        <div class="cd-card-title">รายการที่เลือกเพิ่มได้ในฟอร์มจอง</div>
-        <p class="cd-pinto-sub">สามารถเลือกเพิ่มรายการด้านล่างได้เมื่อกรอกแบบฟอร์มจองค่ะ</p>
-        <div class="cd-addon-list">
-            <div class="cd-addon-row">
-                <span class="cd-addon-icon">🍱</span>
-                <div>
-                    <div class="cd-addon-name">ชุดภัตตาหารปิ่นโตถวายพระ</div>
-                    <div class="cd-addon-desc">มีให้เลือก 5 แบบ ปรุงสดใหม่ทุกวัน</div>
+        <div class="cd-card-title">🍱 ชุดภัตตาหารปิ่นโตถวายพระ</div>
+        <p class="cd-pinto-sub">เลือกเพิ่มได้เมื่อกรอกแบบฟอร์มจอง — ปรุงสดใหม่ทุกวัน</p>
+        <div class="cd-pkg-grid">
+            <c:forEach items="${pintoItems}" var="item" varStatus="loop">
+            <div class="cd-pkg-card">
+                <div class="cd-pkg-img cd-pkg-img--pinto">
+                    <img src="${pageContext.request.contextPath}/static/images/foodimg/food${loop.index + 1}.jpg"
+                         alt="${item.itemName}"
+                         style="width:100%;height:100%;object-fit:cover;"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <div class="cd-pkg-img-fallback" style="display:none;">🍱</div>
+                </div>
+                <div class="cd-pkg-body">
+                    <div class="cd-pkg-name">${item.itemName}</div>
+                    <div class="cd-pkg-desc">${item.itemDetail}</div>
+                    <div class="cd-pkg-price">${item.pricePerUnit} บาท</div>
                 </div>
             </div>
-            <div class="cd-addon-row">
-                <span class="cd-addon-icon">🎁</span>
-                <div>
-                    <div class="cd-addon-name">ชุดสังฆทาน</div>
-                    <div class="cd-addon-desc">มีให้เลือก 5 แบบ คัดสรรของใช้คุณภาพถวายพระสงฆ์</div>
+            </c:forEach>
+            <c:if test="${empty pintoItems}">
+                <p class="cd-pinto-sub">กำลังอัปเดตข้อมูล...</p>
+            </c:if>
+        </div>
+    </div>
+
+    <%-- ========== โซน 4: ชุดสังฆทาน ========== --%>
+    <div class="cd-card">
+        <div class="cd-card-title">🎁 ชุดสังฆทาน</div>
+        <p class="cd-pinto-sub">เลือกเพิ่มได้เมื่อกรอกแบบฟอร์มจอง — คัดสรรของใช้คุณภาพถวายพระสงฆ์</p>
+        <div class="cd-pkg-grid">
+            <c:forEach items="${sangkhathanItems}" var="item" varStatus="loop">
+            <div class="cd-pkg-card">
+                <div class="cd-pkg-img cd-pkg-img--sangkhathan">
+                    <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/offeringset${loop.index + 1}.jpg"
+                         alt="${item.itemName}"
+                         style="width:100%;height:100%;object-fit:cover;"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <div class="cd-pkg-img-fallback" style="display:none;">🎁</div>
+                </div>
+                <div class="cd-pkg-body">
+                    <div class="cd-pkg-name">${item.itemName}</div>
+                    <div class="cd-pkg-desc">${item.itemDetail}</div>
+                    <div class="cd-pkg-price">${item.pricePerUnit} บาท</div>
                 </div>
             </div>
+            </c:forEach>
+            <c:if test="${empty sangkhathanItems}">
+                <p class="cd-pinto-sub">กำลังอัปเดตข้อมูล...</p>
+            </c:if>
         </div>
     </div>
 
