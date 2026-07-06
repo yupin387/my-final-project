@@ -324,6 +324,7 @@
     </c:forEach>
 </div>
 
+
 <%-- ITEM SELECTION MODAL --%>
 <div id="itemSelectionModal" class="modal-overlay">
     <div class="modal-card">

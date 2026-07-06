@@ -75,6 +75,7 @@ function renderItemPicker(category) {
         const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
         const itemType = dataEl.getAttribute('data-type') || '';
 
+		
         // กรองตามหมวดหมู่
         if (category !== 'all' && !itemType.includes(category)) return;
 
