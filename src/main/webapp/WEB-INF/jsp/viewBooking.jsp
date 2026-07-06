@@ -156,17 +156,18 @@
                 </c:if>
             </c:forEach>
 
-            <%-- 2. รายละเอียดการนิมนต์พระสงฆ์ (- ถ้านิมนต์เอง) --%>
+            <%-- 2. รายละเอียดการนิมนต์พระสงฆ์ (เลือกวัด) — แสดง "-" เมื่อ "นิมนต์เอง" เพราะไม่เกี่ยวข้อง (ผู้จองเป็นคนนิมนต์เอง ไม่ต้องเลือกให้ร้านช่วยเลือกวัด) --%>
             <c:forEach items="${booking.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'รายละเอียดการนิมนต์พระสงฆ์')}">
                     <div class="info-row" style="margin-bottom:8px;"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${monkType == 'นิมนต์เอง'}">-</c:when><c:when test="${not empty fn:trim(d.answer) && fn:trim(d.answer) != ','}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
 
-            <%-- 3. จำนวนพระสงฆ์ (- ถ้านิมนต์เอง) --%>
+            <%-- 3. จำนวนพระสงฆ์ — แสดงคำตอบเสมอ ไม่ว่าจะ "นิมนต์เอง" หรือ "ให้ทางร้านนิมนต์"
+                 เพราะฟอร์มจองเก็บค่าจำนวนพระในทุกกรณี (ผู้จองเป็นคนกรอกเองเมื่อนิมนต์เอง) --%>
             <c:forEach items="${booking.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'จำนวนพระ')}">
-                    <div class="info-row" style="margin-bottom:8px;"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${monkType == 'นิมนต์เอง'}">-</c:when><c:when test="${not empty fn:trim(d.answer) && fn:trim(d.answer) != ','}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                    <div class="info-row" style="margin-bottom:8px;"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${not empty fn:trim(d.answer) && fn:trim(d.answer) != ','}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
         </div>

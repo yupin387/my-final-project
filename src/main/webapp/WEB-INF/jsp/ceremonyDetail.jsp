@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -100,13 +101,13 @@
             </c:choose>
             <li>✅ รัศมีการนิมนต์พระสงฆ์ไม่เกิน 10 กิโลเมตร</li>
             <li>✅ ราคาขึ้นอยู่กับขนาดงานและจำนวนแขก ทางร้านจะส่งใบเสนอราคาให้หลังรับจอง</li>
-            <li>✅ กรุณากรอกข้อมูลให้ครบถ้วน เพื่อความสะดวกในการจัดเตรียม</li>
+            <li>✅ กรุณากรอกข้อมูลในหน้าแบบฟอร์มให้ครบถ้วน เพื่อความสะดวกในการจัดเตรียม</li>
         </ul>
     </div>
 
     <%-- ========== โซน 2: อุปกรณ์พื้นฐานที่รวมมาให้ ========== --%>
     <div class="cd-card">
-        <div class="cd-card-title">อุปกรณ์ที่ทางร้านเตรียมให้</div>
+        <div class="cd-card-title">อุปกรณ์พื้นฐานที่ทางร้านเตรียมให้ ขึ้นอยู่กับขนาดของงาน</div>
         <p class="cd-pinto-sub">รายการด้านล่างนี้รวมอยู่ในบริการแล้ว ไม่มีค่าใช้จ่ายเพิ่มเติม</p>
         <ul class="cd-item-list">
             <c:forEach items="${equipments}" var="item">
@@ -123,8 +124,8 @@
 
     <%-- ========== โซน 3: ชุดปิ่นโต ========== --%>
     <div class="cd-card">
-        <div class="cd-card-title">🍱 ชุดภัตตาหารปิ่นโตถวายพระ</div>
-        <p class="cd-pinto-sub">เลือกเพิ่มได้เมื่อกรอกแบบฟอร์มจอง — ปรุงสดใหม่ทุกวัน</p>
+        <div class="cd-card-title">ชุดภัตตาหารปิ่นโตถวายพระ</div>
+        <p class="cd-pinto-sub">สามารถดูชุดภัตตาหารปิ่นโตถวายพระ พร้อมรายละเอียดในแต่ละชุด</p>
         <div class="cd-pkg-grid">
             <c:forEach items="${pintoItems}" var="item" varStatus="loop">
             <div class="cd-pkg-card">
@@ -138,7 +139,6 @@
                 <div class="cd-pkg-body">
                     <div class="cd-pkg-name">${item.itemName}</div>
                     <div class="cd-pkg-desc">${item.itemDetail}</div>
-                    <div class="cd-pkg-price">${item.pricePerUnit} บาท</div>
                 </div>
             </div>
             </c:forEach>
@@ -150,8 +150,8 @@
 
     <%-- ========== โซน 4: ชุดสังฆทาน ========== --%>
     <div class="cd-card">
-        <div class="cd-card-title">🎁 ชุดสังฆทาน</div>
-        <p class="cd-pinto-sub">เลือกเพิ่มได้เมื่อกรอกแบบฟอร์มจอง — คัดสรรของใช้คุณภาพถวายพระสงฆ์</p>
+        <div class="cd-card-title">ชุดสังฆทาน</div>
+        <p class="cd-pinto-sub">สามารถดูสังฆทานพร้อมรายละเอียดของใช้คุณภาพถวายพระสงฆ์</p>
         <div class="cd-pkg-grid">
             <c:forEach items="${sangkhathanItems}" var="item" varStatus="loop">
             <div class="cd-pkg-card">
@@ -165,7 +165,6 @@
                 <div class="cd-pkg-body">
                     <div class="cd-pkg-name">${item.itemName}</div>
                     <div class="cd-pkg-desc">${item.itemDetail}</div>
-                    <div class="cd-pkg-price">${item.pricePerUnit} บาท</div>
                 </div>
             </div>
             </c:forEach>
@@ -191,7 +190,7 @@
 <div class="cd-footer">
     <div class="cd-footer-inner">
         <div class="cd-footer-note">
-            💬 สนใจจองงาน? กรอกแบบฟอร์มเพื่อรับใบเสนอราคา
+            <span class="cd-footer-start-price">เริ่มต้น <fmt:formatNumber value="${ceremony.basePrice}" type="number" groupingUsed="true" maxFractionDigits="0"/> บาท</span>
         </div>
         <c:choose>
             <c:when test="${ceremony.ceremonyId == 1}">
@@ -217,7 +216,6 @@
         </linearGradient>
     </defs>
 </svg>
-
 <script src="${pageContext.request.contextPath}/static/js/ceremonyDetail.js"></script>
 </body>
 </html>
