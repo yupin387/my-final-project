@@ -262,9 +262,11 @@
                             <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
                                 <div class="form-group" style="margin-top:14px;">
                                     <label class="form-label">${q.questionsText} <span class="required">*</span></label>
+                                    <p style="font-size:12px;color:#A08840;margin-top:6px;">จำนวนที่แนะนำ 3, 5 และ 9 รูป</p>
                                     <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
                                     <input type="number" name="details[${detailIndex}].answer"
                                            class="form-control" placeholder="ระบุจำนวนพระสงฆ์..." min="1" required>
+                                    
                                 </div>
                                 <c:set var="detailIndex" value="${detailIndex + 1}"/>
                             </c:if>
