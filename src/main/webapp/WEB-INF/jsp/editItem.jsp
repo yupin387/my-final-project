@@ -128,12 +128,22 @@
                                 </div>
                                 <div class="form-group">
                                     <label>หน่วยนับ</label>
-                                    <select name="unit" required>
-                                        <option value="ชุด"     ${item.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
-                                        <option value="ชิ้น"    ${item.unit == 'ชิ้น'    ? 'selected' : ''}>ชิ้น</option>
-                                        <option value="โหล"     ${item.unit == 'โหล'     ? 'selected' : ''}>โหล</option>
-                                        <option value="เครื่อง" ${item.unit == 'เครื่อง' ? 'selected' : ''}>เครื่อง</option>
-                                    </select>
+                                  <select name="unit" required>
+    <option value="">-- เลือกหน่วย --</option>
+    <option value="ชุด"     ${param.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
+    <option value="ชิ้น"    ${param.unit == 'ชิ้น'    ? 'selected' : ''}>ชิ้น</option>
+    <option value="โหล"     ${param.unit == 'โหล'     ? 'selected' : ''}>โหล</option>
+    <option value="เครื่อง" ${param.unit == 'เครื่อง' ? 'selected' : ''}>เครื่อง</option>
+    <option value="รูป"     ${param.unit == 'รูป'     ? 'selected' : ''}>รูป</option>
+    <option value="ตัว"     ${param.unit == 'ตัว'     ? 'selected' : ''}>ตัว</option>
+    <option value="ใบ"      ${param.unit == 'ใบ'      ? 'selected' : ''}>ใบ</option>
+    <option value="เถา"     ${param.unit == 'เถา'     ? 'selected' : ''}>เถา</option>
+    <option value="อัน"     ${param.unit == 'อัน'     ? 'selected' : ''}>อัน</option>
+    <option value="คู่"     ${param.unit == 'คู่'     ? 'selected' : ''}>คู่</option>
+    <option value="องค์"    ${param.unit == 'องค์'    ? 'selected' : ''}>องค์</option>
+    <option value="ผืน"     ${param.unit == 'ผืน'     ? 'selected' : ''}>ผืน</option>
+    <option value="ต้น"     ${param.unit == 'ต้น'     ? 'selected' : ''}>ต้น</option>
+</select>
                                 </div>
                             </div>
                         </div>

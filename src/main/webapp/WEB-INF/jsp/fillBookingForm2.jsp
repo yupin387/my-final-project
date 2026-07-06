@@ -272,14 +272,15 @@
                     </div>
                 </div>
 
-                <%-- 6. ชุดภัตตาหารปิ่นโต --%>
+            <%-- 6. ชุดปิ่นโต --%>
                 <div class="form-card">
                     <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
                     <div class="card-body">
 
-                        <%-- hidden input รับค่าจาก radio ผ่าน JS (เหมือน fillBookingForm) --%>
+                        <%-- FIX: เก็บ index ของคำถาม "ต้องการชุดภัตตาหาร" ไว้ใช้กับ radio ด้านล่าง --%>
                         <c:forEach items="${questions}" var="q">
-                            <c:if test="${fn:contains(q.questionsText, 'ปิ่นโต') && !fn:contains(q.questionsText, 'เลือก') && !fn:contains(q.questionsText, 'จำนวน')}">
+                            <c:if test="${fn:contains(q.questionsText, 'ต้องการชุดภัตตาหาร')}">
+                                <c:set var="pintoWantIndex" value="${detailIndex}"/>
                                 <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
                                 <c:set var="detailIndex" value="${detailIndex + 1}"/>
                             </c:if>
@@ -289,23 +290,24 @@
                             <label class="form-label">ต้องการชุดภัตตาหารปิ่นโตหรือไม่?</label>
                             <div class="checkbox-group">
                                 <label class="checkbox-label">
-                                    <input type="radio" name="wantPinto" value="ต้องการ"
+                                    <%-- FIX: เปลี่ยน name จาก "wantPinto" เป็น "details[${pintoWantIndex}].answer"
+                                         เพื่อให้ค่าที่เลือกถูกผูกกับ BookingFormDetail ที่มี questionsId ตรงกัน --%>
+                                    <input type="radio" name="details[${pintoWantIndex}].answer" value="ต้องการ"
                                            onchange="toggleSection('pintoDetail', true)" checked>
                                     <span>ต้องการ</span>
                                 </label>
                                 <label class="checkbox-label">
-                                    <input type="radio" name="wantPinto" value="ไม่ต้องการ"
+                                    <input type="radio" name="details[${pintoWantIndex}].answer" value="ไม่ต้องการ"
                                            onchange="toggleSection('pintoDetail', false)">
                                     <span>ไม่ต้องการ</span>
                                 </label>
                             </div>
                         </div>
 
-                        <%-- แสดง default เพราะ default = ต้องการ --%>
+                        <%-- default แสดงเลย เพราะ default = ต้องการ --%>
                         <div id="pintoDetail" style="display:block; margin-top:14px;">
-
                             <c:forEach items="${questions}" var="q">
-                                <c:if test="${fn:contains(q.questionsText, 'เลือก') && fn:contains(q.questionsText, 'ปิ่นโต')}">
+                                <c:if test="${fn:contains(q.questionsText, 'เลือกชุดภัตตาหาร')}">
                                     <div class="form-group">
                                         <label class="form-label">เลือกชุดปิ่นโต</label>
                                         <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
@@ -325,7 +327,7 @@
                             </c:forEach>
 
                             <c:forEach items="${questions}" var="q">
-                                <c:if test="${fn:contains(q.questionsText, 'จำนวนชุด') && fn:contains(q.questionsText, 'ปิ่นโต')}">
+                                <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดภัตตาหาร')}">
                                     <div class="form-group">
                                         <label class="form-label">${q.questionsText}</label>
                                         <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
@@ -335,19 +337,20 @@
                                     <c:set var="detailIndex" value="${detailIndex + 1}"/>
                                 </c:if>
                             </c:forEach>
-
                         </div>
+
                     </div>
                 </div>
 
-                <%-- 7. ชุดสังฆทาน --%>
+                <%-- 7. สังฆทาน --%>
                 <div class="form-card">
                     <div class="card-header">ชุดสังฆทาน</div>
                     <div class="card-body">
 
-                        <%-- hidden input รับค่าจาก radio ผ่าน JS (เหมือน fillBookingForm) --%>
+                        <%-- FIX: เก็บ index ของคำถาม "ต้องการสังฆทาน" ไว้ใช้กับ radio ด้านล่าง --%>
                         <c:forEach items="${questions}" var="q">
-                            <c:if test="${fn:contains(q.questionsText, 'สังฆทาน') && !fn:contains(q.questionsText, 'เลือก') && !fn:contains(q.questionsText, 'จำนวน')}">
+                            <c:if test="${fn:contains(q.questionsText, 'ต้องการสังฆทาน')}">
+                                <c:set var="sanghatanWantIndex" value="${detailIndex}"/>
                                 <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
                                 <c:set var="detailIndex" value="${detailIndex + 1}"/>
                             </c:if>
@@ -357,23 +360,24 @@
                             <label class="form-label">ต้องการชุดสังฆทานหรือไม่?</label>
                             <div class="checkbox-group">
                                 <label class="checkbox-label">
-                                    <input type="radio" name="wantSanghatan" value="ต้องการ"
+                                    <%-- FIX: เปลี่ยน name จาก "wantSanghatan" เป็น "details[${sanghatanWantIndex}].answer"
+                                         เพื่อให้ค่าที่เลือกถูกผูกกับ BookingFormDetail ที่มี questionsId ตรงกัน --%>
+                                    <input type="radio" name="details[${sanghatanWantIndex}].answer" value="ต้องการ"
                                            onchange="toggleSection('sanghatanDetail', true)" checked>
                                     <span>ต้องการ</span>
                                 </label>
                                 <label class="checkbox-label">
-                                    <input type="radio" name="wantSanghatan" value="ไม่ต้องการ"
+                                    <input type="radio" name="details[${sanghatanWantIndex}].answer" value="ไม่ต้องการ"
                                            onchange="toggleSection('sanghatanDetail', false)">
                                     <span>ไม่ต้องการ</span>
                                 </label>
                             </div>
                         </div>
 
-                        <%-- แสดง default เพราะ default = ต้องการ --%>
+                        <%-- default แสดงเลย เพราะ default = ต้องการ --%>
                         <div id="sanghatanDetail" style="display:block; margin-top:14px;">
-
                             <c:forEach items="${questions}" var="q">
-                                <c:if test="${fn:contains(q.questionsText, 'เลือก') && fn:contains(q.questionsText, 'สังฆทาน')}">
+                                <c:if test="${fn:contains(q.questionsText, 'เลือกชุดสังฆทาน')}">
                                     <div class="form-group">
                                         <label class="form-label">เลือกชุดสังฆทาน</label>
                                         <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
@@ -391,7 +395,7 @@
                             </c:forEach>
 
                             <c:forEach items="${questions}" var="q">
-                                <c:if test="${fn:contains(q.questionsText, 'จำนวน') && fn:contains(q.questionsText, 'สังฆทาน')}">
+                                <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดสังฆทาน')}">
                                     <div class="form-group">
                                         <label class="form-label">${q.questionsText}</label>
                                         <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
@@ -401,8 +405,8 @@
                                     <c:set var="detailIndex" value="${detailIndex + 1}"/>
                                 </c:if>
                             </c:forEach>
-
                         </div>
+
                     </div>
                 </div>
 

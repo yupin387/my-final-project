@@ -85,6 +85,30 @@
             <div class="info-row"><span class="info-label">วันที่จัดงาน</span><span class="info-value"><fmt:formatDate value="${b.eventDate}" pattern="dd MMMM yyyy"/></span></div>
             <div class="info-row"><span class="info-label">เวลาเริ่มพิธี</span><span class="info-value">${b.eventTime} น.</span></div>
             <div class="info-row"><span class="info-label">สถานที่</span><span class="info-value">${b.eventAddress}</span></div>
+
+            <%-- รูปภาพสถานที่ --%>
+            <div class="info-row" style="margin-top:12px;">
+                <span class="info-label">รูปภาพสถานที่</span>
+                <span class="info-value">
+                    <c:choose>
+                        <c:when test="${not empty b.addressImage}">
+                            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;">
+                                <c:forEach items="${fn:split(b.addressImage, ',')}" var="imgFile">
+                                    <c:set var="trimmed" value="${fn:trim(imgFile)}"/>
+                                    <c:if test="${not empty trimmed}">
+                                        <img src="${pageContext.request.contextPath}/uploads/address/${trimmed}"
+                                             style="width:130px;height:130px;object-fit:cover;border-radius:10px;border:2px solid #D4A017;box-shadow:0 2px 8px rgba(0,0,0,0.12);"
+                                             onerror="this.style.display='none'">
+                                    </c:if>
+                                </c:forEach>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <span style="color:#A08840;">ไม่มีรูปภาพสถานที่</span>
+                        </c:otherwise>
+                    </c:choose>
+                </span>
+            </div>
         </div>
 
         <hr class="divider">
@@ -93,17 +117,10 @@
         <div class="section">
             <div class="section-title">รายละเอียดการจัดพิธี</div>
             <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'จำนวนแขก') || fn:contains(d.question.questionsText, 'อุปกรณ์') || fn:contains(d.question.questionsText, 'จำนวนผู้') || fn:contains(d.question.questionsText, 'ผูกข้อมือ') || fn:contains(d.question.questionsText, 'บ้านใหม่')}">
+                <c:if test="${fn:contains(d.question.questionsText, 'แขก') || fn:contains(d.question.questionsText, 'อุปกรณ์') || fn:contains(d.question.questionsText, 'จำนวนผู้') || fn:contains(d.question.questionsText, 'ผูกข้อมือ') || fn:contains(d.question.questionsText, 'บ้านใหม่')}">
                     <div class="info-row">
                         <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value">
-                            <c:choose>
-                                <%-- คำถามแบบ "ต้องการ...หรือไม่" ที่ตอบ "ไม่ต้องการ" ให้แสดงคำตอบจริง --%>
-                                <c:when test="${fn:contains(d.question.questionsText, 'ต้องการ') && fn:contains(d.question.questionsText, 'หรือไม่') && d.answer == 'ไม่ต้องการ'}">ไม่ต้องการ</c:when>
-                                <c:when test="${empty d.answer || d.answer == 'ไม่ต้องการ'}">-</c:when>
-                                <c:otherwise>${d.answer}</c:otherwise>
-                            </c:choose>
-                        </span>
+                        <span class="info-value"><c:choose><c:when test="${empty fn:trim(d.answer)}">-</c:when><c:otherwise>${d.answer}</c:otherwise></c:choose></span>
                     </div>
                 </c:if>
             </c:forEach>
@@ -114,17 +131,33 @@
         <%-- การนิมนต์พระสงฆ์ --%>
         <div class="section">
             <div class="section-title">การนิมนต์พระสงฆ์</div>
+
+            <%-- หาคำตอบรูปแบบการนิมนต์ก่อน --%>
+            <c:set var="monkType" value=""/>
             <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'นิมนต์') || fn:contains(d.question.questionsText, 'พระสงฆ์') || fn:contains(d.question.questionsText, 'พระ')}">
-                    <div class="info-row">
-                        <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value">
-                            <c:choose>
-                                <c:when test="${empty d.answer || d.answer == 'ไม่ต้องการ'}">-</c:when>
-                                <c:otherwise>${d.answer}</c:otherwise>
-                            </c:choose>
-                        </span>
-                    </div>
+                <c:if test="${fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')}">
+                    <c:set var="monkType" value="${fn:trim(d.answer)}"/>
+                </c:if>
+            </c:forEach>
+
+            <%-- 1. รูปแบบการนิมนต์ (แสดงเสมอ) --%>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')}">
+                    <div class="info-row" style="margin-bottom:8px;"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                </c:if>
+            </c:forEach>
+
+            <%-- 2. รายละเอียดการนิมนต์พระสงฆ์ (- ถ้านิมนต์เอง) --%>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${fn:contains(d.question.questionsText, 'รายละเอียดการนิมนต์พระสงฆ์')}">
+                    <div class="info-row" style="margin-bottom:8px;"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${monkType == 'นิมนต์เอง'}">-</c:when><c:when test="${not empty fn:trim(d.answer) && fn:trim(d.answer) != ','}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                </c:if>
+            </c:forEach>
+
+            <%-- 3. จำนวนพระสงฆ์ (- ถ้านิมนต์เอง) --%>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${fn:contains(d.question.questionsText, 'จำนวนพระ')}">
+                    <div class="info-row" style="margin-bottom:8px;"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${monkType == 'นิมนต์เอง'}">-</c:when><c:when test="${not empty fn:trim(d.answer) && fn:trim(d.answer) != ','}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
         </div>
@@ -134,41 +167,69 @@
         <%-- ชุดภัตตาหารปิ่นโต --%>
         <div class="section">
             <div class="section-title">ชุดภัตตาหารปิ่นโต</div>
+
+            <%-- หาคำตอบคำถามแรก --%>
+            <c:set var="pintoWant" value="ไม่ต้องการ"/>
             <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'ปิ่นโต')}">
-                    <div class="info-row">
-                        <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value">
-                            <c:choose>
-                                <%-- คำถามแบบ "ต้องการ...หรือไม่" ที่ตอบ "ไม่ต้องการ" ให้แสดงคำตอบจริง --%>
-                                <c:when test="${fn:contains(d.question.questionsText, 'ต้องการ') && fn:contains(d.question.questionsText, 'หรือไม่') && d.answer == 'ไม่ต้องการ'}">ไม่ต้องการ</c:when>
-                                <c:when test="${empty d.answer || d.answer == 'ไม่ต้องการ'}">-</c:when>
-                                <c:otherwise>${d.answer}</c:otherwise>
-                            </c:choose>
-                        </span>
-                    </div>
+                <c:if test="${(fn:contains(d.question.questionsText, 'ภัตตาหาร') || fn:contains(d.question.questionsText, 'ปิ่นโต')) && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
+                    <c:set var="pintoWant" value="${fn:trim(d.answer)}"/>
+                </c:if>
+            </c:forEach>
+
+            <%-- คำถามแรก: แสดงเสมอ --%>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${(fn:contains(d.question.questionsText, 'ภัตตาหาร') || fn:contains(d.question.questionsText, 'ปิ่นโต')) && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>ไม่ต้องการ</c:otherwise></c:choose></span></div>
+                </c:if>
+            </c:forEach>
+
+            <%-- คำถามเลือกชุด: แสดงค่าถ้าต้องการ, - ถ้าไม่ต้องการ --%>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${pintoWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${pintoItems}" var="pItem"><c:if test="${pItem.itemName == fn:trim(d.answer)}"><span style="color:#A08840;font-size:13px;"> — ฿<fmt:formatNumber value="${pItem.pricePerUnit}" pattern="#,###"/> / ${pItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                </c:if>
+            </c:forEach>
+
+            <%-- คำถามจำนวน: แสดงค่าถ้าต้องการ, - ถ้าไม่ต้องการ --%>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${fn:contains(d.question.questionsText, 'จำนวน') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${pintoWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
         </div>
 
         <hr class="divider">
 
-        <%-- รายละเอียดสังฆทาน --%>
+        <%-- ชุดสังฆทาน --%>
         <div class="section">
-            <div class="section-title">รายละเอียดสังฆทาน</div>
+            <div class="section-title">ชุดสังฆทาน</div>
+
+            <%-- หาคำตอบคำถามแรก --%>
+            <c:set var="sangWant" value="ไม่ต้องการ"/>
             <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน')}">
-                    <div class="info-row">
-                        <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value">
-                            <c:choose>
-                                <%-- คำถามแบบ "ต้องการ...หรือไม่" ที่ตอบ "ไม่ต้องการ" ให้แสดงคำตอบจริง --%>
-                                <c:when test="${fn:contains(d.question.questionsText, 'ต้องการ') && fn:contains(d.question.questionsText, 'หรือไม่') && d.answer == 'ไม่ต้องการ'}">ไม่ต้องการ</c:when>
-                                <c:when test="${empty d.answer || d.answer == 'ไม่ต้องการ'}">-</c:when>
-                                <c:otherwise>${d.answer}</c:otherwise>
-                            </c:choose>
-                        </span>
-                    </div>
+                <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน') && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
+                    <c:set var="sangWant" value="${fn:trim(d.answer)}"/>
+                </c:if>
+            </c:forEach>
+
+            <%-- คำถามแรก: แสดงเสมอ --%>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน') && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>ไม่ต้องการ</c:otherwise></c:choose></span></div>
+                </c:if>
+            </c:forEach>
+
+            <%-- คำถามเลือกชุด: แสดงค่าถ้าต้องการ, - ถ้าไม่ต้องการ --%>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${sangWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${sanghatharnItems}" var="sItem"><c:if test="${sItem.itemName == fn:trim(d.answer)}"><span style="color:#A08840;font-size:13px;"> — ฿<fmt:formatNumber value="${sItem.pricePerUnit}" pattern="#,###"/> / ${sItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                </c:if>
+            </c:forEach>
+
+            <%-- คำถามจำนวน: แสดงค่าถ้าต้องการ, - ถ้าไม่ต้องการ --%>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${fn:contains(d.question.questionsText, 'จำนวน') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${sangWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
         </div>
