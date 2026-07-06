@@ -44,16 +44,7 @@
     </div>
 </nav>
 
-<%-- ========== WAVE DIVIDER: HERO → CONTENT ========== --%>
-<svg class="thai-divider" viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block; background:#FFFBF0;">
-    <path d="M0,8 Q150,44 300,18 Q450,-6 600,22 Q750,48 900,20 Q1050,-6 1200,18 L1200,48 L0,48 Z" fill="#FFFFFF"/>
-    <path d="M0,26 Q100,10 200,26 Q300,44 400,26 Q500,10 600,26 Q700,44 800,26 Q900,10 1000,26 Q1100,44 1200,26" stroke="#D4A017" stroke-width="1.5" fill="none" opacity="0.5"/>
-    <circle cx="200" cy="26" r="3" fill="#D4A017" opacity="0.5"/>
-    <circle cx="400" cy="26" r="3" fill="#D4A017" opacity="0.5"/>
-    <circle cx="600" cy="26" r="3" fill="#D4A017" opacity="0.5"/>
-    <circle cx="800" cy="26" r="3" fill="#D4A017" opacity="0.5"/>
-    <circle cx="1000" cy="26" r="3" fill="#D4A017" opacity="0.5"/>
-</svg>
+
 
 <%-- ========== MAIN CONTENT ========== --%>
 <div class="page-wrapper">

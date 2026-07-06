@@ -107,7 +107,7 @@
 
     <%-- ========== โซน 2: อุปกรณ์พื้นฐานที่รวมมาให้ ========== --%>
     <div class="cd-card">
-        <div class="cd-card-title">อุปกรณ์พื้นฐานที่ทางร้านเตรียมให้ ขึ้นอยู่กับขนาดของงาน</div>
+        <div class="cd-card-title">อุปกรณ์พื้นฐานที่ทางร้านเตรียมให้ (สิ่งที่ลูกค้าจะได้รับ)</div>
         <p class="cd-pinto-sub">รายการด้านล่างนี้รวมอยู่ในบริการแล้ว ไม่มีค่าใช้จ่ายเพิ่มเติม</p>
         <ul class="cd-item-list">
             <c:forEach items="${equipments}" var="item">
@@ -122,55 +122,62 @@
         </ul>
     </div>
 
-    <%-- ========== โซน 3: ชุดปิ่นโต ========== --%>
-    <div class="cd-card">
-        <div class="cd-card-title">ชุดภัตตาหารปิ่นโตถวายพระ</div>
-        <p class="cd-pinto-sub">สามารถดูชุดภัตตาหารปิ่นโตถวายพระ พร้อมรายละเอียดในแต่ละชุด</p>
-        <div class="cd-pkg-grid">
-            <c:forEach items="${pintoItems}" var="item" varStatus="loop">
-            <div class="cd-pkg-card">
-                <div class="cd-pkg-img cd-pkg-img--pinto">
-                    <img src="${pageContext.request.contextPath}/static/images/foodimg/food${loop.index + 1}.jpg"
-                         alt="${item.itemName}"
-                         style="width:100%;height:100%;object-fit:cover;"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                    <div class="cd-pkg-img-fallback" style="display:none;">🍱</div>
-                </div>
-                <div class="cd-pkg-body">
-                    <div class="cd-pkg-name">${item.itemName}</div>
-                    <div class="cd-pkg-desc">${item.itemDetail}</div>
-                </div>
-            </div>
-            </c:forEach>
-            <c:if test="${empty pintoItems}">
-                <p class="cd-pinto-sub">กำลังอัปเดตข้อมูล...</p>
-            </c:if>
-        </div>
-    </div>
+    <%-- ========== โซน 3+4: รายการเสริม (ปิ่นโต + สังฆทาน) ========== --%>
+    <div class="cd-card cd-addon-card">
+        <div class="cd-card-title cd-addon-title">รายการเสริม (เลือกเพิ่มเติมได้ในหน้าแบบฟอร์ม)</div>
 
-    <%-- ========== โซน 4: ชุดสังฆทาน ========== --%>
-    <div class="cd-card">
-        <div class="cd-card-title">ชุดสังฆทาน</div>
-        <p class="cd-pinto-sub">สามารถดูสังฆทานพร้อมรายละเอียดของใช้คุณภาพถวายพระสงฆ์</p>
-        <div class="cd-pkg-grid">
-            <c:forEach items="${sangkhathanItems}" var="item" varStatus="loop">
-            <div class="cd-pkg-card">
-                <div class="cd-pkg-img cd-pkg-img--sangkhathan">
-                    <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/offeringset${loop.index + 1}.jpg"
-                         alt="${item.itemName}"
-                         style="width:100%;height:100%;object-fit:cover;"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                    <div class="cd-pkg-img-fallback" style="display:none;">🎁</div>
+        <%-- --- ชุดปิ่นโต --- --%>
+        <div class="cd-addon-subsection">
+            <div class="cd-addon-subtitle">ชุดภัตตาหารปิ่นโตถวายพระ</div>
+            <p class="cd-pinto-sub">สามารถดูชุดภัตตาหารปิ่นโตถวายพระ พร้อมรายละเอียดในแต่ละชุด</p>
+            <div class="cd-pkg-grid">
+                <c:forEach items="${pintoItems}" var="item" varStatus="loop">
+                <div class="cd-pkg-card">
+                    <div class="cd-pkg-img cd-pkg-img--pinto">
+                        <img src="${pageContext.request.contextPath}/static/images/foodimg/food${loop.index + 1}.jpg"
+                             alt="${item.itemName}"
+                             style="width:100%;height:100%;object-fit:cover;"
+                             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="cd-pkg-img-fallback" style="display:none;">🍱</div>
+                    </div>
+                    <div class="cd-pkg-body">
+                        <div class="cd-pkg-name">${item.itemName}</div>
+                        <div class="cd-pkg-desc">${item.itemDetail}</div>
+                    </div>
                 </div>
-                <div class="cd-pkg-body">
-                    <div class="cd-pkg-name">${item.itemName}</div>
-                    <div class="cd-pkg-desc">${item.itemDetail}</div>
-                </div>
+                </c:forEach>
+                <c:if test="${empty pintoItems}">
+                    <p class="cd-pinto-sub">กำลังอัปเดตข้อมูล...</p>
+                </c:if>
             </div>
-            </c:forEach>
-            <c:if test="${empty sangkhathanItems}">
-                <p class="cd-pinto-sub">กำลังอัปเดตข้อมูล...</p>
-            </c:if>
+        </div>
+
+        <div class="cd-addon-divider"></div>
+
+        <%-- --- ชุดสังฆทาน --- --%>
+        <div class="cd-addon-subsection">
+            <div class="cd-addon-subtitle">ชุดสังฆทาน</div>
+            <p class="cd-pinto-sub">สามารถดูสังฆทานพร้อมรายละเอียดของใช้คุณภาพถวายพระสงฆ์</p>
+            <div class="cd-pkg-grid">
+                <c:forEach items="${sangkhathanItems}" var="item" varStatus="loop">
+                <div class="cd-pkg-card">
+                    <div class="cd-pkg-img cd-pkg-img--sangkhathan">
+                        <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/offeringset${loop.index + 1}.jpg"
+                             alt="${item.itemName}"
+                             style="width:100%;height:100%;object-fit:cover;"
+                             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="cd-pkg-img-fallback" style="display:none;">🎁</div>
+                    </div>
+                    <div class="cd-pkg-body">
+                        <div class="cd-pkg-name">${item.itemName}</div>
+                        <div class="cd-pkg-desc">${item.itemDetail}</div>
+                    </div>
+                </div>
+                </c:forEach>
+                <c:if test="${empty sangkhathanItems}">
+                    <p class="cd-pinto-sub">กำลังอัปเดตข้อมูล...</p>
+                </c:if>
+            </div>
         </div>
     </div>
 

@@ -550,4 +550,27 @@ body {
         border-radius:999px;
         white-space:nowrap;
 }
+
+.cd-addon-title {
+    font-size: 1.35rem;
+    margin-bottom: 20px;
+}
+
+.cd-addon-subsection {
+    margin-bottom: 8px;
+}
+
+.cd-addon-subtitle {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #5C3800;
+    margin-bottom: 6px;
+}
+
+.cd-addon-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #E8CC70, transparent);
+    margin: 28px 0;
+}
 /**/
