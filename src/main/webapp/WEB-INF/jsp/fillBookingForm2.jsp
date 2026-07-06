@@ -215,7 +215,7 @@
                             </c:if>
                         </c:forEach>
 
-                        <%-- รายละเอียดการนิมนต์ + จำนวนพระ (แสดงเมื่อ "ให้ทางร้านนิมนต์") --%>
+                        <%-- รายละเอียดการนิมนต์ (เลือกวัด): แสดงเฉพาะเมื่อเลือก "ให้ทางร้านนิมนต์" --%>
                         <div id="monkDetail" style="display:block;">
 
                             <c:forEach items="${questions}" var="q">
@@ -255,20 +255,21 @@
                                 </c:if>
                             </c:forEach>
 
-                            <%-- จำนวนพระสงฆ์ --%>
-                            <c:forEach items="${questions}" var="q">
-                                <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
-                                    <div class="form-group" style="margin-top:14px;">
-                                        <label class="form-label">${q.questionsText}</label>
-                                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                        <input type="number" name="details[${detailIndex}].answer"
-                                               class="form-control" placeholder="ระบุจำนวนพระสงฆ์..." min="1">
-                                    </div>
-                                    <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                                </c:if>
-                            </c:forEach>
-
                         </div>
+
+                        <%-- จำนวนพระสงฆ์: แสดงเสมอ ไม่ว่าจะเลือกนิมนต์แบบไหน --%>
+                        <c:forEach items="${questions}" var="q">
+                            <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
+                                <div class="form-group" style="margin-top:14px;">
+                                    <label class="form-label">${q.questionsText} <span class="required">*</span></label>
+                                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                                    <input type="number" name="details[${detailIndex}].answer"
+                                           class="form-control" placeholder="ระบุจำนวนพระสงฆ์..." min="1" required>
+                                </div>
+                                <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                            </c:if>
+                        </c:forEach>
+
                     </div>
                 </div>
 
@@ -480,5 +481,14 @@
 </script>
 
 <script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=6"></script>
+
+<script>
+function toggleMonkDetail(radio) {
+    var monkDetail = document.getElementById('monkDetail');
+    if (!monkDetail) return;
+    monkDetail.style.display = (radio.value === 'ให้ทางร้านนิมนต์') ? 'block' : 'none';
+}
+</script>
+
 </body>
 </html>
