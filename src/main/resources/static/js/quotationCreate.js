@@ -157,6 +157,7 @@ function addSelectedItemsToTable() {
     checkboxes.forEach(cb => {
         const itemId   = cb.value;
         const itemName = cb.getAttribute('data-name');
+        const itemDesc = cb.getAttribute('data-detail') || '';
         const price    = parseFloat(cb.getAttribute('data-price')) || 0;
         const unit     = cb.getAttribute('data-unit');
         const itemType = cb.getAttribute('data-type') || '';
@@ -174,6 +175,7 @@ function addSelectedItemsToTable() {
             <td class="row-number" style="text-align:center;"></td>
             <td>
                 <span class="item-name">${itemName}</span>
+                ${itemDesc ? `<span class="item-desc">${itemDesc}</span>` : ''}
                 <input type="hidden" name="extraItemIds" value="${itemId}">
             </td>
             <td>${buildQtyCell(1, 'extraQtys')}</td>
