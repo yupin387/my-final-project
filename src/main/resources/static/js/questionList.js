@@ -1,9 +1,9 @@
 function prepareDelete(id) {
-    // 1. กำหนด URL สำหรับลบ
-    const actionUrl = "${pageContext.request.contextPath}/organizer/questions/delete/" + id;
+    // ดึงค่าจาก input แทน
+    const contextPath = document.getElementById('contextPath').value;
+    const actionUrl = contextPath + "/organizer/questions/delete/" + id;
     document.getElementById('confirmDeleteForm').action = actionUrl;
     
-    // 2. สั่งเปิด Modal ด้วยคำสั่ง Bootstrap
     var myModal = new bootstrap.Modal(document.getElementById('deleteModal'));
     myModal.show();
 }

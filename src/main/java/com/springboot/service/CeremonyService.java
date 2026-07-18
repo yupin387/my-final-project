@@ -44,4 +44,21 @@ public class CeremonyService {
         // แปลง Long เป็น int ถ้า ID ใน Repository ใช้ int
         return ceremonyRepo.findById(id.intValue()).orElse(null);
     }
+    
+ // เพิ่มใน CeremonyService.java
+    public List<Ceremony> getCeremoniesByType(String ceremonyType) {
+        return ceremonyRepo.findAll().stream()
+                .filter(c -> ceremonyType.equals(c.getCeremonyType()))
+                .filter(c -> !"กรอกความต้องการเบื้องต้น".equals(c.getCeremonyName())) // เอาเฉพาะ 3 แพ็กเกจหลัก ไม่รวมกำหนดเอง
+                .sorted(java.util.Comparator.comparingDouble(Ceremony::getBasePrice))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    public Ceremony getCustomCeremonyByType(String ceremonyType) {
+        return ceremonyRepo.findAll().stream()
+                .filter(c -> ceremonyType.equals(c.getCeremonyType()))
+                .filter(c -> "กรอกความต้องการเบื้องต้น".equals(c.getCeremonyName()))
+                .findFirst()
+                .orElse(null);
+    }
 }

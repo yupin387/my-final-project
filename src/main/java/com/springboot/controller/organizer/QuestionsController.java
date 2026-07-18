@@ -11,7 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/organizer/questions")
@@ -23,30 +26,74 @@ public class QuestionsController {
     @Autowired
     private CeremonyService ceremonyService;
 
-    //แก้ตรงนี้ล่าสุด
+    // ลำดับประเภทงานตายตัว ใช้ตอนจัดกลุ่ม dropdown ให้เรียงเหมือนกันทุกครั้ง
+    private static final List<String> CEREMONY_TYPE_ORDER =
+        List.of("ทำบุญบ้าน", "ขึ้นบ้านใหม่", "ทำบุญบริษัทหรือออฟฟิศ");
+
+    // ลำดับระดับแพ็กเกจตายตัว ใช้จัดเรียง option ภายในแต่ละ optgroup
+    private static final List<String> PACKAGE_ORDER =
+        List.of("มาตรฐาน", "อิ่มบุญ", "พรีเมียม", "กำหนดเอง");
+
+    // แก้ไข: dropdown "สำหรับประเภทพิธี" เดิมวน ceremonies ทั้ง 12 แถวแบบแบน ๆ
+    // โชว์แค่ ceremonyName (ชื่อแพ็กเกจ) ทำให้มี option หน้าตาซ้ำกัน 4 แบบ x 3 รอบ
+    // แยกไม่ออกว่าเป็นของประเภทงานไหน จึง group ตาม ceremonyType ไว้ล่วงหน้า
+    // ให้ JSP ใช้ <optgroup> แบ่งเป็น 3 กลุ่มตามประเภทงานแทน
+    private Map<String, List<Ceremony>> groupCeremoniesByType(List<Ceremony> allCeremonies) {
+        Map<String, List<Ceremony>> grouped = new LinkedHashMap<>();
+        for (String type : CEREMONY_TYPE_ORDER) {
+            List<Ceremony> forType = allCeremonies.stream()
+                .filter(c -> type.equals(c.getCeremonyType()))
+                .sorted((a, b) -> {
+                    int ra = PACKAGE_ORDER.indexOf(a.getCeremonyName());
+                    int rb = PACKAGE_ORDER.indexOf(b.getCeremonyName());
+                    if (ra < 0) ra = PACKAGE_ORDER.size();
+                    if (rb < 0) rb = PACKAGE_ORDER.size();
+                    return Integer.compare(ra, rb);
+                })
+                .collect(Collectors.toList());
+            if (!forType.isEmpty()) {
+                grouped.put(type, forType);
+            }
+        }
+        return grouped;
+    }
+
+    // ===== หน้ารายการคำถาม — กรองตาม "ประเภทงานบุญ" (ceremonyType) ไม่ใช่รายแพ็กเกจ (ceremonyId)
+    //       เพราะประเภทงานมีแค่ 3 ค่าตายตัว (ทำบุญบ้าน / ขึ้นบ้านใหม่ / ทำบุญออฟฟิศ)
+    //       ในขณะที่แพ็กเกจ (ceremonyId) มีได้หลายรายการต่อประเภทงาน จึงไม่ควรใช้กรอง tab =====
     @GetMapping
-    public String listQuestions(@RequestParam(required = false, defaultValue = "all") String ceremonyId, 
+    public String listQuestions(@RequestParam(required = false, defaultValue = "all") String ceremonyType,
                                 Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) {
             return "redirect:/loginorganizer";
         }
 
         List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
+
+        // ดึงประเภทงานบุญที่มีอยู่จริงแบบไม่ซ้ำ (ปกติจะมี 3 ค่า)
+        List<String> ceremonyTypes = ceremonies.stream()
+                .map(Ceremony::getCeremonyType)
+                .filter(t -> t != null && !t.isBlank())
+                .distinct()
+                .collect(Collectors.toList());
+
+        List<QuestionsDetail> allQuestions = questionsService.getAllQuestions();
         List<QuestionsDetail> questions;
 
-        if ("all".equals(ceremonyId)) {
-            // ดึงคำถามจากทุกพิธีมารวมกัน
-            questions = questionsService.getAllQuestions();
-            model.addAttribute("selectedCeremony", "all");
+        if ("all".equals(ceremonyType)) {
+            questions = allQuestions;
         } else {
-            // ดึงเฉพาะพิธีที่เลือก
-            questions = questionsService.getQuestionsByCeremony(Integer.parseInt(ceremonyId));
-            model.addAttribute("selectedCeremony", ceremonyId);
+            questions = allQuestions.stream()
+                    .filter(q -> q.getCeremony() != null
+                            && ceremonyType.equals(q.getCeremony().getCeremonyType()))
+                    .collect(Collectors.toList());
         }
 
+        model.addAttribute("selectedCeremonyType", ceremonyType);
+        model.addAttribute("ceremonyTypes", ceremonyTypes);
         model.addAttribute("ceremonies", ceremonies);
         model.addAttribute("questions", questions);
-        
+
         return "questionsList";
     }
     
@@ -56,8 +103,9 @@ public class QuestionsController {
         if (session.getAttribute("currentOrganizer") == null) {
             return "redirect:/loginorganizer";
         }
-        
-        model.addAttribute("ceremonies", ceremonyService.getAllCeremonies()); 
+
+        // แก้ไข: ส่ง ceremony ที่ group ตามประเภทงานแล้ว แทน list แบนที่แยกประเภทไม่ออก
+        model.addAttribute("groupedCeremonies", groupCeremoniesByType(ceremonyService.getAllCeremonies()));
         return "addQuestion"; 
     }
     
@@ -94,7 +142,8 @@ public class QuestionsController {
         }
 
         model.addAttribute("question", question);
-        model.addAttribute("ceremonies", ceremonyService.getAllCeremonies());
+        // แก้ไข: ส่ง ceremony ที่ group ตามประเภทงานแล้ว แทน list แบนที่แยกประเภทไม่ออก
+        model.addAttribute("groupedCeremonies", groupCeremoniesByType(ceremonyService.getAllCeremonies()));
         return "editQuestion"; 
     }
 

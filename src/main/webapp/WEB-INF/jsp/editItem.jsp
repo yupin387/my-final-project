@@ -85,15 +85,27 @@
                         <%-- ใช้กับพิธี --%>
                         <div class="form-group">
                             <div class="section-label">ใช้กับพิธีไหนได้บ้าง</div>
+                            <%-- แก้ไข: เดิมวน ${ceremonies} แบบแบน ๆ ทั้ง 12 แถว โชว์แค่ชื่อแพ็กเกจ
+                                 (มาตรฐาน/อิ่มบุญ/พรีเมียม/กำหนดเอง) ซ้ำกัน 3 รอบ แยกไม่ออกว่าเป็นของ
+                                 ประเภทงานไหน เปลี่ยนมาวน ${groupedCeremonies} ที่ Controller จัดกลุ่ม
+                                 ตามประเภทงานไว้แล้ว แสดงเป็นกลุ่มมีหัวข้อคั่นแทน (ยังเช็ค checked
+                                 จาก item.ceremonies เหมือนเดิม) --%>
                             <div class="ceremony-box">
-                                <c:forEach var="c" items="${ceremonies}">
-                                    <div class="ceremony-item">
-                                        <input type="checkbox" name="ceremonyIds"
-                                            value="${c.ceremonyId}" id="cer_${c.ceremonyId}"
-                                            <c:forEach var="ic" items="${item.ceremonies}">
-                                                <c:if test="${ic.ceremonyId == c.ceremonyId}">checked</c:if>
-                                            </c:forEach>>
-                                        <label for="cer_${c.ceremonyId}" class="ceremony-check-label">${c.ceremonyName}</label>
+                                <c:forEach var="entry" items="${groupedCeremonies}">
+                                    <div class="ceremony-type-group">
+                                        <div class="ceremony-type-heading">${entry.key}</div>
+                                        <div class="ceremony-type-options">
+                                            <c:forEach var="c" items="${entry.value}">
+                                                <div class="ceremony-item">
+                                                    <input type="checkbox" name="ceremonyIds"
+                                                        value="${c.ceremonyId}" id="cer_${c.ceremonyId}"
+                                                        <c:forEach var="ic" items="${item.ceremonies}">
+                                                            <c:if test="${ic.ceremonyId == c.ceremonyId}">checked</c:if>
+                                                        </c:forEach>>
+                                                    <label for="cer_${c.ceremonyId}" class="ceremony-check-label">${c.ceremonyName}</label>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
                                     </div>
                                 </c:forEach>
                             </div>

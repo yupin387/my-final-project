@@ -55,7 +55,7 @@
         <div class="card-header-bar">
             <div>
                 <span class="booking-id-badge">รหัสการจอง: ${b.bookingId}</span>
-                <h2>ใบสรุปการจอง ${b.ceremony.ceremonyName}</h2>
+                <h2>สรุปรายละเอียดการจอง${not empty b.ceremony.ceremonyType ? ' ' : ''}${b.ceremony.ceremonyType}</h2>
             </div>
             <span class="status-pill status-${fn:toLowerCase(b.bookingStatus)}">
                 <c:choose>
@@ -69,6 +69,32 @@
                 </c:choose>
             </span>
         </div>
+
+        <%-- งานบุญที่จอง / แพ็กเกจที่เลือก --%>
+        <div class="section">
+            <div class="section-title">งานบุญที่จอง</div>
+            <div class="info-row">
+                <span class="info-label">ประเภทงานบุญ</span>
+                <span class="info-value">${b.ceremony.ceremonyType}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">แพ็กเกจที่เลือก</span>
+                <span class="info-value">
+                    ${b.ceremony.ceremonyName}
+                    <c:if test="${not empty b.ceremony.ceremonyDetail}">
+                        <div style="font-weight:400;font-size:13px;color:#A08840;margin-top:2px;">${b.ceremony.ceremonyDetail}</div>
+                    </c:if>
+                </span>
+            </div>
+            <c:if test="${b.ceremony.basePrice > 0}">
+                <div class="info-row">
+                    <span class="info-label">ราคาแพ็กเกจเริ่มต้น</span>
+                    <span class="info-value" style="color:#D4A017;">฿<fmt:formatNumber value="${b.ceremony.basePrice}" pattern="#,###"/></span>
+                </div>
+            </c:if>
+        </div>
+
+        <hr class="divider">
 
         <%-- ข้อมูลผู้จอง --%>
         <div class="section">
@@ -111,20 +137,7 @@
             </div>
         </div>
 
-        <hr class="divider">
 
-        <%-- รายละเอียดการจัดพิธี --%>
-        <div class="section">
-            <div class="section-title">รายละเอียดการจัดพิธี</div>
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'แขก') || fn:contains(d.question.questionsText, 'อุปกรณ์') || fn:contains(d.question.questionsText, 'จำนวนผู้') || fn:contains(d.question.questionsText, 'ผูกข้อมือ') || fn:contains(d.question.questionsText, 'บ้านใหม่')}">
-                    <div class="info-row">
-                        <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value"><c:choose><c:when test="${empty fn:trim(d.answer)}">-</c:when><c:otherwise>${d.answer}</c:otherwise></c:choose></span>
-                    </div>
-                </c:if>
-            </c:forEach>
-        </div>
 
         <hr class="divider">
 
@@ -150,7 +163,7 @@
             <%-- 2. รายละเอียดการนิมนต์พระสงฆ์ (เลือกวัด) — แสดง "-" เมื่อ "นิมนต์เอง" เพราะไม่เกี่ยวข้อง --%>
             <c:forEach items="${b.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'รายละเอียดการนิมนต์พระสงฆ์')}">
-                    <div class="info-row" style="margin-bottom:8px;"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${monkType == 'นิมนต์เอง'}">-</c:when><c:when test="${not empty fn:trim(d.answer) && fn:trim(d.answer) != ','}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                    <div class="info-row" style="margin-bottom:8px;"><span class="info-label">${d.question.questionsText}</span><span class="info-value" style="white-space:pre-line;"><c:choose><c:when test="${monkType == 'นิมนต์เอง'}">-</c:when><c:when test="${not empty fn:trim(d.answer) && fn:trim(d.answer) != ','}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
 
@@ -205,8 +218,10 @@
         <div class="section">
             <div class="section-title">ชุดสังฆทาน</div>
 
-            <%-- หาคำตอบคำถามแรก --%>
-            <c:set var="sangWant" value="ไม่ต้องการ"/>
+            <%-- หาคำตอบคำถามแรก
+                 หมายเหตุ: โหมดแพ็กเกจแนะนำไม่มีคำถาม "ต้องการสังฆทานหรือไม่" (สังฆทานรวมอยู่ในแพ็กเกจเสมอ)
+                 จึงตั้งค่าเริ่มต้นเป็น "ต้องการ" ไว้ก่อน แล้วให้คำตอบจริง (ถ้ามี จากโหมดกรอกเอง) มาทับทีหลัง --%>
+            <c:set var="sangWant" value="ต้องการ"/>
             <c:forEach items="${b.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน') && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
                     <c:set var="sangWant" value="${fn:trim(d.answer)}"/>
@@ -233,6 +248,37 @@
                     <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${sangWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
+        </div>
+
+        <hr class="divider">
+
+        <%-- รายละเอียดเพิ่มเติม — แสดงคำถาม/คำตอบอื่นๆ ที่ผู้จองกรอกมาทั้งหมด
+             ที่ยังไม่ถูกแสดงในหมวดข้างต้น (กันตกหล่นข้อมูลที่กรอกไว้) --%>
+        <div class="section">
+            <div class="section-title">รายละเอียดเพิ่มเติม</div>
+            <c:set var="hasOtherDetail" value="false"/>
+            <c:forEach items="${b.details}" var="d">
+                <c:if test="${!fn:contains(d.question.questionsText, 'แขก')
+                           && !fn:contains(d.question.questionsText, 'อุปกรณ์')
+                           && !fn:contains(d.question.questionsText, 'จำนวนผู้')
+                           && !fn:contains(d.question.questionsText, 'ผูกข้อมือ')
+                           && !fn:contains(d.question.questionsText, 'บ้านใหม่')
+                           && !fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')
+                           && !fn:contains(d.question.questionsText, 'รายละเอียดการนิมนต์')
+                           && !fn:contains(d.question.questionsText, 'จำนวนพระ')
+                           && !fn:contains(d.question.questionsText, 'ภัตตาหาร')
+                           && !fn:contains(d.question.questionsText, 'ปิ่นโต')
+                           && !fn:contains(d.question.questionsText, 'สังฆทาน')}">
+                    <c:set var="hasOtherDetail" value="true"/>
+                    <div class="info-row">
+                        <span class="info-label">${d.question.questionsText}</span>
+                        <span class="info-value"><c:choose><c:when test="${empty fn:trim(d.answer)}">-</c:when><c:otherwise>${d.answer}</c:otherwise></c:choose></span>
+                    </div>
+                </c:if>
+            </c:forEach>
+            <c:if test="${!hasOtherDetail}">
+                <span style="color:#A08840;font-size:14px;">ไม่มีรายละเอียดเพิ่มเติม</span>
+            </c:if>
         </div>
 
         <%-- Action Bar --%>

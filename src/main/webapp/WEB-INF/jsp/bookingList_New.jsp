@@ -96,7 +96,7 @@
                                         <span class="customer-phone">${b.member.phoneNumber}</span>
                                     </td>
                                     <td>
-                                        <span class="ceremony-badge">${b.ceremony.ceremonyName}</span>
+                                        <span class="ceremony-badge">${b.ceremony.ceremonyType}</span>
                                     </td>
                                     <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
                                     <td>

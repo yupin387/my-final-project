@@ -4,16 +4,21 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-    --gold-mid:      #D4A017;
-    --gold-light:    #E8BB3A;
-    --gold-pale:     #F5D97A;
-    --cream:         #FFFBF0;
-    --cream-warm:    #FFF8E1;
-    --cream-mid:     #FDF3D0;
-    --cream-border:  #E8CC70;
-    --cream-border-soft: #EDD98A;
-    --brown-dark:    #4A2E00;
-    --brown-mid:     #7A5200;
+    --gold:          #E0577F;
+    --gold-mid:      #EC6E96;
+    --gold-light:    #F49CB9;
+    --gold-pale:     #FBD0DE;
+
+    --cream:         #F9DCE6;
+    --cream-warm:    #FFF3F7;
+    --cream-mid:     #FFE8F0;
+    --cream-border:  #F6C3D6;
+    --cream-border-soft: #FADCE6;
+
+    --text-dark:     #3A1526;
+    --text-mid:      #6B2C46;
+    --brown-dark:    #4A1B30;
+    --brown-mid:     #8C3358;
 }
 
 body {
@@ -28,14 +33,14 @@ body {
    NAVBAR
    ========================================================================== */
 .main-navbar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 0 36px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
     display: flex;
     align-items: center;
-    border-bottom: 3px solid var(--gold-mid);
+    border-bottom: 3px solid var(--gold-pale);
     position: relative;
-    min-height: 68px;
-    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    min-height: 92px;
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
 }
 
 .main-navbar::before {
@@ -43,7 +48,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 .navbar-brand-wrap {
@@ -53,63 +58,28 @@ body {
     text-decoration: none;
 }
 
+
+
 .lotus-icon {
-    background: linear-gradient(135deg, #7A5200, #5C3800);
-    width: 44px;
-    height: 44px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
+    padding: 3px;
 }
 
 .nav-brand-text {
-    color: var(--gold-pale);
+    color: #FFFFFF;
     font-family: 'Noto Serif Thai', serif;
-    font-size: 22px;
-    font-weight: 700;
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 800;
     letter-spacing: 0.5px;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
-}
-
-/* ==========================================================================
-   SECTION ORNAMENT
-   ========================================================================== */
-.section-ornament {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    margin-bottom: 20px;
-}
-
-.ornament-line {
-    flex: 1;
-    max-width: 120px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-mid));
-}
-
-.ornament-line.right {
-    background: linear-gradient(90deg, var(--gold-mid), transparent);
-}
-
-.ornament-diamond {
-    width: 10px; height: 10px;
-    background: var(--gold-mid);
-    transform: rotate(45deg);
-    flex-shrink: 0;
-}
-
-.ornament-diamond-sm {
-    width: 5px; height: 5px;
-    background: var(--gold-pale);
-    transform: rotate(45deg);
-    flex-shrink: 0;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 /* ==========================================================================
@@ -124,13 +94,13 @@ body {
 }
 
 .reg-card {
-    background: #FFFFFF;
+    background: var(--cream-warm);
     border-radius: 20px;
     padding: 36px 48px 40px;
-    width: 100%;
-    max-width: 520px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 8px 40px rgba(180, 130, 0, 0.13);
+    width: 120%;
+    max-width: 800px;
+    border: 3px solid #FFFFFF;
+    box-shadow: 0 10px 40px rgba(224, 87, 127, 0.28);
     position: relative;
     overflow: hidden;
 }
@@ -165,7 +135,7 @@ body {
     text-align: center;
     font-size: 2rem;
     margin-bottom: 12px;
-    filter: drop-shadow(0 2px 6px rgba(180,130,0,0.3));
+    filter: drop-shadow(0 2px 6px rgba(224,87,127,0.35));
 }
 
 /* ==========================================================================
@@ -185,7 +155,7 @@ body {
 }
 
 .subtitle-muted {
-    color: #A08840;
+    color: #A8567C;
     font-size: 0.88rem;
 }
 
@@ -219,7 +189,7 @@ body {
 
 .reg-input {
     width: 100%;
-    background-color: var(--cream-warm);
+    background-color: #FFFFFF;
     border: 1.5px solid var(--cream-border-soft);
     border-radius: 8px;
     padding: 11px 15px;
@@ -230,20 +200,20 @@ body {
     outline: none;
 }
 
-.reg-input::placeholder { color: #BFA060; }
+.reg-input::placeholder { color: #D08CA6; }
 
 .reg-input:focus {
     background-color: #FFFFFF;
     border-color: var(--gold-mid);
-    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15);
+    box-shadow: 0 0 0 3px rgba(236, 110, 150, 0.18);
 }
 
 /* ==========================================================================
-   BUTTON — เข้มกว่าหน้า login
+   BUTTON
    ========================================================================== */
 .btn-reg {
-    background: linear-gradient(135deg, #8B6200, #B8860B);
-    color: #FFF8E1;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: #FFFFFF;
     border: none;
     padding: 13px;
     border-radius: 10px;
@@ -253,15 +223,16 @@ body {
     font-family: 'Sarabun', sans-serif;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px rgba(120, 80, 0, 0.35);
+    box-shadow: 0 4px 14px rgba(224, 87, 127, 0.35);
     margin-top: 6px;
     display: block;
 }
 
 .btn-reg:hover {
-    background: linear-gradient(135deg, #6B4A00, #9A6F00);
+    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+    color: var(--brown-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(100, 65, 0, 0.4);
+    box-shadow: 0 6px 20px rgba(224, 87, 127, 0.45);
 }
 
 /* ==========================================================================
@@ -272,7 +243,7 @@ body {
     align-items: center;
     gap: 10px;
     margin: 20px 0 16px;
-    color: #A08840;
+    color: #A8567C;
     font-size: 0.82rem;
     font-weight: 700;
 }
@@ -287,9 +258,12 @@ body {
 
 .footer-links {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
-    text-align: center;
+    text-align: left;
 }
 
 .footer-link {
@@ -297,6 +271,8 @@ body {
     text-decoration: none;
     font-size: 0.88rem;
     font-family: 'Sarabun', sans-serif;
+    margin-left: auto;
+    text-align: right;
 }
 
 .footer-link b {
@@ -323,7 +299,8 @@ body {
    ========================================================================== */
 @media (max-width: 540px) {
     .reg-card { padding: 28px 20px 32px; }
-    .main-navbar { padding: 0 16px; }
-    .nav-brand-text { font-size: 18px; }
+    .main-navbar { padding: 0 16px; min-height: 76px; }
+    .nav-brand-text { font-size: 22px; }
+    .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
     .row-grid { grid-template-columns: 1fr; }
 }

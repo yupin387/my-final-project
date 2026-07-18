@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GLOBAL STYLES & BODY
+   GLOBAL STYLES & BODY  (ธีมชมพู-ขาว เหมือนหน้า home / ceremonyDetail)
    ========================================================================== */
 * {
 	margin: 0;
@@ -9,20 +9,28 @@
 }
 
 :root {
-	--gold: #C9960C;
-	--gold-mid: #D4A017;
-	--gold-light: #E8BB3A;
-	--gold-pale: #F5D97A;
-	--gold-glow: #FDE68A;
-	--cream: #FFFBF0;
-	--cream-warm: #FFF8E1;
-	--cream-mid: #FDF3D0;
-	--cream-border: #E8CC70;
-	--cream-border-soft: #EDD98A;
-	--text-dark: #2C1F00;
-	--text-mid: #5A4000;
-	--brown-dark: #4A2E00;
-	--brown-mid: #7A5200;
+	--gold: #E0577F;
+	--gold-mid: #EC6E96;
+	--gold-light: #F49CB9;
+	--gold-pale: #FBD0DE;
+	--gold-glow: #FFE3EC;
+
+	--cream: #FFFFFF;
+	--cream-warm: #FAFAFA;
+	--cream-mid: #F5F5F5;
+	--cream-border: #E2E2E2;
+	--cream-border-soft: #EAEAEA;
+
+	--text-dark: #1A1A1A;
+	--text-mid: #333333;
+	--text-muted: #777777;
+
+	--brown-dark: #1A1A1A;
+	--brown-mid: #3A3A3A;
+
+	--footer-dark-1: #6E1930;
+	--footer-dark-2: #8C2748;
+	--footer-dark-3: #A6335A;
 }
 
 body {
@@ -33,21 +41,21 @@ body {
 }
 
 /* ==========================================================================
-   NAVBAR (เหมือนหน้า Home)
+   NAVBAR (ให้ตรงกับ cd-navbar ของหน้า ceremonyDetail — 92px / โลโก้ 58px / รูปจริง)
    ========================================================================== */
 .navbar-custom {
-	background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-	padding: 0 36px;
+	background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+	padding: 0 40px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	border-bottom: 3px solid var(--gold-mid);
+	border-bottom: 3px solid var(--gold-pale);
 	position: sticky;
 	top: 0;
 	z-index: 10000;
-	min-height: 68px;
+	min-height: 92px;
 	overflow: visible;
-	box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+	box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
 }
 
 .navbar-custom::before {
@@ -57,39 +65,47 @@ body {
 	left: 0;
 	right: 0;
 	height: 2px;
-	background: linear-gradient(90deg, transparent, var(--gold-pale),
-		var(--gold-light), var(--gold-pale), transparent);
+	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6),
+		rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 .navbar-brand-wrap {
 	display: flex;
 	align-items: center;
 	text-decoration: none;
-	gap: 12px;
+	gap: 14px;
 }
 
+/* โลโก้ใช้รูปจริงแทนอิโมจิ (เหมือนหน้า ceremonyDetail / register) */
 .lotus-icon {
-	background: linear-gradient(135deg, #7A5200, #5C3800);
-	width: 44px;
-	height: 44px;
+	background: rgba(255, 255, 255, 0.18);
+	width: 58px;
+	height: 58px;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 24px;
-	border: 1.5px solid var(--gold-mid);
-	box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+	border: 1.5px solid rgba(255, 255, 255, 0.55);
+	box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
 	flex-shrink: 0;
+	overflow: hidden;
+}
+
+.lotus-icon img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 50%;
 }
 
 .nav-brand-text {
-	color: var(--gold-pale);
+	color: #FFFFFF;
 	font-family: 'Noto Serif Thai', serif;
-	font-size: 22px;
+	font-size: 24px;
 	font-weight: 700;
 	letter-spacing: 0.5px;
 	white-space: nowrap;
-	text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+	text-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
 }
 
 .navbar-center {
@@ -101,7 +117,7 @@ body {
 }
 
 .nav-link-item {
-	color: rgba(253, 237, 160, 0.8);
+	color: #FFFFFF;
 	text-decoration: none;
 	font-size: 14px;
 	font-weight: 600;
@@ -109,29 +125,30 @@ body {
 	border-radius: 6px;
 	transition: background 0.2s, color 0.2s;
 	white-space: nowrap;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .nav-link-item:hover {
-	background: rgba(212, 160, 23, 0.18);
-	color: var(--gold-pale);
+	background: rgba(255, 255, 255, 0.2);
+	color: #FFFFFF;
 }
 
 .nav-link-item.active {
-	background: var(--gold-mid);
-	color: var(--brown-dark);
+	background: #FFFFFF;
+	color: #E0577F;
 	font-weight: 700;
 }
 
 /* ===== User Profile Pill ===== */
 .user-profile-pill {
-	background: rgba(255, 255, 255, 0.08);
-	border: 1.5px solid rgba(212, 160, 23, 0.6);
+	background: rgba(255, 255, 255, 0.15);
+	border: 1.5px solid rgba(255, 255, 255, 0.45);
 	padding: 6px 16px 6px 6px;
 	border-radius: 50px;
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	color: var(--gold-pale);
+	color: #FFFFFF;
 	cursor: pointer;
 	transition: background 0.2s;
 	position: relative;
@@ -139,12 +156,12 @@ body {
 }
 
 .user-profile-pill:hover {
-	background: rgba(255, 255, 255, 0.14);
+	background: rgba(255, 255, 255, 0.25);
 }
 
 .avatar-circle-nav {
-	background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-	color: var(--brown-dark);
+	background: #FFFFFF;
+	color: #E0577F;
 	width: 34px;
 	height: 34px;
 	border-radius: 50%;
@@ -165,12 +182,12 @@ body {
 .user-name-nav {
 	font-size: 0.88rem;
 	font-weight: 700;
-	color: var(--gold-pale);
+	color: #FFFFFF;
 }
 
 .user-role-nav {
 	font-size: 0.7rem;
-	color: rgba(253, 237, 160, 0.65);
+	color: rgba(255, 255, 255, 0.75);
 }
 
 .dropdown-wrap {
@@ -189,7 +206,7 @@ body {
 	border: 1px solid var(--cream-border);
 	border-radius: 10px;
 	min-width: 175px;
-	box-shadow: 0 8px 28px rgba(100, 70, 0, 0.14);
+	box-shadow: 0 8px 28px rgba(224, 87, 127, 0.18);
 	z-index: 99999;
 	padding: 0;
 	transform: translateY(-8px);
@@ -226,7 +243,7 @@ body {
 }
 
 .dropdown-link:hover {
-	background: var(--cream-warm);
+	background: #FFF3F7;
 }
 
 .dropdown-link.danger {
@@ -238,7 +255,7 @@ body {
 }
 
 /* ==========================================================================
-   HERO BANNER (รูปปกเหมือนหน้า Home)
+   HERO BANNER
    ========================================================================== */
 .hero-banner {
 	position: relative;
@@ -256,8 +273,8 @@ body {
 	content: '';
 	position: absolute;
 	inset: 0;
-	background: linear-gradient(to bottom, rgba(40, 20, 0, 0.55) 0%,
-		rgba(60, 35, 0, 0.38) 50%, rgba(30, 15, 0, 0.70) 100%);
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%,
+		rgba(0, 0, 0, 0.32) 50%, rgba(0, 0, 0, 0.68) 100%);
 }
 
 .hero-banner::after {
@@ -283,15 +300,15 @@ body {
 
 .hero-tag {
 	display: inline-block;
-	background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-	color: var(--brown-dark);
+	background: #FFFFFF;
+	color: var(--gold);
 	font-size: 12px;
 	font-weight: 700;
 	padding: 5px 18px;
 	border-radius: 20px;
 	margin-bottom: 12px;
 	letter-spacing: 1px;
-	box-shadow: 0 2px 10px rgba(180, 130, 0, 0.4);
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .hero-content h1 {
@@ -304,7 +321,7 @@ body {
 }
 
 .hero-content p {
-	color: rgba(255, 251, 230, 0.85);
+	color: rgba(255, 255, 255, 0.88);
 	font-size: 14px;
 }
 
@@ -319,14 +336,27 @@ body {
 	margin: 0 auto;
 }
 
+/* กรอบใหญ่ — ใส่ขอบสีชมพูให้ตัดกับพื้นหลังชัดเจน (เหมือน .cd-card ของ ceremonyDetail) */
 .form-container {
 	background: #FFFFFF;
 	border-radius: 20px;
-	border: 4px solid var(--gold-mid);
-	box-shadow: 0 0 0 2px var(--gold-pale), 0 0 15px
-		rgba(212, 160, 23, 0.35), 0 8px 32px rgba(180, 130, 0, 0.15);
+	border: 3px solid var(--gold-mid);
+	box-shadow:
+		0 0 14px rgba(224, 87, 127, 0.28),
+		0 10px 34px rgba(224, 87, 127, 0.14);
 	padding: 36px 36px 28px;
+	position: relative;
+	overflow: hidden;
 }
+
+.form-container::before {
+	content: '';
+	position: absolute;
+	top: 0; left: 24px; right: 24px;
+	height: 2px;
+	background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+}
+
 /* ==========================================================================
    FORM GRID & FORM CARDS
    ========================================================================== */
@@ -341,19 +371,19 @@ body {
 	background: #FFFFFF;
 	border-radius: 14px;
 	overflow: hidden;
-	border: 1.5px solid var(--cream-border);
-	box-shadow: 0 4px 20px rgba(180, 130, 0, 0.07);
+	border: 1.5px solid var(--gold-pale);
+	box-shadow: 0 4px 20px rgba(224, 87, 127, 0.08);
 	margin-bottom: 20px;
 }
 
 .card-header {
-	background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-	color: var(--gold-pale);
+	background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+	color: #FFFFFF;
 	padding: 13px 22px;
 	font-size: 14px;
 	font-weight: 700;
 	letter-spacing: 0.3px;
-	border-bottom: 2px solid var(--gold-mid);
+	border-bottom: 2px solid var(--gold-pale);
 }
 
 .card-body {
@@ -398,7 +428,7 @@ body {
 .form-control:focus {
 	outline: none;
 	border-color: var(--gold-mid);
-	box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15);
+	box-shadow: 0 0 0 3px rgba(236, 110, 150, 0.15);
 	background: #FFFFFF;
 }
 
@@ -421,7 +451,7 @@ body {
 	transition: border 0.2s, box-shadow 0.2s;
 	appearance: none;
 	background-image:
-		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23D4A017' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23EC6E96' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
 	background-repeat: no-repeat;
 	background-position: right 14px center;
 	padding-right: 36px;
@@ -430,7 +460,7 @@ body {
 .form-select:focus {
 	outline: none;
 	border-color: var(--gold-mid);
-	box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15);
+	box-shadow: 0 0 0 3px rgba(236, 110, 150, 0.15);
 	background-color: #FFFFFF;
 }
 
@@ -447,7 +477,7 @@ textarea.form-control {
 }
 
 /* ==========================================================================
-   FIELD LOCKED STATE (toggle-slave ที่ถูกล็อกจาก toggle-master)
+   FIELD LOCKED STATE
    ========================================================================== */
 .form-control.field-locked, .form-select.field-locked {
 	background-color: var(--cream-mid);
@@ -474,7 +504,7 @@ textarea.form-control {
 
 .btn-submit {
 	background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-	color: var(--brown-dark);
+	color: #FFFFFF;
 	border: none;
 	padding: 14px 60px;
 	border-radius: 10px;
@@ -483,13 +513,14 @@ textarea.form-control {
 	font-family: 'Sarabun', sans-serif;
 	cursor: pointer;
 	transition: all 0.2s;
-	box-shadow: 0 4px 16px rgba(180, 130, 0, 0.25);
+	box-shadow: 0 4px 16px rgba(224, 87, 127, 0.25);
 }
 
 .btn-submit:hover {
 	background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+	color: var(--brown-dark);
 	transform: translateY(-2px);
-	box-shadow: 0 6px 20px rgba(180, 130, 0, 0.35);
+	box-shadow: 0 6px 20px rgba(224, 87, 127, 0.35);
 }
 
 /* ==========================================================================
@@ -509,9 +540,14 @@ textarea.form-control {
 		flex-wrap: wrap;
 		gap: 10px;
 		padding: 12px 16px;
+		min-height: 76px;
 	}
 	.nav-brand-text {
 		font-size: 18px;
+	}
+	.lotus-icon {
+		width: 46px;
+		height: 46px;
 	}
 	.hero-banner {
 		height: 220px;
@@ -524,6 +560,15 @@ textarea.form-control {
 	}
 	.form-container {
 		padding: 24px 18px 20px;
+	}
+	.footer-content {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 520px) {
+	.footer-content {
+		grid-template-columns: 1fr;
 	}
 }
 
@@ -544,7 +589,6 @@ textarea.form-control {
 	font-weight: 600;
 }
 
-
 .checkbox-label input[type="checkbox"], .checkbox-label input[type="radio"]
 	{
 	width: 18px;
@@ -552,4 +596,136 @@ textarea.form-control {
 	accent-color: var(--gold-mid);
 	cursor: pointer;
 	flex-shrink: 0;
+}
+
+/* ==========================================================================
+   FOOTER (ธีมเดียวกับหน้า home)
+   ========================================================================== */
+.site-footer {
+	background: linear-gradient(135deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
+	color: rgba(255, 255, 255, 0.92);
+	padding-top: 0;
+	border-top: 3px solid var(--gold-pale);
+	box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+	margin-top: auto;
+}
+
+.footer-top {
+	display: block;
+}
+
+.container {
+	width: 92%;
+	max-width: 1100px;
+	margin: 0 auto;
+}
+
+.footer-content {
+	display: grid;
+	grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+	gap: 30px;
+	padding: 48px 20px 30px;
+}
+
+.footer-brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.footer-brand .lotus-icon {
+	background: rgba(255,255,255,0.18);
+	border: 1.5px solid rgba(255,255,255,0.4);
+	width: 40px;
+	height: 40px;
+}
+
+.footer-brand-text {
+	font-family: 'Noto Serif Thai', serif;
+	font-size: 1.15rem;
+	font-weight: 700;
+	color: #FFFFFF;
+}
+
+.footer-tagline {
+	font-size: 0.88rem;
+	line-height: 1.7;
+	color: rgba(255, 255, 255, 0.9);
+	max-width: 280px;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.footer-heading {
+	font-family: 'Noto Serif Thai', serif;
+	color: #FFFFFF;
+	font-size: 1rem;
+	font-weight: 700;
+	margin-bottom: 14px;
+}
+
+.footer-col a {
+	display: block;
+	color: rgba(255, 255, 255, 0.92);
+	text-decoration: none;
+	font-size: 0.9rem;
+	margin-bottom: 10px;
+	transition: color 0.2s ease;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.footer-col a:hover {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+
+.footer-contact-col p {
+	font-size: 0.9rem;
+	color: rgba(255, 255, 255, 0.8);
+	margin: 0 0 10px;
+}
+
+.footer-bottom {
+	text-align: center;
+	padding: 16px 20px;
+	border-top: 1px solid rgba(255, 255, 255, 0.25);
+	font-size: 0.82rem;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   TEMPLE (WAT) PICKER — dropdown ต่อรูปพระ
+   ========================================================================== */
+.wat-picker-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 8px;
+}
+
+.wat-picker-label {
+	font-size: 13px;
+	color: var(--text-mid);
+	min-width: 62px;
+	flex-shrink: 0;
+	font-weight: 600;
+}
+
+.wat-picker-empty {
+	font-size: 12.5px;
+	color: var(--text-muted);
+}
+
+/* ==========================================================================
+   จำนวนชุดสังฆทาน (ผูกกับจำนวนพระ)
+   ========================================================================== */
+.sanghatan-qty-note {
+	font-size: 12.5px;
+	color: #B0345A;
+	background: var(--gold-glow);
+	border: 1px dashed var(--gold-light);
+	border-radius: 8px;
+	padding: 8px 12px;
+	margin-bottom: 12px;
+	display: inline-block;
 }

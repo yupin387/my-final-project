@@ -4,19 +4,23 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-    --gold:          #C9960C;
-    --gold-mid:      #D4A017;
-    --gold-light:    #E8BB3A;
-    --gold-pale:     #F5D97A;
-    --cream:         #FFFBF0;
-    --cream-warm:    #FFF8E1;
-    --cream-mid:     #FDF3D0;
-    --cream-border:  #E8CC70;
-    --cream-border-soft: #EDD98A;
-    --text-dark:     #2C1F00;
-    --text-mid:      #5A4000;
-    --brown-dark:    #4A2E00;
-    --brown-mid:     #7A5200;
+    /* โทนชมพูหลัก (ให้เข้าธีมกับหน้าอื่นๆ ของเว็บ) */
+    --gold:          #E0577F;
+    --gold-mid:      #EC6E96;
+    --gold-light:    #F49CB9;
+    --gold-pale:     #FBD0DE;
+
+    /* พื้นหลังหน้า: ชมพูอ่อนแต่เข้มกว่าตัวการ์ดนิดหน่อย เพื่อให้ขอบขาวของการ์ดเด่นขึ้น */
+    --cream:         #F9DCE6;
+    --cream-warm:    #FFF3F7;
+    --cream-mid:     #FFE8F0;
+    --cream-border:  #F6C3D6;
+    --cream-border-soft: #FADCE6;
+
+    --text-dark:     #3A1526;
+    --text-mid:      #6B2C46;
+    --brown-dark:    #4A1B30;
+    --brown-mid:     #8C3358;
 }
 
 body {
@@ -31,16 +35,17 @@ body {
    NAVBAR
    ========================================================================== */
 .main-navbar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 0 36px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
     display: flex;
     align-items: center;
-    border-bottom: 3px solid var(--gold-mid);
+    justify-content: space-between;
+    border-bottom: 3px solid var(--gold-pale);
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 68px;
-    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    min-height: 70px;
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
     position: relative;
 }
 
@@ -49,7 +54,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 .navbar-brand-wrap {
@@ -60,26 +65,48 @@ body {
 }
 
 .lotus-icon {
-    background: linear-gradient(135deg, #7A5200, #5C3800);
-    width: 44px;
-    height: 44px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
+    padding: 3px;
 }
 
 .nav-brand-text {
-    color: var(--gold-pale);
+    color: #FFFFFF;
     font-family: 'Noto Serif Thai', serif;
-    font-size: 22px;
-    font-weight: 700;
+    font-style: italic;
+    font-size: 25px;
+    font-weight: 800;
     letter-spacing: 0.5px;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* ปุ่มสมัครสมาชิก มุมขวาของ navbar */
+.btn-register-nav {
+    background: #FFFFFF;
+    color: var(--gold);
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 22px;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'Sarabun', sans-serif;
+    white-space: nowrap;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-register-nav:hover {
+    background: var(--gold-pale);
+    color: var(--brown-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 /* ==========================================================================
@@ -130,13 +157,14 @@ body {
 }
 
 .login-card {
-    background: #FFFFFF;
+    /* ข้างในชมพูอ่อน ขอบขาว ตามที่ต้องการ — ขยายกว้างขึ้นมาก */
+    background: var(--cream-warm);
     border-radius: 20px;
-    padding: 36px 48px 40px;
-    width: 100%;
-    max-width: 480px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 8px 40px rgba(180, 130, 0, 0.13);
+    padding: 48px 90px 52px;
+    width: 150%;
+    max-width: 1400px;
+    border: 3px solid #FFFFFF;
+    box-shadow: 0 10px 40px rgba(224, 87, 127, 0.28);
     position: relative;
     overflow: hidden;
 }
@@ -173,7 +201,7 @@ body {
     text-align: center;
     font-size: 2rem;
     margin-bottom: 12px;
-    filter: drop-shadow(0 2px 6px rgba(180,130,0,0.3));
+    filter: drop-shadow(0 2px 6px rgba(224,87,127,0.35));
 }
 
 /* ==========================================================================
@@ -193,7 +221,7 @@ body {
 }
 
 .subtitle-muted {
-    color: #A08840;
+    color: #A8567C;
     font-size: 0.88rem;
     font-family: 'Sarabun', sans-serif;
 }
@@ -224,23 +252,23 @@ body {
 
 .login-input {
     width: 100%;
-    background-color: var(--cream-warm);
+    background-color: #FFFFFF;
     border: 1.5px solid var(--cream-border-soft);
-    border-radius: 8px;
-    padding: 11px 15px;
+    border-radius: 10px;
+    padding: 15px 18px;
     font-family: 'Sarabun', sans-serif;
-    font-size: 0.92rem;
+    font-size: 1rem;
     color: #333;
     transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
     outline: none;
 }
 
-.login-input::placeholder { color: #BFA060; }
+.login-input::placeholder { color: #D08CA6; }
 
 .login-input:focus {
     background-color: #FFFFFF;
     border-color: var(--gold-mid);
-    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15);
+    box-shadow: 0 0 0 3px rgba(236, 110, 150, 0.18);
 }
 
 /* ==========================================================================
@@ -248,25 +276,26 @@ body {
    ========================================================================== */
 .btn-login {
     background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    color: #FFFFFF;
     border: none;
-    padding: 13px;
-    border-radius: 10px;
+    padding: 16px;
+    border-radius: 12px;
     width: 100%;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.08rem;
     font-family: 'Sarabun', sans-serif;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px rgba(180, 130, 0, 0.25);
+    box-shadow: 0 4px 14px rgba(224, 87, 127, 0.35);
     margin-bottom: 6px;
     margin-top: 4px;
 }
 
 .btn-login:hover {
     background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+    color: var(--brown-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(180, 130, 0, 0.35);
+    box-shadow: 0 6px 20px rgba(224, 87, 127, 0.45);
 }
 
 /* ==========================================================================
@@ -277,7 +306,7 @@ body {
     align-items: center;
     gap: 10px;
     margin: 20px 0 16px;
-    color: #A08840;
+    color: #A8567C;
     font-size: 0.82rem;
     font-weight: 700;
     font-family: 'Sarabun', sans-serif;
@@ -296,9 +325,12 @@ body {
    ========================================================================== */
 .footer-links {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
-    text-align: center;
+    text-align: left;
 }
 
 .footer-link {
@@ -307,6 +339,8 @@ body {
     font-size: 0.88rem;
     font-family: 'Sarabun', sans-serif;
     transition: color 0.2s;
+    text-align: right;
+    margin-left: auto;
 }
 
 .footer-link b {
@@ -346,8 +380,15 @@ body {
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
+@media (max-width: 1060px) {
+    .login-card { max-width: 92%; padding: 40px 48px 44px; }
+}
+
 @media (max-width: 540px) {
-    .login-card { padding: 28px 24px 32px; }
-    .main-navbar { padding: 0 16px; }
-    .nav-brand-text { font-size: 18px; }
+    .page-wrapper { padding: 24px 10px 32px; }
+    .login-card { max-width: 100%; padding: 26px 20px 30px; }
+    .main-navbar { padding: 0 16px; min-height: 76px; }
+    .nav-brand-text { font-size: 22px; }
+    .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
+    .btn-register-nav { padding: 7px 14px; font-size: 12.5px; }
 }

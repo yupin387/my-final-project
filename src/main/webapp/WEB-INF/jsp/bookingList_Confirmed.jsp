@@ -89,7 +89,7 @@
                         <td>
                             <span class="customer-name">${b.member.memberFirstName} ${b.member.memberLastName}</span>
                         </td>
-                        <td>${b.ceremony.ceremonyName}</td>
+                        <td>${b.ceremony.ceremonyType}</td>
                         <td>
                             <c:choose>
                                 <c:when test="${not empty b.quotation.staff}">

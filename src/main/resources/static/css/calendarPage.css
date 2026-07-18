@@ -1,0 +1,199 @@
+/* ==========================================================================
+   calendarPage.css
+   CSS เฉพาะหน้า "ปฏิทินฤกษ์ดีจัดงานบุญ" (calendar.jsp) เท่านั้น
+   แยกออกมาจาก inline <style> เดิมในไฟล์ JSP เพื่อความสะอาด
+   (นำเข้าไฟล์นี้ "ต่อจาก" home.css เสมอ — ยังใช้ class ร่วมของ navbar/footer
+   จาก home.css อยู่ ไม่ได้ตัดขาดจากกันทั้งหมด)
+   ========================================================================== */
+
+/* ===== สรุปฤกษ์ดีรายปี (ท้ายหน้า) ===== */
+.yearly-summary-block {
+    margin-top: 48px;
+}
+.yearly-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+.yearly-summary-card {
+    background: var(--white);
+    border: 1.5px solid var(--gold-pale);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 16px var(--shadow-gold);
+}
+.yearly-summary-month {
+    margin: 0 0 10px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--brown-dark);
+    border-bottom: 1px solid var(--gold-pale);
+    padding-bottom: 8px;
+}
+.yearly-summary-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.yearly-summary-list li {
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    position: relative;
+    padding-left: 16px;
+}
+.yearly-summary-list li::before {
+    content: "◆";
+    position: absolute;
+    left: 0;
+    top: 1px;
+    color: var(--gold-mid);
+    font-size: 0.65rem;
+}
+
+/* ===== เมนู dropdown บนแถบนำทาง (เฉพาะที่ใช้ในหน้านี้) ===== */
+.nav-dropdown-wrap {
+    position: relative;
+    display: inline-block;
+}
+.nav-dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+.nav-caret {
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+.nav-dropdown-wrap:hover .nav-caret {
+    transform: rotate(180deg);
+}
+.nav-dropdown-panel {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: var(--white, #fff);
+    border: 1px solid var(--gold-pale, #e8cc70);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
+    padding: 8px 0;
+    z-index: 100;
+}
+.nav-dropdown-wrap:hover .nav-dropdown-panel,
+.nav-dropdown-wrap:focus-within .nav-dropdown-panel {
+    display: block;
+}
+.nav-dropdown-link {
+    display: block;
+    padding: 10px 18px;
+    font-size: 0.92rem;
+    color: var(--brown-dark, #3d2500);
+    text-decoration: none;
+    white-space: nowrap;
+}
+.nav-dropdown-link:hover {
+    background: var(--gold-pale, #fff8e1);
+}
+.nav-dropdown-divider {
+    border: 0;
+    border-top: 1px solid var(--gold-pale, #e8cc70);
+    margin: 6px 0;
+}
+
+/* ===== หัวหน้าปฏิทิน (banner สีชมพู ด้านบนสุดของหน้า) ===== */
+.calendar-page-header {
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 56px 20px 40px;
+    text-align: center;
+    color: #fff;
+}
+.calendar-page-header h1 {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 2rem;
+    margin: 0 0 10px;
+}
+.calendar-page-header p {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+.calendar-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+}
+.calendar-tab-link {
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.92rem;
+    transition: background 0.2s ease;
+}
+.calendar-tab-link:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+/* ===== การ์ด placeholder ปฏิทินล้านนา ===== */
+.lanna-placeholder-card {
+    background: var(--white, #fff);
+    border: 1.5px dashed var(--gold-mid, #d4a017);
+    border-radius: 14px;
+    padding: 32px;
+    text-align: center;
+    color: var(--text-mid, #5a4a2a);
+}
+
+/* ==========================================================================
+   ปิดการคลิกวันในปฏิทิน (ฤกษ์ดี)
+   เหตุผล: การจองย้ายไปเริ่มที่หน้าแพ็กเกจ/รายละเอียดงานบุญแล้ว
+   ปฏิทินหน้านี้ใช้ "ดูข้อมูลอย่างเดียว" ไม่ใช้เลือกวันเพื่อเปิด popup จองอีกต่อไป
+
+   ใช้ pointer-events: none เพื่อปิดการคลิกจริง ๆ ระดับ CSS
+   (คลิกจะไม่ไปถึง JS event handler เดิมเลย ปลอดภัย ไม่ต้องแก้ home.js)
+   ========================================================================== */
+.cal-cell.cal-cell-free,
+.cal-cell.cal-cell-almost-full,
+.cal-cell.cal-cell-today {
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
+.cal-cell.cal-cell-free:hover,
+.cal-cell.cal-cell-almost-full:hover,
+.cal-cell.cal-cell-today:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* ป้ายชื่อฤกษ์ต่อวัน (good/bad) — ปรับให้เด่นขึ้นเล็กน้อยเพราะตอนนี้คือ
+   ข้อมูลหลักที่ต้องอ่านได้ชัด (ไม่ใช่แค่ของตกแต่งข้าง ๆ ปุ่มกดอีกต่อไป) */
+.cal-day-tag-good,
+.cal-day-tag-bad {
+    white-space: normal;   /* เดิม nowrap อาจตัดชื่อฤกษ์ยาว ๆ หายไป เปลี่ยนให้ตัดบรรทัดได้ */
+    line-height: 1.3;
+}
+
+.cal-cell {
+    position: relative;
+}
+
+.cal-full-mark {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    color: #c0392b;
+    font-weight: 800;
+    font-size: 1rem;
+    line-height: 1;
+    pointer-events: none;
+}

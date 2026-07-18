@@ -8,22 +8,133 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>หน้าหลัก - ระบบรับจัดงานบุญ</title>
+<title>หน้าหลัก - บุญมี รับจัดงานบุญ</title>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/static/css/home.css?v=6">
+	href="${pageContext.request.contextPath}/static/css/home.css?v=16">
+<style>
+	.promotion-banner-wrap {
+		margin-top: 36px;
+		text-align: center;
+	}
+	.promotion-banner-img {
+		width: 100%;
+		max-width: 1200px;
+		height: auto;
+		border-radius: 16px;
+		display: inline-block;
+		box-shadow: 0 6px 24px rgba(61, 37, 0, 0.15);
+	}
+
+	/* ===== navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) ===== */
+	.nav-dropdown-wrap {
+		position: relative;
+		display: inline-block;
+	}
+	.nav-dropdown-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		cursor: pointer;
+	}
+	.nav-caret {
+		font-size: 0.7rem;
+		transition: transform 0.2s ease;
+	}
+	.nav-dropdown-wrap:hover .nav-caret {
+		transform: rotate(180deg);
+	}
+	.nav-dropdown-panel {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		min-width: 220px;
+		background: var(--white, #fff);
+		border: 1px solid var(--gold-pale, #e8cc70);
+		border-radius: 10px;
+		box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
+		padding: 8px 0;
+		z-index: 100;
+	}
+	.nav-dropdown-wrap:hover .nav-dropdown-panel,
+	.nav-dropdown-wrap:focus-within .nav-dropdown-panel {
+		display: block;
+	}
+	.nav-dropdown-link {
+		display: block;
+		padding: 10px 18px;
+		font-size: 0.92rem;
+		color: var(--brown-dark, #3d2500);
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	.nav-dropdown-link:hover {
+		background: var(--gold-pale, #fff8e1);
+	}
+	.nav-dropdown-divider {
+		border: 0;
+		border-top: 1px solid var(--gold-pale, #e8cc70);
+		margin: 6px 0;
+	}
+	/* การ์ดเงื่อนไขเดี่ยวเต็มความกว้าง (ตัด "ขั้นตอนการจอง" ออกแล้ว) */
+	.conditions-grid-single {
+		display: block;
+	}
+
+	/* ===== reviews teaser section (การ์ดใช้ CSS .review-card เดิมจาก home.css) ===== */
+	.reviews-teaser .reviews-grid {
+		margin-bottom: 24px;
+	}
+</style>
 </head>
 <body>
 
 	<%-- ========== NAVBAR ========== --%>
-	<nav class="navbar-custom">
+<nav class="navbar-custom">
 		<a class="navbar-brand-wrap"
 			href="${pageContext.request.contextPath}/home"
 			style="text-decoration: none;">
-			<div class="lotus-icon">🪷</div> <span class="nav-brand-text">ระบบรับจัดงานบุญ</span>
+			<img src="${pageContext.request.contextPath}/static/images/logoo.png"
+				alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+			<span class="nav-brand-text">บุญมี
+				รับจัดงานบุญ</span>
 		</a>
 		<div class="navbar-center">
 			<a href="${pageContext.request.contextPath}/home"
 				class="nav-link-item active">หน้าหลัก</a>
+
+			<%-- ===== เมนู บริการ/แพ็กเกจ (dropdown)
+			     แพ็กเกจย้ายไปอยู่ในหน้ารายละเอียดของแต่ละงานบุญแล้ว ตัวเมนูหลักจึงไม่ลิงก์ไปที่ไหน
+			     เป็นแค่ตัวเปิด dropdown ให้เลือกงานบุญที่ต้องการดูแพ็กเกจแทน ===== --%>
+			<div class="nav-dropdown-wrap">
+				<a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
+					บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
+				</a>
+				<div class="nav-dropdown-panel">
+					<c:forEach var="t" items="${ceremonyTypes}">
+						<a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
+							class="nav-dropdown-link">${t.mainName}</a>
+					</c:forEach>
+					<hr class="nav-dropdown-divider">
+					<a href="${pageContext.request.contextPath}/calendar"
+						class="nav-dropdown-link">📅 ดูปฏิทินเพื่อเลือกวัน</a>
+				</div>
+			</div>
+
+			<%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) — ลิงก์ไปหน้า /calendar ===== --%>
+			<div class="nav-dropdown-wrap">
+				<a href="${pageContext.request.contextPath}/calendar"
+					class="nav-link-item nav-dropdown-toggle">
+					ปฏิทิน <span class="nav-caret">▾</span>
+				</a>
+				<div class="nav-dropdown-panel">
+					<a href="${pageContext.request.contextPath}/calendar#calendarSection"
+						class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
+					<a href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
+						class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
+				</div>
+			</div>
+
 			<c:if test="${not empty sessionScope.user}">
 				<a href="${pageContext.request.contextPath}/latestBooking"
 					class="nav-link-item">การจอง</a>
@@ -79,16 +190,42 @@
 	<div class="hero-section">
 		<div class="hero-overlay"></div>
 		<div class="hero-content">
-			<span class="hero-tag">บริการครบวงจร</span>
-			<h1>
-				บริการรับจัดงานบุญ<span>ถูกหลักพิธีการ</span>
-			</h1>
-			<p>สะดวก สะอาด ตรงต่อเวลา สำหรับวันสำคัญของคุณและครอบครัว</p>
+			<h1 class="hero-quote">"จัดงานบุญให้ง่ายขึ้น<br>มีทีมงานช่วยดูแล"</h1>
+			<p class="hero-desc">มีทีมงานคอยช่วยดูแลเรื่องพิธีสงฆ์
+				ตั้งแต่การนิมนต์พระไปจนถึงวันจัดงานจริง<br>
+				เลือกวันที่และประเภทงานบุญที่ต้องการได้เลยผ่าน<a
+					href="${pageContext.request.contextPath}/calendar"
+					style="color: inherit; text-decoration: underline;">หน้าปฏิทิน</a></p>
+			<div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+				<a href="#conditionsSection" class="hero-cta">ดูขั้นตอนและเงื่อนไขการจอง</a>
+				<a href="${pageContext.request.contextPath}/calendar" class="hero-cta">ไปที่ปฏิทิน</a>
+			</div>
 			<div class="hero-divider"></div>
 		</div>
 	</div>
 
-	<%-- ========== THAI WAVE DIVIDER: HERO → CALENDAR ========== --%>
+	<%-- ========== BANNER SLIDER ========== --%>
+	<section class="banner-slider-section">
+		<div class="container">
+			<div class="banner-slider" id="bannerSlider">
+				<div class="banner-slide active">
+					<img src="${pageContext.request.contextPath}/static/images/promotion.png"
+						alt="โปรโมชั่น จัดงานบุญให้ง่าย ครบ จบในที่เดียว">
+				</div>
+				<div class="banner-slide">
+					<img src="${pageContext.request.contextPath}/static/images/img18.png"
+						alt="บริการรับจัดงานบุญ">
+				</div>
+				<div class="banner-slide">
+					<img src="${pageContext.request.contextPath}/static/images/p2.png"
+						alt="แพ็กเกจอิ่มบุญ">
+				</div>
+			</div>
+			<div class="banner-dots" id="bannerDots"></div>
+		</div>
+	</section>
+
+	<%-- ========== THAI WAVE DIVIDER: HERO → CONDITIONS ========== --%>
 	<svg class="thai-divider" viewBox="0 0 1200 48"
 		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
 		style="display: block; background: #ffffff;">
@@ -108,8 +245,8 @@
     <circle cx="1000" cy="26" r="3" fill="#D4A017" opacity="0.5" />
 </svg>
 
-	<%-- ========== CALENDAR ========== --%>
-	<section class="section-pad section-calendar">
+	<%-- ========== CONDITIONS (เหลือเฉพาะ "เงื่อนไขการให้บริการ") ========== --%>
+	<section class="section-pad section-conditions" id="conditionsSection">
 		<div class="container">
 			<div class="section-ornament">
 				<div class="ornament-line"></div>
@@ -119,51 +256,37 @@
 				<div class="ornament-line right"></div>
 			</div>
 			<div class="section-header">
-				<h2 class="section-title">ตรวจสอบปฏิทินการจัดงาน</h2>
-				<p class="section-subtitle">ดูว่าวันไหนมีงานแล้ว
-					วันไหนยังว่างอยู่</p>
+				<h2 class="section-title">บริการรับจัดงานบุญตามประเพณีภาคเหนือ</h2>
+				<p class="section-subtitle">เงื่อนไขการให้บริการ
+					โปรดอ่านก่อนทำการจอง</p>
 				<div class="gold-line"></div>
 			</div>
-			<div style="text-align: center; margin-top: 10px;">
-				<button class="btn-open-calendar" onclick="openCalendarModal()">🗓
-					ตรวจสอบปฏิทิน</button>
-			</div>
-		</div>
 
-		<%-- Modal Overlay --%>
-		<div class="calendar-modal-overlay" id="calendarOverlay"
-			onclick="closeCalendarModal(event)">
-			<div class="calendar-modal-box">
-				<button class="cal-modal-close" onclick="closeCalendarModal(null)">&times;</button>
-				<div class="cal-header">
-					<button class="cal-nav-btn" onclick="prevMonth()">&#8249;</button>
-					<h5 id="calMonthTitle"></h5>
-					<button class="cal-nav-btn" onclick="nextMonth()">&#8250;</button>
-				</div>
-				<div class="cal-grid" id="calGrid">
-					<div class="cal-day-label">อา</div>
-					<div class="cal-day-label">จ</div>
-					<div class="cal-day-label">อ</div>
-					<div class="cal-day-label">พ</div>
-					<div class="cal-day-label">พฤ</div>
-					<div class="cal-day-label">ศ</div>
-					<div class="cal-day-label">ส</div>
-				</div>
-				<hr
-					style="border: 0; border-top: 1px solid #f0e8c8; margin: 18px 0 14px;">
-				<div class="cal-legend">
-					<span><span class="legend-dot"
-						style="background: var(--cal-booked-bg); border: 1.5px solid var(--cal-booked-border);"></span>มีงานแล้ว</span>
-					<span><span class="legend-dot"
-						style="background: var(--cal-free-bg); border: 1.5px solid var(--cal-free-border);"></span>ว่าง</span>
-					<span><span class="legend-dot"
-						style="background: var(--cal-today-bg); border: 2px solid var(--cal-today-border);"></span>วันนี้</span>
+			<div class="conditions-grid conditions-grid-single">
+				<div class="condition-card condition-card-full">
+					<h3 class="condition-card-title">เงื่อนไขการให้บริการ</h3>
+					<ul class="condition-list">
+						<li>รับจัดงานบุญตามประเพณีภาคเหนือ
+							ถูกต้องตามหลักพิธีการ</li>
+						<li>การนิมนต์พระ ทางร้านเป็นผู้ดำเนินการนิมนต์ให้
+							โดยครอบคลุมพื้นที่ห่างจากสถานที่จัดงานไม่เกิน 50 กิโลเมตร
+							(ไม่ข้ามจังหวัด)</li>
+						<li>การจองคิวขึ้นอยู่กับจำนวนทีมงานที่ว่างในวันนั้น ๆ
+							หากทีมงานเต็มทุกทีมในวันที่เลือก ระบบจะแจ้งว่าวันนั้นไม่สามารถจองได้</li>
+						<li>ลูกค้าเตรียมเพียงปัจจัยถวายพระ
+							ส่วนอุปกรณ์และการจัดเตรียมอื่น ๆ ทางร้านดูแลให้ทั้งหมด</li>
+						<li>ส่วนลด 1,500 บาท หากคุณลูกค้า นิมนต์ และ รับส่งพระเอง</li>
+					</ul>
+					<div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
+						<a href="#ritualStepsSection" class="hero-cta">ดูขั้นตอนการให้บริการทั้งหมด ↓</a>
+						<a href="${pageContext.request.contextPath}/calendar" class="hero-cta">ไปที่ปฏิทินเพื่อเลือกวัน</a>
+					</div>
 				</div>
 			</div>
 		</div>
 	</section>
 
-	<%-- ========== THAI KANOK DIVIDER: CALENDAR → EVENTS ========== --%>
+	<%-- ========== THAI KANOK DIVIDER: CONDITIONS → WHY CHOOSE US ========== --%>
 	<svg class="thai-divider" viewBox="0 0 1200 48"
 		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
 		style="display: block; background: linear-gradient(#fff, #FFF8E1);">
@@ -211,8 +334,11 @@
 			stroke-width="0.5" opacity="0.4" />
 </svg>
 
-	<%-- ========== EVENT TYPES ========== --%>
-	<section class="section-pad section-events">
+	<%-- ========== ทำไมเลือกบุญมี (ใช้แทนที่ packages showcase เดิม)
+	     ใช้ .meaning-block / .meaning-grid / .meaning-card ที่มีอยู่แล้วใน home.css
+	     (เดิมเตรียมไว้สำหรับ "ความหมายวันดี" แต่ไม่เคยถูกเรียกใช้ในหน้านี้)
+	     ตัวเลขด้านล่างเป็นตัวอย่าง โปรดแก้เป็นข้อมูลจริงของร้าน ========== --%>
+	<section class="section-pad section-packages" id="whyChooseSection">
 		<div class="container">
 			<div class="section-ornament">
 				<div class="ornament-line"></div>
@@ -222,64 +348,205 @@
 				<div class="ornament-line right"></div>
 			</div>
 			<div class="section-header">
-				<h2 class="section-title">เลือกประเภทงานบุญ</h2>
-				<p class="section-subtitle">เลือกประเภทงานเพื่อดูรายละเอียดและดำเนินการจอง</p>
+				<h2 class="section-title">ทำไมต้องเลือกบุญมี</h2>
+				<p class="section-subtitle">ดูแลพิธีสงฆ์ให้ครบ จบในที่เดียว
+					ด้วยทีมงานที่เข้าใจประเพณีภาคเหนือ</p>
 				<div class="gold-line"></div>
 			</div>
-			<div class="events-grid">
-				<div class="event-card">
-					<div class="event-card-icon">
-						<img
-							src="${pageContext.request.contextPath}/static/images/ceremony1.webp"
-							alt="${ceremony1.ceremonyName}">
+
+			<div class="meaning-block" style="margin-top: 0;">
+				<div class="meaning-grid">
+					<div class="meaning-card">
+						<div class="meaning-card-title">🙏 ประสบการณ์</div>
+						<div class="meaning-card-desc"><%-- TODO: ใส่จำนวนปีที่เปิดให้บริการจริง --%>รับจัดงานบุญตามประเพณีภาคเหนือมาอย่างต่อเนื่อง</div>
 					</div>
-					<h5>งาน${ceremony1.ceremonyName}</h5>
-					<div class="event-rating">
-						<span class="stars"> <c:forEach begin="1"
-								end="${fn:substringBefore(avgRating1, '.')}">&#9733;</c:forEach>
-							<c:forEach begin="${fn:substringBefore(avgRating1, '.') + 1}"
-								end="5">&#9734;</c:forEach>
-						</span> <span class="rating-num"><fmt:formatNumber
-								value="${avgRating1}" maxFractionDigits="1" /> / 5</span>
+					<div class="meaning-card">
+						<div class="meaning-card-title">📿 ทีมงานมืออาชีพ</div>
+						<div class="meaning-card-desc">ดูแลตั้งแต่การนิมนต์พระ
+							จนถึงจัดอุปกรณ์พิธีสงฆ์ให้ครบทุกขั้นตอน</div>
 					</div>
-					<p>${ceremony1.ceremonyDetail}</p>
-					<div class="event-divider"></div>
-					<div class="event-card-actions">
-						<a
-							href="${pageContext.request.contextPath}/ceremony/detail/${ceremony1.ceremonyId}"
-							class="btn-detail">ดูรายละเอียด</a> <a
-							href="${pageContext.request.contextPath}/reviews/${ceremony1.ceremonyId}"
-							class="btn-outline-brown">ดูรีวิว</a>
+					<div class="meaning-card">
+						<div class="meaning-card-title">🎉 จัดมาแล้วหลายพื้นที่</div>
+						<div class="meaning-card-desc"><%-- TODO: ใส่จำนวนงานที่จัดมาแล้วจริง --%>ครอบคลุมงานบุญบ้าน งานขึ้นบ้านใหม่ และงานออฟฟิศ</div>
+					</div>
+					<div class="meaning-card">
+						<div class="meaning-card-title">⭐ ลูกค้าไว้วางใจ</div>
+						<div class="meaning-card-desc">อ่านรีวิวจากเจ้าภาพที่เคยใช้บริการได้ที่ด้านล่าง
+							หรือหน้า<a href="${pageContext.request.contextPath}/reviews">รีวิวทั้งหมด</a></div>
 					</div>
 				</div>
-				<div class="event-card">
-					<div class="event-card-icon">
-						<img
-							src="${pageContext.request.contextPath}/static/images/ceremony2.jpg"
-							alt="${ceremony2.ceremonyName}">
-					</div>
-					<h5>งาน${ceremony2.ceremonyName}</h5>
-					<div class="event-rating">
-						<span class="stars"> <c:forEach begin="1"
-								end="${fn:substringBefore(avgRating2, '.')}">&#9733;</c:forEach>
-							<c:forEach begin="${fn:substringBefore(avgRating2, '.') + 1}"
-								end="5">&#9734;</c:forEach>
-						</span> <span class="rating-num"><fmt:formatNumber
-								value="${avgRating2}" maxFractionDigits="1" /> / 5</span>
-					</div>
-					<p>${ceremony2.ceremonyDetail}</p>
-					<div class="event-divider"></div>
-					<div class="event-card-actions">
-						<a
-							href="${pageContext.request.contextPath}/ceremony/detail/${ceremony2.ceremonyId}"
-							class="btn-detail">ดูรายละเอียด</a> <a
-							href="${pageContext.request.contextPath}/reviews/${ceremony2.ceremonyId}"
-							class="btn-outline-brown">ดูรีวิว</a>
-					</div>
-				</div>
+			</div>
+
+			<div class="promotion-banner-wrap">
+				<img src="${pageContext.request.contextPath}/static/images/promotion.png"
+					alt="โปรโมชั่น จัดงานบุญให้ง่าย ครบ จบในที่เดียว รับฟรี เครื่องเสียง เก้าอี้ โต๊ะพร้อมผ้าคลุม"
+					class="promotion-banner-img">
 			</div>
 		</div>
 	</section>
+
+	<%-- ========== THAI KANOK DIVIDER: WHY CHOOSE US → REVIEWS TEASER ========== --%>
+	<svg class="thai-divider" viewBox="0 0 1200 48"
+		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+		style="display: block; background: #FFF8E1;">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70"
+			stroke-width="1" opacity="0.6" />
+    <circle cx="600" cy="24" r="4" fill="#E8BB3A" />
+</svg>
+
+	<%-- ========== REVIEWS TEASER (ใช้ .section-reviews / .reviews-grid / .review-card เดิมจาก home.css)
+	     TODO: เปลี่ยนรีวิวตัวอย่างด้านล่างเป็นรีวิวจริง 2-3 อันจากฐานข้อมูล ========== --%>
+	<section class="section-pad section-reviews reviews-teaser">
+		<div class="container">
+			<div class="section-ornament">
+				<div class="ornament-line"></div>
+				<div class="ornament-diamond-sm"></div>
+				<div class="ornament-diamond"></div>
+				<div class="ornament-diamond-sm"></div>
+				<div class="ornament-line right"></div>
+			</div>
+			<div class="section-header">
+				<h2 class="section-title">เสียงจากเจ้าภาพที่ไว้วางใจเรา</h2>
+				<p class="section-subtitle">รีวิวจริงจากลูกค้าที่ใช้บริการจัดงานบุญกับบุญมี</p>
+				<div class="gold-line"></div>
+			</div>
+
+			<div class="reviews-grid">
+				<div class="review-card">
+					<div class="review-stars">★★★★★</div>
+					<p class="review-text">ทีมงานดูแลดีมาก
+						ประสานงานเรื่องนิมนต์พระให้ทั้งหมด ไม่ต้องกังวลเรื่องพิธีการเลย</p>
+					<span class="reviewer-name">คุณสมศรี</span>
+					<span class="review-event-type">งานบุญบ้าน</span>
+				</div>
+				<div class="review-card">
+					<div class="review-stars">★★★★★</div>
+					<p class="review-text">จองผ่านปฏิทินง่าย
+						อุปกรณ์ครบ ทีมงานมาถึงตรงเวลา งานออกมาเรียบร้อยตามที่ตั้งใจไว้</p>
+					<span class="reviewer-name">คุณอนุชา</span>
+					<span class="review-event-type">งานขึ้นบ้านใหม่</span>
+				</div>
+			</div>
+
+			<div class="view-all-wrapper">
+				<a href="${pageContext.request.contextPath}/reviews"
+					class="btn-outline-brown">ดูรีวิวทั้งหมด</a>
+			</div>
+		</div>
+	</section>
+
+	<%-- ========== THAI KANOK DIVIDER: REVIEWS → RITUAL STEPS ========== --%>
+	<svg class="thai-divider" viewBox="0 0 1200 48"
+		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+		style="display: block; background: #FFF8E1;">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70"
+			stroke-width="1" opacity="0.6" />
+    <circle cx="600" cy="24" r="4" fill="#E8BB3A" />
+</svg>
+
+	<%-- ========== ขั้นตอนการให้บริการ ========== --%>
+	<section class="section-pad section-conditions" id="ritualStepsSection">
+		<div class="container">
+			<div class="condition-card condition-card-full">
+			    <h3 class="condition-card-title">ขั้นตอนการให้บริการ</h3>
+			
+			    <div class="ritual-steps-grid">
+			        <div class="ritual-step-item">
+			            <div class="ritual-step-img-wrap">
+			                <img src="${pageContext.request.contextPath}/static/images/img18.png"
+			                     alt="เลือกวันและฤกษ์งาน" class="ritual-step-img">
+			                <span class="ritual-step-num">1</span>
+			            </div>
+			            <h4 class="ritual-step-title">เลือกวันและฤกษ์งาน</h4>
+			            <p class="ritual-step-desc">จะเลือกวันสะดวกหรือวันฤกษ์ดีตามปฏิทินก็ได้ตามความพอใจของเจ้าภาพ
+			                (ดูปฏิทินได้ที่<a href="${pageContext.request.contextPath}/calendar">หน้าปฏิทิน</a>)
+			                แต่ถ้าเป็นวันฤกษ์ดีหรือวันเสาร์-อาทิตย์ ควรจองล่วงหน้า
+			                เพราะพระอาจติดกิจนิมนต์งานอื่นอยู่ก่อนแล้ว</p>
+			        </div>
+			
+			        <div class="ritual-step-item">
+			            <div class="ritual-step-img-wrap">
+			                <img src="${pageContext.request.contextPath}/static/images/img13.jpg"
+			                     alt="แจ้งรายละเอียดงานให้ทีมงาน" class="ritual-step-img">
+			                <span class="ritual-step-num">2</span>
+			            </div>
+			            <h4 class="ritual-step-title">แจ้งรายละเอียดงานให้ทีมงาน</h4>
+			            <p class="ritual-step-desc">ประเภทงานบุญ (บุญบ้าน / ขึ้นบ้านใหม่ / ออฟฟิศ)
+			                จำนวนพระที่ต้องการนิมนต์ (งานมงคลนิยมจำนวนคี่ เช่น 5, 7 หรือ 9 รูป)
+			                สถานที่จัดงาน และทำการเลือกชุดสังฆทานกับชุดภัตตาหารปิ่นโต</p>
+			        </div>
+			        
+			        <div class="ritual-step-item">
+					    <div class="ritual-step-img-wrap">
+					        <img src="${pageContext.request.contextPath}/static/images/img19.jpeg"
+					             alt="ทีมงานเข้าดูสถานที่จริง" class="ritual-step-img">
+					        <span class="ritual-step-num">3</span>
+					    </div>
+					    <h4 class="ritual-step-title">ทีมงานเข้าดูสถานที่จริง</h4>
+					    <p class="ritual-step-desc">
+					        ทีมงานเข้าตรวจสอบพื้นที่จัดงาน ประเมินการจัดวางอุปกรณ์
+					        วางตำแหน่งประกอบพิธี และให้คำแนะนำในการเตรียมสถานที่
+					        เพื่อให้การจัดงานเป็นไปอย่างเหมาะสม
+					    </p>
+					</div>
+			
+			        <div class="ritual-step-item">
+			            <div class="ritual-step-img-wrap">
+			                <img src="${pageContext.request.contextPath}/static/images/img14.jpg"
+			                     alt="ทีมงานนิมนต์พระให้" class="ritual-step-img">
+			                <span class="ritual-step-num">4</span>
+			            </div>
+			            <h4 class="ritual-step-title">ทีมงานนิมนต์พระให้</h4>
+			            <p class="ritual-step-desc">ทางร้านประสานงานกับทางวัดและนิมนต์พระตามจำนวนและเวลาที่แจ้งไว้
+			                พร้อมจัดรถรับ-ส่งพระให้ตามความเหมาะสมของสถานที่</p>
+			        </div>
+			
+			        <div class="ritual-step-item">
+			            <div class="ritual-step-img-wrap">
+			                <img src="${pageContext.request.contextPath}/static/images/img15.jpg"
+			                     alt="เตรียมอุปกรณ์พิธีสงฆ์" class="ritual-step-img">
+			                <span class="ritual-step-num">5</span>
+			            </div>
+			            <h4 class="ritual-step-title">เตรียมอุปกรณ์พิธีสงฆ์</h4>
+			            <p class="ritual-step-desc">ก่อนถึงวันงาน ทีมงานจะจัดเตรียมโต๊ะหมู่บูชา อาสนะสงฆ์
+			                และเครื่องสักการะให้พร้อมที่หน้างาน</p>
+			        </div>
+			
+			        <div class="ritual-step-item">
+			            <div class="ritual-step-img-wrap">
+			                <img src="${pageContext.request.contextPath}/static/images/img16.jpeg"
+			                     alt="จัดชุดภัตตาหารถวายพระ (ปิ่นโต)" class="ritual-step-img">
+			                <span class="ritual-step-num">6</span>
+			            </div>
+			            <h4 class="ritual-step-title">จัดชุดภัตตาหารถวายพระ (ปิ่นโต)</h4>
+			            <p class="ritual-step-desc">จัดเป็นชุดปิ่นโตแยกถวายทีละรูป เหมาะกับพื้นที่จำกัดหรือคอนโด
+			                สะดวก ไม่ต้องลุกไปฉันรวมกัน หรือจะจัดฉันวงรวมกันตรงกลางก็ได้ตามความเหมาะสมของสถานที่</p>
+			        </div>
+			
+			        <div class="ritual-step-item">
+			            <div class="ritual-step-img-wrap">
+			                <img src="${pageContext.request.contextPath}/static/images/img17.jpg"
+			                     alt="ประกอบพิธีในวันงาน" class="ritual-step-img">
+			                <span class="ritual-step-num">7</span>
+			            </div>
+			            <h4 class="ritual-step-title">ประกอบพิธีในวันงาน</h4>
+			            <p class="ritual-step-desc">พระสวดเจริญพระพุทธมนต์ จากนั้นจึงถวายภัตตาหารตามลำดับพิธี</p>
+			        </div>
+			    </div>
+			
+			   
+			</div>
+		</div>
+	</section>
+
+	<%-- ========== THAI KANOK DIVIDER: RITUAL STEPS → GALLERY ========== --%>
+	<svg class="thai-divider" viewBox="0 0 1200 48"
+		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+		style="display: block; background: #FFF8E1;">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70"
+			stroke-width="1" opacity="0.6" />
+    <circle cx="600" cy="24" r="4" fill="#E8BB3A" />
+</svg>
 
 	<%-- ========== GALLERY SECTION ========== --%>
 	<section class="section-pad section-gallery">
@@ -303,34 +570,110 @@
 		</div>
 	</section>
 
-	<%-- ========== FOOTER STRIP ========== --%>
-	<div class="footer-strip">
-		<svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
-			style="display: block; width: 100%; height: 8px;">
-        <rect width="1200" height="8" fill="url(#footerGrad)" />
-        <defs>
-            <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%"
-				y2="0%">
-                <stop offset="0%" stop-color="#3D2500" />
-                <stop offset="25%" stop-color="#D4A017" />
-                <stop offset="50%" stop-color="#E8BB3A" />
-                <stop offset="75%" stop-color="#D4A017" />
-                <stop offset="100%" stop-color="#3D2500" />
-            </linearGradient>
-        </defs>
-    </svg>
-	</div>
+	<%-- ========== FOOTER ========== --%>
+	<footer class="site-footer">
+		<div class="footer-top">
+			<svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
+				style="display: block; width: 100%; height: 8px;">
+            <rect width="1200" height="8" fill="url(#footerGrad)" />
+            <defs>
+                <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%"
+					y2="0%">
+                    <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
+                    <stop offset="50%" stop-color="rgba(255,255,255,0.9)" />
+                    <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
+                </linearGradient>
+            </defs>
+        </svg>
+		</div>
+		<div class="container footer-content footer-content-slim">
+			<div class="footer-col footer-brand-col">
+				<div class="footer-brand">
+					<div class="lotus-icon">🪷</div>
+					<span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+				</div>
+				<p class="footer-tagline">รับจัดงานบุญ
+					ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+				<div class="footer-social">
+					<a href="#" class="footer-social-link">📘 Facebook</a>
+					<a href="#" class="footer-social-link">▶️ YouTube</a>
+					<a href="#" class="footer-social-link">💬 LINE OA</a>
+				</div>
+			</div>
+
+			<div class="footer-col footer-contact-col">
+				<h4 class="footer-heading">ติดต่อเรา</h4>
+				<%-- TODO: ใส่เบอร์โทร / LINE OA / อีเมลจริงของร้านแทนที่ตรงนี้ --%>
+				<p>📞 โทร. 08X-XXX-XXXX</p>
+				<p>💬 LINE OA: @boonmee</p>
+				<p>✉️ boonmee.booking@gmail.com</p>
+				<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
+			</div>
+		</div>
+		<div class="footer-bottom">
+			<p>ด้วยใจที่ตั้งใจดูแลทุกพิธี 🪷 บุญมี รับจัดงานบุญ</p>
+		</div>
+	</footer>
 
 	<%-- ========== SCRIPT ZONE ========== --%>
 	<script>
     window.contextPath = "${pageContext.request.contextPath}";
-    window.bookedDates = [
-        <c:forEach var="d" items="${bookedDates}" varStatus="st">
-            "${d}"<c:if test="${!st.last}">,</c:if>
+
+    // ประเภทงานบุญหลัก 3 แบบ ยังใช้ในหน้านี้สำหรับเมนู dropdown
+    window.ceremonyTypes = [
+        <c:forEach var="t" items="${ceremonyTypes}" varStatus="st">
+            {
+                id: ${t.representativeId},
+                name: "${t.mainName}",
+                image: window.contextPath + "/static/images/${t.image}",
+                packageCount: ${t.packageCount}
+            }<c:if test="${!st.last}">,</c:if>
         </c:forEach>
     ];
-</script>
-	<script src="${pageContext.request.contextPath}/static/js/home.js?v=7"></script>
+
+    // ===== Banner slider — เลื่อนอัตโนมัติทุก 4 วินาที + จุดกดเลือกเองได้ =====
+    (function () {
+        var slides = document.querySelectorAll('#bannerSlider .banner-slide');
+        var dotsWrap = document.getElementById('bannerDots');
+        if (!slides.length || !dotsWrap) return;
+
+        var current = 0;
+        var timer = null;
+
+        slides.forEach(function (_, i) {
+            var dot = document.createElement('button');
+            dot.className = 'banner-dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', 'สไลด์ที่ ' + (i + 1));
+            dot.addEventListener('click', function () {
+                goTo(i);
+                restartTimer();
+            });
+            dotsWrap.appendChild(dot);
+        });
+
+        var dots = dotsWrap.querySelectorAll('.banner-dot');
+
+        function goTo(index) {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = index;
+            slides[current].classList.add('active');
+            dots[current].classList.add('active');
+        }
+
+        function next() {
+            goTo((current + 1) % slides.length);
+        }
+
+        function restartTimer() {
+            if (timer) clearInterval(timer);
+            timer = setInterval(next, 4000);
+        }
+
+        restartTimer();
+    })();
+    </script>
+	<script src="${pageContext.request.contextPath}/static/js/home.js?v=13"></script>
 
 </body>
 </html>

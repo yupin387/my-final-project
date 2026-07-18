@@ -59,45 +59,96 @@ public class BookingFormController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
     
-    // --- แก้ไขเมธอด showBookingForm ---
     @GetMapping("/booking")
     public String showBookingForm(Model model, HttpSession session) {
         Member loginUser = (Member) session.getAttribute("user");
         if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
 
-        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(1);
+        String mainType = "ทำบุญบ้าน";
+        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(1); // c1 = มาตรฐาน (ตัวแทนคำถาม)
+        List<Ceremony> ceremonies = ceremonyService.getCeremoniesByType(mainType);    // 3 แพ็กเกจ: มาตรฐาน/อิ่มบุญ/พรีเมียม
+        Ceremony customCeremony = ceremonyService.getCustomCeremonyByType(mainType);  // c10
+
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
-        
-        // ปรับชื่อตัวแปรให้เป็น sanghatharnItems
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
 
         model.addAttribute("booking", new BookingForm());
         model.addAttribute("questions", questions);
-        model.addAttribute("pintoItems", pintoItems); 
-        model.addAttribute("sanghatharnItems", sanghatharnItems); // ชื่อต้องตรงกัน
+        model.addAttribute("ceremonies", ceremonies);
+        model.addAttribute("defaultCeremonyId", customCeremony != null ? customCeremony.getCeremonyId() : null);
+        model.addAttribute("pintoItems", pintoItems);
+        model.addAttribute("sanghatharnItems", sanghatharnItems);
+        model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
 
         return "fillBookingForm";
     }
 
-    // --- แก้ไขเมธอด showBookingForm2 ---
     @GetMapping("/booking2")
     public String showBookingForm2(Model model, HttpSession session) {
         Member loginUser = (Member) session.getAttribute("user");
         if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
 
-        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(2);
+        String mainType = "ขึ้นบ้านใหม่";
+        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(4); // c4 = มาตรฐาน
+        List<Ceremony> ceremonies = ceremonyService.getCeremoniesByType(mainType);
+        Ceremony customCeremony = ceremonyService.getCustomCeremonyByType(mainType);  // c11
+
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
-        
-        // ปรับชื่อตัวแปรให้เป็น sanghatharnItems
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
 
         model.addAttribute("booking", new BookingForm());
         model.addAttribute("questions", questions);
-        model.addAttribute("pintoItems", pintoItems); 
-        model.addAttribute("sanghatharnItems", sanghatharnItems); // ชื่อต้องตรงกัน
+        model.addAttribute("ceremonies", ceremonies);
+        model.addAttribute("defaultCeremonyId", customCeremony != null ? customCeremony.getCeremonyId() : null);
+        model.addAttribute("pintoItems", pintoItems);
+        model.addAttribute("sanghatharnItems", sanghatharnItems);
+        model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
 
         return "fillBookingForm2";
     }
+
+    @GetMapping("/booking3")
+    public String showBookingForm3(Model model, HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("user");
+        if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
+
+        String mainType = "ทำบุญบริษัทหรือออฟฟิศ";
+        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(7); // c7 = มาตรฐาน
+        List<Ceremony> ceremonies = ceremonyService.getCeremoniesByType(mainType);
+        Ceremony customCeremony = ceremonyService.getCustomCeremonyByType(mainType);  // c12
+
+        List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
+        List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
+
+        model.addAttribute("booking", new BookingForm());
+        model.addAttribute("questions", questions);
+        model.addAttribute("ceremonies", ceremonies);
+        model.addAttribute("defaultCeremonyId", customCeremony != null ? customCeremony.getCeremonyId() : null);
+        model.addAttribute("pintoItems", pintoItems);
+        model.addAttribute("sanghatharnItems", sanghatharnItems);
+        model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
+
+        return "fillBookingForm3";
+    }
+
+    // เพิ่ม helper method นี้ไว้ท้าย class เพื่อไม่ต้องเขียนซ้ำ 3 รอบ
+    private List<Map<String, Object>> buildCeremonyTypesForFooter() {
+        List<Ceremony> all = ceremonyService.getAllCeremonies();
+        Map<String, List<Ceremony>> grouped = all.stream()
+            .collect(java.util.stream.Collectors.groupingBy(
+                c -> c.getCeremonyType() == null ? "" : c.getCeremonyType().trim(),
+                java.util.LinkedHashMap::new,
+                java.util.stream.Collectors.toList()
+            ));
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (String type : grouped.keySet()) {
+            Map<String, Object> m = new java.util.LinkedHashMap<>();
+            m.put("mainName", type);
+            result.add(m);
+        }
+        return result;
+    }
+
 
     /*===========แก้===========*/
     @PostMapping("/saveBooking")
@@ -109,7 +160,7 @@ public class BookingFormController {
         if (loginUser == null) return "redirect:/loginMember";
 
         // 1. ดึง ID ออกมาจาก Object ที่ถูก bind มาแล้ว
-        // Spring จะนำค่า 1 จาก JSP ไปใส่ใน booking.getCeremony().getCeremonyId() ให้โดยอัตโนมัติ
+        // Spring จะนำค่า ceremonyId จาก JSP ไปใส่ใน booking.getCeremony().getCeremonyId() ให้โดยอัตโนมัติ
         if (booking.getCeremony() == null || booking.getCeremony().getCeremonyId() == 0) {
             return "redirect:/booking?error=noCeremony";
         }
@@ -211,5 +262,5 @@ public class BookingFormController {
     }
     //=====================
     
-    
+  
 }

@@ -7,73 +7,84 @@ import java.util.List;
 @Table(name = "ceremony")
 public class Ceremony {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	@Column(name = "ceremonyid")
-	private int ceremonyId; 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ceremonyid")
+    private int ceremonyId;
 
-	@Column(name = "ceremonyname", nullable = false, length = 100)
-	private String ceremonyName;
+    @Column(name = "ceremonytype", nullable = false, length = 100)
+    // ค่าที่เป็นไปได้: ทำบุญบ้าน, ขึ้นบ้านใหม่, ทำบุญออฟฟิศ (มีแค่ 3 ค่าตายตัว)
+    private String ceremonyType;
 
-	@Column(name = "ceremonydetail", length = 255)
-	private String ceremonyDetail;
+    @Column(name = "ceremonyname", nullable = false, length = 100)
+    // ค่าที่เป็นไปได้: มาตรฐาน, อิ่มบุญ, พรีเมียม, ประเมินตามความต้องการ (ชื่อแพ็กเกจ)
+    private String ceremonyName;
 
-	@Column(name = "baseprice", nullable = false)
-	private double basePrice;
+    @Column(name = "ceremonydetail", length = 255)
+    private String ceremonyDetail;
 
-	@ManyToMany(mappedBy = "ceremonies")
-	private List<Item> items;
+    @Column(name = "baseprice", nullable = false)
+    private double basePrice;
 
+    @ManyToMany(mappedBy = "ceremonies")
+    private List<Item> items;
 
-	public Ceremony() {
-	}
+    public Ceremony() {
+    }
 
+    public Ceremony(String ceremonyType, String ceremonyName, String ceremonyDetail, double basePrice) {
+        super();
+        this.ceremonyType = ceremonyType;
+        this.ceremonyName = ceremonyName;
+        this.ceremonyDetail = ceremonyDetail;
+        this.basePrice = basePrice;
+    }
 
-	public Ceremony(String ceremonyName, String ceremonyDetail, double basePrice) {
-		this.ceremonyName = ceremonyName;
-		this.ceremonyDetail = ceremonyDetail;
-		this.basePrice = basePrice;
-	}
+    public int getCeremonyId() {
+        return ceremonyId;
+    }
 
-	
-	public int getCeremonyId() {
-		return ceremonyId;
-	}
+    public void setCeremonyId(int ceremonyId) {
+        this.ceremonyId = ceremonyId;
+    }
 
-	public void setCeremonyId(int ceremonyId) {
-		this.ceremonyId = ceremonyId;
-	}
+    public String getCeremonyType() {
+        return ceremonyType;
+    }
 
-	
-	public String getCeremonyName() {
-		return ceremonyName;
-	}
+    public void setCeremonyType(String ceremonyType) {
+        this.ceremonyType = ceremonyType;
+    }
 
-	public void setCeremonyName(String ceremonyName) {
-		this.ceremonyName = ceremonyName;
-	}
+    public String getCeremonyName() {
+        return ceremonyName;
+    }
 
-	public String getCeremonyDetail() {
-		return ceremonyDetail;
-	}
+    public void setCeremonyName(String ceremonyName) {
+        this.ceremonyName = ceremonyName;
+    }
 
-	public void setCeremonyDetail(String ceremonyDetail) {
-		this.ceremonyDetail = ceremonyDetail;
-	}
+    public String getCeremonyDetail() {
+        return ceremonyDetail;
+    }
 
-	public double getBasePrice() {
-		return basePrice;
-	}
+    public void setCeremonyDetail(String ceremonyDetail) {
+        this.ceremonyDetail = ceremonyDetail;
+    }
 
-	public void setBasePrice(double basePrice) {
-		this.basePrice = basePrice;
-	}
+    public double getBasePrice() {
+        return basePrice;
+    }
 
-	public List<Item> getItems() {
-		return items;
-	}
+    public void setBasePrice(double basePrice) {
+        this.basePrice = basePrice;
+    }
 
-	public void setItems(List<Item> items) {
-		this.items = items;
-	}
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
 }

@@ -74,7 +74,7 @@
                         <tr>
                             <td><span class="assign-id">${a.assignId}</span></td>
                             <td><fmt:formatDate value="${a.assignDate}" pattern="dd/MM/yyyy"/></td>
-                            <td><span class="ceremony-name">${a.bookingForm.ceremony.ceremonyName}</span></td>
+                            <td><span class="ceremony-name">${a.bookingForm.ceremony.ceremonyType}</span></td>
                             <td>${a.bookingForm.member.memberFirstName}</td>
                             <td><span class="status-badge status-${a.jobStatus}">${a.jobStatus}</span></td>
                             <td style="text-align: center;">

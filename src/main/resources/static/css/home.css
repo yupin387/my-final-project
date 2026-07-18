@@ -2,71 +2,97 @@
 
 /* ===== CSS Variables ===== */
 :root {
-    --gold:          #C9960C;
-    --gold-mid:      #D4A017;
-    --gold-light:    #E8BB3A;
-    --gold-pale:     #F5D97A;
-    --gold-glow:     #FDE68A;
+    --gold:          #E0577F;
+    --gold-mid:      #EC6E96;
+    --gold-light:    #F49CB9;
+    --gold-pale:     #FBD0DE;
+    --gold-glow:     #FFE3EC;
 
-    --cream:         #FFFBF0;
-    --cream-warm:    #FFF8E1;
-    --cream-mid:     #FDF3D0;
-    --cream-deep:    #F5E6B0;
-    --cream-border:  #E8CC70;
-    --cream-border-soft: #EDD98A;
+    --cream:         #FFFFFF;
+    --cream-warm:    #FFF6F9;
+    --cream-mid:     #FDEEF3;
+    --cream-deep:    #F8DCE6;
+    --cream-border:  #F3C4D5;
+    --cream-border-soft: #F6D4E1;
 
     --white:         #FFFFFF;
-    --off-white:     #FEFCF5;
+    --off-white:     #FFF9FB;
 
-    --text-dark:     #2C1F00;
-    --text-mid:      #5A4000;
-    --text-body:     #6B5200;
-    --text-muted:    #A08840;
-    --text-light:    #BFA060;
+    /* พื้นหลังหน้าเว็บโทนชมพูอ่อน (ใหม่) */
+    --page-bg:       #FFF2F7;
+    --page-bg-deep:  #FDE7EF;
 
-    --brown-dark:    #4A2E00;
-    --brown-mid:     #7A5200;
+    /* ขอบการ์ดสีชมพูเข้มขึ้น (ใหม่) ใช้แทน cream-border-soft เดิมที่เป็นสีเทา */
+    --card-border:   #F0A8C2;
+    --card-border-soft: #F6C9DC;
 
-    --shadow-gold:   rgba(180, 130, 0, 0.12);
-    --shadow-warm:   rgba(100, 70, 0, 0.08);
+    --text-dark:     #1A1A1A;
+    --text-mid:      #333333;
+    --text-body:     #444444;
+    --text-muted:    #777777;
+    --text-light:    #999999;
+
+    --brown-dark:    #1A1A1A;
+    --brown-mid:     #3A3A3A;
+
+    --shadow-gold:   rgba(224, 87, 127, 0.16);
+    --shadow-warm:   rgba(224, 87, 127, 0.10);
 
     /* ===== Calendar status colors ===== */
-    --cal-booked-bg:     #FDE2E2;
-    --cal-booked-border: #E2685A;
-    --cal-booked-text:   #C13B2E;
-    --cal-booked-dot:    #E2685A;
+    --cal-booked-bg:     #FBD3D3;
+    --cal-booked-border: #E5433A;
+    --cal-booked-text:   #B71C1C;
+    --cal-booked-dot:    #E5433A;
 
     --cal-free-bg:       #EEFBF1;
     --cal-free-border:   #8FD9A8;
     --cal-free-text:     #2F8B4F;
 
-    --cal-today-bg:      #FFD75E;
-    --cal-today-border:  #C9960C;
-    --cal-today-text:    #4A2E00;
+    --cal-almost-bg:     #FFE3C2;
+    --cal-almost-border: #F0932B;
+    --cal-almost-text:   #B85C00;
+
+    --cal-today-bg:      #FFE066;
+    --cal-today-border:  #E0577F;
+    --cal-today-text:    #4A3200;
+
+    --cal-past-bg:       #E7E7E7;
+    --cal-past-border:   #C9C9C9;
+    --cal-past-text:     #9B9B9B;
+
+    /* ===== Footer colors =====
+       เดิมเป็นโทนแดงเข้ม/น้ำตาลแยกจากแถบเมนู อาจารย์บอกให้เปลี่ยนเป็นสีเดียวกับแถบเมนูด้านบน
+       เลยตัดตัวแปรชุดเก่า (--footer-dark-1/2/3) ออก แล้วใช้สีชมพู gradient ชุดเดียวกับ .navbar-custom แทน */
+    --footer-grad-1: #C7405F;
+    --footer-grad-2: #D94F76;
+    --footer-grad-3: #E0577F;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: var(--cream);
+    /* เดิมเป็นสีขาวล้วน (var(--cream)) ดูโล่ง เปลี่ยนเป็นชมพูอ่อนไล่เฉดทั้งหน้า */
+    background: linear-gradient(180deg, var(--page-bg) 0%, #FFFFFF 12%, #FFFFFF 88%, var(--page-bg-deep) 100%);
     color: var(--text-dark);
 }
 
-/* ========== NAVBAR ========== */
+/* ========== NAVBAR ==========
+   สีชมพูสดใส gradient - เป็นโทน "สว่าง" ของแบรนด์
+   ขนาด/ฟอนต์ปรับให้ตรงกับ navbar ของหน้า login (main-navbar) */
 .navbar-custom {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 0 36px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-mid);
+    border-bottom: 3px solid #FBD0DE;
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 68px;
+    min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
 }
 
 .navbar-custom::before {
@@ -74,7 +100,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 .navbar-brand-wrap {
@@ -84,28 +110,37 @@ body {
     gap: 12px;
 }
 
-.lotus-icon {
-    background: linear-gradient(135deg, #7A5200, #5C3800);
-    width: 44px;
-    height: 44px;
+.navbar-custom .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    font-size: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
 }
 
-.nav-brand-text {
-    color: var(--gold-pale);
+/* เพิ่มใหม่ตรงนี้ — ให้รูปโลโก้พอดีกรอบวงกลม */
+.lotus-icon img,
+img.lotus-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.navbar-custom .nav-brand-text {
+    color: #FFFFFF;
     font-family: 'Noto Serif Thai', serif;
-    font-size: 22px;
-    font-weight: 700;
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .navbar-center {
@@ -117,7 +152,7 @@ body {
 }
 
 .nav-link-item {
-    color: rgba(253, 237, 160, 0.8);
+    color: #FFFFFF;
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -125,22 +160,23 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .nav-link-item:hover {
-    background: rgba(212, 160, 23, 0.18);
-    color: var(--gold-pale);
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
 }
 
 .nav-link-item.active {
-    background: var(--gold-mid);
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: #E0577F;
     font-weight: 700;
 }
 
 .btn-register-nav {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: #E0577F;
     font-weight: 700;
     border: none;
     border-radius: 8px;
@@ -150,26 +186,26 @@ body {
     transition: all 0.2s;
     white-space: nowrap;
     font-family: 'Sarabun', sans-serif;
-    box-shadow: 0 2px 8px rgba(180, 130, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-register-nav:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
-    color: var(--brown-dark);
+    background: #FFF3F7;
+    color: #B0345A;
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(180, 130, 0, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
-/* ===== User Profile Pill ===== */
+/* ===== User Profile Pill (บนแถบเมนูสีชมพู) ===== */
 .user-profile-pill {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1.5px solid rgba(212, 160, 23, 0.6);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: var(--gold-pale);
+    color: #FFFFFF;
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
@@ -177,12 +213,12 @@ body {
 }
 
 .user-profile-pill:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .avatar-circle-nav {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: #E0577F;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -195,10 +231,10 @@ body {
 }
 
 .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name-nav  { font-size: 0.88rem; font-weight: 700; color: var(--gold-pale); }
-.user-role-nav  { font-size: 0.7rem; color: rgba(253, 237, 160, 0.65); }
+.user-name-nav  { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
+.user-role-nav  { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
 
-/* Dropdown */
+/* Dropdown (เมนูยังเป็นสีขาวเหมือนเดิม ตามที่ขอให้พื้นหลังรายละเอียดเป็นสีขาว) */
 .dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
 
 .dropdown-menu-custom {
@@ -208,10 +244,10 @@ body {
     top: calc(100% - 10px);
     right: 0;
     background-color: var(--white);
-    border: 1px solid var(--cream-border);
+    border: 1px solid var(--card-border-soft);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(100, 70, 0, 0.14);
+    box-shadow: 0 8px 28px rgba(224, 87, 127, 0.18);
     z-index: 99999;
     padding: 0;
     transform: translateY(-8px);
@@ -240,7 +276,7 @@ body {
 
 .dropdown-link:last-child  { border-bottom: none; border-radius: 0 0 10px 10px; }
 .dropdown-link:first-child { border-radius: 10px 10px 0 0; }
-.dropdown-link:hover       { background: var(--cream-warm); }
+.dropdown-link:hover       { background: #FFF3F7; }
 .dropdown-link.danger      { color: #c0392b; }
 .dropdown-link.danger:hover{ background: #fff5f5; }
 
@@ -263,9 +299,9 @@ body {
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(40, 20, 0, 0.55) 0%,
-        rgba(60, 35, 0, 0.38) 50%,
-        rgba(30, 15, 0, 0.70) 100%
+        rgba(0, 0, 0, 0.50) 0%,
+        rgba(0, 0, 0, 0.32) 50%,
+        rgba(0, 0, 0, 0.68) 100%
     );
 }
 
@@ -274,7 +310,7 @@ body {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 80px;
-    background: linear-gradient(to top, rgba(255, 248, 225, 0.25), transparent);
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.15), transparent);
 }
 
 .hero-content {
@@ -285,19 +321,6 @@ body {
     padding: 0 24px;
 }
 
-.hero-tag {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    font-size: 0.78rem;
-    font-weight: 700;
-    padding: 5px 20px;
-    border-radius: 20px;
-    margin-bottom: 20px;
-    letter-spacing: 1.5px;
-    box-shadow: 0 2px 10px rgba(180, 130, 0, 0.4);
-}
-
 .hero-content h1 {
     font-family: 'Noto Serif Thai', serif;
     font-size: 3rem;
@@ -305,20 +328,57 @@ body {
     line-height: 1.25;
     text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
     margin-bottom: 6px;
-    color: #FFFDF5;
+    color: #FFFFFF;
 }
 
 .hero-content h1 span {
-    color: var(--gold-pale);
+    color: var(--gold-light);
     display: block;
-    text-shadow: 0 2px 12px rgba(180, 130, 0, 0.5);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
 }
 
 .hero-content p {
     font-size: 1rem;
-    color: rgba(255, 251, 230, 0.85);
+    color: rgba(255, 255, 255, 0.88);
     margin-top: 14px;
     line-height: 1.75;
+}
+
+.hero-content .hero-quote {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 2.1rem;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #FFFFFF;
+    font-style: italic;
+    margin: 10px 0 18px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.hero-content .hero-desc {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 640px;
+    margin: 14px auto 22px;
+}
+
+.hero-cta {
+    display: inline-block;
+    padding: 12px 28px;
+    border: 1.5px solid #F49CB9;
+    border-radius: 40px;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    background: rgba(236, 110, 150, 0.18);
+    transition: all 0.25s ease;
+}
+
+.hero-cta:hover {
+    background: #EC6E96;
+    color: #FFFFFF;
 }
 
 .hero-divider {
@@ -334,7 +394,7 @@ body {
     position: fixed;
     top: 24px;
     left: 50%;
-    background: #fffdf0;
+    background: #FFFFFF;
     border: 1.5px solid var(--gold-mid);
     color: var(--brown-dark);
     padding: 16px 24px;
@@ -354,6 +414,67 @@ body {
 .toast-body  { display: flex; flex-direction: column; gap: 2px; }
 .toast-title { font-weight: 700; font-size: 0.95rem; }
 .toast-user  { font-size: 0.85rem; color: var(--brown-mid); }
+
+/* ========== BANNER SLIDER (ใหม่) ==========
+   ตามที่อาจารย์บอกว่าหน้าแรกดูโล่ง ให้ใส่รูปเลื่อนๆ (slider) ไม่กี่รูปพอ
+   วางไว้ต่อจาก Hero section ก่อนเข้าเนื้อหาอื่น */
+.banner-slider-section {
+    padding: 44px 0 12px;
+    background: transparent;
+}
+
+.banner-slider {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 32px var(--shadow-gold);
+    border: 2px solid var(--card-border-soft);
+    aspect-ratio: 21 / 7;
+    background: var(--cream-warm);
+}
+
+.banner-slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+.banner-slide.active {
+    display: block;
+}
+.banner-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.banner-dots {
+    display: flex;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 14px;
+}
+.banner-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--card-border-soft);
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    padding: 0;
+}
+.banner-dot.active {
+    background: var(--gold-mid);
+    transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+    .banner-slider { aspect-ratio: 4 / 3; border-radius: 12px; }
+}
 
 /* ========== SECTION BASE ========== */
 .section-pad { padding: 72px 0; }
@@ -418,188 +539,451 @@ body {
 
 /* ========== CALENDAR SECTION ========== */
 .section-calendar {
-    background: var(--white);
+    background: linear-gradient(180deg, var(--page-bg) 0%, #FFFFFF 22%, #FFFFFF 78%, var(--page-bg) 100%);
     position: relative;
     overflow: hidden;
 }
 
-.section-calendar::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-        radial-gradient(circle, var(--cream-border) 1px, transparent 1px);
-    background-size: 28px 28px;
-    opacity: 0.35;
-    pointer-events: none;
+.calendar-card {
+    background: linear-gradient(165deg, #FFFFFF 0%, var(--cream-warm) 100%);
+    border: 2.5px solid var(--card-border);
+    border-radius: 24px;
+    max-width: 1200px;
+    width: 100%;
+    padding: 28px 36px;
+    margin: 0 auto;
+    box-shadow: 0 16px 44px var(--shadow-gold);
+    position: relative;
+    z-index: 1;
 }
 
-.section-calendar::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        var(--gold-pale) 15%,
-        var(--gold-mid) 35%,
-        var(--gold-light) 50%,
-        var(--gold-mid) 65%,
-        var(--gold-pale) 85%,
-        transparent 100%
-    );
-}
-
-.btn-open-calendar {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    border: none;
-    border-radius: 12px;
-    padding: 12px 36px;
-    font-size: 1rem;
-    font-weight: 700;
-    font-family: 'Sarabun', sans-serif;
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    transition: all 0.2s;
-    box-shadow: 0 4px 16px rgba(180, 130, 0, 0.25);
-}
-
-.btn-open-calendar:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(180, 130, 0, 0.35);
-}
-
-.cal-header   { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+.cal-header   { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
 .cal-header h5 {
     font-family: 'Noto Serif Thai', serif;
     color: var(--brown-dark);
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.25rem;
     margin: 0;
 }
 .cal-nav-btn  {
     background: var(--cream-warm);
-    border: 1.5px solid var(--cream-border-soft);
-    border-radius: 8px;
-    width: 32px; height: 32px;
-    font-size: 0.9rem;
+    border: 1.5px solid var(--card-border-soft);
+    border-radius: 10px;
+    width: 38px; height: 38px;
+    font-size: 1.05rem;
     color: var(--brown-mid);
     cursor: pointer;
     transition: background 0.2s, border-color 0.2s;
     display: flex; align-items: center; justify-content: center;
 }
-.cal-nav-btn:hover { background: var(--cream-mid); border-color: var(--gold-mid); }
+.cal-nav-btn:hover { background: var(--gold-glow); border-color: var(--gold-mid); }
 
-.cal-grid    { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 10px; }
+.cal-grid    { display: grid; grid-template-columns: repeat(7, 1fr); gap: 9px; margin-top: 14px; }
 .cal-day-label {
-    background: linear-gradient(135deg, var(--brown-dark), var(--brown-mid));
-    color: var(--gold-pale);
+    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    color: #FFFFFF;
     text-align: center;
-    padding: 6px 2px;
-    border-radius: 6px;
-    font-size: 0.75rem;
+    padding: 9px 2px;
+    border-radius: 8px;
+    font-size: 0.85rem;
     font-weight: 700;
 }
 
-/* ===== Calendar cell base ===== */
 .cal-cell {
-    background: var(--off-white);
-    border-radius: 8px;
-    min-height: 40px;
+    background: #FAFAFA;
+    border-radius: 12px;
+    min-height: 70px;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-body);
     position: relative;
-    border: 1.5px solid var(--cream-border-soft);
+    border: 2px solid var(--card-border-soft);
     transition: all 0.2s;
+    padding: 8px 6px 6px;
+    cursor: default;
 }
-.cal-cell.empty  { background: transparent; border-color: transparent; }
+.cal-cell.cal-cell-empty  { background: transparent; border-color: transparent; }
 
-/* ===== Cal cell: ว่าง (default, free) ===== */
-.cal-cell.free {
+.cal-cell.cal-cell-free {
     background: var(--cal-free-bg);
-    border: 1.5px solid var(--cal-free-border);
+    border: 2px solid var(--cal-free-border);
     color: var(--cal-free-text);
     font-weight: 600;
+    cursor: pointer;
+}
+.cal-cell.cal-cell-free:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== Cal cell: มีงานแล้ว (booked) ===== */
-.cal-cell.booked {
+.cal-cell.cal-cell-almost-full {
+    background: var(--cal-almost-bg);
+    border: 2px solid var(--cal-almost-border);
+    color: var(--cal-almost-text);
+    font-weight: 700;
+    cursor: pointer;
+}
+.cal-cell.cal-cell-almost-full:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.cal-cell.cal-cell-booked {
     background: var(--cal-booked-bg);
     color: var(--cal-booked-text);
-    border: 1.5px solid var(--cal-booked-border);
+    border: 2px solid var(--cal-booked-border);
     font-weight: 700;
+    cursor: not-allowed;
+    opacity: 0.95;
 }
 
-/* ===== Cal cell: วันนี้ (today) — เด่นที่สุด ===== */
-.cal-cell.today {
+.cal-cell.cal-cell-today {
     background: var(--cal-today-bg);
     border: 2px solid var(--cal-today-border);
-    font-weight: 800;
     color: var(--cal-today-text);
-    box-shadow: 0 0 0 3px rgba(201, 150, 12, 0.18);
-    transform: scale(1.04);
+    font-weight: 800;
+    cursor: pointer;
+}
+.cal-cell.cal-cell-today:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.cal-cell.cal-cell-past {
+    background: var(--cal-past-bg);
+    border: 2px solid var(--cal-past-border);
+    color: var(--cal-past-text);
+    font-weight: 500;
+    cursor: not-allowed;
+    opacity: 0.9;
+}
+
+.cal-cell.cal-cell-selected {
+    outline: 3px solid var(--gold-mid);
+    box-shadow: 0 0 0 4px rgba(236, 110, 150, 0.22);
+    transform: scale(1.03);
     z-index: 1;
 }
 
-.cal-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--cal-booked-dot);
-    position: absolute;
-    bottom: 5px;
+.cal-legend { display: flex; gap: 16px; justify-content: center; margin-top: 18px; font-size: 0.82rem; color: var(--text-muted); flex-wrap: wrap; font-weight: 600; }
+.legend-dot { width: 14px; height: 14px; border-radius: 5px; display: inline-block; margin-right: 6px; vertical-align: middle; }
+
+.cal-day-num {
+    font: inherit;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: inherit;
 }
-.cal-cell.today .cal-dot { background: var(--cal-today-border); }
-.cal-cell.free .cal-dot  { background: var(--cal-free-border); }
 
-.cal-legend { display: flex; gap: 15px; justify-content: center; margin-top: 15px; font-size: 0.78rem; color: var(--text-muted); flex-wrap: wrap; font-weight: 600; }
-.legend-dot { width: 13px; height: 13px; border-radius: 4px; display: inline-block; margin-right: 6px; vertical-align: middle; }
+.cal-remain-tag {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+    font-weight: 600;
+}
 
-/* ========== CALENDAR MODAL ========== */
-.calendar-modal-overlay {
+.cal-remain-tag-urgent {
+    color: var(--cal-almost-text);
+}
+
+.cal-day-tag {
+    font-size: 0.65rem;
+    margin-top: 3px;
+    line-height: 1.25;
+    text-align: center;
+    padding: 2px 5px;
+    border-radius: 6px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.cal-day-tag-good {
+    color: #B02458;
+    background: rgba(236, 110, 150, 0.16);
+}
+
+.cal-day-tag-bad {
+    color: #A33A2E;
+    background: rgba(163, 58, 46, 0.14);
+}
+
+.cal-day-tag-more {
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    margin-top: 1px;
+    font-weight: 600;
+}
+
+.legend-star {
+    color: var(--gold-mid);
+    font-weight: 700;
+    margin-right: 4px;
+}
+
+.legend-warn {
+    color: #A33A2E;
+    font-weight: 700;
+    margin-right: 4px;
+}
+
+.cal-hint {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 14px;
+}
+
+/* ===== Selected-dates bar ===== */
+.selected-dates-bar {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    margin: 26px auto 0;
+    padding: 14px 18px;
+    max-width: 820px;
+    background: var(--cream-warm);
+    border: 2px solid var(--card-border-soft);
+    border-radius: 14px;
+}
+
+.selected-dates-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-right: 4px;
+}
+
+.selected-date-chip {
+    background: var(--white);
+    border: 1px solid var(--gold-mid);
+    color: var(--brown-dark);
+    padding: 5px 8px 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.selected-date-chip button {
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0 2px;
+}
+.selected-date-chip button:hover { color: #A33A2E; }
+
+/* ===== ปุ่มยืนยันวันที่ -> เปิด popup เลือกประเภทงานบุญ ===== */
+.btn-confirm-dates {
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: #FFFFFF;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
+    cursor: pointer;
+    margin-left: 8px;
+    white-space: nowrap;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 3px 10px rgba(224, 87, 127, 0.25);
+}
+.btn-confirm-dates:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(224, 87, 127, 0.35);
+}
+.btn-confirm-dates:active {
+    transform: translateY(0);
+}
+
+/* ===== ความหมายวันดี (meaning section) ===== */
+.meaning-block {
+    max-width: 900px;
+    margin: 48px auto 0;
+    text-align: center;
+}
+
+.meaning-block-title {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--brown-dark);
+}
+.meaning-block-title .highlight {
+    color: #2F8B4F;
+}
+
+.meaning-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 26px 20px;
+    margin-top: 26px;
+}
+
+.meaning-card {
+    background: var(--white);
+    border: 1.5px solid var(--card-border-soft);
+    border-radius: 14px;
+    padding: 16px 14px;
+    box-shadow: 0 4px 14px var(--shadow-warm);
+}
+
+.meaning-card-title {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--gold-mid);
+    margin-bottom: 6px;
+}
+
+.meaning-card-desc {
+    font-size: 0.82rem;
+    color: var(--text-body);
+    line-height: 1.65;
+}
+
+@media (max-width: 860px) {
+    .meaning-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .meaning-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Ceremony types popup (modal) ===== */
+.ceremony-modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(50, 30, 0, 0.45);
-    z-index: 99999;
+    background: rgba(26, 26, 26, 0.55);
+    z-index: 200000;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(3px);
+    padding: 20px;
 }
-.calendar-modal-overlay.open { display: flex; }
 
-.calendar-modal-box {
+.ceremony-modal-overlay.show { display: flex; }
+
+.ceremony-modal-box {
     background: var(--white);
     border-radius: 20px;
-    border: 2px solid var(--gold-mid);
-    padding: 28px 28px 20px;
-    max-width: 480px;
-    width: 90%;
+    max-width: 760px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 30px 28px 26px;
     position: relative;
-    box-shadow: 0 16px 60px rgba(100, 65, 0, 0.22);
-    animation: calModalIn 0.25s ease;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    text-align: center;
 }
 
-@keyframes calModalIn {
-    from { transform: translateY(24px) scale(0.97); opacity: 0; }
-    to   { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.cal-modal-close {
+.ceremony-modal-close {
     position: absolute;
-    top: 14px; right: 16px;
-    background: none;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
     border: none;
-    font-size: 1.5rem;
-    color: var(--text-muted);
-    cursor: pointer;
+    background: var(--cream-mid);
+    color: var(--text-mid);
+    font-size: 1.2rem;
     line-height: 1;
-    transition: color 0.2s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
 }
-.cal-modal-close:hover { color: var(--brown-dark); }
+
+.ceremony-modal-close:hover {
+    background: var(--gold-pale);
+    color: var(--brown-dark);
+}
+
+.ceremony-modal-dates {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    margin: 4px 0 20px;
+}
+
+.ceremony-types-title {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--brown-dark);
+    margin-bottom: 4px;
+}
+.ceremony-types-subtitle {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+}
+
+.ceremony-types-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    margin-top: 22px;
+    text-align: left;
+}
+
+@media (max-width: 860px) {
+    .ceremony-types-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+}
+
+.ceremony-type-card {
+    background: var(--white);
+    border: 1.5px solid var(--card-border-soft);
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: left;
+    box-shadow: 0 4px 20px var(--shadow-warm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.ceremony-type-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(236, 110, 150, 0.22);
+    border-color: var(--gold-mid);
+}
+
+.ceremony-type-img { width: 100%; height: 150px; }
+.ceremony-type-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.ceremony-type-body { padding: 16px 18px 18px; }
+.ceremony-type-name {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    color: var(--brown-dark);
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+}
+.ceremony-type-price {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.ceremony-type-cta {
+    margin-top: 12px;
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 7px 16px;
+    border-radius: 8px;
+}
 
 /* ========== EVENT TYPE CARDS ========== */
 .section-events {
@@ -607,34 +991,7 @@ body {
     position: relative;
     overflow: hidden;
 }
-.section-events::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 24px,
-        rgba(212, 160, 23, 0.045) 24px,
-        rgba(212, 160, 23, 0.045) 25px
-    );
-    pointer-events: none;
-}
-.section-events::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg,
-        transparent,
-        var(--gold-pale) 20%,
-        var(--gold-mid) 50%,
-        var(--gold-pale) 80%,
-        transparent
-    );
-}
 
-/* === แก้ไข: events-grid ขยายเต็ม ไม่กระจุกกลาง === */
 .events-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -643,10 +1000,15 @@ body {
     margin: 0 auto;
 }
 
+.events-grid.events-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 1100px;
+}
+
 .event-card {
     background: var(--white);
     border-radius: 20px;
-    border: 1.5px solid var(--cream-border-soft);
+    border: 1.5px solid var(--card-border-soft);
     padding: 28px 26px 24px;
     display: flex;
     flex-direction: column;
@@ -657,38 +1019,18 @@ body {
     overflow: hidden;
 }
 
-.event-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 56px; height: 56px;
-    background: linear-gradient(135deg, var(--cream-mid) 0%, transparent 65%);
-    border-radius: 0 0 100% 0;
-    pointer-events: none;
-}
-
-.event-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 20px; right: 20px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
-    border-radius: 0 0 2px 2px;
-}
-
 .event-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(100, 70, 0, 0.15);
+    box-shadow: 0 12px 40px rgba(224, 87, 127, 0.15);
 }
 
-/* === แก้ไข: รูป event card กว้างเต็ม ไม่ตายตัว 160px === */
 .event-card-icon {
     width: 100%;
     height: 210px;
     margin-bottom: 18px;
     border-radius: 14px;
     overflow: hidden;
-    border: 2px solid var(--cream-border-soft);
+    border: 2px solid var(--card-border-soft);
 }
 
 .event-card-icon img {
@@ -720,13 +1062,13 @@ body {
 
 .event-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cream-border), transparent);
+    background: linear-gradient(90deg, transparent, var(--card-border-soft), transparent);
     margin-bottom: 16px;
 }
 
 .btn-detail {
     background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    color: #FFFFFF;
     border: none;
     border-radius: 10px;
     padding: 10px 24px;
@@ -737,13 +1079,13 @@ body {
     transition: all 0.2s;
     font-family: 'Sarabun', sans-serif;
     align-self: flex-start;
-    box-shadow: 0 3px 10px rgba(180, 130, 0, 0.2);
+    box-shadow: 0 3px 10px rgba(224, 87, 127, 0.25);
 }
 
 .btn-detail:hover {
     background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(180, 130, 0, 0.3);
+    box-shadow: 0 5px 16px rgba(224, 87, 127, 0.35);
 }
 
 .event-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
@@ -759,33 +1101,6 @@ body {
     overflow: hidden;
 }
 
-.section-reviews::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(var(--cream-mid) 1px, transparent 1px),
-        linear-gradient(90deg, var(--cream-mid) 1px, transparent 1px);
-    background-size: 40px 40px;
-    opacity: 0.3;
-    pointer-events: none;
-}
-
-.section-reviews::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg,
-        transparent,
-        var(--gold-pale) 20%,
-        var(--gold-mid) 50%,
-        var(--gold-pale) 80%,
-        transparent
-    );
-}
-
-/* === แก้ไข: reviews-grid เป็น 2 คอลัมน์ grid เต็มหน้าจอ === */
 .reviews-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -794,10 +1109,9 @@ body {
     margin: 0 auto 32px;
 }
 
-/* === แก้ไข: review-card ไม่มี width ตายตัว ให้ grid จัดการ === */
 .review-card {
     background: linear-gradient(145deg, var(--white) 0%, var(--cream-warm) 100%);
-    border: 1.5px solid var(--cream-border-soft);
+    border: 1.5px solid var(--card-border-soft);
     border-radius: 18px;
     padding: 24px 26px;
     display: flex;
@@ -841,7 +1155,7 @@ body {
     padding: 12px 38px;
     border: 2px solid var(--gold-mid);
     border-radius: 10px;
-    color: var(--brown-mid);
+    color: var(--gold);
     font-family: 'Sarabun', sans-serif;
     font-size: 15px;
     font-weight: 700;
@@ -852,10 +1166,10 @@ body {
 
 .btn-outline-brown:hover {
     background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    color: #FFFFFF;
     border-color: var(--gold-light);
     transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(180, 130, 0, 0.25);
+    box-shadow: 0 4px 14px rgba(224, 87, 127, 0.3);
 }
 
 /* ========== GALLERY ========== */
@@ -864,30 +1178,7 @@ body {
     position: relative;
     overflow: hidden;
 }
-.section-gallery::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, var(--cream-border) 1.5px, transparent 1.5px);
-    background-size: 32px 32px;
-    opacity: 0.25;
-    pointer-events: none;
-}
-.section-gallery::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg,
-        transparent,
-        var(--gold-pale) 20%,
-        var(--gold-mid) 50%,
-        var(--gold-pale) 80%,
-        transparent
-    );
-}
 
-/* === gallery-grid: 3 คอลัมน์ ขนาดเท่ากันทุกรูป === */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -901,7 +1192,7 @@ body {
     overflow: hidden;
     border-radius: 14px;
     box-shadow: 0 4px 14px var(--shadow-warm);
-    border: 1.5px solid var(--cream-border-soft);
+    border: 1.5px solid var(--card-border-soft);
     position: relative;
     z-index: 1;
 }
@@ -915,11 +1206,250 @@ body {
 
 .gallery-item img:hover { transform: scale(1.06); }
 
-/* ========== FOOTER STRIP ========== */
+/* ========== CONDITIONS & STEPS ========== */
+.section-conditions {
+    background: #FFF8FA;
+    position: relative;
+    overflow: hidden;
+}
+
+.conditions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 20px;
+}
+
+@media (max-width: 860px) {
+    .conditions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.condition-card {
+    background: var(--white);
+    border: 1.5px solid var(--card-border-soft);
+    border-radius: 14px;
+    padding: 28px 30px;
+    box-shadow: 0 4px 18px var(--shadow-gold);
+}
+
+.condition-card-full {
+    margin-top: 26px;
+}
+
+.condition-note {
+    margin-top: 18px;
+    padding: 14px 18px;
+    background: var(--cal-booked-bg);
+    border: 1px solid var(--cal-booked-border);
+    border-radius: 10px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--cal-booked-text);
+}
+
+.condition-card-title {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.15rem;
+    color: var(--brown-dark);
+    font-weight: 700;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--card-border-soft);
+}
+
+.condition-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.condition-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-mid);
+}
+
+.step-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    color: var(--white);
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.condition-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.condition-list li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 14px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-mid);
+}
+
+.condition-list li::before {
+    content: "◆";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    color: var(--gold-mid);
+    font-size: 0.75rem;
+}
+
+/* ========== FOOTER ==========
+   เปลี่ยนสีจากโทนแดงเข้ม/น้ำตาลเดิม -> ใช้สีชมพู gradient ชุดเดียวกับแถบเมนูบนสุดตามที่อาจารย์สั่ง
+   และตัดเมนูนำทางออกจาก footer (อาจารย์บอกว่าไม่มีใครกดเมนูที่อยู่ข้างล่าง)
+   เหลือแค่: แบรนด์/แท็กไลน์ + โซเชียล, ช่องทางติดต่อ, และแถบลิขสิทธิ์ท้ายสุด */
 .footer-strip {
     display: block;
     width: 100%;
     line-height: 0;
+}
+
+.site-footer {
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    color: rgba(255, 255, 255, 0.92);
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top: 3px solid #FBD0DE;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    position: relative;
+    z-index: 2;
+}
+
+.footer-top {
+    display: block;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: 30px;
+    padding: 48px 20px 30px;
+}
+
+/* เวอร์ชันย่อ ไม่มีคอลัมน์เมนู เหลือ 2 คอลัมน์: แบรนด์ / ติดต่อ */
+.footer-content.footer-content-slim {
+    grid-template-columns: 1.3fr 1fr;
+    padding: 44px 20px 26px;
+}
+
+@media (max-width: 860px) {
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+    }
+    .footer-content.footer-content-slim {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.footer-brand-text {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.footer-tagline {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 320px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.footer-heading {
+    font-family: 'Noto Serif Thai', serif;
+    color: #FFFFFF;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.footer-col a {
+    display: block;
+    color: rgba(255, 255, 255, 0.92);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    transition: color 0.2s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.footer-col a:hover {
+    color: #FFFFFF;
+}
+
+.footer-contact-col p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.92);
+    margin: 0 0 10px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* โซเชียลมีเดีย ใต้แท็กไลน์แบรนด์ (แทนที่เมนูเดิม) */
+.footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 7px 14px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+.footer-social-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* แถบลิขสิทธิ์ท้ายสุด */
+.footer-bottom {
+    text-align: center;
+    padding: 14px 20px 20px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.75);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 8px;
 }
 
 /* ========== RESPONSIVE ========== */
@@ -927,6 +1457,9 @@ body {
     .events-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 20px;
+    }
+    .events-grid.events-grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .reviews-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -940,10 +1473,16 @@ body {
 @media (max-width: 768px) {
     .navbar-custom { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
     .hero-content h1 { font-size: 2.2rem; }
+    .hero-content .hero-quote { font-size: 1.6rem; }
     .hero-section { height: 400px; }
-    .nav-brand-text { font-size: 18px; }
+    .navbar-custom .nav-brand-text { font-size: 20px; }
+    .navbar-custom .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
     .thai-divider { height: 32px; }
     .events-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+    }
+    .events-grid.events-grid-3 {
         grid-template-columns: 1fr;
         max-width: 480px;
     }
@@ -954,6 +1493,10 @@ body {
         grid-template-columns: repeat(2, 1fr);
         grid-auto-rows: 160px;
     }
+    .calendar-card { padding: 22px 16px 18px; max-width: 100%; }
+    .cal-cell { min-height: 76px; }
+    .selected-dates-bar { flex-direction: column; align-items: stretch; }
+    .btn-confirm-dates { margin-left: 0; margin-top: 6px; width: 100%; }
 }
 
 @media (max-width: 480px) {
@@ -961,6 +1504,8 @@ body {
         grid-template-columns: 1fr;
         grid-auto-rows: 200px;
     }
+    .cal-cell { min-height: 66px; font-size: 0.82rem; }
+    .cal-day-num { font-size: 0.9rem; }
 }
 
 .event-card-actions {
@@ -975,3 +1520,73 @@ body {
     font-size: 0.9rem;
 }
 
+/* ========== Decorative SVG dividers hidden per client request ========== */
+.thai-divider {
+    height: 1px !important;
+    background: var(--card-border-soft) !important;
+}
+.thai-divider svg,
+.thai-divider path,
+.thai-divider circle,
+.thai-divider ellipse,
+.thai-divider line,
+.thai-divider g {
+    display: none !important;
+}
+
+.ritual-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 28px;
+    margin: 28px 0 24px;
+}
+
+.ritual-step-item {
+    text-align: center;
+}
+
+.ritual-step-img-wrap {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 14px;
+}
+
+.ritual-step-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--gold-mid);
+    box-shadow: 0 4px 14px rgba(224, 87, 127, 0.22);
+}
+
+.ritual-step-num {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--gold-mid);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.ritual-step-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 6px;
+}
+
+.ritual-step-desc {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--text-body);
+}

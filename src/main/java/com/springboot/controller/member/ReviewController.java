@@ -40,7 +40,8 @@ public class ReviewController {
         if (session.getAttribute("user") == null) return "redirect:/loginMember";
         
         BookingForm booking = bookingService.getBookingById(bookingId);
-        // เช็คเงื่อนไข: ต้องเสร็จแล้ว และยังไม่เคยรีวิว
+        if (booking == null) return "redirect:/home";
+
         if (!"Completed".equals(booking.getBookingStatus()) || reviewService.hasAlreadyReviewed(bookingId)) {
             return "redirect:/viewBooking/" + bookingId;
         }
@@ -53,21 +54,19 @@ public class ReviewController {
     @PostMapping("/review/save")
     public String save(@ModelAttribute Review review, 
                        @RequestParam String bookingId,
-                       @RequestParam("imageFile") MultipartFile file) throws IOException {
+                       @RequestParam(value = "imageFile", required = false) MultipartFile file) throws IOException {
         
         BookingForm b = bookingService.getBookingById(bookingId);
         review.setBookingForm(b);
         review.setReviewDate(new Date()); 
 
-        if (!file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             
-            // 1. กำหนดตำแหน่งที่จะเซฟไฟล์ (พาธที่ย้ายไปใหม่)
             String uploadDir = "uploads/review/";
             java.io.File dir = new java.io.File(uploadDir);
-            if (!dir.exists()) dir.mkdirs(); // สร้างโฟลเดอร์ถ้ายังไม่มี
+            if (!dir.exists()) dir.mkdirs();
             
-            // 2. บันทึกไฟล์ลง Disk
             java.nio.file.Path path = java.nio.file.Paths.get(uploadDir + fileName);
             java.nio.file.Files.copy(file.getInputStream(), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             
@@ -78,20 +77,15 @@ public class ReviewController {
         return "redirect:/reviews";
     }
     
-    //แก้ตรงนี้ ล่าสุด
     //  3. หน้าดูรีวิวของประเภทงานนั้นๆ (แยกตามงาน)
-    // ใน ReviewController.java
- // แก้ไขเมธอดนี้ใน ReviewController
     @GetMapping("/reviews/{ceremonyId}")
-    public String viewReviewsByCeremony(@PathVariable int ceremonyId, Model model) { // เปลี่ยนจาก @RequestParam เป็น @PathVariable
+    public String viewReviewsByCeremony(@PathVariable int ceremonyId, Model model) {
         List<Review> allReviews = reviewService.getAllReviews();
         
-        // กรองตาม ID
         List<Review> reviews = allReviews.stream()
             .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == ceremonyId)
             .collect(Collectors.toList());
         
-        // คำนวณค่าเฉลี่ย
         double avg = reviews.stream().mapToDouble(Review::getRating).average().orElse(0.0);
         Map<Long, Long> starCounts = reviews.stream()
                 .collect(Collectors.groupingBy(r -> Math.round(r.getRating()), Collectors.counting()));
@@ -99,7 +93,7 @@ public class ReviewController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("avgRating", avg);
         model.addAttribute("starCounts", starCounts);
-        model.addAttribute("selectedCeremonyId", ceremonyId); // ส่งค่านี้ไปให้ JSP
+        model.addAttribute("selectedCeremonyId", ceremonyId);
         
         return "viewReview";
     }
@@ -114,7 +108,6 @@ public class ReviewController {
                             .average()
                             .orElse(0.0);
         
-        
         Map<Long, Long> starCounts = reviews.stream()
                 .collect(Collectors.groupingBy(r -> Math.round(r.getRating()), Collectors.counting()));
         
@@ -127,5 +120,3 @@ public class ReviewController {
     
     //======================
 }
-
- 

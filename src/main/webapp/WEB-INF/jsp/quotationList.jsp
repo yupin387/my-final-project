@@ -97,7 +97,7 @@
                             <span class="customer-name">
                                 ${q.bookingForm.member.memberFirstName} ${q.bookingForm.member.memberLastName}
                             </span>
-                            <span class="ceremony-name">${q.bookingForm.ceremony.ceremonyName}</span>
+                            <span class="ceremony-name">${q.bookingForm.ceremony.ceremonyType}</span>
                         </td>
                         <td class="date-cell">
                             <fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/>

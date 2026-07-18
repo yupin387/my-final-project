@@ -76,14 +76,14 @@
         <a href="${pageContext.request.contextPath}/organizer/questions/add" class="btn-add" style="text-decoration: none;">+ เพิ่มคำถาม</a>
     </div>
 
-    <%-- ========== TABS ========== --%>
+    <%-- ========== TABS — กรองตามประเภทงานบุญ (3 ประเภท) ไม่ใช่รายแพ็กเกจ ========== --%>
     <div class="tabs-wrapper">
-        <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyId=all"
-           class="tab-btn ${(empty selectedCeremony or selectedCeremony eq 'all') ? 'active' : ''}">ทั้งหมด</a>
-        <c:forEach var="c" items="${ceremonies}">
-            <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyId=${c.ceremonyId}"
-               class="tab-btn ${selectedCeremony.toString() eq c.ceremonyId.toString() ? 'active' : ''}">
-                ${c.ceremonyName}
+        <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=all"
+           class="tab-btn ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'active' : ''}">ทั้งหมด</a>
+        <c:forEach var="t" items="${ceremonyTypes}">
+            <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=${t}"
+               class="tab-btn ${selectedCeremonyType eq t ? 'active' : ''}">
+                ${t}
             </a>
         </c:forEach>
     </div>
@@ -93,12 +93,8 @@
         <div class="card-header-bar">
             <span>
                 <c:choose>
-                    <c:when test="${selectedCeremony eq 'all'}">แสดงทุกประเภทพิธี</c:when>
-                    <c:otherwise>
-                        <c:forEach var="c" items="${ceremonies}">
-                            <c:if test="${c.ceremonyId.toString() eq selectedCeremony.toString()}">พิธี${c.ceremonyName}</c:if>
-                        </c:forEach>
-                    </c:otherwise>
+                    <c:when test="${empty selectedCeremonyType or selectedCeremonyType eq 'all'}">แสดงทุกประเภทพิธี</c:when>
+                    <c:otherwise>พิธี${selectedCeremonyType}</c:otherwise>
                 </c:choose>
             </span>
             <span class="header-count">จำนวนทั้งหมด ${questions.size()} รายการ</span>
@@ -121,7 +117,7 @@
                         <td>
                             <c:choose>
                                 <c:when test="${not empty q.ceremony}">
-                                    <span class="ceremony-tag">${q.ceremony.ceremonyName}</span>
+                                    <span class="ceremony-tag">${q.ceremony.ceremonyType}</span>
                                 </c:when>
                                 <c:otherwise>
                                     <span class="ceremony-tag all-tag">ใช้กับทุกประเภทพิธี</span>
@@ -212,6 +208,10 @@
 
 <%-- ========== SCRIPTS ========== --%>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // กำหนด global variable ไว้ให้ไฟล์ js ใช้งาน
+    const contextPath = "${pageContext.request.contextPath}";
+</script><script src="${pageContext.request.contextPath}/static/js/questionList.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/questionList.js"></script>
 <script>
     function toggleDropdown() {

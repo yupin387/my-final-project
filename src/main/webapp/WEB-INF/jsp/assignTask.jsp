@@ -66,7 +66,7 @@
             </div>
             <div class="info-cell">
                 <span class="info-label">ประเภทพิธี</span>
-                <span class="info-value">${b.ceremony.ceremonyName}</span>
+                <span class="info-value">${b.ceremony.ceremonyType}</span>
             </div>
             <div class="info-cell">
                 <span class="info-label">วันจัดงาน</span>

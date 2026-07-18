@@ -97,9 +97,16 @@
                             <td class="item-name">${item.itemName}</td>
                             <td><span class="type-badge">${item.itemType.itemTypeName}</span></td>
                             <td>
-                                <c:forEach var="c" items="${item.ceremonies}">
-                                    <span class="ceremony-tag">${c.ceremonyName}</span>
+                                <%-- แก้ไข: เดิมวน item.ceremonies ตรง ๆ ซึ่งมีได้ถึง 12 แถวต่อ item
+                                     (3 ประเภทงาน x 4 ระดับแพ็กเกจ) เลยโชว์ชื่อแพ็กเกจซ้ำ ๆ 12 อัน
+                                     เปลี่ยนมาใช้ itemCeremonyTypes ที่ Controller คำนวณ "ประเภทงานไม่ซ้ำ"
+                                     ไว้ล่วงหน้าแล้ว จะได้เห็นแค่สูงสุด 3 แท็ก (ทำบุญบ้าน/ขึ้นบ้านใหม่/ทำบุญออฟฟิศ) --%>
+                                <c:forEach var="t" items="${itemCeremonyTypes[item.itemId]}">
+                                    <span class="ceremony-tag">${t}</span>
                                 </c:forEach>
+                                <c:if test="${empty itemCeremonyTypes[item.itemId]}">
+                                    <span class="ceremony-tag ceremony-tag-none">ยังไม่ผูกกับพิธี</span>
+                                </c:if>
                             </td>
                             <td>
                                 <div class="action-links">

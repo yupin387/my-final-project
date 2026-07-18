@@ -50,7 +50,7 @@
         </div>
 
         <div class="info-grid-section">
-            <div class="info-line"><strong>ประเภทพิธี:</strong> ${q.bookingForm.ceremony.ceremonyName}</div>
+            <div class="info-line"><strong>ประเภทพิธี:</strong> ${q.bookingForm.ceremony.ceremonyType}</div>
             <div class="info-line" style="text-align:right;"><strong>วันที่จัดงาน:</strong> <fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></div>
             <div class="info-line"><strong>รหัสการจอง:</strong> ${q.bookingForm.bookingId}</div>
             <div class="info-line" style="text-align:right;"><strong>เวลาเริ่มงาน:</strong> ${q.bookingForm.eventTime} น.</div>

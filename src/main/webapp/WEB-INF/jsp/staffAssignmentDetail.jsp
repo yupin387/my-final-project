@@ -102,7 +102,7 @@
                     </div>
                     <div class="info-group">
                         <span class="label">ประเภทงาน</span>
-                        <span class="value">${a.bookingForm.ceremony.ceremonyName}</span>
+                        <span class="value">${a.bookingForm.ceremony.ceremonyType}</span>
                     </div>
                     <div class="info-group">
                         <span class="label">ลูกค้า</span>

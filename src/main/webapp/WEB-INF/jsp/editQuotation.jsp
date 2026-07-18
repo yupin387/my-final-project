@@ -66,7 +66,7 @@
             </div>
             <div class="info-box">
                 <span class="info-label">ประเภทพิธี</span>
-                <span class="info-value">${q.bookingForm.ceremony.ceremonyName}</span>
+                <span class="info-value">${q.bookingForm.ceremony.ceremonyType}</span>
             </div>
             <div class="info-box">
                 <span class="info-label">ลูกค้า</span>

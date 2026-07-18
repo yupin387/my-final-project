@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>เข้าสู่ระบบสมาชิก - ระบบรับจัดงานบุญ</title>
+    <title>เข้าสู่ระบบสมาชิก - บุญมี รับจัดงานบุญ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/loginMember.css">
@@ -12,35 +12,22 @@
 <body>
 
     <!-- NAVBAR -->
+<!-- NAVBAR -->
     <nav class="main-navbar">
-        <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
-            <div class="lotus-icon">🪷</div>
-            <span class="nav-brand-text">ระบบรับจัดงานบุญ</span>
+        <a class="navbar-brand-wrap"
+            href="${pageContext.request.contextPath}/home"
+            style="text-decoration: none;">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+            <span class="nav-brand-text">บุญมี
+                รับจัดงานบุญ</span>
         </a>
     </nav>
 
-    <!-- THAI WAVE DIVIDER -->
-    <svg viewBox="0 0 1200 36" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:36px;background:#3D2500;">
-        <path d="M0,8 Q150,32 300,14 Q450,-4 600,18 Q750,36 900,16 Q1050,-4 1200,14 L1200,36 L0,36 Z" fill="#FFFBF0"/>
-        <path d="M0,22 Q100,8 200,22 Q300,36 400,22 Q500,8 600,22 Q700,36 800,22 Q900,8 1000,22 Q1100,36 1200,22" stroke="#D4A017" stroke-width="1.2" fill="none" opacity="0.5"/>
-        <circle cx="200" cy="22" r="2.5" fill="#D4A017" opacity="0.5"/>
-        <circle cx="400" cy="22" r="2.5" fill="#D4A017" opacity="0.5"/>
-        <circle cx="600" cy="22" r="2.5" fill="#D4A017" opacity="0.5"/>
-        <circle cx="800" cy="22" r="2.5" fill="#D4A017" opacity="0.5"/>
-        <circle cx="1000" cy="22" r="2.5" fill="#D4A017" opacity="0.5"/>
-    </svg>
-
     <!-- MAIN CONTENT -->
     <div class="page-wrapper">
-
-        <!-- Section ornament -->
-        <div class="section-ornament">
-            <div class="ornament-line"></div>
-            <div class="ornament-diamond-sm"></div>
-            <div class="ornament-diamond"></div>
-            <div class="ornament-diamond-sm"></div>
-            <div class="ornament-line right"></div>
-        </div>
+    <!-- MAIN CONTENT -->
+    <div class="page-wrapper">
 
         <div class="login-card">
 
@@ -80,11 +67,8 @@
                 <div class="or-divider">หรือ</div>
 
                 <div class="footer-links">
-                    <a href="/register" class="footer-link">ยังไม่เป็นสมาชิก? <b>สมัครสมาชิกที่นี่</b></a>
-                    <a href="${pageContext.request.contextPath}/loginorganizer" class="footer-link">
-                        สำหรับออแกไนเซอร์? <b>เข้าสู่ระบบผู้จัดงานที่นี่</b>
-                    </a>
                     <a href="${pageContext.request.contextPath}/home" class="back-link">← กลับหน้าหลัก</a>
+                    <a href="/register" class="footer-link"><b>สมัครสมาชิก</b></a>
                 </div>
 
             </form>
@@ -97,11 +81,11 @@
         <rect width="1200" height="8" fill="url(#footerGrad)"/>
         <defs>
             <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"   stop-color="#3D2500"/>
-                <stop offset="25%"  stop-color="#D4A017"/>
-                <stop offset="50%"  stop-color="#E8BB3A"/>
-                <stop offset="75%"  stop-color="#D4A017"/>
-                <stop offset="100%" stop-color="#3D2500"/>
+                <stop offset="0%"   stop-color="#6E1930"/>
+                <stop offset="25%"  stop-color="#E0577F"/>
+                <stop offset="50%"  stop-color="#F49CB9"/>
+                <stop offset="75%"  stop-color="#E0577F"/>
+                <stop offset="100%" stop-color="#6E1930"/>
             </linearGradient>
         </defs>
     </svg>

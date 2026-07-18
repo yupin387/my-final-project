@@ -30,33 +30,62 @@ public class OrganizerController {
 
     @Autowired
     private StaffAssignmentService staffAssignmentService;
+    
+    @Autowired
+    private ItemService itemService;   // ⬅️ เพิ่มบรรทัดนี้
 
     // ==========================================
-    // 1. Login / Logout Organizer
+    // 1. Login / Logout (รวม Organizer + HeadStaff ในหน้าเดียว)
     // ==========================================
-    
-    // แสดงหน้าฟอร์มสำหรับเข้าสู่ระบบของฝ่ายจัดการ (Organizer)
+
+    // แสดงหน้าฟอร์มสำหรับเข้าสู่ระบบของฝ่ายจัดการ (ใช้ร่วมกันทั้ง Organizer และ HeadStaff)
     @GetMapping("/loginorganizer")
     public String showLoginForm() {
         return "loginOrganizer";
     }
 
-    // ตรวจสอบข้อมูลประจำตัวและจัดการเซสชันเมื่อเข้าสู่ระบบสำเร็จ
-    @PostMapping("/loginorganizer")
-    public ModelAndView loginOrganizer(@RequestParam String email,
-                                       @RequestParam String password,
-                                       HttpSession session, 
-                                       RedirectAttributes ra) {
+    // ==========================================================
+    // FIX: รวม endpoint การ login เป็นจุดเดียวคือ "/login"
+    // (เดิมฟอร์มใน loginOrganizer.jsp post ไปที่ "/login" แต่ controller
+    //  map ไว้ที่ "/loginorganizer" ทำให้ path ไม่ตรงกัน — แก้ให้ตรงกันแล้ว)
+    //
+    // FIX: ตรวจสอบข้อมูลแบบ "ล็อกอินหน้าเดียว ดีเทคเองว่าเป็นใคร" ตามที่อาจารย์สั่ง
+    // ไม่ต้องแยกหน้าล็อกอินของ Organizer กับ HeadStaff อีกต่อไป:
+    //   1) เช็คก่อนว่าเป็น Organizer หรือไม่
+    //   2) ถ้าไม่ใช่ ให้เช็คว่าเป็น HeadStaff หรือไม่ (อีเมลเป็น unique
+    //      อยู่แล้วในแต่ละตาราง จึงไม่มีทางชนกันระหว่าง 2 role)
+    //   3) ถ้าไม่พบทั้งคู่ ค่อยแจ้ง error ว่าอีเมล/รหัสผ่านไม่ถูกต้อง
+    // ==========================================================
+    @PostMapping("/login")
+    public ModelAndView login(@RequestParam String email,
+                               @RequestParam String password,
+                               HttpSession session,
+                               RedirectAttributes ra) {
+
+        // 1) ลองเช็คว่าเป็น Organizer ก่อน
         Organizer organizer = organizerService.login(email, password);
-        if (organizer == null) {
-            ra.addFlashAttribute("error", "อีเมลหรือรหัสผ่านไม่ถูกต้อง");
-            return new ModelAndView("redirect:/loginorganizer");
+        if (organizer != null) {
+            session.setAttribute("currentOrganizer", organizer);
+            return new ModelAndView("redirect:/organizer/bookings");
         }
-        session.setAttribute("currentOrganizer", organizer);
-        return new ModelAndView("redirect:/organizer/bookings");
+
+        // 2) ถ้าไม่ใช่ Organizer ให้เช็คว่าเป็นหัวหน้างาน (HeadStaff) หรือไม่
+        HeadStaff headStaff = headStaffService.login(email, password);
+        if (headStaff != null) {
+            // FIX: ต้องใช้ key "currentStaff" ให้ตรงกับที่ HeadStaffController เช็ค
+            // (session.getAttribute("currentStaff")) ไม่ใช่ "currentHeadStaff"
+            session.setAttribute("currentStaff", headStaff);
+            // FIX: หน้า dashboard จริงของหัวหน้างานคือ /staff/assignments
+            // (ตรงกับ @GetMapping("/staff/assignments") ใน HeadStaffController)
+            return new ModelAndView("redirect:/staff/assignments");
+        }
+
+        // 3) ไม่พบทั้ง Organizer และ HeadStaff ที่ตรงกับข้อมูลนี้
+        ra.addFlashAttribute("error", "อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+        return new ModelAndView("redirect:/loginorganizer");
     }
 
-    // ล้างข้อมูลในเซสชันและออกจากระบบของฝ่ายจัดการ
+    // ล้างข้อมูลในเซสชันและออกจากระบบของฝ่ายจัดการ (ใช้ร่วมกันทั้ง 2 role)
     @GetMapping("/organizer/logout")
     public ModelAndView logout(HttpSession session) {
         session.invalidate();
@@ -153,6 +182,7 @@ public class OrganizerController {
     }
 
     // แสดงรายละเอียดทั้งหมดของรายการจองที่ระบุตาม ID
+ // แสดงรายละเอียดทั้งหมดของรายการจองที่ระบุตาม ID
     @GetMapping("/organizer/bookings/detail/{id}")
     public String bookingDetail(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
@@ -160,7 +190,14 @@ public class OrganizerController {
         BookingForm booking = bookingService.getBookingById(id); 
         
         if (booking == null) return "redirect:/organizer/bookings";
+
+        // ⬅️ เพิ่ม 2 บรรทัดนี้ เพื่อให้ JSP โชว์ราคาชุดปิ่นโต/สังฆทานที่เลือกได้
+        List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
+        List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
+
         model.addAttribute("b", booking);
+        model.addAttribute("pintoItems", pintoItems);         // ⬅️ เพิ่ม
+        model.addAttribute("sanghatharnItems", sanghatharnItems); // ⬅️ เพิ่ม
         return "bookingDetail";
     }
 

@@ -90,11 +90,19 @@
                 <div class="form-group">
                     <label for="ceremonyId">สำหรับประเภทพิธี</label>
                     <div class="select-wrapper">
+                        <%-- แก้ไข: เดิมวน ${ceremonies} แบบแบน ๆ ทั้ง 12 แถว โชว์แค่ชื่อแพ็กเกจ
+                             (มาตรฐาน/อิ่มบุญ/พรีเมียม/กำหนดเอง) ซ้ำกัน 3 รอบ แยกไม่ออกว่าเป็นของ
+                             ประเภทงานไหน เปลี่ยนมาวน ${groupedCeremonies} แล้วใช้ <optgroup>
+                             แบ่งเป็น 3 กลุ่มตามประเภทงาน (ทำบุญบ้าน/ขึ้นบ้านใหม่/ทำบุญออฟฟิศ) --%>
                         <select id="ceremonyId" name="ceremonyId" required>
                             <option value="">-- เลือกประเภทพิธี --</option>
-                            <c:forEach var="c" items="${ceremonies}">
-                                <option value="${c.ceremonyId}"
-                                    ${param.ceremonyId == c.ceremonyId ? 'selected' : ''}>${c.ceremonyName}</option>
+                            <c:forEach var="entry" items="${groupedCeremonies}">
+                                <optgroup label="${entry.key}">
+                                    <c:forEach var="c" items="${entry.value}">
+                                        <option value="${c.ceremonyId}"
+                                            ${param.ceremonyId == c.ceremonyId ? 'selected' : ''}>${c.ceremonyName}</option>
+                                    </c:forEach>
+                                </optgroup>
                             </c:forEach>
                         </select>
                     </div>
