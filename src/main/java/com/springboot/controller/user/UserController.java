@@ -66,6 +66,12 @@ public class UserController {
         "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
     };
 
+    // ชื่อวันในสัปดาห์ เรียงจากจันทร์ -> อาทิตย์ (index 0 = จันทร์)
+    // ใช้จัดกลุ่มบล็อก "สรุปฤกษ์ดีทำบุญ ปี 2569" ให้ตรงกับ weekdayRows ที่ calendar.jsp เรียกใช้
+    private static final String[] WEEKDAY_NAMES_TH = {
+        "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"
+    };
+
     // ปีที่ต้องการแสดงในบล็อก "สรุปฤกษ์ดีทำบุญ ปี 2569"
     // ปฏิทิน Google Calendar สาธารณะที่ดึงมามีข้อมูลหลายปีปนกัน (2026, 2027, ...)
     // ถ้าไม่กรองปีตรงนี้ เดือนเดียวกันจากคนละปีจะถูกจับคู่กับ label "2569" เดียวกันหมด
@@ -152,6 +158,19 @@ public class UserController {
         }
         return normalized;
     }
+    
+ // ==== เพิ่มเมธอดนี้ใน UserController.java (ไม่แตะโค้ดเดิมเลย) ====
+    //
+    // หน้านี้แยกจาก /calendar (ฤกษ์ดีจาก Google Calendar) โดยสิ้นเชิง
+    // ไม่ต้อง autowire service ใหม่ใดๆ เพราะข้อมูลทั้งหมดถูกดึงฝั่ง JS
+    // จากไฟล์ static ที่มีอยู่แล้วใน static/data/*.json
+
+    @GetMapping("/lanna-calendar")
+    public String lannaCalendarPage(Model model) {
+        // ถ้าอยากให้เมนู/footer ของเว็บขึ้นเหมือนหน้าอื่น ก็ใส่บรรทัดนี้ไว้เหมือนหน้า /calendar
+        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        return "lannaCalendar"; // -> resolve ไปที่ lannaCalendar.jsp (ตำแหน่งเดียวกับ calendar.jsp)
+    }
 
     @GetMapping("/register")
     public String registerPage(Model model) {
@@ -201,7 +220,7 @@ public class UserController {
         model.addAttribute("dayQuality", dayQualityCache);
 
         // ===== สรุปฤกษ์ดีทำบุญรายเดือน (ครบทั้ง 7 ประเภท) =====
-        model.addAttribute("monthlyGoodDays", buildMonthlyGoodDays());
+        model.addAttribute("monthlyGoodDaysByWeekday", buildMonthlyGoodDaysByWeekday());
 
         return "calendar";
     }
@@ -243,19 +262,24 @@ public class UserController {
     /**
      * สรุปวันฤกษ์ดี (ครบทั้ง 7 ประเภท: วันราชาโชค / วันมหาสิทธิโชค / วันชัยโชค /
      * วันอัมฤตโชค / วันอธิบดี / วันธงชัย / วันสิทธิโชค)
-     * จาก dayQualityCache แล้วจัดกลุ่มตามเดือน เรียงวันที่จากน้อยไปมาก
-     * เพื่อส่งให้ JSP แสดงในบล็อก "สรุปฤกษ์ดีทำบุญ ปี 2569" (หน้า calendar)
+     * จาก dayQualityCache แล้วจัดกลุ่มเป็น "เดือน -> วันในสัปดาห์ -> รายการเลขวันที่"
+     * เพื่อส่งให้ JSP แสดงในบล็อก "สรุปฤกษ์ดีทำบุญ ปี 2569" (หน้า calendar) ตามรูปแบบ
+     * "วันจันทร์ 20, 27 / วันอังคาร – / วันพุธ 8, 22 ..." ต่อ 1 เดือน
+     *
+     * แก้บั๊ก: เดิม map key ที่ใส่ให้ JSP ชื่อ "days" แต่ calendar.jsp เรียกใช้
+     * ${month.weekdayRows} และ ${row.weekday} / ${row.daysText} ทำให้ค่าไม่ตรงกัน
+     * บล็อกสรุปเลยแสดงว่างเปล่าเสมอ (เห็นแค่หัวข้อเดือน ไม่มีรายการวัน)
      *
      * หมายเหตุ: ฟีด Google Calendar สาธารณะมีข้อมูลหลายปีปนกัน (2026, 2027, ...)
      * แต่ JSP โชว์ label ปีตายตัวว่า "2569" เดือนเดียวกันจากคนละปีเลยไปโผล่ซ้ำกัน
      * แก้โดยกรองเอาเฉพาะปีเป้าหมาย (TARGET_YEAR_CE) ตั้งแต่ตอน build เลย
      */
-    private List<Map<String, Object>> buildMonthlyGoodDays() {
+    private List<Map<String, Object>> buildMonthlyGoodDaysByWeekday() {
         // ใช้ TreeMap เพื่อให้วันที่เรียงจากน้อยไปมากอัตโนมัติ (คีย์เป็น "yyyy-MM-dd" เรียง string ได้ตรงลำดับวันที่พอดี)
         Map<String, List<Map<String, String>>> sorted = new TreeMap<>(dayQualityCache);
 
-        // เดือน (yyyy-MM) -> รายการวันดีในเดือนนั้น
-        Map<String, List<Map<String, String>>> byMonth = new LinkedHashMap<>();
+        // เดือน (yyyy-MM) -> weekday index (0=จันทร์ ... 6=อาทิตย์) -> รายการเลขวันที่ (1-31)
+        Map<String, Map<Integer, List<Integer>>> byMonthWeekday = new LinkedHashMap<>();
 
         for (Map.Entry<String, List<Map<String, String>>> entry : sorted.entrySet()) {
             String dateStr = entry.getKey(); // yyyy-MM-dd
@@ -265,30 +289,43 @@ public class UserController {
             // รองรับทั้งปีแบบ ค.ศ. (2026) และกรณีข้อมูลเก็บเลข พ.ศ. ตรงๆ (2569) เผื่อไว้
             if (!isTargetYear(date)) continue;
 
-            List<String> goodLabelsThisDate = entry.getValue().stream()
-                .filter(tag -> "good".equals(tag.get("type")) && MAIN_GOOD_LABELS.contains(tag.get("label")))
-                .map(tag -> tag.get("label"))
-                .collect(Collectors.toList());
+            boolean hasGoodTag = entry.getValue().stream()
+                .anyMatch(tag -> "good".equals(tag.get("type")) && MAIN_GOOD_LABELS.contains(tag.get("label")));
 
-            if (goodLabelsThisDate.isEmpty()) continue;
+            if (!hasGoodTag) continue;
 
             String monthKey = dateStr.substring(0, 7); // yyyy-MM
+            int weekdayIndex = date.getDayOfWeek().getValue() - 1; // MONDAY(1) -> index 0 ... SUNDAY(7) -> index 6
 
-            Map<String, String> row = new LinkedHashMap<>();
-            row.put("dateLabel", date.getDayOfMonth() + " " + MONTH_NAMES_TH[date.getMonthValue() - 1]);
-            row.put("typeLabel", String.join(", ", goodLabelsThisDate));
-
-            byMonth.computeIfAbsent(monthKey, k -> new ArrayList<>()).add(row);
+            byMonthWeekday
+                .computeIfAbsent(monthKey, k -> new LinkedHashMap<>())
+                .computeIfAbsent(weekdayIndex, k -> new ArrayList<>())
+                .add(date.getDayOfMonth());
         }
 
         List<Map<String, Object>> result = new ArrayList<>();
-        for (Map.Entry<String, List<Map<String, String>>> entry : byMonth.entrySet()) {
-            String monthKey = entry.getKey(); // yyyy-MM
+        for (Map.Entry<String, Map<Integer, List<Integer>>> monthEntry : byMonthWeekday.entrySet()) {
+            String monthKey = monthEntry.getKey(); // yyyy-MM
             int monthValue = Integer.parseInt(monthKey.substring(5, 7));
+            Map<Integer, List<Integer>> weekdayMap = monthEntry.getValue();
+
+            // สร้างแถวครบทั้ง 7 วัน เรียงจันทร์ -> อาทิตย์เสมอ แม้บางวันจะไม่มีฤกษ์ดีเลย (โชว์ "–")
+            List<Map<String, String>> weekdayRows = new ArrayList<>();
+            for (int i = 0; i < 7; i++) {
+                List<Integer> days = weekdayMap.getOrDefault(i, List.of());
+                String daysText = days.isEmpty()
+                    ? "–"
+                    : days.stream().map(String::valueOf).collect(Collectors.joining(", "));
+
+                Map<String, String> row = new LinkedHashMap<>();
+                row.put("weekday", WEEKDAY_NAMES_TH[i]);
+                row.put("daysText", daysText);
+                weekdayRows.add(row);
+            }
 
             Map<String, Object> monthMap = new LinkedHashMap<>();
             monthMap.put("monthName", MONTH_NAMES_TH[monthValue - 1]);
-            monthMap.put("days", entry.getValue());
+            monthMap.put("weekdayRows", weekdayRows); // key ต้องตรงกับ ${month.weekdayRows} ใน calendar.jsp
             result.add(monthMap);
         }
         return result;

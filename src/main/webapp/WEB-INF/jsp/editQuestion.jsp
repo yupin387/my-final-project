@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>แก้ไขคำถาม - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap%22 rel="stylesheet">
+    <title>แก้ไขคำถาม - บุญมี รับจัดงานบุญ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addQuestion.css">
 </head>
 <body>
@@ -14,8 +14,9 @@
 <!-- Navbar -->
 <div class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings" style="text-decoration: none;">
-        <div class="lotus-icon">🪷</div>
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -30,16 +31,16 @@
                 <span class="user-name">Admin Organizer</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
-            <span class="arrow">▾</span>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item">
+                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">
                      ออกจากระบบ
                 </a>
             </div>
         </div>
     </div>
 </div>
- 
+
+
 <!-- Content -->
 <div class="page-wrapper">
     <div class="form-container">
@@ -119,7 +120,30 @@
  
     </div>
 </div>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+    </div>
+   
+</footer>
  
 <script src="${pageContext.request.contextPath}/static/js/addHeadStaff.js"></script>
+<script>
+    function toggleDropdown() {
+        document.getElementById('dropdownMenu').classList.toggle('show');
+    }
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-info')) {
+            document.getElementById('dropdownMenu').classList.remove('show');
+        }
+    });
+</script>
 </body>
 </html>

@@ -21,6 +21,7 @@ public class AuspiciousCalendarService {
     	    "วันอัมฤตโชค", "วันอำมฤตโชค", // ใส่ทั้งสระอำและสระอา
     	    "วันอธิบดี", "วันธงชัย", "วันสิทธิโชค"
     	);
+
     /**
      * ทำความสะอาด label ก่อนเทียบ/เก็บ:
      * - ตัดช่องว่างหัวท้าย (trim)
@@ -36,11 +37,28 @@ public class AuspiciousCalendarService {
         if (raw == null) return "";
         String cleaned = raw
                 .replaceAll("[\\p{Cntrl}]", "")
-                .replace("\u00A0", " ")    // เปลี่ยน ' เป็น "
-                .replace("\u200B", "")     // เปลี่ยน ' เป็น "
-                .replace("\uFEFF", "")     // เปลี่ยน ' เป็น "
+                .replace("\u00A0", " ")    // non-breaking space -> ช่องว่างปกติ
+                .replace("\u200B", "")     // zero-width space -> ตัดทิ้ง
+                .replace("\uFEFF", "")     // BOM -> ตัดทิ้ง
                 .trim()
                 .replaceAll("\\s+", " ");
+        return cleaned;
+    }
+
+    /**
+     * นอกจาก trim/ลบอักขระที่มองไม่เห็นแล้ว ยังตัด suffix ประเภท " (+)" หรือ
+     * เครื่องหมายวงเล็บต่อท้ายชื่อฤกษ์ออกด้วย
+     *
+     * ปัญหาที่เจอจริง: ปฏิทิน Google Calendar สาธารณะตัวนี้ (boonumpar) บาง event กรอก
+     * summary เป็น "วันธงชัย (+)" ซึ่งมีความหมายเดียวกับ "วันธงชัย" เป๊ะ แต่สะกดไม่ตรงกับ
+     * MAIN_GOOD_LABELS ที่ใช้เทียบในบล็อกสรุปรายเดือน (buildMonthlyGoodDays ฝั่ง
+     * UserController) ทำให้ label แบบมีหางวงเล็บถูกกรองทิ้งอย่างไม่ตั้งใจ ทั้งที่ควรนับ
+     * เป็นวันฤกษ์ดีประเภทเดียวกัน
+     */
+    private static String normalizeAndStripSuffix(String raw) {
+        String cleaned = normalizeLabel(raw);
+        // ตัดวงเล็บท้ายสตริงออก เช่น "วันธงชัย (+)" -> "วันธงชัย"
+        cleaned = cleaned.replaceAll("\\s*\\([^)]*\\)\\s*$", "").trim();
         return cleaned;
     }
 
@@ -69,12 +87,20 @@ public class AuspiciousCalendarService {
                     // --- ส่วนที่ปรับปรุง: ล้างข้อมูลและแยกคำ ---
                     // ล้างอักขระพิเศษทุกชนิดก่อน split
                     String cleanSummary = summary.replaceAll("[\\p{Cntrl}\\u00A0\\u200B\\uFEFF]", " ");
-                    String[] labels = cleanSummary.split(",");
+
+                    // เดิม split ด้วย "," อย่างเดียว แต่พบว่าปฏิทินจริงบางวันคั่นชื่อฤกษ์
+                    // หลายอันด้วย "/" แทน เช่น "วันธงชัย / วันมหาสิทธิโชค" ถ้า split แค่ "," 
+                    // สตริงทั้งก้อนจะถูกอ่านเป็น label เดียว ไม่ตรงกับ MAIN_GOOD_LABELS
+                    // ตัวไหนเลย ทำให้ทั้งสองฤกษ์หลุดหายไปพร้อมกันจากบล็อกสรุปรายเดือน
+                    // จึงเพิ่ม "/" เป็นตัวคั่นด้วย
+                    String[] labels = cleanSummary.split("[,/]");
                     
                     List<Map<String, String>> tags = result.computeIfAbsent(dateKey, k -> new ArrayList<>());
                     
                     for (String rawLabel : labels) {
-                        String label = rawLabel.trim().replaceAll("\\s+", " "); // จัดระเบียบช่องว่าง
+                        // ใช้ normalizeAndStripSuffix แทน trim ธรรมดา เพื่อตัดหางวงเล็บ
+                        // เช่น "(+)" ที่ติดมากับบาง event ออกไปด้วย ไม่ใช่แค่ยุบช่องว่าง
+                        String label = normalizeAndStripSuffix(rawLabel);
                         if (label.isEmpty()) continue;
 
                         // เปลี่ยนจากเดิมที่เป็นการกรองออก ให้เป็นการ "รับเข้าทั้งหมด"

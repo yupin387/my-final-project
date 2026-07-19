@@ -1,0 +1,326 @@
+/* ============================================================
+   lannaCalendar.css
+   สไตล์ชีทเฉพาะของ "ปฏิทินล้านนา" แยกออกมาจาก lannaCalendar.jsp เดิม
+   (เดิมเป็น <style> ฝังอยู่ในหน้า + แสดงผลแบบลิสต์ตัวเลข)
+   ตอนนี้เปลี่ยนมาแสดงเป็นตารางปฏิทินรายเดือน (grid 7 คอลัมน์) แทน
+   ใช้โทนสีชมพู-ทองเดียวกับธีมหลักของเว็บ (home.css) แต่ประกาศตัวแปรของ
+   ตัวเองไว้ในไฟล์นี้ เพื่อให้ section นี้ independent ไม่ผูกกับ home.css
+   ============================================================ */
+
+:root {
+    --lc-pink:          #E0577F;
+    --lc-pink-mid:      #EC6E96;
+    --lc-pink-light:    #F49CB9;
+    --lc-pink-pale:     #FBD0DE;
+
+    --lc-card-bg:       #FFFFFF;
+    --lc-card-bg-warm:  #FFF6F9;
+    --lc-border:        #F0A8C2;
+    --lc-border-soft:   #F6D4E1;
+
+    --lc-text-dark:     #1A1A1A;
+    --lc-text-mid:      #3A3A3A;
+    --lc-text-body:     #444444;
+    --lc-text-muted:    #777777;
+
+    --lc-good-bg:       #EEFBF1;
+    --lc-good-border:   #8FD9A8;
+    --lc-good-text:     #2F8B4F;
+
+    --lc-bad-bg:        #FBE2E1;
+    --lc-bad-border:    #E08A82;
+    --lc-bad-text:      #A33A2E;
+
+    --lc-today-bg:      #FFE066;
+    --lc-today-border:  var(--lc-pink);
+    --lc-today-text:    #4A3200;
+
+    --lc-shadow:        rgba(224, 87, 127, 0.16);
+}
+
+.lc-calendar {
+    max-width: 1000px;
+    margin: 0 auto;
+    font-family: 'Sarabun', sans-serif;
+    color: var(--lc-text-body);
+}
+
+.lc-calendar .loading {
+    color: var(--lc-text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* ===== ปีปัจจุบัน (การ์ดข้อมูลปี) ===== */
+.lc-year-card {
+    background: linear-gradient(165deg, #FFFFFF 0%, var(--lc-card-bg-warm) 100%);
+    border: 2px solid var(--lc-border);
+    border-radius: 18px;
+    padding: 22px 26px;
+    margin-bottom: 26px;
+    box-shadow: 0 10px 30px var(--lc-shadow);
+}
+
+.lc-year-card h2 {
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--lc-pink);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 10px;
+}
+
+.lc-year-card p {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--lc-text-body);
+    margin: 0;
+}
+
+.lc-year-card .lc-source {
+    margin-top: 8px;
+    font-size: 0.74rem;
+    color: var(--lc-text-muted);
+}
+
+/* ===== แถบเลื่อนเดือน ===== */
+.lc-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.lc-nav-btn {
+    background: var(--lc-card-bg-warm);
+    border: 1.5px solid var(--lc-border-soft);
+    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    font-size: 1.05rem;
+    color: var(--lc-text-mid);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+}
+.lc-nav-btn:hover { background: var(--lc-pink-pale); border-color: var(--lc-pink-mid); }
+
+.lc-month-title {
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--lc-text-dark);
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-align: center;
+    flex: 1;
+}
+
+/* ===== ตารางปฏิทิน (grid) ===== */
+.lc-card {
+    background: linear-gradient(165deg, #FFFFFF 0%, var(--lc-card-bg-warm) 100%);
+    border: 2.5px solid var(--lc-border);
+    border-radius: 22px;
+    padding: 24px 24px 20px;
+    box-shadow: 0 14px 38px var(--lc-shadow);
+}
+
+.lc-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.lc-day-label {
+    background: linear-gradient(135deg, var(--lc-pink), var(--lc-pink-mid));
+    color: #FFFFFF;
+    text-align: center;
+    padding: 8px 2px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.lc-cell {
+    background: #FAFAFA;
+    border: 1.5px solid var(--lc-border-soft);
+    border-radius: 10px;
+    min-height: 96px;
+    padding: 6px 6px 5px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.lc-cell:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.lc-cell-empty {
+    background: transparent;
+    border-color: transparent;
+    cursor: default;
+    box-shadow: none;
+}
+.lc-cell-empty:hover { transform: none; box-shadow: none; }
+
+.lc-cell-today {
+    background: var(--lc-today-bg);
+    border-color: var(--lc-today-border);
+}
+
+.lc-cell-selected {
+    outline: 3px solid var(--lc-pink-mid);
+    box-shadow: 0 0 0 4px rgba(236, 110, 150, 0.22);
+}
+
+.lc-daynum {
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: var(--lc-text-dark);
+}
+
+.lc-cell-today .lc-daynum { color: var(--lc-today-text); }
+
+.lc-lunar {
+    font-size: 0.62rem;
+    color: var(--lc-text-muted);
+    line-height: 1.3;
+    margin-top: 1px;
+}
+
+.lc-tags {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 4px;
+}
+
+.lc-tag {
+    font-size: 0.6rem;
+    font-weight: 600;
+    line-height: 1.3;
+    padding: 1px 5px;
+    border-radius: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lc-tag-good {
+    color: var(--lc-good-text);
+    background: var(--lc-good-bg);
+    border: 1px solid var(--lc-good-border);
+}
+
+.lc-tag-bad {
+    color: var(--lc-bad-text);
+    background: var(--lc-bad-bg);
+    border: 1px solid var(--lc-bad-border);
+}
+
+.lc-tag-more {
+    font-size: 0.58rem;
+    color: var(--lc-text-muted);
+    font-weight: 600;
+}
+
+/* ===== คำอธิบายสีย่อ (legend) ===== */
+.lc-legend {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--lc-border-soft);
+    font-size: 0.8rem;
+    color: var(--lc-text-muted);
+    font-weight: 600;
+}
+
+.lc-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+/* ===== การ์ดรายละเอียดวัน (แสดงเมื่อคลิกวันในตาราง) ===== */
+.lc-day-detail {
+    margin-top: 22px;
+    background: var(--lc-card-bg);
+    border: 1.5px solid var(--lc-border-soft);
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 6px 20px var(--lc-shadow);
+}
+
+.lc-day-detail h4 {
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--lc-pink);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 10px;
+}
+
+.lc-day-detail p {
+    font-size: 0.87rem;
+    line-height: 1.7;
+    color: var(--lc-text-body);
+    margin: 0 0 6px;
+}
+
+.lc-day-detail-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.lc-day-detail-tag {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    padding: 8px 12px;
+    border-radius: 10px;
+}
+
+.lc-day-detail-tag.good { background: var(--lc-good-bg); border: 1px solid var(--lc-good-border); }
+.lc-day-detail-tag.bad  { background: var(--lc-bad-bg);  border: 1px solid var(--lc-bad-border); }
+
+.lc-day-detail-tag .lc-tag-name {
+    font-weight: 700;
+    color: var(--lc-text-dark);
+    flex-shrink: 0;
+}
+
+.lc-day-detail-empty {
+    font-size: 0.85rem;
+    color: var(--lc-text-muted);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .lc-cell { min-height: 80px; padding: 5px 4px 4px; }
+    .lc-daynum { font-size: 0.86rem; }
+    .lc-tag { font-size: 0.55rem; }
+    .lc-lunar { display: none; }
+    .lc-year-card { padding: 18px 18px; }
+}
+
+@media (max-width: 480px) {
+    .lc-grid { gap: 5px; }
+    .lc-cell { min-height: 66px; border-radius: 8px; }
+    .lc-day-label { font-size: 0.7rem; padding: 6px 1px; }
+    .lc-tags { display: none; }
+}

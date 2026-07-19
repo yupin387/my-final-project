@@ -9,37 +9,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>รีวิวการจัดงานบุญ - ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/review.css">
 </head>
 <body>
 
 <%-- ========== NAVBAR ========== --%>
-<div class="navbar">
-    <a href="${pageContext.request.contextPath}/home" class="navbar-title">
-        <span class="navbar-logo">🪷</span>
-        ระบบรับจัดงานบุญ
+<nav class="navbar-custom">
+    <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+            alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="nav-brand-text">บุญมี รับจัดงานบุญ</span>
     </a>
-    <div class="navbar-right">
-        <nav class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/home"         class="nav-item">หน้าหลัก</a>
-            <a href="${pageContext.request.contextPath}/latestBooking" class="nav-item">การจอง</a>
-            <a href="${pageContext.request.contextPath}/reviews"       class="nav-item active">รีวิว</a>
-        </nav>
-        <div class="user-info" onclick="toggleDropdown()">
-            <div class="user-avatar">
-                ${fn:substring(sessionScope.user.memberFirstName, 0, 1)}
-            </div>
-            <div style="display:flex;flex-direction:column;line-height:1.2;">
-                <span class="user-name">${sessionScope.user.memberFirstName} ${sessionScope.user.memberLastName}</span>
-                <span class="user-role">สมาชิก</span>
-            </div>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/editProfile" class="dropdown-item">โปรไฟล์ของฉัน</a>
-                <a href="${pageContext.request.contextPath}/logout"      class="dropdown-item danger">ออกจากระบบ</a>
-            </div>
-        </div>
+    <div class="navbar-center">
+        <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
+        <c:if test="${not empty sessionScope.user}">
+            <a href="${pageContext.request.contextPath}/latestBooking" class="nav-link-item">การจอง</a>
+            <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-link-item">ใบเสนอราคา</a>
+        </c:if>
+        <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item active">รีวิว</a>
+        <c:if test="${empty sessionScope.user}">
+            <a href="${pageContext.request.contextPath}/loginMember" class="nav-link-item">เข้าสู่ระบบ</a>
+        </c:if>
     </div>
-</div>
+    <c:choose>
+        <c:when test="${not empty sessionScope.user}">
+            <div class="dropdown-wrap">
+                <div class="user-profile-pill" onclick="toggleDropdown()">
+                    <div class="avatar-circle-nav">${fn:substring(sessionScope.user.memberFirstName, 0, 1)}</div>
+                    <div class="user-info-text">
+                        <span class="user-name-nav">${sessionScope.user.memberFirstName} ${sessionScope.user.memberLastName}</span>
+                        <span class="user-role-nav">สมาชิก</span>
+                    </div>
+                </div>
+                <div class="dropdown-menu-custom" id="dropdownMenu">
+                    <a href="${pageContext.request.contextPath}/editProfile" class="dropdown-link">โปรไฟล์ของฉัน</a>
+                    <a href="${pageContext.request.contextPath}/logout" class="dropdown-link danger">ออกจากระบบ</a>
+                </div>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <a href="${pageContext.request.contextPath}/register" class="btn-register-nav">สมัครสมาชิก</a>
+        </c:otherwise>
+    </c:choose>
+</nav>
 
 <%-- ========== PAGE ========== --%>
 <div class="page-wrapper">
@@ -109,6 +122,48 @@
         </div>
     </div>
 </div>
+
+<%-- ========== FOOTER ========== --%>
+<footer class="site-footer">
+    <div class="footer-top">
+        <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
+            style="display: block; width: 100%; height: 8px;">
+        <rect width="1200" height="8" fill="url(#footerGrad)" />
+        <defs>
+            <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
+                <stop offset="50%" stop-color="rgba(255,255,255,0.9)" />
+                <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
+            </linearGradient>
+        </defs>
+        </svg>
+    </div>
+    <div class="container footer-content footer-content-slim">
+        <div class="footer-col footer-brand-col">
+            <div class="footer-brand">
+                <div class="lotus-icon">🪷</div>
+                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+            </div>
+            <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+            <div class="footer-social">
+                <a href="#" class="footer-social-link">📘 Facebook</a>
+                <a href="#" class="footer-social-link">▶️ YouTube</a>
+                <a href="#" class="footer-social-link">💬 LINE OA</a>
+            </div>
+        </div>
+
+        <div class="footer-col footer-contact-col">
+            <h4 class="footer-heading">ติดต่อเรา</h4>
+            <p>📞 โทร. 08X-XXX-XXXX</p>
+            <p>💬 LINE OA: @boonmee</p>
+            <p>✉️ boonmee@gmail.com</p>
+            <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>ด้วยใจที่ตั้งใจดูแลทุกพิธี 🪷 บุญมี รับจัดงานบุญ</p>
+    </div>
+</footer>
 
 <script src="${pageContext.request.contextPath}/static/js/review.js"></script>
 </body>

@@ -5,17 +5,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายชื่อหัวหน้างาน - ระบบรับจัดงานบุญ</title>
+    <title>รายชื่อหัวหน้างาน - บุญมี รับจัดงานบุญ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/headStaffList.css">
 </head>
 <body>
 
-<%-- ===== NAVBAR ===== --%>
+<!-- ===== NAVBAR (same style as bookingList) ===== -->
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
-        <div class="lotus-icon">🪷</div>
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -30,16 +32,15 @@
                 <span class="user-name">Admin Organizer</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
-            <span class="arrow">▾</span>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item">ออกจากระบบ</a>
+                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
             </div>
         </div>
     </div>
 </nav>
 
 
-<%-- ===== PAGE WRAPPER ===== --%>
+<!-- ===== PAGE WRAPPER ===== -->
 <div class="page-wrapper">
 
     <%-- Alert --%>
@@ -69,7 +70,7 @@
     <%-- Table Card --%>
     <div class="content-card">
         <div class="card-header-bar">
-            <span> รายชื่อหัวหน้างานทั้งหมด</span>
+            <span>รายชื่อหัวหน้างานทั้งหมด</span>
             <span class="header-count">จำนวนทั้งหมด ${staffList.size()} รายการ</span>
         </div>
 
@@ -123,9 +124,21 @@
             </tbody>
         </table>
     </div>
+
 </div>
 
-
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+    </div>
+   
+</footer>
 
 <script src="${pageContext.request.contextPath}/static/js/headStaffList.js"></script>
 

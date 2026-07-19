@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>แก้ไขข้อมูลส่วนตัว - ระบบรับจัดงานบุญ</title>
+    <title>แก้ไขข้อมูลส่วนตัว - บุญมี รับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editProfile.css">
 </head>
@@ -23,8 +23,9 @@
 <%-- ========== NAVBAR ========== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home">
-        <div class="lotus-icon">🪷</div>
-        <span class="nav-brand-text">ระบบรับจัดงานบุญ</span>
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="nav-brand-text">บุญมี รับจัดงานบุญ</span>
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home"                     class="nav-link-item">หน้าหลัก</a>
@@ -47,16 +48,6 @@
     </div>
 </nav>
 
-<%-- ========== WAVE DIVIDER หลัง NAVBAR ========== --%>
-<svg class="navbar-wave" viewBox="0 0 1200 36" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-    <path d="M0,36 L1200,36 L1200,10 Q1100,32 1000,14 Q900,0 800,20 Q700,36 600,16 Q500,0 400,22 Q300,36 200,16 Q100,2 0,18 Z" fill="#FFFBF0"/>
-    <path d="M0,22 Q100,8 200,22 Q300,36 400,22 Q500,8 600,22 Q700,36 800,22 Q900,8 1000,22 Q1100,36 1200,22" stroke="#D4A017" stroke-width="1.2" fill="none" opacity="0.5"/>
-    <circle cx="200"  cy="22" r="2.5" fill="#D4A017" opacity="0.6"/>
-    <circle cx="400"  cy="22" r="2.5" fill="#D4A017" opacity="0.6"/>
-    <circle cx="600"  cy="22" r="3"   fill="#D4A017" opacity="0.6"/>
-    <circle cx="800"  cy="22" r="2.5" fill="#D4A017" opacity="0.6"/>
-    <circle cx="1000" cy="22" r="2.5" fill="#D4A017" opacity="0.6"/>
-</svg>
 
 <%-- Flash Banner --%>
 <div id="flash-banner-container"></div>
@@ -81,7 +72,7 @@
                 <div class="profile-name">${member.memberFirstName} ${member.memberLastName}</div>
                 <div class="profile-email">${member.memberEmail}</div>
             </div>
-            <div class="banner-lotus">🪷</div>
+           
         </div>
     </div>
 
@@ -154,28 +145,51 @@
         </div>
     </div>
 
-    <%-- ========== KANOK DIVIDER ========== --%>
-    <svg class="kanok-footer" viewBox="0 0 1200 32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <line x1="0" y1="16" x2="1200" y2="16" stroke="#E8CC70" stroke-width="1" opacity="0.5"/>
-        <g fill="#D4A017" opacity="0.45">
-            <ellipse cx="600" cy="16" rx="18" ry="6" transform="rotate(-30 600 16)"/>
-            <ellipse cx="600" cy="16" rx="18" ry="6" transform="rotate(30 600 16)"/>
-            <ellipse cx="600" cy="16" rx="18" ry="6"/>
-            <circle  cx="600" cy="16" r="4"   fill="#E8BB3A"/>
-            <ellipse cx="480" cy="16" rx="12" ry="4.5" transform="rotate(-30 480 16)"/>
-            <ellipse cx="480" cy="16" rx="12" ry="4.5" transform="rotate(30 480 16)"/>
-            <circle  cx="480" cy="16" r="3"   fill="#E8BB3A"/>
-            <ellipse cx="720" cy="16" rx="12" ry="4.5" transform="rotate(-30 720 16)"/>
-            <ellipse cx="720" cy="16" rx="12" ry="4.5" transform="rotate(30 720 16)"/>
-            <circle  cx="720" cy="16" r="3"   fill="#E8BB3A"/>
-            <ellipse cx="360" cy="16" rx="8"  ry="3"   transform="rotate(-30 360 16)"/>
-            <ellipse cx="360" cy="16" rx="8"  ry="3"   transform="rotate(30 360 16)"/>
-            <ellipse cx="840" cy="16" rx="8"  ry="3"   transform="rotate(-30 840 16)"/>
-            <ellipse cx="840" cy="16" rx="8"  ry="3"   transform="rotate(30 840 16)"/>
-        </g>
-    </svg>
+
 
 </div>
+
+<%-- ========== FOOTER ========== --%>
+<footer class="site-footer">
+    <div class="footer-top">
+        <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
+            style="display: block; width: 100%; height: 8px;">
+        <rect width="1200" height="8" fill="url(#footerGrad)" />
+        <defs>
+            <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
+                <stop offset="50%" stop-color="rgba(255,255,255,0.9)" />
+                <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
+            </linearGradient>
+        </defs>
+        </svg>
+    </div>
+    <div class="container footer-content footer-content-slim">
+        <div class="footer-col footer-brand-col">
+            <div class="footer-brand">
+                <div class="lotus-icon">🪷</div>
+                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+            </div>
+            <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+            <div class="footer-social">
+                <a href="#" class="footer-social-link">📘 Facebook</a>
+                <a href="#" class="footer-social-link">▶️ YouTube</a>
+                <a href="#" class="footer-social-link">💬 LINE OA</a>
+            </div>
+        </div>
+
+        <div class="footer-col footer-contact-col">
+            <h4 class="footer-heading">ติดต่อเรา</h4>
+            <p>📞 โทร. 08X-XXX-XXXX</p>
+            <p>💬 LINE OA: @boonmee</p>
+            <p>✉️ boonmee@gmail.com</p>
+            <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>ด้วยใจที่ตั้งใจดูแลทุกพิธี 🪷 บุญมี รับจัดงานบุญ</p>
+    </div>
+</footer>
 
 <script src="${pageContext.request.contextPath}/static/js/editProfile.js"></script>
 <script>

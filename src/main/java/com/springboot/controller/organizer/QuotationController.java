@@ -150,4 +150,12 @@ public class QuotationController {
             return "redirect:/organizer/quotation/edit/" + quotationId;
         }
     }
+    
+ // เพิ่มใน QuotationController.java
+    @GetMapping("/api/get-items-by-ceremony/{ceremonyId}")
+    @ResponseBody
+    public List<Item> getItemsByCeremony(@PathVariable int ceremonyId) {
+        // ใช้เมธอดที่คุณมีอยู่แล้วใน QuotationService
+        return quotationService.getItemsByCeremonyId(ceremonyId);
+    }
 }

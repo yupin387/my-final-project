@@ -1,6 +1,8 @@
 /* ==========================================================================
    GLOBAL
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -9,45 +11,50 @@
 }
 
 :root {
-    --gold:          #C9960C;
-    --gold-mid:      #D4A017;
-    --gold-light:    #E8BB3A;
-    --gold-pale:     #F5D97A;
-    --gold-glow:     #FDE68A;
-    --cream:         #FFFBF0;
-    --cream-warm:    #FFF8E1;
-    --cream-mid:     #FDF3D0;
-    --cream-border:  #E8CC70;
-    --cream-border-soft: #EDD98A;
-    --text-dark:     #2C1F00;
-    --text-mid:      #5A4000;
-    --text-muted:    #A08840;
-    --brown-dark:    #4A2E00;
-    --brown-mid:     #7A5200;
+    --gold:          #E0577F;
+    --gold-mid:      #EC6E96;
+    --gold-light:    #F49CB9;
+    --gold-pale:     #FBD0DE;
+    --gold-glow:     #FFE3EC;
+    --cream:         #FFFFFF;
+    --cream-warm:    #FFF6F9;
+    --cream-mid:     #FDEEF3;
+    --cream-border:  #F3C4D5;
+    --cream-border-soft: #F6D4E1;
+    --text-dark:     #1A1A1A;
+    --text-mid:      #333333;
+    --text-muted:    #777777;
+    --brown-dark:    #1A1A1A;
+    --brown-mid:     #3A3A3A;
+
+    /* footer gradient เดียวกับ navbar (เหมือน home) */
+    --footer-grad-1: #C7405F;
+    --footer-grad-2: #D94F76;
+    --footer-grad-3: #E0577F;
 }
 
 body {
-    background-color: var(--cream);
+    background-color: var(--cream-warm);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 /* ==========================================================================
-   NAVBAR
+   NAVBAR (ขนาด/ฟอนต์ตรงกับ home.css .navbar-custom เป๊ะ)
    ========================================================================== */
 .navbar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 0 36px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-mid);
+    border-bottom: 3px solid var(--gold-pale);
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 68px;
-    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    min-height: 92px;
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
     overflow: visible;
 }
 
@@ -56,7 +63,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 .navbar-brand-wrap {
@@ -66,27 +73,32 @@ body {
     text-decoration: none;
 }
 
-.lotus-icon {
-    background: linear-gradient(135deg, #7A5200, #5C3800);
-    width: 44px;
-    height: 44px;
+.navbar .lotus-icon,
+.navbar-brand-wrap .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 76px;
+    height: 76px;
+    max-width: 76px;
+    max-height: 76px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    font-size: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
+    object-fit: cover;
 }
 
 .nav-brand-text {
-    color: var(--gold-pale);
+    color: #FFFFFF;
     font-family: 'Noto Serif Thai', serif;
-    font-size: 22px;
-    font-weight: 700;
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 800;
     letter-spacing: 0.5px;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
     white-space: nowrap;
 }
 
@@ -103,7 +115,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(253, 237, 160, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -111,10 +123,11 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
-.nav-item:hover  { background: rgba(212, 160, 23, 0.18); color: var(--gold-pale); }
-.nav-item.active { background: var(--gold-mid); color: var(--brown-dark); font-weight: 700; }
+.nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
+.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
 
 /* ===== User Profile Pill ===== */
 .dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
@@ -123,19 +136,19 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.15);
     padding: 6px 14px 6px 6px;
     border-radius: 50px;
-    border: 1.5px solid rgba(212, 160, 23, 0.6);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
     cursor: pointer;
     transition: background 0.2s;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.14); }
+.user-info:hover { background: rgba(255, 255, 255, 0.25); }
 
 .user-avatar {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: var(--gold);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -148,9 +161,9 @@ body {
 }
 
 .user-detail  { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name    { color: var(--gold-pale); font-size: 0.88rem; font-weight: 700; }
-.user-role    { color: rgba(253, 237, 160, 0.65); font-size: 0.7rem; }
-.arrow        { color: var(--gold-pale); font-size: 12px; margin-left: 2px; }
+.user-name    { color: #FFFFFF; font-size: 0.88rem; font-weight: 700; }
+.user-role    { color: rgba(255, 255, 255, 0.75); font-size: 0.7rem; }
+.arrow        { color: #FFFFFF; font-size: 12px; margin-left: 2px; }
 
 .dropdown-menu {
     display: none;
@@ -161,7 +174,7 @@ body {
     border: 1px solid var(--cream-border);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(100, 70, 0, 0.14);
+    box-shadow: 0 8px 28px var(--shadow-gold, rgba(224, 87, 127, 0.16));
     z-index: 99999;
     overflow: hidden;
 }
@@ -221,18 +234,18 @@ body {
     border-radius: 18px;
     overflow: hidden;
     border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 8px 32px rgba(180, 130, 0, 0.12);
+    box-shadow: 0 8px 32px rgba(224, 87, 127, 0.14);
     width: 100%;
     max-width: 860px;
 }
 
 .card-header-bar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 24px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid var(--gold-mid);
+    border-bottom: 2px solid var(--gold-pale);
     position: relative;
 }
 
@@ -241,14 +254,14 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 .booking-id-badge {
     display: inline-block;
-    background: rgba(212, 160, 23, 0.2);
-    border: 1px solid rgba(212, 160, 23, 0.4);
-    color: var(--gold-pale);
+    background: rgba(255, 255, 255, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #FFFFFF;
     padding: 4px 14px;
     border-radius: 20px;
     font-size: 12px;
@@ -260,13 +273,13 @@ body {
     font-family: 'Noto Serif Thai', serif;
     font-size: 20px;
     font-weight: 700;
-    color: #FFFDF5;
+    color: #FFFFFF;
     margin: 0;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.35);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.25);
 }
 
 /* ==========================================================================
-   STATUS PILL — เหมือน viewBooking ทุกสถานะ
+   STATUS PILL
    ========================================================================== */
 .status-pill {
     display: inline-block;
@@ -280,7 +293,7 @@ body {
     color: var(--brown-dark);
 }
 
-.status-pending   { background: var(--cream-warm); color: #b8860b;  border-color: var(--gold-light); }
+.status-pending   { background: var(--cream-warm); color: #b8860b;  border-color: #ffe082; }
 .status-approved  { background: #e8f5e9;            color: #2e7d32;  border-color: #a5d6a7; }
 .status-quoted    { background: #e8f4fd;            color: #0d5c8f;  border-color: #90caf9; }
 .status-confirmed { background: #e8f5e9;            color: #2e7d32;  border-color: #a5d6a7; }
@@ -313,7 +326,7 @@ body {
 }
 
 .info-row    { display: flex; margin-bottom: 12px; }
-.info-label  { width: 200px; color: #b0a070; font-size: 13px; font-weight: 600; }
+.info-label  { width: 200px; color: #C77E96; font-size: 13px; font-weight: 600; }
 .info-value  { flex: 1; font-size: 15px; font-weight: 600; color: var(--text-dark); }
 
 .divider { border: none; border-top: 1px solid var(--cream-mid); margin: 0 32px; }
@@ -348,9 +361,8 @@ body {
 }
 
 .btn-approve {
-    /* เปลี่ยนจากไล่เฉดทอง เป็นไล่เฉดเขียว */
     background: linear-gradient(135deg, #28a745, #218838);
-    color: #FFFFFF; /* เปลี่ยนตัวหนังสือเป็นสีขาว */
+    color: #FFFFFF;
     box-shadow: 0 3px 10px rgba(40, 167, 69, 0.25);
     border: none;
 }
@@ -394,7 +406,7 @@ body {
     padding: 32px 36px 28px;
     max-width: 420px;
     width: 90%;
-    box-shadow: 0 16px 60px rgba(100, 65, 0, 0.22);
+    box-shadow: 0 16px 60px rgba(224, 87, 127, 0.22);
     text-align: center;
 }
 
@@ -465,7 +477,6 @@ body {
 .btn-modal-approve {
     padding: 10px 24px;
     border-radius: 8px;
-    /* เปลี่ยนเป็นสีเขียว */
     background: linear-gradient(135deg, #28a745, #218838);
     color: #FFFFFF;
     font-weight: 700;
@@ -501,14 +512,81 @@ body {
 }
 
 /* ==========================================================================
+   FOOTER (เหมือน home.css .site-footer)
+   ========================================================================== */
+.site-footer {
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    color: rgba(255, 255, 255, 0.92);
+    margin-top: auto;
+    border-top: 3px solid var(--gold-pale);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    position: relative;
+    z-index: 2;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 24px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.site-footer .lotus-icon,
+.footer-lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.footer-brand-text {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.footer-tagline {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 12px 20px 18px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.75);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
    RESPONSIVE
    ========================================================================== */
 @media (max-width: 768px) {
     .navbar         { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
-    .nav-brand-text { font-size: 18px; }
+    .nav-brand-text { font-size: 20px; }
+    .navbar .lotus-icon,
+    .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     .page-wrapper   { padding: 20px 16px 40px; }
     .card-header-bar{ flex-direction: column; align-items: flex-start; gap: 12px; }
     .info-row       { flex-direction: column; gap: 4px; }
     .info-label     { width: auto; }
     .action-btn-group { flex-direction: column; }
+    .footer-content { flex-direction: column; align-items: flex-start; }
 }

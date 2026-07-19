@@ -7,16 +7,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จัดทำใบเสนอราคา - ระบบรับจัดงานบุญ</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=3">
+    <title>จัดทำใบเสนอราคา - บุญมี รับจัดงานบุญ</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=5">
 </head>
 <body>
 
 <%-- ===== NAVBAR ===== --%>
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
-        <div class="navbar-lotus">🪷</div>
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -82,6 +83,19 @@
             </div>
         </div>
     </div>
+    
+    <%-- เพิ่มส่วนนี้ก่อนเริ่มตาราง --%>
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-body">
+        <label><strong>เลือกแพ็กเกจงานบุญ (เพื่อโหลดรายการอัตโนมัติ):</strong></label>
+        <select id="ceremonySelect" onchange="loadCeremonyItems(this.value)" class="form-control">
+            <option value="">-- เลือกแพ็กเกจ --</option>
+            <c:forEach var="ceremony" items="${allCeremonies}">
+                <option value="${ceremony.ceremonyId}">${ceremony.ceremonyName}</option>
+            </c:forEach>
+        </select>
+    </div>
+</div>
 
     <%-- FORM --%>
     <form id="quotationForm"
@@ -273,6 +287,19 @@
         </div>
     </form>
 </div>
+
+<%-- ===== FOOTER ===== --%>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+    </div>
+   
+</footer>
 
 <%-- STICKY TOTAL BAR --%>
 <div class="total-bar">
