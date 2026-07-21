@@ -869,6 +869,7 @@ function syncWatAnswer(containerId, textareaId) {
     textarea.value = lines.join('\n');
 }
 
+
 // กันเหนียว: sync ค่า dropdown ลง textarea อีกครั้งก่อน submit ฟอร์ม
 function syncAllWatAnswersBeforeSubmit() {
     syncWatAnswer('pkgWatDropdowns', 'pkgWatDiffAnswer');
