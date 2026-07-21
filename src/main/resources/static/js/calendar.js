@@ -25,18 +25,16 @@
    Data files expected in the base path passed to LannaCalendar.load():
      - year_2569.json            (year-level metadata)
      - monthly_notes_2026.json   (reliable per-month day-number lists)
-     - daily_2026_04.json        (fully populated daily records — April,
-                                   the Songkran month, as a reference
-                                   implementation of the daily schema)
+     - daily_2026_01.json ... daily_2026_12.json
+                                  (fully populated daily records for every
+                                   month — lunar date, ฟ้าตีแส่งเศษ, วันไท
+                                   name, tags)
      - day_tag_glossary.json     (static meaning of each day tag)
 
-   NOTE ON COVERAGE: only April (month 4) currently has full day-by-day
-   records (lunar date, ฟ้าตีแส่งเศษ, วันไท name, tags). The other 11
-   months are covered at the *monthly summary* level (which days are
-   วันเสีย / วันเก้ากอง / วันหัวเรียงหมอน / etc. — all reliable, taken
-   directly from each month's sidebar). To extend full daily coverage to
-   the remaining months, add daily_2026_XX.json files following the same
-   schema as daily_2026_04.json and register them in `dailyFiles` below.
+   NOTE ON COVERAGE: all 12 months now have full day-by-day records
+   (daily_2026_01.json through daily_2026_12.json). If a new year's data
+   is added later, follow the same schema and register the new files by
+   updating the year/number range this loader iterates over.
    -----------------------------------------------------------------------
    ============================================================ */
 
@@ -44,7 +42,7 @@ class LannaCalendar {
   constructor({ year, monthlyNotes, dailyByMonth, glossary }) {
     this.year = year;
     this.monthlyNotes = monthlyNotes;       // { "1": {...}, "2": {...}, ... }
-    this.dailyByMonth = dailyByMonth;       // { 4: { days: [...] }, ... }
+    this.dailyByMonth = dailyByMonth;       // { 1: {...}, 2: {...}, ..., 12: {...} }
     this.glossary = glossary;
   }
 
@@ -55,16 +53,25 @@ class LannaCalendar {
       return res.json();
     };
 
-    const [year, monthlyNotes, glossary, april] = await Promise.all([
+    // FIX: เดิม hardcode โหลดแค่ daily_2026_04.json (เมษายน) เดือนเดียว
+    // ตอนนี้มีไฟล์รายวันครบทั้ง 12 เดือนแล้ว (daily_2026_01.json ... daily_2026_12.json)
+    // จึงสร้างรายชื่อไฟล์ทั้ง 12 เดือนแล้วโหลดพร้อมกันทั้งหมดแทน
+    const monthNumbers = Array.from({ length: 12 }, (_, i) => i + 1);
+    const dailyFileNames = monthNumbers.map(
+      (m) => `daily_2026_${String(m).padStart(2, '0')}.json`
+    );
+
+    const [year, monthlyNotes, glossary, ...dailyResults] = await Promise.all([
       fetchJson('year_2569.json'),
       fetchJson('monthly_notes_2026.json'),
       fetchJson('day_tag_glossary.json'),
-      fetchJson('daily_2026_04.json'),
+      ...dailyFileNames.map((name) => fetchJson(name)),
     ]);
 
-    const dailyByMonth = { 4: april };
-    // As more months get full daily files, load & register them here, e.g.:
-    // dailyByMonth[1] = await fetchJson('daily_2026_01.json');
+    const dailyByMonth = {};
+    monthNumbers.forEach((m, idx) => {
+      dailyByMonth[m] = dailyResults[idx];
+    });
 
     return new LannaCalendar({ year, monthlyNotes, dailyByMonth, glossary });
   }
@@ -74,7 +81,7 @@ class LannaCalendar {
     return this.year;
   }
 
-  /** Full day record if available (currently April only), else null. */
+  /** Full day record if available (now all 12 months), else null. */
   getDay(month, date) {
     const monthData = this.dailyByMonth[month];
     if (!monthData) return null;

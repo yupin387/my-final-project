@@ -67,16 +67,35 @@
 				<form action="${pageContext.request.contextPath}/staff/items/save"
 					method="post" class="form-section">
 
-					<%-- ประเภท Item --%>
+					<%-- ประเภท Item
+					     FIX: ตัดตัวเลือก "แพ็กเกจ" ออกจากฟอร์มนี้ ห้ามเจ้าหน้าที่สร้าง item
+					     ประเภทแพ็กเกจเอง เพราะ item แพ็กเกจมีกฎพิเศษที่ฟอร์มทั่วไปนี้ไม่รองรับ:
+					       1) itemName ต้องตรงกับ ceremony.ceremonyName เป๊ะๆ (ดู QuotationService
+					          ที่ match ด้วย itemName == ceremonyName) ถ้าพิมพ์ผิด/เว้นวรรคต่าง
+					          จะทำให้แพ็กเกจไม่แสดงผลในหน้าใบเสนอราคา (บั๊กที่เจอมาก่อนหน้านี้)
+					       2) แพ็กเกจแต่ละตัวต้องผูกกับ ceremony ตายตัวตามระดับราคา (เช่น
+					          "แพ็กเกจอิ่มบุญ" ผูกกับทำบุญบ้าน/ขึ้นบ้านใหม่/ทำบุญออฟฟิศ ระดับอิ่มบุญ
+					          เท่านั้น) ไม่ใช่เลือกพิธีได้อิสระแบบ checkbox เหมือน item ทั่วไป
+					       3) ราคาที่ระบบใช้แสดงผลจริงคือ ceremony.basePrice ไม่ใช่ item.pricePerUnit
+					          ถ้าสร้าง item แพ็กเกจใหม่ผ่านฟอร์มนี้แล้วตั้งราคาเอง จะกลายเป็นราคา
+					          ไม่ตรงกับที่แสดงในหน้าจอง/ใบเสนอราคา
+					     แพ็กเกจทั้งหมดถูกกำหนดไว้แล้วจาก seed data (Run.java) การเพิ่ม/แก้ไขแพ็กเกจ
+					     ควรทำผ่านช่องทางที่ผูกกับ Ceremony โดยตรงแทน ไม่ใช่ผ่านฟอร์มสร้าง Item ทั่วไป --%>
 					<div class="form-group">
 						<div class="section-label">ประเภท Item</div>
 						<div class="type-options">
 							<c:forEach var="t" items="${itemTypes}">
-								<input type="radio" name="typeId" value="${t.itemTypeId}"
-									id="type_${t.itemTypeId}" required>
-								<label for="type_${t.itemTypeId}" class="type-label">${t.itemTypeName}</label>
+								<c:if test="${t.itemTypeName != 'แพ็กเกจ'}">
+									<input type="radio" name="typeId" value="${t.itemTypeId}"
+										id="type_${t.itemTypeId}" required>
+									<label for="type_${t.itemTypeId}" class="type-label">${t.itemTypeName}</label>
+								</c:if>
 							</c:forEach>
 						</div>
+						<p style="font-size: 12px; color: #a0785a; margin-top: 6px;">
+							* แพ็กเกจ (มาตรฐาน/อิ่มบุญ/พรีเมียม) เป็นรายการที่กำหนดไว้จากส่วนกลาง
+							ไม่สามารถสร้างหรือแก้ไขผ่านหน้านี้ได้
+						</p>
 					</div>
 
 					<hr class="divider">

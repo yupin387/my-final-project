@@ -59,119 +59,101 @@ function getBookingCount(dateStr) {
 }
 
 function renderCalendar() {
-	const year = calCurrentDate.getFullYear();
-	const month = calCurrentDate.getMonth();
+    const year = calCurrentDate.getFullYear();
+    const month = calCurrentDate.getMonth();
 
-	const monthTitle = document.getElementById("calMonthTitle");
-	if (monthTitle) {
-		monthTitle.textContent = MONTH_NAMES_TH[month] + " " + (year + BE_OFFSET);
-	}
+    const monthTitle = document.getElementById("calMonthTitle");
+    if (monthTitle) {
+        monthTitle.textContent = MONTH_NAMES_TH[month] + " " + (year + BE_OFFSET);
+    }
 
-	const grid = document.getElementById("calGrid");
-	if (!grid) return;
+    const grid = document.getElementById("calGrid");
+    if (!grid) return;
 
-	// เก็บ label หัวตาราง (7 ช่องแรก) แล้วล้างที่เหลือ
-	while (grid.children.length > 7) {
-		grid.removeChild(grid.lastChild);
-	}
+    // ล้าง Grid เดิม (เก็บเฉพาะ header 7 ช่องแรก: อา, จ, อ, พ, พฤ, ศ, ส)
+    while (grid.children.length > 7) {
+        grid.removeChild(grid.lastChild);
+    }
 
-	const firstDay = new Date(year, month, 1).getDay();
-	const daysInMonth = new Date(year, month + 1, 0).getDate();
-	const todayStr = toDateStr(
-		new Date().getFullYear(),
-		new Date().getMonth(),
-		new Date().getDate()
-	);
+    // แก้ไข: ใช้ Date(year, month, 1) เสมอเพื่อหาจุดเริ่มต้นวันในเดือนที่ถูกต้อง
+    const firstDay = new Date(year, month, 1).getDay(); 
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const todayStr = toDateStr(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
-	for (let i = 0; i < firstDay; i++) {
-		const empty = document.createElement("div");
-		empty.className = "cal-cell cal-cell-empty";
-		grid.appendChild(empty);
-	}
+    const teamCount = window.teamCount || 1;
 
-	const teamCount = window.teamCount || 1;
+    // เพิ่มช่องว่างสำหรับวันก่อนวันที่ 1
+    for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "cal-cell cal-cell-empty";
+        grid.appendChild(empty);
+    }
 
-	for (let d = 1; d <= daysInMonth; d++) {
-		const dateStr = toDateStr(year, month, d);
-		const bookedCount = getBookingCount(dateStr);
-		const isFull = bookedCount >= teamCount;
-		const isToday = dateStr === todayStr;
-		const isPast = dateStr < todayStr; // วันที่ผ่านมาแล้ว (ก่อนวันนี้)
-		const quality = (window.dayQuality && window.dayQuality[dateStr]) || null;
+    // วนลูปสร้างช่องวันในเดือน
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = toDateStr(year, month, d);
+        const bookedCount = getBookingCount(dateStr);
+        const isFull = bookedCount >= teamCount;
+        const isToday = dateStr === todayStr;
+        const isPast = dateStr < todayStr;
+        const quality = (window.dayQuality && window.dayQuality[dateStr]) || null;
 
-		const cell = document.createElement("div");
-		cell.className = "cal-cell";
+        const cell = document.createElement("div");
+        cell.className = "cal-cell";
 
-		const remaining = teamCount - bookedCount;
+        // กำหนดสีสถานะ (ลำดับความสำคัญตามเงื่อนไขธุรกิจ)
+        if (isPast) {
+            cell.classList.add("cal-cell-past");
+        } else if (isFull) {
+            cell.classList.add("cal-cell-booked");
+        } else if (isToday) {
+            cell.classList.add("cal-cell-today");
+        } else if ((teamCount - bookedCount) === 1) {
+            cell.classList.add("cal-cell-almost-full");
+        } else {
+            cell.classList.add("cal-cell-free");
+        }
 
-		// ลำดับความสำคัญของสี:
-		// 1) ผ่านมาแล้ว (เทาทึบ, ล็อกคลิกไม่ได้ไม่ว่าจะว่างหรือเต็ม)
-		// 2) เต็มคิว (แดง)
-		// 3) วันนี้ (เหลือง)
-		// 4) เหลือคิวสุดท้าย (ส้ม)
-		// 5) ว่างปกติ (เขียว)
-		if (isPast) {
-			cell.classList.add("cal-cell-past");
-		} else if (isFull) {
-			cell.classList.add("cal-cell-booked");
-		} else if (isToday) {
-			cell.classList.add("cal-cell-today");
-		} else if (remaining === 1) {
-			cell.classList.add("cal-cell-almost-full");
-		} else {
-			cell.classList.add("cal-cell-free");
-		}
+        if (selectedDate === dateStr) cell.classList.add("cal-cell-selected");
 
-		if (selectedDate === dateStr) cell.classList.add("cal-cell-selected");
+        // เลขวันที่
+        const dayNum = document.createElement("div");
+        dayNum.className = "cal-day-num";
+        dayNum.textContent = d;
+        cell.appendChild(dayNum);
 
-		const dayNum = document.createElement("div");
-		dayNum.className = "cal-day-num";
-		dayNum.textContent = d;
-		cell.appendChild(dayNum);
+        // เครื่องหมายเต็มคิว
+        if (isFull && !isPast) {
+            const fullMark = document.createElement("div");
+            fullMark.className = "cal-full-mark";
+            fullMark.textContent = "✕";
+            cell.appendChild(fullMark);
+        }
 
-		// เต็มคิวแล้ว (และไม่ใช่วันที่ผ่านมาแล้ว ซึ่งมีสีเทาแยกต่างหากอยู่แล้ว)
-		// -> แสดงกากบาทมุมขวาบนของช่อง ให้เห็นชัดว่าจองวันนี้ไม่ได้แล้ว
-		if (isFull && !isPast) {
-			const fullMark = document.createElement("div");
-			fullMark.className = "cal-full-mark";
-			fullMark.textContent = "✕";
-			cell.appendChild(fullMark);
-		}
+        // Tag ฤกษ์ดี (★/▲)
+        if (Array.isArray(quality) && quality.length > 0) {
+            // เพิ่ม Tooltip แสดงชื่อฤกษ์ทั้งหมดเมื่อเอาเมาส์ไปชี้
+            const allLabels = quality.map(q => q.label).join(", ");
+            cell.setAttribute("title", allLabels);
+            
+            // แสดงทุก Tag ที่มีใน Array โดยไม่ตัดทิ้ง
+            quality.forEach(function (q) {
+                const tag = document.createElement("div");
+                tag.className = q.type === "good" ? "cal-day-tag cal-day-tag-good" : "cal-day-tag cal-day-tag-bad";
+                tag.textContent = (q.type === "good" ? "★ " : "▲ ") + q.label;
+                cell.appendChild(tag);
+            });
+        }
 
-		if (!isPast && !isFull && teamCount > 1 && bookedCount > 0) {
-			const remain = document.createElement("div");
-			// ป้ายข้อความ "เหลือ X คิว" ใช้สีเน้นต่างกันตามว่าใกล้เต็มหรือไม่
-			// (เหลือคิวสุดท้าย = คลาส -urgent สีส้ม/แดงเข้มกว่าเหลือหลายคิว)
-			remain.className = remaining === 1 ? "cal-remain-tag cal-remain-tag-urgent" : "cal-remain-tag";
-			remain.textContent = "เหลือ " + remaining + " คิว";
-			cell.appendChild(remain);
-		}
+        // Event การคลิก
+        if (!isFull && !isPast) {
+            cell.addEventListener("click", function () {
+                toggleDateSelection(dateStr, cell);
+            });
+        }
 
-		if (Array.isArray(quality) && quality.length > 0) {
-			const shown = quality.slice(0, 2);
-			shown.forEach(function (q) {
-				const tag = document.createElement("div");
-				tag.className = q.type === "good" ? "cal-day-tag cal-day-tag-good" : "cal-day-tag cal-day-tag-bad";
-				tag.textContent = (q.type === "good" ? "★ " : "▲ ") + q.label;
-				cell.appendChild(tag);
-			});
-			if (quality.length > shown.length) {
-				const more = document.createElement("div");
-				more.className = "cal-day-tag-more";
-				more.textContent = "+" + (quality.length - shown.length);
-				cell.appendChild(more);
-			}
-		}
-
-		// กดเลือกได้เฉพาะวันที่ยังไม่ผ่านมาแล้ว และยังไม่เต็มคิวเท่านั้น
-		if (!isFull && !isPast) {
-			cell.addEventListener("click", function () {
-				toggleDateSelection(dateStr, cell);
-			});
-		}
-
-		grid.appendChild(cell);
-	}
+        grid.appendChild(cell);
+    }
 }
 
 function prevMonth() {

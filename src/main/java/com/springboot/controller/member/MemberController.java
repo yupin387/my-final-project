@@ -1,5 +1,6 @@
 package com.springboot.controller.member;
  
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.springboot.model.BookingForm;
+import com.springboot.model.Item;
 import com.springboot.model.Member;
 import com.springboot.model.Quotation;
 import com.springboot.model.QuotationDetail;
@@ -113,16 +116,31 @@ public class MemberController {
             return "redirect:/memberQuotationDetail";
         }
 
-        // 2. ถ้าเจอ ให้ดึงรายละเอียดและส่งไปหน้า Detail ที่คุณทำไว้เลย
+        // 2. ถ้าเจอ ให้ดึงรายละเอียดและส่งไปหน้า Detail ที่คุณทำไว้
         List<QuotationDetail> details = quotationService.getDetailsByQuotationId(latestQ.getQuotationId());
         
         model.addAttribute("q", latestQ);
         model.addAttribute("details", details);
         
+        // 🚩 เพิ่ม Logic คำนวณ packageIncludedItems ให้ตรงกับฝั่ง Organizer
+        BookingForm booking = latestQ.getBookingForm();
+        if (booking != null) {
+            model.addAttribute("b", booking);
+            
+            if (booking.getCeremony() != null) {
+                int ceremonyId = booking.getCeremony().getCeremonyId();
+                List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
+                boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
+                
+                List<Item> packageIncludedItems = computePackageIncludedItems(allItems, isCustomRequest);
+                model.addAttribute("packageIncludedItems", packageIncludedItems);
+            }
+        }
+        
         return "memberQuotationDetail"; 
     }
     
- // ใน MemberController.java หรือ Controller ฝั่งสมาชิกของคุณ
+    // ใน MemberController.java หรือ Controller ฝั่งสมาชิกของคุณ
     @PostMapping("/member/quotation/confirm")
     public String confirmQuotation(@RequestParam String quotationId, RedirectAttributes ra) {
         try {
@@ -155,6 +173,23 @@ public class MemberController {
         }
     }
     
+    // ===== Helper คำนวณรายการในแพ็กเกจ (แบบเดียวกับฝั่ง Organizer) =====
+    private List<Item> computePackageIncludedItems(List<Item> allItems, boolean isCustomRequest) {
+        List<Item> packageIncludedItems = new ArrayList<>();
+        if (!isCustomRequest && allItems != null) {
+            for (Item it : allItems) {
+                if (it.getItemType() != null) {
+                    String typeName = it.getItemType().getItemTypeName();
+                    boolean isFoodOrSangkathan = "ภัตตาหารปิ่นโต".equals(typeName) || "สังฆทาน".equals(typeName);
+                    boolean isBundledInAllPackages = it.getCeremonies() != null && it.getCeremonies().size() >= 9;
+                    if (!isFoodOrSangkathan && isBundledInAllPackages) {
+                        packageIncludedItems.add(it);
+                    }
+                }
+            }
+        }
+        return packageIncludedItems;
+    }
     
     //==================
 }

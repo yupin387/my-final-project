@@ -66,18 +66,33 @@
 
                     <div class="form-section">
 
-                        <%-- ประเภท Item --%>
+                        <%-- ประเภท Item
+                             FIX: ตัดตัวเลือก "แพ็กเกจ" ออกจากฟอร์มนี้เหมือนหน้า addItem.jsp
+                             ห้ามเจ้าหน้าที่แก้ไข item ประเภทแพ็กเกจผ่านฟอร์มทั่วไปนี้ เพราะมีกฎพิเศษ
+                             (itemName ต้องตรงกับ ceremony.ceremonyName เป๊ะๆ, ผูกกับ ceremony ตายตัว
+                             ตามระดับราคา, ราคาจริงที่ระบบใช้อยู่ที่ ceremony.basePrice ไม่ใช่
+                             item.pricePerUnit) — backend มี validation กันไว้ที่ ItemService.saveItem()
+                             อยู่แล้ว แต่ซ่อนตัวเลือกที่ UI ด้วยเพื่อไม่ให้เจ้าหน้าที่งงว่าทำไมกดบันทึก
+                             ไม่ได้ ถ้า item ที่กำลังแก้ไขบังเอิญเป็นประเภทแพ็กเกจอยู่แล้ว (ไม่ควรเกิดขึ้น
+                             เพราะรายการแพ็กเกจไม่ได้ถูกลิงก์มาจากหน้า itemList ให้กดแก้ไขอยู่แล้ว)
+                             จะไม่มี radio ให้เลือกตรงกับ type เดิม ต้องเปลี่ยนประเภทใหม่ก่อนบันทึก --%>
                         <div class="form-group">
                             <div class="section-label">ประเภท Item</div>
                             <div class="type-options">
                                 <c:forEach var="t" items="${itemTypes}">
-                                    <input type="radio" name="typeId" value="${t.itemTypeId}"
-                                        id="type_${t.itemTypeId}"
-                                        ${item.itemType.itemTypeId == t.itemTypeId ? 'checked' : ''}
-                                        required>
-                                    <label for="type_${t.itemTypeId}" class="type-label">${t.itemTypeName}</label>
+                                    <c:if test="${t.itemTypeName != 'แพ็กเกจ'}">
+                                        <input type="radio" name="typeId" value="${t.itemTypeId}"
+                                            id="type_${t.itemTypeId}"
+                                            ${item.itemType.itemTypeId == t.itemTypeId ? 'checked' : ''}
+                                            required>
+                                        <label for="type_${t.itemTypeId}" class="type-label">${t.itemTypeName}</label>
+                                    </c:if>
                                 </c:forEach>
                             </div>
+                            <p style="font-size:12px; color:#a0785a; margin-top:6px;">
+                                * แพ็กเกจ (มาตรฐาน/อิ่มบุญ/พรีเมียม) เป็นรายการที่กำหนดไว้จากส่วนกลาง
+                                ไม่สามารถสร้างหรือแก้ไขผ่านหน้านี้ได้
+                            </p>
                         </div>
 
                         <hr class="divider">
@@ -140,21 +155,25 @@
                                 </div>
                                 <div class="form-group">
                                     <label>หน่วยนับ</label>
+                                    <%-- FIX: เดิมเช็ค ${param.unit == ...} ซึ่งจะว่างเปล่าเสมอตอนเปิดหน้า
+                                         แก้ไขครั้งแรก (ยังไม่เคย submit ฟอร์ม) ทำให้ dropdown ไม่เคย
+                                         pre-select หน่วยเดิมของ item ให้เลย ต้องเช็คจาก ${item.unit}
+                                         (ค่าที่มีอยู่จริงในฐานข้อมูล) แทน --%>
                                   <select name="unit" required>
     <option value="">-- เลือกหน่วย --</option>
-    <option value="ชุด"     ${param.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
-    <option value="ชิ้น"    ${param.unit == 'ชิ้น'    ? 'selected' : ''}>ชิ้น</option>
-    <option value="โหล"     ${param.unit == 'โหล'     ? 'selected' : ''}>โหล</option>
-    <option value="เครื่อง" ${param.unit == 'เครื่อง' ? 'selected' : ''}>เครื่อง</option>
-    <option value="รูป"     ${param.unit == 'รูป'     ? 'selected' : ''}>รูป</option>
-    <option value="ตัว"     ${param.unit == 'ตัว'     ? 'selected' : ''}>ตัว</option>
-    <option value="ใบ"      ${param.unit == 'ใบ'      ? 'selected' : ''}>ใบ</option>
-    <option value="เถา"     ${param.unit == 'เถา'     ? 'selected' : ''}>เถา</option>
-    <option value="อัน"     ${param.unit == 'อัน'     ? 'selected' : ''}>อัน</option>
-    <option value="คู่"     ${param.unit == 'คู่'     ? 'selected' : ''}>คู่</option>
-    <option value="องค์"    ${param.unit == 'องค์'    ? 'selected' : ''}>องค์</option>
-    <option value="ผืน"     ${param.unit == 'ผืน'     ? 'selected' : ''}>ผืน</option>
-    <option value="ต้น"     ${param.unit == 'ต้น'     ? 'selected' : ''}>ต้น</option>
+    <option value="ชุด"     ${item.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
+    <option value="ชิ้น"    ${item.unit == 'ชิ้น'    ? 'selected' : ''}>ชิ้น</option>
+    <option value="โหล"     ${item.unit == 'โหล'     ? 'selected' : ''}>โหล</option>
+    <option value="เครื่อง" ${item.unit == 'เครื่อง' ? 'selected' : ''}>เครื่อง</option>
+    <option value="รูป"     ${item.unit == 'รูป'     ? 'selected' : ''}>รูป</option>
+    <option value="ตัว"     ${item.unit == 'ตัว'     ? 'selected' : ''}>ตัว</option>
+    <option value="ใบ"      ${item.unit == 'ใบ'      ? 'selected' : ''}>ใบ</option>
+    <option value="เถา"     ${item.unit == 'เถา'     ? 'selected' : ''}>เถา</option>
+    <option value="อัน"     ${item.unit == 'อัน'     ? 'selected' : ''}>อัน</option>
+    <option value="คู่"     ${item.unit == 'คู่'     ? 'selected' : ''}>คู่</option>
+    <option value="องค์"    ${item.unit == 'องค์'    ? 'selected' : ''}>องค์</option>
+    <option value="ผืน"     ${item.unit == 'ผืน'     ? 'selected' : ''}>ผืน</option>
+    <option value="ต้น"     ${item.unit == 'ต้น'     ? 'selected' : ''}>ต้น</option>
 </select>
                                 </div>
                             </div>

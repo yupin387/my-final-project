@@ -2,10 +2,13 @@ package com.springboot.controller.member;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -26,12 +29,14 @@ import com.springboot.model.Ceremony;
 import com.springboot.model.Item;
 import com.springboot.model.Member;
 import com.springboot.model.QuestionsDetail;
+import com.springboot.service.AuspiciousCalendarService;
 import com.springboot.service.BookingService;
 import com.springboot.service.CeremonyService;
 import com.springboot.service.ItemService;
 import com.springboot.service.QuestionsService;
 import com.springboot.service.ReviewService;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -51,6 +56,54 @@ public class BookingFormController {
     
     @Autowired
     private CeremonyService ceremonyService;
+
+    // ใช้แสดงปฏิทินย่อในฟอร์มจอง (เลือกวันได้พร้อมเช็คว่าง/เต็มคิว)
+    @Autowired
+    private AuspiciousCalendarService auspiciousCalendarService;
+
+    // จำนวนทีมงาน/คิวที่รับได้ต่อวัน ให้ตรงกับ TEAM_COUNT ใน UserController
+    private static final int TEAM_COUNT = 2;
+
+    // แคชวันฤกษ์ดีของหน้าฟอร์มจอง แยกตัวแปรออกจาก UserController เพื่อไม่ต้องแก้ไฟล์นั้นเลย
+    private Map<String, List<Map<String, String>>> dayQualityCache = new LinkedHashMap<>();
+
+    @PostConstruct
+    private void loadDayQuality() {
+        try {
+            Map<String, List<Map<String, String>>> raw = auspiciousCalendarService.fetchDayQuality();
+            Map<String, List<Map<String, String>>> normalized = new LinkedHashMap<>();
+            for (Map.Entry<String, List<Map<String, String>>> e : raw.entrySet()) {
+                LocalDate date = LocalDate.parse(e.getKey());
+                if (date.getYear() >= 2400) {
+                    date = date.minusYears(543);
+                }
+                normalized.put(date.toString(), e.getValue());
+            }
+            dayQualityCache = normalized;
+        } catch (Exception e) {
+            System.err.println("[BookingFormController] ดึงข้อมูลวันฤกษ์ดีไม่สำเร็จ (ปฏิทินในฟอร์มจะไม่มีแท็ก ★/▲): "
+                + e.getMessage());
+            dayQualityCache = new LinkedHashMap<>();
+        }
+    }
+
+    // เติมข้อมูลปฏิทิน (วันว่าง/เต็มคิว/ฤกษ์ดี) ให้ model ก่อน return view — ใช้ร่วมกันทั้ง 3 ฟอร์ม
+    private void addCalendarAttributes(Model model) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<String> confirmedDates = bookingService.getAllBookings().stream()
+            .filter(b -> b.getBookingStatus() != null && (
+                "Approved".equals(b.getBookingStatus()) ||
+                "Confirmed".equals(b.getBookingStatus()) ||
+                "Completed".equals(b.getBookingStatus())))
+            .map(b -> sdf.format(b.getEventDate()))
+            .collect(Collectors.toList());
+
+        model.addAttribute("bookedDates", confirmedDates.stream().distinct().collect(Collectors.toList()));
+        model.addAttribute("bookingsPerDate", confirmedDates.stream()
+            .collect(Collectors.groupingBy(d -> d, LinkedHashMap::new, Collectors.counting())));
+        model.addAttribute("teamCount", TEAM_COUNT);
+        model.addAttribute("dayQuality", dayQualityCache);
+    }
     
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -65,9 +118,9 @@ public class BookingFormController {
         if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
 
         String mainType = "ทำบุญบ้าน";
-        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(1); // c1 = มาตรฐาน (ตัวแทนคำถาม)
-        List<Ceremony> ceremonies = ceremonyService.getCeremoniesByType(mainType);    // 3 แพ็กเกจ: มาตรฐาน/อิ่มบุญ/พรีเมียม
-        Ceremony customCeremony = ceremonyService.getCustomCeremonyByType(mainType);  // c10
+        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(1);
+        List<Ceremony> ceremonies = ceremonyService.getCeremoniesByType(mainType);
+        Ceremony customCeremony = ceremonyService.getCustomCeremonyByType(mainType);
 
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
@@ -79,6 +132,7 @@ public class BookingFormController {
         model.addAttribute("pintoItems", pintoItems);
         model.addAttribute("sanghatharnItems", sanghatharnItems);
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
+        addCalendarAttributes(model);
 
         return "fillBookingForm";
     }
@@ -89,9 +143,9 @@ public class BookingFormController {
         if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
 
         String mainType = "ขึ้นบ้านใหม่";
-        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(4); // c4 = มาตรฐาน
+        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(4);
         List<Ceremony> ceremonies = ceremonyService.getCeremoniesByType(mainType);
-        Ceremony customCeremony = ceremonyService.getCustomCeremonyByType(mainType);  // c11
+        Ceremony customCeremony = ceremonyService.getCustomCeremonyByType(mainType);
 
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
@@ -103,6 +157,7 @@ public class BookingFormController {
         model.addAttribute("pintoItems", pintoItems);
         model.addAttribute("sanghatharnItems", sanghatharnItems);
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
+        addCalendarAttributes(model);
 
         return "fillBookingForm2";
     }
@@ -113,9 +168,9 @@ public class BookingFormController {
         if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
 
         String mainType = "ทำบุญบริษัทหรือออฟฟิศ";
-        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(7); // c7 = มาตรฐาน
+        List<QuestionsDetail> questions = questionsService.getQuestionsByCeremony(7);
         List<Ceremony> ceremonies = ceremonyService.getCeremoniesByType(mainType);
-        Ceremony customCeremony = ceremonyService.getCustomCeremonyByType(mainType);  // c12
+        Ceremony customCeremony = ceremonyService.getCustomCeremonyByType(mainType);
 
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
@@ -127,11 +182,11 @@ public class BookingFormController {
         model.addAttribute("pintoItems", pintoItems);
         model.addAttribute("sanghatharnItems", sanghatharnItems);
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
+        addCalendarAttributes(model);
 
         return "fillBookingForm3";
     }
 
-    // เพิ่ม helper method นี้ไว้ท้าย class เพื่อไม่ต้องเขียนซ้ำ 3 รอบ
     private List<Map<String, Object>> buildCeremonyTypesForFooter() {
         List<Ceremony> all = ceremonyService.getAllCeremonies();
         Map<String, List<Ceremony>> grouped = all.stream()
@@ -159,8 +214,6 @@ public class BookingFormController {
         Member loginUser = (Member) session.getAttribute("user");
         if (loginUser == null) return "redirect:/loginMember";
 
-        // 1. ดึง ID ออกมาจาก Object ที่ถูก bind มาแล้ว
-        // Spring จะนำค่า ceremonyId จาก JSP ไปใส่ใน booking.getCeremony().getCeremonyId() ให้โดยอัตโนมัติ
         if (booking.getCeremony() == null || booking.getCeremony().getCeremonyId() == 0) {
             return "redirect:/booking?error=noCeremony";
         }
@@ -168,11 +221,9 @@ public class BookingFormController {
         int ceremonyId = booking.getCeremony().getCeremonyId();
         Ceremony ceremony = ceremonyService.getCeremonyById(ceremonyId);
         
-        // 2. set ค่ากลับเข้าไปเพื่อให้แน่ใจว่าเป็น Object ที่สมบูรณ์
         booking.setCeremony(ceremony);
         booking.setMember(loginUser);
 
-     // รวบรวม imageBase64[0], imageBase64[1], ... จาก allParams
         List<String> imageBase64List = new ArrayList<>();
         for (int i = 0; ; i++) {
             String val = allParams.get("imageBase64[" + i + "]");
@@ -201,8 +252,6 @@ public class BookingFormController {
             }
         }
 
-        // 2. บันทึกทุกอย่างลง Database ในคราวเดียว (Transaction)
-        // ตรงนี้คือการนำค่า addressImage ที่ set ไว้ข้างบน ลงไปในตาราง booking
         BookingForm saved = bookingService.saveBooking(booking);
         return "redirect:/viewBooking/" + saved.getBookingId();
     }
@@ -215,7 +264,6 @@ public class BookingFormController {
 
         boolean alreadyReviewed = reviewService.hasAlreadyReviewed(id);
 
-        // เพิ่มแค่นี้
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
 
@@ -231,33 +279,27 @@ public class BookingFormController {
         Member user = (Member) session.getAttribute("user");
         if (user == null) return "redirect:/loginMember";
 
-        // ลองดึงข้อมูล
         BookingForm latest = bookingService.getLatestBookingByMember(user.getMemberId());
 
         if (latest != null && latest.getBookingId() != null) {
-            //  ถ้าเจอ ให้ส่งไปหน้าสรุป
             return "redirect:/viewBooking/" + latest.getBookingId();
         } else {
-            //  ถ้าไม่เจอ (เช่น สมาชิกใหม่ยังไม่เคยจอง) ให้ส่งไปหน้าจองใหม่แทน
             return "redirect:/booking"; 
         }
     }
     
- // เพิ่มใน BookingFormController.java
     @GetMapping("/booking/cancel/{id}")
     public String cancelBooking(@PathVariable String id, HttpSession session, RedirectAttributes ra) {
         Member loginUser = (Member) session.getAttribute("user");
         if (loginUser == null) return "redirect:/loginMember";
         
         try {
-            // เปลี่ยนมาเรียกใช้ระบบปฏิเสธ/ยกเลิกงาน เพื่อสับเปลี่ยนสถานะเป็น Rejected หรือ Cancelled ใน DB
             bookingService.rejectBooking(id);
             ra.addFlashAttribute("success", "ยกเลิกรายการจองสำเร็จแล้ว");
         } catch(Exception e) {
             ra.addFlashAttribute("error", "เกิดข้อผิดพลาดในการยกเลิก: " + e.getMessage());
         }
         
-        // เด้งกลับหน้าหลัก (Home) ทันทีตามต้องการ ไม่แช่ค้างไว้ที่เดิมให้ปวดตับครับ!
         return "redirect:/home";
     }
     //=====================

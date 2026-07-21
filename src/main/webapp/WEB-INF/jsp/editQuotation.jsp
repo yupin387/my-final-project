@@ -70,6 +70,10 @@
                 <span class="info-value">${q.bookingForm.ceremony.ceremonyType}</span>
             </div>
             <div class="info-box">
+                <span class="info-label">รูปแบบการจอง</span>
+                <span class="info-value">${q.bookingForm.ceremony.ceremonyName}</span>
+            </div>
+            <div class="info-box">
                 <span class="info-label">ลูกค้า</span>
                 <span class="info-value">${q.bookingForm.member.memberFirstName} ${q.bookingForm.member.memberLastName}</span>
             </div>
@@ -89,6 +93,25 @@
           action="${pageContext.request.contextPath}/organizer/quotation/update"
           method="post" onsubmit="return validateForm()">
         <input type="hidden" name="quotationId" value="${q.quotationId}">
+
+        <%-- ชื่อแพ็กเกจ/รูปแบบการจอง ใช้แยกแถวแพ็กเกจออกจากหมวดอื่น ไม่ให้แสดงซ้ำ
+             (รายการแพ็กเกจถูกบันทึกโดยใช้ itemName == ceremonyName ดู QuotationService) --%>
+        <c:set var="packageName" value="${q.bookingForm.ceremony.ceremonyName}"/>
+
+        <%-- ดึงจำนวนพระ + รูปแบบการนิมนต์จากฟอร์มจองต้นทาง มาแสดงเป็นข้อมูลในกล่องด้านบนเท่านั้น
+             ไม่ใช่รายการคิดเงินแยก เพราะรวมอยู่ใน basePrice ของแพ็กเกจแล้ว (กรณีแพ็กเกจจริง)
+             ใช้ fn:contains แทน == ตรงๆ เพราะ monkInviteType มีได้ 2 ค่าตามโหมดการจอง:
+             โหมดแพ็กเกจ = "นิมนต์เอง (ลด ฿1,500)" / โหมดกรอกเอง = "นิมนต์เอง" --%>
+        <c:set var="monkInviteType" value=""/>
+        <c:set var="monkCount" value=""/>
+        <c:forEach var="bd" items="${q.bookingForm.details}">
+            <c:if test="${fn:contains(bd.question.questionsText,'รูปแบบการนิมนต์')}">
+                <c:set var="monkInviteType" value="${bd.answer}"/>
+            </c:if>
+            <c:if test="${fn:contains(bd.question.questionsText,'จำนวนพระ')}">
+                <c:set var="monkCount" value="${bd.answer}"/>
+            </c:if>
+        </c:forEach>
 
         <div class="main-layout">
             <div class="card">
@@ -114,11 +137,146 @@
                             </tr>
                         </thead>
 
-                        <%-- หมวดอุปกรณ์พิธีกรรม --%>
+                        <%-- ===================================================================
+                             หมวดแพ็กเกจหลัก / รูปแบบการจอง
+                             - แพ็กเกจจริง (มาตรฐาน/อิ่มบุญ/พรีเมียม): หาแถวแพ็กเกจใน details ก่อน
+                               ถ้าไม่เจอ (ใบเสนอราคาเก่าที่สร้างก่อนแก้ระบบ) ให้ fallback ไปโชว์ basePrice
+                             - กรอกความต้องการเบื้องต้น: ไม่มีของแถมฟรี ไม่มีราคาตายตัว ไม่มี fallback
+                               เพราะไม่ควรมีการบันทึกแถวราคาแพ็กเกจสำหรับกรณีนี้ตั้งแต่แรก
+                             =================================================================== --%>
+                        <tbody id="group-package">
+                            <tr class="group-row">
+                                <td colspan="8">
+                                    <c:choose>
+                                        <c:when test="${isCustomRequest}">
+                                            รูปแบบการจอง: ${q.bookingForm.ceremony.ceremonyType} (กรอกความต้องการเบื้องต้น
+                                            — ไม่มีแพ็กเกจตายตัว รายการทั้งหมดอยู่ในหมวดต่าง ๆ ด้านล่าง)
+                                        </c:when>
+                                        <c:otherwise>
+                                            แพ็กเกจ: ${q.bookingForm.ceremony.ceremonyType} (${packageName})
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                            </tr>
+
+                            <c:choose>
+                                <%-- ===== กรณีแพ็กเกจจริง: แสดงแถวราคาแพ็กเกจ (จาก details หรือ fallback) ===== --%>
+                                <c:when test="${!isCustomRequest}">
+                                    <c:set var="packageDetailFound" value="false"/>
+                                    <c:forEach var="d" items="${details}">
+                                        <c:if test="${d.item != null && d.item.itemName == packageName}">
+                                            <c:set var="packageDetailFound" value="true"/>
+                                            <tr class="static-row" data-item-id="${d.item.itemId}">
+                                                <td class="row-number" style="text-align:center;">1</td>
+                                                <td>
+                                                    <span class="item-name">${d.item.itemName}</span>
+                                                    <c:if test="${not empty d.item.itemDetail}">
+                                                        <span class="item-desc">${d.item.itemDetail}</span>
+                                                    </c:if>
+                                                    <c:if test="${not empty monkCount}">
+                                                        <span class="item-desc" style="display:block;margin-top:4px;">
+                                                            นิมนต์พระสงฆ์ ${monkCount} รูป
+                                                            <c:if test="${fn:contains(monkInviteType,'นิมนต์เอง')}">
+                                                                <span style="color:#c0392b;font-weight:600;"> (ลูกค้านิมนต์เอง)</span>
+                                                            </c:if>
+                                                        </span>
+                                                    </c:if>
+                                                    <c:if test="${not empty packageIncludedItems}">
+                                                        <div class="item-desc" style="margin-top:6px;">
+                                                            <c:forEach var="pkgItem" items="${packageIncludedItems}">
+                                                                - ${pkgItem.itemName}<br/>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </c:if>
+                                                    <input type="hidden" name="bookingItemNames" value="${d.item.itemName}">
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="bookingQtys" value="1" min="1"
+                                                           class="qty-input" readonly style="text-align:center; background:#f4f4f4;">
+                                                </td>
+                                                <td style="text-align:center;">${d.item.unit}</td>
+                                                <td>
+                                                    <input type="number" name="bookingPrices" value="${d.item.pricePerUnit}"
+                                                           step="0.01" min="0" class="price-input" style="text-align:right;"
+                                                           onchange="calculateGrandTotal()">
+                                                </td>
+                                                <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
+                                                <td><input type="text" name="detailNotes" value="${d.note}" class="note-input" placeholder="หมายเหตุ"></td>
+                                                <td style="text-align:center;">-</td>
+                                            </tr>
+                                        </c:if>
+                                    </c:forEach>
+                                    <c:if test="${!packageDetailFound}">
+                                        <%-- ใบเสนอราคาเก่าที่ยังไม่มีแถวแพ็กเกจ (สร้างก่อนแก้ระบบ) ให้ fallback ใส่ basePrice แทน --%>
+                                        <tr class="static-row">
+                                            <td class="row-number" style="text-align:center;">1</td>
+                                            <td>
+                                                <span class="item-name">${packageName}</span>
+                                                <span class="item-desc">${q.bookingForm.ceremony.ceremonyDetail}</span>
+                                                <c:if test="${not empty packageIncludedItems}">
+                                                    <div class="item-desc" style="margin-top:6px;">
+                                                        <c:forEach var="pkgItem" items="${packageIncludedItems}">
+                                                            - ${pkgItem.itemName}<br/>
+                                                        </c:forEach>
+                                                    </div>
+                                                </c:if>
+                                                <input type="hidden" name="bookingItemNames" value="${packageName}">
+                                            </td>
+                                            <td>
+                                                <input type="number" name="bookingQtys" value="1" min="1"
+                                                       class="qty-input" readonly style="text-align:center; background:#f4f4f4;">
+                                            </td>
+                                            <td style="text-align:center;">แพ็กเกจ</td>
+                                            <td>
+                                                <input type="number" name="bookingPrices" value="${q.bookingForm.ceremony.basePrice}"
+                                                       step="0.01" min="0" class="price-input" style="text-align:right;"
+                                                       onchange="calculateGrandTotal()">
+                                            </td>
+                                            <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
+                                            <td><input type="text" name="detailNotes" class="note-input" placeholder="หมายเหตุ"></td>
+                                            <td style="text-align:center;">-</td>
+                                        </tr>
+                                    </c:if>
+                                </c:when>
+
+                                <%-- ===== กรณีกรอกความต้องการเบื้องต้น: ไม่มีแถวราคา ไม่มี fallback
+                                     แสดงแค่คำอธิบาย รายการทั้งหมดอยู่ในหมวดอุปกรณ์/ภัตตาหาร/สังฆทาน/บริการด้านล่างแทน ===== --%>
+                                <c:otherwise>
+                                    <tr class="static-row">
+                                        <td class="row-number" style="text-align:center;"></td>
+                                        <td colspan="7">
+                                            <span class="item-name">${packageName}</span>
+                                            <c:if test="${not empty q.bookingForm.ceremony.ceremonyDetail}">
+                                                <span class="item-desc">${q.bookingForm.ceremony.ceremonyDetail}</span>
+                                            </c:if>
+                                            <c:if test="${not empty monkCount}">
+                                                <span class="item-desc" style="display:block;margin-top:4px;">
+                                                    นิมนต์พระสงฆ์ ${monkCount} รูป
+                                                    <c:if test="${fn:contains(monkInviteType,'นิมนต์เอง')}">
+                                                        <span style="color:#c0392b;font-weight:600;"> (ลูกค้านิมนต์เอง)</span>
+                                                    </c:if>
+                                                </span>
+                                            </c:if>
+                                            <div class="item-desc" style="margin-top:6px; color:#c0392b;">
+                                                * งานนี้ไม่มีแพ็กเกจตายตัว รายการวัสดุ/บริการทั้งหมดที่เลือกไว้
+                                                แสดงอยู่ในหมวดต่าง ๆ ด้านล่าง กดปุ่ม "เลือกรายการวัสดุอุปกรณ์เสริมเพิ่มเติม"
+                                                เพื่อเพิ่ม/แก้ไขรายการได้
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </c:otherwise>
+                            </c:choose>
+                        </tbody>
+
+                        <%-- หมวดอุปกรณ์พิธีกรรม
+                             FIX: เดิมห่อด้วย <c:if test="${hasEquipmentRow}"> ทำให้ tbody นี้ไม่ถูก render เลย
+                             ถ้าใบเสนอราคายังไม่มีรายการหมวดนี้บันทึกไว้สักชิ้น -> JS หา container ไม่เจอ
+                             -> กดเลือกอุปกรณ์จาก popup แล้วกด "ตกลง" ใช้ไม่ได้ (เหมือนบั๊กเดิมในหน้า create)
+                             จึงต้อง render tbody นี้เสมอ ปล่อยให้ forEach ว่างเองถ้าไม่มีข้อมูล --%>
                         <tbody id="group-equipment">
-                            <tr class="group-row"><td colspan="8">หมวดอุปกรณ์พิธีกรรม</td></tr>
+                            <tr class="group-row"><td colspan="8">หมวดอุปกรณ์พิธีกรรมเสริม</td></tr>
                             <c:forEach var="d" items="${details}">
-                                <c:if test="${d.item != null && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
+                                <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
                                     <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                         <td class="row-number" style="text-align:center;"></td>
                                         <td>
@@ -148,11 +306,11 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- หมวดภัตตาหารปิ่นโต --%>
+                        <%-- หมวดภัตตาหารปิ่นโต (FIX: render เสมอ เหตุผลเดียวกับหมวดอุปกรณ์ด้านบน) --%>
                         <tbody id="group-food">
                             <tr class="group-row"><td colspan="8">หมวดภัตตาหารปิ่นโต</td></tr>
                             <c:forEach var="d" items="${details}">
-                                <c:if test="${d.item != null && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
+                                <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                                     <tr class="static-row" data-item-id="${d.item.itemId}">
                                         <td class="row-number" style="text-align:center;"></td>
                                         <td>
@@ -182,11 +340,11 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- หมวดสังฆทาน --%>
+                        <%-- หมวดสังฆทาน (FIX: render เสมอ เหตุผลเดียวกับหมวดอุปกรณ์ด้านบน) --%>
                         <tbody id="group-sangkathan">
                             <tr class="group-row"><td colspan="8">หมวดสังฆทาน</td></tr>
                             <c:forEach var="d" items="${details}">
-                                <c:if test="${d.item != null && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
+                                <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                                     <tr class="static-row" data-item-id="${d.item.itemId}">
                                         <td class="row-number" style="text-align:center;"></td>
                                         <td>
@@ -216,78 +374,82 @@
                             </c:forEach>
                         </tbody>
 
-                      <%-- หมวดบริการและการดำเนินการ --%>
-<tbody id="group-service">
-<tr class="group-row"><td colspan="8">หมวดบริการและการดำเนินการ</td></tr>
+                        <%-- หมวดบริการและการดำเนินการ (รวมบริการนิมนต์พระ)
+                             FIX 1: render เสมอ เหตุผลเดียวกับหมวดอุปกรณ์ด้านบน
+                             FIX 2: กรณี "กรอกความต้องการเบื้องต้น" ถ้ายังไม่มีแถว "บริการประสานงานนิมนต์พระ"
+                             บันทึกไว้ใน details เลย (ใบเสนอราคาเก่าก่อนแก้ระบบ หรือถูกลบไปโดยไม่ตั้งใจ)
+                             ให้ fallback auto-add แถวนี้ให้ โดยใช้ monkCount จากฟอร์มจองต้นทาง
+                             เงื่อนไข: isCustomRequest, ยังไม่เจอในของที่บันทึกแล้ว, ไม่ใช่ "นิมนต์เอง",
+                             และมี monkCount จริง (เหมือน pattern เดียวกับหน้า create) --%>
+                        <tbody id="group-service">
+                            <tr class="group-row"><td colspan="8">หมวดบริการและการดำเนินการเสริม</td></tr>
 
-<%-- เช็คก่อนว่าลูกค้าเลือกรูปแบบการนิมนต์แบบไหน (ดึงจากคำตอบต้นทางในฟอร์มจอง) --%>
-<c:set var="monkInviteType" value=""/>
-<c:forEach var="bd" items="${q.bookingForm.details}">
-    <c:if test="${fn:contains(bd.question.questionsText,'รูปแบบการนิมนต์')}">
-        <c:set var="monkInviteType" value="${bd.answer}"/>
-    </c:if>
-</c:forEach>
+                            <c:set var="monkInviteServiceFound" value="false"/>
+                            <c:forEach var="d" items="${details}">
+                                <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
+                                    <c:if test="${fn:trim(d.item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">
+                                        <c:set var="monkInviteServiceFound" value="true"/>
+                                    </c:if>
+                                    <tr class="dynamic-row" data-item-id="${d.item.itemId}">
+                                        <td class="row-number" style="text-align:center;"></td>
+                                        <td>
+                                            <span class="item-name">${d.item.itemName}</span>
+                                            <c:if test="${not empty d.item.itemDetail}">
+                                                <span class="item-desc">${d.item.itemDetail}</span>
+                                            </c:if>
+                                            <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
+                                        </td>
+                                        <td>
+                                            <input type="number" name="extraQtys" value="${d.quantity}" min="1"
+                                                   class="qty-input" style="text-align:center;" onchange="calculateGrandTotal()">
+                                        </td>
+                                        <td style="text-align:center;">${d.item.unit}</td>
+                                        <td>
+                                            <input type="number" name="extraPrices" value="${d.item.pricePerUnit}"
+                                                   step="0.01" min="0" class="price-input" style="text-align:right;"
+                                                   onchange="calculateGrandTotal()">
+                                        </td>
+                                        <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
+                                        <td><input type="text" name="detailNotes" value="${d.note}" class="note-input" placeholder="หมายเหตุ"></td>
+                                        <td style="text-align:center;">
+                                            <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
+                                        </td>
+                                    </tr>
+                                </c:if>
+                            </c:forEach>
 
-    <c:forEach var="d" items="${details}">
-        <c:if test="${d.item != null && d.item.itemId == 1}">
-            <tr class="static-row" data-item-id="1">
-                <td class="row-number" style="text-align:center;"></td>
-                <td>
-                    <span class="item-name">
-                        นิมนต์พระสงฆ์
-                        <c:if test="${monkInviteType == 'นิมนต์เอง'}">
-                            <span style="color:#c0392b;font-weight:600;"> (ลูกค้านิมนต์เอง)</span>
-                        </c:if>
-                    </span>
-                    <span class="item-desc">ติดต่อประสานงานและนิมนต์พระสงฆ์</span>
-                    <input type="hidden" name="extraItemIds" value="1">
-                </td>
-                <td>
-                    <input type="number" name="extraQtys" value="${d.quantity}" min="1"
-                           class="qty-input" style="text-align:center;" onchange="calculateGrandTotal()">
-                </td>
-                <td style="text-align:center;">รูป</td>
-                <td>
-                    <input type="number" name="extraPrices" value="200.00"
-                           step="0.01" min="0" class="price-input" style="text-align:right;"
-                           onchange="calculateGrandTotal()">
-                </td>
-                <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
-                <td><input type="text" name="detailNotes" value="${d.note}" class="note-input"></td>
-                <td style="text-align:center;">-</td>
-            </tr>
-        </c:if>
-    </c:forEach>
-    <c:forEach var="d" items="${details}">
-        <c:if test="${d.item != null && d.item.itemId != 1 && d.item.itemType.itemTypeName.contains('บริการ')}">
-            <tr class="dynamic-row" data-item-id="${d.item.itemId}">
-                <td class="row-number" style="text-align:center;"></td>
-                <td>
-                    <span class="item-name">${d.item.itemName}</span>
-                    <c:if test="${not empty d.item.itemDetail}">
-                        <span class="item-desc">${d.item.itemDetail}</span>
-                    </c:if>
-                    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
-                </td>
-                <td>
-                    <input type="number" name="extraQtys" value="${d.quantity}" min="1"
-                           class="qty-input" style="text-align:center;" onchange="calculateGrandTotal()">
-                </td>
-                <td style="text-align:center;">${d.item.unit}</td>
-                <td>
-                    <input type="number" name="extraPrices" value="${d.item.pricePerUnit}"
-                           step="0.01" min="0" class="price-input" style="text-align:right;"
-                           onchange="calculateGrandTotal()">
-                </td>
-                <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
-                <td><input type="text" name="detailNotes" value="${d.note}" class="note-input" placeholder="หมายเหตุ"></td>
-                <td style="text-align:center;">
-                    <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
-                </td>
-            </tr>
-        </c:if>
-    </c:forEach>
-</tbody>
+                            <c:if test="${isCustomRequest && !monkInviteServiceFound && not fn:contains(monkInviteType,'นิมนต์เอง') && not empty monkCount}">
+                                <c:forEach var="item" items="${items}">
+                                    <c:if test="${fn:trim(item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">
+                                        <tr class="dynamic-row" data-item-id="${item.itemId}">
+                                            <td class="row-number" style="text-align:center;"></td>
+                                            <td>
+                                                <span class="item-name">${item.itemName}</span>
+                                                <c:if test="${not empty item.itemDetail}">
+                                                    <span class="item-desc">${item.itemDetail}</span>
+                                                </c:if>
+                                                <input type="hidden" name="extraItemIds" value="${item.itemId}">
+                                            </td>
+                                            <td>
+                                                <input type="number" name="extraQtys" value="${monkCount}" min="1"
+                                                       class="qty-input" style="text-align:center;" onchange="calculateGrandTotal()">
+                                            </td>
+                                            <td style="text-align:center;">${item.unit}</td>
+                                            <td>
+                                                <input type="number" name="extraPrices" value="${item.pricePerUnit}"
+                                                       step="0.01" min="0" class="price-input" style="text-align:right;"
+                                                       onchange="calculateGrandTotal()">
+                                            </td>
+                                            <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
+                                            <td><input type="text" name="detailNotes" class="note-input" placeholder="หมายเหตุ"></td>
+                                            <td style="text-align:center;">
+                                                <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
+                                            </td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                            </c:if>
+                        </tbody>
                     </table>
 
                     <button type="button" class="btn-open-popup" onclick="openItemModal()">
@@ -325,9 +487,9 @@
     </div>
 </div>
 
-<%-- ITEM DATA STORE (เพิ่มเข้ามา — จำเป็นสำหรับ popup เลือกสินค้า) --%>
+<%-- ITEM DATA STORE: ใช้ extraSelectableItems (ไม่รวมของที่ผูกกับทุกแพ็กเกจอยู่แล้ว) ให้ตรงกับหน้า create --%>
 <div id="itemDataStore" style="display:none;">
-    <c:forEach var="item" items="${items}">
+    <c:forEach var="item" items="${extraSelectableItems}">
         <div class="item-data"
              data-id="${item.itemId}"
              data-name="${item.itemName}"

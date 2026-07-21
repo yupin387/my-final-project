@@ -1,0 +1,344 @@
+{
+  "month": 1,
+  "monthNameThai": "มกราคม",
+  "yearCE": 2026,
+  "chulasakaratStart": 1387,
+  "chulasakaratEnd": 1387,
+  "days": [
+    {
+      "date": 1,
+      "weekday": "พฤหัสบดี",
+      "lunar": "เดือน 4 ออก 13 ค่ำ",
+      "faTiSaengSet": 0,
+      "lannaDayName": "วันดับใค้",
+      "lannaDaySubName": "วันขว้ำได้",
+      "tags": [
+        "วันหัวเรียงหมอน"
+      ]
+    },
+    {
+      "date": 2,
+      "weekday": "ศุกร์",
+      "lunar": "เดือน 4 ออก 14 ค่ำ",
+      "faTiSaengSet": 5,
+      "lannaDayName": "วันรวายใจ้",
+      "lannaDaySubName": "วันไสเจ้า",
+      "tags": [
+        "วันเสีย"
+      ]
+    },
+    {
+      "date": 3,
+      "weekday": "เสาร์",
+      "lunar": "เดือน 4 ออก 15 ค่ำ",
+      "faTiSaengSet": 1,
+      "lannaDayName": "วันเมืองเป้า",
+      "lannaDaySubName": "วันไสเสีย",
+      "tags": [
+        "วันมหาสิทธิโชค",
+        "วันทานข้าวใหม่",
+        "วันทานหลัวหิงไฟพระเจ้า"
+      ]
+    },
+    {
+      "date": 4,
+      "weekday": "อาทิตย์",
+      "lunar": "เดือน 4 แรม 1 ค่ำ",
+      "faTiSaengSet": 6,
+      "lannaDayName": "วันเปิกยี",
+      "lannaDaySubName": "วันท้ายป้าว",
+      "tags": [
+        "วันไหม้"
+      ]
+    },
+    {
+      "date": 5,
+      "weekday": "จันทร์",
+      "lunar": "เดือน 4 แรม 2 ค่ำ",
+      "faTiSaengSet": 2,
+      "lannaDayName": "วันกัดเหม้า",
+      "lannaDaySubName": "วันยีเพียง",
+      "tags": []
+    },
+    {
+      "date": 6,
+      "weekday": "อังคาร",
+      "lunar": "เดือน 4 แรม 3 ค่ำ",
+      "faTiSaengSet": 7,
+      "lannaDayName": "วันกดสี",
+      "lannaDaySubName": "วันเก้ากอง",
+      "tags": [
+        "วันไชยาดิถี"
+      ]
+    },
+    {
+      "date": 7,
+      "weekday": "พุธ",
+      "lunar": "เดือน 4 แรม 4 ค่ำ",
+      "faTiSaengSet": 3,
+      "lannaDayName": "วันร้วงใส้",
+      "lannaDaySubName": "วันรองพืน",
+      "tags": [
+        "วันเสีย"
+      ]
+    },
+    {
+      "date": 8,
+      "weekday": "พฤหัสบดี",
+      "lunar": "เดือน 4 แรม 5 ค่ำ",
+      "faTiSaengSet": 8,
+      "lannaDayName": "วันเต่าสะง้า",
+      "lannaDaySubName": "วันพืนดอก",
+      "tags": [
+        "วันไหม้"
+      ]
+    },
+    {
+      "date": 9,
+      "weekday": "ศุกร์",
+      "lunar": "เดือน 4 แรม 6 ค่ำ",
+      "faTiSaengSet": 4,
+      "lannaDayName": "วันก่าเม็ด",
+      "lannaDaySubName": "วันพืนดาย",
+      "tags": [
+        "วันเสีย"
+      ]
+    },
+    {
+      "date": 10,
+      "weekday": "เสาร์",
+      "lunar": "เดือน 4 แรม 7 ค่ำ",
+      "faTiSaengSet": 0,
+      "lannaDayName": "วันกาบสัน",
+      "lannaDaySubName": "วันสุพัก",
+      "tags": [
+        "วันไหม้"
+      ]
+    },
+    {
+      "date": 11,
+      "weekday": "อาทิตย์",
+      "lunar": "เดือน 4 แรม 8 ค่ำ",
+      "faTiSaengSet": 5,
+      "lannaDayName": "วันดับเร้า",
+      "lannaDaySubName": "วันรับได้",
+      "tags": [
+        "วันไชยโชค",
+        "วันอมริสสโชค"
+      ]
+    },
+    {
+      "date": 12,
+      "weekday": "จันทร์",
+      "lunar": "เดือน 4 แรม 9 ค่ำ",
+      "faTiSaengSet": 1,
+      "lannaDayName": "วันรวายเส็ด",
+      "lannaDaySubName": "วันรับตาย",
+      "tags": []
+    },
+    {
+      "date": 13,
+      "weekday": "อังคาร",
+      "lunar": "เดือน 4 แรม 10 ค่ำ",
+      "faTiSaengSet": 6,
+      "lannaDayName": "วันเมืองใค้",
+      "lannaDaySubName": "วันขว้ำได้",
+      "tags": [
+        "วันวอดวาย"
+      ]
+    },
+    {
+      "date": 14,
+      "weekday": "พุธ",
+      "lunar": "เดือน 4 แรม 11 ค่ำ",
+      "faTiSaengSet": 2,
+      "lannaDayName": "วันเปิกใจ้",
+      "lannaDaySubName": "วันไสเจ้า",
+      "tags": [
+        "วันเสีย"
+      ]
+    },
+    {
+      "date": 15,
+      "weekday": "พฤหัสบดี",
+      "lunar": "เดือน 4 แรม 12 ค่ำ",
+      "faTiSaengSet": 7,
+      "lannaDayName": "วันกัดเป้า",
+      "lannaDaySubName": "วันไสเสีย",
+      "tags": []
+    },
+    {
+      "date": 16,
+      "weekday": "ศุกร์",
+      "lunar": "เดือน 4 แรม 13 ค่ำ",
+      "faTiSaengSet": 3,
+      "lannaDayName": "วันกดยี",
+      "lannaDaySubName": "วันท้าวป้าว",
+      "tags": [
+        "วันเสีย"
+      ]
+    },
+    {
+      "date": 17,
+      "weekday": "เสาร์",
+      "lunar": "เดือน 4 แรม 14 ค่ำ",
+      "faTiSaengSet": 8,
+      "lannaDayName": "วันร้วงเหม้า",
+      "lannaDaySubName": "วันยีเพียง",
+      "tags": [
+        "วันริทธาดิถี",
+        "วันหัวเรียงหมอน"
+      ]
+    },
+    {
+      "date": 18,
+      "weekday": "อาทิตย์",
+      "lunar": "เดือน 4 แรม 15 ค่ำ",
+      "faTiSaengSet": 4,
+      "lannaDayName": "วันเต่าสี",
+      "lannaDaySubName": "วันเก้ากอง",
+      "tags": []
+    },
+    {
+      "date": 19,
+      "weekday": "จันทร์",
+      "lunar": "เดือน 5 ออก 1 ค่ำ",
+      "faTiSaengSet": 8,
+      "lannaDayName": "วันก่าใส้",
+      "lannaDaySubName": "วันพืนดอก",
+      "tags": [
+        "วันเสีย"
+      ]
+    },
+    {
+      "date": 20,
+      "weekday": "อังคาร",
+      "lunar": "เดือน 5 ออก 2 ค่ำ",
+      "faTiSaengSet": 4,
+      "lannaDayName": "วันกาบสะง้า",
+      "lannaDaySubName": "วันพืนดาย",
+      "tags": [
+        "วันหัวเรียงหมอน"
+      ]
+    },
+    {
+      "date": 21,
+      "weekday": "พุธ",
+      "lunar": "เดือน 5 ออก 3 ค่ำ",
+      "faTiSaengSet": 0,
+      "lannaDayName": "วันดับเม็ด",
+      "lannaDaySubName": "วันสุพัก",
+      "tags": []
+    },
+    {
+      "date": 22,
+      "weekday": "พฤหัสบดี",
+      "lunar": "เดือน 5 ออก 4 ค่ำ",
+      "faTiSaengSet": 5,
+      "lannaDayName": "วันรวายสัน",
+      "lannaDaySubName": "วันรับได้",
+      "tags": [
+        "วันไชยโชค",
+        "วันอมริสสโชค"
+      ]
+    },
+    {
+      "date": 23,
+      "weekday": "ศุกร์",
+      "lunar": "เดือน 5 ออก 5 ค่ำ",
+      "faTiSaengSet": 1,
+      "lannaDayName": "วันเมืองเร้า",
+      "lannaDaySubName": "วันรับตาย",
+      "tags": []
+    },
+    {
+      "date": 24,
+      "weekday": "เสาร์",
+      "lunar": "เดือน 5 ออก 6 ค่ำ",
+      "faTiSaengSet": 6,
+      "lannaDayName": "วันเปิกเส็ด",
+      "lannaDaySubName": "วันขว้ำได้",
+      "tags": [
+        "วันมัจจุ"
+      ]
+    },
+    {
+      "date": 25,
+      "weekday": "อาทิตย์",
+      "lunar": "เดือน 5 ออก 7 ค่ำ",
+      "faTiSaengSet": 2,
+      "lannaDayName": "วันกัดใค้",
+      "lannaDaySubName": "วันไสเจ้า",
+      "tags": [
+        "วันเสีย"
+      ]
+    },
+    {
+      "date": 26,
+      "weekday": "จันทร์",
+      "lunar": "เดือน 5 ออก 8 ค่ำ",
+      "faTiSaengSet": 7,
+      "lannaDayName": "วันกดใจ้",
+      "lannaDaySubName": "วันไสเสีย",
+      "tags": [
+        "วันเสีย"
+      ]
+    },
+    {
+      "date": 27,
+      "weekday": "อังคาร",
+      "lunar": "เดือน 5 ออก 9 ค่ำ",
+      "faTiSaengSet": 3,
+      "lannaDayName": "วันร้วงเป้า",
+      "lannaDaySubName": "วันท้ายป้าว",
+      "tags": [
+        "วันราชาโชค",
+        "วันอมริสสโชค"
+      ]
+    },
+    {
+      "date": 28,
+      "weekday": "พุธ",
+      "lunar": "เดือน 5 ออก 10 ค่ำ",
+      "faTiSaengSet": 8,
+      "lannaDayName": "วันเต่ายี",
+      "lannaDaySubName": "วันยีเพียง",
+      "tags": [
+        "วันวอดวาย"
+      ]
+    },
+    {
+      "date": 29,
+      "weekday": "พฤหัสบดี",
+      "lunar": "เดือน 5 ออก 11 ค่ำ",
+      "faTiSaengSet": 4,
+      "lannaDayName": "วันก่าเหม้า",
+      "lannaDaySubName": "วันเก้ากอง",
+      "tags": [
+        "วันหัวเรียงหมอน"
+      ]
+    },
+    {
+      "date": 30,
+      "weekday": "ศุกร์",
+      "lunar": "เดือน 5 ออก 12 ค่ำ",
+      "faTiSaengSet": 0,
+      "lannaDayName": "วันกาบสี",
+      "lannaDaySubName": "วันรองพืน",
+      "tags": [
+        "วันหัวเรียงหมอน"
+      ]
+    },
+    {
+      "date": 31,
+      "weekday": "เสาร์",
+      "lunar": "เดือน 5 ออก 13 ค่ำ",
+      "faTiSaengSet": 5,
+      "lannaDayName": "วันดับใส้",
+      "lannaDaySubName": "วันพืนดอก",
+      "tags": [
+        "วันหัวเรียงหมอน"
+      ]
+    }
+  ]
+}
