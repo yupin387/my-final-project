@@ -54,13 +54,11 @@
 <%-- ========== FORM ========== --%>
 <div class="page-wrapper">
     <div class="form-container">
-    <form action="${pageContext.request.contextPath}/saveBooking" method="post" onsubmit="syncAllWatAnswersBeforeSubmit(); return cleanupAndRenumberDetailsBeforeSubmit();">
+    <form action="${pageContext.request.contextPath}/saveBooking" method="post" novalidate onsubmit="return handleFormSubmit(this);">
         <c:set var="detailIndex" value="0"/>
 
         <%-- =========================================================
              0. เลือกวิธีจอง — แพ็กเกจแนะนำ / ความต้องการเบื้องต้น
-             ถ้ามาจากปุ่ม "เลือกจองแพ็กเกจนี้" (มี ceremonyId ติดมา) ให้ default
-             ไปที่โหมดแพ็กเกจเสมอ ส่วน custom=true จากปุ่ม "จองแบบระบุเอง" ให้ default โหมด custom
              ========================================================= --%>
         <c:set var="startInCustomMode" value="${param.custom == 'true'}"/>
         <div class="form-card">
@@ -83,7 +81,6 @@
 
         <%-- =========================================================
              ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่ / รูปภาพ
-             วันที่จัดงานถูกบังคับเลือกไว้แล้วตั้งแต่หน้าปฏิทิน/หน้ารายละเอียดงาน
              ========================================================= --%>
         <div class="form-grid">
             <div>
@@ -103,16 +100,35 @@
                     <div class="card-body">
                         <div class="row-grid">
                             <div class="form-group">
-							    <label class="form-label">วันที่จัดงาน <span class="required">*</span></label>
-							    
-							    <%-- เปลี่ยนจาก input เดิม เป็น date picker --%>
-							    <input type="date" name="eventDate" class="form-control" required
-							           value="${not empty param.dates ? param.dates : selectedDates}">
-							    
-							    <p style="font-size:12px;color:#B0345A;margin-top:6px;">
-							        คุณสามารถเลือกวันที่จัดงานได้โดยตรงจากช่องด้านบน
-							    </p>
-							</div>
+                                <label class="form-label">วันที่จัดงาน <span class="required">*</span></label>
+
+                                <%-- ปฏิทินย่อ: เลือกวันได้ในฟอร์มเลย พร้อมเช็คว่าง/เหลือคิว/เต็มคิว/ฤกษ์ดี --%>
+                                <div class="mini-cal-wrap">
+                                    <div class="mini-cal-header">
+                                        <button type="button" class="mini-cal-nav-btn" onclick="miniCalPrevMonth()">&#8249;</button>
+                                        <span id="miniCalMonthTitle"></span>
+                                        <button type="button" class="mini-cal-nav-btn" onclick="miniCalNextMonth()">&#8250;</button>
+                                    </div>
+                                    <div class="mini-cal-grid" id="miniCalGrid">
+                                        <div class="mini-cal-day-label">อา</div>
+                                        <div class="mini-cal-day-label">จ</div>
+                                        <div class="mini-cal-day-label">อ</div>
+                                        <div class="mini-cal-day-label">พ</div>
+                                        <div class="mini-cal-day-label">พฤ</div>
+                                        <div class="mini-cal-day-label">ศ</div>
+                                        <div class="mini-cal-day-label">ส</div>
+                                    </div>
+                                    <div class="mini-cal-legend">
+                                        <span><i class="mini-cal-dot mini-cal-dot-free"></i>ว่าง</span>
+                                        <span><i class="mini-cal-dot mini-cal-dot-almost"></i>เหลือคิวสุดท้าย</span>
+                                        <span><i class="mini-cal-dot mini-cal-dot-full"></i>เต็มคิว</span>
+                                    </div>
+                                    <p id="miniCalSelectedText" class="mini-cal-selected-text">ยังไม่ได้เลือกวันที่</p>
+                                </div>
+
+                                <input type="hidden" name="eventDate" id="eventDateInput"
+                                       value="${not empty param.dates ? param.dates : selectedDates}">
+                            </div>
                             <div class="form-group">
                                 <label class="form-label">เวลาเริ่มพิธี <span class="required">*</span></label>
                                 <input type="time" name="eventTime" class="form-control" required>
@@ -151,11 +167,7 @@
         </div>
 
         <%-- =========================================================
-             1. รายละเอียดการจอง — ใช้ชุดคำถามเดียวกันทั้ง 2 โหมด (ไม่แยกซ้ำอีกต่อไป)
-             ต่างกันแค่ 2 จุด:
-               ก) การ์ด "เลือกแพ็กเกจ" — โชว์เฉพาะโหมดแพ็กเกจ (โหมดกรอกเองใช้ ceremonyId เริ่มต้นแทน)
-               ข) ช่อง "จำนวนพระสงฆ์" — โหมดแพ็กเกจล็อกตามแพ็กเกจที่เลือก / โหมดกรอกเองให้กรอกเอง
-             ส่วนคำถามอื่น (สังฆทาน / ปิ่นโต / การนิมนต์) ใช้ร่วมกันทั้งหมด
+             1. รายละเอียดการจอง — ใช้ชุดคำถามเดียวกันทั้ง 2 โหมด
              ========================================================= --%>
 
         <%-- 1.1 เลือกแพ็กเกจ — โชว์เฉพาะโหมดแพ็กเกจ --%>
@@ -164,8 +176,6 @@
             <div class="card-body">
                 <div class="item-card-grid">
                     <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
-                        <%-- Ceremony ไม่มีฟิลด์เก็บจำนวนพระ จึงกำหนดตามชื่อแพ็กเกจตามธรรมเนียมของโปรเจกต์ (มาตรฐาน=5, อิ่มบุญ=7, พรีเมียม=9)
-                             FIX: กัน NullPointerException ถ้า ceremonyName เป็น null (fn:contains ไม่รองรับ null) --%>
                         <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
                         <c:choose>
                             <c:when test="${fn:contains(pkgNameSafe, 'พรีเมียม')}">
@@ -178,7 +188,6 @@
                                 <c:set var="pkgMonkCount" value="5"/>
                             </c:otherwise>
                         </c:choose>
-                        <%-- FIX: preselect ตาม param.ceremonyId ถ้ามี ไม่งั้น fallback เป็นตัวแรก --%>
                         <c:set var="isPkgSelected"
                                value="${(not empty param.ceremonyId and param.ceremonyId == pkg.ceremonyId) or (empty param.ceremonyId and loop.first)}"/>
                         <label class="item-card">
@@ -203,7 +212,6 @@
             </div>
         </div>
 
-        <%-- โหมดกรอกเอง: ไม่มีการ์ดเลือกแพ็กเกจ จึงส่ง ceremonyId เริ่มต้นแทนด้วยฟิลด์ซ่อนนี้ --%>
         <div id="customCeremonyWrap" style="${startInCustomMode ? 'display:block;' : 'display:none;'}">
             <input type="hidden" name="ceremony.ceremonyId" id="customCeremonyId" value="${defaultCeremonyId}">
         </div>
@@ -225,7 +233,6 @@
                                     <span>ให้ทางร้านนิมนต์</span>
                                 </label>
                                 <label class="checkbox-label">
-                                    <%-- ส่วนลด ฿1,500 มีผลเฉพาะตอนจองแบบแพ็กเกจเท่านั้น (สคริปต์จะสลับค่า/ซ่อนข้อความให้อัตโนมัติตามโหมด) --%>
                                     <input type="radio" name="details[${detailIndex}].answer" id="selfInviteRadio"
                                            value="${startInCustomMode ? 'นิมนต์เอง' : 'นิมนต์เอง (ลด ฿1,500)'}"
                                            onchange="toggleWatDetailBlock('watDetail', false)">
@@ -238,10 +245,6 @@
                     </c:if>
                 </c:forEach>
 
-                <%-- FIX: โหมดแพ็กเกจไม่ต้องโชว์คำถามนี้เลย (จำนวนพระถูกกำหนดจากแพ็กเกจที่เลือกอยู่แล้ว)
-                     โชว์ให้กรอกเฉพาะตอนเลือก "ความต้องการเบื้องต้น" (โหมดกรอกเอง) เท่านั้น
-                     หมายเหตุ: ยังคง "ส่งค่าคำตอบ" นี้อยู่เสมอแม้ตอนถูกซ่อน (ดู cleanupAndRenumberDetailsBeforeSubmit)
-                     เพราะระบบใช้ค่านี้เป็นค่าเริ่มต้นของ "จำนวนชุดสังฆทาน" และช่องเลือกวัดอยู่เบื้องหลัง --%>
                 <c:forEach items="${questions}" var="q">
                     <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
                         <div class="form-group" id="monkCountGroup" style="margin-top:14px; ${startInCustomMode ? 'display:block;' : 'display:none;'}">
@@ -258,10 +261,6 @@
                     </c:if>
                 </c:forEach>
 
-                <%-- แสดงเมื่อเลือก "ให้ทางร้านนิมนต์" — เลือกว่าจะให้นิมนต์ต่างวัด หรือให้ร้านเลือกวัดให้เอง
-                     FIX ตามคำแนะนำอาจารย์: จำนวนช่องเลือกวัดต้องเท่ากับจำนวนพระสงฆ์ที่นิมนต์ทั้งหมด
-                     (ไม่จำกัดไว้แค่ 2 รูปเหมือนเดิม) แต่ละช่อง/แต่ละรูปเลือกได้อิสระว่าจะระบุวัดที่ต้องการ
-                     เป็นพิเศษ หรือเลือก "ให้ทางร้านเลือกให้" สำหรับรูปนั้นๆ --%>
                 <div id="watDetail" style="display:block; margin-bottom:14px;">
                     <c:forEach items="${questions}" var="q">
                         <c:if test="${fn:contains(q.questionsText, 'รายละเอียดการนิมนต์')}">
@@ -301,12 +300,11 @@
             </div>
         </div>
 
-        <%-- 1.3 เลือกชุดสังฆทาน — ใช้ร่วมกันทั้ง 2 โหมด — จำนวนชุดผูกกับจำนวนพระ --%>
+        <%-- 1.3 เลือกชุดสังฆทาน --%>
         <div class="form-card">
             <div class="card-header">เลือกชุดสังฆทาน</div>
             <div class="card-body">
 
-                <%-- จำนวนชุดสังฆทาน = จำนวนพระ โดยค่าเริ่มต้น แต่แก้ไขเองได้ --%>
                 <c:forEach items="${questions}" var="q">
                     <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดสังฆทาน')}">
                         <div class="form-group" style="margin-bottom:14px;">
@@ -352,7 +350,7 @@
             </div>
         </div>
 
-        <%-- 1.4 ชุดภัตตาหารปิ่นโต — ใช้ร่วมกันทั้ง 2 โหมด — จำนวนชุดเลือกเองอิสระ ไม่ผูกกับจำนวนพระ --%>
+        <%-- 1.4 ชุดภัตตาหารปิ่นโต --%>
         <div class="form-card">
             <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
             <div class="card-body">
@@ -383,7 +381,6 @@
 
                 <div id="pintoDetail" style="display:block; margin-top:14px;">
 
-                    <%-- จำนวนชุดปิ่นโต --%>
                     <c:forEach items="${questions}" var="q">
                         <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดภัตตาหาร')}">
                             <div class="form-group" style="margin-bottom:14px;">
@@ -396,7 +393,6 @@
                         </c:if>
                     </c:forEach>
 
-                    <%-- เลือกชุดปิ่นโต --%>
                     <c:forEach items="${questions}" var="q">
                         <c:if test="${fn:contains(q.questionsText, 'เลือกชุดภัตตาหาร')}">
                             <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
@@ -437,7 +433,7 @@
     </div>
 </div>
 
-<%-- ========== FOOTER (ธีมเดียวกับหน้า home) ========== --%>
+<%-- ========== FOOTER ========== --%>
 <footer class="site-footer">
     <div class="footer-top">
         <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:8px;">
@@ -463,7 +459,6 @@
         </div>
 			<div class="footer-col footer-contact-col">
 				<h4 class="footer-heading">ติดต่อเรา</h4>
-				<%-- TODO: ใส่เบอร์โทร / LINE OA / อีเมลจริงของร้านแทนที่ตรงนี้ --%>
 				<p>📞 โทร. 08X-XXX-XXXX</p>
 				<p>💬 LINE OA: @boonmee</p>
 				<p>✉️ boonmee.booking@gmail.com</p>
@@ -516,9 +511,6 @@
 }
 .item-card-price { font-size: 12px; font-weight: 700; color: var(--gold); }
 
-/* ==========================================================================
-   IMAGE LIGHTBOX — คลิกรูปในการ์ด (แพ็กเกจ/ชุดสังฆทาน/ชุดปิ่นโต) เพื่อดูรูปขยาย
-   ========================================================================== */
 .image-lightbox {
     display: none;
     position: fixed;
@@ -547,9 +539,96 @@
     font-weight: 400;
     cursor: pointer;
 }
+
+/* ===== Mini Calendar (เลือกวันที่จัดงานในฟอร์ม) ===== */
+.mini-cal-wrap {
+    border: 1.5px solid var(--cream-border-soft);
+    border-radius: 10px;
+    padding: 12px;
+    background: #FFF9FB;
+}
+.mini-cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brown-dark, #5C3800);
+    margin-bottom: 8px;
+}
+.mini-cal-nav-btn {
+    background: #FBD0DE;
+    border: none;
+    border-radius: 6px;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    color: #B0345A;
+    font-size: 15px;
+}
+.mini-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+}
+.mini-cal-day-label {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 2px 0;
+}
+.mini-cal-cell {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.mini-cal-cell-empty { cursor: default; }
+.mini-cal-cell-free { background: #E9F7EF; border-color: #B7E4C7; }
+.mini-cal-cell-almost { background: #FFF3D6; border-color: #F0CE7E; }
+.mini-cal-cell-booked { background: #FBE3E7; border-color: #E9A9B4; cursor: not-allowed; }
+.mini-cal-cell-past { background: #F0F0F0; border-color: #DADADA; cursor: not-allowed; color: #B0B0B0; }
+.mini-cal-cell-today { outline: 2px solid #E0577F; }
+.mini-cal-cell-selected { outline: 2px solid #B0345A; box-shadow: 0 0 0 2px rgba(224,87,127,0.25); }
+.mini-cal-full-mark {
+    position: absolute;
+    top: 1px;
+    right: 3px;
+    font-size: 9px;
+    color: #B0345A;
+}
+.mini-cal-legend {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+.mini-cal-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    margin-right: 4px;
+}
+.mini-cal-dot-free { background: #B7E4C7; }
+.mini-cal-dot-almost { background: #F0CE7E; }
+.mini-cal-dot-full { background: #E9A9B4; }
+.mini-cal-selected-text {
+    font-size: 12px;
+    color: #B0345A;
+    margin: 8px 0 0;
+    font-weight: 600;
+}
 </style>
 
-<%-- ========== IMAGE LIGHTBOX (คลิกรูปสินค้า/แพ็กเกจเพื่อดูรูปขยาย) ========== --%>
+<%-- ========== IMAGE LIGHTBOX ========== --%>
 <div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
     <span class="image-lightbox-close" onclick="closeLightbox()">&times;</span>
     <img id="lightboxImg" src="" alt="">
@@ -608,7 +687,6 @@ function toggleWatOwnField(id, show) {
     if (el) el.style.display = show ? 'block' : 'none';
 }
 
-/* ===== Image Lightbox — คลิกรูปในการ์ดเพื่อดูรูปขยาย ===== */
 function openLightbox(imgEl) {
     var lb = document.getElementById('imageLightbox');
     var lbImg = document.getElementById('lightboxImg');
@@ -627,11 +705,6 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeLightbox();
 });
 
-/* เปลี่ยนชื่อจาก toggleWatDetail(id, show) เป็น toggleWatDetailBlock(id, show)
-   เพราะไฟล์ static/js/bookingForm.js (โหลดทีหลังสคริปต์นี้) มีฟังก์ชันชื่อ toggleWatDetail(radio)
-   ของหน้าเก่าอยู่แล้ว (รับพารามิเตอร์ตัวเดียวเป็น radio element ไม่ใช่ id/show) — ชื่อซ้ำกันทำให้
-   ฟังก์ชันของไฟล์เก่าทับฟังก์ชันนี้ ส่งผลให้กด "นิมนต์เอง" แล้วช่อง "รายละเอียดการนิมนต์" ไม่ถูกซ่อน
-   จึงเปลี่ยนชื่อให้ไม่ชนกันแทน (ไม่ไปแก้ไฟล์ bookingForm.js ที่ใช้ร่วมกับหน้าอื่น) */
 function toggleWatDetailBlock(id, show) {
     var el = document.getElementById(id);
     if (el) el.style.display = show ? 'block' : 'none';
@@ -658,10 +731,6 @@ var watOptionList = [
 	    "วัดเจ็ดยอด (วัดโพธารามมหาวิหาร)"
 ];
 
-/* FIX ตามคำแนะนำอาจารย์: จำนวนช่องเลือกวัดต้องเท่ากับจำนวนพระสงฆ์ทั้งหมดเสมอ
-   (เดิมจำกัดไว้แค่ 2 ช่อง — ตัดข้อจำกัดนั้นออก) แต่ละช่องมีตัวเลือก "ให้ทางร้านเลือกให้"
-   เป็นค่าเริ่มต้นอยู่แล้วในตัวมันเอง (ดู watOptionList) ผู้ใช้จะระบุวัดเฉพาะรูปไหนก็ได้ตามต้องการ
-   โดยไม่ต้องระบุให้ครบทุกรูป */
 function renderWatDropdowns(containerId, textareaId, count) {
     var container = document.getElementById(containerId);
     var textarea = document.getElementById(textareaId);
@@ -712,13 +781,11 @@ function syncWatAnswer(containerId, textareaId) {
     textarea.value = lines.join('\n');
 }
 
-/* รวมเหลือชุดเดียว เพราะตอนนี้มีช่องเลือกวัดชุดเดียวที่ใช้ร่วมกันทั้ง 2 โหมด */
 function syncAllWatAnswersBeforeSubmit() {
     syncWatAnswer('watDropdowns', 'watDiffAnswer');
     return true;
 }
 
-/* อัปเดตจำนวนพระ (ล็อกตามแพ็กเกจ) + ค่าเริ่มต้นจำนวนชุดสังฆทาน + ช่องเลือกวัด — ใช้เฉพาะตอนอยู่โหมดแพ็กเกจ */
 function applyPackageMonkCount(radio) {
     var input = document.getElementById('monkCountField');
     if (input && radio.dataset.monkcount) {
@@ -734,7 +801,6 @@ function applyPackageMonkCount(radio) {
     }
 }
 
-/* ผู้ใช้พิมพ์จำนวนพระเองตอนอยู่โหมดกรอกเอง — sync ช่องเลือกวัด + ค่าเริ่มต้นจำนวนชุดสังฆทาน */
 function onMonkCountInputChange(value) {
     var watDiff = document.getElementById('watDiff');
     if (watDiff && watDiff.style.display !== 'none') {
@@ -746,11 +812,6 @@ function onMonkCountInputChange(value) {
     }
 }
 
-/* ==========================================================================
-   FIX หลัก: ยุบโหมดแพ็กเกจ/กรอกเองให้เหลือชุดคำถามเดียว
-   สลับแค่ 2 จุด: การ์ดเลือกแพ็กเกจ (packageOnlyBlock / customCeremonyWrap)
-   และพฤติกรรมของช่องจำนวนพระ (ล็อกตามแพ็กเกจ / กรอกเอง)
-   ========================================================================== */
 function toggleBookingMode(mode) {
     var packageOnlyBlock = document.getElementById('packageOnlyBlock');
     var customCeremonyWrap = document.getElementById('customCeremonyWrap');
@@ -763,8 +824,6 @@ function toggleBookingMode(mode) {
         if (packageOnlyBlock) packageOnlyBlock.style.display = 'block';
         if (customCeremonyWrap) customCeremonyWrap.style.display = 'none';
 
-        // โหมดแพ็กเกจ: ไม่โชว์คำถาม "จำนวนพระ" ให้ลูกค้ากรอกเอง แต่ยังคงคำนวณค่าไว้เบื้องหลัง
-        // จากแพ็กเกจที่เลือกอยู่ตอนนี้ (ใช้เป็นค่าเริ่มต้นของจำนวนชุดสังฆทาน/ช่องเลือกวัด)
         if (monkCountGroup) monkCountGroup.style.display = 'none';
         var checkedPkg = document.querySelector('input[name="ceremony.ceremonyId"]:checked');
         if (monkCountField && checkedPkg && checkedPkg.dataset.monkcount) {
@@ -777,7 +836,6 @@ function toggleBookingMode(mode) {
         if (packageOnlyBlock) packageOnlyBlock.style.display = 'none';
         if (customCeremonyWrap) customCeremonyWrap.style.display = 'block';
 
-        // โหมดกรอกเอง: โชว์คำถาม "จำนวนพระ" ให้ลูกค้ากรอกเอง
         if (monkCountGroup) monkCountGroup.style.display = 'block';
 
         if (selfInviteRadio) selfInviteRadio.value = 'นิมนต์เอง';
@@ -785,11 +843,6 @@ function toggleBookingMode(mode) {
     }
 }
 
-/* ==========================================================================
-   FIX หลัก: กันไม่ให้ฟิลด์ที่อยู่ในกิ่งที่ถูกซ่อนไว้ (เช่น การ์ดแพ็กเกจตอนอยู่โหมดกรอกเอง,
-   ช่องเลือกวัดที่ยังไม่เปิด, ปิ่นโตตอนเลือก "ไม่ต้องการ" ฯลฯ) ถูกส่งไปทับข้อมูลจริง
-   ทำงานตอน submit เท่านั้น ไม่กระทบการใช้งานหน้าจอ
-   ========================================================================== */
 function isInHiddenBranch(el) {
     var node = el.parentElement;
     while (node && node !== document.body) {
@@ -802,19 +855,15 @@ function isInHiddenBranch(el) {
 function cleanupAndRenumberDetailsBeforeSubmit() {
     var form = document.querySelector('form');
 
-    // 1) ปิดฟิลด์ใดๆ ที่อยู่ในกิ่งที่ถูกซ่อนอยู่ตอนนี้ ไม่ให้ถูกส่งไปทับข้อมูลของสิ่งที่เลือกจริง
     form.querySelectorAll('input, select, textarea').forEach(function(el) {
         if (isInHiddenBranch(el)) el.disabled = true;
     });
 
-    // 1.1) ข้อยกเว้น: "จำนวนพระ" ถูกซ่อนไว้ในโหมดแพ็กเกจ (ไม่ให้ลูกค้ากรอกเอง)
-    // แต่ยังต้องส่งค่าไปด้วยเสมอ เพราะระบบใช้ค่านี้เป็นค่าเริ่มต้นของจำนวนชุดสังฆทาน/ช่องเลือกวัด
     var monkCountField = document.getElementById('monkCountField');
     var monkCountQId = document.getElementById('monkCountQuestionIdField');
     if (monkCountField) monkCountField.disabled = false;
     if (monkCountQId) monkCountQId.disabled = false;
 
-    // 2) เรียงเลข details[i] ใหม่ให้ต่อเนื่อง 0,1,2,... เฉพาะฟิลด์ที่ยังไม่ถูกปิด
     var pattern = /^details\[(\d+)\]\.(answer|question\.questionsId)$/;
     var order = [];
     var seen = {};
@@ -832,10 +881,27 @@ function cleanupAndRenumberDetailsBeforeSubmit() {
     return true;
 }
 
-/* ==========================================================================
-   FIX: sync สถานะ show/hide ให้ตรงกับ radio ที่ถูกเลือกจริงตอนโหลดหน้า/กด back
-   (ครอบคลุมทั้งกรณี default และกรณี preselect จาก param.ceremonyId / custom=true)
-   ========================================================================== */
+/* FIX: เพิ่มการเช็ควันที่จัดงานเอง เพราะเปลี่ยนมาใช้ปฏิทินย่อ (hidden input)
+   แทน <input type="date" required> เดิม ซึ่ง browser validate hidden field ไม่ได้
+   จึงปิด native validation ของฟอร์มทั้งใบ (novalidate) แล้วเช็คเองในนี้แทน
+   รวมถึงเรียก reportValidity() manual เพื่อให้ยังเห็น bubble แจ้งเตือนของฟิลด์อื่นๆ ตามปกติ */
+function handleFormSubmit(form) {
+    syncAllWatAnswersBeforeSubmit();
+    cleanupAndRenumberDetailsBeforeSubmit();
+
+    var eventDateVal = document.getElementById('eventDateInput').value;
+    if (!eventDateVal) {
+        alert('กรุณาเลือกวันที่จัดงานจากปฏิทิน');
+        return false;
+    }
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return false;
+    }
+    return true;
+}
+
 function syncInitialToggleStates() {
     document.querySelectorAll('input[type="radio"]:checked').forEach(function(radio) {
         var code = radio.getAttribute('onchange');
@@ -846,9 +912,32 @@ function syncInitialToggleStates() {
 }
 document.addEventListener('DOMContentLoaded', syncInitialToggleStates);
 window.addEventListener('pageshow', syncInitialToggleStates);
+
+/* ===== ปฏิทินย่อสำหรับเลือกวันที่จัดงาน ===== */
+window.bookedDates = [
+    <c:forEach var="d" items="${bookedDates}" varStatus="st">
+        "${d}"<c:if test="${!st.last}">,</c:if>
+    </c:forEach>
+];
+window.teamCount = ${empty teamCount ? 2 : teamCount};
+window.bookingsPerDate = {
+    <c:forEach var="e" items="${bookingsPerDate}" varStatus="st">
+        "${e.key}": ${e.value}<c:if test="${!st.last}">,</c:if>
+    </c:forEach>
+};
+window.dayQuality = {
+    <c:forEach var="e" items="${dayQuality}" varStatus="st">
+        "${e.key}": [
+            <c:forEach var="tag" items="${e.value}" varStatus="st2">
+                {type:"${tag.type}",label:"${tag.label}"}<c:if test="${!st2.last}">,</c:if>
+            </c:forEach>
+        ]<c:if test="${!st.last}">,</c:if>
+    </c:forEach>
+};
 </script>
 
 <script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=8"></script>
+<script src="${pageContext.request.contextPath}/static/js/miniBookingCalendar.js?v=1"></script>
 
 </body>
 </html>
