@@ -14,6 +14,8 @@
 </head>
 <body>
 
+
+
 <%-- ===== Navbar (ธีมเดียวกับ bookingForm.jsp — navbar-custom / โลโก้ 58px / รูปจริง) ===== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
@@ -44,8 +46,16 @@
 </nav>
 
 <div class="page-wrapper">
-    <div class="detail-card">
 
+    <div class="booking-notice">
+        <span class="notice-icon">📞</span>
+        <div class="notice-content">
+            <strong>รอการติดต่อจากทีมงาน</strong>
+			<p>ทีมงานจะติดต่อกลับเพื่อนัดหมายวันและเวลาสำหรับลงพื้นที่สำรวจสถานที่</p>
+        </div>
+    </div>
+
+    <div class="detail-card">
         <%-- Card Header --%>
         <div class="card-header-bar">
             <div>
@@ -72,7 +82,7 @@
                 <span class="info-value">${booking.ceremony.ceremonyType}</span>
             </div>
             <div class="info-row">
-                <span class="info-label">แพ็กเกจที่เลือก</span>
+                <span class="info-label">รูปแบบการจอง</span>
                 <span class="info-value">
                     ${booking.ceremony.ceremonyName}
                     <c:if test="${not empty booking.ceremony.ceremonyDetail}">
@@ -82,8 +92,8 @@
             </div>
             <c:if test="${booking.ceremony.basePrice > 0}">
                 <div class="info-row">
-                    <span class="info-label">ราคาแพ็กเกจเริ่มต้น</span>
-                    <span class="info-value" style="color:var(--gold);">฿<fmt:formatNumber value="${booking.ceremony.basePrice}" pattern="#,###"/></span>
+                    <span class="info-label">ราคาเริ่มต้น</span>
+                    <span class="info-value">฿<fmt:formatNumber value="${booking.ceremony.basePrice}" pattern="#,###"/></span>
                 </div>
             </c:if>
         </div>
@@ -262,32 +272,7 @@
 
         <hr class="divider">
 
-        <%-- รายละเอียดเพิ่มเติม — แสดงคำถาม/คำตอบอื่นๆ ที่ผู้จองกรอกมาทั้งหมด
-             ที่ยังไม่ถูกแสดงในหมวดข้างต้น (กันตกหล่นข้อมูลที่กรอกไว้) --%>
-        <div class="section">
-            <div class="section-title">รายละเอียดเพิ่มเติม</div>
-            <c:set var="hasOtherDetail" value="false"/>
-            <c:forEach items="${booking.details}" var="d">
-                <c:if test="${!fn:contains(d.question.questionsText, 'แขก')
-                           && !fn:contains(d.question.questionsText, 'จำนวนผู้')
-                           && !fn:contains(d.question.questionsText, 'ผูกข้อมือ')
-                           && !fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')
-                           && !fn:contains(d.question.questionsText, 'รายละเอียดการนิมนต์')
-                           && !fn:contains(d.question.questionsText, 'จำนวนพระ')
-                           && !fn:contains(d.question.questionsText, 'ภัตตาหาร')
-                           && !fn:contains(d.question.questionsText, 'ปิ่นโต')
-                           && !fn:contains(d.question.questionsText, 'สังฆทาน')}">
-                    <c:set var="hasOtherDetail" value="true"/>
-                    <div class="info-row">
-                        <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value"><c:choose><c:when test="${empty fn:trim(d.answer)}">-</c:when><c:otherwise>${d.answer}</c:otherwise></c:choose></span>
-                    </div>
-                </c:if>
-            </c:forEach>
-            <c:if test="${!hasOtherDetail}">
-                <span style="color:var(--text-muted);font-size:14px;">ไม่มีรายละเอียดเพิ่มเติม</span>
-            </c:if>
-        </div>
+
 
         <%-- Action Bar --%>
         <div class="action-bar">
@@ -342,23 +327,6 @@
             </div>
             <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
         </div>
-
-     
-			<div class="footer-col">
-				<h4 class="footer-heading">เมนู</h4>
-				<a href="${pageContext.request.contextPath}/home">หน้าหลัก</a>
-				<a href="${pageContext.request.contextPath}/reviews">รีวิว</a>
-				<a href="${pageContext.request.contextPath}/loginMember">เข้าสู่ระบบ</a>
-				<a href="${pageContext.request.contextPath}/register">สมัครสมาชิก</a>
-			</div>
-
-			<div class="footer-col">
-				<h4 class="footer-heading">งานบุญของเรา</h4>
-				<c:forEach var="t" items="${ceremonyTypes}">
-					<a href="#calendarSection">งาน${t.mainName}</a>
-				</c:forEach>
-			</div>
-
 			<div class="footer-col footer-contact-col">
 				<h4 class="footer-heading">ติดต่อเรา</h4>
 				<%-- TODO: ใส่เบอร์โทร / LINE OA / อีเมลจริงของร้านแทนที่ตรงนี้ --%>

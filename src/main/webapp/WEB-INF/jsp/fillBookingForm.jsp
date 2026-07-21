@@ -103,16 +103,16 @@
                     <div class="card-body">
                         <div class="row-grid">
                             <div class="form-group">
-                                <label class="form-label">วันที่จัดงาน</label>
-                                <input type="text" class="form-control"
-                                       value="${not empty param.dates ? param.dates : (not empty selectedDates ? selectedDates : 'ไม่พบวันที่ที่เลือกไว้')}"
-                                       readonly>
-                                <input type="hidden" name="eventDate"
-                                       value="${not empty param.dates ? param.dates : selectedDates}">
-                                <p style="font-size:12px;color:#B0345A;margin-top:6px;">
-                                    ดึงวันที่จากที่คุณเลือกไว้ในหน้าก่อนหน้าแล้ว หากต้องการเปลี่ยนวันที่ กรุณากลับไปเลือกใหม่ที่หน้าปฏิทิน
-                                </p>
-                            </div>
+							    <label class="form-label">วันที่จัดงาน <span class="required">*</span></label>
+							    
+							    <%-- เปลี่ยนจาก input เดิม เป็น date picker --%>
+							    <input type="date" name="eventDate" class="form-control" required
+							           value="${not empty param.dates ? param.dates : selectedDates}">
+							    
+							    <p style="font-size:12px;color:#B0345A;margin-top:6px;">
+							        คุณสามารถเลือกวันที่จัดงานได้โดยตรงจากช่องด้านบน
+							    </p>
+							</div>
                             <div class="form-group">
                                 <label class="form-label">เวลาเริ่มพิธี <span class="required">*</span></label>
                                 <input type="time" name="eventTime" class="form-control" required>
@@ -151,522 +151,282 @@
         </div>
 
         <%-- =========================================================
-             1. โหมดแพ็กเกจแนะนำ
+             1. รายละเอียดการจอง — ใช้ชุดคำถามเดียวกันทั้ง 2 โหมด (ไม่แยกซ้ำอีกต่อไป)
+             ต่างกันแค่ 2 จุด:
+               ก) การ์ด "เลือกแพ็กเกจ" — โชว์เฉพาะโหมดแพ็กเกจ (โหมดกรอกเองใช้ ceremonyId เริ่มต้นแทน)
+               ข) ช่อง "จำนวนพระสงฆ์" — โหมดแพ็กเกจล็อกตามแพ็กเกจที่เลือก / โหมดกรอกเองให้กรอกเอง
+             ส่วนคำถามอื่น (สังฆทาน / ปิ่นโต / การนิมนต์) ใช้ร่วมกันทั้งหมด
              ========================================================= --%>
-        <div id="packageSection" style="${startInCustomMode ? 'display:none;' : 'display:block;'}">
 
-            <%-- 1.1 เลือกแพ็กเกจ (3 ระดับ)
-                 FIX: ถ้ามาจากปุ่ม "เลือกจองแพ็กเกจนี้" (มี param.ceremonyId ติดมา) ให้ preselect
-                 แพ็กเกจที่ตรงกับ id นั้นจริงๆ ไม่ใช่ default ที่ตัวแรกเสมอเหมือนเดิม --%>
-            <div class="form-card">
-                <div class="card-header">เลือกแพ็กเกจ</div>
-                <div class="card-body">
-                    <div class="item-card-grid">
-                        <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
-                            <%-- Ceremony ไม่มีฟิลด์เก็บจำนวนพระ จึงกำหนดตามชื่อแพ็กเกจตามธรรมเนียมของโปรเจกต์ (มาตรฐาน=5, อิ่มบุญ=7, พรีเมียม=9)
-                                 FIX: กัน NullPointerException ถ้า ceremonyName เป็น null (fn:contains ไม่รองรับ null) --%>
-                            <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
-                            <c:choose>
-                                <c:when test="${fn:contains(pkgNameSafe, 'พรีเมียม')}">
-                                    <c:set var="pkgMonkCount" value="9"/>
-                                </c:when>
-                                <c:when test="${fn:contains(pkgNameSafe, 'อิ่มบุญ')}">
-                                    <c:set var="pkgMonkCount" value="7"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:set var="pkgMonkCount" value="5"/>
-                                </c:otherwise>
-                            </c:choose>
-                            <%-- FIX: preselect ตาม param.ceremonyId ถ้ามี ไม่งั้น fallback เป็นตัวแรก --%>
-                            <c:set var="isPkgSelected"
-                                   value="${(not empty param.ceremonyId and param.ceremonyId == pkg.ceremonyId) or (empty param.ceremonyId and loop.first)}"/>
-                            <label class="item-card">
-                                <input type="radio" name="ceremony.ceremonyId" value="${pkg.ceremonyId}"
-                                       data-monkcount="${pkgMonkCount}"
-                                       onchange="applyPackageMonkCount(this)"
-                                       ${isPkgSelected ? 'checked' : ''}>
-                            <div class="item-card-thumb">
-    <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}">
+        <%-- 1.1 เลือกแพ็กเกจ — โชว์เฉพาะโหมดแพ็กเกจ --%>
+        <div class="form-card" id="packageOnlyBlock" style="${startInCustomMode ? 'display:none;' : 'display:block;'}">
+            <div class="card-header">เลือกแพ็กเกจ</div>
+            <div class="card-body">
+                <div class="item-card-grid">
+                    <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
+                        <%-- Ceremony ไม่มีฟิลด์เก็บจำนวนพระ จึงกำหนดตามชื่อแพ็กเกจตามธรรมเนียมของโปรเจกต์ (มาตรฐาน=5, อิ่มบุญ=7, พรีเมียม=9)
+                             FIX: กัน NullPointerException ถ้า ceremonyName เป็น null (fn:contains ไม่รองรับ null) --%>
+                        <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
+                        <c:choose>
+                            <c:when test="${fn:contains(pkgNameSafe, 'พรีเมียม')}">
+                                <c:set var="pkgMonkCount" value="9"/>
+                            </c:when>
+                            <c:when test="${fn:contains(pkgNameSafe, 'อิ่มบุญ')}">
+                                <c:set var="pkgMonkCount" value="7"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="pkgMonkCount" value="5"/>
+                            </c:otherwise>
+                        </c:choose>
+                        <%-- FIX: preselect ตาม param.ceremonyId ถ้ามี ไม่งั้น fallback เป็นตัวแรก --%>
+                        <c:set var="isPkgSelected"
+                               value="${(not empty param.ceremonyId and param.ceremonyId == pkg.ceremonyId) or (empty param.ceremonyId and loop.first)}"/>
+                        <label class="item-card">
+                            <input type="radio" name="ceremony.ceremonyId" value="${pkg.ceremonyId}"
+                                   data-monkcount="${pkgMonkCount}"
+                                   onchange="applyPackageMonkCount(this)"
+                                   ${isPkgSelected ? 'checked' : ''}>
+                        <div class="item-card-thumb">
+    <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}"
+         onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
 </div>
-                                <div class="item-card-body">
-                                    <div class="item-card-name">${pkg.ceremonyName}</div>
-                                    <div class="item-card-desc">${pkg.ceremonyDetail}</div>
-                                    <div class="item-card-price">
-                                        ฿<fmt:formatNumber value="${pkg.basePrice}" pattern="#,###"/>
-                                    </div>
-                                </div>
-                            </label>
-                        </c:forEach>
-                    </div>
-                </div>
-            </div>
-
-            <%-- 1.2 การนิมนต์พระสงฆ์ + จำนวนพระ (ฟิกตามแพ็กเกจ)
-                 ลำดับ: จำนวนพระ (ทราบแล้วจากแพ็กเกจที่เลือกด้านบน) -> รูปแบบการนิมนต์ -> รายละเอียด/เลือกวัด --%>
-            <div class="form-card">
-                <div class="card-header">การนิมนต์พระสงฆ์</div>
-                <div class="card-body">
-
-                    <c:forEach items="${questions}" var="q">
-                        <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
-                            <div class="form-group">
-                                <label class="form-label">${q.questionsText}</label>
-                                <p style="font-size:12px;color:#B0345A;margin-top:2px;">
-                                    กำหนดตามแพ็กเกจที่เลือกไว้ด้านบน
-                                </p>
-                                <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                <input type="number" name="details[${detailIndex}].answer" id="monkCountPackage"
-                                       class="form-control" value="5" readonly style="background:#F5F5F5;">
-                            </div>
-                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                        </c:if>
-                    </c:forEach>
-
-                    <c:forEach items="${questions}" var="q">
-                        <c:if test="${fn:contains(q.questionsText, 'รูปแบบการนิมนต์')}">
-                            <div class="form-group">
-                                <label class="form-label">${q.questionsText}</label>
-                                <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                <div class="checkbox-group">
-                                    <label class="checkbox-label">
-                                        <input type="radio" name="details[${detailIndex}].answer" value="ให้ทางร้านนิมนต์"
-                                               onchange="toggleWatDetail('pkgWatDetail', true)" checked>
-                                        <span>ให้ทางร้านนิมนต์</span>
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="radio" name="details[${detailIndex}].answer" value="นิมนต์เอง (ลด ฿1,500)"
-                                               onchange="toggleWatDetail('pkgWatDetail', false)">
-                                        <span>นิมนต์เอง <small style="color:#2e7d32;">(รับส่วนลด ฿1,500)</small></span>
-                                    </label>
+                            <div class="item-card-body">
+                                <div class="item-card-name">${pkg.ceremonyName}</div>
+                                <div class="item-card-desc">${pkg.ceremonyDetail}</div>
+                                <div class="item-card-price">
+                                    ฿<fmt:formatNumber value="${pkg.basePrice}" pattern="#,###"/>
                                 </div>
                             </div>
-                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                        </c:if>
-                    </c:forEach>
-
-                    <%-- แสดงเมื่อเลือก "ให้ทางร้านนิมนต์" — เลือกว่าจะให้นิมนต์ต่างวัด หรือให้ร้านเลือกวัดให้เอง
-                         FIX ตามคำแนะนำอาจารย์: ให้เลือกระบุวัดเจาะจงได้แค่บางส่วน (สูงสุด 2 รูป) ที่เหลือร้านจัดการให้ --%>
-                    <div id="pkgWatDetail" style="display:block; margin-bottom:14px;">
-                        <c:forEach items="${questions}" var="q">
-                            <c:if test="${fn:contains(q.questionsText, 'รายละเอียดการนิมนต์')}">
-                                <div class="form-group">
-                                    <label class="form-label">รายละเอียดการนิมนต์พระสงฆ์</label>
-                                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                    <div class="checkbox-group">
-                                        <label class="checkbox-label">
-                                            <input type="radio" name="pkgWatType" value="ต่างวัด"
-                                                   onchange="toggleWatOwnField('pkgWatDiff', true);
-                                                             renderWatDropdowns('pkgWatDropdowns','pkgWatDiffAnswer', document.getElementById('monkCountPackage').value);">
-                                            <span>ระบุวัดที่ต้องการบางส่วน <small style="color:#B0345A;">(เลือกได้สูงสุด 2 รูป ที่เหลือร้านจัดให้)</small></span>
-                                        </label>
-                                        <label class="checkbox-label">
-                                            <input type="radio" name="pkgWatType" value="ให้ร้านเลือกให้"
-                                                   onchange="toggleWatOwnField('pkgWatDiff', false); document.getElementById('pkgWatDiffAnswer').value='ให้ร้านเลือกให้';" checked>
-                                            <span>ให้ทางร้านเลือกให้ทั้งหมด <small style="color:#B0345A;">(เลือกวัดใกล้พื้นที่จัดงาน)</small></span>
-                                        </label>
-                                    </div>
-                                    <div id="pkgWatDiff" style="display:none; margin-top:12px;">
-                                        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                                            ระบุวัดที่ต้องการเป็นพิเศษได้สูงสุด 2 รูป ส่วนที่เหลือทางร้านจะจัดหาวัดใกล้พื้นที่จัดงานให้
-                                        </p>
-                                        <div id="pkgWatDropdowns"></div>
-                                        <textarea name="details[${detailIndex}].answer" id="pkgWatDiffAnswer"
-                                                  class="form-control" style="display:none;"></textarea>
-                                    </div>
-                                </div>
-                                <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                            </c:if>
-                        </c:forEach>
-                    </div>
-
-                </div>
-            </div>
-
-            <%-- 1.3 เลือกชุดสังฆทาน (การ์ด) — จำนวนชุดผูกกับจำนวนพระ --%>
-            <div class="form-card">
-                <div class="card-header">เลือกชุดสังฆทาน</div>
-                <div class="card-body">
-                    <c:forEach items="${questions}" var="q">
-                        <c:if test="${fn:contains(q.questionsText, 'เลือกชุดสังฆทาน')}">
-                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                            <div class="item-card-grid">
-                                <c:forEach items="${sanghatharnItems}" var="item" varStatus="loop">
-                                    <label class="item-card">
-                                        <input type="radio" name="details[${detailIndex}].answer"
-                                               value="${item.itemName}" ${loop.first ? 'checked' : ''}>
-                                        <div class="item-card-thumb">
-                                            <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/offeringset${(loop.index % 5) + 1}.jpg" alt="${item.itemName}">
-                                        </div>
-                                        <div class="item-card-body">
-                                            <div class="item-card-name">${item.itemName}</div>
-                                            <div class="item-card-desc">${item.itemDetail}</div>
-                                            <div class="item-card-price">
-                                                ฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}
-                                            </div>
-                                        </div>
-                                    </label>
-                                </c:forEach>
-                            </div>
-                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                        </c:if>
-                    </c:forEach>
-
-                    <%-- จำนวนชุดสังฆทาน = จำนวนพระ โดยค่าเริ่มต้น แต่แก้ไขเองได้ --%>
-                    <c:forEach items="${questions}" var="q">
-                        <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดสังฆทาน')}">
-                            <div class="form-group" style="margin-top:14px;">
-                                <label class="form-label">${q.questionsText}</label>
-                                <p style="font-size:12px;color:#B0345A;margin-top:2px;">
-                                    ค่าเริ่มต้น = จำนวนพระสงฆ์ที่นิมนต์ไว้ด้านบน แก้ไขจำนวนเองได้หากต้องการ
-                                </p>
-                                <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                <input type="number" name="details[${detailIndex}].answer" id="pkgSanghatanQtyInput"
-                                       class="form-control" value="5" min="1"
-                                       oninput="this.dataset.userEdited = 'true';">
-                            </div>
-                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                        </c:if>
+                        </label>
                     </c:forEach>
                 </div>
             </div>
-
-            <%-- 1.4 เลือกชุดปิ่นโต (การ์ด) — พร้อมตัวเลือกต้องการ/ไม่ต้องการ (จำนวนชุดเลือกเองอิสระ ไม่ผูกกับจำนวนพระ) --%>
-            <div class="form-card">
-                <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
-                <div class="card-body">
-
-                    <c:forEach items="${questions}" var="q">
-                        <c:if test="${fn:contains(q.questionsText, 'ต้องการชุดภัตตาหาร')}">
-                            <c:set var="pkgPintoWantIndex" value="${detailIndex}"/>
-                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                        </c:if>
-                    </c:forEach>
-
-                    <div class="form-group">
-                        <label class="form-label">ต้องการชุดภัตตาหารปิ่นโตหรือไม่?</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="radio" name="details[${pkgPintoWantIndex}].answer" value="ต้องการ"
-                                       onchange="toggleSection('pkgPintoDetail', true)" checked>
-                                <span>ต้องการ</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="radio" name="details[${pkgPintoWantIndex}].answer" value="ไม่ต้องการ"
-                                       onchange="toggleSection('pkgPintoDetail', false)">
-                                <span>ไม่ต้องการ</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="pkgPintoDetail" style="display:block; margin-top:14px;">
-                        <c:forEach items="${questions}" var="q">
-                            <c:if test="${fn:contains(q.questionsText, 'เลือกชุดภัตตาหาร')}">
-                                <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                <div class="item-card-grid">
-                                    <c:forEach items="${pintoItems}" var="item" varStatus="loop">
-                                        <c:if test="${fn:contains(item.itemName, 'ชุด')}">
-                                            <label class="item-card">
-                                                <input type="radio" name="details[${detailIndex}].answer"
-                                                       value="${item.itemName}" ${loop.first ? 'checked' : ''}>
-                                                <div class="item-card-thumb">
-                                                    <img src="${pageContext.request.contextPath}/static/images/foodimg/food${(loop.index % 5) + 1}.jpg" alt="${item.itemName}">
-                                                </div>
-                                                <div class="item-card-body">
-                                                    <div class="item-card-name">${item.itemName}</div>
-                                                    <div class="item-card-desc">${item.itemDetail}</div>
-                                                    <div class="item-card-price">
-                                                        ฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}
-                                                    </div>
-                                                </div>
-                                            </label>
-                                        </c:if>
-                                    </c:forEach>
-                                </div>
-                                <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                            </c:if>
-                        </c:forEach>
-
-                        <%-- จำนวนชุดปิ่นโต — กรอกเองอิสระ ไม่ผูกกับจำนวนพระ --%>
-                        <c:forEach items="${questions}" var="q">
-                            <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดภัตตาหาร')}">
-                                <div class="form-group" style="margin-top:14px;">
-                                    <label class="form-label">${q.questionsText}</label>
-                                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                    <input type="number" name="details[${detailIndex}].answer"
-                                           class="form-control" placeholder="ระบุจำนวนชุด..." min="1">
-                                </div>
-                                <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                            </c:if>
-                        </c:forEach>
-                    </div>
-
-                </div>
-            </div>
-
         </div>
 
-        <%-- =========================================================
-             2. ความต้องการเบื้องต้น (โหมดกรอกเอง — ไม่มีอะไรถูกฟิกไว้)
-             ========================================================= --%>
-        <div id="customSection" style="${startInCustomMode ? 'display:block;' : 'display:none;'}">
-
+        <%-- โหมดกรอกเอง: ไม่มีการ์ดเลือกแพ็กเกจ จึงส่ง ceremonyId เริ่มต้นแทนด้วยฟิลด์ซ่อนนี้ --%>
+        <div id="customCeremonyWrap" style="${startInCustomMode ? 'display:block;' : 'display:none;'}">
             <input type="hidden" name="ceremony.ceremonyId" id="customCeremonyId" value="${defaultCeremonyId}">
+        </div>
 
-            <div class="form-grid">
-                <div>
+        <%-- 1.2 การนิมนต์พระสงฆ์ — ใช้ร่วมกันทั้ง 2 โหมด --%>
+        <div class="form-card">
+            <div class="card-header">การนิมนต์พระสงฆ์</div>
+            <div class="card-body">
 
-                    <%-- การนิมนต์พระสงฆ์
-                         FIX ตามที่อาจารย์บอก: "จำนวนพระต้องระบุก่อน ไม่ใช่อยู่ข้างล่าง"
-                         ลำดับใหม่: รูปแบบการนิมนต์ -> จำนวนพระ (ระบุก่อน) -> รายละเอียด/เลือกวัด (ใช้จำนวนที่กรอกไว้) --%>
-                    <div class="form-card">
-                        <div class="card-header">การนิมนต์พระสงฆ์</div>
-                        <div class="card-body">
+                <c:forEach items="${questions}" var="q">
+                    <c:if test="${fn:contains(q.questionsText, 'รูปแบบการนิมนต์')}">
+                        <div class="form-group">
+                            <label class="form-label">${q.questionsText}</label>
+                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="radio" name="details[${detailIndex}].answer" value="ให้ทางร้านนิมนต์"
+                                           onchange="toggleWatDetailBlock('watDetail', true)" checked>
+                                    <span>ให้ทางร้านนิมนต์</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <%-- ส่วนลด ฿1,500 มีผลเฉพาะตอนจองแบบแพ็กเกจเท่านั้น (สคริปต์จะสลับค่า/ซ่อนข้อความให้อัตโนมัติตามโหมด) --%>
+                                    <input type="radio" name="details[${detailIndex}].answer" id="selfInviteRadio"
+                                           value="${startInCustomMode ? 'นิมนต์เอง' : 'นิมนต์เอง (ลด ฿1,500)'}"
+                                           onchange="toggleWatDetailBlock('watDetail', false)">
+                                    <span>นิมนต์เอง <small id="selfInviteDiscountNote"
+                                          style="color:#2e7d32;${startInCustomMode ? 'display:none;' : ''}">(รับส่วนลด ฿1,500)</small></span>
+                                </label>
+                            </div>
+                        </div>
+                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                    </c:if>
+                </c:forEach>
 
-                            <c:forEach items="${questions}" var="q">
-                                <c:if test="${fn:contains(q.questionsText, 'รูปแบบการนิมนต์')}">
-                                    <div class="form-group">
-                                        <label class="form-label">${q.questionsText}</label>
-                                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                        <div class="checkbox-group">
-                                            <label class="checkbox-label">
-                                                <input type="radio" name="details[${detailIndex}].answer" value="ให้ทางร้านนิมนต์"
-                                                       onchange="toggleWatDetail('customWatDetail', true)" checked>
-                                                <span>ให้ทางร้านนิมนต์</span>
-                                            </label>
-                                            <label class="checkbox-label">
-                                                <input type="radio" name="details[${detailIndex}].answer" value="นิมนต์เอง"
-                                                       onchange="toggleWatDetail('customWatDetail', false)">
-                                                <span>นิมนต์เอง</span>
-                                            </label>
+                <%-- FIX: โหมดแพ็กเกจไม่ต้องโชว์คำถามนี้เลย (จำนวนพระถูกกำหนดจากแพ็กเกจที่เลือกอยู่แล้ว)
+                     โชว์ให้กรอกเฉพาะตอนเลือก "ความต้องการเบื้องต้น" (โหมดกรอกเอง) เท่านั้น
+                     หมายเหตุ: ยังคง "ส่งค่าคำตอบ" นี้อยู่เสมอแม้ตอนถูกซ่อน (ดู cleanupAndRenumberDetailsBeforeSubmit)
+                     เพราะระบบใช้ค่านี้เป็นค่าเริ่มต้นของ "จำนวนชุดสังฆทาน" และช่องเลือกวัดอยู่เบื้องหลัง --%>
+                <c:forEach items="${questions}" var="q">
+                    <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
+                        <div class="form-group" id="monkCountGroup" style="margin-top:14px; ${startInCustomMode ? 'display:block;' : 'display:none;'}">
+                            <label class="form-label">${q.questionsText} <span class="required">*</span></label>
+                            <p style="font-size:12px;color:#B0345A;margin-top:2px;">
+                                ระบุจำนวนพระสงฆ์ที่ต้องการก่อน เพื่อให้ระบบแสดงช่องเลือกวัดให้ครบตามจำนวน
+                            </p>
+                            <input type="hidden" name="details[${detailIndex}].question.questionsId" id="monkCountQuestionIdField" value="${q.questionsId}">
+                            <input type="number" name="details[${detailIndex}].answer" id="monkCountField"
+                                   class="form-control" placeholder="เช่น 5" min="1" required
+                                   oninput="onMonkCountInputChange(this.value)">
+                        </div>
+                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                    </c:if>
+                </c:forEach>
+
+                <%-- แสดงเมื่อเลือก "ให้ทางร้านนิมนต์" — เลือกว่าจะให้นิมนต์ต่างวัด หรือให้ร้านเลือกวัดให้เอง
+                     FIX ตามคำแนะนำอาจารย์: จำนวนช่องเลือกวัดต้องเท่ากับจำนวนพระสงฆ์ที่นิมนต์ทั้งหมด
+                     (ไม่จำกัดไว้แค่ 2 รูปเหมือนเดิม) แต่ละช่อง/แต่ละรูปเลือกได้อิสระว่าจะระบุวัดที่ต้องการ
+                     เป็นพิเศษ หรือเลือก "ให้ทางร้านเลือกให้" สำหรับรูปนั้นๆ --%>
+                <div id="watDetail" style="display:block; margin-bottom:14px;">
+                    <c:forEach items="${questions}" var="q">
+                        <c:if test="${fn:contains(q.questionsText, 'รายละเอียดการนิมนต์')}">
+                            <div class="form-group">
+                                <label class="form-label">รายละเอียดการนิมนต์พระสงฆ์</label>
+                                <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input type="radio" name="watType" value="ต่างวัด"
+                                               onchange="toggleWatOwnField('watDiff', true);
+                                                         renderWatDropdowns('watDropdowns','watDiffAnswer', document.getElementById('monkCountField').value);">
+                                        <span>ระบุวัดที่ต้องการเป็นรายรูป <small style="color:#B0345A;">(เลือกได้ครบตามจำนวนพระสงฆ์ที่นิมนต์)</small></span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="radio" name="watType" value="ให้ร้านเลือกให้"
+                                               onchange="toggleWatOwnField('watDiff', false); document.getElementById('watDiffAnswer').value='ให้ร้านเลือกให้';" checked>
+                                        <span>ให้ทางร้านเลือกให้ทั้งหมด <small style="color:#B0345A;">(เลือกวัดใกล้พื้นที่จัดงาน)</small></span>
+                                    </label>
+                                </div>
+                                <div id="watDiff" style="display:none; margin-top:12px;">
+                                    <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+                                        ระบุวัดที่ต้องการสำหรับพระแต่ละรูปได้ครบตามจำนวนพระสงฆ์ที่นิมนต์ไว้ด้านบน
+                                        รูปใดไม่มีวัดที่ต้องการเป็นพิเศษ เลือก "ให้ทางร้านเลือกให้" สำหรับรูปนั้นได้เลย
+                                    </p>
+                                    <div id="watDropdowns">
+                                        <p class="wat-picker-empty">กรุณาระบุจำนวนพระสงฆ์ก่อน จึงจะแสดงช่องเลือกวัด</p>
+                                    </div>
+                                    <textarea name="details[${detailIndex}].answer" id="watDiffAnswer"
+                                              class="form-control" style="display:none;"></textarea>
+                                </div>
+                            </div>
+                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                        </c:if>
+                    </c:forEach>
+                </div>
+
+            </div>
+        </div>
+
+        <%-- 1.3 เลือกชุดสังฆทาน — ใช้ร่วมกันทั้ง 2 โหมด — จำนวนชุดผูกกับจำนวนพระ --%>
+        <div class="form-card">
+            <div class="card-header">เลือกชุดสังฆทาน</div>
+            <div class="card-body">
+
+                <%-- จำนวนชุดสังฆทาน = จำนวนพระ โดยค่าเริ่มต้น แต่แก้ไขเองได้ --%>
+                <c:forEach items="${questions}" var="q">
+                    <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดสังฆทาน')}">
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label class="form-label">${q.questionsText}</label>
+                            <p style="font-size:12px;color:#B0345A;margin-top:2px;">
+                                ค่าเริ่มต้น = จำนวนพระสงฆ์ที่นิมนต์ไว้ด้านบน แก้ไขจำนวนเองได้หากต้องการ
+                            </p>
+                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                            <input type="number" name="details[${detailIndex}].answer" id="sanghatanQtyInput"
+                                   class="form-control" value="5" min="1"
+                                   oninput="this.dataset.userEdited = 'true';">
+                        </div>
+                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                    </c:if>
+                </c:forEach>
+
+                <c:forEach items="${questions}" var="q">
+                    <c:if test="${fn:contains(q.questionsText, 'เลือกชุดสังฆทาน')}">
+                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                        <div class="item-card-grid">
+                            <c:forEach items="${sanghatharnItems}" var="item" varStatus="loop">
+                                <label class="item-card">
+                                    <input type="radio" name="details[${detailIndex}].answer"
+                                           value="${item.itemName}" ${loop.first ? 'checked' : ''}>
+                                    <div class="item-card-thumb">
+                                        <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/F${(loop.index % 3) + 1}.png" alt="${item.itemName}"
+                                             onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
+                                    </div>
+                                    <div class="item-card-body">
+                                        <div class="item-card-name">${item.itemName}</div>
+                                        <div class="item-card-desc">${item.itemDetail}</div>
+                                        <div class="item-card-price">
+                                            ฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}
                                         </div>
                                     </div>
-                                    <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                                </c:if>
+                                </label>
                             </c:forEach>
+                        </div>
+                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                    </c:if>
+                </c:forEach>
 
-                            <%-- FIX: ย้ายจำนวนพระมาไว้ก่อนช่องเลือกวัด ให้กรอกจำนวนก่อนเสมอ --%>
-                            <c:forEach items="${questions}" var="q">
-                                <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
-                                    <div class="form-group" style="margin-top:14px;">
-                                        <label class="form-label">${q.questionsText} <span class="required">*</span></label>
-                                        <p style="font-size:12px;color:#B0345A;">ระบุจำนวนพระสงฆ์ที่ต้องการก่อน เพื่อให้ระบบแสดงช่องเลือกวัดให้ครบตามจำนวน</p>
-                                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                        <input type="number" name="details[${detailIndex}].answer" id="monkCountInput"
-                                               class="form-control" placeholder="ระบุจำนวนพระสงฆ์..." min="1" required
-                                               oninput="onMonkCountInputChange(this.value)">
-                                    </div>
-                                    <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                                </c:if>
-                            </c:forEach>
+            </div>
+        </div>
 
-                            <%-- แสดงเมื่อเลือก "ให้ทางร้านนิมนต์" — ตอนนี้อยู่หลังจำนวนพระแล้ว
-                                 FIX: ระบุวัดเจาะจงได้สูงสุด 2 รูป ที่เหลือร้านจัดให้ --%>
-                            <div id="customWatDetail" style="display:block; margin-bottom:14px;">
-                                <c:forEach items="${questions}" var="q">
-                                    <c:if test="${fn:contains(q.questionsText, 'รายละเอียดการนิมนต์')}">
-                                        <div class="form-group">
-                                            <label class="form-label">รายละเอียดการนิมนต์พระสงฆ์</label>
-                                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                            <div class="checkbox-group">
-                                                <label class="checkbox-label">
-                                                    <input type="radio" name="customWatType" value="ต่างวัด"
-                                                           onchange="toggleWatOwnField('customWatDiff', true);
-                                                                     renderWatDropdowns('customWatDropdowns','customWatDiffAnswer', document.getElementById('monkCountInput').value || 0);">
-                                                    <span>ระบุวัดที่ต้องการบางส่วน <small style="color:#B0345A;">(เลือกได้สูงสุด 2 รูป ที่เหลือร้านจัดให้)</small></span>
-                                                </label>
-                                                <label class="checkbox-label">
-                                                    <input type="radio" name="customWatType" value="ให้ร้านเลือกให้"
-                                                           onchange="toggleWatOwnField('customWatDiff', false); document.getElementById('customWatDiffAnswer').value='ให้ร้านเลือกให้';" checked>
-                                                    <span>ให้ทางร้านเลือกให้ทั้งหมด <small style="color:#B0345A;">(เลือกวัดใกล้พื้นที่จัดงาน)</small></span>
-                                                </label>
+        <%-- 1.4 ชุดภัตตาหารปิ่นโต — ใช้ร่วมกันทั้ง 2 โหมด — จำนวนชุดเลือกเองอิสระ ไม่ผูกกับจำนวนพระ --%>
+        <div class="form-card">
+            <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
+            <div class="card-body">
+
+                <c:forEach items="${questions}" var="q">
+                    <c:if test="${fn:contains(q.questionsText, 'ต้องการชุดภัตตาหาร')}">
+                        <c:set var="pintoWantIndex" value="${detailIndex}"/>
+                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                    </c:if>
+                </c:forEach>
+
+                <div class="form-group">
+                    <label class="form-label">ต้องการชุดภัตตาหารปิ่นโตหรือไม่?</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="radio" name="details[${pintoWantIndex}].answer" value="ต้องการ"
+                                   onchange="toggleSection('pintoDetail', true)" checked>
+                            <span>ต้องการ</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="details[${pintoWantIndex}].answer" value="ไม่ต้องการ"
+                                   onchange="toggleSection('pintoDetail', false)">
+                            <span>ไม่ต้องการ</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="pintoDetail" style="display:block; margin-top:14px;">
+
+                    <%-- จำนวนชุดปิ่นโต --%>
+                    <c:forEach items="${questions}" var="q">
+                        <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดภัตตาหาร')}">
+                            <div class="form-group" style="margin-bottom:14px;">
+                                <label class="form-label">${q.questionsText}</label>
+                                <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                                <input type="number" name="details[${detailIndex}].answer"
+                                       class="form-control" placeholder="ระบุจำนวนชุด..." min="1">
+                            </div>
+                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                        </c:if>
+                    </c:forEach>
+
+                    <%-- เลือกชุดปิ่นโต --%>
+                    <c:forEach items="${questions}" var="q">
+                        <c:if test="${fn:contains(q.questionsText, 'เลือกชุดภัตตาหาร')}">
+                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                            <div class="item-card-grid">
+                                <c:forEach items="${pintoItems}" var="item" varStatus="loop">
+                                    <c:if test="${fn:contains(item.itemName, 'ชุด')}">
+                                        <label class="item-card">
+                                            <input type="radio" name="details[${detailIndex}].answer"
+                                                   value="${item.itemName}" ${loop.first ? 'checked' : ''}>
+                                            <div class="item-card-thumb">
+                                                <img src="${pageContext.request.contextPath}/static/images/foodimg/food${(loop.index % 5) + 1}.png" alt="${item.itemName}"
+                                                     onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
                                             </div>
-                                            <div id="customWatDiff" style="display:none; margin-top:12px;">
-                                                <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                                                    ระบุวัดที่ต้องการเป็นพิเศษได้สูงสุด 2 รูป ส่วนที่เหลือทางร้านจะจัดหาวัดใกล้พื้นที่จัดงานให้
-                                                </p>
-                                                <div id="customWatDropdowns">
-                                                    <p class="wat-picker-empty">กรุณาระบุจำนวนพระสงฆ์ก่อน จึงจะแสดงช่องเลือกวัด</p>
+                                            <div class="item-card-body">
+                                                <div class="item-card-name">${item.itemName}</div>
+                                                <div class="item-card-desc">${item.itemDetail}</div>
+                                                <div class="item-card-price">
+                                                    ฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}
                                                 </div>
-                                                <textarea name="details[${detailIndex}].answer" id="customWatDiffAnswer"
-                                                          class="form-control" style="display:none;"></textarea>
                                             </div>
-                                        </div>
-                                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                                        </label>
                                     </c:if>
                                 </c:forEach>
                             </div>
-
-                        </div>
-                    </div>
+                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                        </c:if>
+                    </c:forEach>
 
                 </div>
 
-                <div>
-
-                    <%-- ชุดปิ่นโต --%>
-                    <div class="form-card">
-                        <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
-                        <div class="card-body">
-
-                            <c:forEach items="${questions}" var="q">
-                                <c:if test="${fn:contains(q.questionsText, 'ต้องการชุดภัตตาหาร')}">
-                                    <c:set var="pintoWantIndex" value="${detailIndex}"/>
-                                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                    <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                                </c:if>
-                            </c:forEach>
-
-                            <div class="form-group">
-                                <label class="form-label">ต้องการชุดภัตตาหารปิ่นโตหรือไม่?</label>
-                                <div class="checkbox-group">
-                                    <label class="checkbox-label">
-                                        <input type="radio" name="details[${pintoWantIndex}].answer" value="ต้องการ"
-                                               onchange="toggleSection('pintoDetail', true)" checked>
-                                        <span>ต้องการ</span>
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="radio" name="details[${pintoWantIndex}].answer" value="ไม่ต้องการ"
-                                               onchange="toggleSection('pintoDetail', false)">
-                                        <span>ไม่ต้องการ</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div id="pintoDetail" style="display:block; margin-top:14px;">
-                                <c:forEach items="${questions}" var="q">
-                                    <c:if test="${fn:contains(q.questionsText, 'เลือกชุดภัตตาหาร')}">
-                                        <div class="form-group">
-                                            <label class="form-label">เลือกชุดปิ่นโต</label>
-                                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                            <div class="item-card-grid">
-                                                <c:forEach items="${pintoItems}" var="item" varStatus="loop">
-                                                    <c:if test="${fn:contains(item.itemName, 'ชุด')}">
-                                                        <label class="item-card">
-                                                            <input type="radio" name="details[${detailIndex}].answer"
-                                                                   value="${item.itemName}" ${loop.first ? 'checked' : ''}>
-                                                            <div class="item-card-thumb">
-                                                                <img src="${pageContext.request.contextPath}/static/images/foodimg/food${(loop.index % 5) + 1}.jpg" alt="${item.itemName}">
-                                                            </div>
-                                                            <div class="item-card-body">
-                                                                <div class="item-card-name">${item.itemName}</div>
-                                                                <div class="item-card-desc">${item.itemDetail}</div>
-                                                                <div class="item-card-price">
-                                                                    ฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}
-                                                                </div>
-                                                            </div>
-                                                        </label>
-                                                    </c:if>
-                                                </c:forEach>
-                                            </div>
-                                        </div>
-                                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                                    </c:if>
-                                </c:forEach>
-
-                                <%-- จำนวนชุดปิ่นโต — เลือกเองอิสระ ไม่ผูกกับจำนวนพระ --%>
-                                <c:forEach items="${questions}" var="q">
-                                    <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดภัตตาหาร')}">
-                                        <div class="form-group">
-                                            <label class="form-label">${q.questionsText}</label>
-                                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                            <input type="number" name="details[${detailIndex}].answer"
-                                                   class="form-control" placeholder="ระบุจำนวนชุด..." min="1">
-                                        </div>
-                                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                                    </c:if>
-                                </c:forEach>
-
-                                <div class="form-group" style="margin-top:10px;">
-                                    <label class="form-label">อุปกรณ์/เมนูอื่นๆ เพิ่มเติม</label>
-                                    <textarea name="pintoExtraNote" class="form-control" rows="2"
-                                              placeholder="ระบุรายการที่ต้องการเพิ่มเติมนอกเหนือจากชุดที่เลือก เช่น เชิงเทียนไฟฟ้า"></textarea>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <%-- สังฆทาน — จำนวนชุดผูกกับจำนวนพระ --%>
-                    <div class="form-card">
-                        <div class="card-header">ชุดสังฆทาน</div>
-                        <div class="card-body">
-
-                            <c:forEach items="${questions}" var="q">
-                                <c:if test="${fn:contains(q.questionsText, 'ต้องการสังฆทาน')}">
-                                    <c:set var="sanghatanWantIndex" value="${detailIndex}"/>
-                                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                    <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                                </c:if>
-                            </c:forEach>
-
-                            <div class="form-group">
-                                <label class="form-label">ต้องการชุดสังฆทานหรือไม่?</label>
-                                <div class="checkbox-group">
-                                    <label class="checkbox-label">
-                                        <input type="radio" name="details[${sanghatanWantIndex}].answer" value="ต้องการ"
-                                               onchange="toggleSection('sanghatanDetail', true)" checked>
-                                        <span>ต้องการ</span>
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="radio" name="details[${sanghatanWantIndex}].answer" value="ไม่ต้องการ"
-                                               onchange="toggleSection('sanghatanDetail', false)">
-                                        <span>ไม่ต้องการ</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div id="sanghatanDetail" style="display:block; margin-top:14px;">
-                                <div class="sanghatan-qty-note">
-                                    🙏 จำนวนชุดสังฆทานจะเท่ากับจำนวนพระสงฆ์ที่ระบุไว้ด้านซ้าย — ระบบจะกรอกให้อัตโนมัติ
-                                    (แก้ไขเองได้หากต้องการจำนวนต่างจากนี้)
-                                </div>
-                                <c:forEach items="${questions}" var="q">
-                                    <c:if test="${fn:contains(q.questionsText, 'เลือกชุดสังฆทาน')}">
-                                        <div class="form-group">
-                                            <label class="form-label">เลือกชุดสังฆทาน</label>
-                                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                            <div class="item-card-grid">
-                                                <c:forEach items="${sanghatharnItems}" var="item" varStatus="loop">
-                                                    <label class="item-card">
-                                                        <input type="radio" name="details[${detailIndex}].answer"
-                                                               value="${item.itemName}" ${loop.first ? 'checked' : ''}>
-                                                        <div class="item-card-thumb">
-                                                            <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/offeringset${(loop.index % 5) + 1}.jpg" alt="${item.itemName}">
-                                                        </div>
-                                                        <div class="item-card-body">
-                                                            <div class="item-card-name">${item.itemName}</div>
-                                                            <div class="item-card-desc">${item.itemDetail}</div>
-                                                            <div class="item-card-price">
-                                                                ฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}
-                                                            </div>
-                                                        </div>
-                                                    </label>
-                                                </c:forEach>
-                                            </div>
-                                        </div>
-                                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                                    </c:if>
-                                </c:forEach>
-
-                                <c:forEach items="${questions}" var="q">
-                                    <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดสังฆทาน')}">
-                                        <div class="form-group">
-                                            <label class="form-label">${q.questionsText}</label>
-                                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                            <input type="number" name="details[${detailIndex}].answer" id="sanghatanQtyInput"
-                                                   class="form-control" placeholder="ระบุจำนวนชุด..." min="1"
-                                                   oninput="this.dataset.userEdited = 'true';">
-                                        </div>
-                                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                                    </c:if>
-                                </c:forEach>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
             </div>
         </div>
 
@@ -701,23 +461,6 @@
             </div>
             <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
         </div>
-
-      
-			<div class="footer-col">
-				<h4 class="footer-heading">เมนู</h4>
-				<a href="${pageContext.request.contextPath}/home">หน้าหลัก</a>
-				<a href="${pageContext.request.contextPath}/reviews">รีวิว</a>
-				<a href="${pageContext.request.contextPath}/loginMember">เข้าสู่ระบบ</a>
-				<a href="${pageContext.request.contextPath}/register">สมัครสมาชิก</a>
-			</div>
-
-			<div class="footer-col">
-				<h4 class="footer-heading">งานบุญของเรา</h4>
-				<c:forEach var="t" items="${ceremonyTypes}">
-					<a href="#calendarSection">งาน${t.mainName}</a>
-				</c:forEach>
-			</div>
-
 			<div class="footer-col footer-contact-col">
 				<h4 class="footer-heading">ติดต่อเรา</h4>
 				<%-- TODO: ใส่เบอร์โทร / LINE OA / อีเมลจริงของร้านแทนที่ตรงนี้ --%>
@@ -732,8 +475,8 @@
 <style>
 .item-card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
 }
 .item-card {
     position: relative;
@@ -741,31 +484,77 @@
     flex-direction: column;
     border: 1.5px solid var(--cream-border-soft);
     border-radius: 10px;
-    padding: 12px;
+    padding: 10px;
     cursor: pointer;
     background: #FFFFFF;
     transition: border-color .15s, box-shadow .15s;
 }
 .item-card:hover { border-color: var(--gold-mid); }
-.item-card input[type="radio"] { position: absolute; top: 10px; right: 10px; }
+.item-card input[type="radio"] { position: absolute; top: 8px; right: 8px; }
 .item-card:has(input:checked) {
     border-color: var(--gold-mid);
     box-shadow: 0 0 0 2px rgba(224,87,127,0.22);
 }
 .item-card-thumb {
-    width: 100%; height: 110px;
+    width: 100%; height: 72px;
     overflow: hidden;
-    border-radius: 8px; margin-bottom: 8px;
+    border-radius: 8px; margin-bottom: 6px;
     background: var(--cream-mid);
 }
 .item-card-thumb img {
     width: 100%; height: 100%;
     object-fit: cover; display: block;
+    cursor: zoom-in;
 }
-.item-card-name { font-weight: 700; font-size: 14px; color: var(--brown-dark); margin-bottom: 4px; }
-.item-card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 6px; }
-.item-card-price { font-size: 13px; font-weight: 700; color: var(--gold); }
+.item-card-name {
+    font-weight: 700; font-size: 12.5px; color: var(--brown-dark); margin-bottom: 3px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.item-card-desc {
+    font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 4px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.item-card-price { font-size: 12px; font-weight: 700; color: var(--gold); }
+
+/* ==========================================================================
+   IMAGE LIGHTBOX — คลิกรูปในการ์ด (แพ็กเกจ/ชุดสังฆทาน/ชุดปิ่นโต) เพื่อดูรูปขยาย
+   ========================================================================== */
+.image-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.78);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    cursor: zoom-out;
+}
+.image-lightbox img {
+    max-width: 90vw;
+    max-height: 88vh;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    cursor: default;
+}
+.image-lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 30px;
+    color: #FFFFFF;
+    font-size: 34px;
+    line-height: 1;
+    font-weight: 400;
+    cursor: pointer;
+}
 </style>
+
+<%-- ========== IMAGE LIGHTBOX (คลิกรูปสินค้า/แพ็กเกจเพื่อดูรูปขยาย) ========== --%>
+<div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
+    <span class="image-lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightboxImg" src="" alt="">
+</div>
+
 
 <script>
 (function() {
@@ -819,7 +608,31 @@ function toggleWatOwnField(id, show) {
     if (el) el.style.display = show ? 'block' : 'none';
 }
 
-function toggleWatDetail(id, show) {
+/* ===== Image Lightbox — คลิกรูปในการ์ดเพื่อดูรูปขยาย ===== */
+function openLightbox(imgEl) {
+    var lb = document.getElementById('imageLightbox');
+    var lbImg = document.getElementById('lightboxImg');
+    if (!lb || !lbImg) return;
+    lbImg.src = imgEl.src;
+    lbImg.alt = imgEl.alt || '';
+    lb.style.display = 'flex';
+}
+
+function closeLightbox() {
+    var lb = document.getElementById('imageLightbox');
+    if (lb) lb.style.display = 'none';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+});
+
+/* เปลี่ยนชื่อจาก toggleWatDetail(id, show) เป็น toggleWatDetailBlock(id, show)
+   เพราะไฟล์ static/js/bookingForm.js (โหลดทีหลังสคริปต์นี้) มีฟังก์ชันชื่อ toggleWatDetail(radio)
+   ของหน้าเก่าอยู่แล้ว (รับพารามิเตอร์ตัวเดียวเป็น radio element ไม่ใช่ id/show) — ชื่อซ้ำกันทำให้
+   ฟังก์ชันของไฟล์เก่าทับฟังก์ชันนี้ ส่งผลให้กด "นิมนต์เอง" แล้วช่อง "รายละเอียดการนิมนต์" ไม่ถูกซ่อน
+   จึงเปลี่ยนชื่อให้ไม่ชนกันแทน (ไม่ไปแก้ไฟล์ bookingForm.js ที่ใช้ร่วมกับหน้าอื่น) */
+function toggleWatDetailBlock(id, show) {
     var el = document.getElementById(id);
     if (el) el.style.display = show ? 'block' : 'none';
 }
@@ -845,9 +658,10 @@ var watOptionList = [
 	    "วัดเจ็ดยอด (วัดโพธารามมหาวิหาร)"
 ];
 
-/* จำกัดให้ระบุวัดเจาะจงได้สูงสุดกี่รูป ตามที่อาจารย์แนะนำ (ที่เหลือร้านจัดให้) */
-var WAT_SPECIFIC_LIMIT = 2;
-
+/* FIX ตามคำแนะนำอาจารย์: จำนวนช่องเลือกวัดต้องเท่ากับจำนวนพระสงฆ์ทั้งหมดเสมอ
+   (เดิมจำกัดไว้แค่ 2 ช่อง — ตัดข้อจำกัดนั้นออก) แต่ละช่องมีตัวเลือก "ให้ทางร้านเลือกให้"
+   เป็นค่าเริ่มต้นอยู่แล้วในตัวมันเอง (ดู watOptionList) ผู้ใช้จะระบุวัดเฉพาะรูปไหนก็ได้ตามต้องการ
+   โดยไม่ต้องระบุให้ครบทุกรูป */
 function renderWatDropdowns(containerId, textareaId, count) {
     var container = document.getElementById(containerId);
     var textarea = document.getElementById(textareaId);
@@ -860,12 +674,10 @@ function renderWatDropdowns(containerId, textareaId, count) {
         return;
     }
 
-    var specificCount = Math.min(count, WAT_SPECIFIC_LIMIT);
     container.innerHTML = '';
     container.dataset.totalCount = count;
-    container.dataset.specificCount = specificCount;
 
-    for (var i = 1; i <= specificCount; i++) {
+    for (var i = 1; i <= count; i++) {
         var row = document.createElement('div');
         row.className = 'wat-picker-row';
         var label = document.createElement('span');
@@ -885,14 +697,6 @@ function renderWatDropdowns(containerId, textareaId, count) {
         container.appendChild(row);
     }
 
-    if (count > specificCount) {
-        var note = document.createElement('p');
-        note.className = 'wat-picker-empty';
-        note.style.marginTop = '8px';
-        note.innerText = 'ที่เหลืออีก ' + (count - specificCount) + ' รูป ทางร้านจะเป็นผู้เลือกวัดให้ตามความเหมาะสมของพื้นที่จัดงาน';
-        container.appendChild(note);
-    }
-
     syncWatAnswer(containerId, textareaId);
 }
 
@@ -905,39 +709,36 @@ function syncWatAnswer(containerId, textareaId) {
     selects.forEach(function(s, idx) {
         lines.push('รูปที่ ' + (idx + 1) + ' ' + s.value);
     });
-    var total = parseInt(container.dataset.totalCount, 10);
-    var specific = parseInt(container.dataset.specificCount, 10);
-    if (total && specific && total > specific) {
-        lines.push('รูปที่ ' + (specific + 1) + '-' + total + ' ให้ร้านเลือกให้');
-    }
     textarea.value = lines.join('\n');
 }
 
+/* รวมเหลือชุดเดียว เพราะตอนนี้มีช่องเลือกวัดชุดเดียวที่ใช้ร่วมกันทั้ง 2 โหมด */
 function syncAllWatAnswersBeforeSubmit() {
-    syncWatAnswer('pkgWatDropdowns', 'pkgWatDiffAnswer');
-    syncWatAnswer('customWatDropdowns', 'customWatDiffAnswer');
+    syncWatAnswer('watDropdowns', 'watDiffAnswer');
     return true;
 }
 
+/* อัปเดตจำนวนพระ (ล็อกตามแพ็กเกจ) + ค่าเริ่มต้นจำนวนชุดสังฆทาน + ช่องเลือกวัด — ใช้เฉพาะตอนอยู่โหมดแพ็กเกจ */
 function applyPackageMonkCount(radio) {
-    var input = document.getElementById('monkCountPackage');
+    var input = document.getElementById('monkCountField');
     if (input && radio.dataset.monkcount) {
         input.value = radio.dataset.monkcount;
     }
-    var qtyInput = document.getElementById('pkgSanghatanQtyInput');
+    var qtyInput = document.getElementById('sanghatanQtyInput');
     if (qtyInput && qtyInput.dataset.userEdited !== 'true') {
         qtyInput.value = input.value;
     }
-    var watDiff = document.getElementById('pkgWatDiff');
+    var watDiff = document.getElementById('watDiff');
     if (watDiff && watDiff.style.display !== 'none') {
-        renderWatDropdowns('pkgWatDropdowns', 'pkgWatDiffAnswer', input.value);
+        renderWatDropdowns('watDropdowns', 'watDiffAnswer', input.value);
     }
 }
 
+/* ผู้ใช้พิมพ์จำนวนพระเองตอนอยู่โหมดกรอกเอง — sync ช่องเลือกวัด + ค่าเริ่มต้นจำนวนชุดสังฆทาน */
 function onMonkCountInputChange(value) {
-    var watDiff = document.getElementById('customWatDiff');
+    var watDiff = document.getElementById('watDiff');
     if (watDiff && watDiff.style.display !== 'none') {
-        renderWatDropdowns('customWatDropdowns', 'customWatDiffAnswer', value || 0);
+        renderWatDropdowns('watDropdowns', 'watDiffAnswer', value || 0);
     }
     var sQty = document.getElementById('sanghatanQtyInput');
     if (sQty && sQty.dataset.userEdited !== 'true') {
@@ -945,20 +746,48 @@ function onMonkCountInputChange(value) {
     }
 }
 
+/* ==========================================================================
+   FIX หลัก: ยุบโหมดแพ็กเกจ/กรอกเองให้เหลือชุดคำถามเดียว
+   สลับแค่ 2 จุด: การ์ดเลือกแพ็กเกจ (packageOnlyBlock / customCeremonyWrap)
+   และพฤติกรรมของช่องจำนวนพระ (ล็อกตามแพ็กเกจ / กรอกเอง)
+   ========================================================================== */
 function toggleBookingMode(mode) {
-    var packageSection = document.getElementById('packageSection');
-    var customSection = document.getElementById('customSection');
+    var packageOnlyBlock = document.getElementById('packageOnlyBlock');
+    var customCeremonyWrap = document.getElementById('customCeremonyWrap');
+    var monkCountGroup = document.getElementById('monkCountGroup');
+    var monkCountField = document.getElementById('monkCountField');
+    var selfInviteRadio = document.getElementById('selfInviteRadio');
+    var selfInviteDiscountNote = document.getElementById('selfInviteDiscountNote');
+
     if (mode === 'package') {
-        packageSection.style.display = 'block';
-        customSection.style.display = 'none';
+        if (packageOnlyBlock) packageOnlyBlock.style.display = 'block';
+        if (customCeremonyWrap) customCeremonyWrap.style.display = 'none';
+
+        // โหมดแพ็กเกจ: ไม่โชว์คำถาม "จำนวนพระ" ให้ลูกค้ากรอกเอง แต่ยังคงคำนวณค่าไว้เบื้องหลัง
+        // จากแพ็กเกจที่เลือกอยู่ตอนนี้ (ใช้เป็นค่าเริ่มต้นของจำนวนชุดสังฆทาน/ช่องเลือกวัด)
+        if (monkCountGroup) monkCountGroup.style.display = 'none';
+        var checkedPkg = document.querySelector('input[name="ceremony.ceremonyId"]:checked');
+        if (monkCountField && checkedPkg && checkedPkg.dataset.monkcount) {
+            monkCountField.value = checkedPkg.dataset.monkcount;
+        }
+
+        if (selfInviteRadio) selfInviteRadio.value = 'นิมนต์เอง (ลด ฿1,500)';
+        if (selfInviteDiscountNote) selfInviteDiscountNote.style.display = 'inline';
     } else {
-        packageSection.style.display = 'none';
-        customSection.style.display = 'block';
+        if (packageOnlyBlock) packageOnlyBlock.style.display = 'none';
+        if (customCeremonyWrap) customCeremonyWrap.style.display = 'block';
+
+        // โหมดกรอกเอง: โชว์คำถาม "จำนวนพระ" ให้ลูกค้ากรอกเอง
+        if (monkCountGroup) monkCountGroup.style.display = 'block';
+
+        if (selfInviteRadio) selfInviteRadio.value = 'นิมนต์เอง';
+        if (selfInviteDiscountNote) selfInviteDiscountNote.style.display = 'none';
     }
 }
 
 /* ==========================================================================
-   FIX หลัก: กันไม่ให้ mode/ส่วนที่ถูกซ่อนไว้ ส่งค่าไปทับข้อมูลของ mode ที่เลือกจริง
+   FIX หลัก: กันไม่ให้ฟิลด์ที่อยู่ในกิ่งที่ถูกซ่อนไว้ (เช่น การ์ดแพ็กเกจตอนอยู่โหมดกรอกเอง,
+   ช่องเลือกวัดที่ยังไม่เปิด, ปิ่นโตตอนเลือก "ไม่ต้องการ" ฯลฯ) ถูกส่งไปทับข้อมูลจริง
    ทำงานตอน submit เท่านั้น ไม่กระทบการใช้งานหน้าจอ
    ========================================================================== */
 function isInHiddenBranch(el) {
@@ -971,27 +800,21 @@ function isInHiddenBranch(el) {
 }
 
 function cleanupAndRenumberDetailsBeforeSubmit() {
-    var modeRadio = document.querySelector('input[name="bookingMode"]:checked');
-    var mode = modeRadio ? modeRadio.value : 'package';
-
-    // 1) ปิดฟิลด์ของโหมดที่ "ไม่ได้เลือก" ทั้งหมด ไม่ให้ถูกส่งไปทับข้อมูล
-    var inactiveSection = document.getElementById(mode === 'package' ? 'customSection' : 'packageSection');
-    if (inactiveSection) {
-        inactiveSection.querySelectorAll('input, select, textarea').forEach(function(el) {
-            el.disabled = true;
-        });
-    }
-
-    // 2) ในโหมดที่เลือกอยู่ ปิดฟิลด์ที่อยู่ในกิ่งที่ถูกซ่อน (เช่น เลือก "ไม่ต้องการ")
-    var activeSection = document.getElementById(mode === 'package' ? 'packageSection' : 'customSection');
-    if (activeSection) {
-        activeSection.querySelectorAll('input, select, textarea').forEach(function(el) {
-            if (isInHiddenBranch(el)) el.disabled = true;
-        });
-    }
-
-    // 3) เรียงเลข details[i] ใหม่ให้ต่อเนื่อง 0,1,2,... เฉพาะฟิลด์ที่ยังไม่ถูกปิด
     var form = document.querySelector('form');
+
+    // 1) ปิดฟิลด์ใดๆ ที่อยู่ในกิ่งที่ถูกซ่อนอยู่ตอนนี้ ไม่ให้ถูกส่งไปทับข้อมูลของสิ่งที่เลือกจริง
+    form.querySelectorAll('input, select, textarea').forEach(function(el) {
+        if (isInHiddenBranch(el)) el.disabled = true;
+    });
+
+    // 1.1) ข้อยกเว้น: "จำนวนพระ" ถูกซ่อนไว้ในโหมดแพ็กเกจ (ไม่ให้ลูกค้ากรอกเอง)
+    // แต่ยังต้องส่งค่าไปด้วยเสมอ เพราะระบบใช้ค่านี้เป็นค่าเริ่มต้นของจำนวนชุดสังฆทาน/ช่องเลือกวัด
+    var monkCountField = document.getElementById('monkCountField');
+    var monkCountQId = document.getElementById('monkCountQuestionIdField');
+    if (monkCountField) monkCountField.disabled = false;
+    if (monkCountQId) monkCountQId.disabled = false;
+
+    // 2) เรียงเลข details[i] ใหม่ให้ต่อเนื่อง 0,1,2,... เฉพาะฟิลด์ที่ยังไม่ถูกปิด
     var pattern = /^details\[(\d+)\]\.(answer|question\.questionsId)$/;
     var order = [];
     var seen = {};

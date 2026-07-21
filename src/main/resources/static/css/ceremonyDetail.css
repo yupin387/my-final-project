@@ -27,10 +27,12 @@
     --shadow-warm:       rgba(0, 0, 0, 0.07);
     --shadow-gold:       rgba(224, 87, 127, 0.14);
 
-    /* ===== Footer colors (ให้ตรงกับ home.css) ===== */
-    --footer-dark-1: #6E1930;
-    --footer-dark-2: #8C2748;
-    --footer-dark-3: #A6335A;
+    /* ===== Footer colors — แก้ให้เป็นชมพูอ่อนเหมือนหน้า home เป๊ะๆ
+       (ของเดิมเป็นโทนเข้ม/แดงเลือดหมู #6E1930 ทำให้ footer ของหน้านี้เข้มกว่าหน้า home
+       ตอนจะไปแก้ ceremonyDetail อีก 3 หน้า ก็แก้ 3 ค่านี้ให้ตรงกันได้เลย) ===== */
+    --footer-dark-1: #C7405F;
+    --footer-dark-2: #D94F76;
+    --footer-dark-3: #E0577F;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -591,7 +593,7 @@ body {
     color: #FFFFFF;
 }
 
-/* ========== SITE FOOTER (ให้ตรงกับ home.css) ========== */
+/* ========== SITE FOOTER (ให้ตรงกับ home.css — ใช้ชมพูอ่อนแทนแดงเลือดหมูเดิม) ========== */
 .site-footer {
     background: linear-gradient(135deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
     color: rgba(255, 255, 255, 0.92);
@@ -604,18 +606,17 @@ body {
 
 .footer-top { display: block; }
 
+/* แก้จาก 4 คอลัมน์ -> 2 คอลัมน์ ให้ตรงกับ 2 div ที่ใช้จริงใน JSP (footer-brand-col / footer-contact-col)
+   เดิมตั้ง 1.4fr 1fr 1fr 1.2fr (4 คอลัมน์) ทำให้ระยะห่างเพี้ยนเพราะมีแค่ 2 คอลัมน์จริง */
 .footer-content {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    grid-template-columns: 1.3fr 1fr;
     gap: 30px;
-    padding: 48px 20px 30px;
+    padding: 44px 20px 26px;
     max-width: 1100px;
     margin: 0 auto;
 }
 
-@media (max-width: 860px) {
-    .footer-content { grid-template-columns: 1fr 1fr; }
-}
 @media (max-width: 520px) {
     .footer-content { grid-template-columns: 1fr; }
 }
@@ -785,3 +786,11 @@ body {
     border-radius: 20px;
 }
 /**/
+
+.cd-package-img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 12px;
+    }

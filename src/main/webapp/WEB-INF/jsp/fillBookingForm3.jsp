@@ -686,23 +686,6 @@
             </div>
             <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
         </div>
-
-      
-			<div class="footer-col">
-				<h4 class="footer-heading">เมนู</h4>
-				<a href="${pageContext.request.contextPath}/home">หน้าหลัก</a>
-				<a href="${pageContext.request.contextPath}/reviews">รีวิว</a>
-				<a href="${pageContext.request.contextPath}/loginMember">เข้าสู่ระบบ</a>
-				<a href="${pageContext.request.contextPath}/register">สมัครสมาชิก</a>
-			</div>
-
-			<div class="footer-col">
-				<h4 class="footer-heading">งานบุญของเรา</h4>
-				<c:forEach var="t" items="${ceremonyTypes}">
-					<a href="#calendarSection">งาน${t.mainName}</a>
-				</c:forEach>
-			</div>
-
 			<div class="footer-col footer-contact-col">
 				<h4 class="footer-heading">ติดต่อเรา</h4>
 				<%-- TODO: ใส่เบอร์โทร / LINE OA / อีเมลจริงของร้านแทนที่ตรงนี้ --%>
