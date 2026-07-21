@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -5,24 +7,30 @@
     font-family: 'Sarabun', sans-serif;
 }
 
+/* ===== CSS Variables (ธีมสีชมพู เหมือนหน้า Home) ===== */
 :root {
-    --gold:          #C9960C;
-    --gold-mid:      #D4A017;
-    --gold-light:    #E8BB3A;
-    --gold-pale:     #F5D97A;
-    --gold-glow:     #FDE68A;
+    --gold:          #E0577F;
+    --gold-mid:      #EC6E96;
+    --gold-light:    #F49CB9;
+    --gold-pale:     #FBD0DE;
+    --gold-glow:     #FFE3EC;
 
-    --cream:         #FFFBF0;
-    --cream-warm:    #FFF8E1;
-    --cream-mid:     #FDF3D0;
-    --cream-border:  #E8CC70;
-    --cream-border-soft: #EDD98A;
+    --cream:         #FFFFFF;
+    --cream-warm:    #FFF6F9;
+    --cream-mid:     #FDEEF3;
+    --cream-border:  #F3C4D5;
+    --cream-border-soft: #F6D4E1;
 
-    --text-dark:     #2C1F00;
-    --text-mid:      #5A4000;
-    --text-muted:    #A08840;
-    --brown-dark:    #4A2E00;
-    --brown-mid:     #7A5200;
+    --text-dark:     #1A1A1A;
+    --text-mid:      #333333;
+    --text-muted:    #777777;
+    --brown-dark:    #1A1A1A;
+    --brown-mid:     #3A3A3A;
+
+    /* สีแถบ footer ให้เป็นเฉดเดียวกับ navbar ตามธีม Home */
+    --footer-grad-1: #C7405F;
+    --footer-grad-2: #D94F76;
+    --footer-grad-3: #E0577F;
 }
 
 body {
@@ -32,20 +40,20 @@ body {
     flex-direction: column;
 }
 
-/* ===== Navbar (เหมือนหน้า Home) ===== */
+/* ===== Navbar (เหมือนหน้า Home ทุกขนาด/ฟอนต์) ===== */
 .navbar-custom {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 0 36px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-mid);
+    border-bottom: 3px solid #FBD0DE;
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 68px;
+    min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
 }
 
 .navbar-custom::before {
@@ -53,7 +61,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 .navbar-brand-wrap {
@@ -63,28 +71,37 @@ body {
     gap: 12px;
 }
 
-.lotus-icon {
-    background: linear-gradient(135deg, #7A5200, #5C3800);
-    width: 44px;
-    height: 44px;
+.navbar-custom .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    font-size: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
 }
 
-.nav-brand-text {
-    color: var(--gold-pale);
+.lotus-icon img,
+img.lotus-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.navbar-custom .nav-brand-text {
+    color: #FFFFFF;
     font-family: 'Noto Serif Thai', serif;
-    font-size: 22px;
-    font-weight: 700;
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .navbar-center {
@@ -96,7 +113,7 @@ body {
 }
 
 .nav-link-item {
-    color: rgba(253, 237, 160, 0.8);
+    color: #FFFFFF;
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -104,25 +121,35 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-.nav-link-item:hover { background: rgba(212, 160, 23, 0.18); color: var(--gold-pale); }
-.nav-link-item.active { background: var(--gold-mid); color: var(--brown-dark); font-weight: 700; }
+.nav-link-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+}
+
+.nav-link-item.active {
+    background: #FFFFFF;
+    color: #E0577F;
+    font-weight: 700;
+}
 
 .user-profile-pill {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.15);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
-    border: 1.5px solid rgba(212, 160, 23, 0.6);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
     white-space: nowrap;
+    color: #FFFFFF;
 }
 
 .avatar-circle-nav {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: #E0577F;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -135,8 +162,8 @@ body {
 }
 
 .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name-nav  { font-size: 0.88rem; font-weight: 700; color: var(--gold-pale); }
-.user-role-nav  { font-size: 0.7rem; color: rgba(253, 237, 160, 0.65); }
+.user-name-nav  { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
+.user-role-nav  { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
 
 /* ===== Page Wrapper ===== */
 .page-wrapper {
@@ -156,15 +183,15 @@ body {
     border: 3px solid var(--gold-mid);
 
     box-shadow:
-        0 0 12px rgba(212,160,23,0.35),
-        0 8px 32px rgba(180,130,0,0.15);
+        0 0 12px rgba(236,110,150,0.35),
+        0 8px 32px rgba(224,87,127,0.15);
 
     margin-bottom: 20px;
 }
 
 /* ===== Card Header ===== */
 .card-header-bar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 22px 32px;
     display: flex;
     justify-content: space-between;
@@ -178,7 +205,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 .card-header-bar h2 {
@@ -209,7 +236,7 @@ body {
 
 .status-pending {
     background: var(--cream-warm);
-    color: #b8860b;
+    color: #C7405F;
     border: 1.5px solid var(--gold-light);
 }
 
@@ -402,13 +429,11 @@ tr:hover td { background: var(--cream); }
     border-top: 1.5px solid var(--cream-mid);
 }
 
-/* ค้นหาและเปลี่ยนทั้งหมดให้เป็นชุดนี้เพียงชุดเดียว */
 .btn-confirm-custom {
     display: block;
     width: 100%;
-    /* ใช้สีเขียว */
     background: linear-gradient(135deg, #28a745, #218838);
-    color: white; 
+    color: white;
     border: none;
     padding: 14px 28px;
     border-radius: 10px;
@@ -427,6 +452,7 @@ tr:hover td { background: var(--cream); }
     transform: translateY(-1px);
     box-shadow: 0 5px 16px rgba(40, 167, 69, 0.35);
 }
+
 /* ===== Revise Section ===== */
 .revise-box {
     background: var(--cream-warm);
@@ -458,14 +484,14 @@ tr:hover td { background: var(--cream); }
 .revise-textarea:focus {
     outline: none;
     border-color: var(--gold-mid);
-    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15);
+    box-shadow: 0 0 0 3px rgba(236, 110, 150, 0.15);
 }
 
 .btn-revise {
     display: block;
     width: 100%;
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    color: var(--gold-pale);
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    color: #FFFFFF;
     border: none;
     padding: 13px;
     border-radius: 8px;
@@ -478,7 +504,7 @@ tr:hover td { background: var(--cream); }
 }
 
 .btn-revise:hover {
-    background: linear-gradient(135deg, #5C3800 0%, #3D2500 60%, #5C3800 100%);
+    background: linear-gradient(135deg, #D94F76 0%, #C7405F 60%, #D94F76 100%);
     transform: translateY(-1px);
 }
 
@@ -528,7 +554,7 @@ tr:hover td { background: var(--cream); }
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(50, 30, 0, 0.45);
+    background-color: rgba(50, 20, 30, 0.45);
     display: none;
     align-items: center;
     justify-content: center;
@@ -541,7 +567,7 @@ tr:hover td { background: var(--cream); }
     border-radius: 15px;
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 16px 60px rgba(100, 65, 0, 0.22);
+    box-shadow: 0 16px 60px rgba(224, 87, 127, 0.22);
     text-align: center;
     border: 1.5px solid var(--gold-mid);
 }
@@ -611,7 +637,7 @@ tr:hover td { background: var(--cream); }
 .member-inline-input:focus {
     outline: none;
     border-color: var(--gold-mid);
-    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15);
+    box-shadow: 0 0 0 3px rgba(236, 110, 150, 0.15);
 }
 
 .btn-flex-group {
@@ -641,8 +667,6 @@ tr:hover td { background: var(--cream); }
 
 .btn-revise-submit:hover { background-color: #c9302c; }
 
-
-
 .flash-banner {
     padding: 14px 20px;
     margin-bottom: 20px;
@@ -657,10 +681,154 @@ tr:hover td { background: var(--cream); }
 .flash-banner-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 .flash-banner-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
+/* ================================================================== */
+/* ===== FOOTER (เหมือนหน้า Home ทั้งสี/ขนาด/โครงสร้าง) ===== */
+/* ================================================================== */
+.footer-strip {
+    display: block;
+    width: 100%;
+    line-height: 0;
+}
+
+.site-footer {
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    color: rgba(255, 255, 255, 0.92);
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top: 3px solid #FBD0DE;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+}
+
+.footer-top {
+    display: block;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: 30px;
+    padding: 48px 20px 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.footer-content.footer-content-slim {
+    grid-template-columns: 1.3fr 1fr;
+    padding: 44px 20px 26px;
+}
+
+@media (max-width: 860px) {
+    .footer-content { grid-template-columns: 1fr 1fr; }
+    .footer-content.footer-content-slim { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+    .footer-content { grid-template-columns: 1fr; }
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.footer-brand .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    flex-shrink: 0;
+}
+
+.footer-brand-text {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.footer-tagline {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 320px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.footer-heading {
+    font-family: 'Noto Serif Thai', serif;
+    color: #FFFFFF;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.footer-col a {
+    display: block;
+    color: rgba(255, 255, 255, 0.92);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    transition: color 0.2s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.footer-col a:hover { color: #FFFFFF; }
+
+.footer-contact-col p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.92);
+    margin: 0 0 10px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 7px 14px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+.footer-social-link:hover { background: rgba(255, 255, 255, 0.3); }
+
+.footer-bottom {
+    text-align: center;
+    padding: 14px 20px 20px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.75);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 8px;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-    .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
-    .navbar-title { font-size: 18px; }
+    .navbar-custom { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
+    .navbar-custom .nav-brand-text { font-size: 20px; }
+    .navbar-custom .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
     .page-wrapper { padding: 20px; }
     .card-header-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
     .info-grid-section { grid-template-columns: 1fr; }

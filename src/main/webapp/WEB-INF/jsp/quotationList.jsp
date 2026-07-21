@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายการใบเสนอราคา - ระบบรับจัดงานบุญ</title>
+    <title>รายการใบเสนอราคา - บุญมี รับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationList.css">
 </head>
@@ -15,8 +15,9 @@
 <%-- ========== NAVBAR ========== --%>
 <div class="navbar">
     <a href="${pageContext.request.contextPath}/organizer/bookings" class="navbar-brand">
-        <div class="navbar-lotus">🪷</div>
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -56,7 +57,7 @@
             <div class="section-ornament">
                 <div class="ornament-line"></div>
                 <div class="ornament-diamond-sm"></div>
-                <div class="ornament-diamond"></div>
+                <div class="ornament-diamond-sm"></div>
                 <div class="ornament-diamond-sm"></div>
                 <div class="ornament-line right"></div>
             </div>
@@ -82,10 +83,11 @@
         <table>
             <thead>
                 <tr>
-                    <th width="12%">เลขที่ใบ</th>
-                    <th width="35%">ลูกค้า / พิธี</th>
-                    <th width="18%">วันจัดงาน</th>
-                    <th width="18%">สถานะ</th>
+                    <th width="10%">เลขที่ใบ</th>
+                    <th width="22%">ลูกค้า</th>
+                    <th width="20%">พิธี</th>
+                    <th width="15%">วันจัดงาน</th>
+                    <th width="16%">สถานะ</th>
                     <th width="17%">จัดการ</th>
                 </tr>
             </thead>
@@ -97,7 +99,9 @@
                             <span class="customer-name">
                                 ${q.bookingForm.member.memberFirstName} ${q.bookingForm.member.memberLastName}
                             </span>
-                            <span class="ceremony-name">${q.bookingForm.ceremony.ceremonyType}</span>
+                        </td>
+                        <td>
+                            <span class="customer-name">${q.bookingForm.ceremony.ceremonyType}</span>
                         </td>
                         <td class="date-cell">
                             <fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/>
@@ -121,7 +125,7 @@
 
                 <c:if test="${empty quotations}">
                     <tr>
-                        <td colspan="5" class="empty-state">
+                        <td colspan="6" class="empty-state">
                             <p>ไม่พบรายการใบเสนอราคาในหมวด
                                <strong>"${empty param.status ? 'ทั้งหมด' : param.status}"</strong>
                             </p>
@@ -134,6 +138,19 @@
     </div>
 
 </div>
+
+<%-- ===== FOOTER ===== --%>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+    </div>
+   
+</footer>
 
 <script src="${pageContext.request.contextPath}/static/js/quotationList.js"></script>
 </body>

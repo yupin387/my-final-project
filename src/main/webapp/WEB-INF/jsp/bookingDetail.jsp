@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายละเอียดการจอง - ระบบรับจัดงานบุญ</title>
+    <title>รายละเอียดการจอง - บุญมี รับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bookingDetail.css">
 </head>
@@ -16,8 +16,9 @@
 <%-- ===== NAVBAR ===== --%>
 <nav class="navbar">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/organizer/bookings" style="text-decoration: none;">
-        <div class="lotus-icon">🪷</div>
-        <span class="nav-brand-text">ระบบรับจัดงานบุญ</span>
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="nav-brand-text">บุญมี รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -78,18 +79,18 @@
                 <span class="info-value">${b.ceremony.ceremonyType}</span>
             </div>
             <div class="info-row">
-                <span class="info-label">แพ็กเกจที่เลือก</span>
+                <span class="info-label">รูปเเบบการจอง</span>
                 <span class="info-value">
                     ${b.ceremony.ceremonyName}
                     <c:if test="${not empty b.ceremony.ceremonyDetail}">
-                        <div style="font-weight:400;font-size:13px;color:#A08840;margin-top:2px;">${b.ceremony.ceremonyDetail}</div>
+                        <div style="font-weight:400;font-size:13px;color:#C77E96;margin-top:2px;">${b.ceremony.ceremonyDetail}</div>
                     </c:if>
                 </span>
             </div>
             <c:if test="${b.ceremony.basePrice > 0}">
                 <div class="info-row">
-                    <span class="info-label">ราคาแพ็กเกจเริ่มต้น</span>
-                    <span class="info-value" style="color:#D4A017;">฿<fmt:formatNumber value="${b.ceremony.basePrice}" pattern="#,###"/></span>
+                    <span class="info-label">ราคาเริ่มต้น</span>
+                    <span class="info-value">฿<fmt:formatNumber value="${b.ceremony.basePrice}" pattern="#,###"/></span>
                 </div>
             </c:if>
         </div>
@@ -123,14 +124,14 @@
                                     <c:set var="trimmed" value="${fn:trim(imgFile)}"/>
                                     <c:if test="${not empty trimmed}">
                                         <img src="${pageContext.request.contextPath}/uploads/address/${trimmed}"
-                                             style="width:130px;height:130px;object-fit:cover;border-radius:10px;border:2px solid #D4A017;box-shadow:0 2px 8px rgba(0,0,0,0.12);"
+                                             style="width:130px;height:130px;object-fit:cover;border-radius:10px;border:2px solid #EC6E96;box-shadow:0 2px 8px rgba(0,0,0,0.12);"
                                              onerror="this.style.display='none'">
                                     </c:if>
                                 </c:forEach>
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <span style="color:#A08840;">ไม่มีรูปภาพสถานที่</span>
+                            <span style="color:#C77E96;">ไม่มีรูปภาพสถานที่</span>
                         </c:otherwise>
                     </c:choose>
                 </span>
@@ -200,7 +201,7 @@
             <%-- คำถามเลือกชุด: แสดงค่าถ้าต้องการ, - ถ้าไม่ต้องการ --%>
             <c:forEach items="${b.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${pintoWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${pintoItems}" var="pItem"><c:if test="${pItem.itemName == fn:trim(d.answer)}"><span style="color:#A08840;font-size:13px;"> — ฿<fmt:formatNumber value="${pItem.pricePerUnit}" pattern="#,###"/> / ${pItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${pintoWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${pintoItems}" var="pItem"><c:if test="${pItem.itemName == fn:trim(d.answer)}"><span style="color:#C77E96;font-size:13px;"> — ฿<fmt:formatNumber value="${pItem.pricePerUnit}" pattern="#,###"/> / ${pItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
 
@@ -238,7 +239,7 @@
             <%-- คำถามเลือกชุด: แสดงค่าถ้าต้องการ, - ถ้าไม่ต้องการ --%>
             <c:forEach items="${b.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${sangWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${sanghatharnItems}" var="sItem"><c:if test="${sItem.itemName == fn:trim(d.answer)}"><span style="color:#A08840;font-size:13px;"> — ฿<fmt:formatNumber value="${sItem.pricePerUnit}" pattern="#,###"/> / ${sItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${sangWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${sanghatharnItems}" var="sItem"><c:if test="${sItem.itemName == fn:trim(d.answer)}"><span style="color:#C77E96;font-size:13px;"> — ฿<fmt:formatNumber value="${sItem.pricePerUnit}" pattern="#,###"/> / ${sItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
 
@@ -250,37 +251,7 @@
             </c:forEach>
         </div>
 
-        <hr class="divider">
-
-        <%-- รายละเอียดเพิ่มเติม — แสดงคำถาม/คำตอบอื่นๆ ที่ผู้จองกรอกมาทั้งหมด
-             ที่ยังไม่ถูกแสดงในหมวดข้างต้น (กันตกหล่นข้อมูลที่กรอกไว้) --%>
-        <div class="section">
-            <div class="section-title">รายละเอียดเพิ่มเติม</div>
-            <c:set var="hasOtherDetail" value="false"/>
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${!fn:contains(d.question.questionsText, 'แขก')
-                           && !fn:contains(d.question.questionsText, 'อุปกรณ์')
-                           && !fn:contains(d.question.questionsText, 'จำนวนผู้')
-                           && !fn:contains(d.question.questionsText, 'ผูกข้อมือ')
-                           && !fn:contains(d.question.questionsText, 'บ้านใหม่')
-                           && !fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')
-                           && !fn:contains(d.question.questionsText, 'รายละเอียดการนิมนต์')
-                           && !fn:contains(d.question.questionsText, 'จำนวนพระ')
-                           && !fn:contains(d.question.questionsText, 'ภัตตาหาร')
-                           && !fn:contains(d.question.questionsText, 'ปิ่นโต')
-                           && !fn:contains(d.question.questionsText, 'สังฆทาน')}">
-                    <c:set var="hasOtherDetail" value="true"/>
-                    <div class="info-row">
-                        <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value"><c:choose><c:when test="${empty fn:trim(d.answer)}">-</c:when><c:otherwise>${d.answer}</c:otherwise></c:choose></span>
-                    </div>
-                </c:if>
-            </c:forEach>
-            <c:if test="${!hasOtherDetail}">
-                <span style="color:#A08840;font-size:14px;">ไม่มีรายละเอียดเพิ่มเติม</span>
-            </c:if>
-        </div>
-
+       
         <%-- Action Bar --%>
         <div class="action-bar">
             <div class="action-btn-group">
@@ -303,6 +274,19 @@
         </div>
     </div>
 </div>
+
+<%-- ===== FOOTER ===== --%>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+    </div>
+   
+</footer>
 
 <%-- Modal อนุมัติ --%>
 <div id="approveModal" class="modal-overlay" style="display: none;">

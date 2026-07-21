@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${isChangeMode ? 'เปลี่ยนหัวหน้างาน' : 'มอบหมายหัวหน้างาน'} - ระบบรับจัดงานบุญ</title>
+    <title>${isChangeMode ? 'เปลี่ยนหัวหน้างาน' : 'มอบหมายหัวหน้างาน'} - บุญมี รับจัดงานบุญ</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/assignStaff.css">
 </head>
@@ -15,8 +15,9 @@
 <%-- ===== NAVBAR ===== --%>
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
-        <div class="lotus-icon">🪷</div>
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -152,7 +153,18 @@
     </div>
 </div>
 
-
+<%-- ===== FOOTER ===== --%>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+    </div>
+   
+</footer>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

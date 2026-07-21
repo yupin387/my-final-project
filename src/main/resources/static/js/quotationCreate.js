@@ -298,3 +298,22 @@ window.addEventListener('load', () => {
     reIndexRows();
     calculateGrandTotal();
 });
+
+// ตัวอย่างแนวทาง JavaScript
+function onCeremonySelect(ceremonyId) {
+    // 1. เรียก API ที่เราเพิ่งสร้าง
+    fetch('/api/get-items-by-ceremony/' + ceremonyId)
+        .then(response => response.json())
+        .then(items => {
+            // 2. เคลียร์ตารางรายการเก่า (ถ้ามี)
+            clearQuotationTable(); 
+            
+            // 3. วนลูปเอา Item ใส่ลงในตาราง
+            items.forEach(item => {
+                addRowToQuotationTable(item.itemName, item.pricePerUnit, 1); // ให้จำนวนเป็น 1 ไว้ก่อน
+            });
+            
+            // 4. สั่งคำนวณราคารวมใหม่
+            calculateTotal();
+        });
+}

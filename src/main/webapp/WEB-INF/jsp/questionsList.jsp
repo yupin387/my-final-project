@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายการคำถามแต่ละพิธี - ระบบรับจัดงานบุญ</title>
+    <title>รายการคำถามแต่ละพิธี - บุญมี รับจัดงานบุญ</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
@@ -16,8 +16,9 @@
 <%-- ========== NAVBAR ========== --%>
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
-        <div class="lotus-icon">🪷</div>
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <div class="navbar-menu">
@@ -32,24 +33,14 @@
                 <span class="user-name">Admin Organizer</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
-            <span class="arrow">▾</span>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item">ออกจากระบบ</a>
+                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
             </div>
         </div>
     </div>
 </nav>
 
-<%-- ========== WAVE DIVIDER หลัง NAVBAR ========== --%>
-<svg class="navbar-wave" viewBox="0 0 1200 36" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-    <path d="M0,36 L1200,36 L1200,10 Q1100,32 1000,14 Q900,0 800,20 Q700,36 600,16 Q500,0 400,22 Q300,36 200,16 Q100,2 0,18 Z" fill="#FFFBF0"/>
-    <path d="M0,22 Q100,8 200,22 Q300,36 400,22 Q500,8 600,22 Q700,36 800,22 Q900,8 1000,22 Q1100,36 1200,22" stroke="#D4A017" stroke-width="1.2" fill="none" opacity="0.5"/>
-    <circle cx="200" cy="22" r="2.5" fill="#D4A017" opacity="0.6"/>
-    <circle cx="400" cy="22" r="2.5" fill="#D4A017" opacity="0.6"/>
-    <circle cx="600" cy="22" r="3"   fill="#D4A017" opacity="0.6"/>
-    <circle cx="800" cy="22" r="2.5" fill="#D4A017" opacity="0.6"/>
-    <circle cx="1000" cy="22" r="2.5" fill="#D4A017" opacity="0.6"/>
-</svg>
+
 
 <%-- ========== PAGE WRAPPER ========== --%>
 <div class="page-wrapper">
@@ -141,34 +132,7 @@
         </table>
     </div>
 
-    <%-- ========== KANOK DIVIDER ========== --%>
-    <svg class="kanok-divider" viewBox="0 0 1200 32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <line x1="0" y1="16" x2="1200" y2="16" stroke="#E8CC70" stroke-width="1" opacity="0.6"/>
-        <g fill="#D4A017" opacity="0.55">
-            <ellipse cx="600" cy="16" rx="18" ry="6" transform="rotate(-30 600 16)"/>
-            <ellipse cx="600" cy="16" rx="18" ry="6" transform="rotate(30 600 16)"/>
-            <ellipse cx="600" cy="16" rx="18" ry="6"/>
-            <circle cx="600" cy="16" r="4" fill="#E8BB3A"/>
-            <ellipse cx="480" cy="16" rx="13" ry="5" transform="rotate(-30 480 16)"/>
-            <ellipse cx="480" cy="16" rx="13" ry="5" transform="rotate(30 480 16)"/>
-            <circle cx="480" cy="16" r="3" fill="#E8BB3A"/>
-            <ellipse cx="720" cy="16" rx="13" ry="5" transform="rotate(-30 720 16)"/>
-            <ellipse cx="720" cy="16" rx="13" ry="5" transform="rotate(30 720 16)"/>
-            <circle cx="720" cy="16" r="3" fill="#E8BB3A"/>
-            <ellipse cx="360" cy="16" rx="9" ry="3.5" transform="rotate(-30 360 16)"/>
-            <ellipse cx="360" cy="16" rx="9" ry="3.5" transform="rotate(30 360 16)"/>
-            <circle cx="360" cy="16" r="2.5" fill="#E8BB3A"/>
-            <ellipse cx="840" cy="16" rx="9" ry="3.5" transform="rotate(-30 840 16)"/>
-            <ellipse cx="840" cy="16" rx="9" ry="3.5" transform="rotate(30 840 16)"/>
-            <circle cx="840" cy="16" r="2.5" fill="#E8BB3A"/>
-            <ellipse cx="240" cy="16" rx="6" ry="2.5" transform="rotate(-30 240 16)"/>
-            <ellipse cx="240" cy="16" rx="6" ry="2.5" transform="rotate(30 240 16)"/>
-            <ellipse cx="960" cy="16" rx="6" ry="2.5" transform="rotate(-30 960 16)"/>
-            <ellipse cx="960" cy="16" rx="6" ry="2.5" transform="rotate(30 960 16)"/>
-        </g>
-        <line x1="0"  y1="4"  x2="1200" y2="4"  stroke="#E8CC70" stroke-width="0.5" opacity="0.3"/>
-        <line x1="0"  y1="28" x2="1200" y2="28" stroke="#E8CC70" stroke-width="0.5" opacity="0.3"/>
-    </svg>
+
 
 </div><%-- /page-wrapper --%>
 
@@ -206,12 +170,25 @@
     </div>
 </div>
 
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+    </div>
+  
+</footer>
+
 <%-- ========== SCRIPTS ========== --%>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // กำหนด global variable ไว้ให้ไฟล์ js ใช้งาน
     const contextPath = "${pageContext.request.contextPath}";
-</script><script src="${pageContext.request.contextPath}/static/js/questionList.js"></script>
+</script>
 <script src="${pageContext.request.contextPath}/static/js/questionList.js"></script>
 <script>
     function toggleDropdown() {

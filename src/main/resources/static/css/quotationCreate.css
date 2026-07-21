@@ -8,25 +8,42 @@
 }
 
 :root {
-    --gold:               #C9960C;
-    --gold-mid:           #D4A017;
-    --gold-light:         #E8BB3A;
-    --gold-pale:          #F5D97A;
-    --gold-glow:          #FDE68A;
-    --cream:              #FFFBF0;
-    --cream-warm:         #FFF8E1;
-    --cream-mid:          #FDF3D0;
-    --cream-border:       #E8CC70;
-    --cream-border-soft:  #EDD98A;
-    --text-dark:          #2C1F00;
-    --text-mid:           #5A4000;
-    --text-muted:         #A08840;
-    --brown-dark:         #4A2E00;
-    --brown-mid:          #7A5200;
+    --gold:               #E0577F;
+    --gold-mid:           #EC6E96;
+    --gold-light:         #F49CB9;
+    --gold-pale:          #FBD0DE;
+    --gold-glow:          #FFE3EC;
+
+    --cream:              #FFFFFF;
+    --cream-warm:         #FFF6F9;
+    --cream-mid:          #FDEEF3;
+    --cream-deep:         #F8DCE6;
+    --cream-border:       #F3C4D5;
+    --cream-border-soft:  #F6D4E1;
+
+    --white:              #FFFFFF;
+    --off-white:          #FFF9FB;
+
+    --text-dark:          #1A1A1A;
+    --text-mid:           #333333;
+    --text-body:          #444444;
+    --text-muted:         #777777;
+    --text-light:         #999999;
+
+    --brown-dark:         #1A1A1A;
+    --brown-mid:          #3A3A3A;
+
+    --shadow-gold:        rgba(224, 87, 127, 0.16);
+    --shadow-warm:        rgba(224, 87, 127, 0.10);
+
+    /* Footer gradient (same as navbar, matches bookingList.css) */
+    --footer-grad-1:      #C7405F;
+    --footer-grad-2:      #D94F76;
+    --footer-grad-3:      #E0577F;
 }
 
 body {
-    background-color: var(--cream);
+    background-color: var(--cream-warm);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -34,18 +51,18 @@ body {
 
 /* ========== NAVBAR ========== */
 .navbar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 0 36px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-mid);
+    border-bottom: 3px solid var(--gold-pale);
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 68px;
+    min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
 }
 
 .navbar::before {
@@ -53,7 +70,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 /* Brand wrapper (ครอบ lotus + title) */
@@ -64,25 +81,33 @@ body {
     text-decoration: none;
 }
 
-.navbar-lotus {
-    background: linear-gradient(135deg, #7A5200, #5C3800);
-    width: 44px; height: 44px;
+.navbar .lotus-icon,
+.navbar-brand .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 76px;
+    height: 76px;
+    max-width: 76px;
+    max-height: 76px;
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 0 10px rgba(212,160,23,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
+    object-fit: cover;
 }
 
 .navbar-title {
-    color: var(--gold-pale);
+    color: #FFFFFF;
     font-family: 'Noto Serif Thai', serif;
-    font-size: 22px;
-    font-weight: 700;
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .navbar-right {
@@ -100,7 +125,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(253,237,160,0.8);
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -108,27 +133,28 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
-.nav-item:hover  { background: rgba(212,160,23,0.18); color: var(--gold-pale); }
-.nav-item.active { background: var(--gold-mid); color: var(--brown-dark); font-weight: 700; }
+.nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
+.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
 
 /* User pill */
 .user-info {
-    background: rgba(255,255,255,0.08);
-    border: 1.5px solid rgba(212,160,23,0.6);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex; align-items: center; gap: 10px;
-    color: var(--gold-pale);
+    color: #FFFFFF;
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
 }
-.user-info:hover { background: rgba(255,255,255,0.14); }
+.user-info:hover { background: rgba(255, 255, 255, 0.25); }
 
 .user-avatar {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: var(--gold);
     width: 34px; height: 34px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -136,9 +162,9 @@ body {
 }
 
 .user-detail { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name   { font-size: 0.88rem; font-weight: 700; color: var(--gold-pale); }
-.user-role   { font-size: 0.7rem;  color: rgba(253,237,160,0.65); }
-.arrow       { color: var(--gold-pale); font-size: 11px; opacity: 0.7; }
+.user-name   { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
+.user-role   { font-size: 0.7rem;  color: rgba(255, 255, 255, 0.75); }
+.arrow       { color: #FFFFFF; font-size: 11px; opacity: 0.8; }
 
 /* Dropdown */
 .dropdown-menu {
@@ -149,7 +175,7 @@ body {
     border: 1px solid var(--cream-border);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(100,70,0,0.14);
+    box-shadow: 0 8px 28px var(--shadow-gold);
     z-index: 99999; overflow: hidden;
 }
 .dropdown-menu.show { display: block; }
@@ -220,9 +246,9 @@ body {
 /* ========== INFO CARD ========== */
 .info-card {
     background: #FFFFFF;
-    border-radius: 16px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 8px 32px rgba(180,130,0,0.10);
+    border-radius: 14px;
+    border: 2px solid var(--gold-mid);
+    box-shadow: 0 0 0 4px rgba(224,87,127,0.12), 0 6px 24px rgba(224,87,127,0.15);
     overflow: hidden;
     margin-bottom: 24px;
     animation: fadeUp 0.3s ease 0.05s both;
@@ -237,448 +263,13 @@ body {
 }
 
 .info-card-header {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 14px 24px;
-    color: var(--gold-pale);
+    color: #FFFFFF;
     font-family: 'Noto Serif Thai', serif;
     font-weight: 700;
     font-size: 15px;
-    border-bottom: 2px solid var(--gold-mid);
-}
-
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    background: var(--cream-warm);
-}
-
-.info-box {
-    padding: 22px 26px; /* ปรับเพิ่มจากเดิม เพื่อให้ดูห่างและโปร่งขึ้น */
-    border-right: 2px solid var(--cream-border);
-    display: flex; flex-direction: column; gap: 8px; /* เพิ่ม gap เล็กน้อย */
-}
-.info-box:last-child { border-right: none; }
-
-.info-label {
-    font-size: 11px; color: var(--text-muted);
-    font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-}
-.info-value         { font-weight: 700; font-size: 14px; color: var(--text-dark); }
-.info-value.highlight { color: var(--gold); font-family: 'Noto Serif Thai', serif; font-size: 15px; }
-
-/* ========== MAIN LAYOUT & CARD ========== */
-.main-layout { display: block; animation: fadeUp 0.3s ease 0.1s both; }
-
-/* เพิ่มในส่วน PATCH หรือส่วนที่กำหนด .card */
-.card {
-    background: #FFFFFF;
-    border-radius: 16px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 8px 32px rgba(180,130,0,0.10);
-    overflow: hidden;
-    margin-top: 40px; /* เพิ่มตรงนี้ครับ: เพิ่มระยะห่างจากกล่องบนให้มากขึ้น */
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale) 20%, var(--gold-mid) 50%, var(--gold-pale) 80%, transparent);
-}
-
-.card-header {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 14px 24px;
-    color: var(--gold-pale);
-    font-family: 'Noto Serif Thai', serif;
-    font-weight: 700;
-    font-size: 15px;
-    border-bottom: 2px solid var(--gold-mid);
-}
-
-.card-body { padding: 24px; }
-
-/* ========== TABLE ========== */
-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; }
-
-th {
-    background: var(--cream-warm);
-    color: var(--brown-dark);
-    padding: 13px 14px;
-    text-align: left;
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 13px; font-weight: 700;
-    border-bottom: 2px solid var(--cream-border);
-    text-transform: uppercase; letter-spacing: 0.4px;
-    word-break: keep-all; white-space: nowrap; overflow: hidden;
-}
-
-td {
-    padding: 13px 14px;
-    border-bottom: 1px solid var(--cream-mid);
-    font-size: 14px;
-    vertical-align: middle;
-    color: #444;
-    word-wrap: break-word; overflow-wrap: break-word; white-space: normal;
-}
-
-tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: var(--cream-warm); transition: background 0.12s; }
-
-.group-row td {
-    background: linear-gradient(90deg, var(--cream-mid), var(--cream-warm));
-    color: var(--brown-mid);
-    font-family: 'Noto Serif Thai', serif;
-    font-weight: 700; font-size: 13px;
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--cream-border-soft);
-    white-space: normal;
-    border-left: 3px solid var(--gold-mid);
-}
-
-/* override hover for group rows */
-tbody tr.group-row:hover td { background: linear-gradient(90deg, var(--cream-mid), var(--cream-warm)); }
-
-tr.static-row td, tr.dynamic-row td {
-    color: #444; background: transparent; font-weight: 400;
-}
-tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm); }
-
-.item-name  { font-weight: 400; color: #444; display: block; margin-bottom: 3px; word-wrap: break-word; }
-.item-desc  { font-size: 12px; color: #999; display: block; }
-
-/* ========== QTY +/- ========== */
-.qty-wrapper {
-    display: flex; align-items: center; gap: 4px; justify-content: center;
-}
-
-.btn-qty {
-    width: 26px; height: 26px;
-    border: 1.5px solid var(--gold-mid);
-    border-radius: 5px;
-    background: var(--cream-warm);
-    color: var(--brown-dark);
-    font-size: 16px; font-weight: 700; line-height: 1;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s, color 0.15s;
-    flex-shrink: 0; padding: 0;
-}
-.btn-qty:hover { background: var(--gold-mid); color: var(--brown-dark); border-color: var(--gold-mid); }
-
-/* ========== INPUTS ========== */
-.qty-input {
-    width: 50px; padding: 5px 4px;
-    border: 1.5px solid var(--cream-border);
-    border-radius: 6px; text-align: center;
-    font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 600;
-    color: #333; transition: border 0.2s;
-    -moz-appearance: textfield;
-}
-.qty-input::-webkit-inner-spin-button,
-.qty-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-
-.price-input {
-    width: 100%; max-width: 110px; padding: 7px 10px;
-    border: 1.5px solid var(--cream-border);
-    border-radius: 6px; text-align: right;
-    font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 700;
-    color: var(--brown-dark); transition: border 0.2s;
-    background: var(--cream-warm);
-}
-.qty-input:focus, .price-input:focus {
-    outline: none; border-color: var(--gold-mid);
-    box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
-    background: #fff;
-}
-
-.note-input {
-    width: 100%; padding: 7px 10px;
-    border: 1.5px solid var(--cream-border);
-    border-radius: 6px;
-    font-family: 'Sarabun', sans-serif; font-size: 13px; color: #444;
-    background: var(--cream-warm); transition: border 0.2s; box-sizing: border-box;
-}
-.note-input:focus {
-    outline: none; border-color: var(--gold-mid);
-    box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
-}
-
-.remove-btn, .btn-remove {
-    background: #fff0f0; color: #c0392b;
-    border: 1.5px solid #f5c6cb;
-    width: 30px; height: 30px;
-    border-radius: 6px; cursor: pointer;
-    font-size: 14px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s, color 0.2s;
-    margin: 0 auto;
-}
-.remove-btn:hover, .btn-remove:hover { background: #c0392b; color: white; border-color: #c0392b; }
-
-/* ========== ADD ITEM BUTTON ========== */
-.btn-open-popup {
-    /* ใช้โทนสีเขียวเดียวกับปุ่มบันทึก */
-    background: linear-gradient(135deg, #16A34A, #15803D);
-    color: #fff;
-    border: 2px solid #15803D;
-    padding: 12px 24px;
-    font-size: 14px; 
-    border-radius: 10px; 
-    cursor: pointer;
-    font-weight: 700; 
-    font-family: 'Sarabun', sans-serif;
-    display: inline-flex; 
-    align-items: center; 
-    gap: 8px;
-    margin-top: 20px; /* เพิ่มระยะห่างด้านบนให้ปุ่มหน่อย */
-    transition: all 0.2s;
-    box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
-}
-
-.btn-open-popup:hover {
-    background: linear-gradient(135deg, #15803D, #166534);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(22, 163, 74, 0.45);
-}
-/* ========== STICKY TOTAL BAR ========== */
-.total-bar {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    border-top: 3px solid var(--gold-mid);
-    box-shadow: 0 -4px 24px rgba(60,35,0,0.35);
-    padding: 0 40px;
-}
-.total-bar::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
-}
-
-.total-bar-inner {
-    max-width: 1400px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: flex-end;
-    gap: 32px; padding: 14px 0;
-}
-
-.total-bar-label { color: rgba(253,237,160,0.8); font-size: 14px; font-weight: 600; white-space: nowrap; }
-.total-bar-amount { font-size: 32px; font-weight: 700; color: var(--gold-light); white-space: nowrap; line-height: 1; }
-.total-bar-sub   { font-size: 11px; color: rgba(240,217,160,0.65); white-space: nowrap; }
-.total-bar-meta  { display: flex; flex-direction: column; gap: 4px; }
-
-.btn-submit {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    border: none; padding: 14px 32px;
-    border-radius: 10px; font-size: 16px; font-weight: 700;
-    font-family: 'Noto Serif Thai', serif; cursor: pointer;
-    transition: all 0.2s; white-space: nowrap; flex-shrink: 0;
-    box-shadow: 0 3px 10px rgba(180,130,0,0.3);
-}
-.btn-submit:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
-    transform: translateY(-2px); box-shadow: 0 5px 16px rgba(180,130,0,0.4);
-}
-
-/* ========== MODAL ========== */
-.modal-overlay {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(50,30,0,0.5);
-    display: none; align-items: center; justify-content: center;
-    z-index: 1000; backdrop-filter: blur(2px);
-}
-.modal-overlay.open { display: flex; }
-
-.modal-card {
-    background: #FFFFFF;
-    width: 1100px; max-width: 95vw;
-    height: 85vh; max-height: 85vh;
-    border-radius: 20px;
-    display: flex; flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 16px 60px rgba(60,35,0,0.35);
-    border: 1.5px solid var(--gold-mid);
-    animation: calModalIn 0.25s ease;
-}
-
-@keyframes calModalIn {
-    from { transform: translateY(20px) scale(0.97); opacity: 0; }
-    to   { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.modal-header {
-    padding: 20px 28px;
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    color: var(--gold-pale);
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 2px solid var(--gold-mid);
-    flex-shrink: 0;
-}
-.modal-header h3 { margin: 0; font-family: 'Noto Serif Thai', serif; font-size: 19px; font-weight: 700; }
-
-.close-btn {
-    background: none; border: none;
-    color: var(--gold-pale); font-size: 26px; cursor: pointer;
-    line-height: 1; transition: color 0.2s;
-}
-.close-btn:hover { color: #fff; }
-
-/* Category tabs */
-.category-tabs {
-    display: flex; gap: 8px;
-    padding: 16px 28px 0;
-    flex-shrink: 0; flex-wrap: wrap;
-    background: var(--cream-warm);
-    border-bottom: 1px solid var(--cream-border);
-}
-
-.category-tab {
-    padding: 10px 22px;
-    border-radius: 10px 10px 0 0;
-    font-size: 14px; font-weight: 700;
-    color: var(--text-muted);
-    background: transparent;
-    border: 1.5px solid transparent;
-    cursor: pointer; transition: all 0.15s;
-    font-family: 'Sarabun', sans-serif;
-    margin-bottom: -1px;
-}
-.category-tab:hover { color: var(--brown-dark); background: rgba(212,160,23,0.12); }
-.category-tab.active {
-    background: #FFFFFF; color: var(--brown-dark);
-    border-color: var(--cream-border); border-bottom-color: #FFFFFF;
-}
-
-.modal-body { padding: 20px 28px; overflow-y: auto; flex: 1; background: #FFFFFF; }
-
-.modal-footer {
-    padding: 16px 28px;
-    background: var(--cream-warm);
-    border-top: 1px solid var(--cream-border);
-    display: flex; justify-content: flex-end; gap: 12px; flex-shrink: 0;
-}
-
-/* Item picker cards */
-.item-picker-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
-
-.item-pick-card {
-    border: 1.5px solid var(--cream-border);
-    border-radius: 12px; padding: 14px 16px;
-    display: flex; align-items: flex-start; gap: 12px;
-    cursor: pointer; transition: all 0.15s; background: var(--cream-warm);
-}
-.item-pick-card:hover { border-color: var(--gold-mid); background: var(--cream-mid); }
-.item-pick-card.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
-
-/* ── ปรับสีติ๊กถูกให้เป็นเขียว ── */
-.item-pick-card input[type="checkbox"] {
-    margin-top: 3px; 
-    width: 18px; 
-    height: 18px;
-    /* เปลี่ยนจากสีทอง เป็นสีเขียวเข้ม */
-    accent-color: #16A34A; 
-    cursor: pointer; 
-    flex-shrink: 0;
-}
-
-.item-pick-info  { flex: 1; min-width: 0; }
-.item-pick-name  { font-weight: 700; color: var(--brown-dark); font-size: 14px; display: block; margin-bottom: 3px; }
-.item-pick-desc  { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 6px; }
-.item-pick-meta  { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-.item-pick-unit  { color: var(--text-muted); }
-.item-pick-price { font-weight: 700; color: var(--brown-dark); }
-
-.popup-empty { text-align: center; color: var(--text-muted); padding: 60px 0; font-size: 14px; }
-
-.btn-submit-modal {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark); border: none;
-    padding: 11px 24px; border-radius: 8px;
-    cursor: pointer; font-weight: 700; font-size: 14px;
-    font-family: 'Sarabun', sans-serif; transition: all 0.2s;
-    box-shadow: 0 3px 10px rgba(180,130,0,0.25);
-}
-.btn-submit-modal:hover { background: linear-gradient(135deg, var(--gold-light), var(--gold-pale)); }
-
-.btn-cancel-modal {
-    background: var(--cream-mid); color: var(--brown-mid);
-    border: 1.5px solid var(--cream-border);
-    padding: 11px 24px; border-radius: 8px;
-    cursor: pointer; font-size: 14px; font-weight: 700;
-    font-family: 'Sarabun', sans-serif; transition: background 0.2s;
-}
-.btn-cancel-modal:hover { background: var(--cream-border-soft); }
-
-.badge-type {
-    background: var(--cream-mid); color: var(--brown-mid);
-    border: 1px solid var(--cream-border);
-    padding: 2px 8px; border-radius: 4px;
-    font-size: 12px; font-weight: 600;
-}
-
-/* Table column widths */
-#mainQuotationTable col.col-no    { width: 50px; }
-#mainQuotationTable col.col-item  { width: auto; }
-#mainQuotationTable col.col-qty   { width: 100px; }
-#mainQuotationTable col.col-unit  { width: 70px; }
-#mainQuotationTable col.col-price { width: 130px; }
-#mainQuotationTable col.col-total { width: 120px; }
-#mainQuotationTable col.col-note  { width: 200px; }
-#mainQuotationTable col.col-del   { width: 50px; }
-
-/* ========== FOOTER ========== */
-.footer-kanok { display: block; width: 100%; height: 32px; line-height: 0; }
-.footer-strip { display: block; width: 100%; line-height: 0; }
-
-/* ========== ANIMATION ========== */
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 1024px) {
-    .item-picker-grid { grid-template-columns: repeat(2,1fr); }
-    .info-grid { grid-template-columns: repeat(3,1fr); }
-}
-@media (max-width: 768px) {
-    .navbar { padding: 0 16px; }
-    .navbar-menu { display: none; }
-    .page-wrapper { padding: 24px 16px 120px; }
-    .info-grid { grid-template-columns: repeat(2,1fr); }
-}
-@media (max-width: 700px) {
-    .item-picker-grid { grid-template-columns: 1fr; }
-    .modal-card { height: 90vh; }
-}
-
-
-
-/* ========================================
-   PATCH: แทนที่ / เพิ่มใน quotationCreate.css
-   ======================================== */
-
-/* ── INFO CARD: ขอบชัด + รัศมีทอง ── */
-.info-card {
-    background: #FFFFFF;
-    border-radius: 14px;
-    border: 2px solid var(--gold-mid);
-    box-shadow: 0 0 0 4px rgba(212,160,23,0.12), 0 6px 24px rgba(180,130,0,0.15);
-    overflow: hidden;
-    margin-bottom: 24px;
-    animation: fadeUp 0.3s ease 0.05s both;
-    position: relative;
-}
-
-.info-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale) 20%, var(--gold-mid) 50%, var(--gold-pale) 80%, transparent);
+    border-bottom: 2px solid var(--gold-pale);
 }
 
 .info-grid {
@@ -698,13 +289,10 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     font-size: 11px; color: var(--text-muted);
     font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
 }
-
 .info-value { font-weight: 700; font-size: 15px; color: var(--text-dark); }
-
-/* รหัสจอง: badge ทอง-ดำ */
 .info-value.highlight {
-    color: var(--gold-pale);
-    background: linear-gradient(135deg, #5C3800, #3D2500);
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #C7405F, #E0577F);
     padding: 4px 14px;
     border-radius: 20px;
     font-size: 14px;
@@ -713,21 +301,92 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     font-family: 'Noto Serif Thai', serif;
 }
 
-/* ── TABLE HEADER: เข้มขึ้น ── */
+/* ========== MAIN LAYOUT & CARD ========== */
+.main-layout { display: block; animation: fadeUp 0.3s ease 0.1s both; }
+
+.card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    border: 1.5px solid var(--gold-mid);
+    box-shadow: 0 8px 32px var(--shadow-warm);
+    overflow: hidden;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold-pale) 20%, var(--gold-mid) 50%, var(--gold-pale) 80%, transparent);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 14px 24px;
+    color: #FFFFFF;
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: 2px solid var(--gold-pale);
+}
+
+.card-body { padding: 24px; }
+
+/* ========== TABLE ========== */
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; }
+
 th {
-    background: #3D2500;
-    color: var(--gold-pale);
+    background: #C7405F;
+    color: #FFFFFF;
     padding: 12px 14px;
     text-align: left;
+    font-family: 'Noto Serif Thai', serif;
     font-size: 12px; font-weight: 700;
-    border-bottom: 2.5px solid var(--gold-mid);
+    border-bottom: 2.5px solid var(--gold-pale);
     text-transform: uppercase; letter-spacing: 0.5px;
     word-break: keep-all; white-space: nowrap; overflow: hidden;
 }
 
-/* ── ปุ่ม QTY แยกเขียว/แดง ── */
+td {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--cream-mid);
+    font-size: 14px;
+    vertical-align: middle;
+    color: #444;
+    word-wrap: break-word; overflow-wrap: break-word; white-space: normal;
+}
 
-/* ลบ .btn-qty เดิมออก แล้วใช้ 2 class นี้แทน */
+tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--cream-warm); transition: background 0.12s; }
+
+.group-row td {
+    background: linear-gradient(90deg, var(--cream-mid), var(--cream-warm));
+    color: var(--gold);
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700; font-size: 13px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--cream-border-soft);
+    white-space: normal;
+    border-left: 3px solid var(--gold-mid);
+}
+
+tbody tr.group-row:hover td { background: linear-gradient(90deg, var(--cream-mid), var(--cream-warm)); }
+
+tr.static-row td, tr.dynamic-row td {
+    color: #444; background: transparent; font-weight: 400;
+}
+tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm); }
+
+.item-name  { font-weight: 400; color: #444; display: block; margin-bottom: 3px; word-wrap: break-word; }
+.item-desc  { font-size: 12px; color: #999; display: block; }
+
+/* ========== QTY +/- ========== */
+.qty-wrapper {
+    display: flex; align-items: center; gap: 4px; justify-content: center;
+}
+
 .btn-qty-minus {
     width: 30px; height: 30px;
     background: #DC2626;
@@ -766,26 +425,109 @@ th {
     transform: scale(1.08);
 }
 
-/* แก้ไขในส่วน PATCH ด้านล่างสุด */
+/* ========== INPUTS ========== */
+.qty-input {
+    width: 50px; padding: 5px 4px;
+    border: 1.5px solid var(--cream-border);
+    border-radius: 6px; text-align: center;
+    font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 600;
+    color: #333; transition: border 0.2s;
+    -moz-appearance: textfield;
+}
+.qty-input::-webkit-inner-spin-button,
+.qty-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+.price-input {
+    width: 100%; max-width: 110px; padding: 7px 10px;
+    border: 1.5px solid var(--cream-border);
+    border-radius: 6px; text-align: right;
+    font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--gold); transition: border 0.2s;
+    background: var(--cream-warm);
+}
+.qty-input:focus, .price-input:focus {
+    outline: none; border-color: var(--gold-mid);
+    box-shadow: 0 0 0 3px rgba(224,87,127,0.15);
+    background: #fff;
+}
+
+.note-input {
+    width: 100%; padding: 7px 10px;
+    border: 1.5px solid var(--cream-border);
+    border-radius: 6px;
+    font-family: 'Sarabun', sans-serif; font-size: 13px; color: #444;
+    background: var(--cream-warm); transition: border 0.2s; box-sizing: border-box;
+}
+.note-input:focus {
+    outline: none; border-color: var(--gold-mid);
+    box-shadow: 0 0 0 3px rgba(224,87,127,0.15);
+}
+
+.remove-btn, .btn-remove {
+    background: #FEE2E2; color: #DC2626;
+    border: 2px solid #FCA5A5;
+    width: 32px; height: 32px;
+    border-radius: 8px; cursor: pointer;
+    font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    margin: 0 auto;
+}
+.remove-btn:hover, .btn-remove:hover {
+    background: #DC2626; color: #fff; border-color: #B91C1C;
+}
+
+/* ========== ADD ITEM BUTTON ========== */
 .btn-open-popup {
-    background: linear-gradient(135deg, #16A34A, #15803D); /* แก้จากน้ำเงินเป็นเขียว */
+    background: linear-gradient(135deg, #16A34A, #15803D);
     color: #fff;
     border: 2px solid #15803D;
-    padding: 12px 22px;
-    font-size: 14px; border-radius: 10px; cursor: pointer;
-    font-weight: 700; font-family: 'Sarabun', sans-serif;
-    display: inline-flex; align-items: center; gap: 8px;
-    margin-top: 15px; transition: all 0.2s;
-    box-shadow: 0 3px 10px rgba(22, 163, 74, 0.35);
+    padding: 12px 24px;
+    font-size: 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
 }
+
 .btn-open-popup:hover {
     background: linear-gradient(135deg, #15803D, #166534);
-    transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(22, 163, 74, 0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(22, 163, 74, 0.45);
 }
 
+/* ========== STICKY TOTAL BAR ========== */
+.total-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    border-top: 3px solid var(--gold-pale);
+    box-shadow: 0 -4px 24px rgba(224,87,127,0.35);
+    padding: 0 40px;
+}
+.total-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+}
 
-/* ── ปุ่มบันทึก (total bar): เขียว ── */
+.total-bar-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: flex-end;
+    gap: 32px; padding: 14px 0;
+}
+
+.total-bar-label { color: rgba(255,255,255,0.85); font-size: 14px; font-weight: 600; white-space: nowrap; }
+.total-bar-amount { font-size: 32px; font-weight: 700; color: #FFFFFF; white-space: nowrap; line-height: 1; }
+.total-bar-sub   { font-size: 11px; color: rgba(255,255,255,0.7); white-space: nowrap; }
+.total-bar-meta  { display: flex; flex-direction: column; gap: 4px; }
+
 .btn-submit {
     background: linear-gradient(135deg, #16A34A, #15803D);
     color: #fff;
@@ -802,23 +544,127 @@ th {
     box-shadow: 0 6px 20px rgba(22,163,74,0.55);
 }
 
-/* ── ปุ่มยืนยัน Modal: เขียว ── */
+/* ========== MODAL ========== */
+.modal-overlay {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(60,20,35,0.5);
+    display: none; align-items: center; justify-content: center;
+    z-index: 1000; backdrop-filter: blur(2px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal-card {
+    background: #FFFFFF;
+    width: 1100px; max-width: 95vw;
+    height: 85vh; max-height: 85vh;
+    border-radius: 20px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 16px 60px rgba(224,87,127,0.35);
+    border: 1.5px solid var(--gold-mid);
+    animation: calModalIn 0.25s ease;
+}
+
+@keyframes calModalIn {
+    from { transform: translateY(20px) scale(0.97); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.modal-header {
+    padding: 20px 28px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    color: #FFFFFF;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid var(--gold-pale);
+    flex-shrink: 0;
+}
+.modal-header h3 { margin: 0; font-family: 'Noto Serif Thai', serif; font-size: 19px; font-weight: 700; }
+
+.close-btn {
+    background: none; border: none;
+    color: #FFFFFF; font-size: 26px; cursor: pointer;
+    line-height: 1; transition: color 0.2s;
+}
+.close-btn:hover { color: var(--gold-pale); }
+
+/* Category tabs */
+.category-tabs {
+    display: flex; gap: 8px;
+    padding: 16px 28px 0;
+    flex-shrink: 0; flex-wrap: wrap;
+    background: var(--cream-warm);
+    border-bottom: 1px solid var(--cream-border);
+}
+
+.category-tab {
+    padding: 10px 22px;
+    border-radius: 10px 10px 0 0;
+    font-size: 14px; font-weight: 700;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1.5px solid transparent;
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'Sarabun', sans-serif;
+    margin-bottom: -1px;
+}
+.category-tab:hover { color: var(--gold); background: rgba(224,87,127,0.12); }
+.category-tab.active {
+    background: #FFFFFF; color: var(--gold);
+    border-color: var(--cream-border); border-bottom-color: #FFFFFF;
+}
+
+.modal-body { padding: 20px 28px; overflow-y: auto; flex: 1; background: #FFFFFF; }
+
+.modal-footer {
+    padding: 16px 28px;
+    background: var(--cream-warm);
+    border-top: 1px solid var(--cream-border);
+    display: flex; justify-content: flex-end; gap: 12px; flex-shrink: 0;
+}
+
+/* Item picker cards */
+.item-picker-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+
+.item-pick-card {
+    border: 1.5px solid var(--cream-border);
+    border-radius: 12px; padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 12px;
+    cursor: pointer; transition: all 0.15s; background: var(--cream-warm);
+}
+.item-pick-card:hover { border-color: var(--gold-mid); background: var(--cream-mid); }
+.item-pick-card.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+.item-pick-card input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: #16A34A;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.item-pick-info  { flex: 1; min-width: 0; }
+.item-pick-name  { font-weight: 700; color: var(--gold); font-size: 14px; display: block; margin-bottom: 3px; }
+.item-pick-desc  { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 6px; }
+.item-pick-meta  { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.item-pick-unit  { color: var(--text-muted); }
+.item-pick-price { font-weight: 700; color: var(--gold); }
+
+.popup-empty { text-align: center; color: var(--text-muted); padding: 60px 0; font-size: 14px; }
+
 .btn-submit-modal {
     background: linear-gradient(135deg, #16A34A, #15803D);
-    color: #fff;
-    border: 2px solid #15803D;
+    color: #fff; border: 2px solid #15803D;
     padding: 11px 24px; border-radius: 8px;
     cursor: pointer; font-weight: 700; font-size: 14px;
     font-family: 'Sarabun', sans-serif; transition: all 0.2s;
     box-shadow: 0 3px 10px rgba(22,163,74,0.4);
 }
-.btn-submit-modal:hover {
-    background: linear-gradient(135deg, #15803D, #166534);
-}
+.btn-submit-modal:hover { background: linear-gradient(135deg, #15803D, #166534); }
 
-/* ── ปุ่มยกเลิก Modal ── */
 .btn-cancel-modal {
-    background: var(--cream-mid); color: var(--brown-mid);
+    background: var(--cream-mid); color: var(--gold);
     border: 2px solid var(--cream-border);
     padding: 11px 24px; border-radius: 8px;
     cursor: pointer; font-size: 14px; font-weight: 700;
@@ -826,17 +672,114 @@ th {
 }
 .btn-cancel-modal:hover { background: var(--cream-border-soft); }
 
-/* ── ปุ่มลบแถว: แดงชัด ── */
-.remove-btn, .btn-remove {
-    background: #FEE2E2; color: #DC2626;
-    border: 2px solid #FCA5A5;
-    width: 32px; height: 32px;
-    border-radius: 8px; cursor: pointer;
-    font-size: 14px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s;
-    margin: 0 auto;
+.badge-type {
+    background: var(--cream-mid); color: var(--gold);
+    border: 1px solid var(--cream-border);
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 12px; font-weight: 600;
 }
-.remove-btn:hover, .btn-remove:hover {
-    background: #DC2626; color: #fff; border-color: #B91C1C;
+
+/* Table column widths */
+#mainQuotationTable col.col-no    { width: 50px; }
+#mainQuotationTable col.col-item  { width: auto; }
+#mainQuotationTable col.col-qty   { width: 100px; }
+#mainQuotationTable col.col-unit  { width: 70px; }
+#mainQuotationTable col.col-price { width: 130px; }
+#mainQuotationTable col.col-total { width: 120px; }
+#mainQuotationTable col.col-note  { width: 200px; }
+#mainQuotationTable col.col-del   { width: 50px; }
+
+/* ========== FOOTER (matches bookingList.css .site-footer) ========== */
+.footer-strip {
+    display: block;
+    width: 100%;
+    line-height: 0;
+    margin-top: auto;
+}
+
+.site-footer {
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    color: rgba(255, 255, 255, 0.92);
+    margin-top: auto;
+    border-top: 3px solid var(--gold-pale);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    position: relative;
+    z-index: 2;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 24px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.site-footer .lotus-icon,
+.footer-lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.footer-brand-text {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.footer-tagline {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 12px 20px 18px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.75);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ========== ANIMATION ========== */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+    .item-picker-grid { grid-template-columns: repeat(2,1fr); }
+    .info-grid { grid-template-columns: repeat(3,1fr); }
+}
+@media (max-width: 768px) {
+    .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
+    .navbar-menu { display: none; }
+    .navbar-title { font-size: 20px; }
+    .navbar .lotus-icon,
+    .navbar-brand .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
+    .page-wrapper { padding: 24px 16px 120px; }
+    .info-grid { grid-template-columns: repeat(2,1fr); }
+    .footer-content { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 700px) {
+    .item-picker-grid { grid-template-columns: 1fr; }
+    .modal-card { height: 90vh; }
 }

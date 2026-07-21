@@ -14,6 +14,9 @@
 <%-- CSS เฉพาะหน้าปฏิทิน แยกไฟล์ออกมาจาก inline <style> เดิม --%>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/calendarPage.css?v=1">
+<%-- CSS เฉพาะส่วนปฏิทินล้านนา แยกไฟล์เดี่ยวๆ ไม่ผูกกับ home.css --%>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/static/css/lannaCalendar.css?v=1">
 </head>
 <body>
 
@@ -212,24 +215,24 @@
 				</p>
 
 				<c:choose>
-					<c:when test="${not empty monthlyGoodDays}">
-						<div class="yearly-summary-grid">
-							<c:forEach var="month" items="${monthlyGoodDays}">
-								<div class="yearly-summary-card">
-									<h4 class="yearly-summary-month">${month.monthName} 2569</h4>
-									<ul class="yearly-summary-list">
-										<c:forEach var="d" items="${month.days}">
-											<li>${d.dateLabel} — ${d.typeLabel}</li>
-										</c:forEach>
-									</ul>
-								</div>
-							</c:forEach>
-						</div>
-					</c:when>
-					<c:otherwise>
-						<p class="section-subtitle">ยังไม่มีข้อมูลฤกษ์ดีสรุปรายเดือนในขณะนี้</p>
-					</c:otherwise>
-				</c:choose>
+    <c:when test="${not empty monthlyGoodDaysByWeekday}">
+        <div class="yearly-summary-grid">
+            <c:forEach var="month" items="${monthlyGoodDaysByWeekday}">
+                <div class="yearly-summary-card">
+                    <h4 class="yearly-summary-month">ฤกษ์ดีประจำเดือน ${month.monthName} 2569</h4>
+                    <ul class="yearly-summary-list">
+                        <c:forEach var="row" items="${month.weekdayRows}">
+                            <li>วัน${row.weekday} ${row.daysText}</li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </c:forEach>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <p class="section-subtitle">ยังไม่มีข้อมูลฤกษ์ดีสรุปรายเดือนในขณะนี้</p>
+    </c:otherwise>
+</c:choose>
 			</div>
 		</div>
 	</section>
@@ -243,7 +246,7 @@
     <circle cx="600" cy="24" r="4" fill="#E8BB3A" />
 </svg>
 
-	<%-- ========== ปฏิทินล้านนา (PLACEHOLDER) ========== --%>
+	<%-- ========== ปฏิทินล้านนา ========== --%>
 	<section class="section-pad section-calendar" id="lannaCalendarSection">
 		<div class="container">
 			<div class="section-header">
@@ -252,9 +255,37 @@
 					สำหรับผู้ที่ต้องการยึดตามธรรมเนียมคนเมือง</p>
 				<div class="gold-line"></div>
 			</div>
-			<div class="lanna-placeholder-card">
-				<p>🚧 อยู่ระหว่างเชื่อมต่อข้อมูลปฏิทินล้านนาจาก API ของมหาวิทยาลัยเชียงใหม่</p>
-				<p style="font-size:0.85rem; margin-top:8px;">เร็ว ๆ นี้จะแสดงวันฤกษ์ดีตามปฏิทินล้านนาคู่กับปฏิทินไทยด้านบน</p>
+
+			<div class="lc-calendar">
+				<div id="lc-year-card" class="lc-year-card loading">กำลังโหลดข้อมูลปี...</div>
+
+				<div class="lc-controls">
+					<button type="button" class="lc-nav-btn" id="lc-prev-month">&#8249;</button>
+					<div class="lc-month-title" id="lc-month-title"></div>
+					<button type="button" class="lc-nav-btn" id="lc-next-month">&#8250;</button>
+				</div>
+
+				<div class="lc-card">
+					<div class="lc-grid" id="lc-grid">
+						<div class="lc-day-label">อา</div>
+						<div class="lc-day-label">จ</div>
+						<div class="lc-day-label">อ</div>
+						<div class="lc-day-label">พ</div>
+						<div class="lc-day-label">พฤ</div>
+						<div class="lc-day-label">ศ</div>
+						<div class="lc-day-label">ส</div>
+					</div>
+
+					<div class="lc-legend">
+						<span><span class="lc-legend-dot" style="background: var(--lc-good-bg); border: 1.5px solid var(--lc-good-border);"></span>วันดี</span>
+						<span><span class="lc-legend-dot" style="background: var(--lc-bad-bg); border: 1.5px solid var(--lc-bad-border);"></span>วันควรเลี่ยง</span>
+						<span><span class="lc-legend-dot" style="background: var(--lc-today-bg); border: 1.5px solid var(--lc-today-border);"></span>วันนี้</span>
+					</div>
+				</div>
+
+				<div class="lc-day-detail" id="lc-day-detail">
+					<p class="lc-day-detail-empty">คลิกวันที่ในตารางเพื่อดูรายละเอียดฤกษ์ของวันนั้น</p>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -294,7 +325,7 @@
 				<h4 class="footer-heading">ติดต่อเรา</h4>
 				<p>📞 โทร. 08X-XXX-XXXX</p>
 				<p>💬 LINE OA: @boonmee</p>
-				<p>✉️ boonmee.booking@gmail.com</p>
+				<p>✉️ boonmee@gmail.com</p>
 				<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
 			</div>
 		</div>
@@ -303,7 +334,7 @@
 		</div>
 	</footer>
 
-	<%-- ========== SCRIPT ZONE ========== --%>
+	<%-- ========== SCRIPT ZONE: ปฏิทิน (ฤกษ์ดี) ========== --%>
 	<script>
     window.contextPath = "${pageContext.request.contextPath}";
 
@@ -346,6 +377,16 @@
     ];
     </script>
 	<script src="${pageContext.request.contextPath}/static/js/home.js?v=13"></script>
+
+	<%-- ========== SCRIPT ZONE: ปฏิทินล้านนา ==========
+	     calendar.js รวม data layer (LannaCalendar) กับตัวแสดงผลแบบ grid ไว้ในไฟล์เดียว
+	     แล้วสั่ง init ทีเดียว — ไม่มี logic ฝังใน JSP อีกต่อไป --%>
+	<script src="${pageContext.request.contextPath}/static/js/calendar.js?v=1"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			initLannaCalendar('${pageContext.request.contextPath}/static/data');
+		});
+	</script>
 
 </body>
 </html>

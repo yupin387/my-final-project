@@ -6,7 +6,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>รายการจองใหม่ - ระบบรับจัดงานบุญ</title>
+    <title>รายการจองใหม่ - บุญมี รับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingList.css">
 </head>
@@ -15,8 +15,9 @@
    <!-- ===== NAVBAR (same style as home) ===== -->
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
-        <div class="lotus-icon">🪷</div>
-        <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -116,6 +117,19 @@
         </div>
 
     </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                     alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+            </div>
+            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+        </div>
+       
+    </footer>
 
     <script src="${pageContext.request.contextPath}/static/js/bookingList.js"></script>
 </body>

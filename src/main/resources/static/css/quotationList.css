@@ -2,39 +2,44 @@
 
 /* ===== CSS Variables ===== */
 :root {
-    --gold:              #C9960C;
-    --gold-mid:          #D4A017;
-    --gold-light:        #E8BB3A;
-    --gold-pale:         #F5D97A;
-    --gold-glow:         #FDE68A;
+    --gold:              #E0577F;
+    --gold-mid:          #EC6E96;
+    --gold-light:        #F49CB9;
+    --gold-pale:         #FBD0DE;
+    --gold-glow:         #FFE3EC;
 
-    --cream:             #FFFBF0;
-    --cream-warm:        #FFF8E1;
-    --cream-mid:         #FDF3D0;
-    --cream-deep:        #F5E6B0;
-    --cream-border:      #E8CC70;
-    --cream-border-soft: #EDD98A;
+    --cream:             #FFFFFF;
+    --cream-warm:        #FFF6F9;
+    --cream-mid:         #FDEEF3;
+    --cream-deep:        #F8DCE6;
+    --cream-border:      #F3C4D5;
+    --cream-border-soft: #F6D4E1;
 
     --white:             #FFFFFF;
 
-    --text-dark:         #2C1F00;
-    --text-mid:          #5A4000;
-    --text-body:         #6B5200;
-    --text-muted:        #A08840;
-    --text-light:        #BFA060;
+    --text-dark:         #1A1A1A;
+    --text-mid:          #333333;
+    --text-body:         #444444;
+    --text-muted:        #777777;
+    --text-light:        #999999;
 
-    --brown-dark:        #4A2E00;
-    --brown-mid:         #7A5200;
+    --brown-dark:        #1A1A1A;
+    --brown-mid:         #3A3A3A;
 
-    --shadow-gold:       rgba(180, 130, 0, 0.12);
-    --shadow-warm:       rgba(100, 70, 0, 0.08);
+    --shadow-gold:       rgba(224, 87, 127, 0.16);
+    --shadow-warm:       rgba(224, 87, 127, 0.10);
+
+    /* Footer gradient (same as navbar, matches bookingList.css) */
+    --footer-grad-1:     #C7405F;
+    --footer-grad-2:     #D94F76;
+    --footer-grad-3:     #E0577F;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: var(--cream);
+    background-color: var(--cream-warm);
     color: var(--text-dark);
     min-height: 100vh;
     display: flex;
@@ -43,17 +48,17 @@ body {
 
 /* ========== NAVBAR ========== */
 .navbar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 0 36px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-mid);
+    border-bottom: 3px solid var(--gold-pale);
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 68px;
-    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    min-height: 92px;
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
     position: relative;
 }
 
@@ -62,7 +67,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
 }
 
 .navbar-brand {
@@ -72,28 +77,33 @@ body {
     text-decoration: none;
 }
 
-.navbar-lotus {
-    background: linear-gradient(135deg, #7A5200, #5C3800);
-    width: 44px;
-    height: 44px;
+.navbar .lotus-icon,
+.navbar-brand .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 76px;
+    height: 76px;
+    max-width: 76px;
+    max-height: 76px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    font-size: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
+    object-fit: cover;
 }
 
 .navbar-title {
-    color: var(--gold-pale);
+    color: #FFFFFF;
     font-family: 'Noto Serif Thai', serif;
-    font-size: 20px;
-    font-weight: 700;
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .navbar-right {
@@ -109,7 +119,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(253, 237, 160, 0.85);
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -118,39 +128,42 @@ body {
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
     font-family: 'Sarabun', sans-serif;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 .nav-item:hover {
-    background: rgba(212, 160, 23, 0.18);
-    color: var(--gold-pale);
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
 }
 
 .nav-item.active {
-    background: var(--gold-mid);
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: var(--gold);
     font-weight: 700;
+    text-shadow: none;
 }
 
 /* ===== User Pill ===== */
 .user-info {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1.5px solid rgba(212, 160, 23, 0.6);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
     padding: 6px 14px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
+    color: #FFFFFF;
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
     white-space: nowrap;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.14); }
+.user-info:hover { background: rgba(255, 255, 255, 0.25); }
 
 .user-avatar {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: var(--gold);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -163,9 +176,9 @@ body {
 }
 
 .user-detail { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name   { font-size: 0.88rem; font-weight: 700; color: var(--gold-pale); }
-.user-role   { font-size: 0.7rem; color: rgba(253, 237, 160, 0.65); }
-.arrow       { color: var(--gold-pale); font-size: 11px; margin-left: 2px; }
+.user-name   { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
+.user-role   { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
+.arrow       { color: #FFFFFF; font-size: 11px; margin-left: 2px; opacity: 0.8; }
 
 /* ===== Dropdown ===== */
 .dropdown-menu {
@@ -177,7 +190,7 @@ body {
     border: 1px solid var(--cream-border);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(100, 70, 0, 0.14);
+    box-shadow: 0 8px 28px var(--shadow-gold);
     z-index: 99999;
     overflow: hidden;
 }
@@ -231,10 +244,10 @@ body {
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     flex: 1;
-    padding: 36px 40px 72px; /* ใช้ค่าเดิมหรือปรับตามความเหมาะสม */
-    max-width: 1550px;      /* เพิ่มจาก 1200px เป็น 1550px (หรือ 1600px ตามชอบ) */
+    padding: 36px 40px 72px;
+    max-width: 1550px;
     margin: 0 auto;
-    width: 95%;             /* ให้มันกว้างเกือบเต็มจอ แต่เหลือขอบนิดๆ ให้ดูสบายตา */
+    width: 95%;
 }
 /* ========== ORNAMENT ========== */
 .section-ornament {
@@ -321,15 +334,15 @@ body {
 .tab-btn:hover {
     background: var(--cream-warm);
     border-color: var(--gold-mid);
-    color: var(--brown-mid);
+    color: var(--gold);
 }
 
 .tab-btn.active {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    border-color: var(--gold-mid);
+    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    color: #FFFFFF;
+    border-color: var(--gold);
     font-weight: 700;
-    box-shadow: 0 3px 10px rgba(180, 130, 0, 0.25);
+    box-shadow: 0 3px 10px rgba(224, 87, 127, 0.35);
 }
 
 /* ========== CONTENT CARD ========== */
@@ -353,12 +366,12 @@ body {
 
 /* ========== CARD HEADER BAR ========== */
 .card-header-bar {
-    background: linear-gradient(135deg, #3D2500, #5C3800, #3D2500);
+    background: linear-gradient(135deg, #C7405F, #D94F76, #E0577F);
     padding: 16px 26px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: var(--gold-pale);
+    color: #FFFFFF;
     font-family: 'Noto Serif Thai', serif;
     font-weight: 700;
     font-size: 15px;
@@ -370,12 +383,12 @@ body {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-light), var(--gold-mid), transparent);
+    background: linear-gradient(90deg, transparent, var(--gold-pale), rgba(255,255,255,0.9), var(--gold-pale), transparent);
 }
 
 .header-count {
     font-size: 13px;
-    color: rgba(245, 217, 122, 0.7);
+    color: rgba(255, 255, 255, 0.8);
     font-family: 'Sarabun', sans-serif;
     font-weight: 400;
 }
@@ -441,7 +454,7 @@ tr:hover td { background: var(--cream-warm); }
 
 .status-pending {
     background: var(--gold-glow);
-    color: var(--brown-mid);
+    color: var(--gold);
     border: 1px solid var(--cream-border);
 }
 
@@ -460,7 +473,7 @@ tr:hover td { background: var(--cream-warm); }
 /* ========== BTN VIEW ========== */
 .btn-view {
     display: inline-block;
-    color: var(--brown-dark);
+    color: var(--gold);
     background: linear-gradient(135deg, var(--cream-warm), var(--cream-mid));
     border: 1.5px solid var(--cream-border);
     padding: 7px 16px;
@@ -474,11 +487,11 @@ tr:hover td { background: var(--cream-warm); }
 }
 
 .btn-view:hover {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    color: #FFFFFF;
     border-color: var(--gold-mid);
     transform: translateY(-1px);
-    box-shadow: 0 3px 10px rgba(180, 130, 0, 0.2);
+    box-shadow: 0 3px 10px rgba(224, 87, 127, 0.3);
 }
 
 /* ========== EMPTY STATE ========== */
@@ -495,7 +508,7 @@ tr:hover td { background: var(--cream-warm); }
 }
 
 .empty-link {
-    color: var(--brown-mid);
+    color: var(--gold);
     font-weight: 600;
     text-decoration: none;
     font-size: 14px;
@@ -504,7 +517,76 @@ tr:hover td { background: var(--cream-warm); }
     transition: color 0.2s;
 }
 
-.empty-link:hover { color: var(--gold); }
+.empty-link:hover { color: var(--gold-mid); }
+
+/* ========== FOOTER (matches bookingList.css .site-footer) ========== */
+.footer-strip {
+    display: block;
+    width: 100%;
+    line-height: 0;
+    margin-top: auto;
+}
+
+.site-footer {
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    color: rgba(255, 255, 255, 0.92);
+    margin-top: auto;
+    border-top: 3px solid var(--gold-pale);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    position: relative;
+    z-index: 2;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 24px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.site-footer .lotus-icon,
+.footer-lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.footer-brand-text {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.footer-tagline {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 12px 20px 18px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.75);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
@@ -514,6 +596,10 @@ tr:hover td { background: var(--cream-warm); }
 @media (max-width: 768px) {
     .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
     .navbar-menu { flex-wrap: wrap; gap: 4px; }
+    .navbar-title { font-size: 20px; }
+    .navbar .lotus-icon,
+    .navbar-brand .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     table { font-size: 13px; }
     th, td { padding: 10px 12px; }
+    .footer-content { flex-direction: column; align-items: flex-start; }
 }

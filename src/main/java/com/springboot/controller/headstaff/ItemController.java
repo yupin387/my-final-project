@@ -134,6 +134,9 @@ public class ItemController {
     }
 
     // บันทึกข้อมูลการเพิ่มหรือแก้ไขอุปกรณ์ พร้อมเชื่อมโยงประเภทและพิธีที่เกี่ยวข้อง
+    // หมายเหตุ: การตรวจสอบห้ามสร้าง/แก้ไข item ประเภท "แพ็กเกจ" ผ่านฟอร์มนี้ ทำไว้ที่
+    // ItemService.saveItem() แล้ว (อยู่ใกล้จุดที่บันทึกจริง ใช้ itemTypeRepo.findById(typeId)
+    // ที่มีอยู่แล้วโดยตรง ไม่ต้องดึง getAllItemTypes() มา filter ซ้ำที่นี่)
     @PostMapping("/save")
     public String saveItem(@ModelAttribute Item item,
                            @RequestParam int typeId,
