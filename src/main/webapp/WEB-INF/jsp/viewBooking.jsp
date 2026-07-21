@@ -10,13 +10,13 @@
     <title>ใบรายละเอียดการจอง - ระบบรับจัดงานบุญ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewBooking.css?v=12">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewBooking.css?v=13">
 </head>
 <body>
 
 
 
-<%-- ===== Navbar (ธีมเดียวกับ bookingForm.jsp — navbar-custom / โลโก้ 58px / รูปจริง) ===== --%>
+<%-- ===== Navbar (ให้ตรงกับหน้า home: มีเมนู บริการ/แพ็กเกจ และ ปฏิทิน แบบ dropdown) ===== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <div class="lotus-icon">
@@ -26,6 +26,33 @@
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
+
+        <%-- ===== เมนู บริการ/แพ็กเกจ (dropdown) ===== --%>
+        <div class="nav-dropdown-wrap">
+            <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
+                บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <c:forEach var="t" items="${ceremonyTypes}">
+                    <a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
+                        class="nav-dropdown-link">${t.mainName}</a>
+                </c:forEach>
+            </div>
+        </div>
+
+        <%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) ===== --%>
+        <div class="nav-dropdown-wrap">
+            <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item nav-dropdown-toggle">
+                ปฏิทิน <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <a href="${pageContext.request.contextPath}/calendar#calendarSection"
+                    class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
+                <a href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
+                    class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
+            </div>
+        </div>
+
         <a href="${pageContext.request.contextPath}/latestBooking" class="nav-link-item active">การจอง</a>
         <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-link-item">ใบเสนอราคา</a>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
@@ -359,6 +386,60 @@
         </div>
     </div>
 </div>
+
+<style>
+/* ===== Navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) — ให้ตรงกับหน้า home ===== */
+.nav-dropdown-wrap {
+    position: relative;
+    display: inline-block;
+}
+.nav-dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+.nav-caret {
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+.nav-dropdown-wrap:hover .nav-caret {
+    transform: rotate(180deg);
+}
+.nav-dropdown-panel {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: var(--white, #fff);
+    border: 1px solid var(--gold-pale, #e8cc70);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
+    padding: 8px 0;
+    z-index: 100;
+}
+.nav-dropdown-wrap:hover .nav-dropdown-panel,
+.nav-dropdown-wrap:focus-within .nav-dropdown-panel {
+    display: block;
+}
+.nav-dropdown-link {
+    display: block;
+    padding: 10px 18px;
+    font-size: 0.92rem;
+    color: var(--brown-dark, #3d2500);
+    text-decoration: none;
+    white-space: nowrap;
+}
+.nav-dropdown-link:hover {
+    background: var(--gold-pale, #fff8e1);
+}
+.nav-dropdown-divider {
+    border: 0;
+    border-top: 1px solid var(--gold-pale, #e8cc70);
+    margin: 6px 0;
+}
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>

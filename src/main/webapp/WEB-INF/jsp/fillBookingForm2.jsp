@@ -54,7 +54,7 @@
 <%-- ========== FORM ========== --%>
 <div class="page-wrapper">
     <div class="form-container">
-    <form action="${pageContext.request.contextPath}/saveBooking" method="post" onsubmit="return syncAllWatAnswersBeforeSubmit();">
+    <form action="${pageContext.request.contextPath}/saveBooking" method="post" novalidate onsubmit="return handleFormSubmit(this);">
         <c:set var="detailIndex" value="0"/>
 
         <%-- =========================================================
@@ -99,15 +99,34 @@
                     <div class="card-body">
                         <div class="row-grid">
                             <div class="form-group">
-                                <label class="form-label">วันที่จัดงาน</label>
-                                <input type="text" class="form-control"
-                                       value="${not empty param.dates ? param.dates : (not empty selectedDates ? selectedDates : 'ไม่พบวันที่ที่เลือกไว้')}"
-                                       readonly>
-                                <input type="hidden" name="eventDate"
+                                <label class="form-label">วันที่จัดงาน <span class="required">*</span></label>
+
+                                <%-- ปฏิทินย่อ: เลือกวันได้ในฟอร์มเลย พร้อมเช็คว่าง/เหลือคิว/เต็มคิว/ฤกษ์ดี --%>
+                                <div class="mini-cal-wrap">
+                                    <div class="mini-cal-header">
+                                        <button type="button" class="mini-cal-nav-btn" onclick="miniCalPrevMonth()">&#8249;</button>
+                                        <span id="miniCalMonthTitle"></span>
+                                        <button type="button" class="mini-cal-nav-btn" onclick="miniCalNextMonth()">&#8250;</button>
+                                    </div>
+                                    <div class="mini-cal-grid" id="miniCalGrid">
+                                        <div class="mini-cal-day-label">อา</div>
+                                        <div class="mini-cal-day-label">จ</div>
+                                        <div class="mini-cal-day-label">อ</div>
+                                        <div class="mini-cal-day-label">พ</div>
+                                        <div class="mini-cal-day-label">พฤ</div>
+                                        <div class="mini-cal-day-label">ศ</div>
+                                        <div class="mini-cal-day-label">ส</div>
+                                    </div>
+                                    <div class="mini-cal-legend">
+                                        <span><i class="mini-cal-dot mini-cal-dot-free"></i>ว่าง</span>
+                                        <span><i class="mini-cal-dot mini-cal-dot-almost"></i>เหลือคิวสุดท้าย</span>
+                                        <span><i class="mini-cal-dot mini-cal-dot-full"></i>เต็มคิว</span>
+                                    </div>
+                                    <p id="miniCalSelectedText" class="mini-cal-selected-text">ยังไม่ได้เลือกวันที่</p>
+                                </div>
+
+                                <input type="hidden" name="eventDate" id="eventDateInput"
                                        value="${not empty param.dates ? param.dates : selectedDates}">
-                                <p style="font-size:12px;color:#B0345A;margin-top:6px;">
-                                    ดึงวันที่จากที่คุณเลือกไว้ในหน้าก่อนหน้าแล้ว หากต้องการเปลี่ยนวันที่ กรุณากลับไปเลือกใหม่ที่หน้ารายละเอียดงาน
-                                </p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">เวลาเริ่มพิธี <span class="required">*</span></label>
@@ -733,6 +752,93 @@
 .item-card-name { font-weight: 700; font-size: 14px; color: var(--brown-dark); margin-bottom: 4px; }
 .item-card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 6px; }
 .item-card-price { font-size: 13px; font-weight: 700; color: var(--gold); }
+
+/* ===== Mini Calendar (เลือกวันที่จัดงานในฟอร์ม) ===== */
+.mini-cal-wrap {
+    border: 1.5px solid var(--cream-border-soft);
+    border-radius: 10px;
+    padding: 12px;
+    background: #FFF9FB;
+}
+.mini-cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brown-dark, #5C3800);
+    margin-bottom: 8px;
+}
+.mini-cal-nav-btn {
+    background: #FBD0DE;
+    border: none;
+    border-radius: 6px;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    color: #B0345A;
+    font-size: 15px;
+}
+.mini-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+}
+.mini-cal-day-label {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 2px 0;
+}
+.mini-cal-cell {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.mini-cal-cell-empty { cursor: default; }
+.mini-cal-cell-free { background: #E9F7EF; border-color: #B7E4C7; }
+.mini-cal-cell-almost { background: #FFF3D6; border-color: #F0CE7E; }
+.mini-cal-cell-booked { background: #FBE3E7; border-color: #E9A9B4; cursor: not-allowed; }
+.mini-cal-cell-past { background: #F0F0F0; border-color: #DADADA; cursor: not-allowed; color: #B0B0B0; }
+.mini-cal-cell-today { outline: 2px solid #E0577F; }
+.mini-cal-cell-selected { outline: 2px solid #B0345A; box-shadow: 0 0 0 2px rgba(224,87,127,0.25); }
+.mini-cal-full-mark {
+    position: absolute;
+    top: 1px;
+    right: 3px;
+    font-size: 9px;
+    color: #B0345A;
+}
+.mini-cal-legend {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+.mini-cal-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    margin-right: 4px;
+}
+.mini-cal-dot-free { background: #B7E4C7; }
+.mini-cal-dot-almost { background: #F0CE7E; }
+.mini-cal-dot-full { background: #E9A9B4; }
+.mini-cal-selected-text {
+    font-size: 12px;
+    color: #B0345A;
+    margin: 8px 0 0;
+    font-weight: 600;
+}
 </style>
 
 <script>
@@ -869,11 +975,34 @@ function syncWatAnswer(containerId, textareaId) {
     textarea.value = lines.join('\n');
 }
 
+/* FIX: เดิมฟังก์ชันนี้เรียก syncWatAnswer() ทั้ง 2 ชุด (pkg / custom) เสมอ
+   ไม่ว่า watType ของแต่ละชุดจะเป็นค่าไหน ทำให้เวลาเลือก "ให้ทางร้านเลือกให้"
+   (ไม่เคยเปิด #pkgWatDropdowns หรือ #customWatDropdowns เลย จึงไม่มี <select>
+   อยู่ข้างในสักตัว) ฟังก์ชัน syncWatAnswer จะวนลูป selects ที่มี 0 ตัว
+   ได้ lines เป็น [] แล้วเซ็ต textarea.value = '' คือไปเขียนทับค่าที่ควรจะเป็น
+   "ให้ร้านเลือกให้" ให้กลายเป็นค่าว่างก่อน submit จริง ทำให้ answer ที่ส่งไป
+   backend ว่างเปล่า หน้า view เลยเช็ค not empty แล้วไม่ผ่าน แสดง "-" แทน
 
-// กันเหนียว: sync ค่า dropdown ลง textarea อีกครั้งก่อน submit ฟอร์ม
+   ต้อง sync จาก dropdown เฉพาะตอนเลือก "ต่างวัด" ของชุดนั้นๆ เท่านั้น
+   ส่วนตอนเลือก "ให้ร้านเลือกให้" ต้องเซ็ตค่าเข้า textarea เองตรงนี้เลย
+   เพราะ radio ของ 2 หน้านี้ไม่มี onchange ตั้งค่า "ให้ร้านเลือกให้" ให้ไว้ล่วงหน้า */
 function syncAllWatAnswersBeforeSubmit() {
-    syncWatAnswer('pkgWatDropdowns', 'pkgWatDiffAnswer');
-    syncWatAnswer('customWatDropdowns', 'customWatDiffAnswer');
+    var pkgWatTypeRadio = document.querySelector('input[name="pkgWatType"]:checked');
+    if (pkgWatTypeRadio && pkgWatTypeRadio.value === 'ต่างวัด') {
+        syncWatAnswer('pkgWatDropdowns', 'pkgWatDiffAnswer');
+    } else {
+        var pkgWatDiffAnswer = document.getElementById('pkgWatDiffAnswer');
+        if (pkgWatDiffAnswer) pkgWatDiffAnswer.value = 'ให้ร้านเลือกให้';
+    }
+
+    var customWatTypeRadio = document.querySelector('input[name="customWatType"]:checked');
+    if (customWatTypeRadio && customWatTypeRadio.value === 'ต่างวัด') {
+        syncWatAnswer('customWatDropdowns', 'customWatDiffAnswer');
+    } else {
+        var customWatDiffAnswer = document.getElementById('customWatDiffAnswer');
+        if (customWatDiffAnswer) customWatDiffAnswer.value = 'ให้ร้านเลือกให้';
+    }
+
     return true;
 }
 
@@ -921,9 +1050,52 @@ function toggleBookingMode(mode) {
         customSection.style.display = 'block';
     }
 }
+
+/* FIX: เพิ่มการเช็ควันที่จัดงานเอง เพราะเปลี่ยนมาใช้ปฏิทินย่อ (hidden input)
+   แทน readonly text เดิม ซึ่ง browser validate hidden field ไม่ได้
+   จึงปิด native validation ของฟอร์มทั้งใบ (novalidate) แล้วเช็คเองในนี้แทน
+   รวมถึงเรียก reportValidity() manual เพื่อให้ยังเห็น bubble แจ้งเตือนของฟิลด์อื่นๆ ตามปกติ */
+function handleFormSubmit(form) {
+    syncAllWatAnswersBeforeSubmit();
+
+    var eventDateVal = document.getElementById('eventDateInput').value;
+    if (!eventDateVal) {
+        alert('กรุณาเลือกวันที่จัดงานจากปฏิทิน');
+        return false;
+    }
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return false;
+    }
+    return true;
+}
+
+/* ===== ปฏิทินย่อสำหรับเลือกวันที่จัดงาน ===== */
+window.bookedDates = [
+    <c:forEach var="d" items="${bookedDates}" varStatus="st">
+        "${d}"<c:if test="${!st.last}">,</c:if>
+    </c:forEach>
+];
+window.teamCount = ${empty teamCount ? 2 : teamCount};
+window.bookingsPerDate = {
+    <c:forEach var="e" items="${bookingsPerDate}" varStatus="st">
+        "${e.key}": ${e.value}<c:if test="${!st.last}">,</c:if>
+    </c:forEach>
+};
+window.dayQuality = {
+    <c:forEach var="e" items="${dayQuality}" varStatus="st">
+        "${e.key}": [
+            <c:forEach var="tag" items="${e.value}" varStatus="st2">
+                {type:"${tag.type}",label:"${tag.label}"}<c:if test="${!st2.last}">,</c:if>
+            </c:forEach>
+        ]<c:if test="${!st.last}">,</c:if>
+    </c:forEach>
+};
 </script>
 
 <script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=8"></script>
+<script src="${pageContext.request.contextPath}/static/js/miniBookingCalendar.js?v=1"></script>
 
 </body>
 </html>

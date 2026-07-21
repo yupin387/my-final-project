@@ -57,13 +57,14 @@
             opacity: 0.88;
         }
         /* ปรับแต่งส่วนแสดงรูปแพ็กเกจ */
-    .cd-package-img-container {
-        width: 100%;
-        height: 200px; /* กำหนดความสูงให้เท่ากันทุกรูป */
-        overflow: hidden;
-        border-radius: 8px 8px 0 0;
-        margin-bottom: 15px;
-    }
+  .cd-package-img-container {
+    width: 100%;
+    height: 220px; /* ปรับให้สูงขึ้นเพื่อให้รูปแสดงผลชัดขึ้น */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
     .cd-package-img-container img {
         width: 100%;
         height: 100%;
@@ -601,7 +602,7 @@
                         class="nav-dropdown-link">${t.mainName}</a>
                 </c:forEach>
                 <hr class="nav-dropdown-divider">
-                <a href="${pageContext.request.contextPath}/calendar" class="nav-dropdown-link">📅 ดูปฏิทินเพื่อเลือกวัน</a>
+               
             </div>
         </div>
 

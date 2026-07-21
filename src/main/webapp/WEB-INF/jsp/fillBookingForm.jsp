@@ -9,11 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>จองงานทำบุญบ้าน - ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=9">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=10">
 </head>
 <body>
 
-<%-- ========== NAVBAR (ให้ตรงกับหน้า ceremonyDetail: 92px / โลโก้ 58px / รูปจริง) ========== --%>
+<%-- ========== NAVBAR (ให้ตรงกับหน้า home: มีเมนู บริการ/แพ็กเกจ และ ปฏิทิน แบบ dropdown) ========== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <div class="lotus-icon">
@@ -23,6 +23,33 @@
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
+
+        <%-- ===== เมนู บริการ/แพ็กเกจ (dropdown) ===== --%>
+        <div class="nav-dropdown-wrap">
+            <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
+                บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <c:forEach var="t" items="${ceremonyTypes}">
+                    <a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
+                        class="nav-dropdown-link">${t.mainName}</a>
+                </c:forEach>
+            </div>
+        </div>
+
+        <%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) ===== --%>
+        <div class="nav-dropdown-wrap">
+            <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item nav-dropdown-toggle">
+                ปฏิทิน <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <a href="${pageContext.request.contextPath}/calendar#calendarSection"
+                    class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
+                <a href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
+                    class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
+            </div>
+        </div>
+
         <a href="${pageContext.request.contextPath}/latestBooking" class="nav-link-item active">การจอง</a>
         <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-link-item">ใบเสนอราคา</a>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
@@ -280,6 +307,17 @@
                                         <span>ให้ทางร้านเลือกให้ทั้งหมด <small style="color:#B0345A;">(เลือกวัดใกล้พื้นที่จัดงาน)</small></span>
                                     </label>
                                 </div>
+
+                                <%-- FIX: ย้าย textarea คำตอบ (watDiffAnswer) ออกมานอก #watDiff
+                                     เดิม textarea นี้ซ้อนอยู่ข้างใน #watDiff ซึ่งจะถูกซ่อน (display:none)
+                                     เมื่อเลือก "ให้ร้านเลือกให้" — ตอน submit ฟังก์ชัน
+                                     cleanupAndRenumberDetailsBeforeSubmit() จะไล่เช็ค parent ทุกตัว
+                                     ถ้าเจอ display:none จะ disable input ข้างในทั้งหมด ทำให้ค่าคำตอบ
+                                     "ให้ร้านเลือกให้" ไม่ถูกส่งไปกับฟอร์มเลย คำถามนี้จึงหายไปทั้งคำถามใน
+                                     booking.details และไม่ขึ้นในหน้า view --%>
+                                <textarea name="details[${detailIndex}].answer" id="watDiffAnswer"
+                                          class="form-control" style="display:none;">ให้ร้านเลือกให้</textarea>
+
                                 <div id="watDiff" style="display:none; margin-top:12px;">
                                     <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
                                         ระบุวัดที่ต้องการสำหรับพระแต่ละรูปได้ครบตามจำนวนพระสงฆ์ที่นิมนต์ไว้ด้านบน
@@ -288,8 +326,6 @@
                                     <div id="watDropdowns">
                                         <p class="wat-picker-empty">กรุณาระบุจำนวนพระสงฆ์ก่อน จึงจะแสดงช่องเลือกวัด</p>
                                     </div>
-                                    <textarea name="details[${detailIndex}].answer" id="watDiffAnswer"
-                                              class="form-control" style="display:none;"></textarea>
                                 </div>
                             </div>
                             <c:set var="detailIndex" value="${detailIndex + 1}"/>
@@ -447,24 +483,29 @@
             </defs>
         </svg>
     </div>
-    <div class="container footer-content">
-        <div class="footer-col footer-brand-col">
-            <div class="footer-brand">
-                <div class="lotus-icon">
-                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
-                </div>
-                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+<div class="container footer-content footer-content-slim">
+    <div class="footer-col footer-brand-col">
+        <div class="footer-brand">
+            <div class="lotus-icon">
+                <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
             </div>
-            <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
         </div>
-			<div class="footer-col footer-contact-col">
-				<h4 class="footer-heading">ติดต่อเรา</h4>
-				<p>📞 โทร. 08X-XXX-XXXX</p>
-				<p>💬 LINE OA: @boonmee</p>
-				<p>✉️ boonmee.booking@gmail.com</p>
-				<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
-			</div>
+        <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+        <div class="footer-social">
+            <a href="#" class="footer-social-link">📘 Facebook</a>
+            <a href="#" class="footer-social-link">▶️ YouTube</a>
+            <a href="#" class="footer-social-link">💬 LINE OA</a>
+        </div>
+    </div>
+		<div class="footer-col footer-contact-col">
+			<h4 class="footer-heading">ติดต่อเรา</h4>
+			<p>📞 โทร. 08X-XXX-XXXX</p>
+			<p>💬 LINE OA: @boonmee</p>
+			<p>✉️ boonmee@gmail.com</p>
+			<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
 		</div>
+	</div>
 	</footer>
 
 <style>
@@ -626,6 +667,58 @@
     margin: 8px 0 0;
     font-weight: 600;
 }
+
+/* ===== Navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) — ให้ตรงกับหน้า home ===== */
+.nav-dropdown-wrap {
+    position: relative;
+    display: inline-block;
+}
+.nav-dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+.nav-caret {
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+.nav-dropdown-wrap:hover .nav-caret {
+    transform: rotate(180deg);
+}
+.nav-dropdown-panel {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: var(--white, #fff);
+    border: 1px solid var(--gold-pale, #e8cc70);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
+    padding: 8px 0;
+    z-index: 100;
+}
+.nav-dropdown-wrap:hover .nav-dropdown-panel,
+.nav-dropdown-wrap:focus-within .nav-dropdown-panel {
+    display: block;
+}
+.nav-dropdown-link {
+    display: block;
+    padding: 10px 18px;
+    font-size: 0.92rem;
+    color: var(--brown-dark, #3d2500);
+    text-decoration: none;
+    white-space: nowrap;
+}
+.nav-dropdown-link:hover {
+    background: var(--gold-pale, #fff8e1);
+}
+.nav-dropdown-divider {
+    border: 0;
+    border-top: 1px solid var(--gold-pale, #e8cc70);
+    margin: 6px 0;
+}
 </style>
 
 <%-- ========== IMAGE LIGHTBOX ========== --%>
@@ -781,10 +874,22 @@ function syncWatAnswer(containerId, textareaId) {
     textarea.value = lines.join('\n');
 }
 
+/* FIX: เดิมฟังก์ชันนี้เรียก syncWatAnswer() เสมอไม่ว่า watType จะเป็นค่าไหน
+   ทำให้เวลาเลือก "ให้ทางร้านเลือกให้ทั้งหมด" (ไม่เคยเปิด #watDropdowns เลย
+   จึงไม่มี <select> อยู่ข้างในเลยสักตัว) ฟังก์ชัน syncWatAnswer จะวนลูป
+   selects ที่มี 0 ตัว ได้ lines เป็น [] แล้วเซ็ต textarea.value = ''
+   คือไปเขียนทับค่า "ให้ร้านเลือกให้" ที่ onchange ตั้งไว้ตอนเลือกวิทยุ
+   ให้กลายเป็นค่าว่างก่อน submit จริง ทำให้ answer ที่ส่งไป backend เป็น ''
+   ไม่ใช่ "ให้ร้านเลือกให้" หน้า view เลยเช็ค not empty แล้วไม่ผ่าน
+   ต้อง sync จาก dropdown เฉพาะตอนเลือก "ต่างวัด" เท่านั้น */
 function syncAllWatAnswersBeforeSubmit() {
-    syncWatAnswer('watDropdowns', 'watDiffAnswer');
+    var watTypeRadio = document.querySelector('input[name="watType"]:checked');
+    if (watTypeRadio && watTypeRadio.value === 'ต่างวัด') {
+        syncWatAnswer('watDropdowns', 'watDiffAnswer');
+    }
     return true;
 }
+
 
 function applyPackageMonkCount(radio) {
     var input = document.getElementById('monkCountField');

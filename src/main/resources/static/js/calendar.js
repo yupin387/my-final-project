@@ -13,6 +13,12 @@
          initLannaCalendar('${pageContext.request.contextPath}/static/data');
        });
      </script>
+
+   UPDATE: เดิมส่วนหัวปฏิทินล้านนาโชว์กล่อง #lc-year-card (ข้อมูลปีมะเมีย/
+   นักษัตร/ที่มา ฯลฯ) แบบเต็ม ตอนนี้ย้าย "ที่มา" ไปแสดงที่ท้ายปฏิทินแทน
+   ผ่าน element #lc-year-source ส่วนหัวปฏิทินเปลี่ยนไปใช้กล่องคำอธิบาย
+   ".lc-explain-box" แบบ static ที่เขียนไว้ใน JSP โดยตรง จึงตัดฟังก์ชัน
+   renderYearCard() ที่ไม่ใช้แล้วออก และเพิ่ม renderYearSource() แทน
    ============================================================ */
 
 /* ============================================================
@@ -162,11 +168,11 @@ if (typeof module !== 'undefined' && module.exports) {
    ============================================================
 
    ต้องมี element เหล่านี้อยู่ใน DOM (ดูตัวอย่าง markup ใน calendar.jsp):
-     #lc-year-card        - การ์ดข้อมูลปี
-     #lc-month-title       - หัวข้อเดือน/ปี ปัจจุบัน
+     #lc-month-title        - หัวข้อเดือน/ปี ปัจจุบัน
      #lc-prev-month / #lc-next-month - ปุ่มเลื่อนเดือน
-     #lc-grid              - grid ของวันในเดือน (7 คอลัมน์)
-     #lc-day-detail         - กล่องรายละเอียดวันที่ถูกเลือก
+     #lc-grid                - grid ของวันในเดือน (7 คอลัมน์)
+     #lc-day-detail           - กล่องรายละเอียดวันที่ถูกเลือก
+     #lc-year-source          - กล่อง "ที่มา" ท้ายปฏิทิน (แทน #lc-year-card เดิม)
    ============================================================ */
 
 (function (window, document) {
@@ -232,20 +238,14 @@ if (typeof module !== 'undefined' && module.exports) {
 		return t.getFullYear() + "-" + pad2(t.getMonth() + 1) + "-" + pad2(t.getDate());
 	}
 
-	/* ===== การ์ดข้อมูลปี ===== */
-	function renderYearCard() {
-		var el = document.getElementById("lc-year-card");
+	/* ===== ที่มา (ท้ายปฏิทิน) =====
+	   แทนที่กล่อง #lc-year-card เดิมที่เคยโชว์ข้อมูลปีมะเมีย/นักษัตร/ที่มา
+	   รวมกันไว้ด้านบน ตอนนี้เหลือแค่ข้อความ "ที่มา" อย่างเดียว แสดงท้ายปฏิทิน */
+	function renderYearSource() {
+		var el = document.getElementById("lc-year-source");
 		if (!el) return;
 		var y = lannaService.getYearInfo();
-
-		var html = "";
-		html += '<h2>' + y.yearNameLanna + ' (' + y.yearNameThaiZodiac + ')</h2>';
-		html += '<p>จุลศักราช ' + y.chulasakarat + ' &middot; พ.ศ. ' + y.buddhistEra + '</p>';
-		html += '<p>ดอกไม้ประจำปี: <strong>' + y.yearFlower + '</strong> &middot; พระธาตุประจำปี: <strong>' + y.yearPagoda.name + '</strong> (' + y.yearPagoda.location + ')</p>';
-		html += '<p>วันสังขานต์ล่อง: ' + y.songkran2026.sangkhanLuang + ' &middot; วันเน่า: ' + y.songkran2026.wanNao + ' &middot; วันพญาวัน: ' + y.songkran2026.wanPhayaWan + '</p>';
-		html += '<p class="lc-source">ที่มา: ' + y.source + '</p>';
-		el.classList.remove("loading");
-		el.innerHTML = html;
+		el.innerHTML = '<p class="lc-source">ที่มา: ' + y.source + '</p>';
 	}
 
 	/* ===== ตารางเดือน ===== */
@@ -401,7 +401,7 @@ if (typeof module !== 'undefined' && module.exports) {
 	function initLannaCalendar(basePath) {
 		LannaCalendar.load(basePath).then(function (service) {
 			lannaService = service;
-			renderYearCard();
+			renderYearSource();
 			renderMonthTitle();
 			renderGrid();
 			renderDayDetail(null);
@@ -412,11 +412,8 @@ if (typeof module !== 'undefined' && module.exports) {
 			if (nextBtn) nextBtn.addEventListener("click", nextMonth);
 		}).catch(function (err) {
 			console.error("โหลดปฏิทินล้านนาไม่สำเร็จ:", err);
-			var yearEl = document.getElementById("lc-year-card");
-			if (yearEl) {
-				yearEl.classList.remove("loading");
-				yearEl.innerHTML = "<p>ไม่สามารถโหลดข้อมูลปฏิทินล้านนาได้ในขณะนี้</p>";
-			}
+			var sourceEl = document.getElementById("lc-year-source");
+			if (sourceEl) sourceEl.innerHTML = "";
 			var gridWrap = document.getElementById("lc-grid");
 			if (gridWrap) gridWrap.innerHTML = "";
 		});

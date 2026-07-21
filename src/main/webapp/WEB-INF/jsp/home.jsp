@@ -101,6 +101,31 @@
 		margin-left: 0;
 		margin-right: auto;
 	}
+	
+	/* ===== "ทำไมต้องเลือกบุญมี" — ขยายการ์ดให้ใหญ่ขึ้น (แยกสโคปจาก .meaning-grid ของหน้าปฏิทิน) ===== */
+#whyChooseSection .meaning-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px 32px;
+    max-width: 860px;
+    margin: 30px auto 0;
+}
+#whyChooseSection .meaning-card {
+    padding: 34px 30px;
+    border-radius: 18px;
+}
+#whyChooseSection .meaning-card-title {
+    font-size: 1.3rem;
+    margin-bottom: 14px;
+}
+#whyChooseSection .meaning-card-desc {
+    font-size: 1rem;
+    line-height: 1.85;
+}
+@media (max-width: 700px) {
+    #whyChooseSection .meaning-grid {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
 </head>
 <body>
@@ -132,8 +157,7 @@
 							class="nav-dropdown-link">${t.mainName}</a>
 					</c:forEach>
 					<hr class="nav-dropdown-divider">
-					<a href="${pageContext.request.contextPath}/calendar"
-						class="nav-dropdown-link">📅 ดูปฏิทินเพื่อเลือกวัน</a>
+					
 				</div>
 			</div>
 			

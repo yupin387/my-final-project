@@ -56,13 +56,14 @@
         .cd-btn-select-package:hover {
             opacity: 0.88;
         }
-        .cd-package-img-container {
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 15px;
-        }
+.cd-package-img-container {
+    width: 100%;
+    height: 220px; /* ปรับให้สูงขึ้นเพื่อให้รูปแสดงผลชัดขึ้น */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
         .cd-package-img-container img {
             width: 100%;
             height: 100%;
@@ -498,6 +499,18 @@
             .navbar-custom .nav-brand-text { font-size: 20px; }
             .navbar-custom .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
         }
+         .promotion-banner-wrap {
+	  margin-top: 36px;
+	  text-align: center;
+	 }
+	 .promotion-banner-img {
+	  width: 100%;
+	  max-width: 1200px;
+	  height: auto;
+	  border-radius: 16px;
+	  display: inline-block;
+	  box-shadow: 0 6px 24px rgba(61, 37, 0, 0.15);
+	 }
     </style>
 </head>
 <body>
@@ -521,7 +534,7 @@
                         class="nav-dropdown-link">${t.mainName}</a>
                 </c:forEach>
                 <hr class="nav-dropdown-divider">
-                <a href="${pageContext.request.contextPath}/calendar" class="nav-dropdown-link">📅 ดูปฏิทินเพื่อเลือกวัน</a>
+              
             </div>
         </div>
 
@@ -784,13 +797,21 @@
         </ul>
     </div>
 
+    <div class="promotion-banner-wrap">
+				<img src="${pageContext.request.contextPath}/static/images/promotion.png"
+					alt="โปรโมชั่น จัดงานบุญให้ง่าย ครบ จบในที่เดียว รับฟรี เครื่องเสียง เก้าอี้ โต๊ะพร้อมผ้าคลุม"
+					class="promotion-banner-img">
+			</div>
+    </div>
+    
+    
     <%-- ========== FOOTER BAR ========== --%>
     <div class="cd-footer">
         <div class="cd-footer-inner">
             <div class="cd-footer-note">
-                <span>เริ่มต้น — เลือกแพ็กเกจจริงในหน้าจอง</span>
+                <span>ไม่อยากเลือกแพ็กเกจสำเร็จรูป? กรอกรายละเอียดเองได้</span>
             </div>
-            <a href="${pageContext.request.contextPath}/booking2?ceremonyId=${ceremony.ceremonyId}${not empty selectedDates ? '&dates=' : ''}${selectedDates}" class="cd-btn-book">จอง${mainType}</a>
+            <a href="${pageContext.request.contextPath}/booking2?ceremonyId=${ceremony.ceremonyId}${not empty selectedDates ? '&dates=' : ''}${selectedDates}" class="cd-btn-book">จองเเบบระบุเอง${mainType}</a>
         </div>
     </div>
 
