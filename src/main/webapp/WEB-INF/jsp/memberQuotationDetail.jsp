@@ -114,6 +114,7 @@
                         </c:if>
                     </c:forEach>
 
+
             <%-- หมวดแพ็กเกจหลัก (โชว์เฉพาะเมื่อมีรายการแพ็กเกจจริง) --%>
                     <c:if test="${hasPackageRow}">
                         <tr class="group-row"><td colspan="5">แพ็กเกจ: ${q.bookingForm.ceremony.ceremonyType} (${packageName})</td></tr>
