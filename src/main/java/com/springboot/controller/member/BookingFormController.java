@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -187,18 +188,31 @@ public class BookingFormController {
         return "fillBookingForm3";
     }
 
+    /*
+     * FIX: เดิมเมธอดนี้ return เฉพาะ "mainName" อย่างเดียว ทำให้ลิงก์ในเมนู dropdown
+     * "บริการ/แพ็กเกจ" ของหน้า bookingForm.jsp / viewBooking.jsp ที่อ้างอิง
+     * ${t.representativeId} ไม่มีค่า (ลิงก์จะกลายเป็น /ceremony/detail/ เฉยๆ)
+     * จึงต้องหา "ตัวแทน" ของแต่ละประเภทงานบุญ (representative ceremony) และใส่
+     * representativeId เข้าไปด้วย ให้ตรงกับ logic เดียวกันกับ buildCeremonyTypes()
+     * ใน UserController (เรียงตามราคาแล้วเลือกตัวที่ถูกที่สุดเป็นตัวแทน)
+     */
     private List<Map<String, Object>> buildCeremonyTypesForFooter() {
         List<Ceremony> all = ceremonyService.getAllCeremonies();
         Map<String, List<Ceremony>> grouped = all.stream()
-            .collect(java.util.stream.Collectors.groupingBy(
+            .collect(Collectors.groupingBy(
                 c -> c.getCeremonyType() == null ? "" : c.getCeremonyType().trim(),
-                java.util.LinkedHashMap::new,
-                java.util.stream.Collectors.toList()
+                LinkedHashMap::new,
+                Collectors.toList()
             ));
         List<Map<String, Object>> result = new ArrayList<>();
-        for (String type : grouped.keySet()) {
-            Map<String, Object> m = new java.util.LinkedHashMap<>();
-            m.put("mainName", type);
+        for (Map.Entry<String, List<Ceremony>> entry : grouped.entrySet()) {
+            List<Ceremony> packages = entry.getValue();
+            packages.sort(Comparator.comparingDouble(Ceremony::getBasePrice));
+            Ceremony representative = packages.get(0);
+
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("mainName", entry.getKey());
+            m.put("representativeId", representative.getCeremonyId());
             result.add(m);
         }
         return result;
@@ -271,6 +285,9 @@ public class BookingFormController {
         model.addAttribute("hasReview", alreadyReviewed);
         model.addAttribute("pintoItems", pintoItems);
         model.addAttribute("sanghatharnItems", sanghatharnItems);
+        // FIX: เดิมหน้านี้ไม่ได้ set ceremonyTypes ทำให้เมนู dropdown "บริการ/แพ็กเกจ"
+        // ใน navbar ของ viewBooking.jsp ว่างเปล่า (${ceremonyTypes} ไม่มีค่า)
+        model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
         return "viewBooking";
     }
     

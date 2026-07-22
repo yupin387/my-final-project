@@ -56,8 +56,7 @@
         .cd-btn-select-package:hover {
             opacity: 0.88;
         }
-        /* ปรับแต่งส่วนแสดงรูปแพ็กเกจ */
-  .cd-package-img-container {
+.cd-package-img-container {
     width: 100%;
     height: 220px; /* ปรับให้สูงขึ้นเพื่อให้รูปแสดงผลชัดขึ้น */
     display: flex;
@@ -65,448 +64,442 @@
     align-items: center;
     margin-bottom: 15px;
 }
-    .cd-package-img-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* ช่วยให้รูปไม่เบี้ยว แม้ขนาดรูปต้นฉบับจะไม่เท่ากัน */
-        transition: transform 0.3s ease;
-    }
-    .cd-package-option:hover img {
-        transform: scale(1.05); /* เพิ่มลูกเล่นตอนเอาเมาส์วาง */
-    }
+        .cd-package-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .cd-package-option:hover img {
+            transform: scale(1.05);
+        }
 
-    /* 1. จัด Layout ให้แสดง 3 คอลัมน์แบบมีระยะห่าง */
-	.cd-package-grid {
-	    display: grid;
-	    grid-template-columns: repeat(3, 1fr);
-	    gap: 20px;
-	    margin-top: 20px;
-	    padding: 0 10px;
-	    align-items: start; /* กันไม่ให้การ์ดยืดสูงตามใบที่ขยายรายละเอียด */
-	}
+        .cd-package-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            padding: 0 10px;
+            align-items: start;
+        }
 
-    .cd-package-option {
-        border: 1px solid #eee;
-        border-radius: 12px;
-        padding: 20px;
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* จัดทุกอย่างให้อยู่กึ่งกลาง */
-        transition: box-shadow 0.3s ease;
-    }
-    .cd-package-option:hover {
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+        .cd-package-option {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: box-shadow 0.3s ease;
+        }
+        .cd-package-option:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-    .cd-package-img-container {
-        width: 100%;
-        height: 220px; /* ปรับให้สูงขึ้นเพื่อให้รูปแสดงผลชัดขึ้น */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 15px;
-    }
+        .cd-package-img-container {
+            width: 100%;
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
 
-    .cd-package-img-container img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain; /* ใช้ contain เพื่อให้เห็นภาพครบทั้งใบ */
-        border-radius: 8px;
-    }
-    .cd-package-option-name {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 5px;
-        color: #333;
-    }
-    .cd-package-option-price {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #d6336c;
-        margin-bottom: 15px;
-    }
-    .cd-btn-select-package {
-        width: 100%;
-        padding: 12px;
-        background: #333; /* ปรับสีปุ่มตามที่คุณชอบ */
-        color: #fff;
-        border-radius: 8px;
-        text-align: center;
-        text-decoration: none;
-        margin-top: auto; /* ดันปุ่มลงมาล่างสุดเสมอ */
-    }
-    .cd-curiosity-teaser {
-    background: linear-gradient(180deg, #FFF8F3 0%, #FCE9EF 100%);
-    padding: 50px 20px 60px;
-    text-align: center;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-	}
-	.cd-curiosity-side-img {
-	    flex-shrink: 0;
-	    width: 140px;
-	}
-	.cd-curiosity-side-img img {
-	    width: 100%;
-	    height: auto;
-	    display: block;
-	}
-	/* รูปฝั่งซ้ายกลับด้านให้หันหน้าเข้าหากล่องตรงกลาง */
-	.cd-curiosity-side-img.left img {
-	    transform: scaleX(-1);
-	}
-	@media (max-width: 900px) {
-	    .cd-curiosity-side-img { display: none; } /* ซ่อนรูปในจอเล็กกันแน่นเกินไป */
-	}
-	.cd-curiosity-card {
-	    max-width: 720px;
-	    margin: 0 auto;
-	    background: #FFFDF9;
-	    border: 2px solid #D9A441;
-	    border-radius: 4px;
-	    padding: 34px 50px 30px;
-	    position: relative;
-	    box-shadow: 0 8px 24px rgba(61, 37, 0, 0.1);
-	}
-	.cd-curiosity-card::before {
-	    content: "";
-	    position: absolute;
-	    inset: 7px;
-	    border: 1px solid #E8C878;
-	    border-radius: 2px;
-	    pointer-events: none;
-	}
-	.cd-curiosity-corner {
-	    position: absolute;
-	    width: 42px;
-	    height: 42px;
-	}
-	.cd-curiosity-corner.tl { top: -1px; left: -1px; }
-	.cd-curiosity-corner.tr { top: -1px; right: -1px; transform: scaleX(-1); }
-	.cd-curiosity-corner.bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
-	.cd-curiosity-corner.br { bottom: -1px; right: -1px; transform: scale(-1, -1); }
+        .cd-package-img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .cd-package-option-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .cd-package-option-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d6336c;
+            margin-bottom: 15px;
+        }
+        .cd-btn-select-package {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            color: #fff;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            margin-top: auto;
+        }
 
-	.cd-curiosity-icon {
-	    margin: 0 auto 12px;
-	    display: flex;
-	    align-items: center;
-	    justify-content: center;
-	}
-	.cd-curiosity-question {
-	    font-family: 'Noto Serif Thai', serif;
-	    font-size: 1.3rem;
-	    font-weight: 700;
-	    color: #A6222F;
-	    margin-bottom: 14px;
-	    line-height: 1.6;
-	}
-	.cd-curiosity-divider {
-	    display: flex;
-	    align-items: center;
-	    justify-content: center;
-	    gap: 10px;
-	    margin-bottom: 18px;
-	}
-	.cd-curiosity-divider span {
-	    width: 40px;
-	    height: 1px;
-	    background: #D9A441;
-	}
-	.cd-curiosity-divider i {
-	    color: #D9A441;
-	    font-size: 0.7rem;
-	}
-	.cd-curiosity-answer {
-	    font-size: 0.98rem;
-	    color: #5c4033;
-	    line-height: 1.95;
-	}
+        /* ===== ชวนสงสัย ===== */
+        .cd-curiosity-teaser {
+            background: linear-gradient(180deg, #FFF8F3 0%, #FCE9EF 100%);
+            padding: 50px 20px 60px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+        .cd-curiosity-side-img {
+            flex-shrink: 0;
+            width: 140px;
+        }
+        .cd-curiosity-side-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .cd-curiosity-side-img.left img {
+            transform: scaleX(-1);
+        }
+        @media (max-width: 900px) {
+            .cd-curiosity-side-img { display: none; }
+        }
+        .cd-curiosity-card {
+            max-width: 720px;
+            margin: 0 auto;
+            background: #FFFDF9;
+            border: 2px solid #D9A441;
+            border-radius: 4px;
+            padding: 34px 50px 30px;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(61, 37, 0, 0.1);
+        }
+        .cd-curiosity-card::before {
+            content: "";
+            position: absolute;
+            inset: 7px;
+            border: 1px solid #E8C878;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+        .cd-curiosity-corner {
+            position: absolute;
+            width: 42px;
+            height: 42px;
+        }
+        .cd-curiosity-corner.tl { top: -1px; left: -1px; }
+        .cd-curiosity-corner.tr { top: -1px; right: -1px; transform: scaleX(-1); }
+        .cd-curiosity-corner.bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
+        .cd-curiosity-corner.br { bottom: -1px; right: -1px; transform: scale(-1, -1); }
 
-    /* ============================================================
-       ===== NAVBAR (คัดลอกมาจาก home.css / home.jsp ให้ตรงกันเป๊ะ =====
-       cd-navbar เดิมถูกแทนที่ด้วย navbar-custom ชุดนี้ทั้งหมด
-       ============================================================ */
-    .navbar-custom {
-        background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
-        padding: 0 40px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 3px solid #FBD0DE;
-        position: sticky;
-        top: 0;
-        z-index: 10000;
-        min-height: 92px;
-        overflow: visible;
-        box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
-    }
-    .navbar-custom::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
-    }
-    .navbar-brand-wrap {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        gap: 12px;
-    }
-    .navbar-custom .lotus-icon {
-        background: rgba(255, 255, 255, 0.18);
-        width: 76px;
-        height: 76px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 32px;
-        border: 1.5px solid rgba(255, 255, 255, 0.55);
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
-        flex-shrink: 0;
-        overflow: hidden;
-    }
-    .navbar-custom .lotus-icon img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-    }
-    .navbar-custom .nav-brand-text {
-        color: #FFFFFF;
-        font-family: 'Noto Serif Thai', serif;
-        font-style: italic;
-        font-size: 30px;
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        white-space: nowrap;
-        text-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-    .navbar-center {
-        display: flex;
-        gap: 2px;
-        align-items: center;
-        margin-left: auto;
-        margin-right: 24px;
-    }
-    .nav-link-item {
-        color: #FFFFFF;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 600;
-        padding: 8px 16px;
-        border-radius: 6px;
-        transition: background 0.2s, color 0.2s;
-        white-space: nowrap;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    }
-    .nav-link-item:hover {
-        background: rgba(255, 255, 255, 0.2);
-        color: #FFFFFF;
-    }
-    .nav-link-item.active {
-        background: #FFFFFF;
-        color: #E0577F;
-        font-weight: 700;
-    }
-    .btn-register-nav {
-        background: #FFFFFF;
-        color: #E0577F;
-        font-weight: 700;
-        border: none;
-        border-radius: 8px;
-        padding: 9px 22px;
-        text-decoration: none;
-        font-size: 14px;
-        transition: all 0.2s;
-        white-space: nowrap;
-        font-family: 'Sarabun', sans-serif;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
-    .btn-register-nav:hover {
-        background: #FFF3F7;
-        color: #B0345A;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    }
-    .user-profile-pill {
-        background: rgba(255, 255, 255, 0.15);
-        border: 1.5px solid rgba(255, 255, 255, 0.45);
-        padding: 6px 16px 6px 6px;
-        border-radius: 50px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #FFFFFF;
-        cursor: pointer;
-        transition: background 0.2s;
-        position: relative;
-        text-decoration: none;
-    }
-    .user-profile-pill:hover {
-        background: rgba(255, 255, 255, 0.25);
-    }
-    .avatar-circle-nav {
-        background: #FFFFFF;
-        color: #E0577F;
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        font-size: 1rem;
-        flex-shrink: 0;
-    }
-    .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-    .user-name-nav  { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
-    .user-role-nav  { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
+        .cd-curiosity-icon {
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cd-curiosity-question {
+            font-family: 'Noto Serif Thai', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #A6222F;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+        .cd-curiosity-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .cd-curiosity-divider span {
+            width: 40px;
+            height: 1px;
+            background: #D9A441;
+        }
+        .cd-curiosity-divider i {
+            color: #D9A441;
+            font-size: 0.7rem;
+        }
+        .cd-curiosity-answer {
+            font-size: 0.98rem;
+            color: #5c4033;
+            line-height: 1.95;
+        }
 
-    .dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
-    .dropdown-menu-custom {
-        visibility: hidden;
-        opacity: 0;
-        position: absolute;
-        top: calc(100% - 10px);
-        right: 0;
-        background-color: #FFFFFF;
-        border: 1px solid var(--card-border-soft, #F6D4E1);
-        border-radius: 10px;
-        min-width: 175px;
-        box-shadow: 0 8px 28px rgba(224, 87, 127, 0.18);
-        z-index: 99999;
-        padding: 0;
-        transform: translateY(-8px);
-        transition: all 0.25s ease;
-    }
-    .dropdown-menu-custom.show {
-        visibility: visible;
-        opacity: 1;
-        transform: translateY(0);
-    }
-    .dropdown-link {
-        display: block;
-        padding: 13px 20px;
-        font-family: 'Sarabun', sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--text-mid, #333333);
-        text-decoration: none;
-        background: #FFFFFF;
-        border-bottom: 1px solid var(--cream-mid, #FDEEF3);
-        transition: background 0.2s;
-        text-align: left;
-    }
-    .dropdown-link:last-child  { border-bottom: none; border-radius: 0 0 10px 10px; }
-    .dropdown-link:first-child { border-radius: 10px 10px 0 0; }
-    .dropdown-link:hover       { background: #FFF3F7; }
-    .dropdown-link.danger      { color: #c0392b; }
-    .dropdown-link.danger:hover{ background: #fff5f5; }
+        /* ============================================================
+           ===== NAVBAR (คัดลอกมาจาก home.css / home.jsp ให้ตรงกันเป๊ะ) =====
+           ============================================================ */
+        .navbar-custom {
+            background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #FBD0DE;
+            position: sticky;
+            top: 0;
+            z-index: 10000;
+            min-height: 92px;
+            overflow: visible;
+            box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+        }
+        .navbar-custom::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+        }
+        .navbar-brand-wrap {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 12px;
+        }
+        .navbar-custom .lotus-icon {
+            background: rgba(255, 255, 255, 0.18);
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border: 1.5px solid rgba(255, 255, 255, 0.55);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .navbar-custom .lotus-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .navbar-custom .nav-brand-text {
+            color: #FFFFFF;
+            font-family: 'Noto Serif Thai', serif;
+            font-style: italic;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .navbar-center {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 24px;
+        }
+        .nav-link-item {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .nav-link-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+        }
+        .nav-link-item.active {
+            background: #FFFFFF;
+            color: #E0577F;
+            font-weight: 700;
+        }
+        .btn-register-nav {
+            background: #FFFFFF;
+            color: #E0577F;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 22px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            font-family: 'Sarabun', sans-serif;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .btn-register-nav:hover {
+            background: #FFF3F7;
+            color: #B0345A;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+        .user-profile-pill {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1.5px solid rgba(255, 255, 255, 0.45);
+            padding: 6px 16px 6px 6px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+            text-decoration: none;
+        }
+        .user-profile-pill:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .avatar-circle-nav {
+            background: #FFFFFF;
+            color: #E0577F;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
+        .user-name-nav  { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
+        .user-role-nav  { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
 
-    /* dropdown เมนู บริการ/แพ็กเกจ และ ปฏิทิน (คัดลอกจาก inline style ของ home.jsp) */
-    .nav-dropdown-wrap { position: relative; display: inline-block; }
-    .nav-dropdown-toggle { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
-    .nav-caret { font-size: 0.7rem; transition: transform 0.2s ease; }
-    .nav-dropdown-wrap:hover .nav-caret { transform: rotate(180deg); }
-    .nav-dropdown-panel {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        min-width: 220px;
-        background: #FFFFFF;
-        border: 1px solid var(--gold-pale, #FBD0DE);
-        border-radius: 10px;
-        box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
-        padding: 8px 0;
-        z-index: 100;
-    }
-    .nav-dropdown-wrap:hover .nav-dropdown-panel,
-    .nav-dropdown-wrap:focus-within .nav-dropdown-panel {
-        display: block;
-    }
-    .nav-dropdown-link {
-        display: block;
-        padding: 10px 18px;
-        font-size: 0.92rem;
-        color: var(--brown-dark, #1A1A1A);
-        text-decoration: none;
-        white-space: nowrap;
-    }
-    .nav-dropdown-link:hover {
-        background: var(--gold-pale, #FBD0DE);
-    }
-    .nav-dropdown-divider {
-        border: 0;
-        border-top: 1px solid var(--gold-pale, #FBD0DE);
-        margin: 6px 0;
-    }
+        .dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
+        .dropdown-menu-custom {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: calc(100% - 10px);
+            right: 0;
+            background-color: #FFFFFF;
+            border: 1px solid var(--card-border-soft, #F6D4E1);
+            border-radius: 10px;
+            min-width: 175px;
+            box-shadow: 0 8px 28px rgba(224, 87, 127, 0.18);
+            z-index: 99999;
+            padding: 0;
+            transform: translateY(-8px);
+            transition: all 0.25s ease;
+        }
+        .dropdown-menu-custom.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .dropdown-link {
+            display: block;
+            padding: 13px 20px;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-mid, #333333);
+            text-decoration: none;
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--cream-mid, #FDEEF3);
+            transition: background 0.2s;
+            text-align: left;
+        }
+        .dropdown-link:last-child  { border-bottom: none; border-radius: 0 0 10px 10px; }
+        .dropdown-link:first-child { border-radius: 10px 10px 0 0; }
+        .dropdown-link:hover       { background: #FFF3F7; }
+        .dropdown-link.danger      { color: #c0392b; }
+        .dropdown-link.danger:hover{ background: #fff5f5; }
 
-    /* login success toast (เผื่อใช้ในอนาคต ให้ตรงกับ home) */
-    .login-alert-toast {
-        position: fixed;
-        top: 24px;
-        left: 50%;
-        background: #FFFFFF;
-        border: 1.5px solid var(--gold-mid);
-        color: var(--brown-dark);
-        padding: 16px 24px;
-        border-radius: 12px;
-        box-shadow: 0 8px 32px var(--shadow-gold);
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        z-index: 999999;
-        transform: translate(-50%, -150%);
-        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
-        opacity: 0;
-    }
-    .login-alert-toast.show { transform: translate(-50%, 0); opacity: 1; }
-    .toast-icon  { font-size: 1.4rem; }
-    .toast-body  { display: flex; flex-direction: column; gap: 2px; }
-    .toast-title { font-weight: 700; font-size: 0.95rem; }
-    .toast-user  { font-size: 0.85rem; color: var(--brown-mid); }
+        .nav-dropdown-wrap { position: relative; display: inline-block; }
+        .nav-dropdown-toggle { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+        .nav-caret { font-size: 0.7rem; transition: transform 0.2s ease; }
+        .nav-dropdown-wrap:hover .nav-caret { transform: rotate(180deg); }
+        .nav-dropdown-panel {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 220px;
+            background: #FFFFFF;
+            border: 1px solid var(--gold-pale, #FBD0DE);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
+            padding: 8px 0;
+            z-index: 100;
+        }
+        .nav-dropdown-wrap:hover .nav-dropdown-panel,
+        .nav-dropdown-wrap:focus-within .nav-dropdown-panel {
+            display: block;
+        }
+        .nav-dropdown-link {
+            display: block;
+            padding: 10px 18px;
+            font-size: 0.92rem;
+            color: var(--brown-dark, #1A1A1A);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .nav-dropdown-link:hover {
+            background: var(--gold-pale, #FBD0DE);
+        }
+        .nav-dropdown-divider {
+            border: 0;
+            border-top: 1px solid var(--gold-pale, #FBD0DE);
+            margin: 6px 0;
+        }
 
-    /* ============================================================
-       ===== FOOTER SOCIAL LINKS (ส่วนที่ ceremonyDetail.css ยังไม่มี) =====
-       ============================================================ */
-    .footer-social {
-        display: flex;
-        gap: 10px;
-        margin-top: 16px;
-        flex-wrap: wrap;
-    }
-    .footer-social-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        color: #FFFFFF;
-        text-decoration: none;
-        font-size: 0.82rem;
-        font-weight: 600;
-        background: rgba(255, 255, 255, 0.16);
-        border: 1px solid rgba(255, 255, 255, 0.35);
-        padding: 7px 14px;
-        border-radius: 20px;
-        transition: background 0.2s;
-    }
-    .footer-social-link:hover {
-        background: rgba(255, 255, 255, 0.3);
-    }
+        .login-alert-toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            background: #FFFFFF;
+            border: 1.5px solid var(--gold-mid);
+            color: var(--brown-dark);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px var(--shadow-gold);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 999999;
+            transform: translate(-50%, -150%);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            opacity: 0;
+        }
+        .login-alert-toast.show { transform: translate(-50%, 0); opacity: 1; }
+        .toast-icon  { font-size: 1.4rem; }
+        .toast-body  { display: flex; flex-direction: column; gap: 2px; }
+        .toast-title { font-weight: 700; font-size: 0.95rem; }
+        .toast-user  { font-size: 0.85rem; color: var(--brown-mid); }
 
-    @media (max-width: 768px) {
-        .navbar-custom { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
-        .navbar-custom .nav-brand-text { font-size: 20px; }
-        .navbar-custom .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
-    }
-    
-    .promotion-banner-wrap {
+        /* ===== FOOTER SOCIAL LINKS ===== */
+        .footer-social {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .footer-social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            padding: 7px 14px;
+            border-radius: 20px;
+            transition: background 0.2s;
+        }
+        .footer-social-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .navbar-custom { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
+            .navbar-custom .nav-brand-text { font-size: 20px; }
+            .navbar-custom .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
+        }
+         .promotion-banner-wrap {
 	  margin-top: 36px;
 	  text-align: center;
 	 }
@@ -517,67 +510,6 @@
 	  border-radius: 16px;
 	  display: inline-block;
 	  box-shadow: 0 6px 24px rgba(61, 37, 0, 0.15);
-	 }
-	
-	 /* ===== navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) ===== */
-	 .nav-dropdown-wrap {
-	  position: relative;
-	  display: inline-block;
-	 }
-	 .nav-dropdown-toggle {
-	  display: inline-flex;
-	  align-items: center;
-	  gap: 4px;
-	  cursor: pointer;
-	 }
-	 .nav-caret {
-	  font-size: 0.7rem;
-	  transition: transform 0.2s ease;
-	 }
-	 .nav-dropdown-wrap:hover .nav-caret {
-	  transform: rotate(180deg);
-	 }
-	 .nav-dropdown-panel {
-	  display: none;
-	  position: absolute;
-	  top: 100%;
-	  left: 0;
-	  min-width: 220px;
-	  background: var(--white, #fff);
-	  border: 1px solid var(--gold-pale, #e8cc70);
-	  border-radius: 10px;
-	  box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
-	  padding: 8px 0;
-	  z-index: 100;
-	 }
-	 .nav-dropdown-wrap:hover .nav-dropdown-panel,
-	 .nav-dropdown-wrap:focus-within .nav-dropdown-panel {
-	  display: block;
-	 }
-	 .nav-dropdown-link {
-	  display: block;
-	  padding: 10px 18px;
-	  font-size: 0.92rem;
-	  color: var(--brown-dark, #3d2500);
-	  text-decoration: none;
-	  white-space: nowrap;
-	 }
-	 .nav-dropdown-link:hover {
-	  background: var(--gold-pale, #fff8e1);
-	 }
-	 .nav-dropdown-divider {
-	  border: 0;
-	  border-top: 1px solid var(--gold-pale, #e8cc70);
-	  margin: 6px 0;
-	 }
-	 /* การ์ดเงื่อนไขเดี่ยวเต็มความกว้าง (ตัด "ขั้นตอนการจอง" ออกแล้ว) */
-	 .conditions-grid-single {
-	  display: block;
-	 }
-	
-	 /* ===== reviews teaser section (การ์ดใช้ CSS .review-card เดิมจาก home.css) ===== */
-	 .reviews-teaser .reviews-grid {
-	  margin-bottom: 24px;
 	 }
     </style>
 </head>
@@ -593,16 +525,16 @@
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
 
         <div class="nav-dropdown-wrap">
-		    <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle active">
-		        บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
-		    </a>
+            <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle active">
+                บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
+            </a>
             <div class="nav-dropdown-panel">
                 <c:forEach var="t" items="${ceremonyTypes}">
                     <a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
                         class="nav-dropdown-link">${t.mainName}</a>
                 </c:forEach>
                 <hr class="nav-dropdown-divider">
-               
+              
             </div>
         </div>
 
@@ -659,7 +591,7 @@
     </div>
 </div>
 
-<%-- ========== ชวนสงสัย: ทำไมต้องทำบุญบ้าน (ธีมไทย) พร้อมรูปเณรน้อย 2 ฝั่งหันเข้าหากล่อง ========== --%>
+<%-- ========== ชวนสงสัย: ทำไมต้องทำบุญขึ้นบ้านใหม่ (ธีมไทย) พร้อมรูปเณรน้อย 2 ฝั่งหันเข้าหากล่อง ========== --%>
 <section class="cd-curiosity-teaser">
 
     <div class="cd-curiosity-side-img left">
@@ -696,16 +628,15 @@
         </div>
 
         <div class="cd-curiosity-question">
-            ทำไมต้องทำบุญบ้าน? แค่ย้ายเข้าอยู่เฉย ๆ ก็ได้ไม่ใช่เหรอ?
+            ทำไมต้องทำบุญขึ้นบ้านใหม่? แค่ย้ายเข้าอยู่เฉย ๆ ก็ได้ไม่ใช่เหรอ?
         </div>
         <div class="cd-curiosity-divider">
             <span></span><i>◆</i><span></span>
         </div>
         <div class="cd-curiosity-answer">
-            หลายครอบครัวเชื่อว่าการนิมนต์พระสงฆ์มาสวดเจริญพระพุทธมนต์ก่อนเริ่มต้นอยู่อาศัย
-            จะช่วยปัดเป่าสิ่งไม่ดี เสริมสิริมงคลให้บ้านและผู้อยู่อาศัย
-            อีกทั้งยังเป็นโอกาสให้คนในครอบครัวได้มารวมตัวทำบุญร่วมกัน
-            เริ่มต้นชีวิตในบ้านหลังนี้ด้วยความสบายใจ
+            บ้านหลังใหม่คือพื้นที่ที่ยังไม่มีใครเคยอยู่อาศัยมาก่อน หลายครอบครัวจึงเชื่อว่าควรนิมนต์พระสงฆ์มาสวดเจริญพระพุทธมนต์
+            เพื่อปัดเป่าสิ่งไม่ดีที่อาจตกค้างอยู่ในพื้นที่ อัญเชิญเจ้าที่เจ้าทางและสิ่งศักดิ์สิทธิ์ให้ช่วยคุ้มครองผู้อยู่อาศัย
+            อีกทั้งยังถือเป็นการเริ่มต้นชีวิตในบ้านหลังใหม่อย่างเป็นสิริมงคล สร้างความอุ่นใจให้ทุกคนในครอบครัวตั้งแต่วันแรกที่ย้ายเข้ามาอยู่
         </div>
     </div>
 
@@ -715,20 +646,19 @@
 
 </section>
 
-
-<%-- ========== รู้จักงานทำบุญบ้าน: ย้ายขึ้นบนสุด เป็นแบนเนอร์ภาพ + ไล่สี ========== --%>
+<%-- ========== รู้จักงานทำบุญขึ้นบ้านใหม่: แบนเนอร์ภาพ + ไล่สีชมพู ========== --%>
 <section class="cd-intro-banner">
     <div class="cd-intro-banner-img">
-        <img src="${pageContext.request.contextPath}/static/images/b1.jpg" alt="ทีมงานให้คำปรึกษาการจัดงาน">
+        <img src="${pageContext.request.contextPath}/static/images/b2.jpg" alt="ทีมงานให้คำปรึกษาการจัดงาน">
     </div>
     <div class="cd-intro-banner-text">
         <div class="cd-intro-banner-text-inner">
-            <div class="cd-intro-banner-title">รู้จักงานทำบุญบ้าน</div>
+            <div class="cd-intro-banner-title">รู้จักงานทำบุญขึ้นบ้านใหม่</div>
             <p class="cd-intro-banner-desc">
-                งานทำบุญบ้าน คือการนิมนต์พระสงฆ์มาสวดเจริญพระพุทธมนต์ที่บ้าน เพื่อความเป็นสิริมงคลแก่ผู้อยู่อาศัย
-                นิยมจัดในโอกาสต่างๆ เช่น ทำบุญประจำปี ทำบุญวันเกิด ทำบุญครบรอบ หรือเมื่อรู้สึกว่าอยากเสริมดวงให้บ้าน
-                เชื่อกันว่าการทำบุญบ้านจะช่วยปัดเป่าสิ่งไม่ดี เสริมความเป็นอยู่ให้ร่มเย็น และเป็นการรักษาประเพณีการทำบุญ
-                ของครอบครัวไทยที่สืบทอดกันมา
+                งานทำบุญขึ้นบ้านใหม่ คือพิธีที่จัดขึ้นเมื่อย้ายเข้าอยู่อาศัยในบ้านหรือที่พักหลังใหม่ ต่างจากงานทำบุญบ้าน
+                ทั่วไปตรงที่เป็นการ "เปิดบ้าน" ครั้งแรก จึงมักมีการนิมนต์พระมาสวดปัดเป่าสิ่งไม่ดีที่อาจตกค้างในพื้นที่
+                และอัญเชิญสิ่งศักดิ์สิทธิ์ เจ้าที่เจ้าทาง ให้ช่วยคุ้มครองผู้อยู่อาศัยใหม่ เพื่อให้การเริ่มต้นชีวิตในบ้านหลังใหม่
+                เป็นไปอย่างราบรื่นและเป็นสิริมงคลตั้งแต่วันแรก
             </p>
         </div>
     </div>
@@ -766,9 +696,7 @@
 <%-- ========== MAIN CONTENT ========== --%>
 <div class="cd-container">
 
-    <%-- ========== โซน 2: เปรียบเทียบแพ็กเกจ
-         แต่ละแพ็กเกจกดดูรายละเอียดได้ก่อน แล้วมีปุ่ม "เลือกจองแพ็กเกจนี้" แยกต่อใบ
-         เพื่อไม่ให้ลูกค้างงว่าต้องกดตรงไหนถึงจะไปฟอร์มของแพ็กเกจที่ต้องการ ========== --%>
+    <%-- ========== โซน 2: เปรียบเทียบแพ็กเกจ ========== --%>
     <div class="cd-card cd-package-card">
         <div class="cd-card-title">📦 เปรียบเทียบแพ็กเกจ${mainType}</div>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">
@@ -782,19 +710,19 @@
 	        <c:if test="${p.ceremonyName != 'กรอกความต้องการเบื้องต้น'}">
 	            <div class="cd-package-option">
 	                <div class="cd-package-img-container">
-	                    <img src="${pageContext.request.contextPath}/static/images/p${imageIndex}.png"
+	                    <img src="${pageContext.request.contextPath}/static/images/p${imageIndex}.png" 
 	                         alt="${p.ceremonyName}">
 	                </div>
-
+	
 	                <div class="cd-package-option-name" style="font-weight:bold; font-size:1.1rem;">${p.ceremonyName}</div>
 	                <div class="cd-package-option-price" style="color: #d6336c; margin: 5px 0;">
 	                    <fmt:formatNumber value="${p.basePrice}" type="number" groupingUsed="true" maxFractionDigits="0"/> บาท
 	                </div>
-
+	
 	                <%-- ========== รายละเอียดแพ็กเกจ (ซ่อน/แสดงได้) ========== --%>
 	                <div id="detail-${p.ceremonyId}" class="cd-detail-collapsed" style="width:100%;">
 	                    <ul class="cd-condition-list" style="font-size:0.85rem; text-align:left; padding-left:18px; margin:0;">
-	   <c:choose>
+	                        <c:choose>
 							    <c:when test="${p.ceremonyName == 'แพ็กเกจมาตรฐาน'}">
 							        <li>ติดต่อวัด นิมนต์คณะพระภิกษุสงฆ์ 5 รูป</li>
 							        <li>ชุดโต๊ะหมู่บูชา และพระประธาน</li>
@@ -836,11 +764,11 @@
 	                <button type="button" class="cd-btn-view-detail" onclick="toggleDetail('${p.ceremonyId}', this)">
 	                    ดูรายละเอียดแพ็กเกจนี้ ▾
 	                </button>
-
+	
 	                <%-- ปุ่มจอง --%>
-	                <a href="${pageContext.request.contextPath}/booking?ceremonyId=${p.ceremonyId}"
+	                <a href="${pageContext.request.contextPath}/booking2?ceremonyId=${p.ceremonyId}" 
 	                   class="cd-btn-select-package">เลือกจองแพ็กเกจนี้</a>
-
+	
 	                <c:set var="imageIndex" value="${imageIndex + 1}" />
 	            </div>
 	        </c:if>
@@ -865,10 +793,10 @@
 
             <li>✅ มัคนายกดำเนินพิธี </li>
 
-            <li>✅ เลือกสินค้าและบริการเพิ่มเติมได้ เช่น ชุดสังฆทาน ชุดปิ่นโต </li>
+            <li>✅ เลือกสินค้าและบริการเพิ่มเติมได้ เช่น ชุดสังฆทาน ชุดปิ่นโต อุปกรณ์พิธีอื่น ๆ เพื่อให้เหมาะกับความต้องการของแต่ละงาน</li>
         </ul>
     </div>
-    
+
     <div class="promotion-banner-wrap">
 				<img src="${pageContext.request.contextPath}/static/images/promotion.png"
 					alt="โปรโมชั่น จัดงานบุญให้ง่าย ครบ จบในที่เดียว รับฟรี เครื่องเสียง เก้าอี้ โต๊ะพร้อมผ้าคลุม"
@@ -877,16 +805,13 @@
     </div>
     
     
-
-    <%-- ========== FOOTER BAR
-         ปุ่มนี้ตอนนี้เป็นทางเลือก "ไม่เลือกแพ็กเกจสำเร็จรูป กรอกเองแทน"
-         ส่วนการจองแพ็กเกจจริงย้ายไปอยู่ที่ปุ่ม "เลือกจองแพ็กเกจนี้" ในแต่ละใบด้านบนแล้ว ========== --%>
+    <%-- ========== FOOTER BAR ========== --%>
     <div class="cd-footer">
         <div class="cd-footer-inner">
             <div class="cd-footer-note">
                 <span>ไม่อยากเลือกแพ็กเกจสำเร็จรูป? กรอกรายละเอียดเองได้</span>
             </div>
-            <a href="${pageContext.request.contextPath}/booking?custom=true${not empty selectedDates ? '&dates=' : ''}${selectedDates}" class="cd-btn-book">จองแบบระบุเอง</a>
+            <a href="${pageContext.request.contextPath}/booking2?ceremonyId=${ceremony.ceremonyId}${not empty selectedDates ? '&dates=' : ''}${selectedDates}" class="cd-btn-book">จองเเบบระบุเอง${mainType}</a>
         </div>
     </div>
 

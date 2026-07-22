@@ -197,3 +197,117 @@
     line-height: 1;
     pointer-events: none;
 }
+
+/* ===== กล่องอธิบาย "ฤกษ์ดี หมายถึงอะไร?" ===== */
+.cal-explain-box {
+    background: var(--white);
+    border: 1.5px solid var(--gold-pale);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 16px var(--shadow-gold);
+}
+.cal-explain-title {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin: 0 0 16px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid var(--gold-pale);
+}
+.cal-explain-title::before {
+    content: "✨ ";
+}
+.cal-explain-text {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--text-mid);
+    margin: 0 0 16px;
+}
+.cal-explain-text:last-of-type {
+    margin-bottom: 16px;
+}
+.cal-explain-list {
+    margin: 0 0 18px;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.cal-explain-list li {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--text-mid);
+    padding-left: 22px;
+    position: relative;
+}
+.cal-explain-list li::before {
+    content: "◆";
+    position: absolute;
+    left: 0;
+    top: 3px;
+    color: var(--gold-mid);
+    font-size: 0.68rem;
+}
+.cal-explain-list li strong {
+    color: var(--brown-dark);
+}
+.cal-explain-note {
+    font-size: 0.85rem;
+    color: var(--brown-dark);
+    font-style: italic;
+    background: var(--gold-pale, #fff8e1);
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin: 0;
+}
+
+/* ===== ที่มาปฏิทินล้านนา (ใต้ปฏิทิน) ===== */
+.lc-year-source {
+    margin-top: 20px;
+    padding: 14px 18px;
+    border: 1.5px dashed var(--gold-mid, #d4a017);
+    border-radius: 12px;
+    background: var(--gold-pale, #fff8e1);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-mid, #5a4a2a);
+}
+.lc-year-source:empty {
+    display: none;
+}
+/* ===== กล่องอธิบาย "ปฏิทินล้านนา คืออะไร?" ===== */
+.lc-explain-box {
+    background: var(--white, #fff);
+    border: 1.5px solid var(--gold-pale, #e8cc70);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 16px var(--shadow-gold, rgba(212,160,23,0.15));
+}
+.lc-explain-title {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--brown-dark, #3d2500);
+    margin: 0 0 16px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid var(--gold-pale, #e8cc70);
+}
+.lc-explain-title::before {
+    content: "🏯 ";
+}
+.lc-explain-text {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--text-mid, #5a4a2a);
+    margin: 0 0 16px;
+}
+.lc-explain-text:last-of-type {
+    margin-bottom: 0;
+}
+.lc-explain-text strong {
+    color: var(--brown-dark, #3d2500);
+}
