@@ -285,6 +285,7 @@ public class UserController {
                 sangkhathanItems.add(item);
             }
         }
+        
 
         model.addAttribute("ceremony",         ceremony);
         model.addAttribute("equipments",       equipmentList);

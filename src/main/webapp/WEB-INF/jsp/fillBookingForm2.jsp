@@ -872,6 +872,7 @@ function syncWatAnswer(containerId, textareaId) {
 
 
 
+
 // กันเหนียว: sync ค่า dropdown ลง textarea อีกครั้งก่อน submit ฟอร์ม
 function syncAllWatAnswersBeforeSubmit() {
     syncWatAnswer('pkgWatDropdowns', 'pkgWatDiffAnswer');
