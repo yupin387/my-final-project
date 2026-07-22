@@ -698,6 +698,7 @@
 	</footer>
 
 
+
 <style>
 .item-card-grid {
     display: grid;
