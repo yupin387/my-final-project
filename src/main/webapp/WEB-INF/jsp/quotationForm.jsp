@@ -252,19 +252,36 @@
 							</tbody>
 
 							<%-- หมวดอุปกรณ์พิธีกรรม
-                             (เพิ่มใหม่: เดิมไม่มี tbody id="group-equipment" ทำให้ JS หา container ไม่เจอ
-                              เวลาเลือกรายการหมวด "อุปกรณ์" จาก popup แล้วกดตกลง จะ error เงียบ ๆ และไม่เพิ่มแถวเข้าตาราง) --%>
+                             หมายเหตุ: ตอน initial render ของหน้านี้ ไม่มีทางมีรายการอุปกรณ์อยู่แล้ว
+                             เพราะรายการหมวดนี้ถูกเพิ่มเข้าตารางผ่าน popup + JS (addSelectedItemsToTable)
+                             เท่านั้น จึงไม่แสดงหัวข้อ "หมวดอุปกรณ์พิธีกรรม" ตายตัวตรงนี้
+                             -> ฝั่ง quotationCreate.js ต้องเป็นคน insert แถว group-row เข้าไปเอง
+                                ตอนเพิ่ม item แรกของหมวดนี้ และลบ group-row ทิ้งถ้าลบ item จนหมวดว่าง --%>
 							<tbody id="group-equipment">
-								<tr class="group-row">
-									<td colspan="8">หมวดอุปกรณ์พิธีกรรม</td>
-								</tr>
 							</tbody>
 
 							<%-- หมวดภัตตาหารปิ่นโต --%>
+							<%-- เช็คก่อนว่ามีรายการภัตตาหารที่ตรงกับที่ลูกค้าเลือกไว้จริงไหม
+                             ถ้าไม่มี ไม่ต้องขึ้นหัวข้อหมวดนี้เลย --%>
+							<c:set var="hasFoodItems" value="false" />
+							<c:forEach var="detail" items="${validDetails}">
+								<c:if
+									test="${fn:contains(detail.question.questionsText,'ภัตตาหาร') && fn:contains(detail.question.questionsText,'เลือก')}">
+									<c:set var="selectedFoodName"
+										value="${fn:trim(detail.answer)}" />
+									<c:forEach var="item" items="${items}">
+										<c:if test="${fn:trim(item.itemName) eq selectedFoodName}">
+											<c:set var="hasFoodItems" value="true" />
+										</c:if>
+									</c:forEach>
+								</c:if>
+							</c:forEach>
 							<tbody id="group-food">
-								<tr class="group-row">
-									<td colspan="8">หมวดภัตตาหารปิ่นโต</td>
-								</tr>
+								<c:if test="${hasFoodItems}">
+									<tr class="group-row">
+										<td colspan="8">หมวดภัตตาหารปิ่นโต</td>
+									</tr>
+								</c:if>
 								<c:set var="foodQty" value="1" />
 								<c:forEach var="d" items="${b.details}">
 									<c:if
@@ -313,10 +330,27 @@
 							</tbody>
 
 							<%-- หมวดสังฆทาน --%>
+							<%-- เช็คก่อนว่ามีรายการสังฆทานที่ตรงกับที่ลูกค้าเลือกไว้จริงไหม
+                             ถ้าไม่มี ไม่ต้องขึ้นหัวข้อหมวดนี้เลย --%>
+							<c:set var="hasSangkathanItems" value="false" />
+							<c:forEach var="detail" items="${validDetails}">
+								<c:if
+									test="${fn:contains(detail.question.questionsText,'สังฆทาน') && fn:contains(detail.question.questionsText,'เลือก')}">
+									<c:set var="selectedSangNameCheck"
+										value="${fn:trim(detail.answer)}" />
+									<c:forEach var="item" items="${items}">
+										<c:if test="${fn:trim(item.itemName) eq selectedSangNameCheck}">
+											<c:set var="hasSangkathanItems" value="true" />
+										</c:if>
+									</c:forEach>
+								</c:if>
+							</c:forEach>
 							<tbody id="group-sangkathan">
-								<tr class="group-row">
-									<td colspan="8">หมวดสังฆทาน</td>
-								</tr>
+								<c:if test="${hasSangkathanItems}">
+									<tr class="group-row">
+										<td colspan="8">หมวดสังฆทาน</td>
+									</tr>
+								</c:if>
 								<c:set var="sangQty" value="1" />
 								<c:forEach var="d" items="${b.details}">
 									<c:if
@@ -374,13 +408,15 @@
                                2) monkInviteType ต้องไม่ใช่ "นิมนต์เอง" (ลูกค้าให้ร้านนิมนต์ให้)
                                3) monkCount ต้องมีค่า (มีจำนวนพระที่กรอกไว้จริง)
                              จำนวน (bookingQtys) = จำนวนพระที่ลูกค้ากรอกไว้ตอนจอง (monkCount)
-                             เหมือน pattern ของหมวดปิ่นโต/สังฆทานด้านบนที่ดึง qty จาก b.details --%>
+                             เหมือน pattern ของหมวดปิ่นโต/สังฆทานด้านบนที่ดึง qty จาก b.details
+                             หัวข้อหมวดนี้ก็ผูกกับเงื่อนไขเดียวกัน ถ้าไม่เข้าเงื่อนไข = ไม่มีรายการ
+                             ก็ไม่ต้องขึ้นหัวข้อ --%>
 							<tbody id="group-service">
-								<tr class="group-row">
-									<td colspan="8">หมวดบริการและการดำเนินการ</td>
-								</tr>
 								<c:if
 									test="${isCustomRequest && not fn:contains(monkInviteType,'นิมนต์เอง') && not empty monkCount}">
+									<tr class="group-row">
+										<td colspan="8">หมวดบริการและการดำเนินการ</td>
+									</tr>
 									<c:forEach var="item" items="${items}">
 										<c:if
 											test="${fn:trim(item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">

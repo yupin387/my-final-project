@@ -283,7 +283,7 @@ img.lotus-icon {
 /* ========== HERO ========== */
 .hero-section {
     position: relative;
-    height: 500px;
+    height: 700px;
     background-image: url('/static/images/cover2.png');
     background-position: center 30%;
     background-size: cover;

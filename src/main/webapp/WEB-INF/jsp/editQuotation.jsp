@@ -114,6 +114,40 @@
             </c:if>
         </c:forEach>
 
+        <%-- ===================================================================
+             เช็คก่อนล่วงหน้าว่าแต่ละหมวดมีรายการอยู่จริงไหม (ไว้ใช้ตัดสินใจว่าจะ
+             แสดงหัวข้อ group-row ของหมวดนั้นหรือไม่) เพื่อไม่ให้หัวข้อหมวดที่ว่างเปล่า
+             โผล่ขึ้นมาเฉย ๆ โดยไม่มีรายการข้างใน
+             =================================================================== --%>
+        <c:set var="hasEquipmentItems" value="false"/>
+        <c:set var="hasFoodItems" value="false"/>
+        <c:set var="hasSangkathanItems" value="false"/>
+        <c:set var="hasServiceItems" value="false"/>
+        <c:set var="monkInviteServiceFound" value="false"/>
+        <c:forEach var="d" items="${details}">
+            <c:if test="${d.item != null && d.item.itemName != packageName}">
+                <c:if test="${d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
+                    <c:set var="hasEquipmentItems" value="true"/>
+                </c:if>
+                <c:if test="${d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
+                    <c:set var="hasFoodItems" value="true"/>
+                </c:if>
+                <c:if test="${d.item.itemType.itemTypeName.contains('สังฆทาน')}">
+                    <c:set var="hasSangkathanItems" value="true"/>
+                </c:if>
+                <c:if test="${d.item.itemType.itemTypeName.contains('บริการ')}">
+                    <c:set var="hasServiceItems" value="true"/>
+                    <c:if test="${fn:trim(d.item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">
+                        <c:set var="monkInviteServiceFound" value="true"/>
+                    </c:if>
+                </c:if>
+            </c:if>
+        </c:forEach>
+        <%-- หมวดบริการจะมีหัวข้อด้วย ถ้ามีรายการบันทึกไว้แล้ว หรือเข้าเงื่อนไข fallback auto-add
+             บริการนิมนต์พระ (isCustomRequest + ยังไม่เจอ + ไม่ใช่นิมนต์เอง + มี monkCount) --%>
+        <c:set var="willShowServiceFallback"
+               value="${isCustomRequest && !monkInviteServiceFound && not fn:contains(monkInviteType,'นิมนต์เอง') && not empty monkCount}"/>
+
         <div class="main-layout">
             <div class="card">
                 <div class="card-header">แก้ไขรายการประมาณการวัสดุและงานดำเนินการ</div>
@@ -270,12 +304,13 @@
                         </tbody>
 
                         <%-- หมวดอุปกรณ์พิธีกรรม
-                             FIX: เดิมห่อด้วย <c:if test="${hasEquipmentRow}"> ทำให้ tbody นี้ไม่ถูก render เลย
-                             ถ้าใบเสนอราคายังไม่มีรายการหมวดนี้บันทึกไว้สักชิ้น -> JS หา container ไม่เจอ
-                             -> กดเลือกอุปกรณ์จาก popup แล้วกด "ตกลง" ใช้ไม่ได้ (เหมือนบั๊กเดิมในหน้า create)
-                             จึงต้อง render tbody นี้เสมอ ปล่อยให้ forEach ว่างเองถ้าไม่มีข้อมูล --%>
+                             หมายเหตุ: tbody ต้อง render เสมอ (ห้ามห่อทั้งก้อนด้วย c:if) ไม่งั้น JS หา
+                             container ไม่เจอ ตอนเพิ่มรายการใหม่จาก popup จะใช้ไม่ได้ ("group-row" ที่ซ่อน
+                             ไปคือแค่หัวข้อบรรทัดแรกเท่านั้น ไม่ใช่ตัว tbody) --%>
                         <tbody id="group-equipment">
-                            <tr class="group-row"><td colspan="8">หมวดอุปกรณ์พิธีกรรมเสริม</td></tr>
+                            <c:if test="${hasEquipmentItems}">
+                                <tr class="group-row"><td colspan="8">หมวดอุปกรณ์พิธีกรรมเสริม</td></tr>
+                            </c:if>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
                                     <tr class="dynamic-row" data-item-id="${d.item.itemId}">
@@ -307,9 +342,11 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- หมวดภัตตาหารปิ่นโต (FIX: render เสมอ เหตุผลเดียวกับหมวดอุปกรณ์ด้านบน) --%>
+                        <%-- หมวดภัตตาหารปิ่นโต --%>
                         <tbody id="group-food">
-                            <tr class="group-row"><td colspan="8">หมวดภัตตาหารปิ่นโต</td></tr>
+                            <c:if test="${hasFoodItems}">
+                                <tr class="group-row"><td colspan="8">หมวดภัตตาหารปิ่นโต</td></tr>
+                            </c:if>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                                     <tr class="static-row" data-item-id="${d.item.itemId}">
@@ -341,9 +378,11 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- หมวดสังฆทาน (FIX: render เสมอ เหตุผลเดียวกับหมวดอุปกรณ์ด้านบน) --%>
+                        <%-- หมวดสังฆทาน --%>
                         <tbody id="group-sangkathan">
-                            <tr class="group-row"><td colspan="8">หมวดสังฆทาน</td></tr>
+                            <c:if test="${hasSangkathanItems}">
+                                <tr class="group-row"><td colspan="8">หมวดสังฆทาน</td></tr>
+                            </c:if>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                                     <tr class="static-row" data-item-id="${d.item.itemId}">
@@ -376,21 +415,15 @@
                         </tbody>
 
                         <%-- หมวดบริการและการดำเนินการ (รวมบริการนิมนต์พระ)
-                             FIX 1: render เสมอ เหตุผลเดียวกับหมวดอุปกรณ์ด้านบน
-                             FIX 2: กรณี "กรอกความต้องการเบื้องต้น" ถ้ายังไม่มีแถว "บริการประสานงานนิมนต์พระ"
-                             บันทึกไว้ใน details เลย (ใบเสนอราคาเก่าก่อนแก้ระบบ หรือถูกลบไปโดยไม่ตั้งใจ)
-                             ให้ fallback auto-add แถวนี้ให้ โดยใช้ monkCount จากฟอร์มจองต้นทาง
-                             เงื่อนไข: isCustomRequest, ยังไม่เจอในของที่บันทึกแล้ว, ไม่ใช่ "นิมนต์เอง",
-                             และมี monkCount จริง (เหมือน pattern เดียวกับหน้า create) --%>
+                             หัวข้อของหมวดนี้แสดงเมื่อมีรายการบันทึกไว้แล้ว (hasServiceItems) หรือกำลังจะ
+                             fallback auto-add บริการนิมนต์พระ (willShowServiceFallback) --%>
                         <tbody id="group-service">
-                            <tr class="group-row"><td colspan="8">หมวดบริการและการดำเนินการเสริม</td></tr>
+                            <c:if test="${hasServiceItems || willShowServiceFallback}">
+                                <tr class="group-row"><td colspan="8">หมวดบริการและการดำเนินการเสริม</td></tr>
+                            </c:if>
 
-                            <c:set var="monkInviteServiceFound" value="false"/>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
-                                    <c:if test="${fn:trim(d.item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">
-                                        <c:set var="monkInviteServiceFound" value="true"/>
-                                    </c:if>
                                     <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                         <td class="row-number" style="text-align:center;"></td>
                                         <td>
@@ -419,7 +452,7 @@
                                 </c:if>
                             </c:forEach>
 
-                            <c:if test="${isCustomRequest && !monkInviteServiceFound && not fn:contains(monkInviteType,'นิมนต์เอง') && not empty monkCount}">
+                            <c:if test="${willShowServiceFallback}">
                                 <c:forEach var="item" items="${items}">
                                     <c:if test="${fn:trim(item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">
                                         <tr class="dynamic-row" data-item-id="${item.itemId}">
