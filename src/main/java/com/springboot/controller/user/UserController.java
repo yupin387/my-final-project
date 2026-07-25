@@ -255,7 +255,7 @@ public class UserController {
         Ceremony ceremony = ceremonyService.getCeremonyById(id);
         if (ceremony == null) return "redirect:/home";
         
-        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        model.addAttribute("ceremonyTypes", buildCeremonyTypes()); // ← เพิ่มบรรทัดนี้
 
         String mainType = ceremony.getCeremonyType() == null ? "" : ceremony.getCeremonyType().trim();
 
@@ -285,7 +285,6 @@ public class UserController {
                 sangkhathanItems.add(item);
             }
         }
-        
 
         model.addAttribute("ceremony",         ceremony);
         model.addAttribute("equipments",       equipmentList);

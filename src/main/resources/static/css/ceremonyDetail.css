@@ -1,0 +1,797 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+
+/* ===== CSS Variables (โทนชมพู-ขาว — ให้ตรงกับ home.css) ===== */
+:root {
+    --gold:              #E0577F;
+    --gold-mid:          #EC6E96;
+    --gold-light:        #F49CB9;
+    --gold-pale:         #FBD0DE;
+    --gold-glow:         #FFE3EC;
+
+    --cream:             #FFFFFF;
+    --cream-warm:        #FAFAFA;
+    --cream-mid:         #F5F5F5;
+    --cream-border:      #E2E2E2;
+    --cream-border-soft: #EAEAEA;
+
+    --white:             #FFFFFF;
+
+    --text-dark:         #1A1A1A;
+    --text-mid:          #333333;
+    --text-body:         #444444;
+    --text-muted:        #777777;
+
+    --brown-dark:        #1A1A1A;
+    --brown-mid:         #3A3A3A;
+
+    --shadow-warm:       rgba(0, 0, 0, 0.07);
+    --shadow-gold:       rgba(224, 87, 127, 0.14);
+
+    /* ===== Footer colors — แก้ให้เป็นชมพูอ่อนเหมือนหน้า home เป๊ะๆ
+       (ของเดิมเป็นโทนเข้ม/แดงเลือดหมู #6E1930 ทำให้ footer ของหน้านี้เข้มกว่าหน้า home
+       ตอนจะไปแก้ ceremonyDetail อีก 3 หน้า ก็แก้ 3 ค่านี้ให้ตรงกันได้เลย) ===== */
+    --footer-dark-1: #C7405F;
+    --footer-dark-2: #D94F76;
+    --footer-dark-3: #E0577F;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+
+/* ========== NAVBAR (ให้ตรงกับ navbar-custom ของ home.css — 92px / โลโก้ 58px) ========== */
+.cd-navbar {
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--gold-pale);
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    min-height: 92px;
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+}
+
+.cd-navbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+}
+
+.cd-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+}
+
+.cd-lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.cd-lotus-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.cd-nav-title {
+    color: #FFFFFF;
+    font-family: 'Noto Serif Thai', serif;
+    font-style: italic;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.cd-nav-links {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.cd-nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.cd-nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+}
+
+/* ========== HERO BANNER (เหลือแค่ชื่องาน + วันที่เลือก) ========== */
+.cd-hero {
+    position: relative;
+    height: 320px;
+    background-size: cover;
+    background-position: center 30%;
+    background-color: #A6335A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.cd-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.50) 0%,
+        rgba(0, 0, 0, 0.32) 50%,
+        rgba(0, 0, 0, 0.68) 100%
+    );
+}
+
+.cd-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+}
+
+.cd-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 0 24px;
+    max-width: 680px;
+}
+
+.cd-hero-title {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+    margin-bottom: 12px;
+    color: #FFFFFF;
+}
+
+.cd-hero-divider {
+    width: 70px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    margin: 0 auto 18px;
+    border-radius: 2px;
+}
+
+.cd-hero-note {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--brown-dark);
+    padding: 10px 28px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1.5px solid var(--gold-mid);
+}
+
+/* ========== INTRO BANNER: รู้จักงานทำบุญบ้าน (ไล่สีตามภาพต้นแบบ) ========== */
+.cd-intro-banner {
+    display: flex;
+    align-items: stretch;
+    min-height: 280px;
+    overflow: hidden;
+}
+
+.cd-intro-banner-img {
+    flex: 0 0 46%;
+    position: relative;
+}
+
+.cd-intro-banner-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cd-intro-banner-text {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 40px 56px;
+    background: linear-gradient(to right, #ffffff 0%, #ffffff 22%, var(--gold-pale) 62%, var(--gold-mid) 100%);
+}
+
+.cd-intro-banner-text-inner {
+    max-width: 560px;
+}
+
+.cd-intro-banner-title {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--footer-dark-1);
+    line-height: 1.5;
+    margin-bottom: 14px;
+}
+
+.cd-intro-banner-desc {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--text-body);
+}
+
+@media (max-width: 860px) {
+    .cd-intro-banner {
+        flex-direction: column;
+        min-height: auto;
+    }
+    .cd-intro-banner-img {
+        flex: none;
+        height: 220px;
+    }
+    .cd-intro-banner-text {
+        padding: 28px 24px;
+        background: linear-gradient(to bottom, #ffffff 0%, #ffffff 15%, var(--gold-pale) 55%, var(--gold-mid) 100%);
+    }
+}
+
+/* ========== SECTION ORNAMENT ========== */
+.cd-section-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 8px;
+}
+
+.cd-ornament-line {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid));
+}
+
+.cd-ornament-line.right {
+    background: linear-gradient(90deg, var(--gold-mid), transparent);
+}
+
+.cd-ornament-diamond {
+    width: 10px; height: 10px;
+    background: var(--gold-mid);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+.cd-ornament-diamond-sm {
+    width: 5px; height: 5px;
+    background: var(--gold-pale);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+.cd-section-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.cd-section-title {
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--brown-dark);
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.cd-gold-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-light), var(--gold-mid), transparent);
+    border-radius: 2px;
+    margin: 10px auto 0;
+}
+
+/* ========== MAIN CONTENT ========== */
+.cd-container {
+    max-width: 1520px;
+    margin: 0 auto;
+    padding: 48px 32px 120px;
+}
+
+/* ========== CARD ========== */
+.cd-card {
+    background: var(--white);
+    border-radius: 18px;
+    border: 3px solid var(--gold-mid);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow:
+        0 0 12px rgba(224,87,127,0.3),
+        0 8px 24px rgba(224,87,127,0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.cd-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20px; right: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    border-radius: 0 0 2px 2px;
+}
+
+.cd-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--cream-mid) 0%, transparent 65%);
+    border-radius: 0 0 100% 0;
+    pointer-events: none;
+}
+
+.cd-card-title {
+    font-family: 'Noto Serif Thai', serif;
+    color: var(--brown-dark);
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    border-bottom: 1.5px solid var(--cream-border-soft);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cd-card-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: linear-gradient(to bottom, var(--gold-mid), var(--gold-light));
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* ========== ITEM LIST (รายการอุปกรณ์) ========== */
+.cd-item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 16px;
+}
+
+.cd-item-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--cream-border);
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--text-body);
+}
+
+.cd-item-list li:last-child { border-bottom: none; }
+
+.cd-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    flex-shrink: 0;
+    margin-top: 5px;
+    box-shadow: 0 1px 4px rgba(224, 87, 127, 0.3);
+}
+
+/* ========== PACKAGE CARDS (ปิ่นโต / สังฆทาน) ========== */
+.cd-pkg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: 14px;
+    margin-top: 4px;
+}
+
+.cd-pkg-card {
+    border: 1.5px solid var(--cream-border-soft);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.cd-pkg-card:hover {
+    box-shadow: 0 6px 20px rgba(224, 87, 127, 0.22);
+    transform: translateY(-2px);
+}
+
+.cd-pkg-img {
+    width: 100%;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.cd-pkg-img--pinto       { background: var(--gold-glow); }
+.cd-pkg-img--sangkhathan { background: var(--gold-pale); }
+
+.cd-pkg-img-fallback {
+    font-size: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.cd-pkg-body {
+    padding: 11px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.cd-pkg-name {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    color: var(--brown-dark);
+    font-size: 13.5px;
+    line-height: 1.4;
+}
+
+.cd-pkg-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    flex: 1;
+}
+
+.cd-pkg-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brown-mid);
+    background: var(--gold-glow);
+    border: 1px solid var(--cream-border);
+    border-radius: 20px;
+    padding: 3px 14px;
+    display: inline-block;
+    margin-top: 8px;
+    align-self: flex-start;
+}
+
+/* ========== PINTO SUB LABEL ========== */
+.cd-pinto-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+/* ========== CONDITION CARD ========== */
+.cd-condition-card {
+    margin-bottom: 28px;
+}
+
+.cd-condition-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cd-condition-list li {
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.6;
+}
+
+/* ========== FOOTER BAR (แถบจองล่าง sticky) ========== */
+.cd-footer {
+    background: var(--white);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 14px 0;
+    border-top: 2px solid var(--cream-border);
+    box-shadow: 0 -4px 20px var(--shadow-gold);
+    z-index: 1000;
+}
+
+.cd-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-mid), var(--gold-pale), transparent);
+}
+
+.cd-footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cd-footer-note {
+    font-size: 14px;
+    color: var(--text-mid);
+    font-weight: 600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.cd-footer-start-price{
+    display:inline-block;
+    background: var(--gold-mid);
+    color:#fff;
+    font-weight:700;
+    font-size:1rem;
+    padding:4px 12px;
+    border-radius:999px;
+    white-space:nowrap;
+}
+
+/* ปุ่มจอง — ขยายใหญ่ขึ้น สีเข้มชัดเจนขึ้น */
+.cd-btn-book {
+    background: linear-gradient(135deg, #C7405F, var(--gold));
+    color: #FFFFFF;
+    border-radius: 14px;
+    padding: 18px 56px;
+    font-weight: 800;
+    font-size: 1.15rem;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    transition: all 0.2s;
+    display: inline-block;
+    box-shadow: 0 6px 20px rgba(199, 64, 95, 0.4);
+    border: none;
+    letter-spacing: 0.3px;
+}
+
+.cd-btn-book:hover {
+    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px rgba(199, 64, 95, 0.5);
+    color: #FFFFFF;
+}
+
+/* ========== SITE FOOTER (ให้ตรงกับ home.css — ใช้ชมพูอ่อนแทนแดงเลือดหมูเดิม) ========== */
+.site-footer {
+    background: linear-gradient(135deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
+    color: rgba(255, 255, 255, 0.92);
+    padding-top: 0;
+    border-top: 3px solid var(--gold-pale);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    position: relative;
+    z-index: 2;
+}
+
+.footer-top { display: block; }
+
+/* แก้จาก 4 คอลัมน์ -> 2 คอลัมน์ ให้ตรงกับ 2 div ที่ใช้จริงใน JSP (footer-brand-col / footer-contact-col)
+   เดิมตั้ง 1.4fr 1fr 1fr 1.2fr (4 คอลัมน์) ทำให้ระยะห่างเพี้ยนเพราะมีแค่ 2 คอลัมน์จริง */
+.footer-content {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 30px;
+    padding: 44px 20px 26px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+@media (max-width: 520px) {
+    .footer-content { grid-template-columns: 1fr; }
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.footer-brand .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.footer-brand .lotus-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.footer-brand-text {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.footer-tagline {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 280px;
+}
+
+.footer-heading {
+    font-family: 'Noto Serif Thai', serif;
+    color: #FFFFFF;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.footer-col a {
+    display: block;
+    color: rgba(255, 255, 255, 0.92);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    transition: color 0.2s ease;
+}
+
+.footer-col a:hover { color: #FFFFFF; }
+
+.footer-contact-col p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 10px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+    .cd-pkg-grid {
+        grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .cd-item-list {
+        grid-template-columns: 1fr;
+    }
+    .cd-pkg-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.cd-addon-title {
+    font-size: 1.35rem;
+    margin-bottom: 20px;
+}
+
+.cd-addon-subsection {
+    margin-bottom: 8px;
+}
+
+.cd-addon-subtitle {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--gold);
+    margin-bottom: 6px;
+}
+
+.cd-addon-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-pale), transparent);
+    margin: 28px 0;
+}
+
+/* ========== PACKAGE SELECTOR (มาตรฐาน/อิ่มบุญ/พรีเมียม) — บน 2 ล่าง 2 กดไม่ได้ ไม่มี hover ========== */
+.cd-package-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 20px;
+}
+
+@media (max-width: 640px) {
+    .cd-package-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.cd-package-option {
+    display: block;
+    text-decoration: none;
+    border: 2px solid var(--cream-border-soft);
+    border-radius: 14px;
+    padding: 18px 18px 16px;
+    background: var(--white);
+    position: relative;
+    cursor: default;
+}
+
+.cd-package-option.active {
+    background: var(--white);
+}
+
+.cd-package-option-name {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--brown-dark);
+    margin-bottom: 6px;
+}
+
+.cd-package-option-price {
+    font-weight: 700;
+    color: var(--gold);
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+}
+
+.cd-package-option-detail {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.cd-package-option-badge {
+    display: inline-block;
+    margin-top: 10px;
+    background: var(--gold-mid);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+/**/
+
+
+.cd-package-img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 12px;
+    }

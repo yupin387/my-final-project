@@ -1278,6 +1278,7 @@
 			}
 		});
 	</script>
+	
 	<script
 		src="${pageContext.request.contextPath}/static/js/ceremonyDetail.js"></script>
 </body>

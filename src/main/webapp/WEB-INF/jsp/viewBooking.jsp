@@ -458,6 +458,7 @@ function showCancelModal(bookingId) {
     document.getElementById('confirmCancelUrl').setAttribute('href', cancelUrl);
     new bootstrap.Modal(document.getElementById('cancelModal')).show();
 }
+
 </script>
 </body>
 </html>

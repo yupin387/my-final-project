@@ -508,12 +508,6 @@
 	</div>
 	</footer>
 
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> branch 'master' of https://github.com/yupin387/my-final-project.git
 <style>
 .item-card-grid {
     display: grid;
