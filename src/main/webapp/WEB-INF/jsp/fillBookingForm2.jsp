@@ -983,9 +983,16 @@ function syncWatAnswer(containerId, textareaId) {
    "ให้ร้านเลือกให้" ให้กลายเป็นค่าว่างก่อน submit จริง ทำให้ answer ที่ส่งไป
    backend ว่างเปล่า หน้า view เลยเช็ค not empty แล้วไม่ผ่าน แสดง "-" แทน
 
+<<<<<<< HEAD
+
+
+
+// กันเหนียว: sync ค่า dropdown ลง textarea อีกครั้งก่อน submit ฟอร์ม
+=======
    ต้อง sync จาก dropdown เฉพาะตอนเลือก "ต่างวัด" ของชุดนั้นๆ เท่านั้น
    ส่วนตอนเลือก "ให้ร้านเลือกให้" ต้องเซ็ตค่าเข้า textarea เองตรงนี้เลย
    เพราะ radio ของ 2 หน้านี้ไม่มี onchange ตั้งค่า "ให้ร้านเลือกให้" ให้ไว้ล่วงหน้า */
+>>>>>>> branch 'master' of https://github.com/yupin387/my-final-project.git
 function syncAllWatAnswersBeforeSubmit() {
     var pkgWatTypeRadio = document.querySelector('input[name="pkgWatType"]:checked');
     if (pkgWatTypeRadio && pkgWatTypeRadio.value === 'ต่างวัด') {
