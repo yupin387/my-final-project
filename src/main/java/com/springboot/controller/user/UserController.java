@@ -129,6 +129,7 @@ public class UserController {
     @GetMapping("/home")
     public String home(Model model) {
         model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        model.addAttribute("recentReviews", reviewService.getTop2RecentReviews());
         return "home";
     }
 

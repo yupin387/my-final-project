@@ -1,42 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
-/* ===== CSS Variables ===== */
+/* ===== CSS Variables =====
+   ธีม: ชมพูอ่อนพาสเทล + ทอง-น้ำตาลเข้ม + ครีม */
 :root {
-    --gold:          #E0577F;
-    --gold-mid:      #EC6E96;
-    --gold-light:    #F49CB9;
-    --gold-pale:     #FBD0DE;
-    --gold-glow:     #FFE3EC;
+    /* ===== โทนหลัก: ทอง-น้ำตาลเข้ม (ข้อความ/หัวข้อ) ===== */
+    --gold:          #6B4423;
+    --gold-mid:      #8B5A2B;
+    --gold-light:    #C9973F;
+    --gold-pale:     #F0DFC0;
+    --gold-glow:     #FFF6E8;
+
+    /* ===== โทนชมพูอ่อนพาสเทล (พื้นหลัง/CTA) ===== */
+    --pink-mid:      #F5C6D6;
+    --pink-light:    #F9DCE6;
+    --pink-pale:     #FCEDF2;
+    --pink-bg-1:     #FFF7F9;
+    --pink-bg-2:     #FDEEF2;
+
+    /* ===== โทนชมพูเข้ม (navbar / footer / accent) ===== */
+    --pink-deep-1:   #9C2E4C;
+    --pink-deep-2:   #C7405F;
+    --pink-deep-3:   #E0577F;
 
     --cream:         #FFFFFF;
-    --cream-warm:    #FFF6F9;
-    --cream-mid:     #FDEEF3;
-    --cream-deep:    #F8DCE6;
-    --cream-border:  #F3C4D5;
-    --cream-border-soft: #F6D4E1;
+    --cream-warm:    #FFFBF6;
+    --cream-mid:     #FBF1DE;
+    --cream-border:  #F0DCE0;
+    --cream-border-soft: #F0DCE0;
 
     --white:         #FFFFFF;
-    --off-white:     #FFF9FB;
+    --off-white:     #FFFBFA;
 
-    /* พื้นหลังหน้าเว็บโทนชมพูอ่อน (ใหม่) */
-    --page-bg:       #FFF2F7;
-    --page-bg-deep:  #FDE7EF;
+    /* พื้นหลังหน้าเว็บ ไล่ชมพูอ่อนพาสเทล */
+    --page-bg:       #FFF6F8;
+    --page-bg-deep:  #FDEBF0;
 
-    /* ขอบการ์ดสีชมพูเข้มขึ้น (ใหม่) ใช้แทน cream-border-soft เดิมที่เป็นสีเทา */
-    --card-border:   #F0A8C2;
-    --card-border-soft: #F6C9DC;
+    --card-border:   #F0D6DC;
+    --card-border-soft: #F0DCE0;
 
     --text-dark:     #1A1A1A;
-    --text-mid:      #333333;
-    --text-body:     #444444;
-    --text-muted:    #777777;
-    --text-light:    #999999;
+    --text-mid:      #5A4030;
+    --text-body:     #6b5a4c;
+    --text-muted:    #a8927e;
+    --text-light:    #c2ada0;
 
-    --brown-dark:    #1A1A1A;
-    --brown-mid:     #3A3A3A;
+    --brown-dark:    #3D2611;
+    --brown-mid:     #6B4423;
 
-    --shadow-gold:   rgba(224, 87, 127, 0.16);
-    --shadow-warm:   rgba(224, 87, 127, 0.10);
+    --shadow-gold:   rgba(184, 103, 122, 0.16);
+    --shadow-warm:   rgba(184, 103, 122, 0.10);
 
     /* ===== Calendar status colors ===== */
     --cal-booked-bg:     #FBD3D3;
@@ -53,18 +65,16 @@
     --cal-almost-text:   #B85C00;
 
     --cal-today-bg:      #FFE066;
-    --cal-today-border:  #E0577F;
+    --cal-today-border:  #B8722B;
     --cal-today-text:    #4A3200;
 
     --cal-past-bg:       #E7E7E7;
     --cal-past-border:   #C9C9C9;
     --cal-past-text:     #9B9B9B;
 
-    /* ===== Footer colors =====
-       เดิมเป็นโทนแดงเข้ม/น้ำตาลแยกจากแถบเมนู อาจารย์บอกให้เปลี่ยนเป็นสีเดียวกับแถบเมนูด้านบน
-       เลยตัดตัวแปรชุดเก่า (--footer-dark-1/2/3) ออก แล้วใช้สีชมพู gradient ชุดเดียวกับ .navbar-custom แทน */
-    --footer-grad-1: #C7405F;
-    --footer-grad-2: #D94F76;
+    /* ===== Navbar / Footer gradient (ชมพูเข้ม -> ชมพูอ่อน) ===== */
+    --footer-grad-1: #9C2E4C;
+    --footer-grad-2: #C7405F;
     --footer-grad-3: #E0577F;
 }
 
@@ -72,27 +82,25 @@
 
 body {
     font-family: 'Sarabun', sans-serif;
-    /* เดิมเป็นสีขาวล้วน (var(--cream)) ดูโล่ง เปลี่ยนเป็นชมพูอ่อนไล่เฉดทั้งหน้า */
     background: linear-gradient(180deg, var(--page-bg) 0%, #FFFFFF 12%, #FFFFFF 88%, var(--page-bg-deep) 100%);
     color: var(--text-dark);
 }
 
 /* ========== NAVBAR ==========
-   สีชมพูสดใส gradient - เป็นโทน "สว่าง" ของแบรนด์
-   ขนาด/ฟอนต์ปรับให้ตรงกับ navbar ของหน้า login (main-navbar) */
+   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน */
 .navbar-custom {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid #FBD0DE;
+    border-bottom: 3px solid var(--pink-light);
     position: sticky;
     top: 0;
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 4px 20px rgba(199, 64, 95, 0.35);
 }
 
 .navbar-custom::before {
@@ -134,9 +142,9 @@ img.lotus-icon {
 }
 .navbar-custom .nav-brand-text {
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 30px;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-style: normal;
+    font-size: 34px;
     font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
@@ -170,13 +178,13 @@ img.lotus-icon {
 
 .nav-link-item.active {
     background: #FFFFFF;
-    color: #E0577F;
+    color: var(--pink-deep-2);
     font-weight: 700;
 }
 
 .btn-register-nav {
     background: #FFFFFF;
-    color: #E0577F;
+    color: var(--pink-deep-2);
     font-weight: 700;
     border: none;
     border-radius: 8px;
@@ -190,13 +198,13 @@ img.lotus-icon {
 }
 
 .btn-register-nav:hover {
-    background: #FFF3F7;
-    color: #B0345A;
+    background: var(--pink-pale);
+    color: var(--pink-deep-1);
     transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
-/* ===== User Profile Pill (บนแถบเมนูสีชมพู) ===== */
+/* ===== User Profile Pill (บนแถบเมนูสีชมพูเข้ม) ===== */
 .user-profile-pill {
     background: rgba(255, 255, 255, 0.15);
     border: 1.5px solid rgba(255, 255, 255, 0.45);
@@ -218,7 +226,7 @@ img.lotus-icon {
 
 .avatar-circle-nav {
     background: #FFFFFF;
-    color: #E0577F;
+    color: var(--pink-deep-2);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -247,7 +255,7 @@ img.lotus-icon {
     border: 1px solid var(--card-border-soft);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(224, 87, 127, 0.18);
+    box-shadow: 0 8px 28px rgba(199, 64, 95, 0.18);
     z-index: 99999;
     padding: 0;
     transform: translateY(-8px);
@@ -276,27 +284,45 @@ img.lotus-icon {
 
 .dropdown-link:last-child  { border-bottom: none; border-radius: 0 0 10px 10px; }
 .dropdown-link:first-child { border-radius: 10px 10px 0 0; }
-.dropdown-link:hover       { background: #FFF3F7; }
+.dropdown-link:hover       { background: var(--pink-pale); }
 .dropdown-link.danger      { color: #c0392b; }
 .dropdown-link.danger:hover{ background: #fff5f5; }
 
 /* ========== HERO ========== */
 .hero-section {
     position: relative;
-    height: 700px;
-    background-image: url('/static/images/cover2.png');
-    background-position: center 30%;
-    background-size: cover;
-    background-repeat: no-repeat;
+    height: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     overflow: hidden;
 }
+.hero-slider {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+}
+.hero-slide.active {
+    opacity: 1;
+}
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+}
 .hero-overlay {
     position: absolute;
     inset: 0;
+    z-index: 1;
     background: linear-gradient(
         to bottom,
         rgba(0, 0, 0, 0.50) 0%,
@@ -315,7 +341,7 @@ img.lotus-icon {
 
 .hero-content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     color: white;
     max-width: 680px;
     padding: 0 24px;
@@ -345,12 +371,12 @@ img.lotus-icon {
 }
 
 .hero-content .hero-quote {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 2.1rem;
+    font-family: 'Charmonman', cursive;
+    font-size: 2.8rem;
     font-weight: 700;
-    line-height: 1.5;
+    line-height: 1.4;
     color: #FFFFFF;
-    font-style: italic;
+    font-style: normal;
     margin: 10px 0 18px;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
 }
@@ -366,18 +392,18 @@ img.lotus-icon {
 .hero-cta {
     display: inline-block;
     padding: 12px 28px;
-    border: 1.5px solid #F49CB9;
+    border: 1.5px solid var(--pink-light);
     border-radius: 40px;
     color: #FFFFFF;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.95rem;
-    background: rgba(236, 110, 150, 0.18);
+    background: rgba(245, 198, 214, 0.35);
     transition: all 0.25s ease;
 }
 
 .hero-cta:hover {
-    background: #EC6E96;
+    background: var(--pink-mid);
     color: #FFFFFF;
 }
 
@@ -395,7 +421,7 @@ img.lotus-icon {
     top: 24px;
     left: 50%;
     background: #FFFFFF;
-    border: 1.5px solid var(--gold-mid);
+    border: 1.5px solid var(--pink-deep-2);
     color: var(--brown-dark);
     padding: 16px 24px;
     border-radius: 12px;
@@ -415,24 +441,22 @@ img.lotus-icon {
 .toast-title { font-weight: 700; font-size: 0.95rem; }
 .toast-user  { font-size: 0.85rem; color: var(--brown-mid); }
 
-/* ========== BANNER SLIDER (ใหม่) ==========
-   ตามที่อาจารย์บอกว่าหน้าแรกดูโล่ง ให้ใส่รูปเลื่อนๆ (slider) ไม่กี่รูปพอ
-   วางไว้ต่อจาก Hero section ก่อนเข้าเนื้อหาอื่น */
+/* ========== BANNER SLIDER ========== */
 .banner-slider-section {
-    padding: 44px 0 12px;
+    padding: 28px 0 10px;
     background: transparent;
 }
 
 .banner-slider {
     position: relative;
     width: 100%;
-    max-width: 1200px;
+    max-width: 980px;
     margin: 0 auto;
-    border-radius: 18px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 32px var(--shadow-gold);
+    box-shadow: 0 8px 24px var(--shadow-gold);
     border: 2px solid var(--card-border-soft);
-    aspect-ratio: 21 / 7;
+    aspect-ratio: 32 / 9;
     background: var(--cream-warm);
 }
 
@@ -455,11 +479,11 @@ img.lotus-icon {
     display: flex;
     justify-content: center;
     gap: 9px;
-    margin-top: 14px;
+    margin-top: 12px;
 }
 .banner-dot {
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     background: var(--card-border-soft);
     border: none;
@@ -468,7 +492,7 @@ img.lotus-icon {
     padding: 0;
 }
 .banner-dot.active {
-    background: var(--gold-mid);
+    background: var(--pink-deep-2);
     transform: scale(1.2);
 }
 
@@ -482,10 +506,10 @@ img.lotus-icon {
 
 .section-header  { text-align: center; margin-bottom: 40px; }
 .section-title   {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     color: var(--brown-dark);
     font-weight: 700;
-    font-size: 1.8rem;
+    font-size: 2.4rem;
     margin-bottom: 8px;
 }
 .section-subtitle { color: var(--text-muted); font-size: 0.93rem; }
@@ -559,10 +583,10 @@ img.lotus-icon {
 
 .cal-header   { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
 .cal-header h5 {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     color: var(--brown-dark);
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.6rem;
     margin: 0;
 }
 .cal-nav-btn  {
@@ -660,8 +684,8 @@ img.lotus-icon {
 }
 
 .cal-cell.cal-cell-selected {
-    outline: 3px solid var(--gold-mid);
-    box-shadow: 0 0 0 4px rgba(236, 110, 150, 0.22);
+    outline: 3px solid var(--pink-deep-2);
+    box-shadow: 0 0 0 4px rgba(199, 64, 95, 0.22);
     transform: scale(1.03);
     z-index: 1;
 }
@@ -702,8 +726,8 @@ img.lotus-icon {
 }
 
 .cal-day-tag-good {
-    color: #B02458;
-    background: rgba(236, 110, 150, 0.16);
+    color: #8A5525;
+    background: rgba(184, 114, 43, 0.16);
 }
 
 .cal-day-tag-bad {
@@ -797,17 +821,17 @@ img.lotus-icon {
     margin-left: 8px;
     white-space: nowrap;
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 3px 10px rgba(224, 87, 127, 0.25);
+    box-shadow: 0 3px 10px rgba(184, 114, 43, 0.25);
 }
 .btn-confirm-dates:hover {
     transform: translateY(-1px);
-    box-shadow: 0 5px 14px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 5px 14px rgba(184, 114, 43, 0.35);
 }
 .btn-confirm-dates:active {
     transform: translateY(0);
 }
 
-/* ===== ความหมายวันดี (meaning section) ===== */
+/* ===== ทำไมต้องเลือกบุญมี (meaning section) ===== */
 .meaning-block {
     max-width: 900px;
     margin: 48px auto 0;
@@ -815,9 +839,9 @@ img.lotus-icon {
 }
 
 .meaning-block-title {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.7rem;
     color: var(--brown-dark);
 }
 .meaning-block-title .highlight {
@@ -839,18 +863,31 @@ img.lotus-icon {
     box-shadow: 0 4px 14px var(--shadow-warm);
 }
 
+.meaning-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-glow), var(--gold-pale));
+    border: 1.5px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin: 0 auto 12px;
+}
+
 .meaning-card-title {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--gold-mid);
-    margin-bottom: 6px;
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 8px;
 }
 
 .meaning-card-desc {
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     color: var(--text-body);
-    line-height: 1.65;
+    line-height: 1.7;
 }
 
 @media (max-width: 860px) {
@@ -858,6 +895,20 @@ img.lotus-icon {
 }
 @media (max-width: 480px) {
     .meaning-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== รีวิวจริงจากลูกค้า แทรกในโซน "ทำไมต้องเลือกบุญมี" ===== */
+.why-review-strip {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+@media (max-width: 700px) {
+    .why-review-strip { grid-template-columns: 1fr; }
 }
 
 /* ===== Ceremony types popup (modal) ===== */
@@ -918,9 +969,9 @@ img.lotus-icon {
 }
 
 .ceremony-types-title {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-weight: 700;
-    font-size: 1.15rem;
+    font-size: 1.6rem;
     color: var(--brown-dark);
     margin-bottom: 4px;
 }
@@ -954,7 +1005,7 @@ img.lotus-icon {
 
 .ceremony-type-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(236, 110, 150, 0.22);
+    box-shadow: 0 12px 30px rgba(184, 114, 43, 0.22);
     border-color: var(--gold-mid);
 }
 
@@ -963,10 +1014,10 @@ img.lotus-icon {
 
 .ceremony-type-body { padding: 16px 18px 18px; }
 .ceremony-type-name {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-weight: 700;
     color: var(--brown-dark);
-    font-size: 1.05rem;
+    font-size: 1.35rem;
     margin-bottom: 6px;
 }
 .ceremony-type-price {
@@ -1021,7 +1072,7 @@ img.lotus-icon {
 
 .event-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(224, 87, 127, 0.15);
+    box-shadow: 0 12px 40px rgba(184, 114, 43, 0.15);
 }
 
 .event-card-icon {
@@ -1045,10 +1096,10 @@ img.lotus-icon {
 }
 
 .event-card h5 {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     color: var(--brown-dark);
     font-weight: 700;
-    font-size: 1.15rem;
+    font-size: 1.5rem;
     margin-bottom: 10px;
 }
 
@@ -1079,13 +1130,13 @@ img.lotus-icon {
     transition: all 0.2s;
     font-family: 'Sarabun', sans-serif;
     align-self: flex-start;
-    box-shadow: 0 3px 10px rgba(224, 87, 127, 0.25);
+    box-shadow: 0 3px 10px rgba(184, 114, 43, 0.25);
 }
 
 .btn-detail:hover {
     background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 5px 16px rgba(184, 114, 43, 0.35);
 }
 
 .event-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
@@ -1169,7 +1220,7 @@ img.lotus-icon {
     color: #FFFFFF;
     border-color: var(--gold-light);
     transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(224, 87, 127, 0.3);
+    box-shadow: 0 4px 14px rgba(184, 114, 43, 0.3);
 }
 
 /* ========== GALLERY ========== */
@@ -1208,7 +1259,7 @@ img.lotus-icon {
 
 /* ========== CONDITIONS & STEPS ========== */
 .section-conditions {
-    background: #FFF8FA;
+    background: #FFF9FA;
     position: relative;
     overflow: hidden;
 }
@@ -1250,8 +1301,8 @@ img.lotus-icon {
 }
 
 .condition-card-title {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.15rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.5rem;
     color: var(--brown-dark);
     font-weight: 700;
     margin-bottom: 18px;
@@ -1313,10 +1364,35 @@ img.lotus-icon {
     font-size: 0.75rem;
 }
 
+/* ===== หัวข้อย่อยภายในบล็อก "ขั้นตอนและเงื่อนไขการให้บริการ" ที่รวมเป็นหัวข้อใหญ่เดียว ===== */
+.subsection-title {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.7rem;
+    color: var(--gold);
+    font-weight: 700;
+    margin: 0 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.subsection-title .subsection-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    color: #fff;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+.subsection-block + .subsection-block {
+    margin-top: 46px;
+}
+
 /* ========== FOOTER ==========
-   เปลี่ยนสีจากโทนแดงเข้ม/น้ำตาลเดิม -> ใช้สีชมพู gradient ชุดเดียวกับแถบเมนูบนสุดตามที่อาจารย์สั่ง
-   และตัดเมนูนำทางออกจาก footer (อาจารย์บอกว่าไม่มีใครกดเมนูที่อยู่ข้างล่าง)
-   เหลือแค่: แบรนด์/แท็กไลน์ + โซเชียล, ช่องทางติดต่อ, และแถบลิขสิทธิ์ท้ายสุด */
+   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน ชุดเดียวกับแถบเมนูบนสุด */
 .footer-strip {
     display: block;
     width: 100%;
@@ -1328,7 +1404,7 @@ img.lotus-icon {
     color: rgba(255, 255, 255, 0.92);
     padding-top: 0;
     padding-bottom: 0;
-    border-top: 3px solid #FBD0DE;
+    border-top: 3px solid var(--pink-light);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
@@ -1374,8 +1450,8 @@ img.lotus-icon {
 }
 
 .footer-brand-text {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.15rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.6rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -1389,9 +1465,9 @@ img.lotus-icon {
 }
 
 .footer-heading {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     color: #FFFFFF;
-    font-size: 1rem;
+    font-size: 1.35rem;
     font-weight: 700;
     margin-bottom: 14px;
 }
@@ -1558,7 +1634,7 @@ img.lotus-icon {
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid var(--gold-mid);
-    box-shadow: 0 4px 14px rgba(224, 87, 127, 0.22);
+    box-shadow: 0 4px 14px rgba(184, 114, 43, 0.22);
 }
 
 .ritual-step-num {

@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>จองงานทำบุญออฟฟิศ - ระบบรับจัดงานบุญ</title>
+    <title>จองงานทำบุญบริษัท - ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=10">
 </head>
@@ -73,7 +73,7 @@
 <div class="hero-banner">
     <div class="hero-content">
         <span class="hero-tag">ระบบจองงานบุญ</span>
-        <h1>จองงานทำบุญออฟฟิศ</h1>
+        <h1>จองงานทำบุญบริษัท</h1>
         <p>ระบุรายละเอียดให้ครบถ้วนเพื่อความถูกต้องของงานพิธี</p>
     </div>
 </div>
@@ -1039,6 +1039,27 @@ window.dayQuality = {
         ]<c:if test="${!st.last}">,</c:if>
     </c:forEach>
 };
+
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // ตรวจสอบว่าใน URL มี custom=true หรือไม่
+        if (urlParams.get('custom') === 'true') {
+            const customRadio = document.querySelector('input[name="bookingMode"][value="custom"]');
+            
+            if (customRadio) {
+                // บังคับเปลี่ยนสถานะเป็น checked
+                customRadio.checked = true;
+                
+                // เรียกฟังก์ชันที่มีอยู่เดิมเพื่ออัปเดต UI (ซ่อน/แสดง block)
+                toggleBookingMode('custom');
+                
+                console.log("Forced Custom Mode applied");
+            }
+        }
+    }, 300); // รอ 300 มิลลิวินาที (0.3 วินาที) เพื่อให้สคริปต์อื่นรันให้เสร็จก่อน
+});
 </script>
 
 <script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=8"></script>
