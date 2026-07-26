@@ -126,6 +126,8 @@ public class UserController {
         return "redirect:/loginMember?successRegister";
     }
 
+    
+    
     @GetMapping("/home")
     public String home(Model model) {
         model.addAttribute("ceremonyTypes", buildCeremonyTypes());
