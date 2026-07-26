@@ -7,7 +7,7 @@
     font-family: 'Sarabun', sans-serif;
 }
 
-/* ===== CSS Variables (ธีมสีชมพู เหมือนหน้า Home) ===== */
+/* ===== CSS Variables (ธีมสีชมพู + ทอง สำหรับความคอนทราสต์) ===== */
 :root {
     --gold:          #E0577F;
     --gold-mid:      #EC6E96;
@@ -31,6 +31,17 @@
     --footer-grad-1: #C7405F;
     --footer-grad-2: #D94F76;
     --footer-grad-3: #E0577F;
+
+    /* ===== สีทอง/สังฆทาน (accent สีที่สอง ให้ตัดกับชมพู) ===== */
+    --saffron:       #D9A404;
+    --saffron-deep:  #B8860B;
+    --saffron-pale:  #FFF3D6;
+
+    /* ===== สีเทาแท้ (neutral จริงๆ ไม่ผสมชมพู) ใช้เป็นพื้นหลัง/เส้นขอบส่วนใหญ่ในเนื้อหา ===== */
+    --neutral-bg:     #FAFAFA;
+    --neutral-mid:    #F2F2F2;
+    --neutral-border: #E2E2E2;
+    --neutral-text:   #6B6B6B;
 }
 
 body {
@@ -47,7 +58,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid #FBD0DE;
+    border-bottom: 3px solid var(--gold-pale);
     position: sticky;
     top: 0;
     z-index: 10000;
@@ -131,7 +142,7 @@ img.lotus-icon {
 
 .nav-link-item.active {
     background: #FFFFFF;
-    color: #E0577F;
+    color: var(--gold);
     font-weight: 700;
 }
 
@@ -196,7 +207,7 @@ img.lotus-icon {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid var(--gold-mid);
+    border-bottom: 2px solid var(--gold-pale);
     position: relative;
 }
 
@@ -234,10 +245,11 @@ img.lotus-icon {
     border: 1.5px solid #a5d6a7;
 }
 
+/* รอยืนยัน: ใช้โทนทองแทนชมพู ให้ 3 สถานะแยกสีกันชัดเจน (เขียว/ทอง/แดง) */
 .status-pending {
-    background: var(--cream-warm);
-    color: #C7405F;
-    border: 1.5px solid var(--gold-light);
+    background: var(--saffron-pale);
+    color: var(--saffron-deep);
+    border: 1.5px solid var(--saffron);
 }
 
 .status-revised {
@@ -276,9 +288,9 @@ img.lotus-icon {
     font-size: 11px;
     color: #166534;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 4px;
+    /* หมายเหตุ: เอา text-transform: uppercase ออก เพราะภาษาไทยไม่มีตัวพิมพ์ใหญ่-เล็ก คำสั่งนี้ไม่มีผลใดๆ */
 }
 
 .staff-name {
@@ -304,8 +316,8 @@ img.lotus-icon {
 /* ===== Info Grid ===== */
 .info-grid-section {
     margin: 24px 32px 0;
-    background: var(--cream-warm);
-    border: 1px solid var(--cream-border);
+    background: var(--neutral-bg);
+    border: 1px solid var(--neutral-border);
     border-radius: 10px;
     padding: 16px 20px;
     display: grid;
@@ -325,42 +337,42 @@ img.lotus-icon {
 .section-wrap { padding: 28px 32px 0; }
 
 .section-title {
-    font-size: 13px;
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 16px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--brown-dark);
     margin-bottom: 16px;
     display: flex;
     align-items: center;
     gap: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.2px;
+    /* หมายเหตุ: เอา text-transform: uppercase ออก เพราะภาษาไทยไม่มีตัวพิมพ์ใหญ่-เล็ก คำสั่งนี้ไม่มีผลใดๆ */
 }
 
 .section-title::after {
     content: '';
     flex: 1;
     height: 1px;
-    background: var(--cream-border);
+    background: var(--neutral-border);
 }
 
 /* ===== Table ===== */
 table { width: 100%; border-collapse: collapse; }
 
 th {
-    background: var(--cream-warm);
-    color: var(--brown-dark);
+    background: var(--neutral-bg);
+    color: var(--neutral-text);
     padding: 13px 14px;
     text-align: left;
     font-size: 12px;
     font-weight: 700;
-    border-bottom: 2px solid var(--cream-border);
-    text-transform: uppercase;
+    border-bottom: 2px solid var(--neutral-border);
     letter-spacing: 0.4px;
 }
 
 td {
     padding: 13px 14px;
-    border-bottom: 1px solid var(--cream-mid);
+    border-bottom: 1px solid var(--neutral-mid);
     font-size: 14px;
     vertical-align: middle;
     color: #444;
@@ -369,14 +381,14 @@ td {
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--cream); }
 
-/* ===== Group Row (หัวหมวด) ===== */
+/* ===== Group Row (หัวหมวด) — เทาแท้ ไม่ใช่ชมพูอ่อน ให้ตัดกับ badge/แถบราคาที่เป็นสี ===== */
 .group-row td {
-    background: var(--cream-mid);
+    background: var(--neutral-mid);
     color: var(--brown-mid);
     font-weight: 700;
     padding: 12px 10px;
     font-size: 15px;
-    border-bottom: 2px solid var(--cream-border-soft);
+    border-bottom: 2px solid var(--neutral-border);
 }
 
 /* ===== Base Price Row ===== */
@@ -405,28 +417,32 @@ tr:hover td { background: var(--cream); }
 
 /* ===== Total ===== */
 .total-section {
-    padding: 20px 32px;
+    margin: 8px 32px 0;
+    padding: 18px 24px;
     text-align: right;
-    border-top: 1.5px dashed var(--cream-border);
-    margin-top: 8px;
+    background: var(--neutral-bg);
+    border: 1px solid var(--neutral-border);
+    border-radius: 12px;
 }
 
 .total-sub {
     font-size: 12px;
-    color: var(--text-muted);
+    color: var(--neutral-text);
     margin-bottom: 4px;
 }
 
+/* ยอดรวมใช้สีทอง + ฟอนต์เซริฟไทย ให้เป็นจุดสายตาเด่นที่สุดในหน้า แยกออกจากตัวเลขอื่นๆ ในตาราง */
 .total-amount {
-    font-size: 36px;
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 38px;
     font-weight: 700;
-    color: var(--brown-dark);
+    color: var(--saffron-deep);
 }
 
 /* ===== Action Box ===== */
 .action-section {
     padding: 24px 32px 32px;
-    border-top: 1.5px solid var(--cream-mid);
+    border-top: 1.5px solid var(--neutral-mid);
 }
 
 .btn-confirm-custom {
@@ -455,8 +471,8 @@ tr:hover td { background: var(--cream); }
 
 /* ===== Revise Section ===== */
 .revise-box {
-    background: var(--cream-warm);
-    border: 1.5px solid var(--cream-border);
+    background: var(--neutral-bg);
+    border: 1.5px solid var(--neutral-border);
     border-radius: 12px;
     padding: 22px 24px;
 }
@@ -518,6 +534,7 @@ tr:hover td { background: var(--cream); }
 }
 
 .lock-title {
+    font-family: 'Noto Serif Thai', serif;
     font-size: 20px;
     color: #22c55e;
     font-weight: 700;

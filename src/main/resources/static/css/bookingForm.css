@@ -1,6 +1,8 @@
 /* ==========================================================================
-   GLOBAL STYLES & BODY  (ธีมชมพู-ขาว เหมือนหน้า home / ceremonyDetail)
+   GLOBAL STYLES & BODY  (ธีมชมพู-ทอง-ขาว เหมือนโลโก้ บุญมี รับจัดงานบุญ)
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&display=swap');
+
 * {
 	margin: 0;
 	padding: 0;
@@ -14,6 +16,13 @@
 	--gold-light: #F49CB9;
 	--gold-pale: #FBD0DE;
 	--gold-glow: #FFE3EC;
+
+	/* ===== สีทองจริง (ตามกรอบทองของโลโก้) ใช้เป็นสีคู่กับชมพูด้านบน
+	   ไม่ได้แทนที่ตัวแปร --gold เดิม (ซึ่งจริงๆ คือชมพู) เพื่อไม่ให้กระทบ
+	   ส่วนอื่นของเว็บที่อ้างอิงตัวแปรเดิมอยู่ ===== */
+	--accent-gold: #D9A441;
+	--accent-gold-mid: #E8C878;
+	--accent-gold-pale: #F7E3B0;
 
 	--cream: #FFFFFF;
 	--cream-warm: #FAFAFA;
@@ -52,7 +61,8 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	border-bottom: 3px solid var(--gold-pale);
+	border-bottom: 3px solid;
+	border-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent) 1;
 	position: sticky;
 	top: 0;
 	z-index: 10000;
@@ -103,8 +113,8 @@ body {
 
 .nav-brand-text {
 	color: #FFFFFF;
-	font-family: 'Noto Serif Thai', serif;
-	font-size: 24px;
+	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-size: 27px;
 	font-weight: 700;
 	letter-spacing: 0.5px;
 	white-space: nowrap;
@@ -287,9 +297,9 @@ body {
 	left: 0;
 	right: 0;
 	height: 4px;
-	background: linear-gradient(90deg, transparent 0%, var(--gold-pale) 15%,
-		var(--gold-mid) 35%, var(--gold-light) 50%, var(--gold-mid) 65%,
-		var(--gold-pale) 85%, transparent 100%);
+	background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 15%,
+		rgba(255,255,255,0.85) 35%, #FFFFFF 50%, rgba(255,255,255,0.85) 65%,
+		rgba(255,255,255,0.35) 85%, transparent 100%);
 }
 
 .hero-content {
@@ -315,9 +325,9 @@ body {
 }
 
 .hero-content h1 {
-	font-family: 'Noto Serif Thai', serif;
+	font-family: 'Charmonman', 'Noto Serif Thai', serif;
 	color: #FFFDF5;
-	font-size: 28px;
+	font-size: 34px;
 	font-weight: 700;
 	margin-bottom: 6px;
 	text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
@@ -339,13 +349,13 @@ body {
 	margin: 0 auto;
 }
 
-/* กรอบใหญ่ — ใส่ขอบสีชมพูให้ตัดกับพื้นหลังชัดเจน (เหมือน .cd-card ของ ceremonyDetail) */
+/* กรอบใหญ่ — ใส่ขอบสีทองให้ตัดกับพื้นหลังชัดเจน แบบกรอบทองของโลโก้ */
 .form-container {
 	background: #FFFFFF;
 	border-radius: 20px;
-	border: 3px solid var(--gold-mid);
+	border: 3px solid var(--accent-gold);
 	box-shadow:
-		0 0 14px rgba(224, 87, 127, 0.28),
+		0 0 14px rgba(217, 164, 65, 0.28),
 		0 10px 34px rgba(224, 87, 127, 0.14);
 	padding: 36px 36px 28px;
 	position: relative;
@@ -357,7 +367,7 @@ body {
 	position: absolute;
 	top: 0; left: 24px; right: 24px;
 	height: 2px;
-	background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
 }
 
 /* ==========================================================================
@@ -374,7 +384,7 @@ body {
 	background: #FFFFFF;
 	border-radius: 14px;
 	overflow: hidden;
-	border: 1.5px solid var(--gold-pale);
+	border: 1.5px solid var(--accent-gold-pale);
 	box-shadow: 0 4px 20px rgba(224, 87, 127, 0.08);
 	margin-bottom: 20px;
 }
@@ -383,10 +393,12 @@ body {
 	background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
 	color: #FFFFFF;
 	padding: 13px 22px;
-	font-size: 14px;
+	font-size: 16px;
+	font-family: 'Charmonman', 'Noto Serif Thai', serif;
 	font-weight: 700;
 	letter-spacing: 0.3px;
-	border-bottom: 2px solid var(--gold-pale);
+	border-bottom: 2px solid;
+	border-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent) 1;
 }
 
 .card-body {
@@ -430,8 +442,8 @@ body {
 
 .form-control:focus {
 	outline: none;
-	border-color: var(--gold-mid);
-	box-shadow: 0 0 0 3px rgba(236, 110, 150, 0.15);
+	border-color: var(--accent-gold);
+	box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
 	background: #FFFFFF;
 }
 
@@ -454,7 +466,7 @@ body {
 	transition: border 0.2s, box-shadow 0.2s;
 	appearance: none;
 	background-image:
-		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23EC6E96' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23D9A441' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
 	background-repeat: no-repeat;
 	background-position: right 14px center;
 	padding-right: 36px;
@@ -462,8 +474,8 @@ body {
 
 .form-select:focus {
 	outline: none;
-	border-color: var(--gold-mid);
-	box-shadow: 0 0 0 3px rgba(236, 110, 150, 0.15);
+	border-color: var(--accent-gold);
+	box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
 	background-color: #FFFFFF;
 }
 
@@ -506,7 +518,7 @@ textarea.form-control {
 }
 
 .btn-submit {
-	background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+	background: linear-gradient(135deg, var(--gold) 0%, var(--accent-gold) 100%);
 	color: #FFFFFF;
 	border: none;
 	padding: 14px 60px;
@@ -520,10 +532,10 @@ textarea.form-control {
 }
 
 .btn-submit:hover {
-	background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
-	color: var(--brown-dark);
+	background: linear-gradient(135deg, var(--accent-gold) 0%, var(--gold) 100%);
+	color: #FFFFFF;
 	transform: translateY(-2px);
-	box-shadow: 0 6px 20px rgba(224, 87, 127, 0.35);
+	box-shadow: 0 6px 20px rgba(217, 164, 65, 0.4);
 }
 
 /* ==========================================================================
@@ -599,7 +611,7 @@ textarea.form-control {
 	{
 	width: 18px;
 	height: 18px;
-	accent-color: var(--gold-mid);
+	accent-color: var(--accent-gold);
 	cursor: pointer;
 	flex-shrink: 0;
 }
@@ -612,7 +624,8 @@ textarea.form-control {
 	background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
 	color: rgba(255, 255, 255, 0.92);
 	padding-top: 0;
-	border-top: 3px solid var(--gold-pale);
+	border-top: 3px solid;
+	border-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent) 1;
 	box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
 	margin-top: auto;
 }
@@ -661,8 +674,8 @@ textarea.form-control {
 }
 
 .footer-brand-text {
-	font-family: 'Noto Serif Thai', serif;
-	font-size: 1.15rem;
+	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-size: 1.3rem;
 	font-weight: 700;
 	color: #FFFFFF;
 }
@@ -701,9 +714,9 @@ textarea.form-control {
 }
 
 .footer-heading {
-	font-family: 'Noto Serif Thai', serif;
+	font-family: 'Charmonman', 'Noto Serif Thai', serif;
 	color: #FFFFFF;
-	font-size: 1rem;
+	font-size: 1.15rem;
 	font-weight: 700;
 	margin-bottom: 14px;
 }
@@ -768,12 +781,146 @@ textarea.form-control {
 	font-size: 12.5px;
 	color: #B0345A;
 	background: var(--gold-glow);
-	border: 1px dashed var(--gold-light);
+	border: 1px dashed var(--accent-gold-mid);
 	border-radius: 8px;
 	padding: 8px 12px;
 	margin-bottom: 12px;
 	display: inline-block;
 }
 
+/* ==========================================================================
+   MINI CALENDAR (เลือกวันที่จัดงานในฟอร์ม) — โทนชมพูทอง
+   ========================================================================== */
+.mini-cal-wrap {
+	border: 1.5px solid var(--accent-gold-pale);
+	border-radius: 10px;
+	padding: 12px;
+	background: #FFFAF0;
+}
+.mini-cal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--brown-dark);
+	margin-bottom: 8px;
+}
+.mini-cal-nav-btn {
+	background: var(--accent-gold-pale);
+	border: none;
+	border-radius: 6px;
+	width: 26px;
+	height: 26px;
+	cursor: pointer;
+	color: #B0345A;
+	font-size: 15px;
+}
+.mini-cal-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 3px;
+}
+.mini-cal-day-label {
+	text-align: center;
+	font-size: 11px;
+	color: var(--text-muted);
+	padding: 2px 0;
+}
+.mini-cal-cell {
+	position: relative;
+	aspect-ratio: 1;
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	cursor: pointer;
+	border: 1px solid transparent;
+}
+.mini-cal-cell-empty { cursor: default; }
+.mini-cal-cell-free { background: #E9F7EF; border-color: #B7E4C7; }
+.mini-cal-cell-almost { background: #FFF3D6; border-color: var(--accent-gold-mid); }
+.mini-cal-cell-booked { background: #FBE3E7; border-color: #E9A9B4; cursor: not-allowed; }
+.mini-cal-cell-past { background: #F0F0F0; border-color: #DADADA; cursor: not-allowed; color: #B0B0B0; }
+.mini-cal-cell-today { outline: 2px solid var(--accent-gold); }
+.mini-cal-cell-selected { outline: 2px solid #B0345A; box-shadow: 0 0 0 2px rgba(224,87,127,0.25); }
+.mini-cal-full-mark {
+	position: absolute;
+	top: 1px;
+	right: 3px;
+	font-size: 9px;
+	color: #B0345A;
+}
+.mini-cal-legend {
+	display: flex;
+	gap: 12px;
+	margin-top: 8px;
+	font-size: 11px;
+	color: var(--text-muted);
+	flex-wrap: wrap;
+}
+.mini-cal-dot {
+	display: inline-block;
+	width: 9px;
+	height: 9px;
+	border-radius: 2px;
+	margin-right: 4px;
+}
+.mini-cal-dot-free { background: #B7E4C7; }
+.mini-cal-dot-almost { background: var(--accent-gold-mid); }
+.mini-cal-dot-full { background: #E9A9B4; }
+.mini-cal-selected-text {
+	font-size: 12px;
+	color: #B0345A;
+	margin: 8px 0 0;
+	font-weight: 600;
+}
+
+/* ==========================================================================
+   ITEM CARDS (แพ็กเกจ / สังฆทาน / ปิ่นโต) — accent เป็นสีทองแทนชมพูล้วน
+   ========================================================================== */
+.item-card-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 10px;
+}
+.item-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	border: 1.5px solid var(--cream-border-soft);
+	border-radius: 10px;
+	padding: 10px;
+	cursor: pointer;
+	background: #FFFFFF;
+	transition: border-color .15s, box-shadow .15s;
+}
+.item-card:hover { border-color: var(--accent-gold); }
+.item-card input[type="radio"] { position: absolute; top: 8px; right: 8px; }
+.item-card:has(input:checked) {
+	border-color: var(--accent-gold);
+	box-shadow: 0 0 0 2px rgba(217,164,65,0.3);
+}
+.item-card-thumb {
+	width: 100%; height: 72px;
+	overflow: hidden;
+	border-radius: 8px; margin-bottom: 6px;
+	background: var(--cream-mid);
+}
+.item-card-thumb img {
+	width: 100%; height: 100%;
+	object-fit: cover; display: block;
+	cursor: zoom-in;
+}
+.item-card-name {
+	font-weight: 700; font-size: 12.5px; color: var(--brown-dark); margin-bottom: 3px;
+	overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.item-card-desc {
+	font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 4px;
+	display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.item-card-price { font-size: 12px; font-weight: 700; color: var(--accent-gold); }
 
 /*booking*/

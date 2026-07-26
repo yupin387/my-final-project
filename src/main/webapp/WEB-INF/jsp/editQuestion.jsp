@@ -80,26 +80,18 @@
                     <input type="text" id="questionsText" name="questionsText"
                            value="${question.questionsText}" required/>
                 </div>
- 
+
+                <%-- แก้ไข: เหลือ dropdown เดียวให้เลือกแค่ "ประเภทงาน" ไม่ต้องเลือกแพ็กเกจ
+                     ระบบจะเลือกแพ็กเกจแรกของประเภทนั้นให้อัตโนมัติฝั่ง service
+                     auto-select ค่าเดิมจาก question.ceremony.ceremonyType --%>
                 <div class="form-group">
-                    <label for="ceremonyId">สำหรับประเภทพิธี</label>
+                    <label for="ceremonyType">ประเภทงาน</label>
                     <div class="select-wrapper">
-                        <%-- แก้ไข: เดิมวน ${ceremonies} แบบแบน ๆ ทั้ง 12 แถว โชว์แค่ชื่อแพ็กเกจ
-                             (มาตรฐาน/อิ่มบุญ/พรีเมียม/กำหนดเอง) ซ้ำกัน 3 รอบ แยกไม่ออกว่าเป็นของ
-                             ประเภทงานไหน เปลี่ยนมาวน ${groupedCeremonies} แล้วใช้ <optgroup>
-                             แบ่งเป็น 3 กลุ่มตามประเภทงาน (ทำบุญบ้าน/ขึ้นบ้านใหม่/ทำบุญออฟฟิศ)
-                             ยังคง logic เดิมที่เช็ค selected จาก question.ceremony.ceremonyId --%>
-                        <select id="ceremonyId" name="ceremonyId" required>
-                            <option value="">-- เลือกประเภทพิธี --</option>
-                            <c:forEach var="entry" items="${groupedCeremonies}">
-                                <optgroup label="${entry.key}">
-                                    <c:forEach var="c" items="${entry.value}">
-                                        <option value="${c.ceremonyId}"
-                                            ${c.ceremonyId == question.ceremony.ceremonyId ? 'selected' : ''}>
-                                            ${c.ceremonyName}
-                                        </option>
-                                    </c:forEach>
-                                </optgroup>
+                        <select id="ceremonyType" name="ceremonyType" required>
+                            <option value="">-- เลือกประเภทงาน --</option>
+                            <c:forEach var="type" items="${ceremonyTypes}">
+                                <option value="${type}"
+                                    ${question.ceremony != null && type == question.ceremony.ceremonyType ? 'selected' : ''}>${type}</option>
                             </c:forEach>
                         </select>
                     </div>

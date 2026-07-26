@@ -191,6 +191,16 @@ public class UserController {
         return ceremonyTypes;
     }
 
+    /**
+     * ตัดคำว่า "วัน" นำหน้าออก (ถ้ามี) เพื่อให้เทียบ label ได้ทนต่อกรณี
+     * ต้นทาง (Google Calendar) พิมพ์ตกคำว่า "วัน" ไป เช่น
+     * "มหาสิทธิโชค" ที่ควรจะเป็น "วันมหาสิทธิโชค"
+     */
+    private static String stripDayPrefix(String s) {
+        if (s == null) return "";
+        return s.startsWith("วัน") ? s.substring(3) : s;
+    }
+
     private List<Map<String, Object>> buildMonthlyGoodDaysByWeekday() {
         Map<String, List<Map<String, String>>> sorted = new TreeMap<>(dayQualityCache);
 
@@ -203,9 +213,16 @@ public class UserController {
             if (!isTargetYear(date)) continue;
             boolean hasGoodTag = entry.getValue().stream().anyMatch(tag -> {
                 if (!"good".equals(tag.get("type"))) return false;
-                
+
                 String label = tag.get("label");
-                return MAIN_GOOD_LABELS.stream().anyMatch(keyword -> label.contains(keyword));
+                if (label == null) return false;
+
+                // เทียบแบบตัดคำว่า "วัน" นำหน้าออกทั้งสองฝั่งก่อน
+                // เพื่อกันกรณีต้นทางพิมพ์ตกคำว่า "วัน" (เช่น "มหาสิทธิโชค"
+                // แทนที่จะเป็น "วันมหาสิทธิโชค") ไม่ให้หลุดจากตารางสรุป
+                String labelCore = stripDayPrefix(label);
+                return MAIN_GOOD_LABELS.stream()
+                        .anyMatch(keyword -> labelCore.contains(stripDayPrefix(keyword)));
             });
 
             if (!hasGoodTag) continue;
