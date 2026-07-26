@@ -78,22 +78,15 @@
                         required value="${param.questionText}" />
                 </div>
 
+                <%-- แก้ไข: ตัด dropdown แพ็กเกจออก คำถามผูกกับ "ประเภทงาน" โดยตรง
+                     (ไม่ผูกกับแพ็กเกจย่อยของ Ceremony อีกต่อไป) เหลือ select เดียว --%>
                 <div class="form-group">
-                    <label for="ceremonyId">สำหรับประเภทพิธี</label>
+                    <label for="ceremonyType">ประเภทงาน</label>
                     <div class="select-wrapper">
-                        <%-- แก้ไข: เดิมวน ${ceremonies} แบบแบน ๆ ทั้ง 12 แถว โชว์แค่ชื่อแพ็กเกจ
-                             (มาตรฐาน/อิ่มบุญ/พรีเมียม/กำหนดเอง) ซ้ำกัน 3 รอบ แยกไม่ออกว่าเป็นของ
-                             ประเภทงานไหน เปลี่ยนมาวน ${groupedCeremonies} แล้วใช้ <optgroup>
-                             แบ่งเป็น 3 กลุ่มตามประเภทงาน (ทำบุญบ้าน/ขึ้นบ้านใหม่/ทำบุญออฟฟิศ) --%>
-                        <select id="ceremonyId" name="ceremonyId" required>
-                            <option value="">-- เลือกประเภทพิธี --</option>
-                            <c:forEach var="entry" items="${groupedCeremonies}">
-                                <optgroup label="${entry.key}">
-                                    <c:forEach var="c" items="${entry.value}">
-                                        <option value="${c.ceremonyId}"
-                                            ${param.ceremonyId == c.ceremonyId ? 'selected' : ''}>${c.ceremonyName}</option>
-                                    </c:forEach>
-                                </optgroup>
+                        <select id="ceremonyType" name="ceremonyType" required>
+                            <option value="">-- เลือกประเภทงาน --</option>
+                            <c:forEach var="type" items="${ceremonyTypes}">
+                                <option value="${type}" ${param.ceremonyType == type ? 'selected' : ''}>${type}</option>
                             </c:forEach>
                         </select>
                     </div>

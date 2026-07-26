@@ -8,8 +8,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>จองงานทำบุญบ้าน - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=10">
+    <%-- เพิ่มฟอนต์ Charmonman (ฟอนต์สคริปต์ไทยแบบเดียวกับที่แคปมา) ไว้ใช้กับหัวข้อ/แบรนด์
+         ส่วนเนื้อหาทั่วไปยังใช้ Sarabun เหมือนเดิมเพื่อความอ่านง่าย --%>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=11">
 </head>
 <body>
 
@@ -85,26 +87,12 @@
         <c:set var="detailIndex" value="0"/>
 
         <%-- =========================================================
-             0. เลือกวิธีจอง — แพ็กเกจแนะนำ / ความต้องการเบื้องต้น
+             โหมดการจอง (แพ็กเกจ / กรอกเอง) มาจากหน้า ceremonyDetail แล้ว
+             (เลือก "เลือกจองแพ็กเกจนี้" หรือ "จองแบบระบุเอง" มาก่อนหน้านี้)
+             ฉะนั้นไม่ต้องมีการ์ด "เลือกวิธีจอง" ซ้ำในฟอร์มนี้อีก — ใช้ค่าจาก
+             param.custom เพื่อกำหนดโหมดการแสดงผลของฟอร์มแทน
              ========================================================= --%>
         <c:set var="startInCustomMode" value="${param.custom == 'true'}"/>
-        <div class="form-card">
-            <div class="card-header">เลือกวิธีจอง</div>
-            <div class="card-body">
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="radio" name="bookingMode" value="package"
-                               onchange="toggleBookingMode('package')" ${startInCustomMode ? '' : 'checked'}>
-                        <span>แพ็กเกจแนะนำ <small style="color:#B0345A;">(ราคาเหมา จำนวนพระถูกกำหนดตามแพ็กเกจ)</small></span>
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="radio" name="bookingMode" value="custom"
-                               onchange="toggleBookingMode('custom')" ${startInCustomMode ? 'checked' : ''}>
-                        <span>ความต้องการเบื้องต้น <small style="color:#B0345A;">(กรอกรายละเอียดทุกอย่างเองตามที่ท่านต้องการ)</small></span>
-                    </label>
-                </div>
-            </div>
-        </div>
 
         <%-- =========================================================
              ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่ / รูปภาพ
@@ -129,7 +117,9 @@
                             <div class="form-group">
                                 <label class="form-label">วันที่จัดงาน <span class="required">*</span></label>
 
-                                <%-- ปฏิทินย่อ: เลือกวันได้ในฟอร์มเลย พร้อมเช็คว่าง/เหลือคิว/เต็มคิว/ฤกษ์ดี --%>
+                                <%-- ปฏิทินย่อ: เลือกวันได้ในฟอร์มเลย พร้อมเช็คว่าง/เหลือคิว/เต็มคิว/ฤกษ์ดี
+                                     วันที่ผ่านมาแล้วถูกซ่อนออกจากปฏิทินแล้ว (miniBookingCalendar.js
+                                     เรนเดอร์เป็นช่องว่างเฉยๆ ไม่โชว์เลขวันหรือสี) --%>
                                 <div class="mini-cal-wrap">
                                     <div class="mini-cal-header">
                                         <button type="button" class="mini-cal-nav-btn" onclick="miniCalPrevMonth()">&#8249;</button>
@@ -170,7 +160,9 @@
                     <div class="card-header">สถานที่จัดพิธี</div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label class="form-label">ที่อยู่ <span class="required">*</span></label>
+                            <%-- เปลี่ยน label ให้ชัดเจนว่าเป็นที่อยู่ที่จะจัดงาน ไม่ใช่ที่อยู่ของผู้จอง
+                                 เพราะบางครั้งผู้จองไม่ได้พักอาศัยอยู่ที่บ้านที่จะจัดงาน --%>
+                            <label class="form-label">ที่อยู่ที่ต้องการจัดงาน <span class="required">*</span></label>
                             <textarea name="eventAddress" class="form-control" rows="3" required
                                       placeholder="เช่น 123/45 หมู่บ้านบุญรักษา ตำบลสุทธิ อำเภอเมือง จังหวัดเชียงใหม่ 50000"></textarea>
                         </div>
@@ -201,6 +193,11 @@
         <div class="form-card" id="packageOnlyBlock" style="${startInCustomMode ? 'display:none;' : 'display:block;'}">
             <div class="card-header">เลือกแพ็กเกจ</div>
             <div class="card-body">
+                <%-- หมายเหตุ: เครื่องเสียง/โต๊ะหมู่บูชา รวมอยู่ในทุกแพ็กเกจอยู่แล้ว
+                     ใส่ note บอกลูกค้าให้ชัดเจนแบบเดียวกับ note ของสังฆทาน --%>
+                <p style="font-size:12px;color:#B0345A;margin:-4px 0 14px;">
+                    ℹ️ ทุกแพ็กเกจรวมชุดเครื่องเสียง โต๊ะหมู่บูชา และพระประธานไว้ให้แล้ว ทางร้านเป็นผู้จัดเตรียมให้ทั้งหมด
+                </p>
                 <div class="item-card-grid">
                     <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
                         <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
@@ -267,6 +264,10 @@
                                           style="color:#2e7d32;${startInCustomMode ? 'display:none;' : ''}">(รับส่วนลด ฿1,500)</small></span>
                                 </label>
                             </div>
+                            <%-- เงื่อนไขสำหรับกรณีนิมนต์เอง --%>
+                            <p style="font-size:12px;color:#B0345A;margin-top:6px;">
+                                ⚠️ กรณีนิมนต์เอง วัดที่นิมนต์ต้องอยู่ในรัศมีพื้นที่ให้บริการที่ทางร้านกำหนดเท่านั้น
+                            </p>
                         </div>
                         <c:set var="detailIndex" value="${detailIndex + 1}"/>
                     </c:if>
@@ -318,6 +319,12 @@
                                 <textarea name="details[${detailIndex}].answer" id="watDiffAnswer"
                                           class="form-control" style="display:none;">ให้ร้านเลือกให้</textarea>
 
+                                <p style="font-size:12px;color:var(--text-muted);margin:8px 0 0;">
+                                    หมายเหตุ: วัดที่ระบุอาจมีการเปลี่ยนแปลงได้ตามความสะดวกของพระสงฆ์ในวันงาน
+                                    หรือในกรณีที่วันจัดงานตรงกับวันฤกษ์ดีซึ่งอาจมีการนิมนต์ชนกัน
+                                    ทางร้านจะติดต่อลูกค้าเพื่อยืนยันอีกครั้ง
+                                </p>
+
                                 <div id="watDiff" style="display:none; margin-top:12px;">
                                     <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
                                         ระบุวัดที่ต้องการสำหรับพระแต่ละรูปได้ครบตามจำนวนพระสงฆ์ที่นิมนต์ไว้ด้านบน
@@ -349,8 +356,13 @@
                                 ค่าเริ่มต้น = จำนวนพระสงฆ์ที่นิมนต์ไว้ด้านบน แก้ไขจำนวนเองได้หากต้องการ
                             </p>
                             <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                            <%-- FIX: เดิม value="5" ตายตัวไม่ว่าจะโหมดไหน ทำให้โหมด "จองแบบระบุเอง"
+                                 ก็ขึ้นเลข 5 มาให้ทั้งที่ยังไม่ได้เลือกจำนวนพระสงฆ์เลย
+                                 ค่า fix 5 ควรเกิดจากการเลือกแพ็กเกจมาตรฐานเท่านั้น (ผ่าน applyPackageMonkCount)
+                                 โหมดกรอกเองจึงให้เริ่มว่าง ให้ผู้ใช้กรอกเอง --%>
                             <input type="number" name="details[${detailIndex}].answer" id="sanghatanQtyInput"
-                                   class="form-control" value="5" min="1"
+                                   class="form-control" value="${startInCustomMode ? '' : 5}" min="1"
+                                   placeholder="ระบุจำนวนชุด..."
                                    oninput="this.dataset.userEdited = 'true';">
                         </div>
                         <c:set var="detailIndex" value="${detailIndex + 1}"/>
@@ -462,6 +474,34 @@
             </div>
         </div>
 
+        <%-- 1.5 หมายเหตุเพิ่มเติม
+             คำถามนี้ต้องดึงมาจาก ${questions} เหมือนคำถามอื่นๆ ในฟอร์ม (ผูกกับ
+             details[].question.questionsId / details[].answer ตามแพทเทิร์นเดิม)
+             ไม่ใช่ field แยกต่างหากแบบ additionalNote — ต้องมีแถวคำถามในตาราง
+             Questionsdetail ที่มี questionsText = "มีความต้องการเพิ่มเติมหรือไม่?"
+             ผูกกับ ceremony ที่เกี่ยวข้องไว้ก่อน ฟอร์มถึงจะดึงมาแสดงได้
+             (เนื้อหาเป็นเรื่องอุปกรณ์/รายละเอียดอื่นๆ ไม่ใช่เรื่องอาหารแขก
+              เพราะเรื่องอาหารมีคำถามของตัวเองอยู่แล้วในส่วนปิ่นโตด้านบน) --%>
+        <c:forEach items="${questions}" var="q">
+            <c:if test="${fn:contains(q.questionsText, 'ความต้องการเพิ่มเติม')}">
+                <div class="form-card">
+                    <div class="card-header">หมายเหตุเพิ่มเติม</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">${q.questionsText}</label>
+                            <p style="font-size:12px;color:#B0345A;margin-top:2px;">
+                                เช่น อุปกรณ์เพิ่มเติม เก้าอี้ ผ้าคลุมโต๊ะ หรือรายละเอียดอื่นๆ ที่ต้องการแจ้งทีมงาน
+                            </p>
+                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                            <textarea name="details[${detailIndex}].answer" class="form-control" rows="3"
+                                      placeholder="เช่น ต้องการเก้าอี้เพิ่ม 10 ตัว, ขอผ้าคลุมโต๊ะสีขาว เป็นต้น"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <c:set var="detailIndex" value="${detailIndex + 1}"/>
+            </c:if>
+        </c:forEach>
+
         <div class="submit-row">
             <button type="submit" class="btn-submit">บันทึกข้อมูลการจอง</button>
         </div>
@@ -509,48 +549,9 @@
 	</footer>
 
 <style>
-.item-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-}
-.item-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 1.5px solid var(--cream-border-soft);
-    border-radius: 10px;
-    padding: 10px;
-    cursor: pointer;
-    background: #FFFFFF;
-    transition: border-color .15s, box-shadow .15s;
-}
-.item-card:hover { border-color: var(--gold-mid); }
-.item-card input[type="radio"] { position: absolute; top: 8px; right: 8px; }
-.item-card:has(input:checked) {
-    border-color: var(--gold-mid);
-    box-shadow: 0 0 0 2px rgba(224,87,127,0.22);
-}
-.item-card-thumb {
-    width: 100%; height: 72px;
-    overflow: hidden;
-    border-radius: 8px; margin-bottom: 6px;
-    background: var(--cream-mid);
-}
-.item-card-thumb img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-    cursor: zoom-in;
-}
-.item-card-name {
-    font-weight: 700; font-size: 12.5px; color: var(--brown-dark); margin-bottom: 3px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.item-card-desc {
-    font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 4px;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.item-card-price { font-size: 12px; font-weight: 700; color: var(--gold); }
+/* หมายเหตุ: ธีมสีชมพูทอง (--accent-gold), การ์ด item-card, mini-cal, card-header ฯลฯ
+   ถูกย้ายไปกำหนดไว้ที่ bookingForm.css (v11) แล้วทั้งหมด เพื่อไม่ให้ซ้ำซ้อน/ชนกัน
+   เหลือไว้ในนี้เฉพาะสไตล์ที่ยังไม่มีอยู่ใน CSS ไฟล์หลัก คือ lightbox และ nav-dropdown */
 
 .image-lightbox {
     display: none;
@@ -579,93 +580,6 @@
     line-height: 1;
     font-weight: 400;
     cursor: pointer;
-}
-
-/* ===== Mini Calendar (เลือกวันที่จัดงานในฟอร์ม) ===== */
-.mini-cal-wrap {
-    border: 1.5px solid var(--cream-border-soft);
-    border-radius: 10px;
-    padding: 12px;
-    background: #FFF9FB;
-}
-.mini-cal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--brown-dark, #5C3800);
-    margin-bottom: 8px;
-}
-.mini-cal-nav-btn {
-    background: #FBD0DE;
-    border: none;
-    border-radius: 6px;
-    width: 26px;
-    height: 26px;
-    cursor: pointer;
-    color: #B0345A;
-    font-size: 15px;
-}
-.mini-cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-}
-.mini-cal-day-label {
-    text-align: center;
-    font-size: 11px;
-    color: var(--text-muted);
-    padding: 2px 0;
-}
-.mini-cal-cell {
-    position: relative;
-    aspect-ratio: 1;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    cursor: pointer;
-    border: 1px solid transparent;
-}
-.mini-cal-cell-empty { cursor: default; }
-.mini-cal-cell-free { background: #E9F7EF; border-color: #B7E4C7; }
-.mini-cal-cell-almost { background: #FFF3D6; border-color: #F0CE7E; }
-.mini-cal-cell-booked { background: #FBE3E7; border-color: #E9A9B4; cursor: not-allowed; }
-.mini-cal-cell-past { background: #F0F0F0; border-color: #DADADA; cursor: not-allowed; color: #B0B0B0; }
-.mini-cal-cell-today { outline: 2px solid #E0577F; }
-.mini-cal-cell-selected { outline: 2px solid #B0345A; box-shadow: 0 0 0 2px rgba(224,87,127,0.25); }
-.mini-cal-full-mark {
-    position: absolute;
-    top: 1px;
-    right: 3px;
-    font-size: 9px;
-    color: #B0345A;
-}
-.mini-cal-legend {
-    display: flex;
-    gap: 12px;
-    margin-top: 8px;
-    font-size: 11px;
-    color: var(--text-muted);
-    flex-wrap: wrap;
-}
-.mini-cal-dot {
-    display: inline-block;
-    width: 9px;
-    height: 9px;
-    border-radius: 2px;
-    margin-right: 4px;
-}
-.mini-cal-dot-free { background: #B7E4C7; }
-.mini-cal-dot-almost { background: #F0CE7E; }
-.mini-cal-dot-full { background: #E9A9B4; }
-.mini-cal-selected-text {
-    font-size: 12px;
-    color: #B0345A;
-    margin: 8px 0 0;
-    font-weight: 600;
 }
 
 /* ===== Navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) — ให้ตรงกับหน้า home ===== */
@@ -917,37 +831,6 @@ function onMonkCountInputChange(value) {
     }
 }
 
-function toggleBookingMode(mode) {
-    var packageOnlyBlock = document.getElementById('packageOnlyBlock');
-    var customCeremonyWrap = document.getElementById('customCeremonyWrap');
-    var monkCountGroup = document.getElementById('monkCountGroup');
-    var monkCountField = document.getElementById('monkCountField');
-    var selfInviteRadio = document.getElementById('selfInviteRadio');
-    var selfInviteDiscountNote = document.getElementById('selfInviteDiscountNote');
-
-    if (mode === 'package') {
-        if (packageOnlyBlock) packageOnlyBlock.style.display = 'block';
-        if (customCeremonyWrap) customCeremonyWrap.style.display = 'none';
-
-        if (monkCountGroup) monkCountGroup.style.display = 'none';
-        var checkedPkg = document.querySelector('input[name="ceremony.ceremonyId"]:checked');
-        if (monkCountField && checkedPkg && checkedPkg.dataset.monkcount) {
-            monkCountField.value = checkedPkg.dataset.monkcount;
-        }
-
-        if (selfInviteRadio) selfInviteRadio.value = 'นิมนต์เอง (ลด ฿1,500)';
-        if (selfInviteDiscountNote) selfInviteDiscountNote.style.display = 'inline';
-    } else {
-        if (packageOnlyBlock) packageOnlyBlock.style.display = 'none';
-        if (customCeremonyWrap) customCeremonyWrap.style.display = 'block';
-
-        if (monkCountGroup) monkCountGroup.style.display = 'block';
-
-        if (selfInviteRadio) selfInviteRadio.value = 'นิมนต์เอง';
-        if (selfInviteDiscountNote) selfInviteDiscountNote.style.display = 'none';
-    }
-}
-
 function isInHiddenBranch(el) {
     var node = el.parentElement;
     while (node && node !== document.body) {
@@ -1007,8 +890,15 @@ function handleFormSubmit(form) {
     return true;
 }
 
+/* FIX: เดิมฟังก์ชันนี้ไล่ทุก radio ที่ checked แล้วยิง onchange ของมันตอนโหลดหน้า
+   โดยไม่สนใจว่า radio นั้นถูกซ่อนอยู่หรือไม่ ทำให้ในโหมด "จองแบบระบุเอง"
+   radio แพ็กเกจ "มาตรฐาน" (ซึ่งถูก checked ไว้เป็นค่าเริ่มต้นในโค้ด JSP แต่ถูกซ่อน
+   ด้วย display:none เพราะ #packageOnlyBlock ไม่แสดงในโหมดนี้) ก็ยังถูกเรียก
+   applyPackageMonkCount() อยู่ดี ส่งผลให้ช่อง "จำนวนพระสงฆ์" ถูกเซ็ตเป็น 5
+   ทั้งที่ควรว่างให้ผู้ใช้กรอกเอง จึงต้องข้าม radio ที่อยู่ในกิ่งที่ถูกซ่อนไปเลย */
 function syncInitialToggleStates() {
     document.querySelectorAll('input[type="radio"]:checked').forEach(function(radio) {
+        if (isInHiddenBranch(radio)) return;
         var code = radio.getAttribute('onchange');
         if (code) {
             try { new Function(code).call(radio); } catch (e) {}
