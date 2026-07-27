@@ -17,7 +17,7 @@
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-        <span class="nav-brand-text">บุญมี นำพาจัดงานบุญ</span>
+        <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
@@ -305,7 +305,6 @@
 					class="promotion-banner-img">
 			</div>
     </div>
-    
     
 
     <%-- ========== FOOTER BAR

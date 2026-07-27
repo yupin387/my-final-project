@@ -319,7 +319,4 @@ public class BookingFormController {
         
         return "redirect:/home";
     }
-    //=====================
-    
-  
 }

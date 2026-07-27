@@ -272,8 +272,8 @@ body {
    ========================================================================== */
 .hero-banner {
 	position: relative;
-	height: 280px;
-	background-image: url('/static/images/cover.png');
+	height: 500px;
+	background-image: url('/static/images/Hero-banner/cover.png');
 	background-position: center 30%;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -923,4 +923,3 @@ textarea.form-control {
 }
 .item-card-price { font-size: 12px; font-weight: 700; color: var(--accent-gold); }
 
-/*booking*/

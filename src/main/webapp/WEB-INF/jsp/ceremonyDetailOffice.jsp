@@ -51,7 +51,7 @@
 			style="text-decoration: none;"> <img
 			src="${pageContext.request.contextPath}/static/images/logoo.png"
 			alt="บุญมี รับจัดงานบุญ" class="lotus-icon"> <span
-			class="nav-brand-text">บุญมี นำพาจัดงานบุญ</span>
+			class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
 		</a>
 		<div class="navbar-center">
 			<a href="${pageContext.request.contextPath}/home"
@@ -69,7 +69,6 @@
 							class="nav-dropdown-link">${t.mainName}</a>
 					</c:forEach>
 					<hr class="nav-dropdown-divider">
-
 				</div>
 			</div>
 

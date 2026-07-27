@@ -9,20 +9,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>จองงานขึ้นบ้านใหม่ - ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=9">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=11">
 </head>
 <body>
 
-<%-- ========== NAVBAR ========== --%>
+<%-- ========== NAVBAR (ให้ตรงกับหน้า home / fillBookingForm.jsp: มีเมนู บริการ/แพ็กเกจ และ ปฏิทิน แบบ dropdown) ========== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <div class="lotus-icon">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
         </div>
-        <span class="nav-brand-text">บุญมี รับจัดงานบุญ</span>
+        <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
+
+        <%-- ===== เมนู บริการ/แพ็กเกจ (dropdown) ===== --%>
+        <div class="nav-dropdown-wrap">
+            <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
+                บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <c:forEach var="t" items="${ceremonyTypes}">
+                    <a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
+                        class="nav-dropdown-link">${t.mainName}</a>
+                </c:forEach>
+            </div>
+        </div>
+
+        <%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) ===== --%>
+        <div class="nav-dropdown-wrap">
+            <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item nav-dropdown-toggle">
+                ปฏิทิน <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <a href="${pageContext.request.contextPath}/calendar#calendarSection"
+                    class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
+                <a href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
+                    class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
+            </div>
+        </div>
+
         <a href="${pageContext.request.contextPath}/latestBooking" class="nav-link-item active">การจอง</a>
         <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-link-item">ใบเสนอราคา</a>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
@@ -162,15 +189,19 @@
         <div class="form-card" id="packageOnlyBlock" style="${startInCustomMode ? 'display:none;' : 'display:block;'}">
             <div class="card-header">เลือกแพ็กเกจ</div>
             <div class="card-body">
+                <p style="font-size:12px;color:#B0345A;margin:-4px 0 14px;">
+                    ℹ️ ทุกแพ็กเกจรวมชุดเครื่องเสียง โต๊ะหมู่บูชา และพระประธานไว้ให้แล้ว ทางร้านเป็นผู้จัดเตรียมให้ทั้งหมด
+                </p>
                 <div class="item-card-grid">
                     <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
                         <%-- Ceremony ไม่มีฟิลด์เก็บจำนวนพระ จึงกำหนดตามชื่อแพ็กเกจตามธรรมเนียมของโปรเจกต์
-                             (มาตรฐาน=5, อิ่มบุญ=7, พรีเมียม=9) --%>
+                             (มาตรฐาน=5, อิ่มบุญ=7, พรีเมียม=9) — ใช้ pkgNameSafe กัน NPE เหมือนฟอร์มทำบุญบ้าน --%>
+                        <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
                         <c:choose>
-                            <c:when test="${fn:contains(pkg.ceremonyName, 'พรีเมียม')}">
+                            <c:when test="${fn:contains(pkgNameSafe, 'พรีเมียม')}">
                                 <c:set var="pkgMonkCount" value="9"/>
                             </c:when>
-                            <c:when test="${fn:contains(pkg.ceremonyName, 'อิ่มบุญ')}">
+                            <c:when test="${fn:contains(pkgNameSafe, 'อิ่มบุญ')}">
                                 <c:set var="pkgMonkCount" value="7"/>
                             </c:when>
                             <c:otherwise>
@@ -185,7 +216,8 @@
                                    onchange="applyPackageMonkCount(this)"
                                    ${isPkgSelected ? 'checked' : ''}>
                             <div class="item-card-thumb">
-                                <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}">
+                                <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}"
+                                     onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
                             </div>
                             <div class="item-card-body">
                                 <div class="item-card-name">${pkg.ceremonyName}</div>
@@ -333,7 +365,8 @@
                                     <input type="radio" name="details[${detailIndex}].answer"
                                            value="${item.itemName}" ${loop.first ? 'checked' : ''}>
                                     <div class="item-card-thumb">
-                                        <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/offeringset${(loop.index % 5) + 1}.jpg" alt="${item.itemName}">
+                                        <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/F${(loop.index % 3) + 1}.png" alt="${item.itemName}"
+                                             onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
                                     </div>
                                     <div class="item-card-body">
                                         <div class="item-card-name">${item.itemName}</div>
@@ -352,7 +385,11 @@
             </div>
         </div>
 
-        <%-- 1.4 ชุดภัตตาหารปิ่นโต --%>
+        <%-- 1.4 ชุดภัตตาหารปิ่นโต
+             FIX: เดิมมี textarea "pintoExtraNote" ต่อท้ายบล็อกนี้ ซึ่งไม่มีอยู่ใน
+             fillBookingForm.jsp ต้นแบบ และไม่ได้ผูกกับระบบ details[].question/answer
+             เลย (ไม่มี hidden question id คู่กัน) ทำให้ค่าที่กรอกไม่ถูกบันทึกแบบ
+             เดียวกับคำถามอื่นๆ ในระบบ จึงตัดออกให้โครงสร้างตรงกับต้นแบบทุกจุด --%>
         <div class="form-card">
             <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
             <div class="card-body">
@@ -405,7 +442,8 @@
                                             <input type="radio" name="details[${detailIndex}].answer"
                                                    value="${item.itemName}" ${loop.first ? 'checked' : ''}>
                                             <div class="item-card-thumb">
-                                                <img src="${pageContext.request.contextPath}/static/images/foodimg/food${(loop.index % 5) + 1}.jpg" alt="${item.itemName}">
+                                                <img src="${pageContext.request.contextPath}/static/images/foodimg/food${(loop.index % 5) + 1}.png" alt="${item.itemName}"
+                                                     onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
                                             </div>
                                             <div class="item-card-body">
                                                 <div class="item-card-name">${item.itemName}</div>
@@ -421,12 +459,6 @@
                             <c:set var="detailIndex" value="${detailIndex + 1}"/>
                         </c:if>
                     </c:forEach>
-
-                    <div class="form-group" style="margin-top:10px;">
-                        <label class="form-label">อุปกรณ์/เมนูอื่นๆ เพิ่มเติม</label>
-                        <textarea name="pintoExtraNote" class="form-control" rows="2"
-                                  placeholder="ระบุรายการที่ต้องการเพิ่มเติมนอกเหนือจากชุดที่เลือก เช่น เชิงเทียนไฟฟ้า"></textarea>
-                    </div>
 
                 </div>
 
@@ -461,21 +493,21 @@
     </div>
 </div>
 
-<%-- ========== FOOTER (ธีมเดียวกับหน้า home) ========== --%>
+<%-- ========== FOOTER (ธีมเดียวกับหน้า home / fillBookingForm.jsp) ========== --%>
 <footer class="site-footer">
     <div class="footer-top">
         <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:8px;">
             <rect width="1200" height="8" fill="url(#footerGrad)" />
             <defs>
                 <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#6E1930" />
-                    <stop offset="50%" stop-color="#EC6E96" />
-                    <stop offset="100%" stop-color="#6E1930" />
+                    <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
+                    <stop offset="50%" stop-color="rgba(255,255,255,0.9)" />
+                    <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
                 </linearGradient>
             </defs>
         </svg>
     </div>
-    <div class="container footer-content">
+    <div class="container footer-content footer-content-slim">
         <div class="footer-col footer-brand-col">
             <div class="footer-brand">
                 <div class="lotus-icon">
@@ -484,22 +516,33 @@
                 <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
             </div>
             <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+            <div class="footer-social">
+                <a href="#" class="footer-social-link">📘 Facebook</a>
+                <a href="#" class="footer-social-link">▶️ YouTube</a>
+                <a href="#" class="footer-social-link">💬 LINE OA</a>
+            </div>
         </div>
 			<div class="footer-col footer-contact-col">
 				<h4 class="footer-heading">ติดต่อเรา</h4>
 				<p>📞 โทร. 08X-XXX-XXXX</p>
 				<p>💬 LINE OA: @boonmee</p>
-				<p>✉️ boonmee.booking@gmail.com</p>
+				<p>✉️ boonmee@gmail.com</p>
 				<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
 			</div>
 		</div>
 	</footer>
-	
+
+<%-- ========== IMAGE LIGHTBOX ========== --%>
+<div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
+    <span class="image-lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightboxImg" src="" alt="">
+</div>
+
 <style>
 .item-card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
 }
 .item-card {
     position: relative;
@@ -507,31 +550,37 @@
     flex-direction: column;
     border: 1.5px solid var(--cream-border-soft);
     border-radius: 10px;
-    padding: 12px;
+    padding: 10px;
     cursor: pointer;
     background: #FFFFFF;
     transition: border-color .15s, box-shadow .15s;
 }
 .item-card:hover { border-color: var(--gold-mid); }
-.item-card input[type="radio"] { position: absolute; top: 10px; right: 10px; }
+.item-card input[type="radio"] { position: absolute; top: 8px; right: 8px; }
 .item-card:has(input:checked) {
     border-color: var(--gold-mid);
     box-shadow: 0 0 0 2px rgba(224,87,127,0.22);
 }
 .item-card-thumb {
-    width: 100%; height: 110px;
+    width: 100%; height: 72px;
     overflow: hidden;
-    border-radius: 8px; margin-bottom: 8px;
+    border-radius: 8px; margin-bottom: 6px;
     background: var(--cream-mid);
 }
 .item-card-thumb img {
     width: 100%; height: 100%;
     object-fit: cover; display: block;
+    cursor: zoom-in;
 }
-.item-card-name { font-weight: 700; font-size: 14px; color: var(--brown-dark); margin-bottom: 4px; }
-.item-card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 6px; }
-.item-card-price { font-size: 13px; font-weight: 700; color: var(--gold); }
-
+.item-card-name {
+    font-weight: 700; font-size: 12.5px; color: var(--brown-dark); margin-bottom: 3px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.item-card-desc {
+    font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 4px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.item-card-price { font-size: 12px; font-weight: 700; color: var(--gold); }
 /* ===== Mini Calendar (เลือกวันที่จัดงานในฟอร์ม) ===== */
 .mini-cal-wrap {
     border: 1.5px solid var(--cream-border-soft);
@@ -618,6 +667,83 @@
     margin: 8px 0 0;
     font-weight: 600;
 }
+
+/* ===== Image lightbox (ขยายดูรูปสินค้า/แพ็กเกจ) ===== */
+.image-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.78);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    cursor: zoom-out;
+}
+.image-lightbox img {
+    max-width: 90vw;
+    max-height: 88vh;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    cursor: default;
+}
+.image-lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 30px;
+    color: #FFFFFF;
+    font-size: 34px;
+    line-height: 1;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+/* ===== Navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) — ให้ตรงกับหน้า home ===== */
+.nav-dropdown-wrap {
+    position: relative;
+    display: inline-block;
+}
+.nav-dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+.nav-caret {
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+.nav-dropdown-wrap:hover .nav-caret {
+    transform: rotate(180deg);
+}
+.nav-dropdown-panel {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: var(--white, #fff);
+    border: 1px solid var(--gold-pale, #e8cc70);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
+    padding: 8px 0;
+    z-index: 100;
+}
+.nav-dropdown-wrap:hover .nav-dropdown-panel,
+.nav-dropdown-wrap:focus-within .nav-dropdown-panel {
+    display: block;
+}
+.nav-dropdown-link {
+    display: block;
+    padding: 10px 18px;
+    font-size: 0.92rem;
+    color: var(--brown-dark, #3d2500);
+    text-decoration: none;
+    white-space: nowrap;
+}
+.nav-dropdown-link:hover {
+    background: var(--gold-pale, #fff8e1);
+}
 </style>
 
 <script>
@@ -671,6 +797,24 @@ function toggleWatOwnField(id, show) {
     var el = document.getElementById(id);
     if (el) el.style.display = show ? 'block' : 'none';
 }
+
+function openLightbox(imgEl) {
+    var lb = document.getElementById('imageLightbox');
+    var lbImg = document.getElementById('lightboxImg');
+    if (!lb || !lbImg) return;
+    lbImg.src = imgEl.src;
+    lbImg.alt = imgEl.alt || '';
+    lb.style.display = 'flex';
+}
+
+function closeLightbox() {
+    var lb = document.getElementById('imageLightbox');
+    if (lb) lb.style.display = 'none';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+});
 
 function toggleWatDetailBlock(id, show) {
     var el = document.getElementById(id);

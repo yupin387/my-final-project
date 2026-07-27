@@ -17,7 +17,7 @@
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-        <span class="nav-brand-text">บุญมี นำพาจัดงานบุญ</span>
+        <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
@@ -141,7 +141,6 @@
     <div class="cd-curiosity-side-img right">
         <img src="${pageContext.request.contextPath}/static/images/img23.png" alt="เณรน้อย">
     </div>
-
 </section>
 
 <%-- ========== รู้จักงานทำบุญขึ้นบ้านใหม่: แบนเนอร์ภาพ + ไล่สีชมพู ========== --%>
@@ -263,7 +262,7 @@
 	                    ดูรายละเอียดแพ็กเกจนี้ ▾
 	                </button>
 	
-	                <%-- ปุ่มจอง --%>
+	                <%-- ปุ่มจอง — โหมดแพ็กเกจ: ไม่ส่ง custom=true จึงเข้าโหมดแพ็กเกจใน fillBookingForm2.jsp --%>
 	                <a href="${pageContext.request.contextPath}/booking2?ceremonyId=${p.ceremonyId}" 
 	                   class="cd-btn-select-package">เลือกจองแพ็กเกจนี้</a>
 	
@@ -303,13 +302,18 @@
     </div>
     
     
-    <%-- ========== FOOTER BAR ========== --%>
+    <%-- ========== FOOTER BAR
+         FIX: เดิมลิงก์นี้ส่ง ceremonyId มาแทน custom=true ทำให้ fillBookingForm2.jsp
+         ไม่รู้ว่าอยู่ในโหมด "จองแบบระบุเอง" (startInCustomMode ตรวจจาก param.custom
+         เท่านั้น) เลยเข้าโหมดแพ็กเกจเสมอไม่ว่าจะกดปุ่มไหน ตอนนี้แก้ให้ส่ง custom=true
+         และตัดข้อความปุ่มให้ตรงกับ fillBookingForm.jsp ต้นแบบ (ไม่ต่อชื่อพิธีท้ายปุ่ม)
+         ========== --%>
     <div class="cd-footer">
         <div class="cd-footer-inner">
             <div class="cd-footer-note">
                 <span>ไม่อยากเลือกแพ็กเกจสำเร็จรูป? กรอกรายละเอียดเองได้</span>
             </div>
-            <a href="${pageContext.request.contextPath}/booking2?ceremonyId=${ceremony.ceremonyId}${not empty selectedDates ? '&dates=' : ''}${selectedDates}" class="cd-btn-book">จองเเบบระบุเอง${mainType}</a>
+            <a href="${pageContext.request.contextPath}/booking2?custom=true${not empty selectedDates ? '&dates=' : ''}${selectedDates}" class="cd-btn-book">จองแบบระบุเอง</a>
         </div>
     </div>
 

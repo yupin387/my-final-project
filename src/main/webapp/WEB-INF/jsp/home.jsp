@@ -137,7 +137,7 @@
 			style="text-decoration: none;">
 			<img src="${pageContext.request.contextPath}/static/images/logoo.png"
 				alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-			<span class="nav-brand-text">บุญมี นำพาจัดงานบุญ</span>
+			<span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
 		</a>
 		<div class="navbar-center">
 			<a href="${pageContext.request.contextPath}/home"
@@ -245,12 +245,11 @@
 		<div class="hero-overlay"></div>
 		<div class="hero-content">
 			<h1 class="hero-quote">"จัดงานบุญให้ง่ายขึ้น<br>มีทีมงานช่วยดูแล"</h1>
-			<p class="hero-desc">มีทีมงานคอยช่วยดูแลเรื่องพิธีสงฆ์
-				ตั้งแต่การนิมนต์พระไปจนถึงวันจัดงานจริง<br>
+			<p class="hero-desc">มีทีมงานคอยดูแลทุกขั้นตอนของพิธีสงฆ์<br>
+            ตั้งแต่การนิมนต์พระ ไปจนถึงการจัดงานอย่างครบครัน<br>
 
 			<div style="display: flex; gap: 14px; justify-content: flex-start; flex-wrap: wrap;">
 				<a href="#stepsConditionsSection" class="hero-cta">ดูขั้นตอนและเงื่อนไขการจอง</a>
-
 			</div>
 			<div class="hero-divider"></div>
 		</div>
@@ -439,31 +438,36 @@
 					</div>
 				</div>
 
-				<%-- ===== รีวิวจริงจากลูกค้า — ดึงจากฐานข้อมูลผ่าน ${recentReviews} (ReviewService#getTop2RecentReviews)
+                <%-- ===== รีวิวจริงจากลูกค้า — ดึงจากฐานข้อมูลผ่าน ${recentReviews} (ReviewService#getTop2RecentReviews)
 				     Controller ต้องมีบรรทัดนี้ในเมธอดที่ return หน้า home ก่อนถึงจะแสดงผลได้:
 				         model.addAttribute("recentReviews", reviewService.getTop2RecentReviews());
 				     ===== --%>
 				<div class="why-review-strip">
-					<c:forEach var="r" items="${recentReviews}">
-						<div class="review-card">
-							<div class="review-stars">
-								<c:forEach begin="1" end="${r.rating}">★</c:forEach>
-								<c:forEach begin="1" end="${5 - r.rating}">☆</c:forEach>
-							</div>
-							<p class="review-text">"${r.comment}"</p>
-							<div class="reviewer-name">
-								${r.bookingForm.member.memberFirstName} ${r.bookingForm.member.memberLastName}
-							</div>
-							<div class="review-event-type">
-								${r.bookingForm.ceremonyType.mainName}
-							</div>
-						</div>
-					</c:forEach>
-
-					<c:if test="${empty recentReviews}">
-						<p style="text-align:center; color:#A08840; width:100%;">ยังไม่มีรีวิวในขณะนี้</p>
-					</c:if>
-				</div>
+				<c:forEach var="r" items="${recentReviews}">
+				    <div class="review-card">
+				        <div class="reviewer-name">
+				            ${r.bookingForm.member.memberFirstName} ${r.bookingForm.member.memberLastName}
+				        </div>
+				        <div class="review-stars">
+				            <c:forEach begin="1" end="${r.rating}">★</c:forEach>
+				            <c:forEach begin="1" end="${5 - r.rating}">☆</c:forEach>
+				        </div>
+			
+				        <div class="review-event-badge">
+				            งาน: ${r.bookingForm.ceremony.ceremonyType}
+				        </div>
+			
+				        <p class="review-text">"${r.comment}"</p>
+			
+				        <c:if test="${not empty r.reviewImage}">
+				            <div class="review-img-wrap">
+				                <img src="${pageContext.request.contextPath}/uploads/review/${r.reviewImage}"
+				                     alt="รูปรีวิว" class="review-img">
+				            </div>
+				        </c:if>
+				    </div>
+				</c:forEach>
+              </div>
 			</div>
 
 		</div>
