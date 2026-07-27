@@ -6,18 +6,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>อัปเดตสถานะงาน - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/updateStatus.css?v=2">
+    <title>อัปเดตสถานะงาน - บุญมีนำพา จัดงานบุญ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/updateStatus.css?v=3">
 </head>
 <body>
 
     <%-- ===== NAVBAR ===== --%>
-    <div class="navbar">
-        <div class="navbar-brand-wrap">
-            <div class="navbar-lotus">🪷</div>
-            <span class="navbar-title">ระบบรับจัดงานบุญ</span>
-        </div>
+    <nav class="navbar">
+        <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/staff/assignments">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
+            <span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
+        </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
                 <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item active">รายการงาน</a>
@@ -33,7 +34,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
 
     <%-- ===== CONTENT ===== --%>
     <div class="page-wrapper">
@@ -97,6 +98,19 @@
 
         </div>
     </div>
+
+    <%-- ===== FOOTER ===== --%>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                     alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+                <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+            </div>
+            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างานและทีมงาน</p>
+        </div>
+   
+    </footer>
 
     <script src="${pageContext.request.contextPath}/static/js/updateStatus.js"></script>
 </body>

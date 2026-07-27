@@ -1,116 +1,134 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
-/* ===== CSS Variables (ตรงกับ home.css) ===== */
+/* ===== CSS Variables (pink-gold theme, matched to bookingList.css) ===== */
 :root {
-    --gold:          #C9960C;
-    --gold-mid:      #D4A017;
-    --gold-light:    #E8BB3A;
-    --gold-pale:     #F5D97A;
-    --gold-glow:     #FDE68A;
+    --gold:          #E0577F;
+    --gold-mid:      #EC6E96;
+    --gold-light:    #F49CB9;
+    --gold-pale:     #FBD0DE;
+    --gold-glow:     #FFE3EC;
 
-    --cream:         #FFFBF0;
-    --cream-warm:    #FFF8E1;
-    --cream-mid:     #FDF3D0;
-    --cream-deep:    #F5E6B0;
-    --cream-border:  #E8CC70;
-    --cream-border-soft: #EDD98A;
+    --cream:         #FFFFFF;
+    --cream-warm:    #FFF6F9;
+    --cream-mid:     #FDEEF3;
+    --cream-deep:    #F8DCE6;
+    --cream-border:  #F3C4D5;
+    --cream-border-soft: #F6D4E1;
 
     --white:         #FFFFFF;
+    --off-white:     #FFF9FB;
 
-    --text-dark:     #2C1F00;
-    --text-mid:      #5A4000;
-    --text-body:     #6B5200;
-    --text-muted:    #A08840;
-    --text-light:    #BFA060;
+    --text-dark:     #1A1A1A;
+    --text-mid:      #333333;
+    --text-body:     #444444;
+    --text-muted:    #777777;
+    --text-light:    #999999;
 
-    --brown-dark:    #4A2E00;
-    --brown-mid:     #7A5200;
+    --brown-dark:    #1A1A1A;
+    --brown-mid:     #3A3A3A;
 
-    --shadow-gold:   rgba(180, 130, 0, 0.12);
-    --shadow-warm:   rgba(100, 70, 0, 0.08);
+    --shadow-gold:   rgba(224, 87, 127, 0.16);
+    --shadow-warm:   rgba(224, 87, 127, 0.10);
+
+    /* สีทองจริง ใช้คู่กับชมพูสำหรับธีม "ชมพู-ทอง" ให้ตรงกับหน้ารายการจอง */
+    --accent-gold:      #D9A441;
+    --accent-gold-mid:  #E8C878;
+    --accent-gold-pale: #F7E3B0;
+
+    /* ===== Footer colors (same gradient as navbar) ===== */
+    --footer-grad-1: #C7405F;
+    --footer-grad-2: #D94F76;
+    --footer-grad-3: #E0577F;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: var(--cream);
+    background-color: var(--cream-warm);
     color: var(--text-dark);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* ===== NAVBAR (เหมือน home) ===== */
+/* ========== NAVBAR ========== */
 .navbar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 0 36px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-mid);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 68px;
+    min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
 }
 
+/* วิ้งๆ สีทองด้านบนแถบเมนู */
 .navbar::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
-/* ===== Brand group: icon + title อยู่ติดกันชิดซ้าย ===== */
+/* Brand */
 .navbar-brand-wrap {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.navbar-lotus {
-    background: linear-gradient(135deg, #7A5200, #5C3800);
-    width: 44px;
-    height: 44px;
+.navbar .lotus-icon,
+.navbar-brand-wrap .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 76px;
+    height: 76px;
+    max-width: 76px;
+    max-height: 76px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    font-size: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
+    object-fit: cover;
 }
 
 .navbar-title {
-    color: var(--gold-pale);
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 20px;
+    color: #FFFFFF;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 32px;
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
-
 
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
+    margin-left: auto;
 }
 
 .navbar-menu {
     display: flex;
     gap: 2px;
     align-items: center;
+    margin-right: 16px;
 }
 
 .nav-item {
-    color: rgba(253, 237, 160, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -118,66 +136,67 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 .nav-item:hover {
-    background: rgba(212, 160, 23, 0.18);
-    color: var(--gold-pale);
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
 }
 
 .nav-item.active {
-    background: var(--gold-mid);
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: var(--gold);
     font-weight: 700;
+    text-shadow: none;
 }
 
-/* ===== User Info ===== */
+/* User pill */
 .user-info {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    padding: 6px 16px 6px 6px;
+    border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1.5px solid rgba(212, 160, 23, 0.6);
-    padding: 6px 14px 6px 6px;
-    border-radius: 50px;
-    white-space: nowrap;
-    position: relative;
+    color: #FFFFFF;
     cursor: pointer;
     transition: background 0.2s;
+    position: relative;
+    white-space: nowrap;
 }
 
-.user-info:hover {
-    background: rgba(255, 255, 255, 0.14);
-}
+.user-info:hover { background: rgba(255, 255, 255, 0.25); }
 
 .user-avatar {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    background: #FFFFFF;
+    color: var(--gold);
     width: 34px;
     height: 34px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15px;
     font-weight: 800;
+    font-size: 1rem;
     flex-shrink: 0;
 }
 
-.user-name { color: var(--gold-pale); font-size: 14px; font-weight: 600; }
-.arrow { color: var(--gold-mid); font-size: 12px; margin-left: 2px; }
+.user-name { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
+.arrow { color: rgba(255, 255, 255, 0.85); font-size: 12px; margin-left: 2px; }
 
-/* ===== Dropdown ===== */
+/* Dropdown */
 .dropdown-menu {
     display: none;
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1px solid var(--cream-border);
+    border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(100, 70, 0, 0.14);
+    box-shadow: 0 8px 28px var(--shadow-gold);
     z-index: 99999;
     overflow: hidden;
 }
@@ -188,161 +207,87 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 13px 18px;
+    padding: 13px 20px;
+    font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-mid);
     text-decoration: none;
-    transition: background 0.2s;
+    background: var(--white);
     border-bottom: 1px solid var(--cream-mid);
+    transition: background 0.2s;
+    text-align: left;
 }
 
-.dropdown-item:last-child { border-bottom: none; }
-.dropdown-item:hover { background: var(--cream-warm); }
-.dropdown-item.danger { color: #c0392b; }
-.dropdown-item.danger:hover { background: #fff5f5; }
+.dropdown-item:last-child  { border-bottom: none; }
+.dropdown-item:hover       { background: var(--cream-warm); }
+.dropdown-item.danger      { color: #c0392b; }
+.dropdown-item.danger:hover{ background: #fff5f5; }
 
-/* ===== Page Wrapper ===== */
+/* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     flex: 1;
-    padding: 36px 40px 72px;
-    width: 500%;           /* ปรับจาก 92% เป็น 95% เพื่อให้กินพื้นที่มากขึ้น */
-    max-width: 1400px;    /* ปรับจาก 1100px เป็น 1400px (หรือค่าที่ต้องการ) */
+    padding: 36px 40px 60px;
+    width: 92%;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
-
-/* ===== List Header ===== */
+/* ========== LIST HEADER ========== */
 .list-header {
+    margin-bottom: 32px;
+    text-align: center;
+    position: relative;
+}
+
+.section-ornament {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 28px;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+.ornament-line {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid));
+}
+.ornament-line.right {
+    background: linear-gradient(90deg, var(--accent-gold-mid), transparent);
+}
+.ornament-diamond {
+    width: 10px; height: 10px;
+    background: var(--accent-gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+.ornament-diamond-sm {
+    width: 5px; height: 5px;
+    background: var(--accent-gold-pale);
+    transform: rotate(45deg);
+    flex-shrink: 0;
 }
 
 .list-header h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 24px;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 2rem;
     color: var(--brown-dark);
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .list-header p { font-size: 13px; color: var(--text-muted); }
 
-/* ===== Content Card ===== */
-.content-card {
-    background: var(--white);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1.5px solid var(--cream-border);
-    box-shadow: 0 4px 24px var(--shadow-warm);
+.gold-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), var(--accent-gold), var(--accent-gold-mid), transparent);
+    border-radius: 2px;
+    margin: 10px auto 0;
 }
 
-/* ===== Card Header Bar ===== */
-.card-header-bar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 100%);
-    padding: 16px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--gold-pale);
-    font-weight: 600;
-    font-size: 15px;
-    border-bottom: 2px solid var(--gold-mid);
-}
-
-.header-count { font-size: 13px; color: rgba(253, 237, 160, 0.7); }
-
-/* ===== Table ===== */
-table { width: 100%; border-collapse: collapse; }
-
-th {
-    background: var(--cream-warm);
-    color: var(--brown-dark);
-    padding: 16px 18px;
-    text-align: left;
-    font-size: 13px;
-    font-weight: 700;
-    border-bottom: 2px solid var(--cream-border);
-}
-
-td {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--cream-mid);
-    font-size: 14px;
-    vertical-align: middle;
-    color: var(--text-body);
-}
-
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--cream-warm); }
-
-/* ===== Assign ID ===== */
-.assign-id {
-    color: var(--brown-mid);
-    font-weight: 700;
-    font-family: monospace;
-    font-size: 13px;
-}
-
-/* ===== Status Badge ===== */
-.status-badge {
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: 600;
-    display: inline-block;
-}
-
-.status-Assigned {
-    background: #e3f2fd;
-    color: #1976d2;
-    border: 1px solid #90caf9;
-}
-
-.status-Completed {
-    background: #e8f5e9;
-    color: #2e7d32;
-    border: 1px solid #a5d6a7;
-}
-
-/* ===== Ceremony Name ===== */
-.ceremony-name {
-    font-weight: 600;
-    color: var(--text-dark);
-}
-
-/* ===== Action Button ===== */
-.btn-view {
-    color: var(--brown-mid);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 13px;
-    padding: 6px 16px;
-    border: 1.5px solid var(--gold-mid);
-    border-radius: 8px;
-    transition: all 0.2s;
-    display: inline-block;
-    background: var(--white);
-}
-
-.btn-view:hover {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    border-color: var(--gold-light);
-    box-shadow: 0 3px 10px rgba(180, 130, 0, 0.2);
-}
-
-.empty-state {
-    text-align: center;
-    padding: 50px;
-    color: var(--text-muted);
-    font-size: 15px;
-}
-
-/* เพิ่มใน staffAssignmentList.css */
-
+/* ========== FLASH BANNER ========== */
 .flash-banner {
     padding: 14px 20px;
     margin-bottom: 20px;
@@ -363,4 +308,253 @@ tr:hover td { background: var(--cream-warm); }
     background: #fee2e2;
     color: #991b1b;
     border: 1.5px solid #fca5a5;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== CONTENT CARD ========== */
+.content-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1.5px solid var(--accent-gold);
+    box-shadow: 0 6px 32px var(--shadow-warm);
+    position: relative;
+}
+
+.content-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+        transparent,
+        var(--accent-gold-pale) 20%,
+        var(--accent-gold) 50%,
+        var(--accent-gold-pale) 80%,
+        transparent
+    );
+}
+
+.card-header-bar {
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 16px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 16px;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    border-bottom: 2px solid var(--accent-gold-mid);
+}
+
+.header-count {
+    font-size: 13px;
+    color: #FFFFFF;
+    opacity: 0.85;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* ========== TABLE ========== */
+table { width: 100%; border-collapse: collapse; }
+
+th {
+    background: var(--cream-warm);
+    color: var(--brown-dark);
+    padding: 15px 18px;
+    text-align: left;
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--accent-gold-pale);
+}
+
+td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--cream-mid);
+    font-size: 14px;
+    vertical-align: middle;
+    color: var(--text-body);
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--cream-warm); transition: background 0.15s; }
+
+/* ===== Assign ID ===== */
+.assign-id {
+    color: var(--gold);
+    font-weight: 700;
+    font-family: monospace;
+    font-size: 13px;
+    background: var(--cream-mid);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--accent-gold-mid);
+}
+
+/* ===== Ceremony Name ===== */
+.ceremony-name {
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* ===== Status Badge ===== */
+.status-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-Assigned {
+    background: #eceff1;
+    color: #546e7a;
+    border: 1px solid #b0bec5;
+}
+
+.status-Preparing {
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffcc80;
+}
+
+.status-In_Progress {
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #90caf9;
+}
+
+.status-Completed {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+/* ========== ACTION BUTTON ========== */
+.btn-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1.5px solid var(--accent-gold);
+    background: var(--cream-warm);
+    color: var(--accent-gold);
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-view:hover {
+    background: var(--cream-mid);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ========== EMPTY STATE ========== */
+.empty-state {
+    text-align: center;
+    padding: 70px 20px;
+    color: var(--text-muted);
+    font-size: 15px;
+}
+
+/* ========== FOOTER ========== */
+.site-footer {
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    color: rgba(255, 255, 255, 0.92);
+    margin-top: auto;
+    border-top: 3px solid var(--accent-gold-pale);
+    box-shadow: 0 -6px 18px rgba(224, 87, 127, 0.25);
+    position: relative;
+    z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 24px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.site-footer .lotus-icon,
+.footer-lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.footer-brand-text {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.footer-tagline {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 12px 20px 18px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.75);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+    .page-wrapper { padding: 24px 20px 48px; width: 100%; }
+    .navbar { padding: 0 16px; }
+    th, td { padding: 12px 12px; font-size: 13px; }
+}
+
+@media (max-width: 768px) {
+    .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
+    .navbar-menu { display: none; }
+    .navbar-title { font-size: 22px; }
+    .navbar .lotus-icon,
+    .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
+    .list-header { flex-direction: column; }
+    .list-header h1 { font-size: 1.5rem; }
+    table { font-size: 12px; }
+    .btn-view { padding: 6px 10px; font-size: 12px; }
+    .footer-content { flex-direction: column; align-items: flex-start; }
 }

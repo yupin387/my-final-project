@@ -5,10 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายการคำถามแต่ละพิธี - บุญมี รับจัดงานบุญ</title>
+    <title>รายการคำถามแต่ละพิธี - บุญมีนำพา จัดงานบุญ</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/questionList.css">
 </head>
 <body>
@@ -17,8 +17,8 @@
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
+             alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <div class="navbar-menu">
@@ -175,8 +175,8 @@
     <div class="footer-content">
         <div class="footer-brand">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+                 alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
         <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>

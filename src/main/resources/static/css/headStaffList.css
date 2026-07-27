@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
 /* ===== CSS Variables (matched to bookingList.css pink theme) ===== */
 :root {
@@ -30,6 +30,11 @@
     --shadow-gold:   rgba(224, 87, 127, 0.16);
     --shadow-warm:   rgba(224, 87, 127, 0.10);
 
+    /* สีทองจริง ใช้กับ ornament/หัวข้อ/ปุ่ม ให้ตรงกับ bookingList.css */
+    --accent-gold:      #D9A441;
+    --accent-gold-mid:  #E8C878;
+    --accent-gold-pale: #F7E3B0;
+
     /* ===== Footer colors (same gradient as navbar, matches bookingList.css) ===== */
     --footer-grad-1: #C7405F;
     --footer-grad-2: #D94F76;
@@ -54,7 +59,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-pale);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     position: sticky;
     top: 0;
     z-index: 10000;
@@ -63,12 +69,13 @@ body {
     box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
 }
 
+/* วิ้งๆ สีทองด้านบนแถบเมนู */
 .navbar::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .navbar-brand {
@@ -99,10 +106,9 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 30px;
-    font-weight: 800;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 32px;
+    font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3);
@@ -189,7 +195,7 @@ body {
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1px solid var(--cream-border);
+    border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
     min-width: 175px;
     box-shadow: 0 8px 28px var(--shadow-gold);
@@ -257,6 +263,7 @@ body {
 
 .list-header-text { text-align: left; }
 
+/* วิ้งๆ ของ ornament ให้เป็นสีทอง (ไม่ใช่ชมพู) */
 .section-ornament {
     display: flex;
     align-items: center;
@@ -265,15 +272,15 @@ body {
 }
 .ornament-line {
     flex: 1; max-width: 80px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-mid));
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid));
 }
-.ornament-line.right { background: linear-gradient(90deg, var(--gold-mid), transparent); }
-.ornament-diamond    { width: 10px; height: 10px; background: var(--gold-mid); transform: rotate(45deg); flex-shrink: 0; }
-.ornament-diamond-sm { width: 5px;  height: 5px;  background: var(--gold-pale); transform: rotate(45deg); flex-shrink: 0; }
+.ornament-line.right { background: linear-gradient(90deg, var(--accent-gold-mid), transparent); }
+.ornament-diamond    { width: 10px; height: 10px; background: var(--accent-gold); transform: rotate(45deg); flex-shrink: 0; }
+.ornament-diamond-sm { width: 5px;  height: 5px;  background: var(--accent-gold-pale); transform: rotate(45deg); flex-shrink: 0; }
 
 .list-header h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.8rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 2rem;
     color: var(--brown-dark);
     font-weight: 700;
     margin-bottom: 4px;
@@ -281,19 +288,20 @@ body {
 
 .list-header p { font-size: 13px; color: var(--text-muted); }
 
+/* เส้นทองใต้หัวข้อ */
 .gold-line {
-    width: 50px; height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-light), var(--gold-mid), transparent);
+    width: 55px; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), var(--accent-gold), var(--accent-gold-mid), transparent);
     border-radius: 2px;
     margin: 8px 0 0;
 }
 
-/* ========== ADD BUTTON ========== */
+/* ========== ADD BUTTON (สีทอง) ========== */
 .btn-add {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-mid));
     color: #FFFFFF;
     text-decoration: none;
     padding: 11px 24px;
@@ -302,14 +310,15 @@ body {
     font-weight: 700;
     font-family: 'Sarabun', sans-serif;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px var(--shadow-gold);
+    box-shadow: 0 4px 14px rgba(217, 164, 65, 0.35);
     white-space: nowrap;
     flex-shrink: 0;
 }
 .btn-add:hover {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: linear-gradient(135deg, var(--accent-gold-mid), var(--accent-gold-pale));
+    color: var(--brown-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(224, 87, 127, 0.3);
+    box-shadow: 0 6px 20px rgba(217, 164, 65, 0.45);
 }
 
 /* ========== CONTENT CARD ========== */
@@ -317,7 +326,7 @@ body {
     background: var(--white);
     border-radius: 20px;
     overflow: hidden;
-    border: 1.5px solid var(--cream-border-soft);
+    border: 1.5px solid var(--accent-gold);
     box-shadow: 0 6px 32px var(--shadow-warm);
     position: relative;
 }
@@ -327,7 +336,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0; height: 3px;
     background: linear-gradient(90deg,
-        transparent, var(--gold-pale) 20%, var(--gold-mid) 50%, var(--gold-pale) 80%, transparent);
+        transparent, var(--accent-gold-pale) 20%, var(--accent-gold) 50%, var(--accent-gold-pale) 80%, transparent);
 }
 
 /* ========== CARD HEADER BAR ========== */
@@ -338,10 +347,10 @@ body {
     justify-content: space-between;
     align-items: center;
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-weight: 600;
-    font-size: 15px;
-    border-bottom: 2px solid var(--gold-pale);
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-weight: 700;
+    font-size: 16px;
+    border-bottom: 2px solid var(--accent-gold-mid);
 }
 .header-count { font-size: 13px; color: #FFFFFF; opacity: 0.85; font-family: 'Sarabun', sans-serif; }
 
@@ -356,7 +365,7 @@ thead th {
     font-family: 'Noto Serif Thai', serif;
     font-size: 14px;
     font-weight: 700;
-    border-bottom: 2px solid var(--cream-border);
+    border-bottom: 2px solid var(--accent-gold-pale);
 }
 
 tbody td {
@@ -432,7 +441,7 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
 .swal2-icon { display: none !important; }
 
 .swal-btn-confirm {
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-mid));
     color: #FFFFFF;
     border: none;
     padding: 10px 28px;
@@ -448,7 +457,7 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
 .swal-btn-cancel {
     background: var(--white);
     color: var(--brown-mid);
-    border: 2px solid var(--gold-mid);
+    border: 2px solid var(--accent-gold-mid);
     padding: 10px 28px;
     border-radius: 8px;
     font-size: 15px; font-weight: 700;
@@ -470,10 +479,18 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
-    border-top: 3px solid var(--gold-pale);
+    border-top: 3px solid var(--accent-gold-pale);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .footer-content {
@@ -512,8 +529,8 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
 }
 
 .footer-brand-text {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.05rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -542,7 +559,7 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
 @media (max-width: 768px) {
     .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
     .navbar-menu { display: none; }
-    .navbar-title { font-size: 20px; }
+    .navbar-title { font-size: 22px; }
     .navbar .lotus-icon,
     .navbar-brand .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     .list-header { flex-direction: column; gap: 16px; align-items: flex-start; }

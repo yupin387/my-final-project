@@ -5,18 +5,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>แก้ไขข้อมูลส่วนตัว - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editStaffProfile.css?v=2">
+    <title>แก้ไขข้อมูลส่วนตัว - บุญมีนำพา จัดงานบุญ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editStaffProfile.css?v=3">
 </head>
 <body>
 
-    <%-- ===== NAVBAR ===== --%>
+    <%-- ===== NAVBAR (เหมือนหน้า list) ===== --%>
     <nav class="navbar-custom">
-        <div class="navbar-brand-wrap">
-            <div class="navbar-lotus">🪷</div>
-            <span class="navbar-title">ระบบรับจัดงานบุญ</span>
-        </div>
+        <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/staff/assignments" style="text-decoration:none;">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา รับจัดงานบุญ" class="navbar-lotus">
+            <span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
+        </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
                 <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">รายการงาน</a>
@@ -39,6 +40,11 @@
         <div class="profile-card">
 
             <div class="card-header">
+                <div class="header-ornament">
+                    <div class="orn-line"></div>
+                    <div class="orn-diamond"></div>
+                    <div class="orn-line right"></div>
+                </div>
                 <div class="card-header-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
                 <h2>แก้ไขข้อมูลส่วนตัว</h2>
                 <p>อัปเดตข้อมูลชื่อ เบอร์โทร และรหัสผ่านของคุณ</p>
@@ -99,7 +105,20 @@
         </div>
     </div>
 
+    <%-- ===== FOOTER (เหมือนหน้า list) ===== --%>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                     alt="บุญมีนำพา รับจัดงานบุญ" class="navbar-lotus footer-lotus-icon">
+                <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+            </div>
+            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างานและทีมงาน</p>
+        </div>
+   
+    </footer>
+
     <script src="${pageContext.request.contextPath}/static/js/updateStatus.js"></script>
-    
+
 </body>
 </html>

@@ -1,47 +1,71 @@
-/* ==========================================================================
-   GLOBAL
-   ========================================================================== */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
+/* ===== CSS Variables (pink-gold theme, matched to itemList/bookingList/staffAssignmentList) ===== */
 :root {
-    --gold-mid:          #D4A017;
-    --gold-light:        #E8BB3A;
-    --gold-pale:         #F5D97A;
-    --cream:             #FFFBF0;
-    --cream-warm:        #FFF8E1;
-    --cream-mid:         #FDF3D0;
-    --cream-border:      #E8CC70;
-    --cream-border-soft: #EDD98A;
-    --text-dark:         #2C1F00;
-    --text-mid:          #5A4000;
-    --text-muted:        #A08840;
-    --brown-dark:        #4A2E00;
-    --brown-mid:         #7A5200;
+    --gold:          #E0577F;
+    --gold-mid:      #EC6E96;
+    --gold-light:    #F49CB9;
+    --gold-pale:     #FBD0DE;
+    --gold-glow:     #FFE3EC;
+
+    --cream:         #FFFFFF;
+    --cream-warm:    #FFF6F9;
+    --cream-mid:     #FDEEF3;
+    --cream-border:  #F3C4D5;
+    --cream-border-soft: #F6D4E1;
+
+    --white:         #FFFFFF;
+
+    --text-dark:     #1A1A1A;
+    --text-mid:      #333333;
+    --text-body:     #444444;
+    --text-muted:    #777777;
+    --text-light:    #999999;
+
+    --brown-dark:    #1A1A1A;
+    --brown-mid:     #3A3A3A;
+
+    /* สีทองจริง ใช้คู่กับชมพูสำหรับธีม "ชมพู-ทอง" */
+    --accent-gold:      #D9A441;
+    --accent-gold-mid:  #E8C878;
+    --accent-gold-pale: #F7E3B0;
+
+    --shadow-gold:   rgba(224, 87, 127, 0.16);
+    --shadow-warm:   rgba(224, 87, 127, 0.10);
+
+    /* ===== Footer colors (same gradient as navbar) ===== */
+    --footer-grad-1: #C7405F;
+    --footer-grad-2: #D94F76;
+    --footer-grad-3: #E0577F;
 }
 
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
+
 body {
-    background-color: var(--cream);
+    background-color: var(--cream-warm);
+    color: var(--text-dark);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 /* ==========================================================================
-   NAVBAR
+   NAVBAR (เหมือนหน้า list)
    ========================================================================== */
 .navbar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
-    padding: 0 36px;
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-mid);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
+    min-height: 92px;
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 68px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(60, 35, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
 }
 
 .navbar::before {
@@ -49,38 +73,41 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
-.navbar-brand-wrap {
+.navbar-brand {
     display: flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
 }
 
-.lotus-icon {
-    background: linear-gradient(135deg, #7A5200, #5C3800);
-    width: 44px;
-    height: 44px;
+.navbar .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 76px;
+    height: 76px;
+    max-width: 76px;
+    max-height: 76px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 0 10px rgba(212, 160, 23, 0.3);
+    font-size: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
+    object-fit: cover;
 }
 
-.nav-brand-text {
-    color: var(--gold-pale);
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 22px;
+.navbar-title {
+    color: #FFFFFF;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 32px;
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .navbar-right {
@@ -96,7 +123,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(253, 237, 160, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -104,98 +131,94 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
-.nav-item:hover  { background: rgba(212, 160, 23, 0.18); color: var(--gold-pale); }
-.nav-item.active { background: var(--gold-mid); color: var(--brown-dark); font-weight: 700; }
-
-/* ===== User Profile Pill ===== */
-.dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
+.nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
+.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
 
 .user-info {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.08);
-    padding: 6px 14px 6px 6px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    padding: 6px 16px 6px 6px;
     border-radius: 50px;
-    border: 1.5px solid rgba(212, 160, 23, 0.6);
+    white-space: nowrap;
+    position: relative;
     cursor: pointer;
     transition: background 0.2s;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.14); }
+.user-info:hover { background: rgba(255, 255, 255, 0.25); }
 
 .user-avatar {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    width: 34px;
-    height: 34px;
+    background: #FFFFFF;
+    color: var(--gold);
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 16px;
     font-weight: 800;
-    font-size: 1rem;
     flex-shrink: 0;
 }
 
-.user-detail  { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name    { color: var(--gold-pale); font-size: 0.88rem; font-weight: 700; }
-.user-role    { color: rgba(253, 237, 160, 0.65); font-size: 0.7rem; }
-.arrow        { color: var(--gold-pale); font-size: 12px; margin-left: 2px; }
+.user-detail { display: flex; flex-direction: column; line-height: 1.2; }
+.user-name   { color: #FFFFFF; font-size: 14px; font-weight: 700; }
+.arrow       { color: rgba(255, 255, 255, 0.85); font-size: 12px; margin-left: 4px; }
 
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: calc(100% - 10px);
+    top: calc(100% + 10px);
     right: 0;
-    background: #FFFFFF;
-    border: 1px solid var(--cream-border);
-    border-radius: 10px;
-    min-width: 175px;
-    box-shadow: 0 8px 28px rgba(100, 70, 0, 0.14);
-    z-index: 99999;
+    background: var(--white);
+    border: 1.5px solid var(--accent-gold-pale);
+    border-radius: 12px;
+    min-width: 180px;
+    box-shadow: 0 8px 28px var(--shadow-gold);
+    z-index: 999;
     overflow: hidden;
 }
 
 .dropdown-menu.show { display: block; }
 
 .dropdown-item {
-    display: block;
-    padding: 13px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-mid);
     text-decoration: none;
-    border-bottom: 1px solid var(--cream-mid);
     transition: background 0.2s;
+    border-bottom: 1px solid var(--cream-mid);
 }
 
-.dropdown-item:last-child  { border-bottom: none; }
-.dropdown-item:hover       { background: var(--cream-warm); }
-.dropdown-item.danger      { color: #c0392b; }
-.dropdown-item.danger:hover{ background: #fff5f5; }
+.dropdown-item:last-child { border-bottom: none; }
+.dropdown-item:hover { background: var(--cream-warm); color: var(--brown-dark); }
+.dropdown-item.danger { color: #c62828; }
+.dropdown-item.danger:hover { background: #fff0f0; color: #c62828; }
 
 /* ==========================================================================
-   FLASH BANNER
+   FLASH / ALERT
    ========================================================================== */
-.flash-banner {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 13px 24px;
+.alert {
+    padding: 11px 14px;
+    border-radius: 8px;
+    margin-bottom: 20px;
     font-size: 14px;
-    font-weight: 600;
-    animation: bannerIn 0.3s ease;
 }
 
-.flash-banner.success { background: #f0faf4; border-bottom: 1px solid #6dbf8b; color: #1e6b3a; }
-.flash-banner.error   { background: #fff5f5; border-bottom: 1px solid #f59393; color: #b71c1c; }
-
-@keyframes bannerIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
+.alert.error {
+    background: #fff0f0;
+    color: #c62828;
+    border: 1px solid #ffb3b3;
 }
 
 /* ==========================================================================
@@ -213,23 +236,39 @@ body {
    CONTENT CARD
    ========================================================================== */
 .content-card {
-    background: #FFFFFF;
-    border-radius: 18px;
+    background: var(--white);
+    border-radius: 20px;
     overflow: hidden;
-    border: 1.5px solid var(--gold-mid);
-    box-shadow: 0 8px 32px rgba(180, 130, 0, 0.12);
+    border: 1.5px solid var(--accent-gold);
+    box-shadow: 0 6px 32px var(--shadow-warm);
     width: 100%;
     max-width: 700px;
+    position: relative;
+}
+
+.content-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+        transparent,
+        var(--accent-gold-pale) 20%,
+        var(--accent-gold) 50%,
+        var(--accent-gold-pale) 80%,
+        transparent
+    );
+    z-index: 1;
 }
 
 /* ==========================================================================
-   CARD HEADER
+   CARD HEADER (หัวข้อหลัก + วิ้งๆ สีทอง)
    ========================================================================== */
 .card-header-bar {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 40%, #3D2500 100%);
+    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 28px 32px 22px;
     text-align: center;
-    border-bottom: 2px solid var(--gold-mid);
+    border-bottom: 2px solid var(--accent-gold-mid);
     position: relative;
 }
 
@@ -238,43 +277,65 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
+}
+
+.header-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.header-ornament .orn-line {
+    width: 46px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale));
+}
+
+.header-ornament .orn-line.right {
+    background: linear-gradient(90deg, var(--accent-gold-pale), transparent);
+}
+
+.header-ornament .orn-diamond {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-gold-pale);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    box-shadow: 0 0 6px rgba(247, 227, 176, 0.7);
 }
 
 .card-header-bar h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 22px;
-    color: #FFFDF5;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 26px;
     font-weight: 700;
     margin-bottom: 6px;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.35);
+    background: linear-gradient(90deg, #FFFDF5 0%, var(--accent-gold-pale) 25%, var(--accent-gold) 50%, var(--accent-gold-pale) 75%, #FFFDF5 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmerGold 3.2s linear infinite;
+    text-shadow: 0 1px 10px rgba(0,0,0,0.15);
+    display: inline-block;
+}
+
+@keyframes shimmerGold {
+    0%   { background-position: 200% center; }
+    100% { background-position: -200% center; }
 }
 
 .card-header-bar p {
     font-size: 13px;
-    color: rgba(253, 237, 160, 0.75);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 /* ==========================================================================
    CARD BODY
    ========================================================================== */
 .card-body { padding: 28px 32px 36px; }
-
-/* ==========================================================================
-   ALERT
-   ========================================================================== */
-.alert {
-    padding: 11px 14px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-.alert.error {
-    background: #fff0f0;
-    color: #c62828;
-    border: 1px solid #ffb3b3;
-}
 
 /* ==========================================================================
    SECTION LABEL
@@ -332,13 +393,13 @@ body {
 .form-group textarea { height: 100px; resize: vertical; line-height: 1.6; }
 
 .form-group input::placeholder,
-.form-group textarea::placeholder { color: #BFA060; }
+.form-group textarea::placeholder { color: #C98BA3; }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    border-color: var(--gold-mid);
-    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15);
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
     background: #FFFFFF;
 }
 
@@ -360,34 +421,48 @@ body {
     transition: all 0.2s;
 }
 
-.type-label:hover { background: var(--cream-mid); border-color: var(--gold-mid); }
+.type-label:hover { background: var(--cream-mid); border-color: var(--accent-gold); }
 
 .type-options input[type="radio"]:checked + .type-label {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
-    border-color: var(--gold-light);
-    box-shadow: 0 2px 8px rgba(180, 130, 0, 0.25);
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    color: #FFFFFF;
+    border-color: var(--accent-gold);
+    box-shadow: 0 2px 8px var(--shadow-gold);
 }
 
 /* ==========================================================================
-   CEREMONY CHECKBOXES
+   CEREMONY CHECKBOXES (จัดกลุ่มตามประเภทงาน)
    ========================================================================== */
 .ceremony-box {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-direction: column;
+    gap: 14px;
     background: var(--cream-warm);
     padding: 16px;
     border-radius: 10px;
     border: 1.5px solid var(--cream-border);
 }
 
+.ceremony-type-group { display: flex; flex-direction: column; gap: 8px; }
+
+.ceremony-type-heading {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed var(--cream-border);
+}
+
+.ceremony-type-options { display: flex; flex-wrap: wrap; gap: 12px; }
+
 .ceremony-item { display: flex; align-items: center; gap: 7px; }
 
 .ceremony-item input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: var(--gold-mid);
+    accent-color: var(--gold);
     cursor: pointer;
     flex-shrink: 0;
 }
@@ -414,8 +489,8 @@ body {
 .form-actions { display: flex; gap: 12px; align-items: center; }
 
 .btn-submit {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
-    color: var(--brown-dark);
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    color: #FFFFFF;
     border: none;
     border-radius: 10px;
     padding: 13px 32px;
@@ -424,13 +499,13 @@ body {
     cursor: pointer;
     transition: all 0.2s;
     font-family: 'Sarabun', sans-serif;
-    box-shadow: 0 4px 14px rgba(180, 130, 0, 0.25);
+    box-shadow: 0 4px 14px var(--shadow-gold);
 }
 
 .btn-submit:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+    opacity: 0.92;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(180, 130, 0, 0.35);
+    box-shadow: 0 6px 20px rgba(224, 87, 127, 0.4);
 }
 
 .btn-cancel {
@@ -445,21 +520,97 @@ body {
     display: inline-block;
     transition: all 0.2s;
     font-family: 'Sarabun', sans-serif;
+    cursor: pointer;
 }
 
 .btn-cancel:hover {
     background: var(--cream-warm);
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
     color: var(--brown-dark);
+}
+
+/* ==========================================================================
+   FOOTER (เหมือนหน้า list)
+   ========================================================================== */
+.site-footer {
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    color: rgba(255, 255, 255, 0.92);
+    margin-top: auto;
+    border-top: 3px solid var(--accent-gold-pale);
+    box-shadow: 0 -6px 18px rgba(224, 87, 127, 0.25);
+    position: relative;
+    z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 24px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.footer-brand-text {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.footer-tagline {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 12px 20px 18px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.75);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
 @media (max-width: 768px) {
-    .navbar      { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
-    .nav-brand-text { font-size: 18px; }
-    .page-wrapper{ padding: 20px 16px 40px; }
-    .card-body   { padding: 20px 18px 28px; }
-    .form-row    { grid-template-columns: 1fr; }
+    .navbar         { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
+    .navbar-menu    { display: none; }
+    .navbar-title   { font-size: 22px; }
+    .navbar .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
+    .navbar-right   { width: 100%; justify-content: space-between; }
+    .page-wrapper   { padding: 20px 16px 40px; }
+    .card-body      { padding: 20px 18px 28px; }
+    .form-row       { grid-template-columns: 1fr; }
+    .footer-content { flex-direction: column; align-items: flex-start; }
 }

@@ -24,6 +24,12 @@
     --brown-dark:    #1A1A1A;
     --brown-mid:     #3A3A3A;
 
+    /* ===== สีทองจริง (ให้ตรงกับ bookingList.css / quotationCreate.css) ===== */
+    --accent-gold:      #D9A441;
+    --accent-gold-mid:  #E8C878;
+    --accent-gold-pale: #F7E3B0;
+    --accent-gold-dark: #B8860B;
+
     /* Footer gradient (same as navbar, matches bookingList.css) */
     --footer-grad-1: #C7405F;
     --footer-grad-2: #D94F76;
@@ -37,14 +43,15 @@ body {
 	flex-direction: column;
 }
 
-/* ===== Navbar (ธีมชมพู เหมือนหน้า bookingList) ===== */
+/* ===== Navbar (ธีมชมพู-ทอง เหมือนหน้า bookingList / quotationCreate) ===== */
 .navbar {
 	background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
 	padding: 0 40px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	border-bottom: 3px solid var(--gold-pale);
+	border-bottom: 3px solid;
+	border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
 	position: sticky;
 	top: 0;
 	z-index: 10000;
@@ -58,7 +65,7 @@ body {
 	position: absolute;
 	top: 0; left: 0; right: 0;
 	height: 2px;
-	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+	background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .navbar-brand-wrap {
@@ -88,13 +95,12 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 30px;
-    font-weight: 800;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 32px;
+    font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 14px rgba(217, 164, 65, 0.45);
 }
 
 
@@ -199,7 +205,7 @@ body {
 	top: calc(100% + 8px);
 	right: 0;
 	background: #FFFFFF;
-	border: 1px solid var(--cream-border);
+	border: 1px solid var(--accent-gold-pale);
 	border-radius: 10px;
 	min-width: 160px;
 	box-shadow: 0 8px 28px rgba(224, 87, 127, 0.16);
@@ -246,8 +252,8 @@ body {
 }
 
 .page-title-row h1 {
-	font-family: 'Noto Serif Thai', serif;
-	font-size: 26px;
+	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-size: 30px;
 	color: var(--brown-dark);
 	font-weight: 700;
 }
@@ -270,9 +276,9 @@ body {
 }
 
 .status-Pending {
-	background: var(--gold-glow);
-	color: var(--gold);
-	border: 1.5px solid var(--gold-light);
+	background: var(--accent-gold-pale);
+	color: var(--accent-gold-dark);
+	border: 1.5px solid var(--accent-gold-mid);
 }
 
 .status-Revised {
@@ -291,11 +297,19 @@ body {
 .info-card {
 	background: #FFFFFF;
 	border-radius: 16px;
-	border: 1.5px solid var(--gold-mid);
+	border: 1.5px solid var(--accent-gold);
 	box-shadow: 0 8px 32px rgba(224, 87, 127, 0.10);
 	overflow: hidden;
 	margin-bottom: 20px;
 	animation: fadeUp 0.4s ease 0.05s both;
+	position: relative;
+}
+
+.info-card::before {
+	content: '';
+	position: absolute;
+	top: 0; left: 0; right: 0; height: 3px;
+	background: linear-gradient(90deg, transparent, var(--accent-gold-pale) 20%, var(--accent-gold) 50%, var(--accent-gold-pale) 80%, transparent);
 }
 
 .info-card-header {
@@ -307,12 +321,13 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	border-bottom: 2px solid var(--gold-pale);
+	border-bottom: 2px solid var(--accent-gold-mid);
 }
 
+/* 7 กล่อง -> 4 คอลัมน์ แถวบน 4 / แถวล่าง 3 (จัดสมดุลกว่าเดิมที่ยัด 6 คอลัมน์แล้วกล่องสุดท้ายหลุดแถวเดียว) */
 .info-grid {
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
+	grid-template-columns: repeat(4, 1fr);
 	gap: 0;
 	padding: 0;
 }
@@ -320,13 +335,18 @@ body {
 .info-box {
 	padding: 18px 20px;
 	border-right: 1px solid var(--cream-mid);
+	border-bottom: 1px solid var(--cream-mid);
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
 }
 
-.info-box:last-child {
+.info-box:nth-child(4n) {
 	border-right: none;
+}
+
+.info-box:nth-last-child(-n+3) {
+	border-bottom: none;
 }
 
 .info-label {
@@ -344,18 +364,35 @@ body {
 }
 
 .info-value.highlight {
-	color: var(--gold);
+	color: #FFFFFF;
+	background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-mid));
+	padding: 4px 14px;
+	border-radius: 20px;
+	font-size: 13px;
+	display: inline-block;
+	border: 1.5px solid var(--accent-gold-mid);
+	font-family: 'Noto Serif Thai', serif;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+	width: fit-content;
 }
 
 /* ===== Table Card ===== */
 .table-card {
 	background: #FFFFFF;
 	border-radius: 16px;
-	border: 1.5px solid var(--gold-mid);
+	border: 1.5px solid var(--accent-gold);
 	box-shadow: 0 8px 32px rgba(224, 87, 127, 0.10);
 	overflow: hidden;
 	margin-bottom: 20px;
 	animation: fadeUp 0.4s ease 0.1s both;
+	position: relative;
+}
+
+.table-card::before {
+	content: '';
+	position: absolute;
+	top: 0; left: 0; right: 0; height: 3px;
+	background: linear-gradient(90deg, transparent, var(--accent-gold-pale) 20%, var(--accent-gold) 50%, var(--accent-gold-pale) 80%, transparent);
 }
 
 .table-card-header {
@@ -367,7 +404,7 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	border-bottom: 2px solid var(--gold-pale);
+	border-bottom: 2px solid var(--accent-gold-mid);
 }
 
 /* ===== Table ===== */
@@ -383,7 +420,7 @@ th {
 	text-align: left;
 	font-size: 12px;
 	font-weight: 700;
-	border-bottom: 2px solid var(--cream-border);
+	border-bottom: 2.5px solid var(--accent-gold-mid);
 	text-transform: uppercase;
 	letter-spacing: 0.4px;
 }
@@ -405,12 +442,13 @@ tr:hover td {
 }
 
 .group-row td {
-	background: var(--cream-mid);
-	color: var(--gold);
+	background: linear-gradient(90deg, var(--accent-gold-pale), var(--cream-warm));
+	color: var(--accent-gold-dark);
 	font-weight: 700;
 	font-size: 13px;
 	padding: 10px 18px;
-	border-bottom: 1px solid var(--cream-border-soft);
+	border-bottom: 1px solid var(--accent-gold-pale);
+	border-left: 3px solid var(--accent-gold);
 }
 
 .item-name {
@@ -428,7 +466,7 @@ tr:hover td {
 
 .amount-cell {
 	font-weight: 700;
-	color: var(--gold);
+	color: var(--accent-gold-dark);
 	font-size: 15px;
 }
 
@@ -436,7 +474,7 @@ tr:hover td {
 .note-section {
 	padding: 20px 24px;
 	background: var(--cream-warm);
-	border-top: 1.5px dashed var(--cream-border);
+	border-top: 1.5px dashed var(--accent-gold-pale);
 }
 
 .note-label {
@@ -462,7 +500,7 @@ tr:hover td {
 }
 
 .note-text {
-	color: var(--gold);
+	color: var(--accent-gold-dark);
 	font-size: 13px;
 	font-style: italic;
 }
@@ -471,7 +509,7 @@ tr:hover td {
 .total-card {
 	background: #FFFFFF;
 	border-radius: 16px;
-	border: 1.5px solid var(--gold-mid);
+	border: 1.5px solid var(--accent-gold);
 	box-shadow: 0 8px 32px rgba(224, 87, 127, 0.10);
 	padding: 24px 32px;
 	display: flex;
@@ -492,7 +530,7 @@ tr:hover td {
 .total-amount {
 	font-size: 40px;
 	font-weight: 700;
-	color: var(--gold);
+	color: var(--accent-gold-dark);
 	white-space: nowrap;
 }
 
@@ -531,7 +569,7 @@ tr:hover td {
 .btn-back {
 	background: #FFFFFF;
 	color: var(--brown-mid);
-	border: 1.5px solid var(--gold-mid);
+	border: 1.5px solid var(--accent-gold-mid);
 }
 
 .btn-back:hover {
@@ -541,6 +579,7 @@ tr:hover td {
 .btn-edit {
 	background: linear-gradient(135deg, var(--gold), var(--gold-mid));
 	color: #FFFFFF;
+	border: 1.5px solid var(--accent-gold-mid);
 	box-shadow: 0 3px 10px rgba(224, 87, 127, 0.35);
 }
 
@@ -583,10 +622,18 @@ tr:hover td {
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
-    border-top: 3px solid var(--gold-pale);
+    border-top: 3px solid var(--accent-gold-pale);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .footer-content {
@@ -620,8 +667,8 @@ tr:hover td {
 }
 
 .footer-brand-text {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.05rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -649,14 +696,16 @@ tr:hover td {
 /* ===== Responsive ===== */
 @media (max-width: 1100px) {
 	.info-grid { grid-template-columns: repeat(3, 1fr); }
-	.info-box { border-right: none; border-bottom: 1px solid var(--cream-mid); }
-	.info-box:last-child { border-bottom: none; }
+	.info-box { border-right: 1px solid var(--cream-mid); border-bottom: 1px solid var(--cream-mid); }
+	.info-box:nth-child(4n) { border-right: 1px solid var(--cream-mid); }
+	.info-box:nth-child(3n) { border-right: none; }
+	.info-box:nth-last-child(-n+3) { border-bottom: none; }
 }
 
 @media (max-width: 768px) {
 	.navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
 	.navbar-menu { flex-wrap: wrap; gap: 4px; }
-	.navbar-title { font-size: 20px; }
+	.navbar-title { font-size: 22px; }
 	.navbar .lotus-icon,
 	.navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
 	.footer-content { flex-direction: column; align-items: flex-start; }
@@ -664,6 +713,10 @@ tr:hover td {
 
 @media (max-width: 700px) {
 	.info-grid { grid-template-columns: repeat(2, 1fr); }
+	.info-box:nth-child(3n) { border-right: 1px solid var(--cream-mid); }
+	.info-box:nth-child(2n) { border-right: none; }
+	.info-box:nth-last-child(-n+3) { border-bottom: 1px solid var(--cream-mid); }
+	.info-box:nth-last-child(-n+1) { border-bottom: none; }
 	.page-title-row { flex-direction: column; align-items: flex-start; gap: 10px; }
 	.total-card { flex-direction: column; align-items: flex-end; }
 }

@@ -5,9 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>รายการ Item - ระบบรับจัดงานบุญ</title>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/itemList.css">
+<title>รายการ Item - บุญมีนำพา จัดงานบุญ</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/itemList.css?v=2">
 </head>
 <body>
 
@@ -22,8 +22,9 @@
     <%-- ========== NAVBAR ========== --%>
     <nav class="navbar">
         <a class="navbar-brand" href="${pageContext.request.contextPath}/staff/assignments">
-            <div class="lotus-icon">🪷</div>
-            <span class="navbar-title">ระบบรับจัดงานบุญ</span>
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
+            <span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
         </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
@@ -133,6 +134,19 @@
 
 
     </div><%-- /page-wrapper --%>
+
+    <%-- ===== FOOTER ===== --%>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                     alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+                <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+            </div>
+            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างานและทีมงาน</p>
+        </div>
+      
+    </footer>
 
     <%-- ========== CONFIRM DELETE MODAL ========== --%>
     <div class="modal-overlay" id="confirmModal">

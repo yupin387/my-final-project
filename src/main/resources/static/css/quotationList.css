@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
 /* ===== CSS Variables ===== */
 :root {
@@ -29,6 +29,11 @@
     --shadow-gold:       rgba(224, 87, 127, 0.16);
     --shadow-warm:       rgba(224, 87, 127, 0.10);
 
+    /* สีทองจริง ใช้คู่กับชมพูสำหรับธีม "ชมพู-ทอง" ให้ตรงกับหน้าอื่นๆ */
+    --accent-gold:      #D9A441;
+    --accent-gold-mid:  #E8C878;
+    --accent-gold-pale: #F7E3B0;
+
     /* Footer gradient (same as navbar, matches bookingList.css) */
     --footer-grad-1:     #C7405F;
     --footer-grad-2:     #D94F76;
@@ -53,7 +58,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-pale);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     position: sticky;
     top: 0;
     z-index: 10000;
@@ -67,7 +73,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .navbar-brand {
@@ -97,10 +103,9 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 30px;
-    font-weight: 800;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 32px;
+    font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3);
@@ -187,7 +192,7 @@ body {
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1px solid var(--cream-border);
+    border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
     min-width: 175px;
     box-shadow: 0 8px 28px var(--shadow-gold);
@@ -260,25 +265,25 @@ body {
 .ornament-line {
     flex: 1;
     height: 1px;
-    background: linear-gradient(to right, transparent, var(--gold-mid));
+    background: linear-gradient(to right, transparent, var(--accent-gold-mid));
     max-width: 60px;
 }
 
 .ornament-line.right {
-    background: linear-gradient(to left, transparent, var(--gold-mid));
+    background: linear-gradient(to left, transparent, var(--accent-gold-mid));
 }
 
 .ornament-diamond {
     width: 8px;
     height: 8px;
-    background: var(--gold-mid);
+    background: var(--accent-gold);
     transform: rotate(45deg);
 }
 
 .ornament-diamond-sm {
     width: 5px;
     height: 5px;
-    background: var(--gold-pale);
+    background: var(--accent-gold-pale);
     transform: rotate(45deg);
 }
 
@@ -291,8 +296,8 @@ body {
 }
 
 .list-header h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.7rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 2rem;
     color: var(--brown-dark);
     font-weight: 700;
     margin-bottom: 5px;
@@ -302,7 +307,7 @@ body {
     font-size: 13px;
     color: var(--text-muted);
     padding-left: 2px;
-    border-bottom: 2px solid var(--gold-mid);
+    border-bottom: 2px solid var(--accent-gold-mid);
     display: inline-block;
     padding-bottom: 3px;
 }
@@ -318,7 +323,7 @@ body {
 
 .tab-btn {
     padding: 8px 20px;
-    border: 1.5px solid var(--cream-border-soft);
+    border: 1.5px solid var(--accent-gold);
     border-radius: 20px;
     text-decoration: none;
     color: var(--text-body);
@@ -333,16 +338,16 @@ body {
 
 .tab-btn:hover {
     background: var(--cream-warm);
-    border-color: var(--gold-mid);
-    color: var(--gold);
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
 }
 
 .tab-btn.active {
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    background: var(--accent-gold);
     color: #FFFFFF;
-    border-color: var(--gold);
+    border-color: var(--accent-gold);
     font-weight: 700;
-    box-shadow: 0 3px 10px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 3px 10px rgba(217, 164, 65, 0.35);
 }
 
 /* ========== CONTENT CARD ========== */
@@ -350,7 +355,7 @@ body {
     background: var(--white);
     border-radius: 20px;
     overflow: hidden;
-    border: 1.5px solid var(--cream-border-soft);
+    border: 1.5px solid var(--accent-gold);
     box-shadow: 0 4px 28px var(--shadow-warm);
     position: relative;
 }
@@ -360,7 +365,7 @@ body {
     position: absolute;
     top: 0; left: 20px; right: 20px;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), transparent);
     z-index: 1;
 }
 
@@ -372,9 +377,9 @@ body {
     justify-content: space-between;
     align-items: center;
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 17px;
     position: relative;
 }
 
@@ -383,7 +388,7 @@ body {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), rgba(255,255,255,0.9), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
 }
 
 .header-count {
@@ -403,7 +408,7 @@ th {
     text-align: left;
     font-size: 13px;
     font-weight: 700;
-    border-bottom: 2px solid var(--cream-border);
+    border-bottom: 2px solid var(--accent-gold-pale);
     font-family: 'Sarabun', sans-serif;
 }
 
@@ -454,8 +459,8 @@ tr:hover td { background: var(--cream-warm); }
 
 .status-pending {
     background: var(--gold-glow);
-    color: var(--gold);
-    border: 1px solid var(--cream-border);
+    color: #b8860b;
+    border: 1px solid var(--accent-gold-mid);
 }
 
 .status-revised {
@@ -473,9 +478,9 @@ tr:hover td { background: var(--cream-warm); }
 /* ========== BTN VIEW ========== */
 .btn-view {
     display: inline-block;
-    color: var(--gold);
+    color: var(--accent-gold);
     background: linear-gradient(135deg, var(--cream-warm), var(--cream-mid));
-    border: 1.5px solid var(--cream-border);
+    border: 1.5px solid var(--accent-gold);
     padding: 7px 16px;
     border-radius: 8px;
     text-decoration: none;
@@ -487,11 +492,11 @@ tr:hover td { background: var(--cream-warm); }
 }
 
 .btn-view:hover {
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
     color: #FFFFFF;
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
     transform: translateY(-1px);
-    box-shadow: 0 3px 10px rgba(224, 87, 127, 0.3);
+    box-shadow: 0 3px 10px rgba(217, 164, 65, 0.3);
 }
 
 /* ========== EMPTY STATE ========== */
@@ -508,11 +513,11 @@ tr:hover td { background: var(--cream-warm); }
 }
 
 .empty-link {
-    color: var(--gold);
+    color: var(--accent-gold);
     font-weight: 600;
     text-decoration: none;
     font-size: 14px;
-    border-bottom: 1.5px solid var(--gold-mid);
+    border-bottom: 1.5px solid var(--accent-gold-mid);
     padding-bottom: 2px;
     transition: color 0.2s;
 }
@@ -531,10 +536,18 @@ tr:hover td { background: var(--cream-warm); }
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
-    border-top: 3px solid var(--gold-pale);
+    border-top: 3px solid var(--accent-gold-pale);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .footer-content {
@@ -568,8 +581,8 @@ tr:hover td { background: var(--cream-warm); }
 }
 
 .footer-brand-text {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.05rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -596,7 +609,7 @@ tr:hover td { background: var(--cream-warm); }
 @media (max-width: 768px) {
     .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
     .navbar-menu { flex-wrap: wrap; gap: 4px; }
-    .navbar-title { font-size: 20px; }
+    .navbar-title { font-size: 22px; }
     .navbar .lotus-icon,
     .navbar-brand .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     table { font-size: 13px; }

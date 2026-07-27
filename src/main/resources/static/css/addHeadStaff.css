@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
 /* ===== CSS Variables (matched to bookingList.css / headStaffList.css pink theme) ===== */
 :root {
@@ -29,6 +29,11 @@
     --shadow-gold:       rgba(224, 87, 127, 0.16);
     --shadow-warm:       rgba(224, 87, 127, 0.10);
 
+    /* สีทองจริง ใช้กับ ornament/หัวข้อ ให้ตรงกับ headStaffList.css / bookingList.css */
+    --accent-gold:      #D9A441;
+    --accent-gold-mid:  #E8C878;
+    --accent-gold-pale: #F7E3B0;
+
     /* ===== Footer colors (same gradient as navbar) ===== */
     --footer-grad-1: #C7405F;
     --footer-grad-2: #D94F76;
@@ -53,7 +58,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-pale);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     position: sticky;
     top: 0;
     z-index: 10000;
@@ -62,12 +68,13 @@ body {
     box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
 }
 
+/* วิ้งๆ สีทองด้านบนแถบเมนู */
 .navbar::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .navbar-brand {
@@ -97,10 +104,9 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 30px;
-    font-weight: 800;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 32px;
+    font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3);
@@ -209,7 +215,7 @@ body {
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1px solid var(--cream-border);
+    border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
     min-width: 175px;
     box-shadow: 0 8px 28px var(--shadow-gold);
@@ -257,7 +263,7 @@ body {
     background: var(--white);
     border-radius: 20px;
     overflow: hidden;
-    border: 1.5px solid var(--cream-border-soft);
+    border: 1.5px solid var(--accent-gold);
     box-shadow: 0 6px 32px var(--shadow-warm);
     width: 100%;
     max-width: 700px;
@@ -267,9 +273,10 @@ body {
 .content-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 20px; right: 20px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+        transparent, var(--accent-gold-pale) 20%, var(--accent-gold) 50%, var(--accent-gold-pale) 80%, transparent);
     z-index: 1;
 }
 
@@ -280,6 +287,7 @@ body {
     text-align: center;
     position: relative;
     overflow: hidden;
+    border-bottom: 2px solid var(--accent-gold-mid);
 }
 
 .card-header-bar::before {
@@ -287,7 +295,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
 }
 
 .card-header-bar::after {
@@ -295,12 +303,12 @@ body {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-light), var(--gold-mid), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), var(--accent-gold), var(--accent-gold-mid), transparent);
 }
 
 .card-header-bar h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.6rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.8rem;
     color: #FFFFFF;
     font-weight: 700;
     margin-bottom: 8px;
@@ -312,7 +320,7 @@ body {
     color: rgba(255, 255, 255, 0.85);
 }
 
-/* ---- ornament in header ---- */
+/* ---- ornament in header (สีทองแทนสีขาว) ---- */
 .card-header-orn {
     display: flex;
     align-items: center;
@@ -323,12 +331,12 @@ body {
 
 .orn-line {
     flex: 1; max-width: 80px; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7));
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale));
 }
 
-.orn-line.r { background: linear-gradient(90deg, rgba(255,255,255,0.7), transparent); }
-.orn-d  { width: 8px; height: 8px; background: #FFFFFF; transform: rotate(45deg); }
-.orn-ds { width: 4px; height: 4px; background: rgba(255,255,255,0.75); transform: rotate(45deg); }
+.orn-line.r { background: linear-gradient(90deg, var(--accent-gold-pale), transparent); }
+.orn-d  { width: 8px; height: 8px; background: var(--accent-gold-pale); transform: rotate(45deg); box-shadow: 0 0 6px rgba(247, 227, 176, 0.7); }
+.orn-ds { width: 4px; height: 4px; background: rgba(247, 227, 176, 0.85); transform: rotate(45deg); }
 
 /* ========== CARD BODY ========== */
 .card-body {
@@ -417,9 +425,9 @@ body {
 }
 
 .form-group input:focus {
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
     background: var(--white);
-    box-shadow: 0 0 0 3px rgba(224, 87, 127, 0.15);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
 }
 
 .form-group input::placeholder {
@@ -448,9 +456,9 @@ body {
 }
 
 .input-wrapper input:focus {
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
     background: var(--white);
-    box-shadow: 0 0 0 3px rgba(224, 87, 127, 0.15);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
 }
 
 .toggle-visibility {
@@ -519,7 +527,7 @@ body {
 
 .btn-cancel:hover {
     background: var(--cream-warm);
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
     color: var(--brown-dark);
 }
 
@@ -543,10 +551,18 @@ body {
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
-    border-top: 3px solid var(--gold-pale);
+    border-top: 3px solid var(--accent-gold-pale);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .footer-content {
@@ -584,8 +600,8 @@ body {
 }
 
 .footer-brand-text {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.05rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -608,7 +624,7 @@ body {
 @media (max-width: 768px) {
     .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
     .navbar-menu { display: none; }
-    .navbar-title { font-size: 20px; }
+    .navbar-title { font-size: 22px; }
     .navbar-lotus { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     .form-row { grid-template-columns: 1fr; }
     .card-body { padding: 24px 20px 28px; }

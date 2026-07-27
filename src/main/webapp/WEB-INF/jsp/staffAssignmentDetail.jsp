@@ -7,8 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ข้อมูลงาน - ${a.assignId}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/assignmentDetail.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/assignmentDetail.css?v=3">
 </head>
 <body>
 
@@ -16,11 +16,12 @@
     <c:if test="${not empty error}"><span id="flash-error" data-msg="${error}" style="display:none;"></span></c:if>
 
     <%-- ===== NAVBAR ===== --%>
-    <div class="navbar">
-        <div class="navbar-brand-wrap">
-            <div class="navbar-lotus">🪷</div>
-            <span class="navbar-title">ระบบรับจัดงานบุญ</span>
-        </div>
+    <nav class="navbar">
+        <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/staff/assignments">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
+            <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
+        </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
                 <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item active">รายการงาน</a>
@@ -36,7 +37,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
 
     <div id="flash-banner-container"></div>
 
@@ -126,13 +127,26 @@
 
                 <hr class="divider">
 
-          
+
                 <div class="section-heading">สถานที่จัดงาน</div>
                 <div class="address-box">${a.bookingForm.eventAddress}</div>
 
             </div>
         </div>
     </div>
+
+    <%-- ===== FOOTER ===== --%>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                     alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+                <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+            </div>
+            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างานและทีมงาน</p>
+        </div>
+     
+    </footer>
 
     <%-- Modal รายงานความเสียหาย --%>
     <div class="modal-overlay" id="damageModal">

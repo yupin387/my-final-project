@@ -6,44 +6,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>เพิ่มรายการอุปกรณ์ - ระบบรับจัดงานบุญ</title>
+<title>เพิ่มรายการอุปกรณ์ - บุญมีนำพา จัดงานบุญ</title>
 <link
-	href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap"
+	href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/static/css/addItem.css">
+	href="${pageContext.request.contextPath}/static/css/addItem.css?v=2">
 </head>
 <body>
 
-	<%-- NAVBAR --%>
+	<%-- ========== NAVBAR (เหมือนหน้า list) ========== --%>
 	<nav class="navbar">
-		<a class="navbar-brand-wrap"
-			href="${pageContext.request.contextPath}/staff/assignments"
-			style="text-decoration: none;">
-			<div class="lotus-icon">🪷</div> <span class="nav-brand-text">ระบบรับจัดงานบุญ</span>
+		<a class="navbar-brand" href="${pageContext.request.contextPath}/staff/assignments">
+			<img src="${pageContext.request.contextPath}/static/images/logoo.png"
+				 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
+			<span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
 		</a>
 		<div class="navbar-right">
 			<nav class="navbar-menu">
-				<a href="${pageContext.request.contextPath}/staff/assignments"
-					class="nav-item">รายการงาน</a> <a
-					href="${pageContext.request.contextPath}/staff/items"
-					class="nav-item active">จัดการ Item</a>
+				<a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">รายการงาน</a>
+				<a href="${pageContext.request.contextPath}/staff/items" class="nav-item active">จัดการ Item</a>
 			</nav>
-			<div class="dropdown-wrap">
-				<div class="user-info" onclick="toggleDropdown()">
-					<div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
-					<div class="user-detail">
-						<span class="user-name">${sessionScope.currentStaff.staffFirstName}
-							${sessionScope.currentStaff.staffLastName}</span>
-
-					</div>
-					<span class="arrow">▾</span>
-				</div>
+			<div class="user-info" onclick="toggleDropdown()">
+				<div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
+				<span class="user-name">${sessionScope.currentStaff.staffFirstName} ${sessionScope.currentStaff.staffLastName}</span>
+				<span class="arrow">▾</span>
 				<div class="dropdown-menu" id="dropdownMenu">
-					<a href="${pageContext.request.contextPath}/staff/profile"
-						class="dropdown-item">โปรไฟล์</a> <a
-						href="${pageContext.request.contextPath}/headstaff/logout"
-						class="dropdown-item danger">ออกจากระบบ</a>
+					<a href="${pageContext.request.contextPath}/staff/profile" class="dropdown-item">โปรไฟล์</a>
+					<a href="${pageContext.request.contextPath}/headstaff/logout" class="dropdown-item danger">ออกจากระบบ</a>
 				</div>
 			</div>
 		</div>
@@ -54,6 +44,11 @@
 		<div class="content-card">
 
 			<div class="card-header-bar">
+				<div class="header-ornament">
+					<div class="orn-line"></div>
+					<div class="orn-diamond"></div>
+					<div class="orn-line right"></div>
+				</div>
 				<h1>เพิ่มรายการอุปกรณ์ใหม่</h1>
 				<p>ระบุรายละเอียดไอเทมและประเภทพิธีที่สามารถใช้งานได้</p>
 			</div>
@@ -92,7 +87,7 @@
 								</c:if>
 							</c:forEach>
 						</div>
-						<p style="font-size: 12px; color: #a0785a; margin-top: 6px;">
+						<p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
 							* แพ็กเกจ (มาตรฐาน/อิ่มบุญ/พรีเมียม) เป็นรายการที่กำหนดไว้จากส่วนกลาง
 							ไม่สามารถสร้างหรือแก้ไขผ่านหน้านี้ได้
 						</p>
@@ -201,6 +196,19 @@
 			</div>
 		</div>
 	</div>
+
+	<%-- ===== FOOTER (เหมือนหน้า list) ===== --%>
+	<footer class="site-footer">
+		<div class="footer-content">
+			<div class="footer-brand">
+				<img src="${pageContext.request.contextPath}/static/images/logoo.png"
+					 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+				<span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+			</div>
+			<p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างานและทีมงาน</p>
+		</div>
+	
+	</footer>
 
 	<script src="${pageContext.request.contextPath}/static/js/itemList.js"></script>
 </body>

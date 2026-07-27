@@ -8,8 +8,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แก้ไขใบเสนอราคา #${q.quotationId} - บุญมี รับจัดงานบุญ</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=5">
+    <title>แก้ไขใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=6">
 </head>
 <body>
 
@@ -17,8 +17,8 @@
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
+             alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -501,8 +501,8 @@
     <div class="footer-content">
         <div class="footer-brand">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+                 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
         <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>

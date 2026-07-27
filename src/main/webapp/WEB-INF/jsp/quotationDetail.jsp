@@ -7,13 +7,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>รายละเอียดใบเสนอราคา ${q.quotationId} - บุญมี
-	รับจัดงานบุญ</title>
+<title>รายละเอียดใบเสนอราคา ${q.quotationId} - บุญมีนำพา
+	จัดงานบุญ</title>
 <link
-	href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap"
+	href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/static/css/quotationDetail.css?v=3">
+	href="${pageContext.request.contextPath}/static/css/quotationDetail.css?v=4">
 </head>
 <body>
 
@@ -22,8 +22,8 @@
 		<a class="navbar-brand-wrap"
 			href="${pageContext.request.contextPath}/organizer/bookings"> <img
 			src="${pageContext.request.contextPath}/static/images/logoo.png"
-			alt="บุญมี รับจัดงานบุญ" class="lotus-icon"> <span
-			class="navbar-title">บุญมี รับจัดงานบุญ</span>
+			alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon"> <span
+			class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
 		</a>
 		<div class="navbar-right">
 			<nav class="navbar-menu">
@@ -333,8 +333,8 @@
 			<div class="footer-brand">
 				<img
 					src="${pageContext.request.contextPath}/static/images/logoo.png"
-					alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-				<span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+					alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+				<span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
 			</div>
 			<p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
 		</div>
