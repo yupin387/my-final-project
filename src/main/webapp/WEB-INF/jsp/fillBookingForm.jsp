@@ -21,7 +21,7 @@
         <div class="lotus-icon">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
         </div>
-        <span class="nav-brand-text">บุญมี รับจัดงานบุญ</span>
+        <span class="nav-brand-text">บุญมืนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>

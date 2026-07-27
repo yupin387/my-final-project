@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>จองงานทำบุญออฟฟิศ - ระบบรับจัดงานบุญ</title>
+    <title>จองงานทำบุญบริษัท - ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=10">
 </head>
@@ -19,7 +19,7 @@
         <div class="lotus-icon">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
         </div>
-        <span class="nav-brand-text">บุญมี รับจัดงานบุญ</span>
+        <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
@@ -73,7 +73,7 @@
 <div class="hero-banner">
     <div class="hero-content">
         <span class="hero-tag">ระบบจองงานบุญ</span>
-        <h1>จองงานทำบุญออฟฟิศ</h1>
+        <h1>จองงานทำบุญบริษัท</h1>
         <p>ระบุรายละเอียดให้ครบถ้วนเพื่อความถูกต้องของงานพิธี</p>
     </div>
 </div>
@@ -85,26 +85,14 @@
         <c:set var="detailIndex" value="0"/>
 
         <%-- =========================================================
-             0. เลือกวิธีจอง — แพ็กเกจแนะนำ / ความต้องการเบื้องต้น
+             โหมดการจอง (แพ็กเกจ / กรอกเอง) มาจากหน้า ceremonyDetail แล้ว
+             (เลือก "เลือกจองแพ็กเกจนี้" หรือ "จองแบบระบุเอง" มาก่อนหน้านี้)
+             ฉะนั้นไม่ต้องมีการ์ด "เลือกวิธีจอง" ซ้ำในฟอร์มนี้อีก — ใช้ค่าจาก
+             param.custom เพื่อกำหนดโหมดการแสดงผลของฟอร์มแทน (ตัดการ์ดเลือกวิธีจอง
+             และ bookingMode radio ที่เคยซ้อนอยู่ก่อนหน้านี้ทิ้ง เพื่อให้ทำงานแบบเดียว
+             กับฟอร์มทำบุญบ้าน/ขึ้นบ้านใหม่ ไม่ต้องพึ่ง JS มา force โหมดซ้ำอีกชั้น)
              ========================================================= --%>
         <c:set var="startInCustomMode" value="${param.custom == 'true'}"/>
-        <div class="form-card">
-            <div class="card-header">เลือกวิธีจอง</div>
-            <div class="card-body">
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="radio" name="bookingMode" value="package"
-                               onchange="toggleBookingMode('package')" ${startInCustomMode ? '' : 'checked'}>
-                        <span>แพ็กเกจแนะนำ <small style="color:#B0345A;">(ราคาเหมา จำนวนพระถูกกำหนดตามแพ็กเกจ)</small></span>
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="radio" name="bookingMode" value="custom"
-                               onchange="toggleBookingMode('custom')" ${startInCustomMode ? 'checked' : ''}>
-                        <span>ความต้องการเบื้องต้น <small style="color:#B0345A;">(กรอกรายละเอียดทุกอย่างเองตามที่ท่านต้องการ)</small></span>
-                    </label>
-                </div>
-            </div>
-        </div>
 
         <%-- =========================================================
              ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่ / รูปภาพ
@@ -201,6 +189,9 @@
         <div class="form-card" id="packageOnlyBlock" style="${startInCustomMode ? 'display:none;' : 'display:block;'}">
             <div class="card-header">เลือกแพ็กเกจ</div>
             <div class="card-body">
+                <p style="font-size:12px;color:#B0345A;margin:-4px 0 14px;">
+                    ℹ️ ทุกแพ็กเกจรวมชุดเครื่องเสียง โต๊ะหมู่บูชา และพระประธานไว้ให้แล้ว ทางร้านเป็นผู้จัดเตรียมให้ทั้งหมด
+                </p>
                 <div class="item-card-grid">
                     <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
                         <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
@@ -267,6 +258,9 @@
                                           style="color:#2e7d32;${startInCustomMode ? 'display:none;' : ''}">(รับส่วนลด ฿1,500)</small></span>
                                 </label>
                             </div>
+                            <p style="font-size:12px;color:#B0345A;margin-top:6px;">
+                                ⚠️ กรณีนิมนต์เอง วัดที่นิมนต์ต้องอยู่ในรัศมีพื้นที่ให้บริการที่ทางร้านกำหนดเท่านั้น
+                            </p>
                         </div>
                         <c:set var="detailIndex" value="${detailIndex + 1}"/>
                     </c:if>
@@ -308,15 +302,14 @@
                                     </label>
                                 </div>
 
-                                <%-- FIX: ย้าย textarea คำตอบ (watDiffAnswer) ออกมานอก #watDiff
-                                     เดิม textarea นี้ซ้อนอยู่ข้างใน #watDiff ซึ่งจะถูกซ่อน (display:none)
-                                     เมื่อเลือก "ให้ร้านเลือกให้" — ตอน submit ฟังก์ชัน
-                                     cleanupAndRenumberDetailsBeforeSubmit() จะไล่เช็ค parent ทุกตัว
-                                     ถ้าเจอ display:none จะ disable input ข้างในทั้งหมด ทำให้ค่าคำตอบ
-                                     "ให้ร้านเลือกให้" ไม่ถูกส่งไปกับฟอร์มเลย คำถามนี้จึงหายไปทั้งคำถามใน
-                                     booking.details และไม่ขึ้นในหน้า view --%>
                                 <textarea name="details[${detailIndex}].answer" id="watDiffAnswer"
                                           class="form-control" style="display:none;">ให้ร้านเลือกให้</textarea>
+
+                                <p style="font-size:12px;color:var(--text-muted);margin:8px 0 0;">
+                                    หมายเหตุ: วัดที่ระบุอาจมีการเปลี่ยนแปลงได้ตามความสะดวกของพระสงฆ์ในวันงาน
+                                    หรือในกรณีที่วันจัดงานตรงกับวันฤกษ์ดีซึ่งอาจมีการนิมนต์ชนกัน
+                                    ทางร้านจะติดต่อลูกค้าเพื่อยืนยันอีกครั้ง
+                                </p>
 
                                 <div id="watDiff" style="display:none; margin-top:12px;">
                                     <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
@@ -349,8 +342,12 @@
                                 ค่าเริ่มต้น = จำนวนพระสงฆ์ที่นิมนต์ไว้ด้านบน แก้ไขจำนวนเองได้หากต้องการ
                             </p>
                             <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                            <%-- FIX: เดิม value="5" ตายตัวไม่ว่าจะโหมดไหน ทำให้โหมด "จองแบบระบุเอง"
+                                 ก็ขึ้นเลข 5 มาให้ทั้งที่ยังไม่ได้เลือกจำนวนพระสงฆ์เลย ปรับให้ตรงกับ
+                                 ฟอร์มทำบุญบ้าน/ขึ้นบ้านใหม่: โหมดกรอกเองให้เริ่มว่าง --%>
                             <input type="number" name="details[${detailIndex}].answer" id="sanghatanQtyInput"
-                                   class="form-control" value="5" min="1"
+                                   class="form-control" value="${startInCustomMode ? '' : 5}" min="1"
+                                   placeholder="ระบุจำนวนชุด..."
                                    oninput="this.dataset.userEdited = 'true';">
                         </div>
                         <c:set var="detailIndex" value="${detailIndex + 1}"/>
@@ -461,6 +458,29 @@
 
             </div>
         </div>
+
+        <%-- 1.5 หมายเหตุเพิ่มเติม
+             ส่วนนี้เดิมขาดหายไปในฟอร์มบริษัท เพิ่มให้ตรงกับฟอร์มทำบุญบ้าน/ขึ้นบ้านใหม่
+             ผูกกับคำถาม "ความต้องการเพิ่มเติมหรือไม่?" ถ้ามีในชุดคำถามของ ceremony ประเภทนี้ --%>
+        <c:forEach items="${questions}" var="q">
+            <c:if test="${fn:contains(q.questionsText, 'ความต้องการเพิ่มเติม')}">
+                <div class="form-card">
+                    <div class="card-header">หมายเหตุเพิ่มเติม</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">${q.questionsText}</label>
+                            <p style="font-size:12px;color:#B0345A;margin-top:2px;">
+                                เช่น อุปกรณ์เพิ่มเติม เก้าอี้ ผ้าคลุมโต๊ะ หรือรายละเอียดอื่นๆ ที่ต้องการแจ้งทีมงาน
+                            </p>
+                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                            <textarea name="details[${detailIndex}].answer" class="form-control" rows="3"
+                                      placeholder="เช่น ต้องการเก้าอี้เพิ่ม 10 ตัว, ขอผ้าคลุมโต๊ะสีขาว เป็นต้น"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <c:set var="detailIndex" value="${detailIndex + 1}"/>
+            </c:if>
+        </c:forEach>
 
         <div class="submit-row">
             <button type="submit" class="btn-submit">บันทึกข้อมูลการจอง</button>
@@ -714,11 +734,6 @@
 .nav-dropdown-link:hover {
     background: var(--gold-pale, #fff8e1);
 }
-.nav-dropdown-divider {
-    border: 0;
-    border-top: 1px solid var(--gold-pale, #e8cc70);
-    margin: 6px 0;
-}
 </style>
 
 <%-- ========== IMAGE LIGHTBOX ========== --%>
@@ -874,14 +889,7 @@ function syncWatAnswer(containerId, textareaId) {
     textarea.value = lines.join('\n');
 }
 
-/* FIX: เดิมฟังก์ชันนี้เรียก syncWatAnswer() เสมอไม่ว่า watType จะเป็นค่าไหน
-   ทำให้เวลาเลือก "ให้ทางร้านเลือกให้ทั้งหมด" (ไม่เคยเปิด #watDropdowns เลย
-   จึงไม่มี <select> อยู่ข้างในเลยสักตัว) ฟังก์ชัน syncWatAnswer จะวนลูป
-   selects ที่มี 0 ตัว ได้ lines เป็น [] แล้วเซ็ต textarea.value = ''
-   คือไปเขียนทับค่า "ให้ร้านเลือกให้" ที่ onchange ตั้งไว้ตอนเลือกวิทยุ
-   ให้กลายเป็นค่าว่างก่อน submit จริง ทำให้ answer ที่ส่งไป backend เป็น ''
-   ไม่ใช่ "ให้ร้านเลือกให้" หน้า view เลยเช็ค not empty แล้วไม่ผ่าน
-   ต้อง sync จาก dropdown เฉพาะตอนเลือก "ต่างวัด" เท่านั้น */
+/* sync จาก dropdown เฉพาะตอนเลือก "ต่างวัด" เท่านั้น */
 function syncAllWatAnswersBeforeSubmit() {
     var watTypeRadio = document.querySelector('input[name="watType"]:checked');
     if (watTypeRadio && watTypeRadio.value === 'ต่างวัด') {
@@ -889,7 +897,6 @@ function syncAllWatAnswersBeforeSubmit() {
     }
     return true;
 }
-
 
 function applyPackageMonkCount(radio) {
     var input = document.getElementById('monkCountField');
@@ -914,37 +921,6 @@ function onMonkCountInputChange(value) {
     var sQty = document.getElementById('sanghatanQtyInput');
     if (sQty && sQty.dataset.userEdited !== 'true') {
         sQty.value = value;
-    }
-}
-
-function toggleBookingMode(mode) {
-    var packageOnlyBlock = document.getElementById('packageOnlyBlock');
-    var customCeremonyWrap = document.getElementById('customCeremonyWrap');
-    var monkCountGroup = document.getElementById('monkCountGroup');
-    var monkCountField = document.getElementById('monkCountField');
-    var selfInviteRadio = document.getElementById('selfInviteRadio');
-    var selfInviteDiscountNote = document.getElementById('selfInviteDiscountNote');
-
-    if (mode === 'package') {
-        if (packageOnlyBlock) packageOnlyBlock.style.display = 'block';
-        if (customCeremonyWrap) customCeremonyWrap.style.display = 'none';
-
-        if (monkCountGroup) monkCountGroup.style.display = 'none';
-        var checkedPkg = document.querySelector('input[name="ceremony.ceremonyId"]:checked');
-        if (monkCountField && checkedPkg && checkedPkg.dataset.monkcount) {
-            monkCountField.value = checkedPkg.dataset.monkcount;
-        }
-
-        if (selfInviteRadio) selfInviteRadio.value = 'นิมนต์เอง (ลด ฿1,500)';
-        if (selfInviteDiscountNote) selfInviteDiscountNote.style.display = 'inline';
-    } else {
-        if (packageOnlyBlock) packageOnlyBlock.style.display = 'none';
-        if (customCeremonyWrap) customCeremonyWrap.style.display = 'block';
-
-        if (monkCountGroup) monkCountGroup.style.display = 'block';
-
-        if (selfInviteRadio) selfInviteRadio.value = 'นิมนต์เอง';
-        if (selfInviteDiscountNote) selfInviteDiscountNote.style.display = 'none';
     }
 }
 
@@ -986,10 +962,6 @@ function cleanupAndRenumberDetailsBeforeSubmit() {
     return true;
 }
 
-/* FIX: เพิ่มการเช็ควันที่จัดงานเอง เพราะเปลี่ยนมาใช้ปฏิทินย่อ (hidden input)
-   แทน <input type="date" required> เดิม ซึ่ง browser validate hidden field ไม่ได้
-   จึงปิด native validation ของฟอร์มทั้งใบ (novalidate) แล้วเช็คเองในนี้แทน
-   รวมถึงเรียก reportValidity() manual เพื่อให้ยังเห็น bubble แจ้งเตือนของฟิลด์อื่นๆ ตามปกติ */
 function handleFormSubmit(form) {
     syncAllWatAnswersBeforeSubmit();
     cleanupAndRenumberDetailsBeforeSubmit();
@@ -1007,8 +979,13 @@ function handleFormSubmit(form) {
     return true;
 }
 
+/* FIX: ต้องข้าม radio ที่อยู่ในกิ่งที่ถูกซ่อน (เช่น การ์ดเลือกแพ็กเกจตอนอยู่ในโหมด
+   "จองแบบระบุเอง") เหมือนกับฟอร์มทำบุญบ้าน/ขึ้นบ้านใหม่ ไม่งั้น radio แพ็กเกจที่ถูก
+   checked ไว้เป็นค่าเริ่มต้นแต่ถูกซ่อนอยู่ จะยังยิง onchange ตอนโหลดหน้าอยู่ดี
+   ทำให้ช่อง "จำนวนพระสงฆ์" ถูกเซ็ตค่าทั้งที่ควรว่างให้ผู้ใช้กรอกเอง */
 function syncInitialToggleStates() {
     document.querySelectorAll('input[type="radio"]:checked').forEach(function(radio) {
+        if (isInHiddenBranch(radio)) return;
         var code = radio.getAttribute('onchange');
         if (code) {
             try { new Function(code).call(radio); } catch (e) {}

@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>หน้าหลัก - บุญมี รับจัดงานบุญ</title>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/static/css/home.css?v=16">
+	href="${pageContext.request.contextPath}/static/css/home.css?v=17">
 <style>
 	.promotion-banner-wrap {
 		margin-top: 36px;
@@ -76,7 +76,7 @@
 		border-top: 1px solid var(--gold-pale, #e8cc70);
 		margin: 6px 0;
 	}
-	/* การ์ดเงื่อนไขเดี่ยวเต็มความกว้าง (ตัด "ขั้นตอนการจอง" ออกแล้ว) */
+	/* การ์ดเงื่อนไขเดี่ยวเต็มความกว้าง */
 	.conditions-grid-single {
 		display: block;
 	}
@@ -101,27 +101,27 @@
 		margin-left: 0;
 		margin-right: auto;
 	}
-	
+
 	/* ===== "ทำไมต้องเลือกบุญมี" — ขยายการ์ดให้ใหญ่ขึ้น (แยกสโคปจาก .meaning-grid ของหน้าปฏิทิน) ===== */
 #whyChooseSection .meaning-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 36px 32px;
-    max-width: 860px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px 26px;
+    max-width: 900px;
     margin: 30px auto 0;
 }
 #whyChooseSection .meaning-card {
-    padding: 34px 30px;
+    padding: 30px 26px;
     border-radius: 18px;
 }
 #whyChooseSection .meaning-card-title {
-    font-size: 1.3rem;
-    margin-bottom: 14px;
+    font-size: 1.4rem;   /* เดิม 1.15rem */
+    margin-bottom: 12px;
 }
 #whyChooseSection .meaning-card-desc {
-    font-size: 1rem;
-    line-height: 1.85;
+    font-size: 0.95rem;
+    line-height: 1.8;
 }
-@media (max-width: 700px) {
+@media (max-width: 860px) {
     #whyChooseSection .meaning-grid {
         grid-template-columns: 1fr;
     }
@@ -137,8 +137,7 @@
 			style="text-decoration: none;">
 			<img src="${pageContext.request.contextPath}/static/images/logoo.png"
 				alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-			<span class="nav-brand-text">บุญมี
-				รับจัดงานบุญ</span>
+			<span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
 		</a>
 		<div class="navbar-center">
 			<a href="${pageContext.request.contextPath}/home"
@@ -157,10 +156,10 @@
 							class="nav-dropdown-link">${t.mainName}</a>
 					</c:forEach>
 					<hr class="nav-dropdown-divider">
-					
+
 				</div>
 			</div>
-			
+
 
 			<%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) — ลิงก์ไปหน้า /calendar ===== --%>
 			<div class="nav-dropdown-wrap">
@@ -201,7 +200,7 @@
 					</div>
 					<div class="dropdown-menu-custom" id="dropdownMenu">
 						<a href="${pageContext.request.contextPath}/editProfile"
-							class="dropdown-link">โปรไฟล์ของฉัน</a> 
+							class="dropdown-link">โปรไฟล์ของฉัน</a>
 							href="${pageContext.request.contextPath}/logout"
 							class="dropdown-link danger">ออกจากระบบ</a>
 					</div>
@@ -227,44 +226,37 @@
 		</div>
 	</c:if>
 
-	<%-- ========== HERO (ข้อความชิดฝั่งซ้าย ทับรูปวัด) ========== --%>
+	<%-- ========== HERO (รูปใหญ่เลื่อนได้ ใช้ชุดรูปเดียวกับ Bn1/Bn2/Bn3 ด้านล่าง ตามที่ขอ) ========== --%>
 	<div class="hero-section">
+			<div class="hero-slider" id="heroSlider">
+			    <div class="hero-slide active">
+			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover.png" alt="cover">
+			    </div>
+			    <div class="hero-slide">
+			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover3.png" alt="cover3">
+			    </div>
+			    <div class="hero-slide">
+			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover4.png" alt="cover4">
+			    </div>
+			    <div class="hero-slide">
+			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover5.png" alt="cover5">
+			    </div>
+			</div>
 		<div class="hero-overlay"></div>
 		<div class="hero-content">
 			<h1 class="hero-quote">"จัดงานบุญให้ง่ายขึ้น<br>มีทีมงานช่วยดูแล"</h1>
-			<p class="hero-desc">มีทีมงานคอยช่วยดูแลเรื่องพิธีสงฆ์
-				ตั้งแต่การนิมนต์พระไปจนถึงวันจัดงานจริง<br>
-				
-			<div style="display: flex; gap: 14px; justify-content: flex-start; flex-wrap: wrap;">
-				<a href="#conditionsSection" class="hero-cta">ดูขั้นตอนและเงื่อนไขการจอง</a>
+			<p class="hero-desc">มีทีมงานคอยดูแลทุกขั้นตอนของพิธีสงฆ์<br>
+            ตั้งแต่การนิมนต์พระ ไปจนถึงการจัดงานอย่างครบครัน<br>
 
+			<div style="display: flex; gap: 14px; justify-content: flex-start; flex-wrap: wrap;">
+				<a href="#stepsConditionsSection" class="hero-cta">ดูขั้นตอนและเงื่อนไขการจอง</a>
 			</div>
 			<div class="hero-divider"></div>
 		</div>
 	</div>
 
-	<%-- ========== BANNER SLIDER ========== --%>
-	<section class="banner-slider-section">
-		<div class="container">
-			<div class="banner-slider" id="bannerSlider">
-				<div class="banner-slide active">
-					<img src="${pageContext.request.contextPath}/static/images/Bn1.png"
-						alt="Bn1">
-				</div>
-				<div class="banner-slide">
-					<img src="${pageContext.request.contextPath}/static/images/Bn2.png"
-						alt="Bn2">
-				</div>
-				<div class="banner-slide">
-					<img src="${pageContext.request.contextPath}/static/images/Bn3.png"
-						alt="Bn3">
-				</div>
-			</div>
-			<div class="banner-dots" id="bannerDots"></div>
-		</div>
-	</section>
 
-	<%-- ========== THAI WAVE DIVIDER: HERO → CONDITIONS ========== --%>
+	<%-- ========== THAI WAVE DIVIDER: BANNER → WHY CHOOSE US ========== --%>
 	<svg class="thai-divider" viewBox="0 0 1200 48"
 		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
 		style="display: block; background: #ffffff;">
@@ -284,8 +276,132 @@
     <circle cx="1000" cy="26" r="3" fill="#D4A017" opacity="0.5" />
 </svg>
 
-	<%-- ========== CONDITIONS (เหลือเฉพาะ "เงื่อนไขการให้บริการ") ========== --%>
-	<section class="section-pad section-conditions" id="conditionsSection">
+    <%-- ========== ขั้นตอนและเงื่อนไขการให้บริการ (รวมเป็นหัวข้อใหญ่เดียวตามที่อาจารย์ให้ปรับ
+	     เดิมมี 2 หัวข้อใหญ่แยกกัน อาจารย์บอกว่าหัวข้อเยอะเกินไป และลำดับควรเป็น "ขั้นตอนก่อน แล้วค่อยเงื่อนไข"
+	     จึงยุบเหลือหัวข้อใหญ่เดียว "ขั้นตอนและเงื่อนไขการให้บริการ" แล้วแบ่งเป็น 2 หัวข้อย่อยด้านใน ========== --%>
+	<section class="section-pad section-conditions" id="stepsConditionsSection">
+	    <div class="container">
+	        <div class="section-ornament">
+				<div class="ornament-line"></div>
+				<div class="ornament-diamond-sm"></div>
+				<div class="ornament-diamond"></div>
+				<div class="ornament-diamond-sm"></div>
+				<div class="ornament-line right"></div>
+			</div>
+			<div class="section-header">
+				<h2 class="section-title">ขั้นตอนและเงื่อนไขการให้บริการ</h2>
+				<p class="section-subtitle">บริการรับจัดงานบุญตามประเพณีภาคเหนือ
+					ตรวจสอบและจองงานบุญกับเราได้ง่าย ๆ พร้อมเงื่อนไขที่ควรทราบก่อนจอง</p>
+				<div class="gold-line"></div>
+			</div>
+
+			<%-- ----- หัวข้อย่อยที่ 1: ขั้นตอนการให้บริการ (มาก่อนเงื่อนไข ตามที่อาจารย์ให้ปรับ) ----- --%>
+			<div class="subsection-block">
+				<h3 class="subsection-title"><span class="subsection-num">1</span>ขั้นตอนการให้บริการ</h3>
+				<div class="condition-card condition-card-full">
+					<div class="ritual-steps-grid">
+						<%-- ขั้นตอนที่ 1: เลือกวันและฤกษ์งาน --%>
+						<div class="ritual-step-item">
+							<div class="ritual-step-content-wrap">
+								 <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 1: <strong>เลือกวันและฤกษ์งาน</strong></p>
+								 <div class="ritual-step-img-wrap">
+									 <img src="${pageContext.request.contextPath}/static/images/img18.png"
+										  alt="เลือกวันและฤกษ์งาน" class="ritual-step-img">
+								 </div>
+								 <p class="ritual-step-desc">ตรวจสอบวันว่างและฤกษ์ดีผ่านปฏิทิน (ไทย/ล้านนา) โดยสัญลักษณ์สีเขียวคือวันว่างที่คุณสามารถจองได้ และกากบาทคือวันที่เต็มแล้ว</p>
+							</div>
+						</div>
+
+						<%-- ขั้นตอนที่ 2: เลือกแพ็กเกจหรือแจ้งรายละเอียด --%>
+						<div class="ritual-step-item">
+							<div class="ritual-step-content-wrap">
+								 <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 2: <strong>เลือกแพ็กเกจหรือแจ้งรายละเอียด</strong></p>
+								 <div class="ritual-step-img-wrap">
+									 <img src="${pageContext.request.contextPath}/static/images/img13.jpg"
+										  alt="เลือกแพ็กเกจหรือแจ้งรายละเอียด" class="ritual-step-img">
+								 </div>
+								 <p class="ritual-step-desc">เลือกใช้บริการผ่านแพ็กเกจที่ทางร้านจัดไว้ หรือกรอกแบบฟอร์มเพื่อระบุความต้องการเฉพาะตัว เช่น จำนวนพระสงฆ์ และรูปแบบชุดภัตตาหาร/สังฆทาน</p>
+							</div>
+						</div>
+
+						<%-- ขั้นตอนที่ 3: ทีมงานเข้าดูสถานที่จริง --%>
+						<div class="ritual-step-item">
+							<div class="ritual-step-content-wrap">
+								 <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 3: <strong>ทีมงานเข้าดูสถานที่จริง</strong></p>
+								 <div class="ritual-step-img-wrap">
+									 <img src="${pageContext.request.contextPath}/static/images/img19.jpeg"
+										  alt="ทีมงานเข้าดูสถานที่จริง" class="ritual-step-img">
+								 </div>
+								 <p class="ritual-step-desc">ทีมงานติดต่อเพื่อเข้าสำรวจพื้นที่ วางแผนจัดอุปกรณ์ และให้คำแนะนำในการเตรียมสถานที่เพื่อให้พิธีเป็นไปอย่างเหมาะสม</p>
+							</div>
+						</div>
+
+						<%-- ขั้นตอนที่ 4: ออกใบเสนอราคา --%>
+						<div class="ritual-step-item">
+							<div class="ritual-step-content-wrap">
+								 <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 4: <strong>ออกใบเสนอราคา</strong></p>
+								 <div class="ritual-step-img-wrap">
+									 <img src="${pageContext.request.contextPath}/static/images/img20.png"
+										  alt="ออกใบเสนอราคา" class="ritual-step-img">
+								 </div>
+								 <p class="ritual-step-desc">ทางร้านสรุปรายละเอียดงานและจัดทำใบเสนอราคา ซึ่งสามารถยืดหยุ่นปรับเปลี่ยนได้ตามความต้องการจริงของลูกค้า</p>
+							</div>
+						</div>
+
+						<%-- ขั้นตอนที่ 5: ยืนยันการจอง --%>
+						<div class="ritual-step-item">
+							<div class="ritual-step-content-wrap">
+								<p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 5: <strong>ยืนยันการจอง</strong></p>
+								<div class="ritual-step-img-wrap">
+									 <img src="${pageContext.request.contextPath}/static/images/img21.png"
+										  alt="ยืนยันการจอง" class="ritual-step-img">
+								</div>
+								 <p class="ritual-step-desc">ลูกค้าทำการยืนยันใบเสนอราคา เพื่อเสร็จสิ้นการจอง</p>
+							</div>
+						</div>
+
+						<%-- ขั้นตอนที่ 6: เตรียมงานและประกอบพิธี --%>
+						<div class="ritual-step-item">
+							<div class="ritual-step-content-wrap">
+								<p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 6: <strong>เตรียมงานและประกอบพิธี</strong></p>
+								<div class="ritual-step-img-wrap">
+									 <img src="${pageContext.request.contextPath}/static/images/img15.jpg"
+										  alt="เตรียมงานและประกอบพิธี" class="ritual-step-img">
+								</div>
+								 <p class="ritual-step-desc">ทีมงานจัดเตรียมโต๊ะหมู่บูชา อาสนะสงฆ์ และเครื่องสักการะให้พร้อม ก่อนดำเนินการประกอบพิธีตามลำดับขั้นตอนทางศาสนา</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<%-- ----- หัวข้อย่อยที่ 2: เงื่อนไขการให้บริการ (มาหลังขั้นตอน ตามที่อาจารย์ให้ปรับ) ----- --%>
+			<div class="subsection-block">
+				<h3 class="subsection-title"><span class="subsection-num">2</span>เงื่อนไขการให้บริการ</h3>
+				<div class="conditions-grid conditions-grid-single">
+					<div class="condition-card condition-card-full">
+						<ul class="condition-list">
+							<li>รับจัดงานบุญตามประเพณีภาคเหนือ
+								ถูกต้องตามหลักพิธีการ</li>
+							<li>การนิมนต์พระ ทางร้านเป็นผู้ดำเนินการนิมนต์ให้
+								โดยครอบคลุมพื้นที่ห่างจากสถานที่จัดงานไม่เกิน 50 กิโลเมตร
+								(ไม่ข้ามจังหวัด)</li>
+							<li>การจองคิวขึ้นอยู่กับจำนวนทีมงานที่ว่างในวันนั้น ๆ
+								หากทีมงานเต็มทุกทีมในวันที่เลือก ระบบจะแจ้งว่าวันนั้นไม่สามารถจองได้</li>
+							<li>ลูกค้าเตรียมเพียงปัจจัยถวายพระ
+								ส่วนอุปกรณ์และการจัดเตรียมอื่น ๆ ทางร้านดูแลให้ทั้งหมด</li>
+							<li>ส่วนลด 1,500 บาท หากคุณลูกค้า นิมนต์ และ รับส่งพระเอง</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+	    </div>
+	</section>
+
+	<%-- ========== ทำไมต้องเลือกบุญมี (ย้ายขึ้นมาไว้ด้านบนของหน้า ตามที่อาจารย์ให้ปรับ)
+	     รีวิวด้านล่างดึงจากฐานข้อมูลจริง (ReviewService#getTop2RecentReviews) ผ่าน attribute "recentReviews"
+	     ที่ Controller ของหน้า /home ต้อง addAttribute เข้า Model ก่อนส่งมาที่ JSP นี้ ========== --%>
+	<section class="section-pad section-packages" id="whyChooseSection">
 		<div class="container">
 			<div class="section-ornament">
 				<div class="ornament-line"></div>
@@ -295,33 +411,69 @@
 				<div class="ornament-line right"></div>
 			</div>
 			<div class="section-header">
-				<h2 class="section-title">บริการรับจัดงานบุญตามประเพณีภาคเหนือ</h2>
-				<p class="section-subtitle">เงื่อนไขการให้บริการ
-					โปรดอ่านก่อนทำการจอง</p>
+				<h2 class="section-title">ทำไมต้องเลือกบริการจากเรา</h2>
+				<p class="section-subtitle">ดูแลพิธีสงฆ์ให้ครบ จบในที่เดียว
+					ด้วยทีมงานที่เข้าใจประเพณีภาคเหนือ</p>
 				<div class="gold-line"></div>
 			</div>
 
-			<div class="conditions-grid conditions-grid-single">
-				<div class="condition-card condition-card-full">
-					<h3 class="condition-card-title">เงื่อนไขการให้บริการ</h3>
-					<ul class="condition-list">
-						<li>รับจัดงานบุญตามประเพณีภาคเหนือ
-							ถูกต้องตามหลักพิธีการ</li>
-						<li>การนิมนต์พระ ทางร้านเป็นผู้ดำเนินการนิมนต์ให้
-							โดยครอบคลุมพื้นที่ห่างจากสถานที่จัดงานไม่เกิน 50 กิโลเมตร
-							(ไม่ข้ามจังหวัด)</li>
-						<li>การจองคิวขึ้นอยู่กับจำนวนทีมงานที่ว่างในวันนั้น ๆ
-							หากทีมงานเต็มทุกทีมในวันที่เลือก ระบบจะแจ้งว่าวันนั้นไม่สามารถจองได้</li>
-						<li>ลูกค้าเตรียมเพียงปัจจัยถวายพระ
-							ส่วนอุปกรณ์และการจัดเตรียมอื่น ๆ ทางร้านดูแลให้ทั้งหมด</li>
-						<li>ส่วนลด 1,500 บาท หากคุณลูกค้า นิมนต์ และ รับส่งพระเอง</li>
-					</ul>
+			<div class="meaning-block" style="margin-top: 0;">
+				<div class="meaning-grid">
+					<div class="meaning-card">
+						<div class="meaning-card-icon">🙏</div>
+						<div class="meaning-card-title">ประสบการณ์</div>
+						<div class="meaning-card-desc"><%-- TODO: ใส่จำนวนปีที่เปิดให้บริการจริง --%>รับจัดงานบุญตามประเพณีภาคเหนือมาอย่างต่อเนื่อง</div>
+					</div>
+					<div class="meaning-card">
+						<div class="meaning-card-icon">📿</div>
+						<div class="meaning-card-title">ทีมงานมืออาชีพ</div>
+						<div class="meaning-card-desc">ดูแลตั้งแต่การนิมนต์พระ
+							จนถึงจัดอุปกรณ์พิธีสงฆ์ให้ครบทุกขั้นตอน</div>
+					</div>
+					<div class="meaning-card">
+						<div class="meaning-card-icon">⭐</div>
+						<div class="meaning-card-title">ลูกค้าไว้วางใจ</div>
+						<div class="meaning-card-desc">อ่านรีวิวจากเจ้าภาพที่เคยใช้บริการได้ด้านล่าง
+							หรือหน้า<a href="${pageContext.request.contextPath}/reviews">รีวิวทั้งหมด</a></div>
+					</div>
 				</div>
+
+                <%-- ===== รีวิวจริงจากลูกค้า — ดึงจากฐานข้อมูลผ่าน ${recentReviews} (ReviewService#getTop2RecentReviews)
+				     Controller ต้องมีบรรทัดนี้ในเมธอดที่ return หน้า home ก่อนถึงจะแสดงผลได้:
+				         model.addAttribute("recentReviews", reviewService.getTop2RecentReviews());
+				     ===== --%>
+				<div class="why-review-strip">
+				<c:forEach var="r" items="${recentReviews}">
+				    <div class="review-card">
+				        <div class="reviewer-name">
+				            ${r.bookingForm.member.memberFirstName} ${r.bookingForm.member.memberLastName}
+				        </div>
+				        <div class="review-stars">
+				            <c:forEach begin="1" end="${r.rating}">★</c:forEach>
+				            <c:forEach begin="1" end="${5 - r.rating}">☆</c:forEach>
+				        </div>
+			
+				        <div class="review-event-badge">
+				            งาน: ${r.bookingForm.ceremony.ceremonyType}
+				        </div>
+			
+				        <p class="review-text">"${r.comment}"</p>
+			
+				        <c:if test="${not empty r.reviewImage}">
+				            <div class="review-img-wrap">
+				                <img src="${pageContext.request.contextPath}/uploads/review/${r.reviewImage}"
+				                     alt="รูปรีวิว" class="review-img">
+				            </div>
+				        </c:if>
+				    </div>
+				</c:forEach>
+              </div>
 			</div>
+
 		</div>
 	</section>
 
-	<%-- ========== THAI KANOK DIVIDER: CONDITIONS → RITUAL STEPS ========== --%>
+	<%-- ========== THAI KANOK DIVIDER: WHY CHOOSE US → STEPS & CONDITIONS ========== --%>
 	<svg class="thai-divider" viewBox="0 0 1200 48"
 		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
 		style="display: block; background: linear-gradient(#fff, #FFF8E1);">
@@ -369,156 +521,9 @@
 			stroke-width="0.5" opacity="0.4" />
 </svg>
 
-    <%-- ========== ขั้นตอนการให้บริการ (หัวข้อใหญ่กึ่งกลาง เหมือนหัวข้ออื่น ๆ) ========== --%>
-	<section class="section-pad section-conditions" id="ritualStepsSection">
-	    <div class="container">
-	        <div class="section-ornament">
-				<div class="ornament-line"></div>
-				<div class="ornament-diamond-sm"></div>
-				<div class="ornament-diamond"></div>
-				<div class="ornament-diamond-sm"></div>
-				<div class="ornament-line right"></div>
-			</div>
-			<div class="section-header">
-				<h2 class="section-title">ขั้นตอนการให้บริการ</h2>
-				<p class="section-subtitle">ตรวจสอบและจองงานบุญกับเราได้ง่าย ๆ เพียงไม่กี่ขั้นตอน</p>
-				<div class="gold-line"></div>
-			</div>
-
-	        <div class="condition-card condition-card-full">
-	            <div class="ritual-steps-grid">
-	                <%-- ขั้นตอนที่ 1: เลือกวันและฤกษ์งาน --%>
-	                <div class="ritual-step-item">
-	                    <div class="ritual-step-content-wrap">
-	                         <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 1: <strong>เลือกวันและฤกษ์งาน</strong></p>
-	                         <div class="ritual-step-img-wrap">
-	                             <img src="${pageContext.request.contextPath}/static/images/img18.png"
-	                                  alt="เลือกวันและฤกษ์งาน" class="ritual-step-img">
-	                         </div>
-	                         <p class="ritual-step-desc">ตรวจสอบวันว่างและฤกษ์ดีผ่านปฏิทิน (ไทย/ล้านนา) โดยสัญลักษณ์สีเขียวคือวันว่างที่คุณสามารถจองได้ และกากบาทคือวันที่เต็มแล้ว</p>
-	                    </div>
-	                </div>
 	
-	                <%-- ขั้นตอนที่ 2: เลือกแพ็กเกจหรือแจ้งรายละเอียด --%>
-	                <div class="ritual-step-item">
-	                    <div class="ritual-step-content-wrap">
-	                         <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 2: <strong>เลือกแพ็กเกจหรือแจ้งรายละเอียด</strong></p>
-	                         <div class="ritual-step-img-wrap">
-	                             <img src="${pageContext.request.contextPath}/static/images/img13.jpg"
-	                                  alt="เลือกแพ็กเกจหรือแจ้งรายละเอียด" class="ritual-step-img">
-	                         </div>
-	                         <p class="ritual-step-desc">เลือกใช้บริการผ่านแพ็กเกจที่ทางร้านจัดไว้ หรือกรอกแบบฟอร์มเพื่อระบุความต้องการเฉพาะตัว เช่น จำนวนพระสงฆ์ และรูปแบบชุดภัตตาหาร/สังฆทาน</p>
-	                    </div>
-	                </div>
-	                
-	                <%-- ขั้นตอนที่ 3: ทีมงานเข้าดูสถานที่จริง --%>
-	                <div class="ritual-step-item">
-	                    <div class="ritual-step-content-wrap">
-	                         <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 3: <strong>ทีมงานเข้าดูสถานที่จริง</strong></p>
-	                         <div class="ritual-step-img-wrap">
-	                             <img src="${pageContext.request.contextPath}/static/images/img19.jpeg"
-	                                  alt="ทีมงานเข้าดูสถานที่จริง" class="ritual-step-img">
-	                         </div>
-	                         <p class="ritual-step-desc">ทีมงานติดต่อเพื่อเข้าสำรวจพื้นที่ วางแผนจัดอุปกรณ์ และให้คำแนะนำในการเตรียมสถานที่เพื่อให้พิธีเป็นไปอย่างเหมาะสม</p>
-	                    </div>
-	                </div>
-	
-	                <%-- ขั้นตอนที่ 4: ออกใบเสนอราคา --%>
-	                <div class="ritual-step-item">
-	                    <div class="ritual-step-content-wrap">
-	                         <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 4: <strong>ออกใบเสนอราคา</strong></p>
-	                         <div class="ritual-step-img-wrap">
-	                             <img src="${pageContext.request.contextPath}/static/images/img20.png"
-	                                  alt="ออกใบเสนอราคา" class="ritual-step-img">
-	                         </div>
-	                         <p class="ritual-step-desc">ทางร้านสรุปรายละเอียดงานและจัดทำใบเสนอราคา ซึ่งสามารถยืดหยุ่นปรับเปลี่ยนได้ตามความต้องการจริงของลูกค้า</p>
-	                    </div>
-	                </div>
-	
-	                <%-- ขั้นตอนที่ 5: ยืนยันการจอง --%>
-	                <div class="ritual-step-item">
-	                    <div class="ritual-step-content-wrap">
-	                        <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 5: <strong>ยืนยันการจอง</strong></p>
-	                        <div class="ritual-step-img-wrap">
-	                             <img src="${pageContext.request.contextPath}/static/images/img21.png"
-	                                  alt="ยืนยันการจอง" class="ritual-step-img">
-	                        </div>
-	                         <p class="ritual-step-desc">ลูกค้าทำการยืนยันใบเสนอราคา เพื่อเสร็จสิ้นการจอง</p>
-	                    </div>
-	                </div>
-	
-	                <%-- ขั้นตอนที่ 6: เตรียมงานและประกอบพิธี --%>
-	                <div class="ritual-step-item">
-	                    <div class="ritual-step-content-wrap">
-	                        <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 6: <strong>เตรียมงานและประกอบพิธี</strong></p>
-	                        <div class="ritual-step-img-wrap">
-	                             <img src="${pageContext.request.contextPath}/static/images/img15.jpg"
-	                                  alt="เตรียมงานและประกอบพิธี" class="ritual-step-img">
-	                        </div>
-	                         <p class="ritual-step-desc">ทีมงานจัดเตรียมโต๊ะหมู่บูชา อาสนะสงฆ์ และเครื่องสักการะให้พร้อม ก่อนดำเนินการประกอบพิธีตามลำดับขั้นตอนทางศาสนา</p>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</section>
 
-	<%-- ========== THAI KANOK DIVIDER: RITUAL STEPS → WHY CHOOSE US ========== --%>
-	<svg class="thai-divider" viewBox="0 0 1200 48"
-		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-		style="display: block; background: #FFF8E1;">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70"
-			stroke-width="1" opacity="0.6" />
-    <circle cx="600" cy="24" r="4" fill="#E8BB3A" />
-</svg>
-
-	<%-- ========== ทำไมเลือกบุญมี (ใช้แทนที่ packages showcase เดิม)
-	     ใช้ .meaning-block / .meaning-grid / .meaning-card ที่มีอยู่แล้วใน home.css
-	     (เดิมเตรียมไว้สำหรับ "ความหมายวันดี" แต่ไม่เคยถูกเรียกใช้ในหน้านี้)
-	     ตัวเลขด้านล่างเป็นตัวอย่าง โปรดแก้เป็นข้อมูลจริงของร้าน ========== --%>
-	<section class="section-pad section-packages" id="whyChooseSection">
-		<div class="container">
-			<div class="section-ornament">
-				<div class="ornament-line"></div>
-				<div class="ornament-diamond-sm"></div>
-				<div class="ornament-diamond"></div>
-				<div class="ornament-diamond-sm"></div>
-				<div class="ornament-line right"></div>
-			</div>
-			<div class="section-header">
-				<h2 class="section-title">ทำไมต้องเลือกบุญมี</h2>
-				<p class="section-subtitle">ดูแลพิธีสงฆ์ให้ครบ จบในที่เดียว
-					ด้วยทีมงานที่เข้าใจประเพณีภาคเหนือ</p>
-				<div class="gold-line"></div>
-			</div>
-
-			<div class="meaning-block" style="margin-top: 0;">
-				<div class="meaning-grid">
-					<div class="meaning-card">
-						<div class="meaning-card-title">🙏 ประสบการณ์</div>
-						<div class="meaning-card-desc"><%-- TODO: ใส่จำนวนปีที่เปิดให้บริการจริง --%>รับจัดงานบุญตามประเพณีภาคเหนือมาอย่างต่อเนื่อง</div>
-					</div>
-					<div class="meaning-card">
-						<div class="meaning-card-title">📿 ทีมงานมืออาชีพ</div>
-						<div class="meaning-card-desc">ดูแลตั้งแต่การนิมนต์พระ
-							จนถึงจัดอุปกรณ์พิธีสงฆ์ให้ครบทุกขั้นตอน</div>
-					</div>
-					<div class="meaning-card">
-						<div class="meaning-card-title">🎉 จัดมาแล้วหลายพื้นที่</div>
-						<div class="meaning-card-desc"><%-- TODO: ใส่จำนวนงานที่จัดมาแล้วจริง --%>ครอบคลุมงานบุญบ้าน งานขึ้นบ้านใหม่ และงานออฟฟิศ</div>
-					</div>
-					<div class="meaning-card">
-						<div class="meaning-card-title">⭐ ลูกค้าไว้วางใจ</div>
-						<div class="meaning-card-desc">อ่านรีวิวจากเจ้าภาพที่เคยใช้บริการได้ที่ด้านล่าง
-							หรือหน้า<a href="${pageContext.request.contextPath}/reviews">รีวิวทั้งหมด</a></div>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</section>
-
-	<%-- ========== THAI KANOK DIVIDER: WHY CHOOSE US → GALLERY ========== --%>
+	<%-- ========== THAI KANOK DIVIDER: STEPS & CONDITIONS → GALLERY ========== --%>
 	<svg class="thai-divider" viewBox="0 0 1200 48"
 		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
 		style="display: block; background: #FFF8E1;">
@@ -589,7 +594,7 @@
 				<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
 			</div>
 		</div>
-		
+
 	</footer>
 
 	<%-- ========== SCRIPT ZONE ========== --%>
@@ -607,6 +612,18 @@
             }<c:if test="${!st.last}">,</c:if>
         </c:forEach>
     ];
+
+    // ===== Hero slider — รูปใหญ่ด้านบนเลื่อนอัตโนมัติทุก 5 วินาที (ชุดรูปเดียวกับ Bn1/Bn2/Bn3) =====
+    (function () {
+        var heroSlides = document.querySelectorAll('#heroSlider .hero-slide');
+        if (!heroSlides.length) return;
+        var heroCurrent = 0;
+        setInterval(function () {
+            heroSlides[heroCurrent].classList.remove('active');
+            heroCurrent = (heroCurrent + 1) % heroSlides.length;
+            heroSlides[heroCurrent].classList.add('active');
+        }, 5000);
+    })();
 
     // ===== Banner slider — เลื่อนอัตโนมัติทุก 4 วินาที + จุดกดเลือกเองได้ =====
     (function () {
