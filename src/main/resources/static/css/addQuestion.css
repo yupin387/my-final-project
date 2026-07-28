@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
-/* ===== CSS Variables (matched to bookingList.css / headStaffList.css pink theme) ===== */
+/* ===== CSS Variables (ธีมชมพู-ทอง-ขาว) ===== */
 :root {
     --gold:              #E0577F;
     --gold-mid:          #EC6E96;
@@ -22,6 +22,11 @@
     --shadow-gold:        rgba(224, 87, 127, 0.16);
     --shadow-warm:        rgba(224, 87, 127, 0.10);
 
+    /* สีทองจริง ใช้คู่กับชมพูให้เป็นธีม "ชมพู-ทอง-ขาว" */
+    --accent-gold:      #D9A441;
+    --accent-gold-mid:  #E8C878;
+    --accent-gold-pale: #F7E3B0;
+
     /* ===== Footer colors (same gradient as navbar) ===== */
     --footer-grad-1: #C7405F;
     --footer-grad-2: #D94F76;
@@ -39,14 +44,15 @@ body {
     flex-direction: column;
 }
  
-/* ========== NAVBAR (matches bookingList.css / headStaffList.css) ========== */
+/* ========== NAVBAR (ชมพู-ทอง-ขาว) ========== */
 .navbar {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-pale);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     min-height: 92px;
     position: sticky;
     top: 0;
@@ -60,7 +66,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
  
 .navbar-brand {
@@ -91,10 +97,9 @@ body {
  
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 30px;
-    font-weight: 800;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 32px;
+    font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
@@ -170,7 +175,7 @@ body {
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1.5px solid var(--cream-border);
+    border: 1.5px solid var(--accent-gold-pale);
     border-radius: 12px;
     min-width: 180px;
     box-shadow: 0 8px 28px var(--shadow-gold);
@@ -222,7 +227,7 @@ body {
     background: var(--white);
     border-radius: 20px;
     overflow: hidden;
-    border: 1.5px solid var(--gold-mid);
+    border: 1.5px solid var(--accent-gold);
     box-shadow: 0 8px 40px var(--shadow-warm);
     width: 100%;
     max-width: 660px;
@@ -234,7 +239,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-mid), var(--gold-light), var(--gold-mid), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
     z-index: 1;
 }
  
@@ -245,7 +250,7 @@ body {
     text-align: center;
     position: relative;
     overflow: hidden;
-    border-bottom: 2px solid var(--gold-pale);
+    border-bottom: 2px solid var(--accent-gold-pale);
 }
  
 .card-header-bar::before {
@@ -317,8 +322,8 @@ body {
 }
  
 .card-header-bar h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 24px;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 26px;
     color: #FFFFFF;
     font-weight: 700;
     margin-bottom: 6px;
@@ -337,7 +342,7 @@ body {
 .header-gold-line {
     width: 70px;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-light), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
     border-radius: 2px;
     margin: 16px auto 0;
     position: relative;
@@ -381,7 +386,7 @@ body {
 .section-label::before {
     content: '';
     width: 4px; height: 16px;
-    background: linear-gradient(to bottom, var(--gold), var(--gold-mid));
+    background: var(--accent-gold);
     border-radius: 2px;
     flex-shrink: 0;
 }
@@ -418,7 +423,7 @@ body {
 .form-group label::before {
     content: '';
     width: 3px; height: 13px;
-    background: var(--gold-mid);
+    background: var(--accent-gold);
     border-radius: 2px;
     flex-shrink: 0;
 }
@@ -439,9 +444,9 @@ body {
 .form-group input::placeholder { color: var(--text-muted); }
  
 .form-group input:focus {
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
     background: var(--white);
-    box-shadow: 0 0 0 3px rgba(224, 87, 127, 0.12);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.15);
 }
  
 /* Select wrapper */
@@ -455,7 +460,7 @@ body {
     right: 14px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--gold-mid);
+    color: var(--accent-gold);
     font-size: 14px;
     pointer-events: none;
 }
@@ -477,9 +482,9 @@ body {
 }
  
 .form-group select:focus {
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
     background: var(--white);
-    box-shadow: 0 0 0 3px rgba(224, 87, 127, 0.12);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.15);
 }
  
 /* ========== DIVIDER ========== */
@@ -505,7 +510,7 @@ body {
 }
  
 .btn-submit {
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    background: var(--accent-gold);
     color: #FFFFFF;
     border: none;
     border-radius: 10px;
@@ -519,9 +524,9 @@ body {
 }
  
 .btn-submit:hover {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: var(--accent-gold-mid);
     transform: translateY(-1px);
-    box-shadow: 0 5px 18px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 5px 18px rgba(217, 164, 65, 0.35);
 }
  
 .btn-cancel {
@@ -539,7 +544,7 @@ body {
  
 .btn-cancel:hover {
     background: var(--cream-warm);
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
 }
  
 /* ========== KANOK FOOTER ========== */
@@ -570,10 +575,18 @@ body {
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
-    border-top: 3px solid var(--gold-pale);
+    border-top: 3px solid var(--accent-gold-pale);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .footer-content {
@@ -612,8 +625,8 @@ body {
 }
 
 .footer-brand-text {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.05rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #FFFFFF;
 }

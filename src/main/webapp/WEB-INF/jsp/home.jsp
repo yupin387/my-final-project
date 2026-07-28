@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>หน้าหลัก - บุญมี รับจัดงานบุญ</title>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/static/css/home.css?v=17">
+	href="${pageContext.request.contextPath}/static/css/home.css?v=18">
 <style>
 	.promotion-banner-wrap {
 		margin-top: 36px;
@@ -22,7 +22,7 @@
 		height: auto;
 		border-radius: 16px;
 		display: inline-block;
-		box-shadow: 0 6px 24px rgba(61, 37, 0, 0.15);
+		box-shadow: 0 6px 24px rgba(224, 87, 127, 0.15);
 	}
 
 	/* ===== navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) ===== */
@@ -50,9 +50,9 @@
 		left: 0;
 		min-width: 220px;
 		background: var(--white, #fff);
-		border: 1px solid var(--gold-pale, #e8cc70);
+		border: 1px solid var(--accent-gold-pale, #F7E3B0);
 		border-radius: 10px;
-		box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
+		box-shadow: 0 8px 24px rgba(224, 87, 127, 0.18);
 		padding: 8px 0;
 		z-index: 100;
 	}
@@ -64,16 +64,16 @@
 		display: block;
 		padding: 10px 18px;
 		font-size: 0.92rem;
-		color: var(--brown-dark, #3d2500);
+		color: var(--brown-dark, #7A2340);
 		text-decoration: none;
 		white-space: nowrap;
 	}
 	.nav-dropdown-link:hover {
-		background: var(--gold-pale, #fff8e1);
+		background: var(--gold-pale, #FDEEF3);
 	}
 	.nav-dropdown-divider {
 		border: 0;
-		border-top: 1px solid var(--gold-pale, #e8cc70);
+		border-top: 1px solid var(--accent-gold-pale, #F7E3B0);
 		margin: 6px 0;
 	}
 	/* การ์ดเงื่อนไขเดี่ยวเต็มความกว้าง */
@@ -201,7 +201,7 @@
 					<div class="dropdown-menu-custom" id="dropdownMenu">
 						<a href="${pageContext.request.contextPath}/editProfile"
 							class="dropdown-link">โปรไฟล์ของฉัน</a>
-							href="${pageContext.request.contextPath}/logout"
+						<a href="${pageContext.request.contextPath}/logout"
 							class="dropdown-link danger">ออกจากระบบ</a>
 					</div>
 				</div>
@@ -262,18 +262,18 @@
 		style="display: block; background: #ffffff;">
     <path
 			d="M0,0 L1200,0 L1200,16 Q1100,40 1000,20 Q900,2 800,28 Q700,48 600,28 Q500,8 400,30 Q300,48 200,24 Q100,4 0,22 Z"
-			fill="#3D2500" opacity="0.07" />
+			fill="#E0577F" opacity="0.07" />
     <path
 			d="M0,8 Q150,44 300,18 Q450,-6 600,22 Q750,48 900,20 Q1050,-6 1200,18 L1200,48 L0,48 Z"
-			fill="#FFF8E1" />
+			fill="#FFF6F9" />
     <path
 			d="M0,26 Q100,10 200,26 Q300,44 400,26 Q500,10 600,26 Q700,44 800,26 Q900,10 1000,26 Q1100,44 1200,26"
-			stroke="#D4A017" stroke-width="1.5" fill="none" opacity="0.5" />
-    <circle cx="200" cy="26" r="3" fill="#D4A017" opacity="0.5" />
-    <circle cx="400" cy="26" r="3" fill="#D4A017" opacity="0.5" />
-    <circle cx="600" cy="26" r="3" fill="#D4A017" opacity="0.5" />
-    <circle cx="800" cy="26" r="3" fill="#D4A017" opacity="0.5" />
-    <circle cx="1000" cy="26" r="3" fill="#D4A017" opacity="0.5" />
+			stroke="#D9A441" stroke-width="1.5" fill="none" opacity="0.5" />
+    <circle cx="200" cy="26" r="3" fill="#D9A441" opacity="0.5" />
+    <circle cx="400" cy="26" r="3" fill="#D9A441" opacity="0.5" />
+    <circle cx="600" cy="26" r="3" fill="#D9A441" opacity="0.5" />
+    <circle cx="800" cy="26" r="3" fill="#D9A441" opacity="0.5" />
+    <circle cx="1000" cy="26" r="3" fill="#D9A441" opacity="0.5" />
 </svg>
 
     <%-- ========== ขั้นตอนและเงื่อนไขการให้บริการ (รวมเป็นหัวข้อใหญ่เดียวตามที่อาจารย์ให้ปรับ
@@ -476,36 +476,36 @@
 	<%-- ========== THAI KANOK DIVIDER: WHY CHOOSE US → STEPS & CONDITIONS ========== --%>
 	<svg class="thai-divider" viewBox="0 0 1200 48"
 		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-		style="display: block; background: linear-gradient(#fff, #FFF8E1);">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70"
+		style="display: block; background: linear-gradient(#fff, #FFF6F9);">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F3C4D5"
 			stroke-width="1" opacity="0.6" />
-    <g fill="#D4A017" opacity="0.55">
+    <g fill="#D9A441" opacity="0.55">
         <ellipse cx="600" cy="24" rx="18" ry="6"
 			transform="rotate(-30 600 24)" />
         <ellipse cx="600" cy="24" rx="18" ry="6"
 			transform="rotate(30 600 24)" />
         <ellipse cx="600" cy="24" rx="18" ry="6" />
-        <circle cx="600" cy="24" r="4" fill="#E8BB3A" />
+        <circle cx="600" cy="24" r="4" fill="#E8C878" />
         <ellipse cx="480" cy="24" rx="14" ry="5"
 			transform="rotate(-30 480 24)" />
         <ellipse cx="480" cy="24" rx="14" ry="5"
 			transform="rotate(30 480 24)" />
-        <circle cx="480" cy="24" r="3" fill="#E8BB3A" />
+        <circle cx="480" cy="24" r="3" fill="#E8C878" />
         <ellipse cx="720" cy="24" rx="14" ry="5"
 			transform="rotate(-30 720 24)" />
         <ellipse cx="720" cy="24" rx="14" ry="5"
 			transform="rotate(30 720 24)" />
-        <circle cx="720" cy="24" r="3" fill="#E8BB3A" />
+        <circle cx="720" cy="24" r="3" fill="#E8C878" />
         <ellipse cx="360" cy="24" rx="10" ry="4"
 			transform="rotate(-30 360 24)" />
         <ellipse cx="360" cy="24" rx="10" ry="4"
 			transform="rotate(30 360 24)" />
-        <circle cx="360" cy="24" r="2.5" fill="#E8BB3A" />
+        <circle cx="360" cy="24" r="2.5" fill="#E8C878" />
         <ellipse cx="840" cy="24" rx="10" ry="4"
 			transform="rotate(-30 840 24)" />
         <ellipse cx="840" cy="24" rx="10" ry="4"
 			transform="rotate(30 840 24)" />
-        <circle cx="840" cy="24" r="2.5" fill="#E8BB3A" />
+        <circle cx="840" cy="24" r="2.5" fill="#E8C878" />
         <ellipse cx="240" cy="24" rx="7" ry="3"
 			transform="rotate(-30 240 24)" />
         <ellipse cx="240" cy="24" rx="7" ry="3"
@@ -515,9 +515,9 @@
         <ellipse cx="960" cy="24" rx="7" ry="3"
 			transform="rotate(30 960 24)" />
     </g>
-    <line x1="0" y1="4" x2="1200" y2="4" stroke="#E8CC70"
+    <line x1="0" y1="4" x2="1200" y2="4" stroke="#F3C4D5"
 			stroke-width="0.5" opacity="0.4" />
-    <line x1="0" y1="44" x2="1200" y2="44" stroke="#E8CC70"
+    <line x1="0" y1="44" x2="1200" y2="44" stroke="#F3C4D5"
 			stroke-width="0.5" opacity="0.4" />
 </svg>
 
@@ -526,10 +526,10 @@
 	<%-- ========== THAI KANOK DIVIDER: STEPS & CONDITIONS → GALLERY ========== --%>
 	<svg class="thai-divider" viewBox="0 0 1200 48"
 		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-		style="display: block; background: #FFF8E1;">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70"
+		style="display: block; background: #FFF6F9;">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F3C4D5"
 			stroke-width="1" opacity="0.6" />
-    <circle cx="600" cy="24" r="4" fill="#E8BB3A" />
+    <circle cx="600" cy="24" r="4" fill="#E8C878" />
 </svg>
 
 	<%-- ========== GALLERY SECTION ========== --%>
@@ -547,7 +547,7 @@
 					สู่ความประทับใจที่บอกต่อ</h2>
 				<p class="section-subtitle">ร่วมสัมผัสรอยยิ้มและความสำเร็จในทุกพิธีสำคัญที่ได้รับความไว้วางใจจากครอบครัวมากมาย</p>
 				<div class="gold-line"></div>
-				<p style="margin-top: 15px; font-size: 0.9rem; color: #A08840;">[อัปเดตบรรยากาศงานจริงแบบเรียลไทม์ได้ที่
+				<p style="margin-top: 15px; font-size: 0.9rem; color: #C98A2F;">[อัปเดตบรรยากาศงานจริงแบบเรียลไทม์ได้ที่
 					Facebook และ YouTube ของเรา]</p>
 			</div>
 			<div class="gallery-grid" id="galleryGrid"></div>
@@ -563,9 +563,9 @@
             <defs>
                 <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%"
 					y2="0%">
-                    <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
-                    <stop offset="50%" stop-color="rgba(255,255,255,0.9)" />
-                    <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
+                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
+                    <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+                    <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
                 </linearGradient>
             </defs>
         </svg>
@@ -573,7 +573,8 @@
 		<div class="container footer-content footer-content-slim">
 			<div class="footer-col footer-brand-col">
 				<div class="footer-brand">
-					<div class="lotus-icon">🪷</div>
+					<img src="${pageContext.request.contextPath}/static/images/logoo.png"
+						alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
 					<span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
 				</div>
 				<p class="footer-tagline">รับจัดงานบุญ

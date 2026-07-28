@@ -19,7 +19,7 @@
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-        <span class="nav-brand-text">บุญมี รับจัดงานบุญ</span>
+        <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
@@ -131,9 +131,9 @@
         <rect width="1200" height="8" fill="url(#footerGrad)" />
         <defs>
             <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
-                <stop offset="50%" stop-color="rgba(255,255,255,0.9)" />
-                <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
+               <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
+<stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+<stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
             </linearGradient>
         </defs>
         </svg>
@@ -141,8 +141,9 @@
     <div class="container footer-content footer-content-slim">
         <div class="footer-col footer-brand-col">
             <div class="footer-brand">
-                <div class="lotus-icon">🪷</div>
-                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+    alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+                <span class="footer-brand-text">บุญมีนำพา รับจัดงานบุญ</span>
             </div>
             <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
             <div class="footer-social">
@@ -160,9 +161,7 @@
             <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
         </div>
     </div>
-    <div class="footer-bottom">
-        <p>ด้วยใจที่ตั้งใจดูแลทุกพิธี 🪷 บุญมี รับจัดงานบุญ</p>
-    </div>
+   
 </footer>
 
 <script src="${pageContext.request.contextPath}/static/js/review.js"></script>

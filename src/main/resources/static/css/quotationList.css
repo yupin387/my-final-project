@@ -491,6 +491,7 @@ tr:hover td { background: var(--cream-warm); }
     white-space: nowrap;
 }
 
+
 .btn-view:hover {
     background: linear-gradient(135deg, var(--gold), var(--accent-gold));
     color: #FFFFFF;

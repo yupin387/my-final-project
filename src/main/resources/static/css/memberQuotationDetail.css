@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
 * {
     margin: 0;
@@ -27,10 +27,15 @@
     --brown-dark:    #1A1A1A;
     --brown-mid:     #3A3A3A;
 
-    /* สีแถบ footer ให้เป็นเฉดเดียวกับ navbar ตามธีม Home */
+    /* สีแถบ navbar/footer ให้เป็นเฉดเดียวกับหน้า Home เป๊ะๆ */
     --footer-grad-1: #C7405F;
     --footer-grad-2: #D94F76;
     --footer-grad-3: #E0577F;
+
+    /* ===== ทองจริง (เส้นขอบ/วิ้งๆ) ให้ตรงกับ home.css ===== */
+    --accent-gold:      #D9A441;
+    --accent-gold-mid:  #E8C878;
+    --accent-gold-pale: #F7E3B0;
 
     /* ===== สีทอง/สังฆทาน (accent สีที่สอง ให้ตัดกับชมพู) ===== */
     --saffron:       #D9A404;
@@ -51,20 +56,21 @@ body {
     flex-direction: column;
 }
 
-/* ===== Navbar (เหมือนหน้า Home ทุกขนาด/ฟอนต์) ===== */
+/* ===== Navbar (เหมือนหน้า Home ทุกสี/ขนาด/ฟอนต์ เป๊ะๆ) ===== */
 .navbar-custom {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-pale);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     position: sticky;
     top: 0;
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 4px 20px rgba(199, 64, 95, 0.35);
 }
 
 .navbar-custom::before {
@@ -72,7 +78,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
 }
 
 .navbar-brand-wrap {
@@ -106,9 +112,9 @@ img.lotus-icon {
 
 .navbar-custom .nav-brand-text {
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 30px;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-style: normal;
+    font-size: 34px;
     font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
@@ -142,7 +148,7 @@ img.lotus-icon {
 
 .nav-link-item.active {
     background: #FFFFFF;
-    color: var(--gold);
+    color: var(--footer-grad-2);
     font-weight: 700;
 }
 
@@ -160,7 +166,7 @@ img.lotus-icon {
 
 .avatar-circle-nav {
     background: #FFFFFF;
-    color: #E0577F;
+    color: var(--footer-grad-2);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -202,12 +208,12 @@ img.lotus-icon {
 
 /* ===== Card Header ===== */
 .card-header-bar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 22px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid var(--gold-pale);
+    border-bottom: 2px solid var(--accent-gold);
     position: relative;
 }
 
@@ -216,7 +222,7 @@ img.lotus-icon {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
 }
 
 .card-header-bar h2 {
@@ -290,7 +296,6 @@ img.lotus-icon {
     font-weight: 700;
     letter-spacing: 0.5px;
     margin-bottom: 4px;
-    /* หมายเหตุ: เอา text-transform: uppercase ออก เพราะภาษาไทยไม่มีตัวพิมพ์ใหญ่-เล็ก คำสั่งนี้ไม่มีผลใดๆ */
 }
 
 .staff-name {
@@ -333,31 +338,39 @@ img.lotus-icon {
 
 .info-line strong { color: var(--brown-dark); }
 
-/* ===== Section Title ===== */
+/* ===== Section Title — แถบชมพู-ทอง เต็มความกว้าง ตามภาพตัวอย่าง ===== */
 .section-wrap { padding: 28px 32px 0; }
 
 .section-title {
     font-family: 'Noto Serif Thai', serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
-    color: var(--brown-dark);
-    margin-bottom: 16px;
+    color: #FFFFFF;
+    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
+    padding: 13px 20px;
+    border-radius: 12px;
+    border: 1.5px solid var(--accent-gold);
+    margin-bottom: 0;
     display: flex;
     align-items: center;
     gap: 10px;
     letter-spacing: 0.2px;
-    /* หมายเหตุ: เอา text-transform: uppercase ออก เพราะภาษาไทยไม่มีตัวพิมพ์ใหญ่-เล็ก คำสั่งนี้ไม่มีผลใดๆ */
+    text-shadow: 0 1px 6px rgba(0,0,0,0.25);
 }
 
 .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--neutral-border);
+    content: none;
 }
 
 /* ===== Table ===== */
-table { width: 100%; border-collapse: collapse; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5px solid var(--accent-gold);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+}
 
 th {
     background: var(--neutral-bg);
@@ -381,14 +394,14 @@ td {
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--cream); }
 
-/* ===== Group Row (หัวหมวด) — เทาแท้ ไม่ใช่ชมพูอ่อน ให้ตัดกับ badge/แถบราคาที่เป็นสี ===== */
+/* ===== Group Row (หัวหมวด) — โทนทอง/สังฆทาน ให้ตัดกับแถบชมพูด้านบน ตามภาพตัวอย่าง ===== */
 .group-row td {
-    background: var(--neutral-mid);
-    color: var(--brown-mid);
+    background: linear-gradient(90deg, var(--accent-gold-pale) 0%, var(--saffron-pale) 100%);
+    color: var(--saffron-deep);
     font-weight: 700;
     padding: 12px 10px;
     font-size: 15px;
-    border-bottom: 2px solid var(--neutral-border);
+    border-bottom: 2px solid var(--accent-gold-mid);
 }
 
 /* ===== Base Price Row ===== */
@@ -699,7 +712,7 @@ tr:hover td { background: var(--cream); }
 .flash-banner-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
 /* ================================================================== */
-/* ===== FOOTER (เหมือนหน้า Home ทั้งสี/ขนาด/โครงสร้าง) ===== */
+/* ===== FOOTER (เหมือนหน้า Home ทั้งสี/ขนาด/โครงสร้าง เป๊ะๆ) ===== */
 /* ================================================================== */
 .footer-strip {
     display: block;
@@ -712,7 +725,8 @@ tr:hover td { background: var(--cream); }
     color: rgba(255, 255, 255, 0.92);
     padding-top: 0;
     padding-bottom: 0;
-    border-top: 3px solid #FBD0DE;
+    border-top: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
@@ -755,20 +769,21 @@ tr:hover td { background: var(--cream); }
 
 .footer-brand .lotus-icon {
     background: rgba(255, 255, 255, 0.18);
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 22px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
     flex-shrink: 0;
 }
 
 .footer-brand-text {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.15rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.6rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -782,9 +797,9 @@ tr:hover td { background: var(--cream); }
 }
 
 .footer-heading {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     color: #FFFFFF;
-    font-size: 1rem;
+    font-size: 1.35rem;
     font-weight: 700;
     margin-bottom: 14px;
 }

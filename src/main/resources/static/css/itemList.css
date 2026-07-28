@@ -318,7 +318,7 @@ body {
 }
 
 .btn-add {
-    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    background: var(--accent-gold);
     color: #FFFFFF;
     padding: 11px 22px;
     text-decoration: none;
@@ -339,7 +339,6 @@ body {
     transform: translateY(-1px);
     box-shadow: 0 5px 16px rgba(224, 87, 127, 0.4);
 }
-
 /* ========== TABS ========== */
 .tabs-wrapper {
     display: flex;

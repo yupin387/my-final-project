@@ -20,7 +20,7 @@
 			href="${pageContext.request.contextPath}/organizer/bookings"> <img
 			src="${pageContext.request.contextPath}/static/images/logoo.png"
 			alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon"> <span
-			class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
+			class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
 		</a>
 		<div class="navbar-right">
 			<nav class="navbar-menu">

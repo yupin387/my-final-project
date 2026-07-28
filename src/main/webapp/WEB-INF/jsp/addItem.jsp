@@ -205,7 +205,7 @@
 					 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
 				<span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
 			</div>
-			<p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างานและทีมงาน</p>
+			<p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
 		</div>
 	
 	</footer>

@@ -12,6 +12,7 @@
 </head>
 <body>
 
+
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">

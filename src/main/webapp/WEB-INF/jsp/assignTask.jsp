@@ -6,18 +6,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${isChangeMode ? 'เปลี่ยนหัวหน้างาน' : 'มอบหมายหัวหน้างาน'} - บุญมี รับจัดงานบุญ</title>
+    <title>${isChangeMode ? 'เปลี่ยนหัวหน้างาน' : 'มอบหมายหัวหน้างาน'} - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/assignStaff.css">
 </head>
 <body>
 
-<%-- ===== NAVBAR ===== --%>
+<%-- ===== NAVBAR (matched exactly to bookingList.jsp) ===== --%>
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
+             alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -32,9 +32,8 @@
                 <span class="user-name">Admin Organizer</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
-            <span class="arrow">▾</span>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item">ออกจากระบบ</a>
+                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
             </div>
         </div>
     </div>
@@ -71,6 +70,7 @@
             </div>
             <div class="info-cell">
                 <span class="info-label">วันจัดงาน</span>
+                <span class="info-value">
                     <fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/>
                 </span>
             </div>
@@ -114,7 +114,7 @@
         <div class="form-section">
 
             <div class="form-section-title">
-                <span> กรอกข้อมูลการมอบหมาย</span>
+                <span>กรอกข้อมูลการมอบหมาย</span>
                 <div class="form-title-line"></div>
             </div>
 
@@ -143,7 +143,7 @@
                 </div>
 
                 <button type="submit" class="btn-submit">
-                     ${isChangeMode ? 'ยืนยันการเปลี่ยนหัวหน้างาน' : 'ยืนยันการมอบหมายงาน'}
+                    ${isChangeMode ? 'ยืนยันการเปลี่ยนหัวหน้างาน' : 'ยืนยันการมอบหมายงาน'}
                 </button>
 
                 <a href="javascript:history.back()" class="back-link">← ยกเลิกและกลับหน้าก่อนหน้า</a>
@@ -153,17 +153,17 @@
     </div>
 </div>
 
-<%-- ===== FOOTER ===== --%>
+<%-- ===== FOOTER (matched exactly to bookingList.jsp) ===== --%>
 <footer class="site-footer">
     <div class="footer-content">
         <div class="footer-brand">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+                 alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
         <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>
-   
+
 </footer>
 
 
@@ -171,5 +171,15 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/assignStaff.js"></script>
 
+<script>
+function toggleDropdown() {
+    document.getElementById('dropdownMenu').classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.user-info')) {
+        document.getElementById('dropdownMenu').classList.remove('show');
+    }
+});
+</script>
 </body>
 </html>

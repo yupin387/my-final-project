@@ -478,6 +478,7 @@ function showCancelModal(bookingId) {
     new bootstrap.Modal(document.getElementById('cancelModal')).show();
 }
 
+
 </script>
 </body>
 </html>

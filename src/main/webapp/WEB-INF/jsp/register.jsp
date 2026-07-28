@@ -4,24 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>สมัครสมาชิกใหม่ -บุญมี รับจัดงานบุญ</title>
+    <title>สมัครสมาชิกใหม่ - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/register.css">
 </head>
 <body>
 
-<!-- NAVBAR -->
+    <!-- NAVBAR -->
     <nav class="main-navbar">
         <a class="navbar-brand-wrap"
             href="${pageContext.request.contextPath}/home"
             style="text-decoration: none;">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-            <span class="nav-brand-text">บุญมี
-                รับจัดงานบุญ</span>
+                alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
+            <span class="nav-brand-text">บุญมีนำพา
+                จัดงานบุญ</span>
         </a>
     </nav>
+
     <!-- MAIN CONTENT -->
     <div class="page-wrapper">
 
@@ -75,7 +76,6 @@
 
                 <div class="footer-links">
                     <a href="${pageContext.request.contextPath}/home" class="back-link">← กลับหน้าหลัก</a>
-
                 </div>
 
             </form>

@@ -17,7 +17,7 @@
         <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/staff/assignments">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
                  alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
-            <span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
+            <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
         </a>
         <div class="navbar-right">
             <nav class="navbar-menu">

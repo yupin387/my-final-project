@@ -308,7 +308,7 @@ body {
 }
 
 .btn-add {
-    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    background: var(--accent-gold);
     color: #FFFFFF;
     padding: 11px 22px;
     text-decoration: none;
@@ -324,7 +324,7 @@ body {
 }
 
 .btn-add:hover {
-    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-mid));
+    background: var(--accent-gold-mid);
     transform: translateY(-1px);
     box-shadow: 0 5px 16px rgba(217, 164, 65, 0.35);
 }
@@ -422,7 +422,7 @@ tr:hover td { background: var(--cream-warm); }
 
 /* ---- Circle Number ---- */
 .circle-num {
-    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    background: var(--accent-gold);
     color: #FFFFFF;
     width: 28px;
     height: 28px;

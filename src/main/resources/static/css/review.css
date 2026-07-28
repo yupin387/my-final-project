@@ -1,25 +1,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
 
+/* ===== ธีมชมพู-ขาว-ทอง ให้ตรงกับ home.css (นำโทนสีจริงของแบรนด์มาใช้ในหน้านี้) ===== */
 :root {
-    --red:          #8B1A1A;
-    --red-dark:     #5a1010;
-    --red-light:    #c62828;
-    --gold:         #D4A017;
-    --gold-light:   #f0c040;
-    --cream:        #FDF3DC;
-    --cream-mid:    #FFF8E7;
-    --cream-border: #e0c070;
+    /* ชมพูแบรนด์ — ใช้เฉพาะส่วนหัวการ์ด (ให้เข้าธีมเดียวกับ navbar/footer) */
+    --brand-pink-1: #C7405F;
+    --brand-pink-2: #D94F76;
+    --brand-pink-3: #E0577F;
+    --pink-pale:    #FBD0DE;
+
+    /* ทองจริง — ใช้เป็นจุดเน้น (ดาว, ปุ่ม, เส้นขอบ) */
+    --gold:         #D9A441;
+    --gold-mid:     #E8C878;
+    --gold-light:   #F7E3B0;
+
+    /* ขาว/ครีม — โทนหลักของพื้นหลังและการ์ด ไม่ให้หน้าดูชมพูจัด */
+    --cream:        #FFFDF8;
+    --cream-mid:    #FFF9EF;
+    --cream-border: #F3C4D5;
     --white:        #ffffff;
+
     --text-dark:    #2a1a1a;
-    --text-mid:     #5a3a2a;
-    --text-muted:   #999;
+    --text-mid:     #6b4a35;
+    --text-muted:   #8a8a8a;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: var(--cream);
+    background: linear-gradient(180deg, #FFF6F8 0%, #FFFFFF 14%, #FFFFFF 86%, #FDEBF0 100%);
     color: var(--text-dark);
     min-height: 100vh;
 }
@@ -37,15 +46,15 @@ body {
     background: var(--white);
     border-radius: 20px;
     border: 1.5px solid var(--cream-border);
-    box-shadow: 0 8px 36px rgba(139,26,26,0.1);
+    box-shadow: 0 8px 36px rgba(217, 164, 65, 0.16);
     width: 100%;
     max-width: 560px;
     overflow: hidden;
 }
 
-/* ========== CARD HEADER ========== */
+/* ========== CARD HEADER (ชมพูแบรนด์ เดียวกับ navbar/footer) ========== */
 .review-card-header {
-    background: linear-gradient(135deg, #3D2500 0%, #5C3800 50%, #3D2500 100%);
+    background: linear-gradient(135deg, var(--brand-pink-1) 0%, var(--brand-pink-2) 55%, var(--brand-pink-3) 100%);
     padding: 24px 28px 20px;
     text-align: center;
     border-bottom: 3px solid var(--gold);
@@ -57,22 +66,23 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #F5D97A, #E8BB3A, #F5D97A, transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
 }
 
 .review-card-header h2 {
     font-family: 'Noto Serif Thai', serif;
-    color: var(--cream);
+    color: #FFFFFF;
     font-size: 1.4rem;
     font-weight: 700;
     margin-bottom: 10px;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
 }
 
 .booking-badge {
     display: inline-block;
-    background: rgba(212,160,23,0.2);
-    border: 1px solid var(--gold);
-    color: var(--gold-light);
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    color: #FFFFFF;
     padding: 4px 14px;
     border-radius: 20px;
     font-size: 13px;
@@ -81,7 +91,7 @@ body {
 }
 
 .ceremony-name {
-    color: rgba(253,243,220,0.75);
+    color: rgba(255, 255, 255, 0.85);
     font-size: 13px;
 }
 
@@ -95,7 +105,7 @@ body {
     display: block;
     font-size: 13px;
     font-weight: 700;
-    color: #5C3800;
+    color: var(--text-mid);
     margin-bottom: 10px;
 }
 
@@ -142,14 +152,14 @@ body {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     color: var(--text-dark);
-    background: #fffdf5;
+    background: var(--cream);
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-control:focus {
     border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.15);
 }
 
 textarea.form-control {
@@ -169,7 +179,7 @@ textarea.form-control {
     border-radius: 12px;
     padding: 20px 16px;
     text-align: center;
-    background: #fffdf5;
+    background: var(--cream);
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
     position: relative;
@@ -190,14 +200,15 @@ textarea.form-control {
 }
 
 .upload-icon { font-size: 1.8rem; margin-bottom: 6px; }
-.upload-text { font-size: 13px; font-weight: 600; color: #5C3800; }
+.upload-text { font-size: 13px; font-weight: 600; color: var(--text-mid); }
 .upload-hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
 
 /* ========== DIVIDER ========== */
 .divider {
     border: 0;
-    border-top: 1px solid #f0e8d8;
+    border-top: 1px solid var(--cream-border);
     margin: 24px 0;
+    opacity: 0.5;
 }
 
 /* ========== ACTIONS ========== */
@@ -209,7 +220,7 @@ textarea.form-control {
 
 .btn-submit {
     flex: 2;
-    background: linear-gradient(135deg, #D4A017, #E8BB3A);
+    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
     color: #4A2E00;
     border: none;
     border-radius: 10px;
@@ -220,13 +231,13 @@ textarea.form-control {
     cursor: pointer;
     transition: all 0.2s;
     letter-spacing: 0.5px;
-    box-shadow: 0 3px 10px rgba(180,130,0,0.25);
+    box-shadow: 0 3px 10px rgba(217, 164, 65, 0.3);
 }
 
 .btn-submit:hover {
-    background: linear-gradient(135deg, #E8BB3A, #F5D97A);
+    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(180,130,0,0.35);
+    box-shadow: 0 5px 16px rgba(217, 164, 65, 0.4);
 }
 
 .btn-skip {
@@ -256,17 +267,14 @@ textarea.form-control {
     .star-rating label { font-size: 2rem; }
 }
 
-.review-card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 4px;
-}
+/* ==========================================================================
+   ส่วนเสริม (ไม่ได้ใช้ในฟอร์มเขียนรีวิวหน้านี้ แต่เก็บไว้เผื่อใช้กับการ์ดแสดงรีวิว เช่น หน้ารายการรีวิว)
+   ========================================================================== */
 .review-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--pink-deep-2);
+    background: var(--brand-pink-2);
     color: #fff;
     display: flex;
     align-items: center;
@@ -288,7 +296,7 @@ textarea.form-control {
     align-items: center;
     gap: 5px;
     background: var(--pink-pale);
-    color: var(--pink-deep-2);
+    color: var(--brand-pink-2);
     font-size: 0.78rem;
     font-weight: 700;
     padding: 4px 12px;

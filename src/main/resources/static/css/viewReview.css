@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
-/* ===== CSS Variables (โทนชมพู-ขาว — ให้ตรงกับ home.css / ceremonyDetail.css) ===== */
+/* ===== CSS Variables (โทนชมพู-ขาว-ทอง) ===== */
 :root {
     --gold:              #E0577F;
     --gold-mid:          #EC6E96;
@@ -28,10 +28,15 @@
     --shadow-gold:       rgba(224, 87, 127, 0.14);
     --shadow-warm:       rgba(0, 0, 0, 0.07);
 
-    /* ===== Footer colors (ให้ตรงกับ home.css / ceremonyDetail.css) ===== */
-    --footer-dark-1: #6E1930;
-    --footer-dark-2: #8C2748;
-    --footer-dark-3: #A6335A;
+    /* สีทองจริง สำหรับธีม ชมพู-ขาว-ทอง */
+    --accent-gold:       #D9A441;
+    --accent-gold-mid:   #E8C878;
+    --accent-gold-pale:  #F7E3B0;
+
+    /* ===== Footer colors (สีชมพูเดียวกับ navbar) ===== */
+    --footer-dark-1: #C7405F;
+    --footer-dark-2: #D94F76;
+    --footer-dark-3: #E0577F;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,14 +49,15 @@ body {
     padding-bottom: 0;
 }
 
-/* ========== NAVBAR (ให้ตรงกับ navbar-custom / cd-navbar — 92px, โลโก้ 58px) ========== */
+/* ========== NAVBAR ========== */
 .navbar {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-pale);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     position: sticky;
     top: 0;
     z-index: 10000;
@@ -64,7 +70,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .navbar-title {
@@ -72,10 +78,9 @@ body {
     align-items: center;
     gap: 12px;
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 26px;
-    font-weight: 800;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 32px;
+    font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-decoration: none;
@@ -130,6 +135,86 @@ body {
 .nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
 .nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
 
+/* nav-item as a <button> (dropdown toggles) needs to look identical to <a> */
+button.nav-item {
+    background: none;
+    border: none;
+    font-family: 'Sarabun', sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ========== NAV DROPDOWNS (บริการ/แพ็กเกจ, ปฏิทิน) ========== */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown-toggle .caret {
+    font-size: 10px;
+    transition: transform 0.2s;
+}
+
+.nav-dropdown:hover .nav-dropdown-toggle .caret,
+.nav-dropdown.show .nav-dropdown-toggle .caret {
+    transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    background: var(--white);
+    border: 1px solid var(--accent-gold-pale);
+    border-radius: 10px;
+    min-width: 190px;
+    box-shadow: 0 8px 28px rgba(224, 87, 127, 0.18);
+    z-index: 99999;
+    overflow: hidden;
+    padding: 6px 0;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown.show .nav-dropdown-menu {
+    display: block;
+}
+
+.nav-dropdown-menu a {
+    display: block;
+    padding: 11px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-mid);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-dropdown-menu a:hover {
+    background: var(--cream-mid);
+    color: var(--gold);
+}
+
+/* ========== สมัครสมาชิก BUTTON ========== */
+.btn-register {
+    background: transparent;
+    border: 1.5px solid #FFFFFF;
+    color: #FFFFFF;
+    padding: 9px 22px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-register:hover {
+    background: #FFFFFF;
+    color: var(--gold);
+}
+
 /* User pill */
 .user-info {
     background: rgba(255, 255, 255, 0.15);
@@ -172,7 +257,7 @@ body {
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1px solid var(--cream-border);
+    border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
     min-width: 175px;
     box-shadow: 0 8px 28px rgba(224, 87, 127, 0.18);
@@ -217,9 +302,9 @@ body {
 }
 
 .section-title {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     color: var(--brown-dark);
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     font-weight: 700;
     margin-bottom: 6px;
 }
@@ -232,7 +317,7 @@ body {
 .gold-line {
     width: 60px;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-light), var(--gold-mid), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), var(--accent-gold), var(--accent-gold-mid), transparent);
     border-radius: 2px;
     margin: 12px auto 0;
 }
@@ -249,25 +334,25 @@ body {
     flex: 1;
     max-width: 120px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-mid));
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid));
 }
 .ornament-line.right {
-    background: linear-gradient(90deg, var(--gold-mid), transparent);
+    background: linear-gradient(90deg, var(--accent-gold-mid), transparent);
 }
 .ornament-diamond {
     width: 10px; height: 10px;
-    background: var(--gold-mid);
+    background: var(--accent-gold);
     transform: rotate(45deg);
     flex-shrink: 0;
 }
 .ornament-diamond-sm {
     width: 5px; height: 5px;
-    background: var(--gold-pale);
+    background: var(--accent-gold-pale);
     transform: rotate(45deg);
     flex-shrink: 0;
 }
 
-/* ========== FILTER BUTTONS (3 ประเภทงานจริง) ========== */
+/* ========== FILTER BUTTONS ========== */
 .filter-wrapper {
     display: flex;
     justify-content: center;
@@ -279,7 +364,7 @@ body {
 .btn-filter {
     padding: 9px 26px;
     border-radius: 50px;
-    border: 1.5px solid var(--gold-mid);
+    border: 1.5px solid var(--accent-gold);
     background: transparent;
     color: var(--brown-mid);
     text-decoration: none;
@@ -291,10 +376,10 @@ body {
 
 .btn-filter:hover,
 .btn-filter.active-link {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: var(--accent-gold);
     color: #FFFFFF;
-    border-color: var(--gold-light);
-    box-shadow: 0 4px 12px rgba(224, 87, 127, 0.3);
+    border-color: var(--accent-gold);
+    box-shadow: 0 4px 12px rgba(217, 164, 65, 0.35);
     transform: translateY(-1px);
 }
 
@@ -302,10 +387,10 @@ body {
 .summary-card {
     background: var(--white);
     border-radius: 20px;
-    border: 3px solid var(--gold-mid);
+    border: 1.5px solid var(--accent-gold);
     box-shadow:
-        0 0 0 2px var(--gold-pale),
-        0 0 15px rgba(224, 87, 127, 0.28),
+        0 0 0 2px var(--accent-gold-pale),
+        0 0 15px rgba(217, 164, 65, 0.2),
         0 4px 24px var(--shadow-warm);
     padding: 40px 60px;
     display: flex;
@@ -323,7 +408,7 @@ body {
     position: absolute;
     top: 0; left: 20px; right: 20px;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold-mid), var(--gold-light), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
     border-radius: 0 0 3px 3px;
 }
 
@@ -340,8 +425,8 @@ body {
 }
 
 .rating-big h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 3.8rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 4.2rem;
     font-weight: 700;
     color: var(--brown-dark);
     line-height: 1;
@@ -349,7 +434,7 @@ body {
 }
 
 .stars-big {
-    color: var(--gold-mid);
+    color: var(--accent-gold);
     font-size: 1.4rem;
     letter-spacing: 3px;
     margin-bottom: 8px;
@@ -391,7 +476,7 @@ body {
 
 .bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--gold-mid), var(--gold-light));
+    background: var(--accent-gold);
     border-radius: 10px;
     transition: width 0.5s ease;
 }
@@ -400,10 +485,10 @@ body {
 .review-card {
     background: var(--white);
     border-radius: 18px;
-    border: 3px solid var(--gold-mid);
+    border: 1.5px solid var(--accent-gold);
     box-shadow:
-        0 0 0 2px var(--gold-pale),
-        0 0 15px rgba(224, 87, 127, 0.25),
+        0 0 0 2px var(--accent-gold-pale),
+        0 0 15px rgba(217, 164, 65, 0.16),
         0 4px 24px var(--shadow-warm);
     padding: 30px 40px;
     margin-bottom: 20px;
@@ -418,12 +503,12 @@ body {
     position: absolute;
     left: 0; top: 20px; bottom: 20px;
     width: 3px;
-    background: linear-gradient(to bottom, transparent, var(--gold-mid), transparent);
+    background: linear-gradient(to bottom, transparent, var(--accent-gold), transparent);
     border-radius: 0 2px 2px 0;
 }
 
 .review-card:hover {
-    box-shadow: 0 10px 32px rgba(224, 87, 127, 0.2);
+    box-shadow: 0 10px 32px rgba(217, 164, 65, 0.22);
     transform: translateY(-2px);
 }
 
@@ -441,7 +526,7 @@ body {
 }
 
 .avatar {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: var(--gold);
     color: #FFFFFF;
     width: 44px;
     height: 44px;
@@ -464,7 +549,7 @@ body {
 }
 
 .stars-review {
-    color: var(--gold-mid);
+    color: var(--accent-gold);
     font-size: 0.95rem;
     letter-spacing: 2px;
 }
@@ -479,9 +564,9 @@ body {
 
 .ceremony-badge {
     display: inline-block;
-    background: var(--gold-glow);
+    background: var(--cream-mid);
     color: var(--brown-mid);
-    border: 1px solid var(--cream-border-soft);
+    border: 1px solid var(--accent-gold-mid);
     border-radius: 20px;
     padding: 4px 14px;
     font-size: 12px;
@@ -524,13 +609,13 @@ body {
     margin-bottom: 12px;
 }
 
-/* ========== SITE FOOTER (ให้ตรงกับ home.css / ceremonyDetail.css) ========== */
+/* ========== SITE FOOTER ========== */
 .site-footer {
     background: linear-gradient(135deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
     color: rgba(255, 255, 255, 0.92);
     padding-top: 0;
     padding-bottom: 24px;
-    border-top: 3px solid var(--gold-pale);
+    border-top: 3px solid var(--accent-gold-pale);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
@@ -582,8 +667,8 @@ body {
 }
 
 .footer-brand-text {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.15rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #FFFFFF;
 }

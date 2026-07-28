@@ -1,14 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
 /* ===== CSS Variables =====
-   ธีม: ชมพูอ่อนพาสเทล + ทอง-น้ำตาลเข้ม + ครีม */
+   ธีม: ชมพู-ทอง (ชมพูเข้ม/พาสเทล = สีหลัก, ทองจริง = เส้นประดับ/วิ้งๆ เท่านั้น ไม่มีน้ำตาลแล้ว) */
 :root {
-    /* ===== โทนหลัก: ทอง-น้ำตาลเข้ม (ข้อความ/หัวข้อ) ===== */
-    --gold:          #6B4423;
-    --gold-mid:      #8B5A2B;
-    --gold-light:    #C9973F;
-    --gold-pale:     #F0DFC0;
-    --gold-glow:     #FFF6E8;
+    /* ===== โทนหลัก: ชมพูเข้ม (ข้อความ/หัวข้อ/ปุ่ม) ===== */
+    --gold:          #E0577F;
+    --gold-mid:      #EC6E96;
+    --gold-light:    #F49CB9;
+    --gold-pale:     #FBD0DE;
+    --gold-glow:     #FFE3EC;
+
+    /* ===== โทนทองจริง ใช้เฉพาะเส้นประดับ / ออนาเมนต์ / วิ้งๆ ===== */
+    --accent-gold:      #D9A441;
+    --accent-gold-mid:  #E8C878;
+    --accent-gold-pale: #F7E3B0;
 
     /* ===== โทนชมพูอ่อนพาสเทล (พื้นหลัง/CTA) ===== */
     --pink-mid:      #F5C6D6;
@@ -17,16 +22,16 @@
     --pink-bg-1:     #FFF7F9;
     --pink-bg-2:     #FDEEF2;
 
-    /* ===== โทนชมพูเข้ม (navbar / footer / accent) ===== */
-    --pink-deep-1:   #9C2E4C;
-    --pink-deep-2:   #C7405F;
+    /* ===== โทนชมพูเข้ม (navbar / footer / accent) — ให้ตรงกับ bookingList.css ===== */
+    --pink-deep-1:   #C7405F;
+    --pink-deep-2:   #D94F76;
     --pink-deep-3:   #E0577F;
 
     --cream:         #FFFFFF;
     --cream-warm:    #FFFBF6;
-    --cream-mid:     #FBF1DE;
-    --cream-border:  #F0DCE0;
-    --cream-border-soft: #F0DCE0;
+    --cream-mid:     #FDEEF3;
+    --cream-border:  #F3C4D5;
+    --cream-border-soft: #F6D4E1;
 
     --white:         #FFFFFF;
     --off-white:     #FFFBFA;
@@ -39,16 +44,17 @@
     --card-border-soft: #F0DCE0;
 
     --text-dark:     #1A1A1A;
-    --text-mid:      #5A4030;
-    --text-body:     #6b5a4c;
-    --text-muted:    #a8927e;
-    --text-light:    #c2ada0;
+    --text-mid:      #3A3A3A;
+    --text-body:     #555555;
+    --text-muted:    #8a8a8a;
+    --text-light:    #b8b8b8;
 
-    --brown-dark:    #3D2611;
-    --brown-mid:     #6B4423;
+    /* หัวข้อหลัก — ชมพูเข้มแบบเบอร์กันดี (ไม่ใช่น้ำตาล) */
+    --brown-dark:    #7A2340;
+    --brown-mid:     #A83A5C;
 
-    --shadow-gold:   rgba(184, 103, 122, 0.16);
-    --shadow-warm:   rgba(184, 103, 122, 0.10);
+    --shadow-gold:   rgba(224, 87, 127, 0.16);
+    --shadow-warm:   rgba(224, 87, 127, 0.10);
 
     /* ===== Calendar status colors ===== */
     --cal-booked-bg:     #FBD3D3;
@@ -65,16 +71,16 @@
     --cal-almost-text:   #B85C00;
 
     --cal-today-bg:      #FFE066;
-    --cal-today-border:  #B8722B;
-    --cal-today-text:    #4A3200;
+    --cal-today-border:  #D9A441;
+    --cal-today-text:    #6B4E00;
 
     --cal-past-bg:       #E7E7E7;
     --cal-past-border:   #C9C9C9;
     --cal-past-text:     #9B9B9B;
 
-    /* ===== Navbar / Footer gradient (ชมพูเข้ม -> ชมพูอ่อน) ===== */
-    --footer-grad-1: #9C2E4C;
-    --footer-grad-2: #C7405F;
+    /* ===== Navbar / Footer gradient (ชมพูเข้ม -> ชมพูอ่อน) — ให้ตรงกับ bookingList.css ===== */
+    --footer-grad-1: #C7405F;
+    --footer-grad-2: #D94F76;
     --footer-grad-3: #E0577F;
 }
 
@@ -87,14 +93,15 @@ body {
 }
 
 /* ========== NAVBAR ==========
-   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน */
+   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน (เหมือน bookingList) + เส้นขอบล่างสีทองจริง */
 .navbar-custom {
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--pink-light);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     position: sticky;
     top: 0;
     z-index: 10000;
@@ -108,7 +115,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
 }
 
 .navbar-brand-wrap {
@@ -132,7 +139,7 @@ body {
     flex-shrink: 0;
 }
 
-/* เพิ่มใหม่ตรงนี้ — ให้รูปโลโก้พอดีกรอบวงกลม */
+/* ให้รูปโลโก้พอดีกรอบวงกลม ทั้ง navbar และ footer */
 .lotus-icon img,
 img.lotus-icon {
     width: 100%;
@@ -198,7 +205,7 @@ img.lotus-icon {
 }
 
 .btn-register-nav:hover {
-    background: var(--pink-pale);
+    background: var(--accent-gold-pale);
     color: var(--pink-deep-1);
     transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
@@ -242,7 +249,7 @@ img.lotus-icon {
 .user-name-nav  { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
 .user-role-nav  { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
 
-/* Dropdown (เมนูยังเป็นสีขาวเหมือนเดิม ตามที่ขอให้พื้นหลังรายละเอียดเป็นสีขาว) */
+/* Dropdown (เมนูยังเป็นสีขาวเหมือนเดิม) */
 .dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
 
 .dropdown-menu-custom {
@@ -358,7 +365,7 @@ img.lotus-icon {
 }
 
 .hero-content h1 span {
-    color: var(--gold-light);
+    color: var(--accent-gold-mid);
     display: block;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
 }
@@ -392,25 +399,26 @@ img.lotus-icon {
 .hero-cta {
     display: inline-block;
     padding: 12px 28px;
-    border: 1.5px solid var(--pink-light);
+    border: 1.5px solid var(--accent-gold-mid);
     border-radius: 40px;
     color: #FFFFFF;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.95rem;
-    background: rgba(245, 198, 214, 0.35);
+    background: rgba(217, 164, 65, 0.22);
     transition: all 0.25s ease;
 }
 
 .hero-cta:hover {
-    background: var(--pink-mid);
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
     color: #FFFFFF;
 }
 
 .hero-divider {
     width: 70px;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), transparent);
     margin: 18px auto 0;
     border-radius: 2px;
 }
@@ -517,7 +525,7 @@ img.lotus-icon {
 .gold-line {
     width: 60px;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-mid), var(--gold-light), var(--gold-mid), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), var(--accent-gold), var(--accent-gold-mid), transparent);
     border-radius: 2px;
     margin: 12px auto 0;
 }
@@ -531,7 +539,7 @@ img.lotus-icon {
     height: 48px;
 }
 
-/* ========== SECTION ORNAMENT HEADER ========== */
+/* ========== SECTION ORNAMENT HEADER (วิ้งๆ สีทองจริง) ========== */
 .section-ornament {
     display: flex;
     align-items: center;
@@ -543,20 +551,20 @@ img.lotus-icon {
     flex: 1;
     max-width: 120px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-mid));
+    background: linear-gradient(90deg, transparent, var(--accent-gold));
 }
 .ornament-line.right {
-    background: linear-gradient(90deg, var(--gold-mid), transparent);
+    background: linear-gradient(90deg, var(--accent-gold), transparent);
 }
 .ornament-diamond {
     width: 10px; height: 10px;
-    background: var(--gold-mid);
+    background: var(--accent-gold);
     transform: rotate(45deg);
     flex-shrink: 0;
 }
 .ornament-diamond-sm {
     width: 5px; height: 5px;
-    background: var(--gold-pale);
+    background: var(--accent-gold-pale);
     transform: rotate(45deg);
     flex-shrink: 0;
 }
@@ -600,7 +608,7 @@ img.lotus-icon {
     transition: background 0.2s, border-color 0.2s;
     display: flex; align-items: center; justify-content: center;
 }
-.cal-nav-btn:hover { background: var(--gold-glow); border-color: var(--gold-mid); }
+.cal-nav-btn:hover { background: var(--accent-gold-pale); border-color: var(--accent-gold); }
 
 .cal-grid    { display: grid; grid-template-columns: repeat(7, 1fr); gap: 9px; margin-top: 14px; }
 .cal-day-label {
@@ -726,8 +734,8 @@ img.lotus-icon {
 }
 
 .cal-day-tag-good {
-    color: #8A5525;
-    background: rgba(184, 114, 43, 0.16);
+    color: #8A6420;
+    background: rgba(217, 164, 65, 0.18);
 }
 
 .cal-day-tag-bad {
@@ -743,7 +751,7 @@ img.lotus-icon {
 }
 
 .legend-star {
-    color: var(--gold-mid);
+    color: var(--accent-gold);
     font-weight: 700;
     margin-right: 4px;
 }
@@ -785,7 +793,7 @@ img.lotus-icon {
 
 .selected-date-chip {
     background: var(--white);
-    border: 1px solid var(--gold-mid);
+    border: 1px solid var(--accent-gold);
     color: var(--brown-dark);
     padding: 5px 8px 5px 12px;
     border-radius: 20px;
@@ -809,7 +817,7 @@ img.lotus-icon {
 
 /* ===== ปุ่มยืนยันวันที่ -> เปิด popup เลือกประเภทงานบุญ ===== */
 .btn-confirm-dates {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
     color: #FFFFFF;
     border: none;
     border-radius: 20px;
@@ -821,11 +829,11 @@ img.lotus-icon {
     margin-left: 8px;
     white-space: nowrap;
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 3px 10px rgba(184, 114, 43, 0.25);
+    box-shadow: 0 3px 10px rgba(217, 164, 65, 0.3);
 }
 .btn-confirm-dates:hover {
     transform: translateY(-1px);
-    box-shadow: 0 5px 14px rgba(184, 114, 43, 0.35);
+    box-shadow: 0 5px 14px rgba(217, 164, 65, 0.4);
 }
 .btn-confirm-dates:active {
     transform: translateY(0);
@@ -958,7 +966,7 @@ img.lotus-icon {
 }
 
 .ceremony-modal-close:hover {
-    background: var(--gold-pale);
+    background: var(--accent-gold-pale);
     color: var(--brown-dark);
 }
 
@@ -1005,8 +1013,8 @@ img.lotus-icon {
 
 .ceremony-type-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(184, 114, 43, 0.22);
-    border-color: var(--gold-mid);
+    box-shadow: 0 12px 30px rgba(217, 164, 65, 0.25);
+    border-color: var(--accent-gold);
 }
 
 .ceremony-type-img { width: 100%; height: 150px; }
@@ -1028,7 +1036,7 @@ img.lotus-icon {
 .ceremony-type-cta {
     margin-top: 12px;
     display: inline-block;
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
     color: #FFFFFF;
     font-weight: 700;
     font-size: 0.82rem;
@@ -1072,7 +1080,7 @@ img.lotus-icon {
 
 .event-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(184, 114, 43, 0.15);
+    box-shadow: 0 12px 40px rgba(217, 164, 65, 0.18);
 }
 
 .event-card-icon {
@@ -1118,7 +1126,7 @@ img.lotus-icon {
 }
 
 .btn-detail {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
     color: #FFFFFF;
     border: none;
     border-radius: 10px;
@@ -1130,17 +1138,17 @@ img.lotus-icon {
     transition: all 0.2s;
     font-family: 'Sarabun', sans-serif;
     align-self: flex-start;
-    box-shadow: 0 3px 10px rgba(184, 114, 43, 0.25);
+    box-shadow: 0 3px 10px rgba(217, 164, 65, 0.3);
 }
 
 .btn-detail:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-mid));
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(184, 114, 43, 0.35);
+    box-shadow: 0 5px 16px rgba(217, 164, 65, 0.4);
 }
 
 .event-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.event-rating .stars { color: var(--gold-mid); font-size: 1rem; letter-spacing: 2px; }
+.event-rating .stars { color: var(--accent-gold); font-size: 1rem; letter-spacing: 2px; }
 .event-rating .rating-num { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
 
 /* ========== REVIEWS ========== */
@@ -1178,7 +1186,7 @@ img.lotus-icon {
     position: absolute;
     left: 0; top: 20px; bottom: 20px;
     width: 3px;
-    background: linear-gradient(to bottom, transparent, var(--gold-mid), transparent);
+    background: linear-gradient(to bottom, transparent, var(--accent-gold), transparent);
     border-radius: 0 2px 2px 0;
 }
 
@@ -1193,7 +1201,7 @@ img.lotus-icon {
     pointer-events: none;
 }
 
-.review-stars { color: var(--gold-mid); font-size: 1rem; letter-spacing: 2px; }
+.review-stars { color: var(--accent-gold); font-size: 1rem; letter-spacing: 2px; }
 .review-text  { color: var(--text-body); font-size: 0.9rem; line-height: 1.8; flex: 1; font-style: italic; padding-top: 8px; }
 .reviewer-name { font-weight: 700; color: var(--brown-dark); font-size: 0.92rem; }
 .review-event-type { font-size: 0.8rem; color: var(--text-light); }
@@ -1204,7 +1212,7 @@ img.lotus-icon {
 .btn-outline-brown {
     display: inline-block;
     padding: 12px 38px;
-    border: 2px solid var(--gold-mid);
+    border: 2px solid var(--accent-gold);
     border-radius: 10px;
     color: var(--gold);
     font-family: 'Sarabun', sans-serif;
@@ -1216,11 +1224,11 @@ img.lotus-icon {
 }
 
 .btn-outline-brown:hover {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
     color: #FFFFFF;
-    border-color: var(--gold-light);
+    border-color: var(--accent-gold);
     transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(184, 114, 43, 0.3);
+    box-shadow: 0 4px 14px rgba(217, 164, 65, 0.35);
 }
 
 /* ========== GALLERY ========== */
@@ -1331,7 +1339,7 @@ img.lotus-icon {
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-mid));
     color: var(--white);
     font-weight: 700;
     font-size: 0.85rem;
@@ -1360,7 +1368,7 @@ img.lotus-icon {
     position: absolute;
     left: 0;
     top: 2px;
-    color: var(--gold-mid);
+    color: var(--accent-gold);
     font-size: 0.75rem;
 }
 
@@ -1382,7 +1390,7 @@ img.lotus-icon {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-mid));
     color: #fff;
     font-size: 0.95rem;
     flex-shrink: 0;
@@ -1392,7 +1400,7 @@ img.lotus-icon {
 }
 
 /* ========== FOOTER ==========
-   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน ชุดเดียวกับแถบเมนูบนสุด */
+   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน ชุดเดียวกับแถบเมนูบนสุด + วิ้งๆ ทองด้านบน */
 .footer-strip {
     display: block;
     width: 100%;
@@ -1404,7 +1412,8 @@ img.lotus-icon {
     color: rgba(255, 255, 255, 0.92);
     padding-top: 0;
     padding-bottom: 0;
-    border-top: 3px solid var(--pink-light);
+    border-top: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
@@ -1447,6 +1456,18 @@ img.lotus-icon {
     align-items: center;
     gap: 10px;
     margin-bottom: 10px;
+}
+
+/* โลโก้ในฟุตเตอร์ (แทนดอกบัวเดิม) วงกลมทึบเหมือนฝั่ง navbar แต่ย่อขนาดลง */
+.footer-brand .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+    object-fit: cover;
 }
 
 .footer-brand-text {
@@ -1493,7 +1514,7 @@ img.lotus-icon {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
-/* โซเชียลมีเดีย ใต้แท็กไลน์แบรนด์ (แทนที่เมนูเดิม) */
+/* โซเชียลมีเดีย ใต้แท็กไลน์แบรนด์ */
 .footer-social {
     display: flex;
     gap: 10px;
@@ -1633,8 +1654,8 @@ img.lotus-icon {
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid var(--gold-mid);
-    box-shadow: 0 4px 14px rgba(184, 114, 43, 0.22);
+    border: 3px solid var(--accent-gold);
+    box-shadow: 0 4px 14px rgba(217, 164, 65, 0.3);
 }
 
 .ritual-step-num {
@@ -1644,7 +1665,7 @@ img.lotus-icon {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: var(--gold-mid);
+    background: var(--accent-gold);
     color: #fff;
     font-weight: 700;
     font-size: 0.9rem;

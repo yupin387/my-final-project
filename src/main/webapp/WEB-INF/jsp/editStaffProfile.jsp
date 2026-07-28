@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>แก้ไขข้อมูลส่วนตัว - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editStaffProfile.css?v=3">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editStaffProfile.css?v=4">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
         <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/staff/assignments" style="text-decoration:none;">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
                  alt="บุญมีนำพา รับจัดงานบุญ" class="navbar-lotus">
-            <span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
+            <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
         </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
@@ -45,7 +45,6 @@
                     <div class="orn-diamond"></div>
                     <div class="orn-line right"></div>
                 </div>
-                <div class="card-header-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
                 <h2>แก้ไขข้อมูลส่วนตัว</h2>
                 <p>อัปเดตข้อมูลชื่อ เบอร์โทร และรหัสผ่านของคุณ</p>
             </div>
@@ -113,7 +112,7 @@
                      alt="บุญมีนำพา รับจัดงานบุญ" class="navbar-lotus footer-lotus-icon">
                 <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
             </div>
-            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างานและทีมงาน</p>
+            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
         </div>
    
     </footer>

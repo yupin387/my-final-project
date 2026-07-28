@@ -262,7 +262,7 @@ body {
 }
 
 /* ==========================================================================
-   CARD HEADER (หัวข้อหลัก + วิ้งๆ สีทอง)
+   CARD HEADER (หัวข้อหลัก)
    ========================================================================== */
 .card-header-bar {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
@@ -312,19 +312,9 @@ body {
     font-size: 26px;
     font-weight: 700;
     margin-bottom: 6px;
-    background: linear-gradient(90deg, #FFFDF5 0%, var(--accent-gold-pale) 25%, var(--accent-gold) 50%, var(--accent-gold-pale) 75%, #FFFDF5 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shimmerGold 3.2s linear infinite;
+    color: #FFFFFF;
     text-shadow: 0 1px 10px rgba(0,0,0,0.15);
     display: inline-block;
-}
-
-@keyframes shimmerGold {
-    0%   { background-position: 200% center; }
-    100% { background-position: -200% center; }
 }
 
 .card-header-bar p {
@@ -404,7 +394,7 @@ body {
 }
 
 /* ==========================================================================
-   TYPE RADIO
+   TYPE RADIO (ตัวกรองประเภท Item) — สีทองล้วน ไม่ไล่สี
    ========================================================================== */
 .type-options { display: flex; gap: 10px; flex-wrap: wrap; }
 .type-options input[type="radio"] { display: none; }
@@ -424,7 +414,7 @@ body {
 .type-label:hover { background: var(--cream-mid); border-color: var(--accent-gold); }
 
 .type-options input[type="radio"]:checked + .type-label {
-    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    background: var(--accent-gold);
     color: #FFFFFF;
     border-color: var(--accent-gold);
     box-shadow: 0 2px 8px var(--shadow-gold);
@@ -489,7 +479,7 @@ body {
 .form-actions { display: flex; gap: 12px; align-items: center; }
 
 .btn-submit {
-    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    background: var(--accent-gold);
     color: #FFFFFF;
     border: none;
     border-radius: 10px;

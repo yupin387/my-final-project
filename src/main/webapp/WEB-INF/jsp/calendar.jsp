@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ปฏิทินฤกษ์ดี - บุญมี รับจัดงานบุญ</title>
+<title>ปฏิทินฤกษ์ดี - บุญมีนำพา จัดงานบุญ</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/home.css?v=15">
 <%-- CSS เฉพาะหน้าปฏิทิน แยกไฟล์ออกมาจาก inline <style> เดิม --%>
@@ -335,7 +335,7 @@
 	</section>
 
 	<%-- ========== FOOTER (ใหม่ — ไม่มีเมนู, สีตรงกับแถบเมนูบนสุด) ========== --%>
-	<footer class="site-footer">
+<footer class="site-footer">
 		<div class="footer-top">
 			<svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
 				style="display: block; width: 100%; height: 8px;">
@@ -343,9 +343,9 @@
             <defs>
                 <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%"
 					y2="0%">
-                    <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
-                    <stop offset="50%" stop-color="rgba(255,255,255,0.9)" />
-                    <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
+                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
+                    <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+                    <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
                 </linearGradient>
             </defs>
         </svg>
@@ -353,8 +353,9 @@
 		<div class="container footer-content footer-content-slim">
 			<div class="footer-col footer-brand-col">
 				<div class="footer-brand">
-					<div class="lotus-icon">🪷</div>
-					<span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+					<img src="${pageContext.request.contextPath}/static/images/logoo.png"
+						alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+					<span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
 				</div>
 				<p class="footer-tagline">รับจัดงานบุญ
 					ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
@@ -373,9 +374,7 @@
 				<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
 			</div>
 		</div>
-		
 	</footer>
-
 	<%-- ========== SCRIPT ZONE: ปฏิทิน (ฤกษ์ดี) ========== --%>
 	<script>
     window.contextPath = "${pageContext.request.contextPath}";

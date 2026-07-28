@@ -51,7 +51,7 @@
 
         <div class="card">
             <div class="card-header-bar">
-                <span>🪷 รายละเอียดข้อมูลงาน</span>
+                <span>รายละเอียดข้อมูลงาน</span>
                 <a href="${pageContext.request.contextPath}/staff/assignments/update-status/${a.bookingForm.bookingId}"
                    class="btn-update-status">🔄 อัปเดตสถานะงาน</a>
             </div>
@@ -143,7 +143,7 @@
                      alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
                 <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
             </div>
-            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างานและทีมงาน</p>
+            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
         </div>
      
     </footer>

@@ -491,17 +491,21 @@ tbody tr:hover td { background: var(--cream-warm); transition: background 0.15s;
 .btn-quote  { background: linear-gradient(135deg, var(--gold), var(--accent-gold)); color: #FFFFFF; }
 .btn-quote:hover { opacity: 0.9; }
 
-.btn-assign { background: linear-gradient(135deg, #2e7d32, #43a047); color: #fff; }
-.btn-assign:hover { background: linear-gradient(135deg, #245c27, #388e3c); }
+/* มอบหมายงาน / เปลี่ยนตัว - สีทองล้วน ไม่ไล่เฉด */
+.btn-assign {
+    background: var(--accent-gold);
+    color: #FFFFFF;
+}
+.btn-assign:hover { background: #C4922F; }
 
 .btn-update { background: linear-gradient(135deg, #1565c0, #1976d2); color: #fff; }
 .btn-update:hover { background: linear-gradient(135deg, #0d4f9e, #1565c0); }
 
 .btn-change {
-    background: linear-gradient(135deg, var(--gold-mid), var(--accent-gold-mid));
+    background: var(--accent-gold);
     color: #FFFFFF;
 }
-.btn-change:hover { background: linear-gradient(135deg, var(--accent-gold-mid), var(--accent-gold-pale)); color: var(--brown-dark); }
+.btn-change:hover { background: #C4922F; }
 
 /* ========== EMPTY STATE ========== */
 .empty-state {

@@ -4,21 +4,34 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-    --gold:          #E0577F;
-    --gold-mid:      #EC6E96;
-    --gold-light:    #F49CB9;
-    --gold-pale:     #FBD0DE;
+    /* โทนชมพู-ขาว-ทอง (ให้เข้าธีมหลักของเว็บ) */
+    --gold:          #D9A441;   /* ทองสด ตามปุ่ม "งานใหม่" */
+    --gold-mid:      #D9A441;   /* ทองสำหรับเส้นคั่น/ประดับ/กรอบ */
+    --gold-light:    #E8C171;
+    --gold-pale:     #F5E4C0;
 
+    /* ชมพู CTA */
+    --pink-cta:       #E0577F;
+    --pink-cta-light: #EC6E96;
+    --pink-cta-dark:  #C7405F;
+
+    /* พื้นหลัง: ครีมชมพูอ่อนมาก + การ์ดขาว */
     --cream:         #F9DCE6;
-    --cream-warm:    #FFF3F7;
-    --cream-mid:     #FFE8F0;
-    --cream-border:  #F6C3D6;
-    --cream-border-soft: #FADCE6;
+    --cream-warm:    #FFFFFF;
+    --cream-mid:     #FFF8F3;
+    --cream-border:  #F3D9DC;
+    --cream-border-soft: #F6E2D9;
 
     --text-dark:     #3A1526;
     --text-mid:      #6B2C46;
-    --brown-dark:    #4A1B30;
-    --brown-mid:     #8C3358;
+    --brown-dark:    #B8823A;
+    --brown-mid:     #C79552;
+
+    /* สีเดิมของ navbar (คงไว้ตาม home.css) */
+    --nav-gold:       #E0577F;
+    --nav-gold-mid:   #EC6E96;
+    --nav-gold-light: #F49CB9;
+    --nav-gold-pale:  #FBD0DE;
 }
 
 body {
@@ -30,17 +43,21 @@ body {
 }
 
 /* ==========================================================================
-   NAVBAR
+   NAVBAR (เหมือน home.css — ขนาด/สี/ฟอนต์ + เส้นทองบน-ล่าง)
    ========================================================================== */
 .main-navbar {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
-    border-bottom: 3px solid var(--gold-pale);
-    position: relative;
-    min-height: 92px;
+    border-top: 3px solid #E5BD6D;
+    border-bottom: 3px solid #E5BD6D;
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    min-height: 70px;
     box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+    position: relative;
 }
 
 .main-navbar::before {
@@ -58,11 +75,9 @@ body {
     text-decoration: none;
 }
 
-
-
 .lotus-icon {
-    width: 72px;
-    height: 72px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     object-fit: cover;
     background: rgba(255, 255, 255, 0.18);
@@ -74,16 +89,15 @@ body {
 
 .nav-brand-text {
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 30px;
-    font-weight: 800;
+    font-family: 'Charmonman', cursive;
+    font-weight: 700;
+    font-size: 34px;
     letter-spacing: 0.5px;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 /* ==========================================================================
-   PAGE WRAPPER & CARD
+   PAGE WRAPPER & CARD (ธีมชมพู-ขาว-ทอง)
    ========================================================================== */
 .page-wrapper {
     flex: 1;
@@ -96,11 +110,11 @@ body {
 .reg-card {
     background: var(--cream-warm);
     border-radius: 20px;
-    padding: 36px 48px 40px;
-    width: 120%;
-    max-width: 800px;
-    border: 3px solid #FFFFFF;
-    box-shadow: 0 10px 40px rgba(224, 87, 127, 0.28);
+    padding: 40px 60px 44px;
+    width: 100%;
+    max-width: 700px;
+    border: 2px solid var(--gold-pale);
+    box-shadow: 0 10px 40px rgba(139, 90, 43, 0.18);
     position: relative;
     overflow: hidden;
 }
@@ -135,7 +149,7 @@ body {
     text-align: center;
     font-size: 2rem;
     margin-bottom: 12px;
-    filter: drop-shadow(0 2px 6px rgba(224,87,127,0.35));
+    filter: drop-shadow(0 2px 6px rgba(139,90,43,0.25));
 }
 
 /* ==========================================================================
@@ -148,14 +162,15 @@ body {
 
 .title-main {
     color: var(--brown-dark);
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', cursive;
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 2.2rem;
+    letter-spacing: 0.5px;
     margin-bottom: 6px;
 }
 
 .subtitle-muted {
-    color: #A8567C;
+    color: var(--text-mid);
     font-size: 0.88rem;
 }
 
@@ -189,7 +204,7 @@ body {
 
 .reg-input {
     width: 100%;
-    background-color: #FFFFFF;
+    background-color: var(--cream-mid);
     border: 1.5px solid var(--cream-border-soft);
     border-radius: 8px;
     padding: 11px 15px;
@@ -200,19 +215,19 @@ body {
     outline: none;
 }
 
-.reg-input::placeholder { color: #D08CA6; }
+.reg-input::placeholder { color: #C9A9AE; }
 
 .reg-input:focus {
     background-color: #FFFFFF;
     border-color: var(--gold-mid);
-    box-shadow: 0 0 0 3px rgba(236, 110, 150, 0.18);
+    box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.18);
 }
 
 /* ==========================================================================
-   BUTTON
+   BUTTON (ชมพู CTA)
    ========================================================================== */
 .btn-reg {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: linear-gradient(135deg, var(--pink-cta), var(--pink-cta-light));
     color: #FFFFFF;
     border: none;
     padding: 13px;
@@ -229,8 +244,8 @@ body {
 }
 
 .btn-reg:hover {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
-    color: var(--brown-dark);
+    background: linear-gradient(135deg, var(--pink-cta-dark), var(--pink-cta));
+    color: #FFFFFF;
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(224, 87, 127, 0.45);
 }
@@ -243,7 +258,7 @@ body {
     align-items: center;
     gap: 10px;
     margin: 20px 0 16px;
-    color: #A8567C;
+    color: var(--text-mid);
     font-size: 0.82rem;
     font-weight: 700;
 }
@@ -297,10 +312,14 @@ body {
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
+@media (max-width: 1060px) {
+    .reg-card { max-width: 92%; }
+}
+
 @media (max-width: 540px) {
     .reg-card { padding: 28px 20px 32px; }
     .main-navbar { padding: 0 16px; min-height: 76px; }
-    .nav-brand-text { font-size: 22px; }
+    .nav-brand-text { font-size: 26px; }
     .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
     .row-grid { grid-template-columns: 1fr; }
 }

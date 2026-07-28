@@ -54,7 +54,7 @@
                 <div class="orn-diamond-sm"></div>
                 <div class="orn-line"></div>
             </div>
-            <div class="header-lotus">🪷</div>
+            
             <h1>เพิ่มคำถามใหม่</h1>
             <p>ระบุข้อความคำถามและเลือกประเภทพิธีที่เกี่ยวข้อง</p>
             <div class="header-gold-line"></div>

@@ -143,13 +143,13 @@
 
             <div class="modal-header">
                 <div class="w-100">
-                    <div class="modal-ornament">
-                        <div class="ornament-line" style="max-width:50px;"></div>
-                        <div class="ornament-diamond-sm"></div>
-                        <div class="ornament-diamond"></div>
-                        <div class="ornament-diamond-sm"></div>
-                        <div class="ornament-line right" style="max-width:50px;"></div>
-                    </div>
+                   <div class="section-ornament">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond-sm"></div>
+    <div class="ornament-diamond"></div>
+    <div class="ornament-diamond-sm"></div>
+    <div class="ornament-line right"></div>
+</div>
                     <h5 class="modal-title">ยืนยันการลบข้อมูล</h5>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

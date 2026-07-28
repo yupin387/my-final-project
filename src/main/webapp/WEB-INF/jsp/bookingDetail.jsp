@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายละเอียดการจอง - บุญมีนำพา รับจัดงานบุญ</title>
+    <title>รายละเอียดการจอง - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bookingDetail.css">
 </head>
@@ -18,7 +18,7 @@
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/organizer/bookings" style="text-decoration: none;">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
              alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
-        <span class="nav-brand-text">บุญมีนำพา รับจัดงานบุญ</span>
+        <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
@@ -300,7 +300,7 @@
         <div class="footer-brand">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
                  alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="footer-brand-text">บุญมีนำพา รับจัดงานบุญ</span>
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
         <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>

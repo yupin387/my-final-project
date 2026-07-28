@@ -8,31 +8,55 @@
 	    <meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <title>รีวิว: ระบบรับจัดงานบุญ</title>
-	    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+	    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewReview.css">
 	</head>
 	<body>
 	
-	<%-- ========== NAVBAR (ให้ตรงกับ home / ceremonyDetail: 92px, โลโก้จริง 58px) ========== --%>
+	<%-- ========== NAVBAR ========== --%>
 	<nav class="navbar">
 	    <a class="navbar-title" href="${pageContext.request.contextPath}/home">
 	        <span class="navbar-logo">
-	            <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
+	            <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา จัดงานบุญ">
 	        </span>
-	        บุญมี รับจัดงานบุญ
+	        บุญมีนำพา จัดงานบุญ
 	    </a>
 	    <div class="navbar-right">
 	        <div class="navbar-menu">
-	            <a href="${pageContext.request.contextPath}/home"          class="nav-item">หน้าหลัก</a>
+	            <a href="${pageContext.request.contextPath}/home" class="nav-item">หน้าหลัก</a>
+
+	            <%-- หมายเหตุ: ปรับ href ให้ตรงกับ route จริงของหน้าบริการ/แพ็กเกจ --%>
+	            <div class="nav-dropdown">
+	                <button type="button" class="nav-item nav-dropdown-toggle">บริการ/แพ็กเกจ <span class="caret">▾</span></button>
+	                <div class="nav-dropdown-menu">
+	                    <a href="<c:url value='/ceremonies'><c:param name='type' value='ทำบุญบ้าน'/></c:url>">งานทำบุญบ้าน</a>
+	                    <a href="<c:url value='/ceremonies'><c:param name='type' value='ขึ้นบ้านใหม่'/></c:url>">งานขึ้นบ้านใหม่</a>
+	                    <a href="<c:url value='/ceremonies'><c:param name='type' value='ทำบุญออฟฟิศ'/></c:url>">งานทำบุญออฟฟิศ</a>
+	                </div>
+	            </div>
+
+	            <%-- หมายเหตุ: ปรับ href ให้ตรงกับ route จริงของหน้าปฏิทินคิวงาน --%>
+	            <div class="nav-dropdown">
+	                <button type="button" class="nav-item nav-dropdown-toggle">ปฏิทิน <span class="caret">▾</span></button>
+	                <div class="nav-dropdown-menu">
+	                    <a href="${pageContext.request.contextPath}/calendar">ปฏิทินคิวงาน</a>
+	                    <c:if test="${not empty sessionScope.user}">
+	                        <a href="${pageContext.request.contextPath}/latestBooking">การจองของฉัน</a>
+	                    </c:if>
+	                </div>
+	            </div>
+
 	            <c:if test="${not empty sessionScope.user}">
-	                <a href="${pageContext.request.contextPath}/latestBooking"  class="nav-item">การจอง</a>
 	                <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-item">ใบเสนอราคา</a>
 	            </c:if>
-	            <a href="${pageContext.request.contextPath}/reviews"        class="nav-item active">รีวิว</a>
+	            <a href="${pageContext.request.contextPath}/reviews" class="nav-item active">รีวิว</a>
 	            <c:if test="${empty sessionScope.user}">
 	                <a href="${pageContext.request.contextPath}/loginMember" class="nav-item">เข้าสู่ระบบ</a>
 	            </c:if>
 	        </div>
+	        <c:if test="${empty sessionScope.user}">
+	            <a href="${pageContext.request.contextPath}/register" class="btn-register">สมัครสมาชิก</a>
+	        </c:if>
 	        <c:if test="${not empty sessionScope.user}">
 	            <div class="user-info" onclick="this.querySelector('.dropdown-menu').classList.toggle('show')">
 	                <div class="user-avatar-nav">${fn:substring(sessionScope.user.memberFirstName, 0, 1)}</div>
@@ -175,7 +199,7 @@
 	
 	</div>
 	
-	<%-- ========== FOOTER (ให้ตรงกับ home / ceremonyDetail — ใช้โลโก้จริง ไม่มี Copyright) ========== --%>
+	<%-- ========== FOOTER ========== --%>
 	<footer class="site-footer">
 	    <div class="footer-top">
 	        <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
@@ -183,11 +207,11 @@
 	            <rect width="1200" height="8" fill="url(#footerGrad)" />
 	            <defs>
 	                <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-	                    <stop offset="0%" stop-color="#6E1930" />
-	                    <stop offset="25%" stop-color="#EC6E96" />
-	                    <stop offset="50%" stop-color="#FBD0DE" />
-	                    <stop offset="75%" stop-color="#EC6E96" />
-	                    <stop offset="100%" stop-color="#6E1930" />
+	                    <stop offset="0%" stop-color="#D9A441" stop-opacity="0.3" />
+	                    <stop offset="25%" stop-color="#E8C878" />
+	                    <stop offset="50%" stop-color="#F7E3B0" />
+	                    <stop offset="75%" stop-color="#E8C878" />
+	                    <stop offset="100%" stop-color="#D9A441" stop-opacity="0.3" />
 	                </linearGradient>
 	            </defs>
 	        </svg>
@@ -196,9 +220,9 @@
 	        <div class="footer-col footer-brand-col">
 	            <div class="footer-brand">
 	                <div class="lotus-icon">
-	                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
+	                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา จัดงานบุญ">
 	                </div>
-	                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+	                <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
 	            </div>
 	            <p class="footer-tagline">รับจัดงานบุญ
 	                ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
@@ -229,5 +253,22 @@
 	    </div>
 	</footer>
 	
+	<script>
+	document.querySelectorAll('.nav-dropdown-toggle').forEach(function (btn) {
+	    btn.addEventListener('click', function (e) {
+	        e.stopPropagation();
+	        var dropdown = btn.closest('.nav-dropdown');
+	        document.querySelectorAll('.nav-dropdown.show').forEach(function (d) {
+	            if (d !== dropdown) d.classList.remove('show');
+	        });
+	        dropdown.classList.toggle('show');
+	    });
+	});
+	document.addEventListener('click', function () {
+	    document.querySelectorAll('.nav-dropdown.show').forEach(function (d) {
+	        d.classList.remove('show');
+	    });
+	});
+	</script>
 	</body>
 	</html>
