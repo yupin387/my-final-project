@@ -146,19 +146,20 @@
 			<%-- ===== เมนู บริการ/แพ็กเกจ (dropdown)
 			     แพ็กเกจย้ายไปอยู่ในหน้ารายละเอียดของแต่ละงานบุญแล้ว ตัวเมนูหลักจึงไม่ลิงก์ไปที่ไหน
 			     เป็นแค่ตัวเปิด dropdown ให้เลือกงานบุญที่ต้องการดูแพ็กเกจแทน ===== --%>
-			<div class="nav-dropdown-wrap">
-				<a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
-					บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
-				</a>
-				<div class="nav-dropdown-panel">
-					<c:forEach var="t" items="${ceremonyTypes}">
-						<a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
-							class="nav-dropdown-link">${t.mainName}</a>
-					</c:forEach>
-					<hr class="nav-dropdown-divider">
+		
 
-				</div>
-			</div>
+        <%-- เมนูบริการ/แพ็กเกจ (dropdown) --%>
+        <div class="nav-dropdown-wrap">
+            <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
+                บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <c:forEach var="t" items="${ceremonyTypes}">
+                    <a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
+                       class="nav-dropdown-link">${t.mainName}</a>
+                </c:forEach>
+            </div>
+        </div>
 
 
 			<%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) — ลิงก์ไปหน้า /calendar ===== --%>
@@ -230,16 +231,16 @@
 	<div class="hero-section">
 			<div class="hero-slider" id="heroSlider">
 			    <div class="hero-slide active">
-			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover.png" alt="cover">
+			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover1.png" alt="cover">
 			    </div>
 			    <div class="hero-slide">
-			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover3.png" alt="cover3">
+			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover.png" alt="cover3">
 			    </div>
 			    <div class="hero-slide">
-			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover4.png" alt="cover4">
+			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover6.png" alt="cover4">
 			    </div>
 			    <div class="hero-slide">
-			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover5.png" alt="cover5">
+			        <img src="${pageContext.request.contextPath}/static/images/Hero-banner/cover7.png" alt="cover5">
 			    </div>
 			</div>
 		<div class="hero-overlay"></div>

@@ -516,9 +516,9 @@
             <rect width="1200" height="8" fill="url(#footerGrad)" />
             <defs>
                 <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
-                    <stop offset="50%" stop-color="rgba(255,255,255,0.9)" />
-                    <stop offset="100%" stop-color="rgba(255,255,255,0.15)" />
+                   <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
+<stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+<stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
                 </linearGradient>
             </defs>
         </svg>

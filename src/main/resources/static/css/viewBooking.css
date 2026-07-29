@@ -48,7 +48,7 @@
 }
 
 body {
-	background-color: var(--cream-warm);
+	background-color: #FFF6F9;
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -94,7 +94,7 @@ body {
 	display: flex;
 	align-items: center;
 	text-decoration: none;
-	gap: 14px;
+	gap: 12px;
 }
 
 /* โลโก้ navbar — ขนาดให้ตรงกับ home (76px) */
@@ -567,7 +567,7 @@ body {
 .footer-heading {
 	font-family: 'Charmonman', 'Noto Serif Thai', serif;
 	color: #FFFFFF;
-	font-size: 1.15rem;
+	font-size: 1.35rem;
 	font-weight: 700;
 	margin-bottom: 14px;
 }

@@ -43,7 +43,7 @@
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: var(--cream);
+    background-color: #FFF6F9;
     color: var(--text-dark);
     min-height: 100vh;
     padding-bottom: 0;
@@ -718,4 +718,55 @@ button.nav-item {
     .filter-wrapper{ gap: 8px; }
     .btn-filter    { padding: 7px 18px; font-size: 0.85rem; }
     .review-card, .summary-card { padding: 22px; }
+}
+.footer-content.footer-content-slim {
+    grid-template-columns: 1.3fr 1fr;
+    padding: 44px 20px 26px;
+}
+@media (max-width: 860px) {
+    .footer-content.footer-content-slim { grid-template-columns: 1fr; }
+}
+
+.footer-brand .lotus-icon {
+    background: rgba(255, 255, 255, 0.18);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.footer-brand .lotus-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 7px 14px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+.footer-social-link:hover {
+    background: rgba(255, 255, 255, 0.3);
 }

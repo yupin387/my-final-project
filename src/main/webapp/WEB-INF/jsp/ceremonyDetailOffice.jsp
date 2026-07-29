@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${ceremony.ceremonyName}- บุญมีรับจัดงานบุญ</title>
+<title>${ceremony.ceremonyName}-บุญมีรับจัดงานบุญ</title>
 <link
 	href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap"
 	rel="stylesheet">
@@ -19,6 +19,7 @@
 .cd-package-img-container {
 	height: 340px;
 }
+
 .cd-package-option {
 	padding: 24px;
 }
@@ -191,8 +192,8 @@
 			</div>
 
 			<div class="cd-curiosity-question">
-			    พิธีทำบุญบริษัท เพื่อความเป็นสิริมงคล<br>
-			    และความเจริญก้าวหน้าขององค์กร
+				พิธีทำบุญบริษัท เพื่อความเป็นสิริมงคล<br>
+				และความเจริญก้าวหน้าขององค์กร
 			</div>
 			<div class="cd-curiosity-divider">
 				<span></span><i>◆</i><span></span>
@@ -411,8 +412,9 @@
 			<div class="cd-footer-note">
 				<span>ไม่อยากเลือกแพ็กเกจสำเร็จรูป? กรอกรายละเอียดเองได้</span>
 			</div>
-			  <a href="${pageContext.request.contextPath}/booking3?ceremonyId=${ceremony.ceremonyId}&custom=true" 
-                 class="cd-btn-book">จองเเบบระบุเอง (ทำบุญบริษัท)</a>
+			<a
+				href="${pageContext.request.contextPath}/booking3?ceremonyId=${ceremony.ceremonyId}&custom=true"
+				class="cd-btn-book">จองเเบบระบุเอง (ทำบุญบริษัท)</a>
 		</div>
 	</div>
 
@@ -425,12 +427,9 @@
             <defs>
                 <linearGradient id="footerGrad" x1="0%" y1="0%"
 					x2="100%" y2="0%">
-                    <stop offset="0%"
-					stop-color="rgba(255,255,255,0.15)" />
-                    <stop offset="50%"
-					stop-color="rgba(255,255,255,0.9)" />
-                    <stop offset="100%"
-					stop-color="rgba(255,255,255,0.15)" />
+                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
+<stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+<stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
                 </linearGradient>
             </defs>
         </svg>
@@ -486,10 +485,8 @@
 				});
 			}
 		});
-		
-		
 	</script>
-	
+
 	<script
 		src="${pageContext.request.contextPath}/static/js/ceremonyDetail.js"></script>
 </body>

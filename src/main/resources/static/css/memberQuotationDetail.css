@@ -47,10 +47,15 @@
     --neutral-mid:    #F2F2F2;
     --neutral-border: #E2E2E2;
     --neutral-text:   #6B6B6B;
+
+    /* ===== ทองอ่อนๆ ใช้แทนสีเทาในกล่องข้อมูล/ยอดรวม (ตามที่ขอ ไม่เอาสีเทา) ===== */
+    --gold-bg-pale:   #FFF8E9;
+    --gold-border-pale: #F0D28A;
+    --gold-text-mid:  #8A6420;
 }
 
 body {
-    background-color: var(--cream);
+    background-color: var(--cream-warm); /* เดิม var(--cream) = ขาวล้วน เปลี่ยนเป็น #FFF6F9 เหมือน Home */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -196,13 +201,10 @@ img.lotus-icon {
     background: #FFFFFF;
     border-radius: 18px;
     overflow: hidden;
-
-    border: 3px solid var(--gold-mid);
-
+    border: 2px solid var(--accent-gold); /* เดิม 3px solid var(--gold-mid) = ชมพู เปลี่ยนเป็นทองจริง */
     box-shadow:
-        0 0 12px rgba(236,110,150,0.35),
-        0 8px 32px rgba(224,87,127,0.15);
-
+        0 0 10px rgba(217,164,65,0.22),
+        0 8px 32px rgba(224,87,127,0.10);
     margin-bottom: 20px;
 }
 
@@ -321,8 +323,8 @@ img.lotus-icon {
 /* ===== Info Grid ===== */
 .info-grid-section {
     margin: 24px 32px 0;
-    background: var(--neutral-bg);
-    border: 1px solid var(--neutral-border);
+    background: var(--gold-bg-pale);
+    border: 1px solid var(--gold-border-pale);
     border-radius: 10px;
     padding: 16px 20px;
     display: grid;
@@ -348,8 +350,9 @@ img.lotus-icon {
     color: #FFFFFF;
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 13px 20px;
-    border-radius: 12px;
+    border-radius: 12px 12px 0 0;
     border: 1.5px solid var(--accent-gold);
+    border-bottom: none;
     margin-bottom: 0;
     display: flex;
     align-items: center;
@@ -373,33 +376,35 @@ table {
 }
 
 th {
-    background: var(--neutral-bg);
-    color: var(--neutral-text);
+    background: var(--cream-mid);
+    color: var(--brown-mid);
     padding: 13px 14px;
     text-align: left;
     font-size: 12px;
     font-weight: 700;
-    border-bottom: 2px solid var(--neutral-border);
+    border: none;
+    border-bottom: 2px solid var(--accent-gold-pale);
     letter-spacing: 0.4px;
 }
 
 td {
     padding: 13px 14px;
-    border-bottom: 1px solid var(--neutral-mid);
+    border: none;
+    border-bottom: 1px solid var(--cream-border-soft);
     font-size: 14px;
     vertical-align: middle;
     color: #444;
 }
 
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--cream); }
+tr:hover td { background: var(--cream-warm); }
 
 /* ===== Group Row (หัวหมวด) — โทนทอง/สังฆทาน ให้ตัดกับแถบชมพูด้านบน ตามภาพตัวอย่าง ===== */
 .group-row td {
     background: linear-gradient(90deg, var(--accent-gold-pale) 0%, var(--saffron-pale) 100%);
     color: var(--saffron-deep);
     font-weight: 700;
-    padding: 12px 10px;
+    padding: 11px 14px;
     font-size: 15px;
     border-bottom: 2px solid var(--accent-gold-mid);
 }
@@ -433,14 +438,14 @@ tr:hover td { background: var(--cream); }
     margin: 8px 32px 0;
     padding: 18px 24px;
     text-align: right;
-    background: var(--neutral-bg);
-    border: 1px solid var(--neutral-border);
+    background: var(--gold-bg-pale);
+    border: 1px solid var(--gold-border-pale);
     border-radius: 12px;
 }
 
 .total-sub {
     font-size: 12px;
-    color: var(--neutral-text);
+    color: var(--gold-text-mid);
     margin-bottom: 4px;
 }
 
@@ -484,8 +489,8 @@ tr:hover td { background: var(--cream); }
 
 /* ===== Revise Section ===== */
 .revise-box {
-    background: var(--neutral-bg);
-    border: 1.5px solid var(--neutral-border);
+    background: var(--gold-bg-pale);
+    border: 1.5px solid var(--gold-border-pale);
     border-radius: 12px;
     padding: 22px 24px;
 }
@@ -866,3 +871,52 @@ tr:hover td { background: var(--cream); }
     .info-grid-section { grid-template-columns: 1fr; }
     .btn-flex-group { flex-direction: column; }
 }
+
+/* ===== navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) ===== */
+.nav-dropdown-wrap { position: relative; display: inline-block; }
+.nav-dropdown-toggle { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+.nav-caret { font-size: 0.7rem; transition: transform 0.2s ease; }
+.nav-dropdown-wrap:hover .nav-caret { transform: rotate(180deg); }
+.nav-dropdown-panel {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0;
+    min-width: 220px;
+    background: #fff;
+    border: 1px solid var(--accent-gold-pale);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(224, 87, 127, 0.18);
+    padding: 8px 0;
+    z-index: 100;
+}
+.nav-dropdown-wrap:hover .nav-dropdown-panel,
+.nav-dropdown-wrap:focus-within .nav-dropdown-panel { display: block; }
+.nav-dropdown-link { display: block; padding: 10px 18px; font-size: 0.92rem; color: var(--brown-dark); text-decoration: none; white-space: nowrap; }
+.nav-dropdown-link:hover { background: var(--cream-mid); }
+
+/* ===== profile dropdown ===== */
+.dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; cursor: pointer; }
+.dropdown-menu-custom {
+    visibility: hidden; opacity: 0;
+    position: absolute; top: calc(100% - 10px); right: 0;
+    background-color: #fff;
+    border: 1px solid var(--cream-border-soft);
+    border-radius: 10px;
+    min-width: 175px;
+    box-shadow: 0 8px 28px rgba(199, 64, 95, 0.18);
+    z-index: 99999; padding: 0;
+    transform: translateY(-8px);
+    transition: all 0.25s ease;
+}
+.dropdown-menu-custom.show { visibility: visible; opacity: 1; transform: translateY(0); }
+.dropdown-link {
+    display: block; padding: 13px 20px;
+    font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 600;
+    color: var(--text-mid); text-decoration: none; background: #fff;
+    border-bottom: 1px solid var(--cream-mid); transition: background 0.2s; text-align: left;
+}
+.dropdown-link:last-child  { border-bottom: none; border-radius: 0 0 10px 10px; }
+.dropdown-link:first-child { border-radius: 10px 10px 0 0; }
+.dropdown-link:hover       { background: var(--cream-mid); }
+.dropdown-link.danger      { color: #c0392b; }
+.dropdown-link.danger:hover{ background: #fff5f5; }

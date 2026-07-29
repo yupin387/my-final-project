@@ -1,7 +1,11 @@
 package com.springboot.controller.member;
- 
+
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.model.BookingForm;
+import com.springboot.model.Ceremony;
 import com.springboot.model.Item;
 import com.springboot.model.Member;
 import com.springboot.model.Quotation;
 import com.springboot.model.QuotationDetail;
+import com.springboot.service.CeremonyService;
 import com.springboot.service.MemberService;
 import com.springboot.service.QuotationService;
 
@@ -30,6 +36,18 @@ public class MemberController {
     
     @Autowired
     private QuotationService quotationService; 
+    
+    @Autowired
+    private CeremonyService ceremonyService;
+
+    // ===== ใช้ mapping รูปภาพแบบเดียวกับ UserController เพื่อความสอดคล้องกัน =====
+    private static final Map<String, String> TYPE_IMAGE_MAP = new LinkedHashMap<>();
+    static {
+        TYPE_IMAGE_MAP.put("ทำบุญบ้าน", "ceremony1.webp");
+        TYPE_IMAGE_MAP.put("ขึ้นบ้านใหม่", "img11.jpg");
+        TYPE_IMAGE_MAP.put("ทำบุญบริษัทหรือออฟฟิศ", "img12.jpg");
+    }
+    private static final String DEFAULT_TYPE_IMAGE = "ceremony1.webp";
  
     @GetMapping("/loginMember")
     public String loginPage() {
@@ -107,6 +125,9 @@ public class MemberController {
     public String showLatestQuotation(HttpSession session, Model model) {
         Member user = (Member) session.getAttribute("user");
         if (user == null) return "redirect:/loginMember";
+
+        // 🚩 เพิ่มบรรทัดนี้ — ตัวที่หายไป ทำให้ dropdown "บริการ/แพ็กเกจ" ใน navbar ว่างเปล่า
+        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
 
         // 1. หาใบเสนอราคาสุดท้ายของสมาชิกคนนี้
         Quotation latestQ = quotationService.getLatestQuotationByMemberId(user.getMemberId());
@@ -190,6 +211,38 @@ public class MemberController {
             }
         }
         return packageIncludedItems;
+    }
+
+    // ===== Helper สร้างรายการ ceremonyTypes สำหรับ dropdown "บริการ/แพ็กเกจ" ใน navbar
+    //       (โลจิกเดียวกับ UserController#buildCeremonyTypes เพื่อให้ navbar ทุกหน้าตรงกัน) =====
+    private List<Map<String, Object>> buildCeremonyTypes() {
+        List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
+
+        Map<String, List<Ceremony>> grouped = ceremonies.stream()
+            .collect(Collectors.groupingBy(
+                c -> c.getCeremonyType() == null ? "" : c.getCeremonyType().trim(),
+                LinkedHashMap::new,
+                Collectors.toList()
+            ));
+
+        List<Map<String, Object>> ceremonyTypes = new ArrayList<>();
+        for (Map.Entry<String, List<Ceremony>> entry : grouped.entrySet()) {
+            List<Ceremony> packages = entry.getValue();
+            packages.sort(Comparator.comparingDouble(Ceremony::getBasePrice));
+            Ceremony representative = packages.get(0);
+
+            String mainName = entry.getKey();
+            String image = TYPE_IMAGE_MAP.getOrDefault(mainName, DEFAULT_TYPE_IMAGE);
+
+            Map<String, Object> typeMap = new LinkedHashMap<>();
+            typeMap.put("mainName", mainName);
+            typeMap.put("representativeId", representative.getCeremonyId());
+            typeMap.put("image", image);
+            typeMap.put("priceFrom", packages.get(0).getBasePrice());
+            typeMap.put("packageCount", packages.size());
+            ceremonyTypes.add(typeMap);
+        }
+        return ceremonyTypes;
     }
     
     //==================

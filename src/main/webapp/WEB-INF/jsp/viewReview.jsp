@@ -1,4 +1,4 @@
-	<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -25,13 +25,16 @@
 	        <div class="navbar-menu">
 	            <a href="${pageContext.request.contextPath}/home" class="nav-item">หน้าหลัก</a>
 
-	            <%-- หมายเหตุ: ปรับ href ให้ตรงกับ route จริงของหน้าบริการ/แพ็กเกจ --%>
+	            <%-- ===== เมนู บริการ/แพ็กเกจ (dropdown)
+	                 ใช้ ${ceremonyTypes} ที่ ReviewController ส่งมาให้ (buildCeremonyTypesForFooter())
+	                 ลิงก์ไปหน้ารายละเอียดพิธี /ceremony/detail/{representativeId} ให้ตรงกับ route จริง
+	                 (เดิมลิงก์ไป /ceremonies?type=... ซึ่งไม่มี route นี้อยู่จริง) ===== --%>
 	            <div class="nav-dropdown">
 	                <button type="button" class="nav-item nav-dropdown-toggle">บริการ/แพ็กเกจ <span class="caret">▾</span></button>
 	                <div class="nav-dropdown-menu">
-	                    <a href="<c:url value='/ceremonies'><c:param name='type' value='ทำบุญบ้าน'/></c:url>">งานทำบุญบ้าน</a>
-	                    <a href="<c:url value='/ceremonies'><c:param name='type' value='ขึ้นบ้านใหม่'/></c:url>">งานขึ้นบ้านใหม่</a>
-	                    <a href="<c:url value='/ceremonies'><c:param name='type' value='ทำบุญออฟฟิศ'/></c:url>">งานทำบุญออฟฟิศ</a>
+	                    <c:forEach var="t" items="${ceremonyTypes}">
+	                        <a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}">${t.mainName}</a>
+	                    </c:forEach>
 	                </div>
 	            </div>
 
@@ -91,10 +94,10 @@
 	    </div>
 	
 	    <%-- ========== Filter: 3 ประเภทงานจริงตาม Ceremony.ceremonyType ==========
-	         หมายเหตุ: เปลี่ยนจากกรองด้วย ceremonyId (path variable) เป็นกรองด้วย ceremonyType (query param "type")
-	         เพราะ 1 ประเภทงานมีได้หลายแพ็กเกจ/หลาย ceremonyId
-	         *** ฝั่ง Controller ต้องรับพารามิเตอร์ "type" และกรอง reviews ที่
-	             booking.ceremony.ceremonyType ตรงกับค่านั้น พร้อมส่ง selectedCeremonyType กลับมาที่ view *** --%>
+	         หมายเหตุ: ค่า type ต้องตรงกับ Ceremony.ceremonyType ในฐานข้อมูลเป๊ะ ๆ
+	         ("ทำบุญบริษัทหรือออฟฟิศ" ไม่ใช่ "ทำบุญออฟฟิศ" — อิงตาม UserController)
+	         Controller (/reviews) กรอง reviews ที่ booking.ceremony.ceremonyType ตรงกับค่านี้
+	         และส่ง selectedCeremonyType กลับมาที่ view --%>
 	    <div class="filter-wrapper">
 	        <a href="${pageContext.request.contextPath}/reviews"
 	           class="btn-filter ${empty selectedCeremonyType ? 'active-link' : ''}">ทั้งหมด</a>
@@ -102,8 +105,8 @@
 	           class="btn-filter ${selectedCeremonyType == 'ทำบุญบ้าน' ? 'active-link' : ''}">งานทำบุญบ้าน</a>
 	        <a href="<c:url value='/reviews'><c:param name='type' value='ขึ้นบ้านใหม่'/></c:url>"
 	           class="btn-filter ${selectedCeremonyType == 'ขึ้นบ้านใหม่' ? 'active-link' : ''}">งานขึ้นบ้านใหม่</a>
-	        <a href="<c:url value='/reviews'><c:param name='type' value='ทำบุญออฟฟิศ'/></c:url>"
-	           class="btn-filter ${selectedCeremonyType == 'ทำบุญออฟฟิศ' ? 'active-link' : ''}">งานทำบุญออฟฟิศ</a>
+	        <a href="<c:url value='/reviews'><c:param name='type' value='ทำบุญบริษัทหรือออฟฟิศ'/></c:url>"
+	           class="btn-filter ${selectedCeremonyType == 'ทำบุญบริษัทหรือออฟฟิศ' ? 'active-link' : ''}">งานทำบุญออฟฟิศ</a>
 	    </div>
 	
 	    <%-- ========== SUMMARY CARD ========== --%>
@@ -199,7 +202,7 @@
 	
 	</div>
 	
-	<%-- ========== FOOTER ========== --%>
+	<%-- ========== FOOTER (โครงเดียวกับ home.jsp — แบบ slim: แบรนด์+โซเชียล / ติดต่อเรา) ========== --%>
 	<footer class="site-footer">
 	    <div class="footer-top">
 	        <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
@@ -207,47 +210,35 @@
 	            <rect width="1200" height="8" fill="url(#footerGrad)" />
 	            <defs>
 	                <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-	                    <stop offset="0%" stop-color="#D9A441" stop-opacity="0.3" />
-	                    <stop offset="25%" stop-color="#E8C878" />
-	                    <stop offset="50%" stop-color="#F7E3B0" />
-	                    <stop offset="75%" stop-color="#E8C878" />
-	                    <stop offset="100%" stop-color="#D9A441" stop-opacity="0.3" />
+	                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
+	                    <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+	                    <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
 	                </linearGradient>
 	            </defs>
 	        </svg>
 	    </div>
-	    <div class="container footer-content">
+	    <div class="container footer-content footer-content-slim">
 	        <div class="footer-col footer-brand-col">
 	            <div class="footer-brand">
 	                <div class="lotus-icon">
 	                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา จัดงานบุญ">
 	                </div>
-	                <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+	                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
 	            </div>
 	            <p class="footer-tagline">รับจัดงานบุญ
 	                ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+	            <div class="footer-social">
+	                <a href="#" class="footer-social-link">📘 Facebook</a>
+	                <a href="#" class="footer-social-link">▶️ YouTube</a>
+	                <a href="#" class="footer-social-link">💬 LINE OA</a>
+	            </div>
 	        </div>
-	
-	        <div class="footer-col">
-	            <h4 class="footer-heading">เมนู</h4>
-	            <a href="${pageContext.request.contextPath}/home">หน้าหลัก</a>
-	            <a href="${pageContext.request.contextPath}/reviews">รีวิว</a>
-	            <a href="${pageContext.request.contextPath}/loginMember">เข้าสู่ระบบ</a>
-	            <a href="${pageContext.request.contextPath}/register">สมัครสมาชิก</a>
-	        </div>
-	
-	        <div class="footer-col">
-	            <h4 class="footer-heading">งานบุญของเรา</h4>
-	            <a href="<c:url value='/reviews'><c:param name='type' value='ทำบุญบ้าน'/></c:url>">งานทำบุญบ้าน</a>
-	            <a href="<c:url value='/reviews'><c:param name='type' value='ขึ้นบ้านใหม่'/></c:url>">งานขึ้นบ้านใหม่</a>
-	            <a href="<c:url value='/reviews'><c:param name='type' value='ทำบุญออฟฟิศ'/></c:url>">งานทำบุญออฟฟิศ</a>
-	        </div>
-	
+
 	        <div class="footer-col footer-contact-col">
 	            <h4 class="footer-heading">ติดต่อเรา</h4>
 	            <p>📞 โทร. 08X-XXX-XXXX</p>
 	            <p>💬 LINE OA: @boonmee</p>
-	            <p>✉️ boonmee.booking@gmail.com</p>
+	            <p>✉️ boonmee@gmail.com</p>
 	            <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
 	        </div>
 	    </div>

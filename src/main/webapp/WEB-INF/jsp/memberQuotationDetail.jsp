@@ -14,23 +14,58 @@
 <body>
 
 <%-- ========== NAVBAR (เหมือนหน้า Home ทุกสี/ขนาด) ========== --%>
+<%-- ========== NAVBAR (ครบเมนูเหมือนหน้า Home ทุกอย่าง) ========== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
              alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
         <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
+
     <div class="navbar-center">
-        <a href="${pageContext.request.contextPath}/home"          class="nav-link-item">หน้าหลัก</a>
+        <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
+
+        <%-- เมนูบริการ/แพ็กเกจ (dropdown) --%>
+        <div class="nav-dropdown-wrap">
+            <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
+                บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <c:forEach var="t" items="${ceremonyTypes}">
+                    <a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
+                       class="nav-dropdown-link">${t.mainName}</a>
+                </c:forEach>
+            </div>
+        </div>
+
+        <%-- เมนูปฏิทิน (dropdown) --%>
+        <div class="nav-dropdown-wrap">
+            <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item nav-dropdown-toggle">
+                ปฏิทิน <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <a href="${pageContext.request.contextPath}/calendar#calendarSection" class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
+                <a href="${pageContext.request.contextPath}/calendar#lannaCalendarSection" class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
+            </div>
+        </div>
+
         <a href="${pageContext.request.contextPath}/latestBooking" class="nav-link-item">การจอง</a>
         <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-link-item active">ใบเสนอราคา</a>
-        <a href="${pageContext.request.contextPath}/reviews"       class="nav-link-item">รีวิว</a>
+        <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
-    <div class="user-profile-pill">
-        <div class="avatar-circle-nav">${fn:substring(sessionScope.user.memberFirstName, 0, 1)}</div>
-        <div class="user-info-text">
-            <span class="user-name-nav">${sessionScope.user.memberFirstName} ${sessionScope.user.memberLastName}</span>
-            <span class="user-role-nav">สมาชิก</span>
+
+    <%-- โปรไฟล์ผู้ใช้ + dropdown (โปรไฟล์ของฉัน / ออกจากระบบ) --%>
+    <div class="dropdown-wrap">
+        <div class="user-profile-pill" id="userProfileToggle">
+            <div class="avatar-circle-nav">${fn:substring(sessionScope.user.memberFirstName, 0, 1)}</div>
+            <div class="user-info-text">
+                <span class="user-name-nav">${sessionScope.user.memberFirstName} ${sessionScope.user.memberLastName}</span>
+                <span class="user-role-nav">สมาชิก</span>
+            </div>
+        </div>
+        <div class="dropdown-menu-custom" id="dropdownMenu">
+            <a href="${pageContext.request.contextPath}/editProfile" class="dropdown-link">โปรไฟล์ของฉัน</a>
+            <a href="${pageContext.request.contextPath}/logout" class="dropdown-link danger">ออกจากระบบ</a>
         </div>
     </div>
 </nav>
@@ -358,6 +393,20 @@
     function showConfirmModal() { document.getElementById('confirmModal').style.display = 'flex'; }
     function closeConfirmModal() { document.getElementById('confirmModal').style.display = 'none'; }
     setTimeout(function() { const banner = document.getElementById('flashBanner'); if(banner) { banner.style.display = 'none'; } }, 5000);
+    
+    function () {
+        var toggle = document.getElementById('userProfileToggle');
+        var menu = document.getElementById('dropdownMenu');
+        if (toggle && menu) {
+            toggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                menu.classList.toggle('show');
+            });
+            document.addEventListener('click', function () {
+                menu.classList.remove('show');
+            });
+        }
+    }();
 </script>
 </body>
 </html>
