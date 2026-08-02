@@ -114,6 +114,20 @@
             </c:if>
         </c:forEach>
 
+        <%-- ส่วนลดกรณีลูกค้านิมนต์พระสงฆ์เอง (แพ็กเกจจริงเท่านั้น) — ต้องคำนวณค่านี้ที่นี่ด้วย
+             เพราะแถวแพ็กเกจด้านล่างต้องแสดงราคาหลังหักส่วนลด ไม่ใช่ราคาแค็ตตาล็อกเต็มจำนวน
+             ไม่งั้นพอเปิดหน้าแก้ไขใบเสนอราคาที่เคยหักส่วนลดไปแล้ว จะเห็นราคาผิด (เด้งกลับไปเต็มราคา) --%>
+        <c:set var="monkSelfInviteDiscount" value="${1500}"/>
+        <c:set var="isMonkSelfInvite" value="${fn:contains(monkInviteType,'นิมนต์เอง')}"/>
+        <c:choose>
+            <c:when test="${!isCustomRequest && isMonkSelfInvite}">
+                <c:set var="packageDisplayPrice" value="${q.bookingForm.ceremony.basePrice - monkSelfInviteDiscount}"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="packageDisplayPrice" value="${q.bookingForm.ceremony.basePrice}"/>
+            </c:otherwise>
+        </c:choose>
+
         <%-- ===================================================================
              เช็คก่อนล่วงหน้าว่าแต่ละหมวดมีรายการอยู่จริงไหม (ไว้ใช้ตัดสินใจว่าจะ
              แสดงหัวข้อ group-row ของหมวดนั้นหรือไม่) เพื่อไม่ให้หัวข้อหมวดที่ว่างเปล่า
@@ -146,7 +160,7 @@
         <%-- หมวดบริการจะมีหัวข้อด้วย ถ้ามีรายการบันทึกไว้แล้ว หรือเข้าเงื่อนไข fallback auto-add
              บริการนิมนต์พระ (isCustomRequest + ยังไม่เจอ + ไม่ใช่นิมนต์เอง + มี monkCount) --%>
         <c:set var="willShowServiceFallback"
-               value="${isCustomRequest && !monkInviteServiceFound && not fn:contains(monkInviteType,'นิมนต์เอง') && not empty monkCount}"/>
+               value="${isCustomRequest && !monkInviteServiceFound && !isMonkSelfInvite && not empty monkCount}"/>
 
         <div class="main-layout">
             <div class="card">
@@ -176,6 +190,9 @@
                              หมวดแพ็กเกจหลัก / รูปแบบการจอง
                              - แพ็กเกจจริง (มาตรฐาน/อิ่มบุญ/พรีเมียม): หาแถวแพ็กเกจใน details ก่อน
                                ถ้าไม่เจอ (ใบเสนอราคาเก่าที่สร้างก่อนแก้ระบบ) ให้ fallback ไปโชว์ basePrice
+                               *** ทั้ง 2 กรณีใช้ packageDisplayPrice (หักส่วนลดนิมนต์เองแล้ว)
+                               แทนที่จะใช้ d.item.pricePerUnit / basePrice ตรง ๆ ไม่งั้นราคาจะเด้ง
+                               กลับไปเต็มจำนวนทุกครั้งที่เปิดหน้าแก้ไข ***
                              - กรอกความต้องการเบื้องต้น: ไม่มีของแถมฟรี ไม่มีราคาตายตัว ไม่มี fallback
                                เพราะไม่ควรมีการบันทึกแถวราคาแพ็กเกจสำหรับกรณีนี้ตั้งแต่แรก
                              =================================================================== --%>
@@ -211,9 +228,15 @@
                                                     <c:if test="${not empty monkCount}">
                                                         <span class="item-desc" style="display:block;margin-top:4px;">
                                                             นิมนต์พระสงฆ์ ${monkCount} รูป
-                                                            <c:if test="${fn:contains(monkInviteType,'นิมนต์เอง')}">
+                                                            <c:if test="${isMonkSelfInvite}">
                                                                 <span style="color:#c0392b;font-weight:600;"> (ลูกค้านิมนต์เอง)</span>
                                                             </c:if>
+                                                        </span>
+                                                    </c:if>
+                                                    <c:if test="${isMonkSelfInvite}">
+                                                        <span class="item-desc" style="color:#c0392b;display:block;margin-top:4px;">
+                                                            * ราคานี้หักส่วนลด <fmt:formatNumber value="${monkSelfInviteDiscount}" minFractionDigits="0"/> บาท
+                                                            เนื่องจากลูกค้านิมนต์พระสงฆ์เอง
                                                         </span>
                                                     </c:if>
                                                     <c:if test="${not empty packageIncludedItems}">
@@ -231,7 +254,7 @@
                                                 </td>
                                                 <td style="text-align:center;">${d.item.unit}</td>
                                                 <td>
-                                                    <input type="number" name="bookingPrices" value="${d.item.pricePerUnit}"
+                                                    <input type="number" name="bookingPrices" value="${packageDisplayPrice}"
                                                            step="0.01" min="0" class="price-input" style="text-align:right;"
                                                            onchange="calculateGrandTotal()">
                                                 </td>
@@ -242,12 +265,26 @@
                                         </c:if>
                                     </c:forEach>
                                     <c:if test="${!packageDetailFound}">
-                                        <%-- ใบเสนอราคาเก่าที่ยังไม่มีแถวแพ็กเกจ (สร้างก่อนแก้ระบบ) ให้ fallback ใส่ basePrice แทน --%>
+                                        <%-- ใบเสนอราคาเก่าที่ยังไม่มีแถวแพ็กเกจ (สร้างก่อนแก้ระบบ) ให้ fallback ใส่ราคาแพ็กเกจ (หักส่วนลดถ้ามี) แทน --%>
                                         <tr class="static-row">
                                             <td class="row-number" style="text-align:center;">1</td>
                                             <td>
                                                 <span class="item-name">${packageName}</span>
                                                 <span class="item-desc">${q.bookingForm.ceremony.ceremonyDetail}</span>
+                                                <c:if test="${not empty monkCount}">
+                                                    <span class="item-desc" style="display:block;margin-top:4px;">
+                                                        นิมนต์พระสงฆ์ ${monkCount} รูป
+                                                        <c:if test="${isMonkSelfInvite}">
+                                                            <span style="color:#c0392b;font-weight:600;"> (ลูกค้านิมนต์เอง)</span>
+                                                        </c:if>
+                                                    </span>
+                                                </c:if>
+                                                <c:if test="${isMonkSelfInvite}">
+                                                    <span class="item-desc" style="color:#c0392b;display:block;margin-top:4px;">
+                                                        * ราคานี้หักส่วนลด <fmt:formatNumber value="${monkSelfInviteDiscount}" minFractionDigits="0"/> บาท
+                                                        เนื่องจากลูกค้านิมนต์พระสงฆ์เอง
+                                                    </span>
+                                                </c:if>
                                                 <c:if test="${not empty packageIncludedItems}">
                                                     <div class="item-desc" style="margin-top:6px;">
                                                         <c:forEach var="pkgItem" items="${packageIncludedItems}">
@@ -263,7 +300,7 @@
                                             </td>
                                             <td style="text-align:center;">แพ็กเกจ</td>
                                             <td>
-                                                <input type="number" name="bookingPrices" value="${q.bookingForm.ceremony.basePrice}"
+                                                <input type="number" name="bookingPrices" value="${packageDisplayPrice}"
                                                        step="0.01" min="0" class="price-input" style="text-align:right;"
                                                        onchange="calculateGrandTotal()">
                                             </td>
@@ -287,7 +324,7 @@
                                             <c:if test="${not empty monkCount}">
                                                 <span class="item-desc" style="display:block;margin-top:4px;">
                                                     นิมนต์พระสงฆ์ ${monkCount} รูป
-                                                    <c:if test="${fn:contains(monkInviteType,'นิมนต์เอง')}">
+                                                    <c:if test="${isMonkSelfInvite}">
                                                         <span style="color:#c0392b;font-weight:600;"> (ลูกค้านิมนต์เอง)</span>
                                                     </c:if>
                                                 </span>
@@ -550,6 +587,16 @@
             <button type="button" class="category-tab"        data-category="บริการ"   onclick="switchCategoryTab(this,'บริการ')">บริการและดำเนินการ</button>
         </div>
         <div class="modal-body">
+            <%-- Toolbar เลือกทั้งหมดทุกหมวด (ไม่ใช่แค่แท็บที่กำลังเปิดอยู่)
+                 ทำงานร่วมกับ selectedItemIds ใน quotationCreate.js ซึ่งเก็บสถานะ
+                 การเลือกไว้แบบ global ไม่ผูกกับแท็บที่แสดงอยู่ตอนนั้น (เหมือนหน้า create) --%>
+            <div class="picker-toolbar">
+                <label class="select-all-label">
+                    <input type="checkbox" id="selectAllVisible" onchange="toggleSelectAllVisible(this)">
+                    เลือกทั้งหมดทุกหมวด
+                </label>
+                <span class="selected-count-badge">เลือกแล้ว <span id="selectedCount">0</span> รายการ</span>
+            </div>
             <div class="item-picker-grid" id="itemPickerGrid"></div>
         </div>
         <div class="modal-footer">

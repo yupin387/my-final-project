@@ -1,3 +1,14 @@
+// ===== ชื่อหัวข้อของแต่ละหมวด =====
+const GROUP_LABELS = {
+    'group-equipment':  'หมวดอุปกรณ์พิธีกรรม',
+    'group-food':       'หมวดภัตตาหารปิ่นโต',
+    'group-sangkathan': 'หมวดสังฆทาน',
+    'group-service':    'หมวดบริการและการดำเนินการ'
+};
+
+// ===== เก็บ itemId ที่ถูกเลือกไว้ใน popup ให้คงอยู่แม้สลับแท็บหมวดหมู่ =====
+const selectedItemIds = new Set();
+
 // ===== ฟังก์ชันสร้าง HTML สำหรับปุ่ม +/- และ input จำนวน =====
 function buildQtyCell(value, inputName) {
     return `
@@ -8,6 +19,7 @@ function buildQtyCell(value, inputName) {
             <button type="button" class="btn-qty-plus" onclick="adjustQty(this, 1)">+</button>
         </div>`;
 }
+
 // ===== ฟังก์ชันปรับค่าจำนวน (+/-) =====
 function adjustQty(btn, delta) {
     const input = btn.parentElement.querySelector('.qty-input');
@@ -17,16 +29,39 @@ function adjustQty(btn, delta) {
     calculateGrandTotal();
 }
 
-// ===== สร้าง Set ของ itemId ทั้งหมดที่อยู่ในตารางแล้ว =====
+// ===== สร้าง Set ของ itemId ทั้งหมดที่อยู่ในตารางหลักแล้ว (ทั้ง static และ dynamic) =====
 function getExistingItemIds() {
     const ids = new Set();
     document.querySelectorAll('tr[data-item-id]').forEach(tr => {
-        ids.add(tr.getAttribute('data-item-id'));
+        ids.add(String(tr.getAttribute('data-item-id')));
     });
     document.querySelectorAll('tr.static-row[data-injected-id]').forEach(tr => {
-        ids.add(tr.getAttribute('data-injected-id'));
+        ids.add(String(tr.getAttribute('data-injected-id')));
     });
     return ids;
+}
+
+// ===== เพิ่มหัวข้อหมวดให้ tbody อัตโนมัติ ถ้ายังไม่มีหัวข้ออยู่ =====
+// ใช้ตอนเพิ่ม item เข้าไปในหมวดที่ยังไม่มีรายการใด ๆ มาก่อน (ตอน render ตอนแรกฝั่ง JSP
+// ไม่ได้ใส่ group-row ไว้ให้เสมอ เพราะบางหมวดขึ้นกับเงื่อนไขข้อมูลลูกค้า)
+function ensureGroupHeader(tbody) {
+    if (!tbody) return;
+    if (tbody.querySelector('.group-row')) return; // มีหัวข้ออยู่แล้ว ไม่ต้องเพิ่มซ้ำ
+    const label = GROUP_LABELS[tbody.id] || '';
+    const headerRow = document.createElement('tr');
+    headerRow.className = 'group-row';
+    headerRow.innerHTML = `<td colspan="8">${label}</td>`;
+    tbody.prepend(headerRow);
+}
+
+// ===== ลบหัวข้อหมวดทิ้ง ถ้าหมวดนั้นไม่มีรายการเหลืออยู่แล้ว =====
+function removeGroupHeaderIfEmpty(tbody) {
+    if (!tbody || !tbody.id || !tbody.id.startsWith('group-')) return;
+    const remaining = tbody.querySelectorAll('tr.static-row, tr.dynamic-row');
+    if (remaining.length === 0) {
+        const header = tbody.querySelector('.group-row');
+        if (header) header.remove();
+    }
 }
 
 // ===== เปิด/ปิด Modal =====
@@ -47,6 +82,8 @@ function switchCategoryTab(tabEl, category) {
 }
 
 // ===== วาด grid การ์ดเลือกรายการ ตามหมวดหมู่ที่เลือก =====
+// หมายเหตุ: checkbox ที่ถูกเลือกไว้ (เก็บใน selectedItemIds) จะยังติ๊กอยู่เสมอ
+// แม้จะสลับแท็บไปมา เพราะ selectedItemIds ไม่ผูกกับ DOM ของแท็บใดแท็บหนึ่ง
 function renderItemPicker(category) {
     if (!category) {
         const activeTab = document.querySelector('.category-tab.active');
@@ -68,22 +105,22 @@ function renderItemPicker(category) {
     let count = 0;
 
     items.forEach(dataEl => {
-        const itemId   = dataEl.getAttribute('data-id');
+        const itemId   = String(dataEl.getAttribute('data-id'));
         const itemName = dataEl.getAttribute('data-name');
         const itemDesc = dataEl.getAttribute('data-detail') || '';
         const unit     = dataEl.getAttribute('data-unit');
         const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
         const itemType = dataEl.getAttribute('data-type') || '';
 
-		
         // กรองตามหมวดหมู่
         if (category !== 'all' && !itemType.includes(category)) return;
 
         count++;
-        const isExist = existingIds.has(String(itemId));
+        const isExist   = existingIds.has(itemId);
+        const isChecked = selectedItemIds.has(itemId);
 
         const card = document.createElement('label');
-        card.className = 'item-pick-card' + (isExist ? ' disabled' : '');
+        card.className = 'item-pick-card' + (isExist ? ' disabled' : '') + (isChecked ? ' selected' : '');
 
         card.innerHTML = `
             <input type="checkbox" class="popup-item-checkbox"
@@ -93,10 +130,10 @@ function renderItemPicker(category) {
                 data-unit="${unit}"
                 data-price="${price}"
                 data-type="${itemType}"
-                ${isExist ? 'disabled' : ''}>
+                ${isExist ? 'disabled' : ''}
+                ${isChecked ? 'checked' : ''}>
             <div class="item-pick-info">
                 <div class="item-pick-header">
-                
                     <span class="item-pick-name">${itemName}</span>
                 </div>
                 ${itemDesc ? `<span class="item-pick-desc">${itemDesc}</span>` : ''}
@@ -108,11 +145,16 @@ function renderItemPicker(category) {
             </div>`;
 
         // คลิกการ์ดแล้ว toggle checkbox
-        card.addEventListener('click', function(e) {
+        card.addEventListener('click', function (e) {
             if (isExist) return;
             const cb = card.querySelector('input[type="checkbox"]');
             if (e.target !== cb) cb.checked = !cb.checked;
+
+            if (cb.checked) selectedItemIds.add(itemId);
+            else selectedItemIds.delete(itemId);
+
             updateCardSelected(card, cb.checked);
+            updateSelectAllState();
             updateSelectedCount();
         });
 
@@ -123,6 +165,7 @@ function renderItemPicker(category) {
         grid.innerHTML = '<div class="popup-empty"><span style="font-size:2.5rem;display:block;margin-bottom:10px;">🔍</span>ไม่มีรายการในหมวดหมู่นี้</div>';
     }
 
+    updateSelectAllState();
     updateSelectedCount();
 }
 
@@ -134,8 +177,9 @@ function updateCardSelected(card, selected) {
     }
 }
 
+// ===== นับจำนวนที่เลือกไว้ทั้งหมด (ทุกหมวด ไม่ใช่แค่แท็บที่กำลังเปิดอยู่) =====
 function updateSelectedCount() {
-    const count = document.querySelectorAll('.popup-item-checkbox:checked').length;
+    const count = selectedItemIds.size;
     const el = document.getElementById('selectedCount');
     if (el) el.textContent = count;
 
@@ -146,27 +190,69 @@ function updateSelectedCount() {
     }
 }
 
-// ===== ฟังก์ชันเพิ่มรายการสินค้าที่เลือกลงในตารางหลัก =====
-function addSelectedItemsToTable() {
-    const checkboxes = document.querySelectorAll('.popup-item-checkbox:checked');
+// ===== เลือก/ยกเลิกเลือก "ทุกรายการทุกหมวด" ในคลิกเดียว ไม่ใช่แค่แท็บที่เห็นอยู่ =====
+function toggleSelectAllVisible(checkbox) {
+    const checked = checkbox.checked;
+    const dataStore = document.getElementById('itemDataStore');
+    if (!dataStore) return;
 
-    if (checkboxes.length === 0) {
+    const existingIds = getExistingItemIds();
+
+    dataStore.querySelectorAll('.item-data').forEach(dataEl => {
+        const itemId = String(dataEl.getAttribute('data-id'));
+        if (existingIds.has(itemId)) return; // ข้ามของที่เพิ่มเข้าตารางไปแล้ว
+
+        if (checked) selectedItemIds.add(itemId);
+        else selectedItemIds.delete(itemId);
+    });
+
+    // วาดใหม่ตามแท็บปัจจุบัน ให้ checkbox ที่มองเห็นอยู่ sync ตาม state ล่าสุด
+    renderItemPicker();
+}
+
+// ===== เช็คว่าควรติ๊ก "เลือกทั้งหมด" ไหม โดยพิจารณาจากรายการทั้งหมดในทุกหมวด =====
+function updateSelectAllState() {
+    const selectAllCb = document.getElementById('selectAllVisible');
+    if (!selectAllCb) return;
+
+    const dataStore = document.getElementById('itemDataStore');
+    if (!dataStore) return;
+
+    const existingIds = getExistingItemIds();
+    const allSelectableIds = [...dataStore.querySelectorAll('.item-data')]
+        .map(el => String(el.getAttribute('data-id')))
+        .filter(id => !existingIds.has(id));
+
+    selectAllCb.checked = allSelectableIds.length > 0 &&
+        allSelectableIds.every(id => selectedItemIds.has(id));
+}
+
+// ===== ฟังก์ชันเพิ่มรายการสินค้าที่เลือกลงในตารางหลัก =====
+// ดึงจาก selectedItemIds (ครบทุกหมวดที่เลือกไว้) แทนการอ่านจาก checkbox ที่มองเห็นในแท็บปัจจุบัน
+function addSelectedItemsToTable() {
+    if (selectedItemIds.size === 0) {
         alert('กรุณาเลือกรายการอย่างน้อย 1 รายการ');
         return;
     }
 
-    checkboxes.forEach(cb => {
-        const itemId   = cb.value;
-        const itemName = cb.getAttribute('data-name');
-        const itemDesc = cb.getAttribute('data-detail') || '';
-        const price    = parseFloat(cb.getAttribute('data-price')) || 0;
-        const unit     = cb.getAttribute('data-unit');
-        const itemType = cb.getAttribute('data-type') || '';
+    const dataStore = document.getElementById('itemDataStore');
+
+    selectedItemIds.forEach(itemId => {
+        const dataEl = dataStore.querySelector(`.item-data[data-id="${itemId}"]`);
+        if (!dataEl) return;
+
+        const itemName = dataEl.getAttribute('data-name');
+        const itemDesc = dataEl.getAttribute('data-detail') || '';
+        const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
+        const unit     = dataEl.getAttribute('data-unit');
+        const itemType = dataEl.getAttribute('data-type') || '';
 
         let targetBody = document.getElementById('group-service');
-        if (itemType.includes('อุปกรณ์'))  targetBody = document.getElementById('group-equipment');
+        if (itemType.includes('อุปกรณ์'))       targetBody = document.getElementById('group-equipment');
         else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
         else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
+
+        ensureGroupHeader(targetBody);
 
         const tr = document.createElement('tr');
         tr.className = 'dynamic-row';
@@ -194,6 +280,7 @@ function addSelectedItemsToTable() {
         targetBody.appendChild(tr);
     });
 
+    selectedItemIds.clear(); // เคลียร์สถานะที่เลือกไว้ หลังจากเพิ่มเข้าตารางแล้ว
     closeItemModal();
     reIndexRows();
     calculateGrandTotal();
@@ -201,7 +288,12 @@ function addSelectedItemsToTable() {
 
 // ===== จัดการแถว =====
 function removeRow(button) {
-    button.closest('tr').remove();
+    const row = button.closest('tr');
+    const tbody = row.parentElement;
+
+    row.remove();
+    removeGroupHeaderIfEmpty(tbody);
+
     reIndexRows();
     calculateGrandTotal();
 }
@@ -306,13 +398,13 @@ function onCeremonySelect(ceremonyId) {
         .then(response => response.json())
         .then(items => {
             // 2. เคลียร์ตารางรายการเก่า (ถ้ามี)
-            clearQuotationTable(); 
-            
+            clearQuotationTable();
+
             // 3. วนลูปเอา Item ใส่ลงในตาราง
             items.forEach(item => {
                 addRowToQuotationTable(item.itemName, item.pricePerUnit, 1); // ให้จำนวนเป็น 1 ไว้ก่อน
             });
-            
+
             // 4. สั่งคำนวณราคารวมใหม่
             calculateTotal();
         });

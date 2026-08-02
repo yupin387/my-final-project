@@ -141,10 +141,16 @@
                                ราคาตาม basePrice พร้อมรายการที่รวมอยู่แล้ว (ดู Run.java ส่วน A)
                                บริการนิมนต์พระรวมอยู่ใน basePrice ของแพ็กเกจอยู่แล้ว จึงไม่ต้อง
                                ดึง "บริการประสานงานนิมนต์พระ" มาคิดแยกอีก
+                               *** ถ้าลูกค้าเลือก "นิมนต์เอง" ให้หักส่วนลด 1,500 บาท ออกจาก
+                               basePrice เพราะร้านไม่ต้องออกค่าใช้จ่ายส่วนนี้ให้แล้ว (ดูตัวแปร
+                               packagePrice / monkSelfInviteDiscount ด้านล่าง) ***
                              - กรณี "กรอกความต้องการเบื้องต้น": ไม่มีของแถมฟรี ไม่มีราคาตายตัว
                                ผู้จัดงานต้องเลือกอุปกรณ์/บริการทั้งหมดเองผ่านป๊อปอัพด้านล่าง
                                ยกเว้น "บริการประสานงานนิมนต์พระ" ที่ระบบดึงจำนวนพระมาให้อัตโนมัติ
                                (ดูหมวดบริการด้านล่าง) เมื่อลูกค้าเลือก "ให้ทางร้านนิมนต์"
+                               กรณีนี้ไม่ต้องหักส่วนลดซ้ำ เพราะไม่เคยถูกดึงมาคิดเงินตั้งแต่แรก
+                               ถ้าเลือกนิมนต์เอง (เงื่อนไข fn:contains(monkInviteType,'นิมนต์เอง')
+                               จะเป็น false ทำให้ไม่มีการเพิ่มแถวบริการนี้เข้าไปเลย)
                              =================================================================== --%>
 							<%-- เช็คก่อนว่าลูกค้าเลือกรูปแบบการนิมนต์แบบไหน และจำนวนพระเท่าไหร่
                              ข้อมูลนี้เป็นแค่ "รายละเอียด" แสดงในกล่องด้านบน ไม่ใช่รายการคิดเงินแยก
@@ -160,6 +166,25 @@
 									<c:set var="monkCount" value="${d.answer}" />
 								</c:if>
 							</c:forEach>
+
+							<%-- ค่าคงที่ส่วนลดกรณีลูกค้านิมนต์พระสงฆ์เอง (แพ็กเกจจริงเท่านั้น)
+                             ถ้าจำนวนเงินนี้เปลี่ยนในอนาคต แก้ตรงนี้ที่เดียวพอ --%>
+							<c:set var="monkSelfInviteDiscount" value="${1500}" />
+							<c:set var="isMonkSelfInvite"
+								value="${fn:contains(monkInviteType,'นิมนต์เอง')}" />
+
+							<%-- ราคาแพ็กเกจที่แสดงจริงในฟอร์ม = basePrice ปกติ หรือ basePrice
+                             หักส่วนลด ถ้าลูกค้านิมนต์พระสงฆ์เอง (เฉพาะกรณีแพ็กเกจจริงเท่านั้น
+                             เพราะกรณีกรอกความต้องการเบื้องต้นไม่มีราคาตายตัวอยู่แล้ว) --%>
+							<c:choose>
+								<c:when test="${!isCustomRequest && isMonkSelfInvite}">
+									<c:set var="packageDisplayPrice"
+										value="${b.ceremony.basePrice - monkSelfInviteDiscount}" />
+								</c:when>
+								<c:otherwise>
+									<c:set var="packageDisplayPrice" value="${b.ceremony.basePrice}" />
+								</c:otherwise>
+							</c:choose>
 
 							<tbody id="group-package">
 								<tr class="group-row">
@@ -188,10 +213,18 @@
 													<span class="item-desc"
 														style="display: block; margin-top: 4px;">
 														นิมนต์พระสงฆ์ ${monkCount} รูป <c:if
-															test="${fn:contains(monkInviteType,'นิมนต์เอง')}">
+															test="${isMonkSelfInvite}">
 															<span style="color: #c0392b; font-weight: 600;">
 																(ลูกค้านิมนต์เอง)</span>
 														</c:if>
+													</span>
+												</c:if> <c:if test="${isMonkSelfInvite}">
+													<span class="item-desc"
+														style="color: #c0392b; display: block; margin-top: 4px;">
+														* ราคานี้หักส่วนลด
+														<fmt:formatNumber value="${monkSelfInviteDiscount}"
+															minFractionDigits="0" /> บาท
+														เนื่องจากลูกค้านิมนต์พระสงฆ์เอง
 													</span>
 												</c:if> <c:if test="${not empty packageIncludedItems}">
 													<div class="item-desc" style="margin-top: 6px;">
@@ -209,7 +242,7 @@
 												style="text-align: center; background: #f4f4f4;"></td>
 											<td style="text-align: center;">แพ็กเกจ</td>
 											<td><input type="number" name="bookingPrices"
-												value="${b.ceremony.basePrice}" step="0.01" min="0"
+												value="${packageDisplayPrice}" step="0.01" min="0"
 												class="price-input" style="text-align: right;"
 												onchange="calculateGrandTotal()"></td>
 											<td style="text-align: right;" class="amount-cell"><span
@@ -234,7 +267,7 @@
 													<span class="item-desc"
 														style="display: block; margin-top: 4px;">
 														นิมนต์พระสงฆ์ ${monkCount} รูป <c:if
-															test="${fn:contains(monkInviteType,'นิมนต์เอง')}">
+															test="${isMonkSelfInvite}">
 															<span style="color: #c0392b; font-weight: 600;">
 																(ลูกค้านิมนต์เอง)</span>
 														</c:if>
@@ -255,8 +288,9 @@
                              หมายเหตุ: ตอน initial render ของหน้านี้ ไม่มีทางมีรายการอุปกรณ์อยู่แล้ว
                              เพราะรายการหมวดนี้ถูกเพิ่มเข้าตารางผ่าน popup + JS (addSelectedItemsToTable)
                              เท่านั้น จึงไม่แสดงหัวข้อ "หมวดอุปกรณ์พิธีกรรม" ตายตัวตรงนี้
-                             -> ฝั่ง quotationCreate.js ต้องเป็นคน insert แถว group-row เข้าไปเอง
-                                ตอนเพิ่ม item แรกของหมวดนี้ และลบ group-row ทิ้งถ้าลบ item จนหมวดว่าง --%>
+                             -> ฝั่ง quotationCreate.js เป็นคน insert แถว group-row เข้าไปเอง
+                                ตอนเพิ่ม item แรกของหมวดนี้ (ฟังก์ชัน ensureGroupHeader) และลบ
+                                group-row ทิ้งถ้าลบ item จนหมวดว่าง (ฟังก์ชัน removeGroupHeaderIfEmpty) --%>
 							<tbody id="group-equipment">
 							</tbody>
 
@@ -410,10 +444,14 @@
                              จำนวน (bookingQtys) = จำนวนพระที่ลูกค้ากรอกไว้ตอนจอง (monkCount)
                              เหมือน pattern ของหมวดปิ่นโต/สังฆทานด้านบนที่ดึง qty จาก b.details
                              หัวข้อหมวดนี้ก็ผูกกับเงื่อนไขเดียวกัน ถ้าไม่เข้าเงื่อนไข = ไม่มีรายการ
-                             ก็ไม่ต้องขึ้นหัวข้อ --%>
+                             ก็ไม่ต้องขึ้นหัวข้อ (ถ้ามี item บริการอื่นถูกเพิ่มทีหลังผ่าน popup
+                             ฝั่ง JS จะเป็นคนใส่หัวข้อให้เองผ่าน ensureGroupHeader)
+                             หมายเหตุ: กรณีนี้ isMonkSelfInvite จะเป็น false เสมอ (ตามเงื่อนไข
+                             not fn:contains ด้านล่าง) จึงไม่ต้องหักส่วนลด 1,500 เพราะยังไม่เคย
+                             ถูกคิดเงินตั้งแต่แรก --%>
 							<tbody id="group-service">
 								<c:if
-									test="${isCustomRequest && not fn:contains(monkInviteType,'นิมนต์เอง') && not empty monkCount}">
+									test="${isCustomRequest && not isMonkSelfInvite && not empty monkCount}">
 									<tr class="group-row">
 										<td colspan="8">หมวดบริการและการดำเนินการ</td>
 									</tr>
@@ -521,6 +559,17 @@
 					onclick="switchCategoryTab(this,'บริการ')">บริการและดำเนินการ</button>
 			</div>
 			<div class="modal-body">
+				<%-- Toolbar เลือกทั้งหมดทุกหมวด (ไม่ใช่แค่แท็บที่กำลังเปิดอยู่)
+                     ทำงานร่วมกับ selectedItemIds ใน quotationCreate.js ซึ่งเก็บสถานะ
+                     การเลือกไว้แบบ global ไม่ผูกกับแท็บที่แสดงอยู่ตอนนั้น --%>
+				<div class="picker-toolbar">
+					<label class="select-all-label"> <input type="checkbox"
+						id="selectAllVisible" onchange="toggleSelectAllVisible(this)">
+						เลือกทั้งหมดทุกหมวด
+					</label>
+					<span class="selected-count-badge">เลือกแล้ว <span
+						id="selectedCount">0</span> รายการ</span>
+				</div>
 				<div class="item-picker-grid" id="itemPickerGrid"></div>
 			</div>
 			<div class="modal-footer">
