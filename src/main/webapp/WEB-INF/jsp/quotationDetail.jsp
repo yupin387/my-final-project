@@ -121,7 +121,7 @@
 				<thead>
 					<tr>
 						<th width="60" style="text-align: center;">ลำดับ</th>
-						<th>รายการและรายละเอียด</th>
+						<th>รายการ</th>
 						<th width="110" style="text-align: center;">จำนวน</th>
 						<th width="130" style="text-align: right;">ราคา/หน่วย</th>
 						<th width="130" style="text-align: right;">รวม (บาท)</th>
