@@ -298,25 +298,30 @@
             </c:forEach>
         </div>
 
-        <%-- หมายเหตุเพิ่มเติม (สิ่งที่ผู้จองกรอกเพิ่มเติมตอนจอง) --%>
-        <c:forEach items="${booking.details}" var="d">
-            <c:if test="${fn:contains(d.question.questionsText, 'ความต้องการเพิ่มเติม')}">
-                <hr class="divider">
-                <div class="section">
-                    <div class="section-title">หมายเหตุเพิ่มเติม</div>
-                    <div class="info-row">
-                        <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value" style="white-space:pre-line;">
-                            <c:choose>
-                                <c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when>
-                                <c:otherwise>-</c:otherwise>
-                            </c:choose>
-                        </span>
-                    </div>
-                </div>
-            </c:if>
-        </c:forEach>
-
+        <%-- หมายเหตุเพิ่มเติม (สิ่งที่ผู้จองกรอกเพิ่มเติมตอนจอง)
+		     แสดง section นี้เสมอ แม้ลูกค้าจะไม่ได้กรอก (ไม่มี detail แถวนี้ก็ตาม) --%>
+			<c:set var="extraNoteLabel" value="มีความต้องการเพิ่มเติมหรือไม่"/>
+			<c:set var="extraNoteAnswer" value=""/>
+			<c:forEach items="${booking.details}" var="d">
+			    <c:if test="${fn:contains(d.question.questionsText, 'ความต้องการเพิ่มเติม')}">
+			        <c:set var="extraNoteLabel" value="${d.question.questionsText}"/>
+			        <c:set var="extraNoteAnswer" value="${fn:trim(d.answer)}"/>
+			    </c:if>
+			</c:forEach>
+			
+			<hr class="divider">
+			<div class="section">
+			    <div class="section-title">หมายเหตุเพิ่มเติม</div>
+			    <div class="info-row">
+			        <span class="info-label">${extraNoteLabel}</span>
+			        <span class="info-value">
+			            <c:choose>
+			                <c:when test="${not empty extraNoteAnswer}">${extraNoteAnswer}</c:when>
+			                <c:otherwise>-</c:otherwise>
+			            </c:choose>
+			        </span>
+			    </div>
+			</div>
         <hr class="divider">
 
 

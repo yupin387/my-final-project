@@ -78,7 +78,7 @@
 </nav>
 
 <%-- ========== HEADER: เหลือแค่ชื่องาน + วันที่เลือก ========== --%>
-<div class="cd-hero" style="background-image:url('${pageContext.request.contextPath}/static/images/Hero-banner/cover.png');">
+<div class="cd-hero" style="background-image:url('${pageContext.request.contextPath}/static/images/Hero-banner/cover1.png');">
     <div class="cd-hero-overlay"></div>
     <div class="cd-hero-content">
         <h1 class="cd-hero-title">รายละเอียดงาน${mainType}</h1>
@@ -166,31 +166,31 @@
 
 <%-- ========== KANOK DIVIDER ========== --%>
 <svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:48px;background:#FFF5F8;">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F3B6C8" stroke-width="1" opacity="0.6"/>
-    <g fill="#D6336C" opacity="0.55">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8C878" stroke-width="1" opacity="0.6"/>
+    <g fill="#D9A441" opacity="0.55">
         <ellipse cx="600" cy="24" rx="18" ry="6" transform="rotate(-30 600 24)"/>
         <ellipse cx="600" cy="24" rx="18" ry="6" transform="rotate(30 600 24)"/>
         <ellipse cx="600" cy="24" rx="18" ry="6"/>
-        <circle  cx="600" cy="24" r="4"   fill="#F48FB1"/>
+        <circle  cx="600" cy="24" r="4"   fill="#F7E3B0"/>
         <ellipse cx="480" cy="24" rx="14" ry="5" transform="rotate(-30 480 24)"/>
         <ellipse cx="480" cy="24" rx="14" ry="5" transform="rotate(30 480 24)"/>
-        <circle  cx="480" cy="24" r="3"   fill="#F48FB1"/>
+        <circle  cx="480" cy="24" r="3"   fill="#F7E3B0"/>
         <ellipse cx="720" cy="24" rx="14" ry="5" transform="rotate(-30 720 24)"/>
         <ellipse cx="720" cy="24" rx="14" ry="5" transform="rotate(30 720 24)"/>
-        <circle  cx="720" cy="24" r="3"   fill="#F48FB1"/>
+        <circle  cx="720" cy="24" r="3"   fill="#F7E3B0"/>
         <ellipse cx="360" cy="24" rx="10" ry="4" transform="rotate(-30 360 24)"/>
         <ellipse cx="360" cy="24" rx="10" ry="4" transform="rotate(30 360 24)"/>
-        <circle  cx="360" cy="24" r="2.5" fill="#F48FB1"/>
+        <circle  cx="360" cy="24" r="2.5" fill="#F7E3B0"/>
         <ellipse cx="840" cy="24" rx="10" ry="4" transform="rotate(-30 840 24)"/>
         <ellipse cx="840" cy="24" rx="10" ry="4" transform="rotate(30 840 24)"/>
-        <circle  cx="840" cy="24" r="2.5" fill="#F48FB1"/>
+        <circle  cx="840" cy="24" r="2.5" fill="#F7E3B0"/>
         <ellipse cx="240" cy="24" rx="7"  ry="3" transform="rotate(-30 240 24)"/>
         <ellipse cx="240" cy="24" rx="7"  ry="3" transform="rotate(30 240 24)"/>
         <ellipse cx="960" cy="24" rx="7"  ry="3" transform="rotate(-30 960 24)"/>
         <ellipse cx="960" cy="24" rx="7"  ry="3" transform="rotate(30 960 24)"/>
     </g>
-    <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#F3B6C8" stroke-width="0.5" opacity="0.35"/>
-    <line x1="0" y1="42" x2="1200" y2="42" stroke="#F3B6C8" stroke-width="0.5" opacity="0.35"/>
+    <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#E8C878" stroke-width="0.5" opacity="0.35"/>
+    <line x1="0" y1="42" x2="1200" y2="42" stroke="#E8C878" stroke-width="0.5" opacity="0.35"/>
 </svg>
 
 <%-- ========== MAIN CONTENT ========== --%>

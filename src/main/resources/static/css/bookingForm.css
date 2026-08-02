@@ -271,13 +271,27 @@ body {
 .hero-banner {
 	position: relative;
 	height: 500px;
-	background-image: url('/static/images/Hero-banner/cover.png');
 	background-position: center 30%;
 	background-size: cover;
 	background-repeat: no-repeat;
 	display: flex;
 	align-items: center;
 	overflow: hidden;
+}
+
+/* รูปสำหรับหน้าทำบุญบ้าน */
+.hero-home {
+    background-image: url('/static/images/Hero-banner/cover1.png') !important;
+}
+
+/* รูปสำหรับหน้าขึ้นบ้านใหม่ */
+.hero-house {
+    background-image: url('/static/images/Hero-banner/cover6.png') !important;
+}
+
+/* รูปสำหรับหน้าทำบุญบริษัท */
+.hero-company {
+    background-image: url('/static/images/Hero-banner/cover7.png') !important;
 }
 
 .hero-banner::before {

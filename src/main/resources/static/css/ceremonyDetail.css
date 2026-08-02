@@ -587,8 +587,10 @@ body {
     white-space:nowrap;
 }
 
+/* ===== แก้: ปุ่ม "จองแบบระบุเอง" เปลี่ยนจากกราเดียนต์ชมพู-ทอง เป็น solid gold
+   ตาม rule ปุ่ม interactive/active ของโปรเจกต์ (ไม่ใช้กราเดียนต์) ===== */
 .cd-btn-book {
-    background: linear-gradient(135deg, #C7405F, var(--gold));
+    background: var(--accent-gold);
     color: #FFFFFF;
     border-radius: 14px;
     padding: 18px 56px;
@@ -598,19 +600,19 @@ body {
     font-family: 'Sarabun', sans-serif;
     transition: all 0.2s;
     display: inline-block;
-    box-shadow: 0 6px 20px rgba(199, 64, 95, 0.4);
+    box-shadow: 0 6px 20px rgba(217, 164, 65, 0.35);
     border: none;
     letter-spacing: 0.3px;
 }
 
 .cd-btn-book:hover {
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    background: #C4901E;
     transform: translateY(-2px);
-    box-shadow: 0 8px 26px rgba(199, 64, 95, 0.5);
+    box-shadow: 0 8px 26px rgba(217, 164, 65, 0.45);
     color: #FFFFFF;
 }
 
-/* ========== SITE FOOTER (ตรงกับ home.css เป๊ะ) ========== */
+/* ========== SITE FOOTER (ตรงกับ home.css เป๊ะ) — ไม่แตะ ========== */
 .site-footer {
     background: linear-gradient(135deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
     color: rgba(255, 255, 255, 0.92);
@@ -942,11 +944,13 @@ body {
     align-items: center;
     justify-content: center;
 }
+/* ===== แก้: สีข้อความ "คำถาม" ในการ์ดชวนสงสัย เปลี่ยนจากแดงจัด #A6222F
+   เป็นน้ำตาลเข้ม (--brown-dark) ให้กลืนกับหัวข้ออื่นๆ ในหน้า ===== */
 .cd-curiosity-question {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 1.7rem;
     font-weight: 700;
-    color: #A6222F;
+    color: var(--brown-dark);
     margin-bottom: 14px;
     line-height: 1.5;
 }
@@ -973,7 +977,7 @@ body {
 }
 
 /* ============================================================
-   ===== NAVBAR (navbar-custom) — ตรงกับ home.css/home.jsp เป๊ะ
+   ===== NAVBAR (navbar-custom) — ตรงกับ home.css/home.jsp เป๊ะ — ไม่แตะ
    ============================================================ */
 .navbar-custom {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);

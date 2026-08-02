@@ -72,7 +72,7 @@
 </nav>
 
 <%-- ========== HERO BANNER ========== --%>
-<div class="hero-banner">
+<div class="hero-banner hero-home">
     <div class="hero-content">
         <span class="hero-tag">ระบบจองงานบุญ</span>
         <h1>จองงานทำบุญบ้าน</h1>
