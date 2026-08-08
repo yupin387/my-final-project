@@ -81,11 +81,6 @@
 		display: block;
 	}
 
-	/* ===== reviews teaser section (การ์ดใช้ CSS .review-card เดิมจาก home.css) ===== */
-	.reviews-teaser .reviews-grid {
-		margin-bottom: 24px;
-	}
-
 	/* ===== Hero: จัดข้อความให้ชิดฝั่งซ้าย (ฝั่งรูปวัด) แทนการจัดกึ่งกลาง ===== */
 	.hero-content {
 		text-align: left;
@@ -125,6 +120,26 @@
     #whyChooseSection .meaning-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* ===== ปุ่ม "ดูรีวิวทั้งหมด" ในการ์ด "ลูกค้าไว้วางใจ" ===== */
+.btn-review-all {
+	display: inline-block;
+	margin-top: 10px;
+	padding: 8px 22px;
+	background: linear-gradient(90deg, #E0577F, #EC6E96);
+	color: #fff;
+	font-size: 0.9rem;
+	font-weight: 600;
+	border-radius: 30px;
+	text-decoration: none;
+	box-shadow: 0 4px 14px rgba(224, 87, 127, 0.25);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-review-all:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 18px rgba(224, 87, 127, 0.35);
+	color: #fff;
 }
 </style>
 </head>
@@ -399,9 +414,7 @@
 	    </div>
 	</section>
 
-	<%-- ========== ทำไมต้องเลือกบุญมี (ย้ายขึ้นมาไว้ด้านบนของหน้า ตามที่อาจารย์ให้ปรับ)
-	     รีวิวด้านล่างดึงจากฐานข้อมูลจริง (ReviewService#getTop2RecentReviews) ผ่าน attribute "recentReviews"
-	     ที่ Controller ของหน้า /home ต้อง addAttribute เข้า Model ก่อนส่งมาที่ JSP นี้ ========== --%>
+	<%-- ========== ทำไมต้องเลือกบุญมี (ย้ายขึ้นมาไว้ด้านบนของหน้า ตามที่อาจารย์ให้ปรับ) ========== --%>
 	<section class="section-pad section-packages" id="whyChooseSection">
 		<div class="container">
 			<div class="section-ornament">
@@ -434,41 +447,10 @@
 					<div class="meaning-card">
 						<div class="meaning-card-icon">⭐</div>
 						<div class="meaning-card-title">ลูกค้าไว้วางใจ</div>
-						<div class="meaning-card-desc">อ่านรีวิวจากเจ้าภาพที่เคยใช้บริการได้ด้านล่าง
-							หรือหน้า<a href="${pageContext.request.contextPath}/reviews">รีวิวทั้งหมด</a></div>
+						<div class="meaning-card-desc">อ่านรีวิวจากเจ้าภาพ<br>ที่เคยใช้บริการจริง</div>
+						<a href="${pageContext.request.contextPath}/reviews" class="btn-review-all">ดูรีวิวทั้งหมด</a>
 					</div>
 				</div>
-
-                <%-- ===== รีวิวจริงจากลูกค้า — ดึงจากฐานข้อมูลผ่าน ${recentReviews} (ReviewService#getTop2RecentReviews)
-				     Controller ต้องมีบรรทัดนี้ในเมธอดที่ return หน้า home ก่อนถึงจะแสดงผลได้:
-				         model.addAttribute("recentReviews", reviewService.getTop2RecentReviews());
-				     ===== --%>
-				<div class="why-review-strip">
-				<c:forEach var="r" items="${recentReviews}">
-				    <div class="review-card">
-				        <div class="reviewer-name">
-				            ${r.bookingForm.member.memberFirstName} ${r.bookingForm.member.memberLastName}
-				        </div>
-				        <div class="review-stars">
-				            <c:forEach begin="1" end="${r.rating}">★</c:forEach>
-				            <c:forEach begin="1" end="${5 - r.rating}">☆</c:forEach>
-				        </div>
-			
-				        <div class="review-event-badge">
-				            งาน: ${r.bookingForm.ceremony.ceremonyType}
-				        </div>
-			
-				        <p class="review-text">"${r.comment}"</p>
-			
-				        <c:if test="${not empty r.reviewImage}">
-				            <div class="review-img-wrap">
-				                <img src="${pageContext.request.contextPath}/uploads/review/${r.reviewImage}"
-				                     alt="รูปรีวิว" class="review-img">
-				            </div>
-				        </c:if>
-				    </div>
-				</c:forEach>
-              </div>
 			</div>
 
 		</div>
@@ -670,6 +652,5 @@
     })();
     </script>
 	<script src="${pageContext.request.contextPath}/static/js/home.js?v=13"></script>
-
 </body>
 </html>

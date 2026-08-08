@@ -271,13 +271,27 @@ body {
 .hero-banner {
 	position: relative;
 	height: 500px;
-	background-image: url('/static/images/Hero-banner/cover.png');
 	background-position: center 30%;
 	background-size: cover;
 	background-repeat: no-repeat;
 	display: flex;
 	align-items: center;
 	overflow: hidden;
+}
+
+/* รูปสำหรับหน้าทำบุญบ้าน */
+.hero-home {
+    background-image: url('/static/images/Hero-banner/cover1.png') !important;
+}
+
+/* รูปสำหรับหน้าขึ้นบ้านใหม่ */
+.hero-house {
+    background-image: url('/static/images/Hero-banner/cover6.png') !important;
+}
+
+/* รูปสำหรับหน้าทำบุญบริษัท */
+.hero-company {
+    background-image: url('/static/images/Hero-banner/cover7.png') !important;
 }
 
 .hero-banner::before {
@@ -901,7 +915,7 @@ textarea.form-control {
 	transition: border-color .15s, box-shadow .15s;
 }
 .item-card:hover { border-color: var(--accent-gold); }
-.item-card input[type="radio"] { position: absolute; top: 8px; right: 8px; }
+.item-card input[type="radio"] { position: absolute; top: auto; bottom: 8px; right: 8px; }
 .item-card:has(input:checked) {
 	border-color: var(--accent-gold);
 	box-shadow: 0 0 0 2px rgba(217,164,65,0.3);

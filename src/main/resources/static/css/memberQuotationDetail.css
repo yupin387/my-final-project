@@ -365,7 +365,24 @@ img.lotus-icon {
     content: none;
 }
 
-/* ===== Table ===== */
+/* ===== กรอบทองล้อมรอบทั้งบล็อก header+table เป็นกรอบเดียวต่อเนื่อง แบบฝั่งออแกไนซ์ ===== */
+.quote-frame {
+    border: 1.5px solid var(--accent-gold);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.quote-frame .section-title {
+    border: none;
+    border-radius: 0;
+}
+
+.quote-frame table {
+    border: none;
+    border-radius: 0;
+}
+
+/* ===== Table (แก้: ใส่ขอบครบสี่ด้านทุกเซลล์ ด้วย --accent-gold-mid ให้ตรงกับฝั่งออแกไนซ์) ===== */
 table {
     width: 100%;
     border-collapse: collapse;
