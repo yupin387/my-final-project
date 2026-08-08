@@ -121,9 +121,10 @@ body {
 }
 
 .nav-item {
+    font-family: 'Charmonman', sans-serif;
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 6px;
@@ -139,7 +140,7 @@ body {
 button.nav-item {
     background: none;
     border: none;
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Charmonman', sans-serif;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -248,9 +249,8 @@ button.nav-item {
 }
 
 .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name-nav  { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
-.user-role-nav  { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
-
+.user-name-nav  { font-family: 'Charmonman', sans-serif; font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
+.user-role-nav  { font-family: 'Charmonman', sans-serif; font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
 .dropdown-menu {
     display: none;
     position: absolute;

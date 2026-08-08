@@ -980,9 +980,11 @@ body {
 }
 
 /* ============================================================
-   ===== NAVBAR (navbar-custom) — ตรงกับ home.css/home.jsp เป๊ะ — ไม่แตะ
+   ===== NAVBAR (navbar-custom) — sync ให้ตรงกับ home.css/home.jsp เป๊ะ
+   (เพิ่ม font-family ครอบทั้งหมด + ปรับขนาด font ให้เท่ากัน)
    ============================================================ */
 .navbar-custom {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 0 40px;
     display: flex;
@@ -1003,6 +1005,11 @@ body {
     top: 0; left: 0; right: 0;
     height: 2px;
     background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
+}
+/* บังคับให้ elements ลูกทั้งหมดในแถบเมนูเป็นฟอนต์ Charmonman เหมือนกันหมด ให้ตรงกับ home.css เป๊ะ */
+.navbar-custom,
+.navbar-custom * {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
 }
 .navbar-brand-wrap {
     display: flex;
@@ -1050,7 +1057,7 @@ body {
 .nav-link-item {
     color: #FFFFFF;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 6px;
@@ -1075,10 +1082,10 @@ body {
     border-radius: 8px;
     padding: 9px 22px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
     transition: all 0.2s;
     white-space: nowrap;
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 .btn-register-nav:hover {
@@ -1146,7 +1153,7 @@ body {
 .dropdown-link {
     display: block;
     padding: 13px 20px;
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-mid);
@@ -1162,7 +1169,7 @@ body {
 .dropdown-link.danger      { color: #c0392b; }
 .dropdown-link.danger:hover{ background: #fff5f5; }
 
-/* dropdown เมนู บริการ/แพ็กเกจ และ ปฏิทิน */
+/* dropdown เมนู บริการ/แพ็กเกจ และ ปฏิทิน (เฉพาะหน้านี้ home ไม่มี) */
 .nav-dropdown-wrap { position: relative; display: inline-block; }
 .nav-dropdown-toggle { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
 .nav-caret { font-size: 0.7rem; transition: transform 0.2s ease; }
@@ -1228,7 +1235,7 @@ body {
 
 @media (max-width: 768px) {
     .navbar-custom { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
-    .navbar-custom .nav-brand-text { font-size: 22px; }
+    .navbar-custom .nav-brand-text { font-size: 20px; }
     .navbar-custom .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
 }
 
