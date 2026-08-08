@@ -87,13 +87,15 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     background: #FFF6F9;
     color: var(--text-dark);
 }
 /* ========== NAVBAR ==========
-   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน (เหมือน bookingList) + เส้นขอบล่างสีทองจริง */
+   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน (เหมือน bookingList) + เส้นขอบล่างสีทองจริง
+   หมายเหตุ: ล็อกฟอนต์ navbar ทั้งหมดกลับเป็น Sarabun ตามที่ขอ (ยกเว้น .nav-brand-text ที่ตั้ง Charmonman เฉพาะจุดอยู่แล้ว) */
 .navbar-custom {
+    font-family: 'Sarabun', sans-serif;
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 0 40px;
     display: flex;
@@ -823,7 +825,6 @@ img.lotus-icon {
     padding: 8px 18px;
     font-size: 0.85rem;
     font-weight: 700;
-    font-family: 'Sarabun', sans-serif;
     cursor: pointer;
     margin-left: 8px;
     white-space: nowrap;
@@ -1135,7 +1136,6 @@ img.lotus-icon {
     text-decoration: none;
     display: inline-block;
     transition: all 0.2s;
-    font-family: 'Sarabun', sans-serif;
     align-self: flex-start;
     box-shadow: 0 3px 10px rgba(217, 164, 65, 0.3);
 }
@@ -1214,7 +1214,6 @@ img.lotus-icon {
     border: 2px solid var(--accent-gold);
     border-radius: 10px;
     color: var(--gold);
-    font-family: 'Sarabun', sans-serif;
     font-size: 15px;
     font-weight: 700;
     text-decoration: none;
@@ -1399,14 +1398,10 @@ img.lotus-icon {
 }
 
 /* ========== FOOTER ==========
-   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน ชุดเดียวกับแถบเมนูบนสุด + วิ้งๆ ทองด้านบน */
-.footer-strip {
-    display: block;
-    width: 100%;
-    line-height: 0;
-}
-
+   ชมพูเข้ม gradient ไล่ไปชมพูอ่อน ชุดเดียวกับแถบเมนูบนสุด + วิ้งๆ ทองด้านบน
+   หมายเหตุ: ล็อกฟอนต์ footer ทั้งหมดกลับเป็น Sarabun ตามที่ขอ (ยกเว้น .footer-brand-text / .footer-heading ที่ตั้ง Charmonman เฉพาะจุดอยู่แล้ว) */
 .site-footer {
+    font-family: 'Sarabun', sans-serif;
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
     color: rgba(255, 255, 255, 0.92);
     padding-top: 0;
@@ -1675,6 +1670,7 @@ img.lotus-icon {
 }
 
 .ritual-step-title {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 1rem;
     font-weight: 700;
     color: var(--brown-dark);
@@ -1686,6 +1682,24 @@ img.lotus-icon {
     font-size: 0.85rem;
     line-height: 1.55;
     color: var(--text-body);
+}
+
+/* ===== ป้ายข้อความ "ขั้นตอนที่ N: ชื่อขั้นตอน" ใต้รูปวงกลมในแต่ละขั้นตอน =====
+   คำนำ "ขั้นตอนที่ N:" ใช้ฟอนต์ inherit (Charmonman จาก body) ตัวเล็ก
+   ชื่อขั้นตอน (ใน <strong>) ตัวใหญ่ขึ้น สีน้ำตาลเข้ม เข้าชุดกับหัวข้ออื่น */
+.ritual-step-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.ritual-step-label strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--brown-dark);
 }
 
 .review-img-wrap {

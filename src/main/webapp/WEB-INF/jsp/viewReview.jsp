@@ -182,7 +182,7 @@
 	                    <fmt:formatDate value="${r.reviewDate}" pattern="dd MMM yyyy"/>
 	                </div>
 	            </div>
-	            <div class="ceremony-badge">🪷 งาน: ${r.bookingForm.ceremony.ceremonyType}</div>
+	            <div class="ceremony-badge">🪷 ประเภทงาน: ${r.bookingForm.ceremony.ceremonyType}</div>
 	            <p class="review-text">"${r.comment}"</p>
 	            <c:if test="${not empty r.reviewImage}">
 	                <div class="review-img-wrapper">
@@ -201,7 +201,6 @@
 	    </c:if>
 	
 	</div>
-	
 	<%-- ========== FOOTER (โครงเดียวกับ home.jsp — แบบ slim: แบรนด์+โซเชียล / ติดต่อเรา) ========== --%>
 	<footer class="site-footer">
 	    <div class="footer-top">

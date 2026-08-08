@@ -915,7 +915,7 @@ textarea.form-control {
 	transition: border-color .15s, box-shadow .15s;
 }
 .item-card:hover { border-color: var(--accent-gold); }
-.item-card input[type="radio"] { position: absolute; top: 8px; right: 8px; }
+.item-card input[type="radio"] { position: absolute; top: auto; bottom: 8px; right: 8px; }
 .item-card:has(input:checked) {
 	border-color: var(--accent-gold);
 	box-shadow: 0 0 0 2px rgba(217,164,65,0.3);
