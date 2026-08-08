@@ -133,13 +133,14 @@ body {
 .nav-item {
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
 }
 
 .nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
@@ -335,7 +336,7 @@ body {
 }
 
 .btn-update-status {
-    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    background: var(--accent-gold);
     color: #FFFFFF;
     padding: 8px 20px;
     border-radius: 8px;
@@ -349,13 +350,13 @@ body {
     border: none;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 2px 8px rgba(217, 164, 65, 0.3);
 }
 
 .btn-update-status:hover {
-    opacity: 0.92;
+    background: #C4922F;
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(224, 87, 127, 0.45);
+    box-shadow: 0 4px 14px rgba(217, 164, 65, 0.4);
 }
 
 .card-body { padding: 32px 28px; }

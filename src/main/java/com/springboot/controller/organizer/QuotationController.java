@@ -63,6 +63,12 @@ public class QuotationController {
         model.addAttribute("b", booking);
         model.addAttribute("validDetails", validDetails);
 
+        // FIX: ดึงข้อความ "ความต้องการเพิ่มเติม" ที่ลูกค้ากรอกไว้ตอนจอง มาแสดงในหน้า
+        // ใบเสนอราคา เป็นข้อมูลอ้างอิงให้ผู้จัดงานอ่านแล้วไปเพิ่มรายการ/ราคาเองผ่าน
+        // ปุ่ม "เลือกรายการวัสดุอุปกรณ์เสริม" (ไม่ auto-fill ราคา เพราะเป็น freetext
+        // จับคู่กับชื่อ item ในระบบไม่ได้ตรงๆ เหมือนสังฆทาน/ปิ่นโตที่เป็นการเลือกจากรายการ)
+        model.addAttribute("additionalNote", extractAdditionalNote(booking));
+
         int ceremonyId = booking.getCeremony().getCeremonyId();
         List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
         model.addAttribute("items", allItems);
@@ -129,6 +135,9 @@ public class QuotationController {
         // แต่ไม่เคยมีการ addAttribute("b", ...) มาก่อน เลยว่างเปล่าเสมอ
         model.addAttribute("b", quotation.getBookingForm());
 
+        // FIX: โชว์หมายเหตุความต้องการเพิ่มเติมในหน้ารายละเอียดด้วยเช่นกัน
+        model.addAttribute("additionalNote", extractAdditionalNote(quotation.getBookingForm()));
+
         // เหมือนหน้า create/edit: คำนวณรายการที่ผูกกับ "ทุกแพ็กเกจ" เพื่อแสดงเป็น bullet list ในกล่องแพ็กเกจ
         int ceremonyId = quotation.getBookingForm().getCeremony().getCeremonyId();
         List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
@@ -155,6 +164,9 @@ public class QuotationController {
         BookingForm booking = quotation.getBookingForm();
         int ceremonyId = booking.getCeremony().getCeremonyId();
         List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
+
+        // FIX: โชว์หมายเหตุความต้องการเพิ่มเติมในหน้าแก้ไขด้วยเช่นกัน (ใช้ booking ตัวเดียวกันนี้)
+        model.addAttribute("additionalNote", extractAdditionalNote(booking));
 
         // เหมือนกับ createQuotationForm: "items" ต้องเป็นรายการเต็ม เผื่อ JSP ส่วนอื่นต้องอ้างอิง
         model.addAttribute("items", allItems);
@@ -235,12 +247,28 @@ public class QuotationController {
             for (Item it : allItems) {
                 String typeName = it.getItemType().getItemTypeName();
                 boolean isFoodOrSangkathan = typeName.equals("ภัตตาหารปิ่นโต") || typeName.equals("สังฆทาน");
+                boolean isOptionalExtra = typeName.equals("อุปกรณ์เสริม (เลือกเพิ่มเอง)"); // ใหม่
                 boolean isBundledInAllPackages = it.getCeremonies() != null && it.getCeremonies().size() >= 9;
-                if (!isFoodOrSangkathan && isBundledInAllPackages) {
+                if (!isFoodOrSangkathan && !isOptionalExtra && isBundledInAllPackages) {
                     packageIncludedItems.add(it);
                 }
             }
         }
         return packageIncludedItems;
+    }
+
+    // FIX: ดึงคำตอบข้อความอิสระของคำถาม "มีความต้องการเพิ่มเติมหรือไม่" มาแสดงในใบเสนอราคา
+    // เป็นข้อมูลอ้างอิงให้ผู้จัดงานอ่าน (ไม่ auto-fill ราคา เพราะเป็น freetext จับคู่กับ item ไม่ได้
+    // ตรงๆ เหมือนสังฆทาน/ปิ่นโตที่เป็นการเลือกจากรายการที่มีชื่อ item ตรงกันเป๊ะ)
+    private String extractAdditionalNote(BookingForm booking) {
+        for (BookingFormDetail d : booking.getDetails()) {
+            if (d.getQuestion().getQuestionsText().contains("ความต้องการเพิ่มเติม")) {
+                String ans = d.getAnswer();
+                if (ans != null && !ans.trim().isEmpty()) {
+                    return ans.trim();
+                }
+            }
+        }
+        return null;
     }
 }

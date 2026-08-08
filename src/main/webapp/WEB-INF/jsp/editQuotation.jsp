@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=6">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=7">
 </head>
 <body>
 
@@ -95,14 +95,8 @@
           method="post" onsubmit="return validateForm()">
         <input type="hidden" name="quotationId" value="${q.quotationId}">
 
-        <%-- ชื่อแพ็กเกจ/รูปแบบการจอง ใช้แยกแถวแพ็กเกจออกจากหมวดอื่น ไม่ให้แสดงซ้ำ
-             (รายการแพ็กเกจถูกบันทึกโดยใช้ itemName == ceremonyName ดู QuotationService) --%>
         <c:set var="packageName" value="${q.bookingForm.ceremony.ceremonyName}"/>
 
-        <%-- ดึงจำนวนพระ + รูปแบบการนิมนต์จากฟอร์มจองต้นทาง มาแสดงเป็นข้อมูลในกล่องด้านบนเท่านั้น
-             ไม่ใช่รายการคิดเงินแยก เพราะรวมอยู่ใน basePrice ของแพ็กเกจแล้ว (กรณีแพ็กเกจจริง)
-             ใช้ fn:contains แทน == ตรงๆ เพราะ monkInviteType มีได้ 2 ค่าตามโหมดการจอง:
-             โหมดแพ็กเกจ = "นิมนต์เอง (ลด ฿1,500)" / โหมดกรอกเอง = "นิมนต์เอง" --%>
         <c:set var="monkInviteType" value=""/>
         <c:set var="monkCount" value=""/>
         <c:forEach var="bd" items="${q.bookingForm.details}">
@@ -114,9 +108,6 @@
             </c:if>
         </c:forEach>
 
-        <%-- ส่วนลดกรณีลูกค้านิมนต์พระสงฆ์เอง (แพ็กเกจจริงเท่านั้น) — ต้องคำนวณค่านี้ที่นี่ด้วย
-             เพราะแถวแพ็กเกจด้านล่างต้องแสดงราคาหลังหักส่วนลด ไม่ใช่ราคาแค็ตตาล็อกเต็มจำนวน
-             ไม่งั้นพอเปิดหน้าแก้ไขใบเสนอราคาที่เคยหักส่วนลดไปแล้ว จะเห็นราคาผิด (เด้งกลับไปเต็มราคา) --%>
         <c:set var="monkSelfInviteDiscount" value="${1500}"/>
         <c:set var="isMonkSelfInvite" value="${fn:contains(monkInviteType,'นิมนต์เอง')}"/>
         <c:choose>
@@ -130,8 +121,10 @@
 
         <%-- ===================================================================
              เช็คก่อนล่วงหน้าว่าแต่ละหมวดมีรายการอยู่จริงไหม (ไว้ใช้ตัดสินใจว่าจะ
-             แสดงหัวข้อ group-row ของหมวดนั้นหรือไม่) เพื่อไม่ให้หัวข้อหมวดที่ว่างเปล่า
-             โผล่ขึ้นมาเฉย ๆ โดยไม่มีรายการข้างใน
+             แสดงหัวข้อ group-row ของหมวดนั้นหรือไม่)
+             หมายเหตุ: hasEquipmentItems นับเฉพาะอุปกรณ์ที่ผู้จัดงานเพิ่มเข้ามาเอง
+             (อยู่ใน details จริง) ไม่รวมอุปกรณ์ที่ "รวมในแพ็กเกจ" ซึ่งย้ายไปแสดง
+             ต่อจากแถวแพ็กเกจใน group-package แล้ว
              =================================================================== --%>
         <c:set var="hasEquipmentItems" value="false"/>
         <c:set var="hasFoodItems" value="false"/>
@@ -157,10 +150,12 @@
                 </c:if>
             </c:if>
         </c:forEach>
-        <%-- หมวดบริการจะมีหัวข้อด้วย ถ้ามีรายการบันทึกไว้แล้ว หรือเข้าเงื่อนไข fallback auto-add
-             บริการนิมนต์พระ (isCustomRequest + ยังไม่เจอ + ไม่ใช่นิมนต์เอง + มี monkCount) --%>
         <c:set var="willShowServiceFallback"
                value="${isCustomRequest && !monkInviteServiceFound && !isMonkSelfInvite && not empty monkCount}"/>
+
+        <%-- อุปกรณ์ที่รวมอยู่ในแพ็กเกจ (แสดงเฉพาะกรณีแพ็กเกจจริง) — ดูหมายเหตุเรื่องคีย์เวิร์ด
+             "ต่อรูป" ในไฟล์ quotationCreate.jsp ประกอบ ใช้ตรรกะเดียวกัน --%>
+        <c:set var="hasPackageEquip" value="${!isCustomRequest && not empty packageIncludedItems}"/>
 
         <div class="main-layout">
             <div class="card">
@@ -186,16 +181,9 @@
                             </tr>
                         </thead>
 
-                        <%-- ===================================================================
-                             หมวดแพ็กเกจหลัก / รูปแบบการจอง
-                             - แพ็กเกจจริง (มาตรฐาน/อิ่มบุญ/พรีเมียม): หาแถวแพ็กเกจใน details ก่อน
-                               ถ้าไม่เจอ (ใบเสนอราคาเก่าที่สร้างก่อนแก้ระบบ) ให้ fallback ไปโชว์ basePrice
-                               *** ทั้ง 2 กรณีใช้ packageDisplayPrice (หักส่วนลดนิมนต์เองแล้ว)
-                               แทนที่จะใช้ d.item.pricePerUnit / basePrice ตรง ๆ ไม่งั้นราคาจะเด้ง
-                               กลับไปเต็มจำนวนทุกครั้งที่เปิดหน้าแก้ไข ***
-                             - กรอกความต้องการเบื้องต้น: ไม่มีของแถมฟรี ไม่มีราคาตายตัว ไม่มี fallback
-                               เพราะไม่ควรมีการบันทึกแถวราคาแพ็กเกจสำหรับกรณีนี้ตั้งแต่แรก
-                             =================================================================== --%>
+                        <%-- หมวดแพ็กเกจหลัก / รูปแบบการจอง (แถวราคาแพ็กเกจ ล็อกจำนวน = 1 เสมอ)
+                             อุปกรณ์ที่ "รวมในแพ็กเกจ" แสดงต่อจากแถวแพ็กเกจในหมวดนี้เลย
+                             ไม่แยกเป็นหมวด "อุปกรณ์พิธีกรรม" อีกต่อไปเมื่อเลือกแพ็กเกจ --%>
                         <tbody id="group-package">
                             <tr class="group-row">
                                 <td colspan="8">
@@ -212,13 +200,12 @@
                             </tr>
 
                             <c:choose>
-                                <%-- ===== กรณีแพ็กเกจจริง: แสดงแถวราคาแพ็กเกจ (จาก details หรือ fallback) ===== --%>
                                 <c:when test="${!isCustomRequest}">
                                     <c:set var="packageDetailFound" value="false"/>
                                     <c:forEach var="d" items="${details}">
                                         <c:if test="${d.item != null && d.item.itemName == packageName}">
                                             <c:set var="packageDetailFound" value="true"/>
-                                            <tr class="static-row" data-item-id="${d.item.itemId}">
+                                            <tr class="static-row no-qty-convert" data-item-id="${d.item.itemId}">
                                                 <td class="row-number" style="text-align:center;">1</td>
                                                 <td>
                                                     <span class="item-name">${d.item.itemName}</span>
@@ -239,18 +226,14 @@
                                                             เนื่องจากลูกค้านิมนต์พระสงฆ์เอง
                                                         </span>
                                                     </c:if>
-                                                    <c:if test="${not empty packageIncludedItems}">
-                                                        <div class="item-desc" style="margin-top:6px;">
-                                                            <c:forEach var="pkgItem" items="${packageIncludedItems}">
-                                                                - ${pkgItem.itemName}<br/>
-                                                            </c:forEach>
-                                                        </div>
-                                                    </c:if>
+                                                    <%-- อุปกรณ์ที่รวมในแพ็กเกจแสดงเป็นแถวจริงต่อจากแถวนี้
+                                                         ด้านล่างเลย (ดู packageIncludedItems loop) ไม่ต้อง
+                                                         list bullet ซ้ำตรงนี้ --%>
                                                     <input type="hidden" name="bookingItemNames" value="${d.item.itemName}">
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="bookingQtys" value="1" min="1"
-                                                           class="qty-input" readonly style="text-align:center; background:#f4f4f4;">
+                                                  <input type="number" name="bookingQtys" value="1" min="1"
+       class="qty-input" readonly style="text-align: center; background: #f4f4f4;">
                                                 </td>
                                                 <td style="text-align:center;">${d.item.unit}</td>
                                                 <td>
@@ -265,8 +248,7 @@
                                         </c:if>
                                     </c:forEach>
                                     <c:if test="${!packageDetailFound}">
-                                        <%-- ใบเสนอราคาเก่าที่ยังไม่มีแถวแพ็กเกจ (สร้างก่อนแก้ระบบ) ให้ fallback ใส่ราคาแพ็กเกจ (หักส่วนลดถ้ามี) แทน --%>
-                                        <tr class="static-row">
+                                        <tr class="static-row no-qty-convert">
                                             <td class="row-number" style="text-align:center;">1</td>
                                             <td>
                                                 <span class="item-name">${packageName}</span>
@@ -285,18 +267,11 @@
                                                         เนื่องจากลูกค้านิมนต์พระสงฆ์เอง
                                                     </span>
                                                 </c:if>
-                                                <c:if test="${not empty packageIncludedItems}">
-                                                    <div class="item-desc" style="margin-top:6px;">
-                                                        <c:forEach var="pkgItem" items="${packageIncludedItems}">
-                                                            - ${pkgItem.itemName}<br/>
-                                                        </c:forEach>
-                                                    </div>
-                                                </c:if>
                                                 <input type="hidden" name="bookingItemNames" value="${packageName}">
                                             </td>
                                             <td>
                                                 <input type="number" name="bookingQtys" value="1" min="1"
-                                                       class="qty-input" readonly style="text-align:center; background:#f4f4f4;">
+                                                       class="qty-input" readonly disabled style="text-align:center; background:#f4f4f4;">
                                             </td>
                                             <td style="text-align:center;">แพ็กเกจ</td>
                                             <td>
@@ -309,13 +284,37 @@
                                             <td style="text-align:center;">-</td>
                                         </tr>
                                     </c:if>
+
+                                    <%-- ✅ อุปกรณ์ที่รวมในแพ็กเกจ ย้ายมาอยู่ต่อจากแถวแพ็กเกจตรงนี้เลย
+                                         (แสดงไม่ว่าจะเจอ packageDetailFound หรือไม่ก็ตาม) --%>
+                                    <c:if test="${hasPackageEquip}">
+                                        <c:forEach var="pkgItem" items="${packageIncludedItems}">
+                                            <c:set var="pkgItemQty" value="1"/>
+                                            <c:if test="${(not empty pkgItem.itemDetail && fn:contains(pkgItem.itemDetail,'ต่อรูป')) || fn:contains(pkgItem.itemName,'ต่อรูป')}">
+                                                <c:set var="pkgItemQty" value="${monkCount}"/>
+                                            </c:if>
+                                            <tr class="static-row no-qty-convert package-included-row">
+                                                <td class="row-number no-index" style="text-align:center;"></td>
+                                                <td>
+                                                    <span class="item-name">${pkgItem.itemName}</span>
+                                                    <c:if test="${not empty pkgItem.itemDetail}">
+                                                        <span class="item-desc">${pkgItem.itemDetail}</span>
+                                                    </c:if>
+                                                </td>
+                                                <td><input type="number" value="${pkgItemQty}" class="qty-input" readonly disabled style="text-align:center;"></td>
+                                                <td style="text-align:center;">${pkgItem.unit}</td>
+                                                <td style="text-align:center;"><span class="package-included-label">รวมในแพ็กเกจ</span></td>
+                                                <td style="text-align:right;">-</td>
+                                                <td><span class="item-desc">-</span></td>
+                                                <td style="text-align:center;">-</td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:if>
                                 </c:when>
 
-                                <%-- ===== กรณีกรอกความต้องการเบื้องต้น: ไม่มีแถวราคา ไม่มี fallback
-                                     แสดงแค่คำอธิบาย รายการทั้งหมดอยู่ในหมวดอุปกรณ์/ภัตตาหาร/สังฆทาน/บริการด้านล่างแทน ===== --%>
                                 <c:otherwise>
-                                    <tr class="static-row">
-                                        <td class="row-number" style="text-align:center;"></td>
+                                    <tr class="static-row no-qty-convert">
+                                        <td class="row-number no-index" style="text-align:center;"></td>
                                         <td colspan="7">
                                             <span class="item-name">${packageName}</span>
                                             <c:if test="${not empty q.bookingForm.ceremony.ceremonyDetail}">
@@ -340,14 +339,15 @@
                             </c:choose>
                         </tbody>
 
-                        <%-- หมวดอุปกรณ์พิธีกรรม
-                             หมายเหตุ: tbody ต้อง render เสมอ (ห้ามห่อทั้งก้อนด้วย c:if) ไม่งั้น JS หา
-                             container ไม่เจอ ตอนเพิ่มรายการใหม่จาก popup จะใช้ไม่ได้ ("group-row" ที่ซ่อน
-                             ไปคือแค่หัวข้อบรรทัดแรกเท่านั้น ไม่ใช่ตัว tbody) --%>
+                        <%-- หมวดอุปกรณ์พิธีกรรม (เสริม)
+                             ตอนนี้ใช้เก็บเฉพาะอุปกรณ์ที่ผู้จัดงานเพิ่มเองผ่านป๊อปอัพเท่านั้น
+                             (อุปกรณ์ที่รวมในแพ็กเกจย้ายไปแสดงใน group-package ด้านบนแล้ว จึงไม่มี
+                             .package-included-row เหลืออยู่ในหมวดนี้อีก) --%>
                         <tbody id="group-equipment">
                             <c:if test="${hasEquipmentItems}">
                                 <tr class="group-row"><td colspan="8">หมวดอุปกรณ์พิธีกรรมเสริม</td></tr>
                             </c:if>
+
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
                                     <tr class="dynamic-row" data-item-id="${d.item.itemId}">
@@ -379,7 +379,7 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- หมวดภัตตาหารปิ่นโต --%>
+                        <%-- หมวดภัตตาหารปิ่นโต (ไม่แตะ) --%>
                         <tbody id="group-food">
                             <c:if test="${hasFoodItems}">
                                 <tr class="group-row"><td colspan="8">หมวดภัตตาหารปิ่นโต</td></tr>
@@ -415,7 +415,7 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- หมวดสังฆทาน --%>
+                        <%-- หมวดสังฆทาน (ไม่แตะ) --%>
                         <tbody id="group-sangkathan">
                             <c:if test="${hasSangkathanItems}">
                                 <tr class="group-row"><td colspan="8">หมวดสังฆทาน</td></tr>
@@ -451,9 +451,7 @@
                             </c:forEach>
                         </tbody>
 
-                        <%-- หมวดบริการและการดำเนินการ (รวมบริการนิมนต์พระ)
-                             หัวข้อของหมวดนี้แสดงเมื่อมีรายการบันทึกไว้แล้ว (hasServiceItems) หรือกำลังจะ
-                             fallback auto-add บริการนิมนต์พระ (willShowServiceFallback) --%>
+                        <%-- หมวดบริการและการดำเนินการ (รวมบริการนิมนต์พระ) --%>
                         <tbody id="group-service">
                             <c:if test="${hasServiceItems || willShowServiceFallback}">
                                 <tr class="group-row"><td colspan="8">หมวดบริการและการดำเนินการเสริม</td></tr>
@@ -587,9 +585,6 @@
             <button type="button" class="category-tab"        data-category="บริการ"   onclick="switchCategoryTab(this,'บริการ')">บริการและดำเนินการ</button>
         </div>
         <div class="modal-body">
-            <%-- Toolbar เลือกทั้งหมดทุกหมวด (ไม่ใช่แค่แท็บที่กำลังเปิดอยู่)
-                 ทำงานร่วมกับ selectedItemIds ใน quotationCreate.js ซึ่งเก็บสถานะ
-                 การเลือกไว้แบบ global ไม่ผูกกับแท็บที่แสดงอยู่ตอนนั้น (เหมือนหน้า create) --%>
             <div class="picker-toolbar">
                 <label class="select-all-label">
                     <input type="checkbox" id="selectAllVisible" onchange="toggleSelectAllVisible(this)">
@@ -607,7 +602,7 @@
 </div>
 
 
-<script src="${pageContext.request.contextPath}/static/js/quotationCreate.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/quotationEdit.js"></script>
 
 </body>
 </html>

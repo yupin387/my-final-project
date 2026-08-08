@@ -1,11 +1,10 @@
-// ===== quotationCreate.js =====
-// หน้าสร้างใบเสนอราคา: "ไม่มี" ปุ่ม +/- ปรับจำนวน (ใส่จำนวนโดยพิมพ์ในช่องตรง ๆ เท่านั้น)
-// ปุ่ม +/- มีเฉพาะหน้าแก้ไข (quotationEdit.js)
+// ===== quotationEdit.js =====
+// หน้าแก้ไขใบเสนอราคา: "มี" ปุ่ม +/- ปรับจำนวน (หน้าสร้างใช้ quotationCreate.js ที่ไม่มีปุ่มนี้)
 //
-// อุปกรณ์ที่ "รวมอยู่ในแพ็กเกจ" (.package-included-row) เป็นแถวข้อมูลล้วน ๆ:
-//   - จำนวนคำนวณมาจากฝั่ง JSP แล้ว (ตามจำนวนพระ หรือ 1 แล้วแต่ชนิดอุปกรณ์)
+// อุปกรณ์ที่ "รวมอยู่ในแพ็กเกจ" (.package-included-row) เป็นแถวข้อมูลล้วน ๆ เหมือนหน้าสร้าง:
+//   - จำนวนคำนวณมาจากฝั่ง JSP แล้ว (ตามจำนวนพระ หรือ 1 แล้วแต่ชนิดอุปกรณ์) แก้ไขไม่ได้
 //   - ราคาไม่ถูกดึงมาคิดในยอดรวม เพราะรวมอยู่ใน "ราคาแพ็กเกจ" อยู่แล้ว
-//   - ห้ามแก้ไข/ห้ามลบ จึงไม่ต้องผ่าน buildQtyCell เลย
+//   - ห้ามแก้ไข/ห้ามลบ
 
 const GROUP_LABELS = {
     'group-equipment':  'หมวดอุปกรณ์พิธีกรรม',
@@ -16,10 +15,23 @@ const GROUP_LABELS = {
 
 const selectedItemIds = new Set();
 
-// ===== ช่องจำนวน แบบไม่มีปุ่ม +/- (พิมพ์เลขตรง ๆ) =====
+// ===== ช่องจำนวน พร้อมปุ่ม +/- (เฉพาะหน้าแก้ไขเท่านั้น) =====
 function buildQtyCell(value, inputName) {
-    return `<input type="number" name="${inputName}" value="${value}" min="1"
-                class="qty-input" onchange="calculateGrandTotal()">`;
+    return `
+        <div class="qty-wrapper">
+            <button type="button" class="btn-qty-minus" onclick="adjustQty(this, -1)">−</button>
+            <input type="number" name="${inputName}" value="${value}" min="1"
+                class="qty-input" onchange="calculateGrandTotal()">
+            <button type="button" class="btn-qty-plus" onclick="adjustQty(this, 1)">+</button>
+        </div>`;
+}
+
+function adjustQty(btn, delta) {
+    const input = btn.parentElement.querySelector('.qty-input');
+    let val = parseInt(input.value) || 1;
+    val = Math.max(1, val + delta);
+    input.value = val;
+    calculateGrandTotal();
 }
 
 function getExistingItemIds() {
@@ -327,7 +339,7 @@ window.addEventListener('click', (e) => {
 });
 
 window.addEventListener('load', () => {
-    // แปลง qty cell ให้เป็นช่องกรอกธรรมดา (ไม่มี +/-)
+    // แปลง qty cell ของแถวปกติให้มีปุ่ม +/-
     // ข้ามแถวที่ทำเครื่องหมาย .no-qty-convert ไว้ (แถวราคาแพ็กเกจ / แถวอุปกรณ์รวมในแพ็กเกจ ที่ต้องคงค่าล็อกไว้)
     document.querySelectorAll('.static-row:not(.no-qty-convert), .dynamic-row:not(.no-qty-convert)').forEach(row => {
         const qInput = row.querySelector('input[name="bookingQtys"], input[name="extraQtys"]');

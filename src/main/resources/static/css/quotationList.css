@@ -126,16 +126,15 @@ body {
 .nav-item {
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    font-family: 'Sarabun', sans-serif;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
 }
-
 .nav-item:hover {
     background: rgba(255, 255, 255, 0.2);
     color: #FFFFFF;
@@ -476,10 +475,10 @@ tr:hover td { background: var(--cream-warm); }
 }
 
 /* ========== BTN VIEW ========== */
-.btn-view {
+.content-card table td a.btn-view {
     display: inline-block;
     color: var(--accent-gold);
-    background: linear-gradient(135deg, var(--cream-warm), var(--cream-mid));
+    background: var(--white);
     border: 1.5px solid var(--accent-gold);
     padding: 7px 16px;
     border-radius: 8px;
@@ -491,9 +490,8 @@ tr:hover td { background: var(--cream-warm); }
     white-space: nowrap;
 }
 
-
-.btn-view:hover {
-    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+.content-card table td a.btn-view:hover {
+    background: var(--accent-gold);
     color: #FFFFFF;
     border-color: var(--accent-gold);
     transform: translateY(-1px);

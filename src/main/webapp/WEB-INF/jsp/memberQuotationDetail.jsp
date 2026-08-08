@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ใบเสนอราคาของฉัน - #${q.quotationId}</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=4">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=5">
 </head>
 <body>
 
@@ -86,20 +86,41 @@
             </span>
         </div>
 
-        <div class="info-grid-section">
-            <div class="info-line"><strong>ประเภทพิธี:</strong> ${q.bookingForm.ceremony.ceremonyType}</div>
-            <div class="info-line" style="text-align:right;"><strong>วันที่จัดงาน:</strong> <fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></div>
-            <div class="info-line"><strong>รหัสการจอง:</strong> ${q.bookingForm.bookingId}</div>
-            <div class="info-line" style="text-align:right;"><strong>เวลาเริ่มงาน:</strong> ${q.bookingForm.eventTime} น.</div>
-            <%-- 🟢 เพิ่มข้อมูลหัวหน้างานที่นี่ --%>
-            <div class="info-line" style="grid-column: span 2; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px;">
-                <strong>หัวหน้างานรับผิดชอบ:</strong>
-                <c:choose>
-                    <c:when test="${not empty q.staff}">
-                        ${q.staff.staffFirstName} ${q.staff.staffLastName} (โทร: ${q.staff.staffPhone})
-                    </c:when>
-                    <c:otherwise>อยู่ระหว่างการมอบหมายหัวหน้างาน</c:otherwise>
-                </c:choose>
+        <%-- ===== INFO GRID (ปรับให้เป็นแบบ label/value เหมือนหน้า organizer) ===== --%>
+        <div class="info-card">
+            <div class="info-grid-section">
+                <div class="info-box">
+                    <span class="info-label">รหัสการจอง</span>
+                    <span class="info-value highlight">${q.bookingForm.bookingId}</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">ประเภทพิธี</span>
+                    <span class="info-value">${q.bookingForm.ceremony.ceremonyType}</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">รูปแบบการจอง</span>
+                    <span class="info-value">${q.bookingForm.ceremony.ceremonyName}</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">วันที่จัดงาน</span>
+                    <span class="info-value"><fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">เวลาเริ่มงาน</span>
+                    <span class="info-value">${q.bookingForm.eventTime} น.</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">หัวหน้างานรับผิดชอบ</span>
+                    <span class="info-value">
+                        <c:choose>
+                            <c:when test="${not empty q.staff}">
+                                ${q.staff.staffFirstName} ${q.staff.staffLastName}<br>
+                                <small style="color:#666;">โทร: ${q.staff.staffPhone}</small>
+                            </c:when>
+                            <c:otherwise>อยู่ระหว่างการมอบหมายหัวหน้างาน</c:otherwise>
+                        </c:choose>
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -112,14 +133,25 @@
                         <tr>
                             <th width="50" style="text-align:center;">ลำดับ</th>
                             <th>รายการ</th>
-                            <th width="110" style="text-align:center;">จำนวน</th>
-                            <th width="140" style="text-align:right;">รวมเงิน (฿)</th>
-                            <th width="280">พิมพ์รายละเอียดแจ้งแก้ไขที่นี่</th>
+                            <th width="90" style="text-align:center;">จำนวน</th>
+                            <th width="120" style="text-align:right;">ราคา/หน่วย</th>
+                            <th width="120" style="text-align:right;">รวม (บาท)</th>
+                            <th width="260">พิมพ์รายละเอียดแจ้งแก้ไขที่นี่</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:set var="count" value="1"/>
                         <c:set var="packageName" value="${q.bookingForm.ceremony.ceremonyName}"/>
+
+                        <%-- เช็คจำนวนพระที่นิมนต์ ใช้คำนวณจำนวนของอุปกรณ์ที่รวมในแพ็กเกจ
+                             ที่ต้อง "คูณตามจำนวนพระ" (คีย์เวิร์ด "ต่อรูป") — ใช้ตรรกะเดียวกับ
+                             หน้า organizer (quotationDetail.jsp) --%>
+                        <c:set var="monkCount" value=""/>
+                        <c:forEach var="bd" items="${q.bookingForm.details}">
+                            <c:if test="${fn:contains(bd.question.questionsText,'จำนวนพระ')}">
+                                <c:set var="monkCount" value="${bd.answer}"/>
+                            </c:if>
+                        </c:forEach>
 
                         <%-- เช็คก่อนว่าแต่ละหมวดมีรายการจริงหรือไม่ ถ้าไม่มีจะไม่แสดง header เลย
                              (ไม่โชว์หมวด/แพ็กเกจที่ไม่มีรายการอยู่ข้างใน) --%>
@@ -151,30 +183,23 @@
                         </c:forEach>
 
 
-                <%-- หมวดแพ็กเกจหลัก (โชว์เฉพาะเมื่อมีรายการแพ็กเกจจริง) --%>
+                        <%-- หมวดแพ็กเกจหลัก (โชว์เฉพาะเมื่อมีรายการแพ็กเกจจริง) --%>
                         <c:if test="${hasPackageRow}">
-                            <tr class="group-row"><td colspan="5">แพ็กเกจ: ${q.bookingForm.ceremony.ceremonyType} (${packageName})</td></tr>
+                            <tr class="group-row"><td colspan="6">แพ็กเกจ: ${q.bookingForm.ceremony.ceremonyType} (${packageName})</td></tr>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName == packageName}">
                                     <tr class="item-row-data">
                                         <td style="text-align:center; color:#aaa;">${count}</td> <c:set var="count" value="${count + 1}"/>
                                         <td>
                                             <span class="item-name">${d.item.itemName}</span>
-                                            <span class="item-desc">${d.item.itemDetail}</span>
-
-                                            <%-- 🚩 ซ่อนจุดดำ (list-style-type: none) และใช้ขีด (-) อย่างเดียว --%>
-                                            <c:if test="${not empty packageIncludedItems}">
-                                                <ul style="margin-top: 6px; padding-left: 0; list-style-type: none; color: #666; font-size: 0.9em;">
-                                                    <c:forEach var="incItem" items="${packageIncludedItems}">
-                                                        <li>- ${incItem.itemName}</li>
-                                                    </c:forEach>
-                                                </ul>
+                                            <c:if test="${not empty d.item.itemDetail}">
+                                                <span class="item-desc">${d.item.itemDetail}</span>
                                             </c:if>
                                         </td>
                                         <td style="text-align:center;">${d.quantity} ${d.item.unit}</td>
+                                        <td style="text-align:right;"><fmt:formatNumber value="${d.subtotal / d.quantity}" pattern="#,###.00"/></td>
                                         <td style="text-align:right;" class="amount-cell"><fmt:formatNumber value="${d.subtotal}" pattern="#,###.00"/></td>
                                         <td>
-                                            <%-- 🚩 คืนค่าช่องกรอกข้อความแจ้งแก้ไขสำหรับแพ็กเกจ --%>
                                             <c:if test="${q.quotationStatus != 'Confirmed'}">
                                                 <input type="hidden" class="row-item-id" value="${d.item.itemId}">
                                                 <input type="text" class="member-inline-input row-item-note" placeholder="พิมพ์เพิ่มเรื่องแพ็กเกจ (ถ้ามี)...">
@@ -183,12 +208,37 @@
                                     </tr>
                                 </c:if>
                             </c:forEach>
+
+                            <%-- ✅ อุปกรณ์ที่รวมในแพ็กเกจ: แสดงเป็นแถวตารางเต็มต่อจากแถวแพ็กเกจ
+                                 เหมือนหน้า organizer (quotationDetail.jsp) แทนที่ bullet list เดิม
+                                 ไม่นับลำดับ ไม่นับราคาเข้ายอดรวม เพราะรวมอยู่ในราคาแพ็กเกจข้างบนแล้ว --%>
+                            <c:if test="${not empty packageIncludedItems}">
+                                <c:forEach var="pkgItem" items="${packageIncludedItems}">
+                                    <c:set var="pkgItemQty" value="1"/>
+                                    <c:if test="${(not empty pkgItem.itemDetail && fn:contains(pkgItem.itemDetail,'ต่อรูป')) || fn:contains(pkgItem.itemName,'ต่อรูป')}">
+                                        <c:set var="pkgItemQty" value="${monkCount}"/>
+                                    </c:if>
+                                    <tr class="item-row-data package-included-row">
+                                        <td style="text-align:center; color:#ccc;"></td>
+                                        <td>
+                                            <span class="item-name" style="color:#666;">${pkgItem.itemName}</span>
+                                            <c:if test="${not empty pkgItem.itemDetail}">
+                                                <span class="item-desc">${pkgItem.itemDetail}</span>
+                                            </c:if>
+                                        </td>
+                                        <td style="text-align:center;">${pkgItemQty} ${pkgItem.unit}</td>
+                                        <td style="text-align:center; color:#888;"><span class="package-included-label">รวมในแพ็กเกจ</span></td>
+                                        <td style="text-align:right; color:#888;">-</td>
+                                        <td>-</td>
+                                    </tr>
+                                </c:forEach>
+                            </c:if>
                         </c:if>
 
 
                         <%-- หมวดอุปกรณ์พิธีกรรม (โชว์เฉพาะเมื่อมีรายการจริง) --%>
                         <c:if test="${hasEquipmentRow}">
-                            <tr class="group-row"><td colspan="5">หมวดอุปกรณ์พิธีกรรม</td></tr>
+                            <tr class="group-row"><td colspan="6">หมวดอุปกรณ์พิธีกรรม</td></tr>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
                                     <tr class="item-row-data">
@@ -198,6 +248,7 @@
                                             <span class="item-desc">${d.item.itemDetail}</span>
                                         </td>
                                         <td style="text-align:center;">${d.quantity} ${d.item.unit}</td>
+                                        <td style="text-align:right;"><fmt:formatNumber value="${d.item.pricePerUnit}" pattern="#,###.00"/></td>
                                         <td style="text-align:right;" class="amount-cell"><fmt:formatNumber value="${d.subtotal}" pattern="#,###.00"/></td>
                                         <td>
                                             <c:if test="${q.quotationStatus != 'Confirmed'}">
@@ -212,7 +263,7 @@
 
                         <%-- หมวดภัตตาหาร (โชว์เฉพาะเมื่อมีรายการจริง) --%>
                         <c:if test="${hasFoodRow}">
-                            <tr class="group-row"><td colspan="5">หมวดภัตตาหาร</td></tr>
+                            <tr class="group-row"><td colspan="6">หมวดภัตตาหาร</td></tr>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                                     <tr class="item-row-data">
@@ -222,6 +273,7 @@
                                             <span class="item-desc">${d.item.itemDetail}</span>
                                         </td>
                                         <td style="text-align:center;">${d.quantity} ${d.item.unit}</td>
+                                        <td style="text-align:right;"><fmt:formatNumber value="${d.item.pricePerUnit}" pattern="#,###.00"/></td>
                                         <td style="text-align:right;" class="amount-cell"><fmt:formatNumber value="${d.subtotal}" pattern="#,###.00"/></td>
                                         <td>
                                             <c:if test="${q.quotationStatus != 'Confirmed'}">
@@ -236,7 +288,7 @@
 
                         <%-- หมวดสังฆทาน (โชว์เฉพาะเมื่อมีรายการจริง) --%>
                         <c:if test="${hasSangkathanRow}">
-                            <tr class="group-row"><td colspan="5">หมวดสังฆทาน</td></tr>
+                            <tr class="group-row"><td colspan="6">หมวดสังฆทาน</td></tr>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                                     <tr class="item-row-data">
@@ -246,6 +298,7 @@
                                             <span class="item-desc">${d.item.itemDetail}</span>
                                         </td>
                                         <td style="text-align:center;">${d.quantity} ${d.item.unit}</td>
+                                        <td style="text-align:right;"><fmt:formatNumber value="${d.item.pricePerUnit}" pattern="#,###.00"/></td>
                                         <td style="text-align:right;" class="amount-cell"><fmt:formatNumber value="${d.subtotal}" pattern="#,###.00"/></td>
                                         <td>
                                             <c:if test="${q.quotationStatus != 'Confirmed'}">
@@ -260,13 +313,14 @@
 
                         <%-- หมวดบริการและการดำเนินการ (โชว์เฉพาะเมื่อมีรายการจริง) --%>
                         <c:if test="${hasServiceRow}">
-                            <tr class="group-row"><td colspan="5">หมวดบริการและการดำเนินการ</td></tr>
+                            <tr class="group-row"><td colspan="6">หมวดบริการและการดำเนินการ</td></tr>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
                                     <tr class="item-row-data">
                                         <td style="text-align:center; color:#aaa;">${count}</td> <c:set var="count" value="${count + 1}"/>
                                         <td><span class="item-name">${d.item.itemName}</span></td>
                                         <td style="text-align:center;">${d.quantity} ${d.item.unit}</td>
+                                        <td style="text-align:right;"><fmt:formatNumber value="${d.item.pricePerUnit}" pattern="#,###.00"/></td>
                                         <td style="text-align:right;" class="amount-cell"><fmt:formatNumber value="${d.subtotal}" pattern="#,###.00"/></td>
                                         <td>
                                             <c:if test="${q.quotationStatus != 'Confirmed'}">

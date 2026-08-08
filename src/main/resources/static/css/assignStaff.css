@@ -130,13 +130,14 @@ body {
 .nav-item {
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
 }
 
 .nav-item:hover {
@@ -475,7 +476,7 @@ body {
 
 /* ===== Submit Button ===== */
 .btn-submit {
-    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    background: var(--accent-gold);
     color: #FFFFFF;
     border: none;
     padding: 15px;
@@ -487,27 +488,16 @@ body {
     font-family: 'Noto Serif Thai', serif;
     letter-spacing: 0.5px;
     transition: all 0.25s;
-    box-shadow: 0 4px 16px rgba(224,87,127,0.35);
+    box-shadow: 0 4px 16px rgba(217, 164, 65, 0.3);
     position: relative;
     overflow: hidden;
 }
 
-.btn-submit::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 60%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-    transition: left 0.5s ease;
-}
-
 .btn-submit:hover {
-    background: linear-gradient(135deg, var(--gold-mid), var(--accent-gold-mid));
+    background: #C4922F;
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(217, 164, 65, 0.4);
 }
-
-.btn-submit:hover::after { left: 140%; }
 
 /* ===== Back Link ===== */
 .back-link {

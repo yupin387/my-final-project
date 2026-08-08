@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -83,11 +84,13 @@
 				<div class="info-box">
 					<span class="info-label">ประเภทพิธี</span> <span class="info-value">${q.bookingForm.ceremony.ceremonyType}</span>
 				</div>
-				<%-- เพิ่มใหม่: แสดงชื่อแพ็กเกจคู่กับประเภทพิธี ให้สอดคล้องกับหน้าสร้าง/แก้ไขใบเสนอราคา --%>
+				<%-- แก้บั๊ก: เดิมอ้างตัวแปร ${b.ceremony.ceremonyName} ซึ่งไม่มีในหน้านี้ (หน้านี้ใช้ q.bookingForm
+                     ทั้งไฟล์) ทำให้ค่าว่างเปล่าเสมอ แก้เป็น ${q.bookingForm.ceremony.ceremonyName} ให้ตรงกับ
+                     ที่อื่นทั้งหมดในหน้านี้ --%>
 				<div class="info-box">
-    <span class="info-label">รูปแบบการจอง</span> <span
-        class="info-value">${b.ceremony.ceremonyName}</span>
-</div>
+					<span class="info-label">รูปแบบการจอง</span> <span
+						class="info-value">${q.bookingForm.ceremony.ceremonyName}</span>
+				</div>
 				<div class="info-box">
 					<span class="info-label">ลูกค้า</span> <span class="info-value">${q.bookingForm.member.memberFirstName}
 						${q.bookingForm.member.memberLastName}</span>
@@ -136,7 +139,28 @@
 					<c:set var="packageName"
 						value="${q.bookingForm.ceremony.ceremonyName}" />
 
-					<%-- เช็คก่อนว่าแต่ละหมวดมีรายการจริงหรือไม่ ถ้าไม่มีจะไม่แสดง header เลย --%>
+					<%-- ===================================================================
+                     เช็คจำนวนพระที่นิมนต์ ใช้ตัดสินใจจำนวนอุปกรณ์ที่รวมในแพ็กเกจชิ้นที่คูณ
+                     ตามจำนวนพระ (ดูตรรกะคีย์เวิร์ด "ต่อรูป" ประกอบ ใช้หลักการเดียวกับหน้า
+                     quotationCreate.jsp / quotationEdit.jsp)
+                     =================================================================== --%>
+					<c:set var="monkInviteType" value="" />
+					<c:set var="monkCount" value="" />
+					<c:forEach var="bd" items="${q.bookingForm.details}">
+						<c:if
+							test="${fn:contains(bd.question.questionsText,'รูปแบบการนิมนต์')}">
+							<c:set var="monkInviteType" value="${bd.answer}" />
+						</c:if>
+						<c:if test="${fn:contains(bd.question.questionsText,'จำนวนพระ')}">
+							<c:set var="monkCount" value="${bd.answer}" />
+						</c:if>
+					</c:forEach>
+					<c:set var="isMonkSelfInvite"
+						value="${fn:contains(monkInviteType,'นิมนต์เอง')}" />
+
+					<%-- เช็คก่อนว่าแต่ละหมวดมีรายการจริงหรือไม่ ถ้าไม่มีจะไม่แสดง header เลย
+                     หมายเหตุ: hasEquipmentRow นับเฉพาะอุปกรณ์เสริมที่เพิ่มเองจริง (อยู่ใน details)
+                     ไม่รวมอุปกรณ์ที่ "รวมในแพ็กเกจ" ซึ่งแสดงต่อจากแถวแพ็กเกจแทนแล้ว --%>
 					<c:set var="hasEquipmentRow" value="false" />
 					<c:set var="hasFoodRow" value="false" />
 					<c:set var="hasSangkathanRow" value="false" />
@@ -158,7 +182,8 @@
 						</c:if>
 					</c:forEach>
 
-					<%-- หมวดแพ็กเกจหลัก --%>
+					<%-- หมวดแพ็กเกจหลัก + อุปกรณ์ที่รวมในแพ็กเกจ (แสดงเป็นแถวตารางเต็มต่อจากแถว
+                     แพ็กเกจเลย ไม่แยกหัวข้อ "หมวดอุปกรณ์พิธีกรรม" ซ้ำ ให้ตรงกับหน้าสร้าง/แก้ไข) --%>
 					<c:forEach var="d" items="${details}">
 						<c:if test="${d.item != null && d.item.itemName == packageName}">
 							<tr class="group-row">
@@ -172,12 +197,6 @@
 										test="${not empty d.item.itemDetail}">
 										<br>
 										<small style="color: #888;">${d.item.itemDetail}</small>
-									</c:if> <c:if test="${not empty packageIncludedItems}">
-										<div style="margin-top: 6px; font-size: 0.85em; color: #888;">
-											<c:forEach var="pkgItem" items="${packageIncludedItems}">
-                - ${pkgItem.itemName}<br />
-											</c:forEach>
-										</div>
 									</c:if></td>
 								<td style="text-align: center;">${d.quantity}
 									${d.item.unit}</td>
@@ -190,7 +209,33 @@
 						</c:if>
 					</c:forEach>
 
-					<%-- หมวดอุปกรณ์พิธีกรรม (แสดงเฉพาะเมื่อมีรายการจริง) --%>
+					<%-- ✅ อุปกรณ์ที่รวมในแพ็กเกจ: แถวตารางเต็ม (จำนวน/หน่วย/ป้ายรวมในแพ็กเกจ)
+                     ไม่นับลำดับ ไม่นับราคาเข้ายอดรวม เพราะรวมอยู่ในราคาแพ็กเกจข้างบนแล้ว --%>
+					<c:if test="${not empty packageIncludedItems}">
+						<c:forEach var="pkgItem" items="${packageIncludedItems}">
+							<c:set var="pkgItemQty" value="1" />
+							<c:if
+								test="${(not empty pkgItem.itemDetail && fn:contains(pkgItem.itemDetail,'ต่อรูป')) || fn:contains(pkgItem.itemName,'ต่อรูป')}">
+								<c:set var="pkgItemQty" value="${monkCount}" />
+							</c:if>
+							<tr class="package-included-row">
+								<td style="text-align: center; color: #ccc;"></td>
+								<td><span style="color: #555;">${pkgItem.itemName}</span> <c:if
+										test="${not empty pkgItem.itemDetail}">
+										<br>
+										<small style="color: #888;">${pkgItem.itemDetail}</small>
+									</c:if></td>
+								<td style="text-align: center;">${pkgItemQty}
+									${pkgItem.unit}</td>
+								<td style="text-align: center; color: #888;"><span
+									class="package-included-label">รวมในแพ็กเกจ</span></td>
+								<td style="text-align: right; color: #888;">-</td>
+								<td class="note-text">-</td>
+							</tr>
+						</c:forEach>
+					</c:if>
+
+					<%-- หมวดอุปกรณ์พิธีกรรม (แสดงเฉพาะเมื่อมีรายการเสริมที่เพิ่มเองจริง) --%>
 					<c:if test="${hasEquipmentRow}">
 						<tr class="group-row">
 							<td colspan="6">หมวดอุปกรณ์พิธีกรรม</td>

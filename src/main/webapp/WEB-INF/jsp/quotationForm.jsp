@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>จัดทำใบเสนอราคา - บุญมีนำพา จัดงานบุญ</title>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=6">
+	href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=7">
 </head>
 <body>
 
@@ -77,8 +77,6 @@
 				<div class="info-box">
 					<span class="info-label">ประเภทพิธี</span> <span class="info-value">${b.ceremony.ceremonyType}</span>
 				</div>
-				<%-- แสดงชื่อรูปแบบการจองที่ลูกค้าเลือกไว้ตอนจอง ดึงมาจาก b.ceremony ตรง ๆ
-                 ไม่ต้องมี dropdown ให้เลือกซ้ำ เพราะพิธี+รูปแบบถูกกำหนดตั้งแต่ตอนจองแล้ว --%>
 				<div class="info-box">
 					<span class="info-label">รูปแบบการจอง</span> <span
 						class="info-value">${b.ceremony.ceremonyName}</span>
@@ -135,26 +133,7 @@
 								</tr>
 							</thead>
 
-							<%-- ===================================================================
-                             หมวดแพ็กเกจหลัก / รูปแบบการจอง
-                             - กรณีแพ็กเกจจริง (มาตรฐาน/อิ่มบุญ/พรีเมียม): แสดงเป็นก้อนเดียว
-                               ราคาตาม basePrice พร้อมรายการที่รวมอยู่แล้ว (ดู Run.java ส่วน A)
-                               บริการนิมนต์พระรวมอยู่ใน basePrice ของแพ็กเกจอยู่แล้ว จึงไม่ต้อง
-                               ดึง "บริการประสานงานนิมนต์พระ" มาคิดแยกอีก
-                               *** ถ้าลูกค้าเลือก "นิมนต์เอง" ให้หักส่วนลด 1,500 บาท ออกจาก
-                               basePrice เพราะร้านไม่ต้องออกค่าใช้จ่ายส่วนนี้ให้แล้ว (ดูตัวแปร
-                               packagePrice / monkSelfInviteDiscount ด้านล่าง) ***
-                             - กรณี "กรอกความต้องการเบื้องต้น": ไม่มีของแถมฟรี ไม่มีราคาตายตัว
-                               ผู้จัดงานต้องเลือกอุปกรณ์/บริการทั้งหมดเองผ่านป๊อปอัพด้านล่าง
-                               ยกเว้น "บริการประสานงานนิมนต์พระ" ที่ระบบดึงจำนวนพระมาให้อัตโนมัติ
-                               (ดูหมวดบริการด้านล่าง) เมื่อลูกค้าเลือก "ให้ทางร้านนิมนต์"
-                               กรณีนี้ไม่ต้องหักส่วนลดซ้ำ เพราะไม่เคยถูกดึงมาคิดเงินตั้งแต่แรก
-                               ถ้าเลือกนิมนต์เอง (เงื่อนไข fn:contains(monkInviteType,'นิมนต์เอง')
-                               จะเป็น false ทำให้ไม่มีการเพิ่มแถวบริการนี้เข้าไปเลย)
-                             =================================================================== --%>
-							<%-- เช็คก่อนว่าลูกค้าเลือกรูปแบบการนิมนต์แบบไหน และจำนวนพระเท่าไหร่
-                             ข้อมูลนี้เป็นแค่ "รายละเอียด" แสดงในกล่องด้านบน ไม่ใช่รายการคิดเงินแยก
-                             เพราะบริการนิมนต์พระรวมอยู่ใน basePrice ของแพ็กเกจอยู่แล้ว (กรณีแพ็กเกจจริง) --%>
+							<%-- เช็คก่อนว่าลูกค้าเลือกรูปแบบการนิมนต์แบบไหน และจำนวนพระเท่าไหร่ --%>
 							<c:set var="monkInviteType" value="" />
 							<c:set var="monkCount" value="" />
 							<c:forEach var="d" items="${b.details}">
@@ -167,15 +146,10 @@
 								</c:if>
 							</c:forEach>
 
-							<%-- ค่าคงที่ส่วนลดกรณีลูกค้านิมนต์พระสงฆ์เอง (แพ็กเกจจริงเท่านั้น)
-                             ถ้าจำนวนเงินนี้เปลี่ยนในอนาคต แก้ตรงนี้ที่เดียวพอ --%>
 							<c:set var="monkSelfInviteDiscount" value="${1500}" />
 							<c:set var="isMonkSelfInvite"
 								value="${fn:contains(monkInviteType,'นิมนต์เอง')}" />
 
-							<%-- ราคาแพ็กเกจที่แสดงจริงในฟอร์ม = basePrice ปกติ หรือ basePrice
-                             หักส่วนลด ถ้าลูกค้านิมนต์พระสงฆ์เอง (เฉพาะกรณีแพ็กเกจจริงเท่านั้น
-                             เพราะกรณีกรอกความต้องการเบื้องต้นไม่มีราคาตายตัวอยู่แล้ว) --%>
 							<c:choose>
 								<c:when test="${!isCustomRequest && isMonkSelfInvite}">
 									<c:set var="packageDisplayPrice"
@@ -185,6 +159,22 @@
 									<c:set var="packageDisplayPrice" value="${b.ceremony.basePrice}" />
 								</c:otherwise>
 							</c:choose>
+
+							<%-- ===================================================================
+							     เช็คว่าอุปกรณ์แต่ละชิ้นในแพ็กเกจ (packageIncludedItems) "คูณตาม
+							     จำนวนพระ" หรือไม่ เนื่องจากตอนนี้ยังไม่มี field ในฐานข้อมูลระบุเรื่องนี้
+							     โดยตรง (itemceremony เป็น join table เปล่า ๆ ไม่มี quantity) จึงใช้
+							     คีย์เวิร์ด "ต่อรูป" ในชื่อ/รายละเอียดอุปกรณ์เป็นตัวเช็คแทนไปก่อน
+							     -> ถ้าอุปกรณ์ชิ้นไหนควรคูณตามจำนวนพระ ให้ตั้งชื่อ/รายละเอียดมีคำว่า
+							        "ต่อรูป" อยู่ด้วย (เช่น "ผ้าไตร (ต่อรูป)") ไม่งั้นระบบจะใส่จำนวน = 1
+							     -> ถ้าต้องการ field แยกจริง ๆ ในอนาคต ควรเพิ่ม column เช่น
+							        scalesbymonk (boolean) ในตาราง itemceremony แล้วมาแก้จุดนี้แทน
+							     =================================================================== --%>
+
+							<%-- อุปกรณ์ที่รวมในแพ็กเกจ ตอนนี้แสดงต่อจากแถวราคาแพ็กเกจใน group-package
+							     เลย (ไม่แยกหัวข้อหมวดอุปกรณ์อีกต่อไปเมื่อเลือกแพ็กเกจ) --%>
+							<c:set var="hasPackageEquip"
+								value="${!isCustomRequest && not empty packageIncludedItems}" />
 
 							<tbody id="group-package">
 								<tr class="group-row">
@@ -202,9 +192,9 @@
 								</tr>
 
 								<c:choose>
-									<%-- ===== กรณีแพ็กเกจจริง: แสดงแถวราคาแพ็กเกจตายตัว ===== --%>
+									<%-- ===== กรณีแพ็กเกจจริง: แสดงแถวราคาแพ็กเกจตายตัว (ล็อกจำนวน = 1 เสมอ) ===== --%>
 									<c:when test="${!isCustomRequest}">
-										<tr class="static-row">
+										<tr class="static-row no-qty-convert">
 											<td class="row-number" style="text-align: center;">1</td>
 											<td><span class="item-name">${b.ceremony.ceremonyName}</span>
 												<c:if test="${not empty b.ceremony.ceremonyDetail}">
@@ -226,20 +216,14 @@
 															minFractionDigits="0" /> บาท
 														เนื่องจากลูกค้านิมนต์พระสงฆ์เอง
 													</span>
-												</c:if> <c:if test="${not empty packageIncludedItems}">
-													<div class="item-desc" style="margin-top: 6px;">
-														<c:forEach var="pkgItem" items="${packageIncludedItems}">
-                                                        - ${pkgItem.itemName}<br />
-														</c:forEach>
-													</div>
 												</c:if>
-												<%-- ชื่อนี้ต้องตรงกับ Item ที่มีอยู่จริงในฐานข้อมูล (itemName = ceremonyName)
-                                             ไม่งั้น service จะหาไม่เจอแล้วข้ามแถวนี้ไปเงียบ ๆ --%>
+												<%-- หมายเหตุ: อุปกรณ์ที่รวมในแพ็กเกจแสดงเป็นแถวจริงต่อจากแถวนี้
+												     ด้านล่างเลย (ดู packageIncludedItems loop) ไม่ต้อง list
+												     ชื่อซ้ำเป็น bullet text ตรงนี้ --%>
 												<input type="hidden" name="bookingItemNames"
 												value="${b.ceremony.ceremonyName}"></td>
-											<td><input type="number" name="bookingQtys" value="1"
-												min="1" class="qty-input" readonly
-												style="text-align: center; background: #f4f4f4;"></td>
+											<td><input type="number" name="bookingQtys" value="1" min="1"
+       class="qty-input" readonly style="text-align: center; background: #f4f4f4;"></td>
 											<td style="text-align: center;">แพ็กเกจ</td>
 											<td><input type="number" name="bookingPrices"
 												value="${packageDisplayPrice}" step="0.01" min="0"
@@ -251,13 +235,40 @@
 												class="note-input" placeholder="หมายเหตุ"></td>
 											<td style="text-align: center;">-</td>
 										</tr>
+
+										<%-- ✅ อุปกรณ์ที่รวมในแพ็กเกจ ย้ายมาอยู่ต่อจากแถวแพ็กเกจตรงนี้เลย
+										     ไม่แยกเป็นหมวด "อุปกรณ์พิธีกรรม" อีกต่อไปเมื่อเลือกแพ็กเกจ --%>
+										<c:if test="${hasPackageEquip}">
+											<c:forEach var="pkgItem" items="${packageIncludedItems}">
+												<c:set var="pkgItemQty" value="1" />
+												<c:if
+													test="${(not empty pkgItem.itemDetail && fn:contains(pkgItem.itemDetail,'ต่อรูป')) || fn:contains(pkgItem.itemName,'ต่อรูป')}">
+													<c:set var="pkgItemQty" value="${monkCount}" />
+												</c:if>
+												<tr class="static-row no-qty-convert package-included-row">
+													<td class="row-number no-index" style="text-align: center;"></td>
+													<td><span class="item-name">${pkgItem.itemName}</span>
+														<c:if test="${not empty pkgItem.itemDetail}">
+															<span class="item-desc">${pkgItem.itemDetail}</span>
+														</c:if></td>
+													<td><input type="number" value="${pkgItemQty}"
+														class="qty-input" readonly disabled
+														style="text-align: center;"></td>
+													<td style="text-align: center;">${pkgItem.unit}</td>
+													<td style="text-align: center;"><span
+														class="package-included-label">รวมในแพ็กเกจ</span></td>
+													<td style="text-align: right;">-</td>
+													<td><span class="item-desc">-</span></td>
+													<td style="text-align: center;">-</td>
+												</tr>
+											</c:forEach>
+										</c:if>
 									</c:when>
 
-									<%-- ===== กรณีกรอกความต้องการเบื้องต้น: ไม่มีของแถมฟรี ไม่มีแถวราคาตายตัว
-                                         แสดงแค่คำอธิบาย ผู้จัดงานต้องเลือกทุกอย่างเองผ่านป๊อปอัพ ===== --%>
+									<%-- ===== กรณีกรอกความต้องการเบื้องต้น: ไม่มีของแถมฟรี ไม่มีแถวราคาตายตัว ===== --%>
 									<c:otherwise>
-										<tr class="static-row">
-											<td class="row-number" style="text-align: center;"></td>
+										<tr class="static-row no-qty-convert">
+											<td class="row-number no-index" style="text-align: center;"></td>
 											<td colspan="7">
 												<span class="item-name">${b.ceremony.ceremonyName}</span>
 												<c:if test="${not empty b.ceremony.ceremonyDetail}">
@@ -284,19 +295,14 @@
 								</c:choose>
 							</tbody>
 
-							<%-- หมวดอุปกรณ์พิธีกรรม
-                             หมายเหตุ: ตอน initial render ของหน้านี้ ไม่มีทางมีรายการอุปกรณ์อยู่แล้ว
-                             เพราะรายการหมวดนี้ถูกเพิ่มเข้าตารางผ่าน popup + JS (addSelectedItemsToTable)
-                             เท่านั้น จึงไม่แสดงหัวข้อ "หมวดอุปกรณ์พิธีกรรม" ตายตัวตรงนี้
-                             -> ฝั่ง quotationCreate.js เป็นคน insert แถว group-row เข้าไปเอง
-                                ตอนเพิ่ม item แรกของหมวดนี้ (ฟังก์ชัน ensureGroupHeader) และลบ
-                                group-row ทิ้งถ้าลบ item จนหมวดว่าง (ฟังก์ชัน removeGroupHeaderIfEmpty) --%>
-							<tbody id="group-equipment">
-							</tbody>
+							<%-- หมวดอุปกรณ์พิธีกรรม (เสริม)
+							     ตอนนี้ใช้เก็บเฉพาะอุปกรณ์ที่ผู้จัดงานเพิ่มเองผ่านป๊อปอัพเท่านั้น
+							     (อุปกรณ์ที่รวมในแพ็กเกจย้ายไปแสดงใน group-package ด้านบนแล้ว)
+							     หัวข้อของหมวดนี้จะถูกสร้างขึ้นเองโดย JS (ensureGroupHeader) เมื่อมี
+							     การเพิ่มรายการเข้ามาเท่านั้น จึงปล่อย tbody นี้ว่างไว้ตอนโหลดหน้าแรก --%>
+							<tbody id="group-equipment"></tbody>
 
-							<%-- หมวดภัตตาหารปิ่นโต --%>
-							<%-- เช็คก่อนว่ามีรายการภัตตาหารที่ตรงกับที่ลูกค้าเลือกไว้จริงไหม
-                             ถ้าไม่มี ไม่ต้องขึ้นหัวข้อหมวดนี้เลย --%>
+							<%-- หมวดภัตตาหารปิ่นโต (ไม่แตะ — ดึงจาก bookingform ที่ลูกค้ากรอกไว้เหมือนเดิม) --%>
 							<c:set var="hasFoodItems" value="false" />
 							<c:forEach var="detail" items="${validDetails}">
 								<c:if
@@ -363,9 +369,7 @@
 								</c:forEach>
 							</tbody>
 
-							<%-- หมวดสังฆทาน --%>
-							<%-- เช็คก่อนว่ามีรายการสังฆทานที่ตรงกับที่ลูกค้าเลือกไว้จริงไหม
-                             ถ้าไม่มี ไม่ต้องขึ้นหัวข้อหมวดนี้เลย --%>
+							<%-- หมวดสังฆทาน (ไม่แตะ — ดึงจาก bookingform ที่ลูกค้ากรอกไว้เหมือนเดิม) --%>
 							<c:set var="hasSangkathanItems" value="false" />
 							<c:forEach var="detail" items="${validDetails}">
 								<c:if
@@ -432,23 +436,7 @@
 								</c:forEach>
 							</tbody>
 
-							<%-- หมวดบริการและการดำเนินการ (รวมถึงบริการนิมนต์พระสงฆ์)
-                             FIX: ดึง "บริการประสานงานนิมนต์พระ" มาใส่ในตารางให้อัตโนมัติ
-                             เฉพาะกรณี "กรอกความต้องการเบื้องต้น" (isCustomRequest) เท่านั้น
-                             เพราะกรณีแพ็กเกจจริง บริการนี้รวมอยู่ใน basePrice ของแพ็กเกจอยู่แล้ว
-                             ไม่ต้องคิดแยกซ้ำ (ดู tbody id="group-package" ด้านบน)
-                             เงื่อนไข:
-                               1) isCustomRequest ต้องเป็น true (กรอกเองเท่านั้น)
-                               2) monkInviteType ต้องไม่ใช่ "นิมนต์เอง" (ลูกค้าให้ร้านนิมนต์ให้)
-                               3) monkCount ต้องมีค่า (มีจำนวนพระที่กรอกไว้จริง)
-                             จำนวน (bookingQtys) = จำนวนพระที่ลูกค้ากรอกไว้ตอนจอง (monkCount)
-                             เหมือน pattern ของหมวดปิ่นโต/สังฆทานด้านบนที่ดึง qty จาก b.details
-                             หัวข้อหมวดนี้ก็ผูกกับเงื่อนไขเดียวกัน ถ้าไม่เข้าเงื่อนไข = ไม่มีรายการ
-                             ก็ไม่ต้องขึ้นหัวข้อ (ถ้ามี item บริการอื่นถูกเพิ่มทีหลังผ่าน popup
-                             ฝั่ง JS จะเป็นคนใส่หัวข้อให้เองผ่าน ensureGroupHeader)
-                             หมายเหตุ: กรณีนี้ isMonkSelfInvite จะเป็น false เสมอ (ตามเงื่อนไข
-                             not fn:contains ด้านล่าง) จึงไม่ต้องหักส่วนลด 1,500 เพราะยังไม่เคย
-                             ถูกคิดเงินตั้งแต่แรก --%>
+							<%-- หมวดบริการและการดำเนินการ (รวมถึงบริการนิมนต์พระสงฆ์) --%>
 							<tbody id="group-service">
 								<c:if
 									test="${isCustomRequest && not isMonkSelfInvite && not empty monkCount}">
@@ -489,6 +477,33 @@
 							</tbody>
 
 						</table>
+
+						<%-- ============================================================
+						     FIX: กล่องแสดง "ความต้องการเพิ่มเติม" ที่ลูกค้ากรอกไว้ตอนจอง
+						     (freetext เช่น "ต้องการเก้าอี้เพิ่ม 10 ตัว") ดึงมาจาก
+						     QuotationController -> extractAdditionalNote() ผ่าน
+						     model attribute "additionalNote"
+						     หมายเหตุ: เป็นข้อมูลอ้างอิงให้ผู้จัดงานอ่านเฉยๆ ไม่ auto-fill
+						     ราคา/จำนวนให้ เพราะเป็นข้อความอิสระ จับคู่กับชื่อ item ในระบบ
+						     ไม่ได้ตรงๆ เหมือนสังฆทาน/ปิ่นโตที่เป็นการเลือกจากรายการที่มีอยู่แล้ว
+						     ผู้จัดงานต้องอ่านแล้วไปกดปุ่ม "เลือกรายการวัสดุอุปกรณ์เสริม"
+						     ด้านล่างเพื่อเพิ่มรายการ/ราคาที่ตรงกับความต้องการนี้เอง
+						     ============================================================ --%>
+						<c:if test="${not empty additionalNote}">
+							<div class="additional-note-box"
+								style="margin: 16px 0; padding: 14px 16px; background: #FFF7E6;
+                                       border: 1px solid #E0C089; border-radius: 8px;">
+								<div style="font-weight: 600; color: #8A5A00; margin-bottom: 6px;">
+									📝 ความต้องการเพิ่มเติมที่ลูกค้ากรอกไว้ตอนจอง
+								</div>
+								<div style="white-space: pre-wrap; color: #5c4300; font-size: 14px;">${additionalNote}</div>
+								<div style="font-size: 12px; color: #B0345A; margin-top: 8px;">
+									* ข้อความนี้เป็นข้อมูลอ้างอิงเท่านั้น กรุณากดปุ่ม
+									"เลือกรายการวัสดุอุปกรณ์เสริม" ด้านล่างเพื่อเพิ่มรายการและราคา
+									ที่ตรงกับความต้องการนี้เข้าสู่ใบเสนอราคาด้วยตนเอง
+								</div>
+							</div>
+						</c:if>
 
 						<button type="button" class="btn-open-popup"
 							onclick="openItemModal()">
@@ -559,9 +574,6 @@
 					onclick="switchCategoryTab(this,'บริการ')">บริการและดำเนินการ</button>
 			</div>
 			<div class="modal-body">
-				<%-- Toolbar เลือกทั้งหมดทุกหมวด (ไม่ใช่แค่แท็บที่กำลังเปิดอยู่)
-                     ทำงานร่วมกับ selectedItemIds ใน quotationCreate.js ซึ่งเก็บสถานะ
-                     การเลือกไว้แบบ global ไม่ผูกกับแท็บที่แสดงอยู่ตอนนั้น --%>
 				<div class="picker-toolbar">
 					<label class="select-all-label"> <input type="checkbox"
 						id="selectAllVisible" onchange="toggleSelectAllVisible(this)">
@@ -580,8 +592,6 @@
 			</div>
 		</div>
 	</div>
-
-
 
 	<script
 		src="${pageContext.request.contextPath}/static/js/quotationCreate.js"></script>

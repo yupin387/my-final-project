@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
 /* ===== CSS Variables (matched to home.css pink theme) ===== */
 :root {
@@ -27,6 +27,12 @@
     --shadow-gold:   rgba(224, 87, 127, 0.16);
     --shadow-warm:   rgba(224, 87, 127, 0.10);
 
+    /* ===== สีทองจริง (ให้ตรงกับหน้าอื่นทั้งหมด) ===== */
+    --accent-gold:        #D9A441;
+    --accent-gold-mid:    #E8C878;
+    --accent-gold-pale:   #F7E3B0;
+    --accent-gold-dark:   #B8860B;
+
     /* ===== Footer colors (same gradient as navbar) ===== */
     --footer-grad-1: #C7405F;
     --footer-grad-2: #D94F76;
@@ -51,7 +57,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-pale);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     position: sticky;
     top: 0;
     z-index: 10000;
@@ -65,7 +72,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .navbar-brand-wrap {
@@ -96,13 +103,12 @@ body {
 
 .nav-brand-text {
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
-    font-style: italic;
-    font-size: 30px;
-    font-weight: 800;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 34px;
+    font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 14px rgba(217, 164, 65, 0.45);
 }
 
 .navbar-center {
@@ -116,13 +122,14 @@ body {
 .nav-link-item {
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
 }
 
 .nav-link-item:hover {
@@ -566,10 +573,19 @@ body {
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
-    border-top: 3px solid var(--gold-pale);
+    border-top: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .footer-content {
@@ -608,8 +624,8 @@ body {
 }
 
 .footer-brand-text {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.05rem;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -618,6 +634,39 @@ body {
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.9);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.footer-social {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.footer-social-link {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.footer-social-link:hover { color: #FFFFFF; }
+
+.footer-col { min-width: 220px; }
+
+.footer-heading {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+}
+
+.footer-contact-col p {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 6px;
 }
 
 .footer-bottom {
@@ -634,7 +683,7 @@ body {
     .navbar-center { display: none; }
     .navbar-custom .lotus-icon,
     .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
-    .nav-brand-text { font-size: 20px; }
+    .nav-brand-text { font-size: 24px; }
     .form-row { grid-template-columns: 1fr; }
     .profile-banner { padding: 22px 20px; }
     .profile-banner-content { gap: 16px; }

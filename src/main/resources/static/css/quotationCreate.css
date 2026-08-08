@@ -81,7 +81,6 @@ body {
     background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
-/* Brand wrapper (ครอบ lotus + title) */
 .navbar-brand {
     display: flex;
     align-items: center;
@@ -134,18 +133,18 @@ body {
 .nav-item {
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
 }
 .nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
 .nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
 
-/* User pill */
 .user-info {
     background: rgba(255, 255, 255, 0.15);
     border: 1.5px solid rgba(255, 255, 255, 0.45);
@@ -173,7 +172,6 @@ body {
 .user-role   { font-size: 0.7rem;  color: rgba(255, 255, 255, 0.75); }
 .arrow       { color: #FFFFFF; font-size: 11px; opacity: 0.8; }
 
-/* Dropdown */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -198,12 +196,10 @@ body {
 }
 .dropdown-item:hover { background: var(--cream-warm); color: var(--brown-dark); }
 
-/* ========== WAVE DIVIDER (after navbar) ========== */
 .navbar-wave {
     display: block; width: 100%; height: 32px; line-height: 0;
 }
 
-/* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     flex: 1;
     padding: 32px 40px;
@@ -213,7 +209,6 @@ body {
     padding-bottom: 120px;
 }
 
-/* ========== PAGE TITLE ========== */
 .page-title-row {
     margin-bottom: 24px;
     animation: fadeUp 0.3s ease both;
@@ -250,7 +245,6 @@ body {
     margin-top: 6px;
 }
 
-/* ========== INFO CARD ========== */
 .info-card {
     background: #FFFFFF;
     border-radius: 14px;
@@ -311,7 +305,6 @@ body {
     text-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
 
-/* ========== MAIN LAYOUT & CARD ========== */
 .main-layout { display: block; animation: fadeUp 0.3s ease 0.1s both; }
 
 .card {
@@ -344,7 +337,6 @@ body {
 
 .card-body { padding: 24px; }
 
-/* ========== TABLE ========== */
 table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; }
 
 th {
@@ -392,7 +384,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
 .item-name  { font-weight: 700; color: var(--text-dark); display: block; margin-bottom: 3px; word-wrap: break-word; }
 .item-desc  { font-size: 12px; color: #999; display: block; }
 
-/* ========== QTY +/- ========== */
 .qty-wrapper {
     display: flex; align-items: center; gap: 4px; justify-content: center;
 }
@@ -435,7 +426,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     transform: scale(1.08);
 }
 
-/* ========== INPUTS ========== */
 .qty-input {
     width: 50px; padding: 5px 4px;
     border: 1.5px solid var(--accent-gold-pale);
@@ -487,7 +477,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     background: #DC2626; color: #fff; border-color: #B91C1C;
 }
 
-/* ========== ADD ITEM BUTTON ========== */
 .btn-open-popup {
     background: linear-gradient(135deg, #16A34A, #15803D);
     color: #fff;
@@ -512,7 +501,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     box-shadow: 0 6px 20px rgba(22, 163, 74, 0.45);
 }
 
-/* ========== STICKY TOTAL BAR ========== */
 .total-bar {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
@@ -559,7 +547,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     box-shadow: 0 6px 20px rgba(22,163,74,0.55);
 }
 
-/* ========== MODAL ========== */
 .modal-overlay {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
@@ -603,7 +590,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
 }
 .close-btn:hover { color: var(--accent-gold-pale); }
 
-/* Category tabs */
 .category-tabs {
     display: flex; gap: 8px;
     padding: 16px 28px 0;
@@ -638,10 +624,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     display: flex; justify-content: flex-end; gap: 12px; flex-shrink: 0;
 }
 
-/* ========== PICKER TOOLBAR (เลือกทั้งหมดทุกหมวด / จำนวนที่เลือกแล้ว) ==========
-   เดิมไม่มี rule ให้เลย เลยเป็น layout เริ่มต้นของเบราว์เซอร์ (checkbox+label ตกบรรทัด
-   ไม่จัดกึ่งกลาง) ตอนนี้จัดเป็นแถบ toolbar โทนชมพู-ทอง วางคู่กันซ้าย-ขวา ให้เข้าธีมเดียวกับ
-   modal ส่วนอื่น ๆ */
 .picker-toolbar {
     display: flex;
     align-items: center;
@@ -690,7 +672,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     font-size: 14px;
 }
 
-/* Item picker cards */
 .item-picker-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
 
 .item-pick-card {
@@ -724,7 +705,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
 .item-pick-unit    { color: var(--text-muted); }
 .item-pick-price   { font-weight: 700; color: var(--accent-gold-dark); }
 
-/* Badge "เพิ่มแล้ว" ที่โชว์บนการ์ดที่ถูกเพิ่มเข้าตารางไปแล้ว */
 .item-already-added {
     display: inline-block;
     margin-top: 6px;
@@ -765,7 +745,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     font-size: 12px; font-weight: 600;
 }
 
-/* Table column widths */
 #mainQuotationTable col.col-no    { width: 50px; }
 #mainQuotationTable col.col-item  { width: auto; }
 #mainQuotationTable col.col-qty   { width: 100px; }
@@ -775,7 +754,6 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
 #mainQuotationTable col.col-note  { width: 200px; }
 #mainQuotationTable col.col-del   { width: 50px; }
 
-/* ========== FOOTER (matches bookingList.css .site-footer) ========== */
 .footer-strip {
     display: block;
     width: 100%;
@@ -852,13 +830,11 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* ========== ANIMATION ========== */
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
     .item-picker-grid { grid-template-columns: repeat(2,1fr); }
     .info-grid { grid-template-columns: repeat(3,1fr); }
@@ -877,4 +853,33 @@ tr.static-row:hover td, tr.dynamic-row:hover td { background: var(--cream-warm);
 @media (max-width: 700px) {
     .item-picker-grid { grid-template-columns: 1fr; }
     .modal-card { height: 90vh; }
+}
+
+/* ========== PACKAGE-INCLUDED EQUIPMENT ROWS (เพิ่มใหม่) ==========
+   แถวอุปกรณ์ที่ "รวมอยู่ในแพ็กเกจ" อยู่แล้ว (.package-included-row)
+   - แสดงเพื่อข้อมูลเท่านั้น ไม่มี +/-, ไม่มีปุ่มลบ, ไม่คิดราคาเข้ายอดรวม (ดู quotationCreate.js / quotationEdit.js)
+   - ใช้โทนสีจางลงเล็กน้อยให้ดูออกว่าต่างจากแถวที่แก้ไข/ลบได้จริง */
+tr.package-included-row td {
+    background: var(--cream-warm);
+    color: var(--text-muted);
+}
+tr.package-included-row .item-name { color: var(--text-dark); }
+tr.package-included-row:hover td { background: var(--cream-warm); }
+
+.package-included-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-gold-dark);
+    background: var(--accent-gold-pale);
+    border: 1px solid var(--accent-gold-mid);
+    padding: 3px 10px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.qty-input[readonly],
+.qty-input:disabled {
+    background: #f4f4f4;
+    color: #888;
+    cursor: not-allowed;
 }
