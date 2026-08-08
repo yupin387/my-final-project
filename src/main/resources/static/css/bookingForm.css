@@ -54,6 +54,7 @@ body {
    NAVBAR (ให้ตรงกับหน้า home — 92px / โลโก้ 76px / ตัวอักษร 34px)
    ========================================================================== */
 .navbar-custom {
+	font-family: 'Charmonman', 'Noto Serif Thai', serif;
 	background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
 	padding: 0 40px;
 	display: flex;
@@ -67,6 +68,11 @@ body {
 	min-height: 92px;
 	overflow: visible;
 	box-shadow: 0 4px 20px rgba(199, 64, 95, 0.35);
+}
+
+.navbar-custom,
+.navbar-custom * {
+	font-family: 'Charmonman', 'Noto Serif Thai', serif;
 }
 
 .navbar-custom::before {

@@ -43,11 +43,12 @@
     --card-border:   #F0D6DC;
     --card-border-soft: #F0DCE0;
 
+    /* ===== สีข้อความทั้งหมด: ดำสนิท/ดำเข้ม ไม่มีสีเทาแล้ว ===== */
     --text-dark:     #1A1A1A;
-    --text-mid:      #3A3A3A;
-    --text-body:     #555555;
-    --text-muted:    #8a8a8a;
-    --text-light:    #b8b8b8;
+    --text-mid:      #1A1A1A;
+    --text-body:     #1A1A1A;
+    --text-muted:    #1A1A1A;
+    --text-light:    #1A1A1A;
 
     /* หัวข้อหลัก — ชมพูเข้มแบบเบอร์กันดี (ไม่ใช่น้ำตาล) */
     --brown-dark:    #7A2340;
@@ -56,7 +57,7 @@
     --shadow-gold:   rgba(224, 87, 127, 0.16);
     --shadow-warm:   rgba(224, 87, 127, 0.10);
 
-    /* ===== Calendar status colors ===== */
+    /* ===== Calendar status colors (คงไว้ตามเดิม เพราะสีเทาตรงนี้สื่อสถานะ "วันที่ผ่านมาแล้ว/กดไม่ได้") ===== */
     --cal-booked-bg:     #FBD3D3;
     --cal-booked-border: #E5433A;
     --cal-booked-text:   #B71C1C;
@@ -95,7 +96,7 @@ body {
    ชมพูเข้ม gradient ไล่ไปชมพูอ่อน (เหมือน bookingList) + เส้นขอบล่างสีทองจริง
    หมายเหตุ: ล็อกฟอนต์ navbar ทั้งหมดกลับเป็น Sarabun ตามที่ขอ (ยกเว้น .nav-brand-text ที่ตั้ง Charmonman เฉพาะจุดอยู่แล้ว) */
 .navbar-custom {
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 0 40px;
     display: flex;
@@ -117,6 +118,13 @@ body {
     top: 0; left: 0; right: 0;
     height: 2px;
     background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
+}
+
+/* บังคับให้ทุก element ในแถบเมนู (a, span, div, button ฯลฯ) เป็นฟอนต์ Charmonman เหมือนชื่อแบรนด์เสมอ
+   เพราะบาง element (เช่น <button>, <a> บางตัว) ไม่สืบทอดฟอนต์จาก parent ตาม UA stylesheet ของเบราว์เซอร์ */
+.navbar-custom,
+.navbar-custom * {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
 }
 
 .navbar-brand-wrap {
@@ -170,7 +178,7 @@ img.lotus-icon {
 .nav-link-item {
     color: #FFFFFF;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 6px;
@@ -198,10 +206,10 @@ img.lotus-icon {
     border-radius: 8px;
     padding: 9px 22px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
     transition: all 0.2s;
     white-space: nowrap;
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -279,7 +287,7 @@ img.lotus-icon {
 .dropdown-link {
     display: block;
     padding: 13px 20px;
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-mid);
@@ -1401,7 +1409,7 @@ img.lotus-icon {
    ชมพูเข้ม gradient ไล่ไปชมพูอ่อน ชุดเดียวกับแถบเมนูบนสุด + วิ้งๆ ทองด้านบน
    หมายเหตุ: ล็อกฟอนต์ footer ทั้งหมดกลับเป็น Sarabun ตามที่ขอ (ยกเว้น .footer-brand-text / .footer-heading ที่ตั้ง Charmonman เฉพาะจุดอยู่แล้ว) */
 .site-footer {
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
     color: rgba(255, 255, 255, 0.92);
     padding-top: 0;
@@ -1411,6 +1419,12 @@ img.lotus-icon {
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
     position: relative;
     z-index: 2;
+}
+
+/* บังคับให้ทุก element ใน footer เป็นฟอนต์ Charmonman เหมือนชื่อแบรนด์เสมอ ด้วยเหตุผลเดียวกับ navbar ด้านบน */
+.site-footer,
+.site-footer * {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
 }
 
 .footer-top {

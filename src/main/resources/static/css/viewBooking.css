@@ -1,6 +1,7 @@
 /* ==========================================================================
    GLOBAL STYLES & BODY  (ธีมชมพู-ทอง เหมือนโลโก้ บุญมีนำพา รับจัดงานบุญ)
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&display=swap');
 
 * {
@@ -122,7 +123,7 @@ body {
 
 .nav-brand-text {
 	color: #FFFFFF;
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-family: 'Charmonman', sans-serif;
 	font-size: 34px;
 	font-weight: 800;
 	letter-spacing: 0.5px;
@@ -139,9 +140,10 @@ body {
 }
 
 .nav-link-item {
+	font-family: 'Charmonman', sans-serif;
 	color: #FFFFFF;
 	text-decoration: none;
-	font-size: 14px;
+	font-size: 17px;
 	font-weight: 600;
 	padding: 8px 16px;
 	border-radius: 6px;
@@ -208,12 +210,14 @@ body {
 }
 
 .user-name-nav {
+	font-family: 'Charmonman', sans-serif;
 	font-size: 0.88rem;
 	font-weight: 700;
 	color: #FFFFFF;
 }
 
 .user-role-nav {
+	font-family: 'Charmonman', sans-serif;
 	font-size: 0.7rem;
 	color: rgba(255, 255, 255, 0.75);
 }
@@ -331,7 +335,7 @@ body {
 }
 
 .card-header-bar h2 {
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-family: 'Charmonman', sans-serif;
 	font-size: 24px;
 	font-weight: 700;
 	color: var(--brown-dark);
@@ -400,7 +404,7 @@ body {
 }
 
 .section-title {
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-family: 'Charmonman', sans-serif;
 	font-size: 16px;
 	font-weight: 700;
 	color: var(--accent-brown);
@@ -550,7 +554,7 @@ body {
 }
 
 .footer-brand-text {
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-family: 'Charmonman', sans-serif;
 	font-size: 1.6rem;
 	font-weight: 700;
 	color: #FFFFFF;
@@ -565,7 +569,7 @@ body {
 }
 
 .footer-heading {
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-family: 'Charmonman', sans-serif;
 	color: #FFFFFF;
 	font-size: 1.35rem;
 	font-weight: 700;
