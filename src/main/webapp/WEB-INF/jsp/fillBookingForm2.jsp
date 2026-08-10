@@ -426,7 +426,7 @@
                     <c:forEach items="${questions}" var="q">
                         <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดภัตตาหาร')}">
                             <div class="form-group" style="margin-bottom:14px;">
-                                <label class="form-label">${q.questionsText}</label>
+                                <label class="form-label">${q.questionsText}<span class="required" style="color:red;">*</span></label>
                                 <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
                                 <input type="number" name="details[${detailIndex}].answer"
                                        class="form-control" placeholder="ระบุจำนวนชุด..." min="1">

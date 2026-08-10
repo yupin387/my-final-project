@@ -33,6 +33,7 @@
 
     --shadow-gold:   rgba(224, 87, 127, 0.16);
     --shadow-warm:   rgba(224, 87, 127, 0.10);
+    --shadow-accent-gold: rgba(217, 164, 65, 0.30);
 
     /* ===== Footer colors (same gradient as navbar) ===== */
     --footer-grad-1: #C7405F;
@@ -51,7 +52,7 @@ body {
     flex-direction: column;
 }
 
-/* ========== NAVBAR (matches home.css / viewBooking.css) ========== */
+/* ========== NAVBAR (matches home.css / viewBooking.css) — ไม่แก้ ========== */
 .navbar-custom {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 0 40px;
@@ -302,7 +303,7 @@ body {
     border-radius: 18px;
     padding: 30px 36px;
     margin-bottom: 28px;
-    border: 2px solid var(--gold-pale);
+    border: 2px solid var(--accent-gold-pale);
     box-shadow: 0 6px 24px var(--shadow-warm);
     position: relative;
     overflow: hidden;
@@ -330,23 +331,23 @@ body {
     flex: 1;
     max-width: 80px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.75));
+    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.85));
 }
 
 .orn-line.right {
-    background: linear-gradient(90deg, rgba(255,255,255,0.75), transparent);
+    background: linear-gradient(90deg, rgba(217, 164, 65, 0.85), transparent);
 }
 
 .orn-diamond {
     width: 9px; height: 9px;
-    background: #FFFFFF;
+    background: var(--accent-gold-mid);
     transform: rotate(45deg);
     flex-shrink: 0;
 }
 
 .orn-diamond-sm {
     width: 5px; height: 5px;
-    background: rgba(255,255,255,0.8);
+    background: var(--accent-gold-pale);
     transform: rotate(45deg);
     flex-shrink: 0;
 }
@@ -363,20 +364,21 @@ body {
     width: 72px;
     height: 72px;
     background: #FFFFFF;
-    color: var(--gold);
+    color: var(--accent-gold);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     font-size: 1.8rem;
     font-weight: 700;
     flex-shrink: 0;
     box-shadow: 0 0 14px rgba(255,255,255,0.35);
+    border: 2px solid var(--accent-gold-pale);
 }
 
 .profile-name {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
     color: #FFFFFF;
@@ -411,7 +413,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-pale), var(--gold-mid), var(--gold-light), var(--gold-mid), var(--gold-pale), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
     z-index: 1;
 }
 
@@ -419,7 +421,7 @@ body {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 16px 28px;
     color: #FFFFFF;
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     font-weight: 700;
     font-size: 1rem;
     display: flex;
@@ -474,7 +476,7 @@ body {
 .form-label::before {
     content: '';
     width: 3px; height: 13px;
-    background: var(--gold-mid);
+    background: var(--accent-gold);
     border-radius: 2px;
     flex-shrink: 0;
 }
@@ -496,9 +498,9 @@ body {
 .form-control::placeholder { color: var(--text-muted); }
 
 .form-control:focus {
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
     background: var(--white);
-    box-shadow: 0 0 0 3px rgba(224, 87, 127, 0.12);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.16);
 }
 
 .form-control[readonly],
@@ -526,12 +528,12 @@ body {
 .section-divider hr {
     flex: 1;
     border: 0;
-    border-top: 1px solid var(--cream-border-soft);
+    border-top: 1px solid var(--accent-gold-pale);
 }
 
 .section-divider span {
     font-size: 12px;
-    color: var(--text-muted);
+    color: var(--accent-brown);
     white-space: nowrap;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -563,11 +565,11 @@ body {
 
 .btn-cancel:hover {
     background: var(--cream-warm);
-    border-color: var(--gold-mid);
+    border-color: var(--accent-gold);
 }
 
 .btn-save {
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    background: var(--accent-gold);
     color: #FFFFFF;
     border: none;
     border-radius: 10px;
@@ -578,13 +580,13 @@ body {
     cursor: pointer;
     transition: all 0.2s;
     letter-spacing: 0.5px;
-    box-shadow: 0 3px 12px var(--shadow-gold);
+    box-shadow: 0 3px 12px var(--shadow-accent-gold);
 }
 
 .btn-save:hover {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: var(--accent-brown);
     transform: translateY(-1px);
-    box-shadow: 0 5px 18px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 5px 18px var(--shadow-accent-gold);
 }
 
 /* ========== FLASH BANNER ========== */
@@ -608,7 +610,7 @@ body {
 .flash-banner-error   { background: #ffebee; border-color: #ef9a9a; color: #b71c1c; }
 .flash-banner-hide    { opacity: 0; }
 
-/* ========== FOOTER (matches home.css / viewBooking.css) ========== */
+/* ========== FOOTER (matches home.css / viewBooking.css) — ไม่แก้ ========== */
 .footer-top {
     display: block;
 }
@@ -711,4 +713,3 @@ body {
     .form-card-subtitle { margin-left: 0; }
     .footer-content { grid-template-columns: 1fr; }
 }
-

@@ -332,9 +332,27 @@ body {
     background: var(--accent-gold-pale);
 }
 
-.info-row    { display: flex; margin-bottom: 12px; }
-.info-label  { width: 200px; color: #C77E96; font-size: 13px; font-weight: 600; }
-.info-value  { flex: 1; font-size: 15px; font-weight: 600; color: var(--text-dark); }
+.info-row {
+    display: flex;
+    flex-direction: row;    /* บังคับให้เรียงต่อกันในแนวนอน */
+    align-items: flex-start; /* จัดให้ข้อความชิดด้านบนตรงกัน (กรณีข้อความยาวหลายบรรทัด) */
+    margin-bottom: 12px;
+}
+
+.info-label {
+    width: 200px;
+    min-width: 200px;       /* ป้องกันไม่ให้ความกว้างถูกบีบย่อลง */
+    color: #C77E96;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.info-value {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
 
 .divider { border: none; border-top: 1px solid var(--cream-mid); margin: 0 32px; }
 

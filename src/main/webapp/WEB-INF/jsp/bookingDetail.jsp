@@ -257,9 +257,10 @@
                 <hr class="divider">
                 <div class="section">
                     <div class="section-title">หมายเหตุเพิ่มเติม</div>
-                    <div class="info-row">
-                        <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value" style="white-space:pre-line;">
+                    <%-- เพิ่ม style display: flex; align-items: flex-start; ตรงนี้เพื่อบังคับแถวนี้โดยเฉพาะ --%>
+                    <div class="info-row" style="display: flex; flex-direction: row; align-items: flex-start;">
+                        <span class="info-label" style="width: 200px; min-width: 200px; flex-shrink: 0;">${d.question.questionsText}</span>
+                        <span class="info-value" style="flex: 1; white-space: pre-line; display: inline-block;">
                             <c:choose>
                                 <c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when>
                                 <c:otherwise>-</c:otherwise>
