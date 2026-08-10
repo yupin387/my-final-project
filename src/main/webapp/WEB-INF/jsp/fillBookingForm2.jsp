@@ -848,7 +848,8 @@ var watOptionList = [
     "วัดชัยมงคล",
     "วัดดับภัย",
     "วัดหมื่นล้าน",
-    "วัดเจ็ดยอด (วัดโพธารามมหาวิหาร)"
+    "วัดเจ็ดยอด (วัดโพธารามมหาวิหาร)",
+    "อื่นๆ (ระบุวัดเอง)" // 1. เพิ่มตัวเลือกอื่นๆ
 ];
 
 function renderWatDropdowns(containerId, textareaId, count) {
@@ -869,9 +870,12 @@ function renderWatDropdowns(containerId, textareaId, count) {
     for (var i = 1; i <= count; i++) {
         var row = document.createElement('div');
         row.className = 'wat-picker-row';
+        row.style.marginBottom = '8px';
+        
         var label = document.createElement('span');
         label.className = 'wat-picker-label';
         label.innerText = 'รูปที่ ' + i;
+        
         var select = document.createElement('select');
         select.className = 'form-select';
         watOptionList.forEach(function(w) {
@@ -880,9 +884,49 @@ function renderWatDropdowns(containerId, textareaId, count) {
             opt.innerText = '▼ ' + w;
             select.appendChild(opt);
         });
-        select.addEventListener('change', function() { syncWatAnswer(containerId, textareaId); });
+        
+        // 2. สร้างกล่อง input สำหรับพิมพ์ชื่อวัด (ซ่อนไว้เป็นค่าเริ่มต้น)
+        var customInputWrap = document.createElement('div');
+        customInputWrap.className = 'custom-wat-wrap';
+        customInputWrap.style.display = 'none';
+        customInputWrap.style.marginTop = '6px';
+        
+        var customInput = document.createElement('input');
+        customInput.type = 'text';
+        customInput.className = 'form-control custom-wat-input';
+        customInput.placeholder = 'พิมพ์ชื่อวัดที่ต้องการ...';
+        customInput.style.fontSize = '13px';
+        
+        // 3. สร้างข้อความแจ้งเตือนสีแดง
+        var warningText = document.createElement('p');
+        warningText.style.fontSize = '12px';
+        warningText.style.color = '#c0392b';
+        warningText.style.margin = '4px 0 0 0';
+        warningText.innerText = '* วัดที่ระบุต้องอยู่บริเวณใกล้เคียงสถานที่จัดงานเท่านั้น และอาจมีการเปลี่ยนแปลงตามความสะดวกของพระสงฆ์';
+        
+        customInputWrap.appendChild(customInput);
+        customInputWrap.appendChild(warningText);
+
+        // 4. ผูก Event เปิด/ปิด กล่องพิมพ์ข้อความ
+        select.addEventListener('change', (function(currentWrap) {
+            return function() {
+                if (this.value === 'อื่นๆ (ระบุวัดเอง)') {
+                    currentWrap.style.display = 'block';
+                } else {
+                    currentWrap.style.display = 'none';
+                }
+                syncWatAnswer(containerId, textareaId);
+            };
+        })(customInputWrap));
+        
+        // 5. ผูก Event อัปเดตข้อมูลเมื่อมีการพิมพ์
+        customInput.addEventListener('input', function() {
+            syncWatAnswer(containerId, textareaId);
+        });
+
         row.appendChild(label);
         row.appendChild(select);
+        row.appendChild(customInputWrap);
         container.appendChild(row);
     }
 
@@ -893,11 +937,23 @@ function syncWatAnswer(containerId, textareaId) {
     var container = document.getElementById(containerId);
     var textarea = document.getElementById(textareaId);
     if (!container || !textarea) return;
-    var selects = container.querySelectorAll('select');
+    
+    var rows = container.querySelectorAll('.wat-picker-row');
     var lines = [];
-    selects.forEach(function(s, idx) {
-        lines.push('รูปที่ ' + (idx + 1) + ' ' + s.value);
+    
+    rows.forEach(function(row, idx) {
+        var select = row.querySelector('select');
+        var customInput = row.querySelector('.custom-wat-input');
+        var val = select.value;
+        
+        // 6. ถ้าเลือกอื่นๆ ให้ดึงค่าจากช่อง input ที่พิมพ์มาแทน
+        if (val === 'อื่นๆ (ระบุวัดเอง)') {
+            val = customInput.value.trim() ? ('(อื่นๆ) ' + customInput.value.trim()) : '(อื่นๆ) ยังไม่ระบุ';
+        }
+        
+        lines.push('รูปที่ ' + (idx + 1) + ' ' + val);
     });
+    
     textarea.value = lines.join('\n');
 }
 

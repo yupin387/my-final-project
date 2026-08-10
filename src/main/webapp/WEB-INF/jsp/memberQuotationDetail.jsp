@@ -157,6 +157,7 @@
                              (ไม่โชว์หมวด/แพ็กเกจที่ไม่มีรายการอยู่ข้างใน) --%>
                         <c:set var="hasPackageRow" value="false"/>
                         <c:set var="hasEquipmentRow" value="false"/>
+                        <c:set var="hasExtraRow" value="false"/>
                         <c:set var="hasFoodRow" value="false"/>
                         <c:set var="hasSangkathanRow" value="false"/>
                         <c:set var="hasServiceRow" value="false"/>
@@ -166,8 +167,11 @@
                                     <c:when test="${d.item.itemName == packageName}">
                                         <c:set var="hasPackageRow" value="true"/>
                                     </c:when>
-                                    <c:when test="${d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
+                                    <c:when test="${d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                                         <c:set var="hasEquipmentRow" value="true"/>
+                                    </c:when>
+                                    <c:when test="${d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+                                        <c:set var="hasExtraRow" value="true"/>
                                     </c:when>
                                     <c:when test="${d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                                         <c:set var="hasFoodRow" value="true"/>
@@ -240,7 +244,32 @@
                         <c:if test="${hasEquipmentRow}">
                             <tr class="group-row"><td colspan="6">หมวดอุปกรณ์พิธีกรรม</td></tr>
                             <c:forEach var="d" items="${details}">
-                                <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
+                                <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
+                                    <tr class="item-row-data">
+                                        <td style="text-align:center; color:#aaa;">${count}</td> <c:set var="count" value="${count + 1}"/>
+                                        <td>
+                                            <span class="item-name">${d.item.itemName}</span>
+                                            <span class="item-desc">${d.item.itemDetail}</span>
+                                        </td>
+                                        <td style="text-align:center;">${d.quantity} ${d.item.unit}</td>
+                                        <td style="text-align:right;"><fmt:formatNumber value="${d.item.pricePerUnit}" pattern="#,###.00"/></td>
+                                        <td style="text-align:right;" class="amount-cell"><fmt:formatNumber value="${d.subtotal}" pattern="#,###.00"/></td>
+                                        <td>
+                                            <c:if test="${q.quotationStatus != 'Confirmed'}">
+                                                <input type="hidden" class="row-item-id" value="${d.item.itemId}">
+                                                <input type="text" class="member-inline-input row-item-note" placeholder="พิมพ์เพิ่มเรื่องอุปกรณ์ชิ้นนี้ (ถ้ามี)...">
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+
+                        <%-- หมวดอุปกรณ์เสริม (โชว์เฉพาะเมื่อมีรายการจริง) --%>
+                        <c:if test="${hasExtraRow}">
+                            <tr class="group-row"><td colspan="6">หมวดอุปกรณ์เสริม</td></tr>
+                            <c:forEach var="d" items="${details}">
+                                <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
                                     <tr class="item-row-data">
                                         <td style="text-align:center; color:#aaa;">${count}</td> <c:set var="count" value="${count + 1}"/>
                                         <td>
@@ -338,7 +367,7 @@
         </div>
 
         <div class="total-section">
-            <div class="total-amount">฿ <fmt:formatNumber value="${q.totalAmount}" pattern="#,###.00"/></div>
+            <div class="total-amount">รวมทั้งสิ้น ฿ <fmt:formatNumber value="${q.totalAmount}" pattern="#,###.00"/></div>
         </div>
 
         <div class="action-section">

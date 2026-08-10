@@ -5,7 +5,55 @@
    (นำเข้าไฟล์นี้ "ต่อจาก" home.css เสมอ — ยังใช้ class ร่วมของ navbar/footer
    จาก home.css อยู่ ไม่ได้ตัดขาดจากกันทั้งหมด)
    ========================================================================== */
+/* ==========================================================================
+   ปรับแก้ฟอนต์: ข้อความทั่วไป = Sarabun, หัวข้อใหญ่ = Charmonman
+   ========================================================================== */
 
+/* 1. บังคับให้ข้อความทั้งหน้า รวมถึงเมนูและฟุตเตอร์ กลับไปใช้ฟอนต์ Sarabun */
+/* ==========================================================================
+   ปรับแก้ฟอนต์ตามโจทย์อาจารย์: 
+   ข้อความทั่วไป = Noto Serif Thai (ทางการ มีหัว แต่อ่านง่าย)
+   หัวข้อใหญ่ และ **แถบเมนูทั้งหมด** = Charmonman (ลายไทย)
+========================================================================== */
+
+/* 1. บังคับให้ข้อความเนื้อหาทั่วไป (body) ใช้ฟอนต์ Noto Serif Thai */
+/* ==========================================================================
+   ปรับแก้ฟอนต์: 
+   ข้อความรายละเอียดทั่วไปทั้งหมด = Sarabun (สารบรรณ)
+   หัวข้อใหญ่ และ แถบเมนู/ฟุตเตอร์ = Charmonman (ลายไทย)
+========================================================================== */
+
+/* 1. บังคับให้ข้อความเนื้อหาทั่วไป ตาราง และช่องกรอกข้อมูล ใช้ฟอนต์ Sarabun */
+body, input, textarea, select, button, table, th, td, p {
+    font-family: 'Sarabun', sans-serif !important;
+}
+
+/* 2. กำหนดให้ "หัวข้อใหญ่" กลับไปใช้ฟอนต์ลายไทย (Charmonman) */
+h1, h2, h3, h4, h5, h6,
+.section-title,
+.hero-quote,
+.meaning-card-title,
+.ceremony-type-name,
+.event-card h5,
+.ritual-step-title {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif !important;
+}
+
+/* 3. บังคับให้แถบเมนู (Navbar) และ Footer ทั้งหมดเป็นฟอนต์ Charmonman */
+.navbar-custom,
+.navbar-custom *,
+.nav-link-item,
+.nav-dropdown-link,
+.nav-brand-text,
+.dropdown-link,
+.user-name-nav,
+.user-role-nav,
+.site-footer,
+.site-footer *,
+.footer-heading,
+.footer-brand-text {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif !important;
+}
 /* ===== สรุปฤกษ์ดีรายปี (ท้ายหน้า) ===== */
 .yearly-summary-block {
     margin-top: 48px;

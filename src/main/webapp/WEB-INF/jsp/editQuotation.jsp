@@ -347,7 +347,11 @@
                             <c:if test="${hasEquipmentItems}">
                                 <tr class="group-row"><td colspan="8">หมวดอุปกรณ์พิธีกรรมเสริม</td></tr>
                             </c:if>
-
+<%-- ✅ เพิ่มหมวดอุปกรณ์เสริมตรงนี้ --%>
+<tbody id="group-extra">
+    <c:if test="${hasExtraItems}">
+        <tr class="group-row"><td colspan="8">หมวดอุปกรณ์เสริม</td></tr>
+    </c:if>
                             <c:forEach var="d" items="${details}">
                                 <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
                                     <tr class="dynamic-row" data-item-id="${d.item.itemId}">
@@ -577,18 +581,26 @@
             <h3> เลือกอุปกรณ์และบริการเสริมสำหรับจัดงานบุญ</h3>
             <button type="button" class="close-btn" onclick="closeItemModal()">✕</button>
         </div>
-        <div class="category-tabs">
-            <button type="button" class="category-tab active" data-category="all"      onclick="switchCategoryTab(this,'all')">ทั้งหมด</button>
-            <button type="button" class="category-tab"        data-category="อุปกรณ์"  onclick="switchCategoryTab(this,'อุปกรณ์')">อุปกรณ์พิธีกรรม</button>
-            <button type="button" class="category-tab"        data-category="ภัตตาหาร" onclick="switchCategoryTab(this,'ภัตตาหาร')">ภัตตาหารปิ่นโต</button>
-            <button type="button" class="category-tab"        data-category="สังฆทาน"  onclick="switchCategoryTab(this,'สังฆทาน')">สังฆทาน</button>
-            <button type="button" class="category-tab"        data-category="บริการ"   onclick="switchCategoryTab(this,'บริการ')">บริการและดำเนินการ</button>
-        </div>
+        <%-- แท็บ "ทั้งหมด" ถูกเอาออกตามที่ผู้จัดงานต้องการ
+             เหลือแค่ 4 หมวดให้เลือกทีละหมวด ไม่ให้แสดงรวมกันทุกหมวดในครั้งเดียว
+             แท็บแรก (อุปกรณ์พิธีกรรม) ถูกตั้งเป็น active เริ่มต้นแทน --%>
+       <div class="category-tabs">
+    <button type="button" class="category-tab active" data-category="อุปกรณ์พิธีกรรม"
+        onclick="switchCategoryTab(this,'อุปกรณ์พิธีกรรม')">อุปกรณ์พิธีกรรม</button>
+    <button type="button" class="category-tab" data-category="ภัตตาหาร"
+        onclick="switchCategoryTab(this,'ภัตตาหาร')">ภัตตาหารปิ่นโต</button>
+    <button type="button" class="category-tab" data-category="สังฆทาน"
+        onclick="switchCategoryTab(this,'สังฆทาน')">สังฆทาน</button>
+    <button type="button" class="category-tab" data-category="บริการ"
+        onclick="switchCategoryTab(this,'บริการ')">บริการและดำเนินการ</button>
+    <button type="button" class="category-tab" data-category="อุปกรณ์เสริม"
+        onclick="switchCategoryTab(this,'อุปกรณ์เสริม')">อุปกรณ์เสริม</button>
+</div>
         <div class="modal-body">
             <div class="picker-toolbar">
                 <label class="select-all-label">
                     <input type="checkbox" id="selectAllVisible" onchange="toggleSelectAllVisible(this)">
-                    เลือกทั้งหมดทุกหมวด
+                    เลือกทั้งหมดในหมวดนี้
                 </label>
                 <span class="selected-count-badge">เลือกแล้ว <span id="selectedCount">0</span> รายการ</span>
             </div>
