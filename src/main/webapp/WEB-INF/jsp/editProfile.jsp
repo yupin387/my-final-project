@@ -172,6 +172,7 @@
             </form>
         </div>
     </div>
+    
 </div>
 
 <%-- ========== FOOTER (ธีมเดียวกับหน้า home / viewBooking) ========== --%>
