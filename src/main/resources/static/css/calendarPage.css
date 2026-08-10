@@ -5,7 +5,31 @@
    (นำเข้าไฟล์นี้ "ต่อจาก" home.css เสมอ — ยังใช้ class ร่วมของ navbar/footer
    จาก home.css อยู่ ไม่ได้ตัดขาดจากกันทั้งหมด)
    ========================================================================== */
+/* ==========================================================================
+   ปรับแก้ฟอนต์: ข้อความทั่วไป = Sarabun, หัวข้อใหญ่ = Charmonman
+   ========================================================================== */
 
+/* 1. บังคับให้ข้อความทั้งหน้า รวมถึงเมนูและฟุตเตอร์ กลับไปใช้ฟอนต์ Sarabun */
+body, 
+.navbar-custom *, 
+.site-footer * {
+    font-family: 'Sarabun', 'Noto Serif Thai', sans-serif !important;
+}
+
+/* 2. กำหนดให้เฉพาะ "หัวข้อใหญ่" และ "ชื่อแบรนด์" กลับไปใช้ฟอนต์ลายไทย (Charmonman) */
+h1, h2, h3, h4, h5, h6,
+.section-title,
+.meaning-block-title,
+.calendar-page-header h1,
+.nav-brand-text,
+.cal-header h5,
+.cal-explain-title,
+.lc-explain-title,
+.footer-brand-text,
+.footer-heading,
+.yearly-summary-month {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif !important;
+}
 /* ===== สรุปฤกษ์ดีรายปี (ท้ายหน้า) ===== */
 .yearly-summary-block {
     margin-top: 48px;

@@ -6,14 +6,20 @@
 //   - จำนวนคำนวณมาจากฝั่ง JSP แล้ว (ตามจำนวนพระ หรือ 1 แล้วแต่ชนิดอุปกรณ์)
 //   - ราคาไม่ถูกดึงมาคิดในยอดรวม เพราะรวมอยู่ใน "ราคาแพ็กเกจ" อยู่แล้ว
 //   - ห้ามแก้ไข/ห้ามลบ จึงไม่ต้องผ่าน buildQtyCell เลย
+//
+// อัปเดต: เอาแท็บ "ทั้งหมด" ออกจากป๊อปอัพเลือกอุปกรณ์เสริมแล้ว เหลือแค่ 4 หมวด
+// (อุปกรณ์ / ภัตตาหาร / สังฆทาน / บริการ) ให้ดูทีละหมวดเท่านั้น และเช็คบ็อกซ์
+// "เลือกทั้งหมด" จะเลือกเฉพาะรายการในหมวดที่กำลังดูอยู่ ไม่ดึงข้ามหมวดอื่นมาด้วย
 
+
+// 1. เพิ่ม label ให้กลุ่มอุปกรณ์เสริม
 const GROUP_LABELS = {
     'group-equipment':  'หมวดอุปกรณ์พิธีกรรม',
     'group-food':       'หมวดภัตตาหารปิ่นโต',
     'group-sangkathan': 'หมวดสังฆทาน',
-    'group-service':    'หมวดบริการและการดำเนินการ'
+    'group-service':    'หมวดบริการและการดำเนินการ',
+    'group-extra':      'หมวดอุปกรณ์เสริม' // เพิ่มบรรทัดนี้
 };
-
 const selectedItemIds = new Set();
 
 // ===== ช่องจำนวน แบบไม่มีปุ่ม +/- (พิมพ์เลขตรง ๆ) =====
@@ -31,6 +37,12 @@ function getExistingItemIds() {
         ids.add(String(tr.getAttribute('data-injected-id')));
     });
     return ids;
+}
+
+// ===== หมวดที่กำลังเปิดดูอยู่ในป๊อปอัพตอนนี้ (ไม่มีแท็บ "ทั้งหมด" แล้ว) =====
+function getCurrentCategory() {
+    const activeTab = document.querySelector('.category-tab.active');
+    return activeTab ? activeTab.getAttribute('data-category') : 'อุปกรณ์พิธีกรรม'; // เปลี่ยนตรงนี้
 }
 
 function ensureGroupHeader(tbody) {
@@ -70,8 +82,7 @@ function switchCategoryTab(tabEl, category) {
 
 function renderItemPicker(category) {
     if (!category) {
-        const activeTab = document.querySelector('.category-tab.active');
-        category = activeTab ? activeTab.getAttribute('data-category') : 'all';
+        category = getCurrentCategory();
     }
 
     const grid = document.getElementById('itemPickerGrid');
@@ -95,7 +106,8 @@ function renderItemPicker(category) {
         const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
         const itemType = dataEl.getAttribute('data-type') || '';
 
-        if (category !== 'all' && !itemType.includes(category)) return;
+        // ไม่มีแท็บ "ทั้งหมด" อีกต่อไป แสดงเฉพาะรายการที่ตรงกับหมวดปัจจุบันเท่านั้น
+        if (!itemType.includes(category)) return;
 
         count++;
         const isExist   = existingIds.has(itemId);
@@ -164,14 +176,20 @@ function updateSelectedCount() {
     if (submitBtn) submitBtn.style.opacity = count > 0 ? '1' : '0.65';
 }
 
+// ===== "เลือกทั้งหมดในหมวดนี้": เลือกเฉพาะรายการของหมวดที่กำลังเปิดดูอยู่เท่านั้น
+//        ไม่ดึงรายการจากหมวดอื่นมาด้วย =====
 function toggleSelectAllVisible(checkbox) {
     const checked = checkbox.checked;
     const dataStore = document.getElementById('itemDataStore');
     if (!dataStore) return;
 
+    const category    = getCurrentCategory();
     const existingIds = getExistingItemIds();
 
     dataStore.querySelectorAll('.item-data').forEach(dataEl => {
+        const itemType = dataEl.getAttribute('data-type') || '';
+        if (!itemType.includes(category)) return; // เอาเฉพาะหมวดปัจจุบัน
+
         const itemId = String(dataEl.getAttribute('data-id'));
         if (existingIds.has(itemId)) return;
 
@@ -182,6 +200,7 @@ function toggleSelectAllVisible(checkbox) {
     renderItemPicker();
 }
 
+// ===== อัปเดตสถานะติ๊กถูกของ "เลือกทั้งหมดในหมวดนี้" ตามหมวดที่เปิดดูอยู่ =====
 function updateSelectAllState() {
     const selectAllCb = document.getElementById('selectAllVisible');
     if (!selectAllCb) return;
@@ -189,8 +208,10 @@ function updateSelectAllState() {
     const dataStore = document.getElementById('itemDataStore');
     if (!dataStore) return;
 
-    const existingIds = getExistingItemIds();
+    const category     = getCurrentCategory();
+    const existingIds  = getExistingItemIds();
     const allSelectableIds = [...dataStore.querySelectorAll('.item-data')]
+        .filter(el => (el.getAttribute('data-type') || '').includes(category))
         .map(el => String(el.getAttribute('data-id')))
         .filter(id => !existingIds.has(id));
 
@@ -206,49 +227,55 @@ function addSelectedItemsToTable() {
 
     const dataStore = document.getElementById('itemDataStore');
 
-    selectedItemIds.forEach(itemId => {
-        const dataEl = dataStore.querySelector(`.item-data[data-id="${itemId}"]`);
-        if (!dataEl) return;
+	selectedItemIds.forEach(itemId => {
+	    const dataEl = dataStore.querySelector(`.item-data[data-id="${itemId}"]`);
+	    if (!dataEl) return;
 
-        const itemName = dataEl.getAttribute('data-name');
-        const itemDesc = dataEl.getAttribute('data-detail') || '';
-        const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
-        const unit     = dataEl.getAttribute('data-unit');
-        const itemType = dataEl.getAttribute('data-type') || '';
+	    const itemName = dataEl.getAttribute('data-name');
+	    const itemDesc = dataEl.getAttribute('data-detail') || '';
+	    const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
+	    const unit     = dataEl.getAttribute('data-unit');
+	    const itemType = dataEl.getAttribute('data-type') || '';
 
-        let targetBody = document.getElementById('group-service');
-        if (itemType.includes('อุปกรณ์'))       targetBody = document.getElementById('group-equipment');
-        else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
-        else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
+	    const scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
+	    const monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
+	    const initialQty   = scalesByMonk ? monkCount : 1;
 
-        ensureGroupHeader(targetBody);
+        // 3. แก้ไขการแยกกลุ่มปลายทาง ให้เช็คคำแยกกันชัดเจน
+	    let targetBody = document.getElementById('group-service');
+	    if (itemType.includes('อุปกรณ์พิธีกรรม')) targetBody = document.getElementById('group-equipment');
+        else if (itemType.includes('อุปกรณ์เสริม')) targetBody = document.getElementById('group-extra'); // แยกอุปกรณ์เสริมมาเข้า group-extra
+	    else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
+	    else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
 
-        const tr = document.createElement('tr');
-        tr.className = 'dynamic-row';
-        tr.setAttribute('data-item-id', itemId);
+	    ensureGroupHeader(targetBody);
 
-        tr.innerHTML = `
-            <td class="row-number" style="text-align:center;"></td>
-            <td>
-                <span class="item-name">${itemName}</span>
-                ${itemDesc ? `<span class="item-desc">${itemDesc}</span>` : ''}
-                <input type="hidden" name="extraItemIds" value="${itemId}">
-            </td>
-            <td>${buildQtyCell(1, 'extraQtys')}</td>
-            <td style="text-align:center;">${unit}</td>
-            <td style="text-align:right;">
-                <input type="number" name="extraPrices" value="${price.toFixed(2)}"
-                    step="0.01" min="0" class="price-input" onchange="calculateGrandTotal()">
-            </td>
-            <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
-            <td><input type="text" name="detailNotes" class="note-input" placeholder="หมายเหตุ"></td>
-            <td style="text-align:center;">
-                <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
-            </td>`;
+	    const tr = document.createElement('tr');
+	    tr.className = 'dynamic-row';
+	    tr.setAttribute('data-item-id', itemId);
 
-        targetBody.appendChild(tr);
-    });
+	    tr.innerHTML = `
+	        <td class="row-number" style="text-align:center;"></td>
+	        <td>
+	            <span class="item-name">${itemName}</span>
+	            ${itemDesc ? `<span class="item-desc">${itemDesc}</span>` : ''}
+	            <input type="hidden" name="extraItemIds" value="${itemId}">
+	        </td>
+	        <td>${buildQtyCell(initialQty, 'extraQtys')}</td>
+	        <td style="text-align:center;">${unit}</td>
+	        <td style="text-align:right;">
+	            <input type="number" name="extraPrices" value="${price.toFixed(2)}"
+	                step="0.01" min="0" class="price-input" onchange="calculateGrandTotal()">
+	        </td>
+	        <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
+	        <td><input type="text" name="detailNotes" class="note-input" placeholder="หมายเหตุ"></td>
+	        <td style="text-align:center;">
+	            <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
+	        </td>`;
 
+	    targetBody.appendChild(tr);
+	});
+	
     selectedItemIds.clear();
     closeItemModal();
     reIndexRows();

@@ -84,9 +84,6 @@
 				<div class="info-box">
 					<span class="info-label">ประเภทพิธี</span> <span class="info-value">${q.bookingForm.ceremony.ceremonyType}</span>
 				</div>
-				<%-- แก้บั๊ก: เดิมอ้างตัวแปร ${b.ceremony.ceremonyName} ซึ่งไม่มีในหน้านี้ (หน้านี้ใช้ q.bookingForm
-                     ทั้งไฟล์) ทำให้ค่าว่างเปล่าเสมอ แก้เป็น ${q.bookingForm.ceremony.ceremonyName} ให้ตรงกับ
-                     ที่อื่นทั้งหมดในหน้านี้ --%>
 				<div class="info-box">
 					<span class="info-label">รูปแบบการจอง</span> <span
 						class="info-value">${q.bookingForm.ceremony.ceremonyName}</span>
@@ -134,16 +131,9 @@
 				<tbody>
 					<c:set var="count" value="1" />
 
-					<%-- ตัวแปรชื่อแพ็กเกจ ใช้แยกแถวแพ็กเกจออกจากหมวดอื่น ๆ ไม่ให้ปนกัน/ซ้ำกัน
-                     รายการแพ็กเกจถูกบันทึกโดยใช้ itemName == ceremonyName (ดู QuotationService) --%>
 					<c:set var="packageName"
 						value="${q.bookingForm.ceremony.ceremonyName}" />
 
-					<%-- ===================================================================
-                     เช็คจำนวนพระที่นิมนต์ ใช้ตัดสินใจจำนวนอุปกรณ์ที่รวมในแพ็กเกจชิ้นที่คูณ
-                     ตามจำนวนพระ (ดูตรรกะคีย์เวิร์ด "ต่อรูป" ประกอบ ใช้หลักการเดียวกับหน้า
-                     quotationCreate.jsp / quotationEdit.jsp)
-                     =================================================================== --%>
 					<c:set var="monkInviteType" value="" />
 					<c:set var="monkCount" value="" />
 					<c:forEach var="bd" items="${q.bookingForm.details}">
@@ -158,17 +148,18 @@
 					<c:set var="isMonkSelfInvite"
 						value="${fn:contains(monkInviteType,'นิมนต์เอง')}" />
 
-					<%-- เช็คก่อนว่าแต่ละหมวดมีรายการจริงหรือไม่ ถ้าไม่มีจะไม่แสดง header เลย
-                     หมายเหตุ: hasEquipmentRow นับเฉพาะอุปกรณ์เสริมที่เพิ่มเองจริง (อยู่ใน details)
-                     ไม่รวมอุปกรณ์ที่ "รวมในแพ็กเกจ" ซึ่งแสดงต่อจากแถวแพ็กเกจแทนแล้ว --%>
 					<c:set var="hasEquipmentRow" value="false" />
+					<c:set var="hasExtraRow" value="false" /> 
 					<c:set var="hasFoodRow" value="false" />
 					<c:set var="hasSangkathanRow" value="false" />
 					<c:set var="hasServiceRow" value="false" />
 					<c:forEach var="d" items="${details}">
 						<c:if test="${d.item != null && d.item.itemName != packageName}">
-							<c:if test="${d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
+							<c:if test="${d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
 								<c:set var="hasEquipmentRow" value="true" />
+							</c:if>
+							<c:if test="${d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+								<c:set var="hasExtraRow" value="true" />
 							</c:if>
 							<c:if test="${d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
 								<c:set var="hasFoodRow" value="true" />
@@ -182,8 +173,6 @@
 						</c:if>
 					</c:forEach>
 
-					<%-- หมวดแพ็กเกจหลัก + อุปกรณ์ที่รวมในแพ็กเกจ (แสดงเป็นแถวตารางเต็มต่อจากแถว
-                     แพ็กเกจเลย ไม่แยกหัวข้อ "หมวดอุปกรณ์พิธีกรรม" ซ้ำ ให้ตรงกับหน้าสร้าง/แก้ไข) --%>
 					<c:forEach var="d" items="${details}">
 						<c:if test="${d.item != null && d.item.itemName == packageName}">
 							<tr class="group-row">
@@ -209,8 +198,6 @@
 						</c:if>
 					</c:forEach>
 
-					<%-- ✅ อุปกรณ์ที่รวมในแพ็กเกจ: แถวตารางเต็ม (จำนวน/หน่วย/ป้ายรวมในแพ็กเกจ)
-                     ไม่นับลำดับ ไม่นับราคาเข้ายอดรวม เพราะรวมอยู่ในราคาแพ็กเกจข้างบนแล้ว --%>
 					<c:if test="${not empty packageIncludedItems}">
 						<c:forEach var="pkgItem" items="${packageIncludedItems}">
 							<c:set var="pkgItemQty" value="1" />
@@ -235,14 +222,14 @@
 						</c:forEach>
 					</c:if>
 
-					<%-- หมวดอุปกรณ์พิธีกรรม (แสดงเฉพาะเมื่อมีรายการเสริมที่เพิ่มเองจริง) --%>
+					<%-- หมวดอุปกรณ์พิธีกรรม --%>
 					<c:if test="${hasEquipmentRow}">
 						<tr class="group-row">
 							<td colspan="6">หมวดอุปกรณ์พิธีกรรม</td>
 						</tr>
 						<c:forEach var="d" items="${details}">
 							<c:if
-								test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
+								test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
 								<tr>
 									<td style="text-align: center; color: #888;">${count}</td>
 									<c:set var="count" value="${count + 1}" />
@@ -263,7 +250,35 @@
 						</c:forEach>
 					</c:if>
 
-					<%-- หมวดภัตตาหารปิ่นโต (แสดงเฉพาะเมื่อมีรายการจริง) --%>
+					<%-- หมวดอุปกรณ์เสริม --%>
+					<c:if test="${hasExtraRow}">
+						<tr class="group-row">
+							<td colspan="6">หมวดอุปกรณ์เสริม</td>
+						</tr>
+						<c:forEach var="d" items="${details}">
+							<c:if
+								test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+								<tr>
+									<td style="text-align: center; color: #888;">${count}</td>
+									<c:set var="count" value="${count + 1}" />
+									<td><strong>${d.item.itemName}</strong> <c:if
+											test="${not empty d.item.itemDetail}">
+											<br>
+											<small style="color: #888;">${d.item.itemDetail}</small>
+										</c:if></td>
+									<td style="text-align: center;">${d.quantity}
+										${d.item.unit}</td>
+									<td style="text-align: right;"><fmt:formatNumber
+											value="${d.item.pricePerUnit}" pattern="#,###.00" /></td>
+									<td style="text-align: right;"><fmt:formatNumber
+											value="${d.subtotal}" pattern="#,###.00" /></td>
+									<td class="note-text">${not empty d.note ? d.note : '-'}</td>
+								</tr>
+							</c:if>
+						</c:forEach>
+					</c:if>
+
+					<%-- หมวดภัตตาหารปิ่นโต --%>
 					<c:if test="${hasFoodRow}">
 						<tr class="group-row">
 							<td colspan="6">หมวดภัตตาหารปิ่นโต</td>
@@ -291,7 +306,7 @@
 						</c:forEach>
 					</c:if>
 
-					<%-- หมวดสังฆทาน (แสดงเฉพาะเมื่อมีรายการจริง) --%>
+					<%-- หมวดสังฆทาน --%>
 					<c:if test="${hasSangkathanRow}">
 						<tr class="group-row">
 							<td colspan="6">หมวดสังฆทาน</td>
@@ -319,7 +334,7 @@
 						</c:forEach>
 					</c:if>
 
-					<%-- หมวดบริการและการดำเนินการ (แสดงเฉพาะเมื่อมีรายการจริง) --%>
+					<%-- หมวดบริการและการดำเนินการ --%>
 					<c:if test="${hasServiceRow}">
 						<tr class="group-row">
 							<td colspan="6">หมวดบริการและการดำเนินการ</td>

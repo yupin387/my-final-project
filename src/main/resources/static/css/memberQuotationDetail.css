@@ -970,3 +970,19 @@ tr:hover td { background: var(--cream-warm); }
 .dropdown-link:hover       { background: var(--cream-mid); }
 .dropdown-link.danger      { color: #c0392b; }
 .dropdown-link.danger:hover{ background: #fff5f5; }
+
+/* ==================================================================
+   แก้ไขความกว้างคอลัมน์ลำดับ และคอลัมน์อื่นๆ ในตาราง
+================================================================== */
+
+table th:nth-child(1),
+table td:nth-child(1) {
+    width: 65px; /* ปรับความกว้างคอลัมน์ลำดับให้กว้างขึ้น เพื่อให้ข้อความอยู่บรรทัดเดียว */
+    text-align: center;
+}
+
+/* ปรับความกว้างของคอลัมน์อื่นให้สมดุลกัน */
+table th:nth-child(3), table td:nth-child(3) { width: 100px; } /* จำนวน */
+table th:nth-child(4), table td:nth-child(4) { width: 130px; } /* ราคา/หน่วย */
+table th:nth-child(5), table td:nth-child(5) { width: 130px; } /* รวม */
+table th:nth-child(6), table td:nth-child(6) { width: 280px; } /* พิมพ์รายละเอียด... */
