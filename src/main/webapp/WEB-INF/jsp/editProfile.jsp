@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>แก้ไขข้อมูลส่วนตัว - บุญมีนำพา จัดงานบุญ</title>
+    <title>แก้ไขข้อมูลส่วนตัว - บุญมี รับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editProfile.css">
 </head>
@@ -20,18 +20,46 @@
     <span id="flash-error" data-msg="${error}" style="display:none;"></span>
 </c:if>
 
-<%-- ========== NAVBAR ========== --%>
+<%-- ========== NAVBAR (ให้ตรงกับหน้า home / viewBooking) ========== --%>
 <nav class="navbar-custom">
-    <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home">
-        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-             alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
-        <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
+    <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
+        <div class="lotus-icon">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา รับจัดงานบุญ">
+        </div>
+        <span class="nav-brand-text">บุญมีนำพา รับจัดงานบุญ</span>
     </a>
     <div class="navbar-center">
-        <a href="${pageContext.request.contextPath}/home"                     class="nav-link-item">หน้าหลัก</a>
-        <a href="${pageContext.request.contextPath}/latestBooking"            class="nav-link-item">การจอง</a>
-        <a href="${pageContext.request.contextPath}/member/quotation/list"    class="nav-link-item">ใบเสนอราคา</a>
-        <a href="${pageContext.request.contextPath}/reviews"                  class="nav-link-item">รีวิว</a>
+        <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
+
+        <%-- ===== เมนู บริการ/แพ็กเกจ (dropdown) ===== --%>
+        <div class="nav-dropdown-wrap">
+            <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
+                บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <c:forEach var="t" items="${ceremonyTypes}">
+                    <a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
+                        class="nav-dropdown-link">${t.mainName}</a>
+                </c:forEach>
+            </div>
+        </div>
+
+        <%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) ===== --%>
+        <div class="nav-dropdown-wrap">
+            <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item nav-dropdown-toggle">
+                ปฏิทิน <span class="nav-caret">▾</span>
+            </a>
+            <div class="nav-dropdown-panel">
+                <a href="${pageContext.request.contextPath}/calendar#calendarSection"
+                    class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
+                <a href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
+                    class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
+            </div>
+        </div>
+
+        <a href="${pageContext.request.contextPath}/latestBooking" class="nav-link-item">การจอง</a>
+        <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-link-item">ใบเสนอราคา</a>
+        <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
     <div class="dropdown-wrap">
         <div class="user-profile-pill" onclick="toggleDropdown()">
@@ -149,45 +177,39 @@
 
 </div>
 
-<%-- ========== FOOTER ========== --%>
+<%-- ========== FOOTER (ธีมเดียวกับหน้า home / viewBooking) ========== --%>
 <footer class="site-footer">
     <div class="footer-top">
-        <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
-            style="display: block; width: 100%; height: 8px;">
-        <rect width="1200" height="8" fill="url(#footerGrad)" />
-        <defs>
-            <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
-                <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
-                <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
-            </linearGradient>
-        </defs>
+        <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:8px;">
+            <rect width="1200" height="8" fill="url(#footerGradEditProfile)" />
+            <defs>
+                <linearGradient id="footerGradEditProfile" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
+                    <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+                    <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
+                </linearGradient>
+            </defs>
         </svg>
     </div>
-    <div class="container footer-content footer-content-slim">
+    <div class="container footer-content">
         <div class="footer-col footer-brand-col">
             <div class="footer-brand">
-                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                     alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
-                <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+                <div class="lotus-icon">
+                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา รับจัดงานบุญ">
+                </div>
+                <span class="footer-brand-text">บุญมีนำพา รับจัดงานบุญ</span>
             </div>
             <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
-            <div class="footer-social">
-                <a href="#" class="footer-social-link">📘 Facebook</a>
-                <a href="#" class="footer-social-link">▶️ YouTube</a>
-                <a href="#" class="footer-social-link">💬 LINE OA</a>
-            </div>
         </div>
-
         <div class="footer-col footer-contact-col">
             <h4 class="footer-heading">ติดต่อเรา</h4>
+            <%-- TODO: ใส่เบอร์โทร / LINE OA / อีเมลจริงของร้านแทนที่ตรงนี้ --%>
             <p>📞 โทร. 08X-XXX-XXXX</p>
             <p>💬 LINE OA: @boonmee</p>
-            <p>✉️ boonmee@gmail.com</p>
+            <p>✉️ boonmee.booking@gmail.com</p>
             <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
         </div>
     </div>
-  
 </footer>
 
 <script src="${pageContext.request.contextPath}/static/js/editProfile.js"></script>
