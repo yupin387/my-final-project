@@ -25,7 +25,7 @@
             <a href="${pageContext.request.contextPath}/organizer/bookings"    class="nav-item active">รายการจอง</a>
             <a href="${pageContext.request.contextPath}/organizer/head-staff"  class="nav-item">หัวหน้างาน</a>
             <a href="${pageContext.request.contextPath}/organizer/questions"   class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation"   class="nav-item">ใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/organizer/quotation"   class="nav-item">จัดการใบเสนอราคา</a>
         </nav>
         <div class="user-info" onclick="toggleDropdown()">
             <div class="user-avatar">A</div>

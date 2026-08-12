@@ -1,40 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
-/* ===== CSS Variables (ธีมชมพู-ทอง-ขาว) ===== */
+/* ===== CSS Variables (matched to addHeadStaff.css brown-gold-white theme) ===== */
 :root {
-    --gold:              #E0577F;
-    --gold-mid:          #EC6E96;
-    --gold-light:        #F49CB9;
-    --gold-pale:         #FBD0DE;
-    --gold-glow:         #FFE3EC;
-    --cream:             #FFF6F9;
-    --cream-warm:        #FFF6F9;
-    --cream-mid:         #FDEEF3;
-    --cream-border:      #F3C4D5;
-    --cream-border-soft: #F6D4E1;
+    --gold:              #A9752E;
+    --gold-mid:          #C0923F;
+    --gold-light:        #D9B87A;
+    --gold-pale:         #F0E2C7;
+    --gold-glow:         #FFF8ED;
+
+    --cream:             #FFFBF3;
+    --cream-warm:        #FFFBF3;
+    --cream-mid:         #FBF2E3;
+    --cream-deep:        #F3E3C7;
+    --cream-border:      #E8D5B7;
+    --cream-border-soft: #EDE0C8;
+
     --white:             #FFFFFF;
+
     --text-dark:         #1A1A1A;
     --text-mid:          #333333;
     --text-body:         #444444;
     --text-muted:        #777777;
+    --text-light:        #999999;
+
     --brown-dark:        #1A1A1A;
     --brown-mid:         #3A3A3A;
-    --shadow-gold:        rgba(224, 87, 127, 0.16);
-    --shadow-warm:        rgba(224, 87, 127, 0.10);
 
-    /* สีทองจริง ใช้คู่กับชมพูให้เป็นธีม "ชมพู-ทอง-ขาว" */
+    --shadow-gold:       rgba(169, 117, 46, 0.18);
+    --shadow-warm:       rgba(169, 117, 46, 0.12);
+
+    /* สีทองจริง ใช้กับ ornament/หัวข้อ/ปุ่ม */
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
 
-    /* ===== Footer colors (same gradient as navbar) ===== */
-    --footer-grad-1: #C7405F;
-    --footer-grad-2: #D94F76;
-    --footer-grad-3: #E0577F;
+    /* ===== สีน้ำตาลล้วน ใช้กับ navbar / card-header / footer ===== */
+    --brand-brown: #9C6B3E;
 }
- 
-* { margin: 0; padding: 0; box-sizing: border-box; }
- 
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
     font-family: 'Sarabun', sans-serif;
     background-color: var(--cream);
@@ -43,24 +48,24 @@ body {
     display: flex;
     flex-direction: column;
 }
- 
-/* ========== NAVBAR (ชมพู-ทอง-ขาว) ========== */
+
+/* ========== NAVBAR ========== */
 .navbar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: var(--brand-brown);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 3px solid;
     border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
-    min-height: 92px;
     position: sticky;
     top: 0;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
     z-index: 10000;
+    min-height: 92px;
     overflow: visible;
+    box-shadow: 0 4px 20px rgba(122, 82, 48, 0.32);
 }
- 
+
 .navbar::before {
     content: '';
     position: absolute;
@@ -68,16 +73,15 @@ body {
     height: 2px;
     background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
- 
+
 .navbar-brand {
     display: flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
 }
- 
-.navbar .lotus-icon,
-.navbar-brand .lotus-icon {
+
+.lotus-icon {
     background: rgba(255, 255, 255, 0.18);
     width: 76px;
     height: 76px;
@@ -94,7 +98,7 @@ body {
     object-fit: cover;
     color: #FFFFFF;
 }
- 
+
 .navbar-title {
     color: #FFFFFF;
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
@@ -102,259 +106,234 @@ body {
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
- 
+
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
 }
- 
+
 .navbar-menu {
     display: flex;
     gap: 2px;
     align-items: center;
+    margin-right: 16px;
 }
- 
+
 .nav-item {
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
 }
-.nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
-.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
- 
-/* User Info */
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+}
+
+.nav-item.active {
+    background: #FFFFFF;
+    color: var(--gold);
+    font-weight: 700;
+    text-shadow: none;
+}
+
+/* ===== User Info / Pill ===== */
 .user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     background: rgba(255, 255, 255, 0.15);
     border: 1.5px solid rgba(255, 255, 255, 0.45);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
-    white-space: nowrap;
-    position: relative;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     color: #FFFFFF;
+    cursor: pointer;
     transition: background 0.2s;
+    position: relative;
+    white-space: nowrap;
 }
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
- 
+
+.user-info:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
 .user-avatar {
     background: #FFFFFF;
     color: var(--gold);
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
     font-weight: 800;
+    font-size: 1rem;
     flex-shrink: 0;
 }
- 
-.user-detail  { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name    { color: #FFFFFF; font-size: 13px; font-weight: 700; }
-.user-role    { color: rgba(255, 255, 255, 0.75); font-size: 11px; }
-.arrow        { color: #FFFFFF; font-size: 12px; margin-left: 4px; opacity: 0.85; }
- 
-/* Dropdown */
+
+.user-detail {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.user-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.user-role {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* ===== Dropdown ===== */
 .dropdown-menu {
     display: none;
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1.5px solid var(--accent-gold-pale);
-    border-radius: 12px;
-    min-width: 180px;
+    border: 1px solid var(--accent-gold-pale);
+    border-radius: 10px;
+    min-width: 175px;
     box-shadow: 0 8px 28px var(--shadow-gold);
     z-index: 99999;
     overflow: hidden;
 }
- 
+
 .dropdown-menu.show { display: block; }
- 
+
 .dropdown-item {
     display: block;
-    padding: 14px 18px;
+    padding: 13px 20px;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-mid);
     text-decoration: none;
     transition: background 0.2s;
-    text-align: center;
+    text-align: left;
     font-family: 'Sarabun', sans-serif;
     border-bottom: 1px solid var(--cream-mid);
 }
- 
+
 .dropdown-item:last-child { border-bottom: none; }
-.dropdown-item:hover { background: var(--cream-warm); color: var(--brown-dark); }
+
+.dropdown-item:hover {
+    background: var(--cream-warm);
+    color: var(--brown-dark);
+}
+
 .dropdown-item.danger { color: #c0392b; }
 .dropdown-item.danger:hover { background: #fff5f5; }
- 
-/* ========== WAVE DIVIDER ========== */
-.navbar-wave {
-    display: block;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-    height: 36px;
-    background: #C7405F;
-}
- 
+
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     flex: 1;
-    padding: 48px 20px 60px;
+    padding: 48px 24px 60px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    background: var(--cream);
 }
- 
+
 /* ========== FORM CONTAINER (การ์ดหลัก) ========== */
 .form-container {
     background: var(--white);
     border-radius: 20px;
     overflow: hidden;
     border: 1.5px solid var(--accent-gold);
-    box-shadow: 0 8px 40px var(--shadow-warm);
+    box-shadow: 0 6px 32px var(--shadow-warm);
     width: 100%;
     max-width: 660px;
     position: relative;
 }
- 
+
 .form-container::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
+    background: linear-gradient(90deg,
+        transparent, var(--accent-gold-pale) 20%, var(--accent-gold) 50%, var(--accent-gold-pale) 80%, transparent);
     z-index: 1;
 }
- 
+
 /* ========== CARD HEADER ========== */
 .card-header-bar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: var(--brand-brown);
     padding: 34px 32px 30px;
     text-align: center;
     position: relative;
     overflow: hidden;
-    border-bottom: 2px solid var(--accent-gold-pale);
+    border-bottom: 2px solid var(--accent-gold-mid);
 }
- 
+
 .card-header-bar::before {
     content: '';
     position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.18) 1px, transparent 1px);
-    background-size: 20px 20px;
-    pointer-events: none;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
 }
- 
+
+.card-header-bar::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), var(--accent-gold), var(--accent-gold-mid), transparent);
+}
+
+.card-header-bar h1 {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.8rem;
+    color: #FFFFFF;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.2);
+}
+
+.card-header-bar p {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ---- ornament in header ---- */
 .header-ornament {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 14px;
-    position: relative;
-    z-index: 1;
-}
- 
-.orn-line {
-    flex: 1;
-    max-width: 90px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.75));
-}
- 
-.orn-line:last-child {
-    background: linear-gradient(90deg, rgba(255,255,255,0.75), transparent);
-}
- 
-.orn-diamond {
-    width: 9px; height: 9px;
-    background: #FFFFFF;
-    transform: rotate(45deg);
-    flex-shrink: 0;
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-}
- 
-.orn-diamond-sm {
-    width: 5px; height: 5px;
-    background: rgba(255,255,255,0.8);
-    transform: rotate(45deg);
-    flex-shrink: 0;
-}
- 
-.header-lotus {
-    font-size: 40px;
-    margin-bottom: 12px;
-    position: relative;
-    z-index: 1;
-    filter: drop-shadow(0 2px 10px rgba(0,0,0,0.25));
-}
- 
-.question-id-badge {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.18);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: #FFFFFF;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    padding: 4px 14px;
-    border-radius: 20px;
+    gap: 12px;
     margin-bottom: 10px;
-    position: relative;
-    z-index: 1;
 }
- 
-.card-header-bar h1 {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 26px;
-    color: #FFFFFF;
-    font-weight: 700;
-    margin-bottom: 6px;
-    position: relative;
-    z-index: 1;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.2);
+
+.header-ornament .orn-line {
+    flex: 1; max-width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale));
 }
- 
-.card-header-bar p {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.85);
-    position: relative;
-    z-index: 1;
-}
- 
-.header-gold-line {
-    width: 70px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
-    border-radius: 2px;
-    margin: 16px auto 0;
-    position: relative;
-    z-index: 1;
-}
- 
+
+.header-ornament .orn-line:last-child { background: linear-gradient(90deg, var(--accent-gold-pale), transparent); }
+.header-ornament .orn-diamond { width: 8px; height: 8px; background: var(--accent-gold-pale); transform: rotate(45deg); box-shadow: 0 0 6px rgba(247, 227, 176, 0.7); }
+.header-ornament .orn-diamond-sm { width: 4px; height: 4px; background: rgba(247, 227, 176, 0.85); transform: rotate(45deg); }
+
 /* ========== CARD BODY ========== */
 .card-body {
-    padding: 34px 40px 38px;
+    padding: 32px 36px 38px;
     background: var(--white);
 }
- 
+
 /* ========== ALERT ========== */
 .alert {
     padding: 12px 16px;
@@ -363,26 +342,26 @@ body {
     font-size: 14px;
     font-weight: 600;
 }
- 
+
 .alert-error {
     background: #fff0f0;
     color: #c62828;
     border: 1px solid #ffb3b3;
 }
- 
+
 /* ========== SECTION LABEL ========== */
 .section-label {
     font-size: 12px;
     font-weight: 700;
-    color: var(--brown-mid);
+    color: var(--accent-gold);
     margin-bottom: 22px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
 }
- 
+
 .section-label::before {
     content: '';
     width: 4px; height: 16px;
@@ -390,27 +369,27 @@ body {
     border-radius: 2px;
     flex-shrink: 0;
 }
- 
+
 .section-label::after {
     content: '';
     flex: 1;
     height: 1px;
     background: linear-gradient(90deg, var(--cream-border), transparent);
 }
- 
+
 /* ========== FORM ========== */
 .form-section {
     display: flex;
     flex-direction: column;
     gap: 22px;
 }
- 
+
 .form-group {
     display: flex;
     flex-direction: column;
     gap: 7px;
 }
- 
+
 .form-group label {
     font-size: 13px;
     font-weight: 700;
@@ -419,7 +398,7 @@ body {
     align-items: center;
     gap: 6px;
 }
- 
+
 .form-group label::before {
     content: '';
     width: 3px; height: 13px;
@@ -427,7 +406,7 @@ body {
     border-radius: 2px;
     flex-shrink: 0;
 }
- 
+
 .form-group input {
     width: 100%;
     padding: 13px 16px;
@@ -438,22 +417,22 @@ body {
     background: var(--cream-warm);
     color: var(--text-dark);
     font-family: 'Sarabun', sans-serif;
-    transition: border-color 0.25s, box-shadow 0.25s, background 0.2s;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
 }
- 
+
 .form-group input::placeholder { color: var(--text-muted); }
- 
+
 .form-group input:focus {
     border-color: var(--accent-gold);
     background: var(--white);
-    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.15);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
 }
- 
+
 /* Select wrapper */
 .select-wrapper {
     position: relative;
 }
- 
+
 .select-wrapper::after {
     content: '▾';
     position: absolute;
@@ -464,7 +443,7 @@ body {
     font-size: 14px;
     pointer-events: none;
 }
- 
+
 .form-group select {
     width: 100%;
     padding: 13px 40px 13px 16px;
@@ -480,13 +459,13 @@ body {
     -webkit-appearance: none;
     cursor: pointer;
 }
- 
+
 .form-group select:focus {
     border-color: var(--accent-gold);
     background: var(--white);
-    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.15);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
 }
- 
+
 /* ========== DIVIDER ========== */
 .divider {
     border: none;
@@ -494,13 +473,13 @@ body {
     background: linear-gradient(90deg, transparent, var(--cream-border), transparent);
     margin: 4px 0;
 }
- 
+
 /* ========== KANOK INLINE (คั่นก่อนปุ่ม) ========== */
 .kanok-inline {
     margin: 4px 0 6px;
     opacity: 0.7;
 }
- 
+
 /* ========== FORM ACTIONS ========== */
 .form-actions {
     display: flex;
@@ -508,7 +487,8 @@ body {
     align-items: center;
     flex-wrap: wrap;
 }
- 
+
+/* ปุ่มยืนยัน สีทองล้วน */
 .btn-submit {
     background: var(--accent-gold);
     color: #FFFFFF;
@@ -522,13 +502,13 @@ body {
     font-family: 'Sarabun', sans-serif;
     box-shadow: 0 3px 12px var(--shadow-gold);
 }
- 
+
 .btn-submit:hover {
     background: var(--accent-gold-mid);
     transform: translateY(-1px);
     box-shadow: 0 5px 18px rgba(217, 164, 65, 0.35);
 }
- 
+
 .btn-cancel {
     background: var(--white);
     color: var(--brown-mid);
@@ -541,38 +521,15 @@ body {
     transition: background 0.2s, border-color 0.2s;
     font-family: 'Sarabun', sans-serif;
 }
- 
+
 .btn-cancel:hover {
     background: var(--cream-warm);
     border-color: var(--accent-gold);
 }
- 
-/* ========== KANOK FOOTER ========== */
-.kanok-footer {
-    display: block;
-    width: 100%;
-    height: 32px;
-    opacity: 0.6;
-}
- 
-/* ========== FIELD ERROR ========== */
-.field-error {
-    color: #c62828;
-    font-size: 12px;
-    margin-top: 3px;
-    display: block;
-}
 
-/* ========== FOOTER (matches bookingList.css / headStaffList.css) ========== */
-.footer-strip {
-    display: block;
-    width: 100%;
-    line-height: 0;
-    margin-top: auto;
-}
-
+/* ========== FOOTER ========== */
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    background: var(--brand-brown);
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
     border-top: 3px solid var(--accent-gold-pale);
@@ -606,7 +563,6 @@ body {
     gap: 10px;
 }
 
-.site-footer .lotus-icon,
 .footer-lotus-icon {
     background: rgba(255, 255, 255, 0.18);
     width: 40px;
@@ -637,22 +593,13 @@ body {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
-.footer-bottom {
-    text-align: center;
-    padding: 12px 20px 18px;
-    font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
- 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
     .navbar          { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
     .navbar-brand    { order: 0; }
     .navbar-right    { order: 2; width: 100%; justify-content: space-between; }
     .navbar-menu     { display: none; }
-    .navbar .lotus-icon,
-    .navbar-brand .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
+    .lotus-icon      { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     .page-wrapper    { padding: 24px 14px 48px; }
     .card-body       { padding: 22px 20px 28px; }
     .card-header-bar { padding: 26px 20px 22px; }

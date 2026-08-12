@@ -215,15 +215,27 @@ public class OrganizerController {
     }
 
     // ปฏิเสธรายการจองและเปลี่ยนสถานะเป็นถูกปฏิเสธ (Rejected)
-    @GetMapping("/organizer/bookings/reject/{id}")
-    public String rejectBooking(@PathVariable String id, HttpSession session, RedirectAttributes ra) {
-        if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
-        try {
-            bookingService.rejectBooking(id);
-            ra.addFlashAttribute("error", "ปฏิเสธรายการจองแล้ว");
-        } catch (Exception e) {
-            ra.addFlashAttribute("error", "ไม่สามารถปฏิเสธรายการได้");
+    @PostMapping("/organizer/bookings/reject/{id}")
+    public String rejectBooking(
+            @PathVariable String id, 
+            @RequestParam("rejectDetail") String rejectDetail, // รับค่าเหตุผลจากฟอร์ม JSP
+            HttpSession session, 
+            RedirectAttributes ra) {
+            
+        if (session.getAttribute("currentOrganizer") == null) {
+            return "redirect:/loginorganizer";
         }
+        
+        try {
+            // ส่ง rejectDetail เข้าไปใน Service ด้วย
+            bookingService.rejectBooking(id, rejectDetail);
+            
+            // แนะนำ: เปลี่ยนคีย์จาก "error" เป็น "success" หรือ "message" หากเป็นการทำงานที่สำเร็จ
+            ra.addFlashAttribute("success", "ปฏิเสธรายการจองเรียบร้อยแล้ว");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "ไม่สามารถปฏิเสธรายการได้: " + e.getMessage());
+        }
+        
         return "redirect:/organizer/bookings?status=Rejected";
     }
     

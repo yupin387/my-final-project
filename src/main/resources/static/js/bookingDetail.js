@@ -13,7 +13,6 @@ document.addEventListener('click', function (e) {
 });
 
 // ===== Modal Functions =====
-// JSP เรียก openApproveModal() → ต้องมีฟังก์ชันนี้
 function openApproveModal(bookingId, approveUrl) {
     document.getElementById('displayBookingId').textContent = 'รหัส: ' + bookingId;
     document.getElementById('confirmApproveLink').href = approveUrl;
@@ -24,9 +23,18 @@ function closeApproveModal() {
     document.getElementById('approveModal').style.display = 'none';
 }
 
-function openRejectModal(bookingId, rejectUrl) {
-    document.getElementById('displayRejectBookingId').textContent = 'รหัส: ' + bookingId;
-    document.getElementById('confirmRejectLink').href = rejectUrl;
+// ลบ openRejectModal อันเก่าทิ้งทั้งหมด แล้วใช้อันนี้แทน
+function openRejectModal(bookingId, actionUrl) {
+    // แสดงรหัสการจอง
+    document.getElementById('displayRejectBookingId').innerText = bookingId;
+    
+    // เซ็ต URL ให้กับ Form (สำคัญ: id ของฟอร์มต้องตรงกับใน jsp)
+    document.getElementById('rejectForm').action = actionUrl;
+    
+    // เคลียร์ข้อความเก่า (ถ้ามี)
+    document.getElementById('rejectDetail').value = '';
+    
+    // แสดง Modal
     document.getElementById('rejectModal').style.display = 'flex';
 }
 
@@ -34,7 +42,7 @@ function closeRejectModal() {
     document.getElementById('rejectModal').style.display = 'none';
 }
 
-// ลบอันเดิมออก แล้วใช้อันนี้แทน (รวมทั้งสอง modal)
+// กดพื้นที่ว่างเพื่อปิด Modal
 document.addEventListener('click', function(e) {
     const approveModal = document.getElementById('approveModal');
     if (e.target === approveModal) closeApproveModal();
@@ -42,4 +50,3 @@ document.addEventListener('click', function(e) {
     const rejectModal = document.getElementById('rejectModal');
     if (e.target === rejectModal) closeRejectModal();
 });
-

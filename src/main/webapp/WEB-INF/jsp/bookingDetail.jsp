@@ -25,7 +25,7 @@
             <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item active">รายการจอง</a>
             <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a>
             <a href="${pageContext.request.contextPath}/organizer/questions"  class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item">ใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
         </nav>
         <div class="dropdown-wrap">
             <div class="user-info" onclick="toggleDropdown()">
@@ -83,7 +83,7 @@
                 <span class="info-value">
                     ${b.ceremony.ceremonyName}
                     <c:if test="${not empty b.ceremony.ceremonyDetail}">
-                        <div style="font-weight:400;font-size:13px;color:#C77E96;margin-top:2px;">${b.ceremony.ceremonyDetail}</div>
+                        <div style="font-weight:400;font-size:13px;color:var(--gold-mid);margin-top:2px;">${b.ceremony.ceremonyDetail}</div>
                     </c:if>
                 </span>
             </div>
@@ -131,7 +131,7 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <span style="color:#C77E96;">ไม่มีรูปภาพสถานที่</span>
+                            <span style="color:var(--gold-mid);">ไม่มีรูปภาพสถานที่</span>
                         </c:otherwise>
                     </c:choose>
                 </span>
@@ -332,11 +332,22 @@
         <div class="modal-id-container modal-id-reject">
             <span id="displayRejectBookingId" class="modal-id-text modal-id-text-reject"></span>
         </div>
-        <p class="modal-footer-note">การปฏิเสธไม่สามารถย้อนกลับได้</p>
-        <div class="modal-btn-group">
-            <button type="button" class="btn-modal-cancel" onclick="closeRejectModal()">ยกเลิก</button>
-            <a id="confirmRejectLink" href="#" class="btn-modal-reject">ยืนยันปฏิเสธ</a>
-        </div>
+        
+        <!-- เปลี่ยนเป็น Form เพื่อส่งค่า rejectDetail ไปที่ Controller -->
+        <form id="rejectForm" method="POST" action="">
+            <div style="margin-top: 15px; text-align: left;">
+                <label for="rejectDetail" style="font-weight: 600; font-size: 14px; color: #333;">เหตุผลที่ปฏิเสธงาน <span style="color:red;">*</span></label>
+                <textarea id="rejectDetail" name="rejectDetail" rows="3" 
+                          style="width: 100%; margin-top: 5px; padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-family: 'Sarabun', sans-serif;" 
+                          required placeholder="โปรดระบุเหตุผลที่ปฏิเสธการจองนี้..."></textarea>
+            </div>
+
+            <p class="modal-footer-note" style="margin-top: 10px;">การปฏิเสธไม่สามารถย้อนกลับได้</p>
+            <div class="modal-btn-group">
+                <button type="button" class="btn-modal-cancel" onclick="closeRejectModal()">ยกเลิก</button>
+                <button type="submit" class="btn-modal-reject">ยืนยันปฏิเสธ</button>
+            </div>
+        </form>
     </div>
 </div>
 

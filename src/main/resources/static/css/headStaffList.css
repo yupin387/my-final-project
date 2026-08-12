@@ -1,23 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
 
-/* ===== CSS Variables (matched to bookingList.css pink theme) ===== */
+/* ===== CSS Variables (matched to bookingList.css brown-gold-white theme) ===== */
 :root {
-    --gold:          #E0577F;
-    --gold-mid:      #EC6E96;
-    --gold-light:    #F49CB9;
-    --gold-pale:     #FBD0DE;
-    --gold-glow:     #FFE3EC;
+    --gold:          #A9752E;
+    --gold-mid:      #C0923F;
+    --gold-light:    #D9B87A;
+    --gold-pale:     #F0E2C7;
+    --gold-glow:     #FFF8ED;
 
     --cream:         #FFFFFF;
-    --cream-warm:    #FFF6F9;
-    --cream-mid:     #FDEEF3;
-    --cream-deep:    #F8DCE6;
-    --cream-border:  #F3C4D5;
-    --cream-border-soft: #F6D4E1;
+    --cream-warm:    #FFFBF3;
+    --cream-mid:     #FBF2E3;
+    --cream-deep:    #F3E3C7;
+    --cream-border:  #E8D5B7;
+    --cream-border-soft: #EDE0C8;
 
     --white:         #FFFFFF;
-    --off-white:     #FFF9FB;
+    --off-white:     #FFFDF8;
 
     --text-dark:     #1A1A1A;
     --text-mid:      #333333;
@@ -28,18 +28,16 @@
     --brown-dark:    #1A1A1A;
     --brown-mid:     #3A3A3A;
 
-    --shadow-gold:   rgba(224, 87, 127, 0.16);
-    --shadow-warm:   rgba(224, 87, 127, 0.10);
+    --shadow-gold:   rgba(169, 117, 46, 0.18);
+    --shadow-warm:   rgba(169, 117, 46, 0.12);
 
     /* สีทองจริง ใช้กับ ornament/หัวข้อ/ปุ่ม ให้ตรงกับ bookingList.css */
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
 
-    /* ===== Footer colors (same gradient as navbar, matches bookingList.css) ===== */
-    --footer-grad-1: #C7405F;
-    --footer-grad-2: #D94F76;
-    --footer-grad-3: #E0577F;
+    /* ===== สีน้ำตาลล้วน ใช้กับ navbar / card-header / footer (matches bookingList.css) ===== */
+    --brand-brown: #9C6B3E;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -55,7 +53,7 @@ body {
 
 /* ========== NAVBAR (matches bookingList.css .navbar) ========== */
 .navbar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: var(--brand-brown);
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -67,7 +65,7 @@ body {
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 4px 20px rgba(122, 82, 48, 0.32);
 }
 
 /* วิ้งๆ สีทองด้านบนแถบเมนู */
@@ -132,14 +130,14 @@ body {
 .nav-item {
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
 }
 
 .nav-item:hover {
@@ -265,7 +263,7 @@ body {
 
 .list-header-text { text-align: left; }
 
-/* วิ้งๆ ของ ornament ให้เป็นสีทอง (ไม่ใช่ชมพู) */
+/* วิ้งๆ ของ ornament เป็นสีทอง */
 .section-ornament {
     display: flex;
     align-items: center;
@@ -343,7 +341,7 @@ body {
 
 /* ========== CARD HEADER BAR ========== */
 .card-header-bar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: var(--brand-brown);
     padding: 16px 28px;
     display: flex;
     justify-content: space-between;
@@ -478,7 +476,7 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
 }
 
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    background: var(--brand-brown);
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
     border-top: 3px solid var(--accent-gold-pale);
