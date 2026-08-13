@@ -1,21 +1,12 @@
 // ===== quotationEdit.js =====
-// หน้าแก้ไขใบเสนอราคา: "มี" ปุ่ม +/- ปรับจำนวน (หน้าสร้างใช้ quotationCreate.js ที่ไม่มีปุ่มนี้)
-//
-// อุปกรณ์ที่ "รวมอยู่ในแพ็กเกจ" (.package-included-row) เป็นแถวข้อมูลล้วน ๆ เหมือนหน้าสร้าง:
-//   - จำนวนคำนวณมาจากฝั่ง JSP แล้ว (ตามจำนวนพระ หรือ 1 แล้วแต่ชนิดอุปกรณ์) แก้ไขไม่ได้
-//   - ราคาไม่ถูกดึงมาคิดในยอดรวม เพราะรวมอยู่ใน "ราคาแพ็กเกจ" อยู่แล้ว
-//   - ห้ามแก้ไข/ห้ามลบ
-//
-// อัปเดต: เอาแท็บ "ทั้งหมด" ออกจากป๊อปอัพเลือกอุปกรณ์เสริมแล้ว เหลือแค่ 4 หมวด
-// (อุปกรณ์ / ภัตตาหาร / สังฆทาน / บริการ) ให้ดูทีละหมวดเท่านั้น และเช็คบ็อกซ์
-// "เลือกทั้งหมด" จะเลือกเฉพาะรายการในหมวดที่กำลังดูอยู่ ไม่ดึงข้ามหมวดอื่นมาด้วย
+// หน้าแก้ไขใบเสนอราคา: "มี" ปุ่ม +/- ปรับจำนวน 
 
 const GROUP_LABELS = {
     'group-equipment':  'หมวดอุปกรณ์พิธีกรรม',
     'group-food':       'หมวดภัตตาหารปิ่นโต',
     'group-sangkathan': 'หมวดสังฆทาน',
     'group-service':    'หมวดบริการและการดำเนินการ',
-    'group-extra':      'หมวดอุปกรณ์เสริม' // เพิ่มบรรทัดนี้
+    'group-extra':      'หมวดอุปกรณ์เสริม' 
 };
 
 const selectedItemIds = new Set();
@@ -26,7 +17,7 @@ function buildQtyCell(value, inputName) {
         <div class="qty-wrapper">
             <button type="button" class="btn-qty-minus" onclick="adjustQty(this, -1)">−</button>
             <input type="number" name="${inputName}" value="${value}" min="1"
-                class="qty-input" onchange="calculateGrandTotal()">
+                class="qty-input clean-input text-center" onchange="calculateGrandTotal()">
             <button type="button" class="btn-qty-plus" onclick="adjustQty(this, 1)">+</button>
         </div>`;
 }
@@ -36,7 +27,7 @@ function adjustQty(btn, delta) {
     let val = parseInt(input.value) || 1;
     val = Math.max(1, val + delta);
     input.value = val;
-    calculateGrandTotal();
+    calculateGrandTotal(); // ฟังก์ชันนี้จะถูก override โดย script ท้ายไฟล์ JSP ซึ่งคำนวณแพ็กเกจด้วย
 }
 
 function getExistingItemIds() {
@@ -50,10 +41,10 @@ function getExistingItemIds() {
     return ids;
 }
 
-// ===== หมวดที่กำลังเปิดดูอยู่ในป๊อปอัพตอนนี้ (ไม่มีแท็บ "ทั้งหมด" แล้ว) =====
+// ===== หมวดที่กำลังเปิดดูอยู่ในป๊อปอัพตอนนี้ =====
 function getCurrentCategory() {
     const activeTab = document.querySelector('.category-tab.active');
-    return activeTab ? activeTab.getAttribute('data-category') : 'อุปกรณ์พิธีกรรม'; // เปลี่ยนค่าเริ่มต้นให้ตรงกัน
+    return activeTab ? activeTab.getAttribute('data-category') : 'อุปกรณ์พิธีกรรม';
 }
 
 function ensureGroupHeader(tbody) {
@@ -62,7 +53,8 @@ function ensureGroupHeader(tbody) {
     const label = GROUP_LABELS[tbody.id] || '';
     const headerRow = document.createElement('tr');
     headerRow.className = 'group-row';
-    headerRow.innerHTML = `<td colspan="8">${label}</td>`;
+    // สร้างให้ตรงกับรูปแบบ JSP ที่มี 7 คอลัมน์
+    headerRow.innerHTML = `<td></td><td class="category-header-text">${label}</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>`;
     tbody.prepend(headerRow);
 }
 
@@ -117,7 +109,7 @@ function renderItemPicker(category) {
         const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
         const itemType = dataEl.getAttribute('data-type') || '';
 
-        // ไม่มีแท็บ "ทั้งหมด" อีกต่อไป แสดงเฉพาะรายการที่ตรงกับหมวดปัจจุบันเท่านั้น
+        // แสดงเฉพาะรายการที่ตรงกับหมวดปัจจุบันเท่านั้น
         if (!itemType.includes(category)) return;
 
         count++;
@@ -187,8 +179,7 @@ function updateSelectedCount() {
     if (submitBtn) submitBtn.style.opacity = count > 0 ? '1' : '0.65';
 }
 
-// ===== "เลือกทั้งหมดในหมวดนี้": เลือกเฉพาะรายการของหมวดที่กำลังเปิดดูอยู่เท่านั้น
-//        ไม่ดึงรายการจากหมวดอื่นมาด้วย =====
+// ===== "เลือกทั้งหมดในหมวดนี้" =====
 function toggleSelectAllVisible(checkbox) {
     const checked = checkbox.checked;
     const dataStore = document.getElementById('itemDataStore');
@@ -211,7 +202,7 @@ function toggleSelectAllVisible(checkbox) {
     renderItemPicker();
 }
 
-// ===== อัปเดตสถานะติ๊กถูกของ "เลือกทั้งหมดในหมวดนี้" ตามหมวดที่เปิดดูอยู่ =====
+// ===== อัปเดตสถานะติ๊กถูกของ "เลือกทั้งหมดในหมวดนี้" =====
 function updateSelectAllState() {
     const selectAllCb = document.getElementById('selectAllVisible');
     if (!selectAllCb) return;
@@ -248,7 +239,7 @@ function addSelectedItemsToTable() {
         const unit     = dataEl.getAttribute('data-unit');
         const itemType = dataEl.getAttribute('data-type') || '';
 
-        // ✅ แยกปลายทางตารางตามประเภทไอเทมอย่างแม่นยำ ไม่ให้คำว่า "อุปกรณ์" ชนกัน
+        // แยกปลายทางตารางตามประเภท
         let targetBody = document.getElementById('group-service');
         if (itemType.includes('อุปกรณ์พิธีกรรม')) targetBody = document.getElementById('group-equipment');
         else if (itemType.includes('อุปกรณ์เสริม')) targetBody = document.getElementById('group-extra');
@@ -261,24 +252,24 @@ function addSelectedItemsToTable() {
         tr.className = 'dynamic-row';
         tr.setAttribute('data-item-id', itemId);
 
+        // ตัดช่อง DetailNotes ที่เกินมาออกให้เหลือ 7 คอลัมน์พอดี พร้อมใส่ readonly
         tr.innerHTML = `
-            <td class="row-number" style="text-align:center;"></td>
-            <td>
-                <span class="item-name">${itemName}</span>
-                ${itemDesc ? `<span class="item-desc">${itemDesc}</span>` : ''}
-                <input type="hidden" name="extraItemIds" value="${itemId}">
-            </td>
-            <td>${buildQtyCell(1, 'extraQtys')}</td>
-            <td style="text-align:center;">${unit}</td>
-            <td style="text-align:right;">
-                <input type="number" name="extraPrices" value="${price.toFixed(2)}"
-                    step="0.01" min="0" class="price-input" onchange="calculateGrandTotal()">
-            </td>
-            <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
-            <td><input type="text" name="detailNotes" class="note-input" placeholder="หมายเหตุ"></td>
-            <td style="text-align:center;">
-                <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
-            </td>`;
+                <td class="row-number text-center"></td>
+                <td>
+                    ${itemName}
+                    ${itemDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
+                    <input type="hidden" name="extraItemIds" value="${itemId}">
+                </td>
+                <td>${buildQtyCell(1, 'extraQtys')}</td>
+                <td class="text-center">${unit}</td>
+                <td>
+                    <input type="number" name="extraPrices" value="${price.toFixed(2)}"
+                        step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
+                </td>
+                <td class="text-right"><span class="subtotal">0.00</span></td>
+                <td class="text-center delete-col">
+                    <button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button>
+                </td>`;
 
         targetBody.appendChild(tr);
     });
@@ -301,14 +292,13 @@ function removeRow(button) {
 }
 
 function reIndexRows() {
-    // ไม่นับเลขลำดับให้แถว "รวมในแพ็กเกจ" (.package-included-row) เพราะไม่ใช่รายการคิดเงินแยก
+    // ไม่นับเลขลำดับให้แถว "รวมในแพ็กเกจ" (.package-included-row)
     const rowNumbers = document.querySelectorAll('.row-number:not(.no-index)');
     rowNumbers.forEach((td, index) => {
         td.innerText = index + 1;
     });
 }
 
-// ===== คำนวณยอดรวม: ข้ามแถว .package-included-row เสมอ เพราะไม่มี input ราคา/จำนวนให้อ่านอยู่แล้ว =====
 function calculateGrandTotal() {
     let totalAmount = 0.0;
 
@@ -362,7 +352,7 @@ window.addEventListener('click', (e) => {
 
 window.addEventListener('load', () => {
     // แปลง qty cell ของแถวปกติให้มีปุ่ม +/-
-    // ข้ามแถวที่ทำเครื่องหมาย .no-qty-convert ไว้ (แถวราคาแพ็กเกจ / แถวอุปกรณ์รวมในแพ็กเกจ ที่ต้องคงค่าล็อกไว้)
+    // ข้ามแถวที่ทำเครื่องหมาย .no-qty-convert ไว้ 
     document.querySelectorAll('.static-row:not(.no-qty-convert), .dynamic-row:not(.no-qty-convert)').forEach(row => {
         const qInput = row.querySelector('input[name="bookingQtys"], input[name="extraQtys"]');
         if (qInput) {

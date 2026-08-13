@@ -1,31 +1,68 @@
 // ===== quotationCreate.js =====
-// หน้าสร้างใบเสนอราคา: "ไม่มี" ปุ่ม +/- ปรับจำนวน (ใส่จำนวนโดยพิมพ์ในช่องตรง ๆ เท่านั้น)
-// ปุ่ม +/- มีเฉพาะหน้าแก้ไข (quotationEdit.js)
-//
-// อุปกรณ์ที่ "รวมอยู่ในแพ็กเกจ" (.package-included-row) เป็นแถวข้อมูลล้วน ๆ:
-//   - จำนวนคำนวณมาจากฝั่ง JSP แล้ว (ตามจำนวนพระ หรือ 1 แล้วแต่ชนิดอุปกรณ์)
-//   - ราคาไม่ถูกดึงมาคิดในยอดรวม เพราะรวมอยู่ใน "ราคาแพ็กเกจ" อยู่แล้ว
-//   - ห้ามแก้ไข/ห้ามลบ จึงไม่ต้องผ่าน buildQtyCell เลย
-//
-// อัปเดต: เอาแท็บ "ทั้งหมด" ออกจากป๊อปอัพเลือกอุปกรณ์เสริมแล้ว เหลือแค่ 4 หมวด
-// (อุปกรณ์ / ภัตตาหาร / สังฆทาน / บริการ) ให้ดูทีละหมวดเท่านั้น และเช็คบ็อกซ์
-// "เลือกทั้งหมด" จะเลือกเฉพาะรายการในหมวดที่กำลังดูอยู่ ไม่ดึงข้ามหมวดอื่นมาด้วย
 
-
-// 1. เพิ่ม label ให้กลุ่มอุปกรณ์เสริม
 const GROUP_LABELS = {
     'group-equipment':  'หมวดอุปกรณ์พิธีกรรม',
     'group-food':       'หมวดภัตตาหารปิ่นโต',
     'group-sangkathan': 'หมวดสังฆทาน',
     'group-service':    'หมวดบริการและการดำเนินการ',
-    'group-extra':      'หมวดอุปกรณ์เสริม' // เพิ่มบรรทัดนี้
+    'group-extra':      'หมวดอุปกรณ์เสริม' 
 };
+
 const selectedItemIds = new Set();
 
-// ===== ช่องจำนวน แบบไม่มีปุ่ม +/- (พิมพ์เลขตรง ๆ) =====
+// ฟังก์ชันเปิด-ปิดโหมดแก้ไขจำนวน (ซ่อน/โชว์ปุ่ม +/-)
+function toggleEditQty(btn) {
+    const wrapper = btn.closest('.qty-wrapper');
+    const minusBtn = wrapper.querySelector('.btn-qty-minus');
+    const plusBtn = wrapper.querySelector('.btn-qty-plus');
+    
+    if (minusBtn.style.display === 'none') {
+        // เปิดโหมดแก้ไข
+        minusBtn.style.display = 'inline-flex';
+        plusBtn.style.display = 'inline-flex';
+        btn.innerHTML = '✔️'; // เปลี่ยนรูปดินสอเป็นเครื่องหมายถูก
+        btn.title = 'ยืนยันจำนวน';
+    } else {
+        // ปิดโหมดแก้ไข
+        minusBtn.style.display = 'none';
+        plusBtn.style.display = 'none';
+        btn.innerHTML = '✏️'; // เปลี่ยนกลับเป็นดินสอ
+        btn.title = 'แก้ไขจำนวน';
+    }
+}
+
+// ฟังก์ชันสร้างช่องจำนวนที่มีรูปดินสอซ่อน +/- ไว้ตอนแรก (เรียงลำดับ: - | ตัวเลข | + | ดินสอ)
 function buildQtyCell(value, inputName) {
-    return `<input type="number" name="${inputName}" value="${value}" min="1"
-                class="qty-input" onchange="calculateGrandTotal()">`;
+    return `
+        <div class="qty-wrapper">
+            <button type="button" class="btn-qty-minus" onclick="adjustQty(this, -1)" style="display:none;">−</button>
+            <input type="number" name="${inputName}" value="${value}" min="1" class="qty-input" readonly>
+            <button type="button" class="btn-qty-plus" onclick="adjustQty(this, 1)" style="display:none;">+</button>
+            <button type="button" class="btn-pencil-toggle" onclick="toggleEditQty(this)" title="แก้ไขจำนวน">✏️</button>
+        </div>`;
+}
+
+// ฟังก์ชันกดปรับเพิ่ม/ลดจำนวน
+function adjustQty(btn, delta) {
+    const input = btn.parentElement.querySelector('.qty-input');
+    let val = parseInt(input.value) || 1;
+    val = val + delta;
+    
+    // ถ้าน้อยกว่าหรือเท่ากับ 0 จะถามเพื่อลบรายการทิ้ง
+    if (val <= 0) {
+        if (confirm('คุณต้องการลบรายการนี้ออกจากใบเสนอราคาใช่หรือไม่?')) {
+            const row = btn.closest('tr');
+            const tbody = row.parentElement;
+            row.remove();
+            removeGroupHeaderIfEmpty(tbody);
+            reIndexRows();
+            calculateGrandTotal();
+        }
+        return;
+    }
+    
+    input.value = val;
+    calculateGrandTotal();
 }
 
 function getExistingItemIds() {
@@ -39,10 +76,9 @@ function getExistingItemIds() {
     return ids;
 }
 
-// ===== หมวดที่กำลังเปิดดูอยู่ในป๊อปอัพตอนนี้ (ไม่มีแท็บ "ทั้งหมด" แล้ว) =====
 function getCurrentCategory() {
     const activeTab = document.querySelector('.category-tab.active');
-    return activeTab ? activeTab.getAttribute('data-category') : 'อุปกรณ์พิธีกรรม'; // เปลี่ยนตรงนี้
+    return activeTab ? activeTab.getAttribute('data-category') : 'อุปกรณ์พิธีกรรม';
 }
 
 function ensureGroupHeader(tbody) {
@@ -51,13 +87,13 @@ function ensureGroupHeader(tbody) {
     const label = GROUP_LABELS[tbody.id] || '';
     const headerRow = document.createElement('tr');
     headerRow.className = 'group-row';
-    headerRow.innerHTML = `<td colspan="8">${label}</td>`;
+    // สร้าง 6 คอลัมน์ เอาชื่อหมวดไว้ซ้ายมือสุดโดยการใช้ colspan="6" แต่ชิดซ้าย
+    headerRow.innerHTML = `<td colspan="6" class="category-header-text" style="text-align: left !important; padding-left: 25px !important;">${label}</td>`;
     tbody.prepend(headerRow);
 }
 
 function removeGroupHeaderIfEmpty(tbody) {
     if (!tbody || !tbody.id || !tbody.id.startsWith('group-')) return;
-    // แถวที่ "รวมในแพ็กเกจ" (.package-included-row) นับเป็นเนื้อหาของหมวดด้วย ห้ามเอาหัวข้อออกถ้ายังเหลือแถวนี้อยู่
     const remaining = tbody.querySelectorAll('tr.static-row, tr.dynamic-row');
     if (remaining.length === 0) {
         const header = tbody.querySelector('.group-row');
@@ -106,7 +142,6 @@ function renderItemPicker(category) {
         const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
         const itemType = dataEl.getAttribute('data-type') || '';
 
-        // ไม่มีแท็บ "ทั้งหมด" อีกต่อไป แสดงเฉพาะรายการที่ตรงกับหมวดปัจจุบันเท่านั้น
         if (!itemType.includes(category)) return;
 
         count++;
@@ -176,8 +211,6 @@ function updateSelectedCount() {
     if (submitBtn) submitBtn.style.opacity = count > 0 ? '1' : '0.65';
 }
 
-// ===== "เลือกทั้งหมดในหมวดนี้": เลือกเฉพาะรายการของหมวดที่กำลังเปิดดูอยู่เท่านั้น
-//        ไม่ดึงรายการจากหมวดอื่นมาด้วย =====
 function toggleSelectAllVisible(checkbox) {
     const checked = checkbox.checked;
     const dataStore = document.getElementById('itemDataStore');
@@ -188,7 +221,7 @@ function toggleSelectAllVisible(checkbox) {
 
     dataStore.querySelectorAll('.item-data').forEach(dataEl => {
         const itemType = dataEl.getAttribute('data-type') || '';
-        if (!itemType.includes(category)) return; // เอาเฉพาะหมวดปัจจุบัน
+        if (!itemType.includes(category)) return;
 
         const itemId = String(dataEl.getAttribute('data-id'));
         if (existingIds.has(itemId)) return;
@@ -200,7 +233,6 @@ function toggleSelectAllVisible(checkbox) {
     renderItemPicker();
 }
 
-// ===== อัปเดตสถานะติ๊กถูกของ "เลือกทั้งหมดในหมวดนี้" ตามหมวดที่เปิดดูอยู่ =====
 function updateSelectAllState() {
     const selectAllCb = document.getElementById('selectAllVisible');
     if (!selectAllCb) return;
@@ -227,83 +259,72 @@ function addSelectedItemsToTable() {
 
     const dataStore = document.getElementById('itemDataStore');
 
-	selectedItemIds.forEach(itemId => {
-	    const dataEl = dataStore.querySelector(`.item-data[data-id="${itemId}"]`);
-	    if (!dataEl) return;
+    selectedItemIds.forEach(itemId => {
+        const dataEl = dataStore.querySelector(`.item-data[data-id="${itemId}"]`);
+        if (!dataEl) return;
 
-	    const itemName = dataEl.getAttribute('data-name');
-	    const itemDesc = dataEl.getAttribute('data-detail') || '';
-	    const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
-	    const unit     = dataEl.getAttribute('data-unit');
-	    const itemType = dataEl.getAttribute('data-type') || '';
+        const itemName = dataEl.getAttribute('data-name');
+        const itemDesc = dataEl.getAttribute('data-detail') || '';
+        const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
+        const unit     = dataEl.getAttribute('data-unit');
+        const itemType = dataEl.getAttribute('data-type') || '';
+        
+        const scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
+        const monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
+        const initialQty   = scalesByMonk ? monkCount : 1;
 
-	    const scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
-	    const monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
-	    const initialQty   = scalesByMonk ? monkCount : 1;
+        let targetBody = document.getElementById('group-service');
+        if (itemType.includes('อุปกรณ์พิธีกรรม')) targetBody = document.getElementById('group-equipment');
+        else if (itemType.includes('อุปกรณ์เสริม')) targetBody = document.getElementById('group-extra');
+        else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
+        else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
 
-        // 3. แก้ไขการแยกกลุ่มปลายทาง ให้เช็คคำแยกกันชัดเจน
-	    let targetBody = document.getElementById('group-service');
-	    if (itemType.includes('อุปกรณ์พิธีกรรม')) targetBody = document.getElementById('group-equipment');
-        else if (itemType.includes('อุปกรณ์เสริม')) targetBody = document.getElementById('group-extra'); // แยกอุปกรณ์เสริมมาเข้า group-extra
-	    else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
-	    else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
+        ensureGroupHeader(targetBody);
 
-	    ensureGroupHeader(targetBody);
+        const tr = document.createElement('tr');
+        tr.className = 'dynamic-row';
+        tr.setAttribute('data-item-id', itemId);
 
-	    const tr = document.createElement('tr');
-	    tr.className = 'dynamic-row';
-	    tr.setAttribute('data-item-id', itemId);
+        // ตัดคอลัมน์ลบทิ้ง เหลือ 6 คอลัมน์ และเรียกใช้ฟังก์ชัน buildQtyCell สร้างช่องจำนวน
+        tr.innerHTML = `
+                <td class="row-number text-center"></td>
+                <td>
+                    ${itemName}
+                    ${itemDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
+                    <input type="hidden" name="extraItemIds" value="${itemId}">
+                </td>
+                <td>
+                    ${buildQtyCell(initialQty, 'extraQtys')}
+                </td>
+                <td class="text-center">${unit}</td>
+                <td>
+                    <input type="number" name="extraPrices" value="${price.toFixed(2)}" step="0.01" min="0" class="clean-input text-right price-input" readonly>
+                </td>
+                <td class="text-right"><span class="subtotal">0.00</span></td>`;
 
-	    tr.innerHTML = `
-	        <td class="row-number" style="text-align:center;"></td>
-	        <td>
-	            <span class="item-name">${itemName}</span>
-	            ${itemDesc ? `<span class="item-desc">${itemDesc}</span>` : ''}
-	            <input type="hidden" name="extraItemIds" value="${itemId}">
-	        </td>
-	        <td>${buildQtyCell(initialQty, 'extraQtys')}</td>
-	        <td style="text-align:center;">${unit}</td>
-	        <td style="text-align:right;">
-	            <input type="number" name="extraPrices" value="${price.toFixed(2)}"
-	                step="0.01" min="0" class="price-input" onchange="calculateGrandTotal()">
-	        </td>
-	        <td style="text-align:right;" class="amount-cell"><span class="subtotal">0.00</span></td>
-	        <td><input type="text" name="detailNotes" class="note-input" placeholder="หมายเหตุ"></td>
-	        <td style="text-align:center;">
-	            <button type="button" class="btn-remove" onclick="removeRow(this)">✕</button>
-	        </td>`;
+        targetBody.appendChild(tr);
+    });
 
-	    targetBody.appendChild(tr);
-	});
-	
     selectedItemIds.clear();
     closeItemModal();
     reIndexRows();
     calculateGrandTotal();
 }
 
-function removeRow(button) {
-    const row = button.closest('tr');
-    const tbody = row.parentElement;
-
-    row.remove();
-    removeGroupHeaderIfEmpty(tbody);
-
-    reIndexRows();
-    calculateGrandTotal();
-}
-
 function reIndexRows() {
-    // ไม่นับเลขลำดับให้แถว "รวมในแพ็กเกจ" (.package-included-row) เพราะไม่ใช่รายการคิดเงินแยก
     const rowNumbers = document.querySelectorAll('.row-number:not(.no-index)');
     rowNumbers.forEach((td, index) => {
         td.innerText = index + 1;
     });
 }
 
-// ===== คำนวณยอดรวม: ข้ามแถว .package-included-row เสมอ เพราะไม่มี input ราคา/จำนวนให้อ่านอยู่แล้ว =====
 function calculateGrandTotal() {
-    let totalAmount = 0.0;
+    let packageTotal = 0.0;
+    let extraTotal = 0.0;
+    
+    const discountEl = document.getElementById('discountValue');
+    const discount = discountEl ? (parseFloat(discountEl.value) || 0) : 0;
+    const isCustomRequest = window.IS_CUSTOM_REQUEST === true;
 
     document.querySelectorAll('.static-row, .dynamic-row').forEach(row => {
         if (row.classList.contains('package-included-row')) return;
@@ -320,13 +341,32 @@ function calculateGrandTotal() {
             if (subtotalSpan) {
                 subtotalSpan.innerText = subtotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
             }
-            totalAmount += subtotal;
+            
+            const parentTbody = row.closest('tbody');
+            const isManuallyAddedExtra = parentTbody && parentTbody.id === 'group-extra';
+
+            if (row.classList.contains('package-main-row')) {
+                packageTotal += subtotal;
+            } else if (isCustomRequest && !isManuallyAddedExtra) {
+                packageTotal += subtotal;
+            } else {
+                extraTotal += subtotal;
+            }
         }
     });
 
+    const summaryPackage = document.getElementById('summaryPackage');
+    if (summaryPackage) summaryPackage.innerText = packageTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+
+    const summaryExtra = document.getElementById('summaryExtra');
+    if (summaryExtra) summaryExtra.innerText = extraTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+
+    let grandTotal = packageTotal + extraTotal - discount;
+    if (grandTotal < 0) grandTotal = 0;
+
     const grandTotalSpan = document.getElementById('grandTotal');
     if (grandTotalSpan) {
-        grandTotalSpan.innerText = totalAmount.toLocaleString('th-TH', {minimumFractionDigits: 2});
+        grandTotalSpan.innerText = grandTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
     }
 }
 
@@ -340,7 +380,8 @@ function validateForm() {
 }
 
 function toggleDropdown() {
-    document.getElementById('dropdownMenu').classList.toggle('show');
+    const dd = document.getElementById('dropdownMenu');
+    if (dd) dd.classList.toggle('show');
 }
 
 window.addEventListener('click', (e) => {
@@ -354,18 +395,6 @@ window.addEventListener('click', (e) => {
 });
 
 window.addEventListener('load', () => {
-    // แปลง qty cell ให้เป็นช่องกรอกธรรมดา (ไม่มี +/-)
-    // ข้ามแถวที่ทำเครื่องหมาย .no-qty-convert ไว้ (แถวราคาแพ็กเกจ / แถวอุปกรณ์รวมในแพ็กเกจ ที่ต้องคงค่าล็อกไว้)
-    document.querySelectorAll('.static-row:not(.no-qty-convert), .dynamic-row:not(.no-qty-convert)').forEach(row => {
-        const qInput = row.querySelector('input[name="bookingQtys"], input[name="extraQtys"]');
-        if (qInput) {
-            const inputName = qInput.name;
-            const val       = qInput.value || 1;
-            const td        = qInput.closest('td');
-            td.innerHTML    = buildQtyCell(val, inputName);
-        }
-    });
-
     const nameToId = {};
     document.querySelectorAll('#itemDataStore .item-data').forEach(dataEl => {
         nameToId[dataEl.getAttribute('data-name')] = dataEl.getAttribute('data-id');

@@ -9,6 +9,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=18">
+    <style>
+        /* ===== ปรับคอลัมน์ "จำนวน" (ปุ่ม +/-) ให้กว้างขึ้นและอยู่แถวเดียวกัน ===== */
+        #mainQuotationTable .qty-wrapper{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-wrap:nowrap;
+            white-space:nowrap;
+            gap:6px;
+        }
+        #mainQuotationTable .btn-qty-minus,
+        #mainQuotationTable .btn-qty-plus{
+            flex:0 0 auto;
+            width:26px;
+            height:26px;
+            border:1px solid #9C6B3E;
+            background:#FFFFFF;
+            color:#9C6B3E;
+            border-radius:4px;
+            font-size:15px;
+            line-height:1;
+            cursor:pointer;
+        }
+        #mainQuotationTable .btn-qty-minus:hover,
+        #mainQuotationTable .btn-qty-plus:hover{
+            background:#FBF2E3;
+        }
+        #mainQuotationTable .qty-wrapper .qty-input{
+            flex:0 0 auto;
+            width:52px;
+            text-align:center;
+        }
+        /* ===== ปุ่มลบ (ถังขยะ) ให้เล็กและเป็นสีแดง ===== */
+        #mainQuotationTable td.delete-col{
+            padding:4px !important;
+            text-align:center;
+        }
+        #mainQuotationTable .btn-remove{
+            width:26px;
+            height:26px;
+            padding:0;
+            border:1px solid #FCA5A5;
+            background:#FEE2E2;
+            color:#DC2626;
+            border-radius:6px;
+            font-size:13px;
+            line-height:1;
+            cursor:pointer;
+        }
+        #mainQuotationTable .btn-remove:hover{
+            background:#DC2626;
+            border-color:#DC2626;
+            color:#FFFFFF;
+        }
+        
+        /* สไตล์สำหรับช่อง input ที่เป็น readonly ให้ดูเหมือนข้อความธรรมดา หรือดูแก้ไม่ได้ */
+        .price-input[readonly] {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: #333;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
 
@@ -101,9 +165,18 @@
                             <td class="label">วันที่จัดงาน:</td>
                             <td class="value"><fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy" /> เวลา ${q.bookingForm.eventTime} น.</td>
                         </tr>
-                        <tr>
+                           <tr>
                             <td class="label">รูปแบบพิธี:</td>
-                            <td class="value">${q.bookingForm.ceremony.ceremonyType} (${packageName})</td>
+                            <td class="value">${q.bookingForm.ceremony.ceremonyType}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">รูปแบบการจอง:</td>
+                            <td class="value">
+                                <c:choose>
+                                    <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
+                                    <c:otherwise>${packageName}</c:otherwise>
+                                </c:choose>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -126,15 +199,15 @@
             </div>
 
             <table id="mainQuotationTable" class="standard-table is-editing">
-                <colgroup>
-                    <col style="width: 50px;">  
-                    <col style="width: auto;">  
-                    <col style="width: 80px;">  
-                    <col style="width: 80px;">  
-                    <col style="width: 120px;"> 
-                    <col style="width: 120px;"> 
-                    <col class="delete-col" style="width: 50px;">  
-                </colgroup>
+               <colgroup>
+    <col style="width: 60px;">
+    <col style="width: auto;">
+    <col style="width: 160px;">   <!-- จำนวน: ขยายให้กว้างพอสำหรับปุ่ม +/- อยู่แถวเดียวกัน -->
+    <col style="width: 70px;">
+    <col style="width: 110px;">
+    <col style="width: 110px;">
+    <col class="delete-col" style="width: 40px;">  <!-- ลบ: ให้เล็กที่สุด -->
+</colgroup>
                 <thead>
                     <tr>
                         <th class="text-center">ลำดับ</th>
@@ -157,7 +230,8 @@
                         </td>
                         <td><input type="number" name="bookingQtys" value="1" class="clean-input text-center qty-input" readonly></td>
                         <td class="text-center">แพ็กเกจ</td>
-                        <td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()"></td>
+                        <!-- ใส่ readonly ที่นี่ -->
+                        <td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                         <td class="text-right"><span class="subtotal">0.00</span></td>
                         <td class="text-center delete-col">-</td>
                     </tr>
@@ -188,7 +262,8 @@
                 <c:set var="equipmentBlockEdit">
                     <c:set var="printedEquipHeaderEdit" value="false" />
                     <c:forEach var="d" items="${details}">
-                        <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
+                        <!-- แก้เงื่อนไขให้ดึงเฉพาะ "อุปกรณ์พิธีกรรม" -->
+                        <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                             <c:if test="${!printedEquipHeaderEdit}">
                                 <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
                                 <c:set var="printedEquipHeaderEdit" value="true" />
@@ -201,7 +276,8 @@
                                 </td>
                                 <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
-                                <td><input type="number" name="extraPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()"></td>
+                                <!-- ใส่ readonly ที่นี่ -->
+                                <td><input type="number" name="extraPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
                             </tr>
@@ -232,7 +308,8 @@
                                 <td class="text-center">${d.item.unit}</td>
                                 <td>
                                     <c:set var="sangPriceEdit" value="${isFreeSangEdit ? '0.00' : d.item.pricePerUnit}" />
-                                    <input type="number" name="bookingPrices" value="${sangPriceEdit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()">
+                                    <!-- ใส่ readonly ที่นี่ -->
+                                    <input type="number" name="bookingPrices" value="${sangPriceEdit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
                                 </td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
@@ -257,7 +334,8 @@
                                 </td>
                                 <td><input type="number" name="bookingQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
-                                <td><input type="number" name="bookingPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()"></td>
+                                <!-- ใส่ readonly ที่นี่ -->
+                                <td><input type="number" name="bookingPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
                             </tr>
@@ -281,7 +359,34 @@
                                 </td>
                                 <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
-                                <td><input type="number" name="extraPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()"></td>
+                                <!-- ใส่ readonly ที่นี่ -->
+                                <td><input type="number" name="extraPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                <td class="text-right"><span class="subtotal">0.00</span></td>
+                                <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
+                            </tr>
+                        </c:if>
+                    </c:forEach>
+                </c:set>
+
+                <!-- เพิ่มบล็อกสำหรับหมวดอุปกรณ์เสริมแยกต่างหาก -->
+                <c:set var="extraEquipmentBlockEdit">
+                    <c:set var="printedExtraHeaderEdit" value="false" />
+                    <c:forEach var="d" items="${details}">
+                        <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+                            <c:if test="${!printedExtraHeaderEdit}">
+                                <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <c:set var="printedExtraHeaderEdit" value="true" />
+                            </c:if>
+                            <tr class="dynamic-row" data-item-id="${d.item.itemId}">
+                                <td class="text-center row-number"></td>
+                                <td>
+                                    ${d.item.itemName} <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
+                                    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
+                                </td>
+                                <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
+                                <td class="text-center">${d.item.unit}</td>
+                                <!-- ใส่ readonly ที่นี่ -->
+                                <td><input type="number" name="extraPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
                             </tr>
@@ -295,14 +400,14 @@
                         <tbody id="group-sangkathan">${sangkathanBlockEdit}</tbody>
                         <tbody id="group-food">${foodBlockEdit}</tbody>
                         <tbody id="group-service">${serviceBlockEdit}</tbody>
-                        <tbody id="group-extra"></tbody>
+                        <tbody id="group-extra">${extraEquipmentBlockEdit}</tbody>
                     </c:when>
                     <c:otherwise>
                         <tbody id="group-sangkathan">${sangkathanBlockEdit}</tbody>
                         <tbody id="group-food">${foodBlockEdit}</tbody>
                         <tbody id="group-service">${serviceBlockEdit}</tbody>
                         <tbody id="group-equipment">${equipmentBlockEdit}</tbody>
-                        <tbody id="group-extra"></tbody>
+                        <tbody id="group-extra">${extraEquipmentBlockEdit}</tbody>
                     </c:otherwise>
                 </c:choose>
 
@@ -321,15 +426,7 @@
                     <c:set var="discountValue" value="${!isCustomRequest && isMonkSelfInvite ? 1500 : 0}" />
                     <input type="hidden" id="discountValue" value="${discountValue}">
                     <table class="totals-table">
-                        <tr>
-                            <td class="tot-label">รูปแบบพิธี:</td>
-                            <td class="tot-value">
-                                <c:choose>
-                                    <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
-                                    <c:otherwise>${packageName}</c:otherwise>
-                                </c:choose>
-                            </td>
-                        </tr>
+                      
                         <tr>
                             <td class="tot-label">
                                 <c:choose>
@@ -339,10 +436,12 @@
                             </td>
                             <td class="tot-value">฿ <span id="summaryPackage">0.00</span></td>
                         </tr>
+                        <c:if test="${!isCustomRequest}">
                         <tr>
                             <td class="tot-label">รายการเพิ่มเติม:</td>
                             <td class="tot-value">฿ <span id="summaryExtra">0.00</span></td>
                         </tr>
+                        </c:if>
                         <c:if test="${!isCustomRequest && isMonkSelfInvite}">
                             <tr>
                                 <td class="tot-label">ส่วนลดนิมนต์เอง:</td>
@@ -467,12 +566,18 @@
 
             var descHtml = itemDesc ? '<br><span class="text-muted" style="font-size:12px;">' + itemDesc + '</span>' : '';
 
+            // ใช้ buildQtyCell (มีปุ่ม +/-) จาก quotationEdit.js เพื่อให้แถวที่เพิ่มใหม่หน้าตาเหมือนแถวเดิมทุกประการ
+            var qtyCellHtml = (typeof buildQtyCell === 'function')
+                ? buildQtyCell(initialQty, 'extraQtys')
+                : '<input type="number" name="extraQtys" value="' + initialQty + '" min="1" class="clean-input text-center qty-input" onchange="calculateGrandTotal()">';
+
             tr.innerHTML = 
                 '<td class="text-center row-number"></td>' +
                 '<td>' + itemName + descHtml + '<input type="hidden" name="extraItemIds" value="' + itemId + '"></td>' +
-                '<td><input type="number" name="extraQtys" value="' + initialQty + '" min="1" class="clean-input text-center qty-input" onchange="calculateGrandTotal()"></td>' +
+                '<td>' + qtyCellHtml + '</td>' +
                 '<td class="text-center">' + unit + '</td>' +
-                '<td><input type="number" name="extraPrices" value="' + price.toFixed(2) + '" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()"></td>' +
+                /* เพิ่ม readonly ให้กับแถวที่ถูกสร้างใหม่ผ่าน JavaScript ด้วย */
+                '<td><input type="number" name="extraPrices" value="' + price.toFixed(2) + '" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>' +
                 '<td class="text-right"><span class="subtotal">0.00</span></td>' +
                 '<td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>';
 

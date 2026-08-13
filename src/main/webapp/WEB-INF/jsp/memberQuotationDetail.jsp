@@ -103,7 +103,7 @@
         <%-- ===== แถวข้อมูลเมตา: ข้อมูลลูกค้า / เลขที่-สถานะ ===== --%>
         <div class="doc-meta-row">
             <div class="meta-box-left">
-                <table class="plain-info-table">
+                <table class="layout-table">
                     <tr>
                         <td class="label">ชื่อลูกค้า:</td>
                         <td class="value">คุณ ${sessionScope.user.memberFirstName} ${sessionScope.user.memberLastName}</td>
@@ -116,23 +116,23 @@
                         <td class="label">วันที่จัดงาน:</td>
                         <td class="value"><fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/> เวลา ${q.bookingForm.eventTime} น.</td>
                     </tr>
-                    <tr>
-                        <td class="label">รูปแบบพิธี:</td>
-                        <td class="value">${q.bookingForm.ceremony.ceremonyType} (${q.bookingForm.ceremony.ceremonyName})</td>
-                    </tr>
-                    <tr>
-                        <td class="label">รูปแบบการจอง:</td>
-                        <td class="value">
-                            <c:choose>
-                                <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
-                                <c:otherwise>แพ็กเกจอิ่มบุญ</c:otherwise>
-                            </c:choose>
-                        </td>
-                    </tr>
+                  <tr>
+                            <td class="label">รูปแบบพิธี:</td>
+                            <td class="value">${q.bookingForm.ceremony.ceremonyType}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">รูปแบบการจอง:</td>
+                            <td class="value">
+                                <c:choose>
+                                    <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
+                                    <c:otherwise>${q.bookingForm.ceremony.ceremonyName}</c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
                 </table>
             </div>
             <div class="meta-box-right">
-                <table class="bordered-meta-table">
+                <table class="layout-table bordered">
                     <tr>
                         <td class="meta-label">เลขที่:</td>
                         <td class="meta-value">${q.quotationId}</td>
@@ -166,10 +166,11 @@
             </div>
         </div>
 
-        <%-- ===== ตารางรายการ (สไตล์เดียวกับใบเสนอราคาฝั่ง organizer) ===== --%>
-        <table class="items-table">
+        <%-- ===== ตารางรายการ ===== --%>
+        <%-- เพิ่มคลาส no-border-table ถ้าไม่ใช่คำขอกำหนดเอง --%>
+        <table class="items-table ${not isCustomRequest ? 'no-border-table' : ''}">
             <colgroup>
-                <col style="width: 50px;">
+                <col style="width: 70px;">
                 <col style="width: auto;">
                 <col style="width: 70px;">
                 <col style="width: 70px;">
@@ -231,13 +232,23 @@
 
                 <%-- ===== หมวดแพ็กเกจหลัก (เรียงอยู่บนสุดเสมอ) ===== --%>
                 <c:if test="${hasPackageRow}">
-                    <tr class="group-row"><td></td><td class="category-header-text" style="text-align:left;">แพ็กเกจ: ${q.bookingForm.ceremony.ceremonyType} (${packageName})</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <%-- ไม่แสดงหัวตารางหมวดหมู่ถ้าเป็นแพ็กเกจสำเร็จรูป --%>
+                    <c:if test="${isCustomRequest}">
+                        <tr class="group-row"><td></td><td class="category-header-text" style="text-align:left;">แพ็กเกจ: ${q.bookingForm.ceremony.ceremonyType} (${packageName})</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    </c:if>
+                    
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName == packageName}">
                             <tr>
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
                                 <td>
-                                    <span class="item-name">แพ็กเกจ: ${d.item.itemName}</span>
+                                    <%-- ซ่อนคำว่า "แพ็กเกจ:" --%>
+                                    <span class="item-name">
+                                        <c:choose>
+                                            <c:when test="${isCustomRequest}">แพ็กเกจ: ${d.item.itemName}</c:when>
+                                            <c:otherwise>${d.item.itemName}</c:otherwise>
+                                        </c:choose>
+                                    </span>
                                 </td>
                                 <td class="text-center">1</td>
                                 <td class="text-center">แพ็กเกจ</td>
@@ -258,13 +269,13 @@
 
                     <%-- อุปกรณ์ที่รวมในแพ็กเกจ — โชว์เฉพาะแพ็กเกจสำเร็จรูป --%>
                     <c:if test="${not empty packageIncludedItems && !isCustomRequest}">
-                        <tr class="group-row"><td></td><td style="text-align:left; padding-left:20px !important; font-weight:600; color:var(--doc-brown);">ประกอบไปด้วยรายการดังนี้:</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr class="package-included-row"><td></td><td style="text-align:left; padding-left:20px !important; font-weight:600; color:var(--doc-brown);">ประกอบไปด้วยรายการดังนี้:</td><td></td><td></td><td></td><td></td><td></td></tr>
                         <c:forEach var="pkgItem" items="${packageIncludedItems}">
                             <c:set var="pkgItemQty" value="1"/>
                             <c:if test="${(not empty pkgItem.itemDetail && fn:contains(pkgItem.itemDetail,'ต่อรูป')) || fn:contains(pkgItem.itemName,'ต่อรูป')}">
                                 <c:set var="pkgItemQty" value="${monkCount}"/>
                             </c:if>
-                            <tr>
+                            <tr class="package-included-row">
                                 <td></td>
                                 <td style="padding-left:20px;">- ${pkgItem.itemName}</td>
                                 <td class="text-center">${pkgItemQty}</td>
@@ -280,7 +291,9 @@
                 <%-- ===== หมวดอุปกรณ์ (พิธีกรรม + เสริม) เก็บเป็นตัวแปรไว้ก่อน เพื่อสลับตำแหน่งตาม isCustomRequest ===== --%>
                 <c:set var="equipmentGroupBlock">
                     <c:if test="${hasEquipmentRow}">
-                        <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <c:if test="${isCustomRequest}">
+                            <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        </c:if>
                         <c:forEach var="d" items="${details}">
                             <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                                 <tr>
@@ -307,7 +320,9 @@
                         </c:forEach>
                     </c:if>
                     <c:if test="${hasExtraRow}">
-                        <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <c:if test="${isCustomRequest}">
+                             <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        </c:if>
                         <c:forEach var="d" items="${details}">
                             <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
                                 <tr>
@@ -338,7 +353,9 @@
                 <%-- ===== หมวดสังฆทาน — รวมตรรกะ "ฟรี/รวมในแพ็กเกจ" เมื่อไม่ใช่คำขอกำหนดเองและราคา 299 ===== --%>
                 <c:set var="sangBlock">
                     <c:if test="${hasSangkathanRow}">
-                        <tr class="group-row"><td></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <c:if test="${isCustomRequest}">
+                            <tr class="group-row"><td></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        </c:if>
                         <c:forEach var="d" items="${details}">
                             <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                                 <c:set var="isFreeSang" value="${!isCustomRequest && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}"/>
@@ -371,7 +388,9 @@
                 <%-- ===== หมวดภัตตาหาร ===== --%>
                 <c:set var="foodBlock">
                     <c:if test="${hasFoodRow}">
-                        <tr class="group-row"><td></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <c:if test="${isCustomRequest}">
+                             <tr class="group-row"><td></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        </c:if>
                         <c:forEach var="d" items="${details}">
                             <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                                 <tr>
@@ -402,7 +421,9 @@
                 <%-- ===== หมวดบริการและการดำเนินการ ===== --%>
                 <c:set var="servBlock">
                     <c:if test="${hasServiceRow}">
-                        <tr class="group-row"><td></td><td class="category-header-text">หมวดบริการและการดำเนินการ</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <c:if test="${isCustomRequest}">
+                             <tr class="group-row"><td></td><td class="category-header-text">หมวดบริการและการดำเนินการ</td><td></td><td></td><td></td><td></td><td></td></tr>
+                        </c:if>
                         <c:forEach var="d" items="${details}">
                             <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
                                 <tr>

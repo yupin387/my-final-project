@@ -7,6 +7,8 @@
 	font-family: 'Sarabun', sans-serif;
 }
 
+html, body { width: 100%; }
+
 :root {
     --gold:              #A9752E;
     --gold-mid:          #C0923F;
@@ -68,6 +70,7 @@ body {
 	background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
+.navbar-brand,
 .navbar-brand-wrap {
     display: flex;
     align-items: center;
@@ -76,21 +79,17 @@ body {
 }
 
 .navbar .lotus-icon,
+.navbar-brand .lotus-icon,
 .navbar-brand-wrap .lotus-icon {
     background: rgba(255, 255, 255, 0.18);
-    width: 76px;
-    height: 76px;
-    max-width: 76px;
-    max-height: 76px;
+    width: 45px;
+    height: 45px;
+    max-width: 45px;
+    max-height: 45px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
     border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
-    flex-shrink: 0;
     object-fit: cover;
+    flex-shrink: 0;
 }
 
 .navbar-title {
@@ -230,63 +229,47 @@ body {
 	color: var(--brown-dark);
 }
 
-/* Toolbar */
-.toolbar {
-    max-width: 210mm;
-    margin: 15px auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 4mm;
-}
-.toolbar a {
-    color: var(--brand-brown);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-}
-.toolbar a:hover { text-decoration: underline; }
-
-/* ===== ปุ่มแก้ไขใบเสนอราคา (สีฟ้า) ===== */
+/* ===== ปุ่มแก้ไขใบเสนอราคา (ฟ้าอ่อน มุมขวา) ===== */
 .btn-blue-edit {
-    background: #2563EB !important;
-    color: #fff !important;
-    border: none;
+    background: #DBEAFE !important;
+    color: #1D4ED8 !important;
+    border: 1.5px solid #93C5FD;
     padding: 9px 20px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     text-decoration: none !important;
-    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
     transition: 0.2s;
     display: inline-flex;
     align-items: center;
     gap: 6px;
 }
 .btn-blue-edit:hover {
-    background: #1D4ED8 !important;
+    background: #BFDBFE !important;
+    border-color: #60A5FA;
     transform: translateY(-1px);
 }
 
-/* ===== Page wrapper / A4 document (จัดกึ่งกลางหน้าจอ) ===== */
+/* ===== Page wrapper / A4 document (จัดกึ่งกลางหน้าจอเสมอ) ===== */
 .page-wrapper {
     width: 100%;
-    max-width: calc(210mm + 30px);
-    margin: 24px auto;
-    padding: 0 15px;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    margin: 24px auto;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
 
 .a4-document,
 .sheet {
-    width: 210mm;
+    width: 260mm;
     max-width: 100%;
     min-height: 297mm;
-    margin: 0 auto 20px;
+    margin: 0 auto 20px auto;
     background: #fff;
     padding: 14mm 12mm;
     position: relative;
@@ -398,7 +381,13 @@ tr.included-row td { color: #888; }
     padding-top: 8px;
 }
 
-/* ===== ปุ่มกลับหน้ารายการ (ล่างกระดาษ กึ่งกลาง) ===== */
+/* ===== ปุ่มกลับหน้ารายการ: ล่างสุดท้ายจริงๆ ของหน้าเว็บ (นอกกระดาษ ใต้ footer) ===== */
+.back-bottom-wrap {
+    width: 100%;
+    text-align: center;
+    padding: 24px 15px 32px;
+    background: var(--cream);
+}
 .btn-back-bottom {
     display: inline-block;
     background: var(--brand-brown);
@@ -420,7 +409,6 @@ tr.included-row td { color: #888; }
 .site-footer {
     background: var(--brand-brown);
     color: rgba(255, 255, 255, 0.92);
-    margin-top: auto;
     border-top: 3px solid var(--accent-gold-pale);
     box-shadow: 0 -6px 18px rgba(122, 82, 48, 0.25);
     position: relative;
@@ -482,6 +470,7 @@ tr.included-row td { color: #888; }
     .sheet, .a4-document { box-shadow: none; margin: 0; width: auto; min-height: auto; }
     .no-print { display: none !important; }
     .site-footer { display: none !important; }
+    .back-bottom-wrap { display: none !important; }
 }
 
 @media (max-width: 768px) {
@@ -492,3 +481,52 @@ tr.included-row td { color: #888; }
     .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     .footer-content { flex-direction: column; align-items: flex-start; }
 }
+
+/* =========================================
+   เนื้อหาใบเสนอราคา (คลาสที่ใช้จริงใน quotationDetail.jsp
+   แต่ก่อนหน้านี้ไฟล์นี้ไม่มีสไตล์ให้ เลยขึ้นเป็นตัวหนังสือเปล่าๆ)
+   ========================================= */
+
+.text-center { text-align: center; }
+.text-left   { text-align: left; }
+.text-right  { text-align: right; }
+.text-danger { color: #D32F2F !important; }
+.text-muted  { color: #777; font-size: 13px; }
+
+/* หัวกระดาษ */
+.doc-header { text-align: center; border-bottom: 2px solid var(--brand-brown); padding-bottom: 20px; margin-bottom: 25px; }
+.company-info h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--brand-brown); }
+.company-info p { font-size: 14px; color: #444; line-height: 1.5; }
+.doc-title-box h1 { font-size: 26px; font-weight: 700; margin-top: 25px; color: var(--brand-brown); letter-spacing: 1px; }
+.doc-title-box p { text-align: center; color: #555; }
+
+/* แถวข้อมูลลูกค้า/เอกสาร */
+.doc-meta-row { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 14px; gap: 20px; }
+.meta-box-left { flex: 1; }
+.meta-box-right { width: 300px; }
+.layout-table { width: 100%; border-collapse: collapse; }
+.layout-table td { padding: 5px 8px; vertical-align: top; }
+.layout-table .label { font-weight: 700; width: 120px; color: var(--brand-brown); white-space: nowrap; }
+.layout-table.bordered { border: 1px solid var(--brand-brown); }
+.layout-table.bordered td { border: 1px solid var(--brand-brown); padding: 6px 10px; }
+
+/* ตารางรายการ */
+.standard-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; table-layout: fixed; }
+.standard-table th, .standard-table td { border: 1px solid #333; padding: 8px; font-size: 14px; vertical-align: middle; overflow: hidden; word-wrap: break-word; }
+.standard-table th { background-color: var(--brand-brown); color: #FFF; font-weight: 700; text-align: center; }
+
+.group-row td { background: #FFFBF3 !important; }
+.category-header-text { font-weight: 800 !important; color: var(--brand-brown) !important; font-size: 14.5px !important; text-align: center !important; }
+
+.package-includes-title { font-weight: 700; font-size: 13.5px; border-top: none !important; border-bottom: none !important; padding-top: 15px !important; color: #333; }
+.package-included-row td { border-top: none !important; border-bottom: none !important; padding-top: 2px !important; padding-bottom: 2px !important; color: #555; }
+.indented-item { padding-left: 35px !important; }
+
+/* สรุปยอด */
+.doc-footer { display: flex; justify-content: space-between; gap: 30px; align-items: stretch; }
+.totals-table { width: 100%; border-collapse: collapse; height: 100%; }
+.totals-table td { border: 1px solid var(--brand-brown); padding: 12px 15px; font-weight: 600; font-size: 15px; }
+.tot-label { background: var(--cream-warm); width: 55%; text-align: left; color: var(--brand-brown); }
+.tot-value { text-align: right; width: 45%; }
+.grand-total-row td { font-weight: 700; font-size: 18px; }
+.total-amount { text-align: right; font-size: 22px !important; color: #B91C1C !important; font-weight: 700; }

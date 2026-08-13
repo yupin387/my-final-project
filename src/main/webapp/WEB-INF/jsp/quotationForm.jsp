@@ -9,6 +9,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>จัดทำใบเสนอราคา - บุญมีนำพา จัดงานบุญ</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=18">
+<style>
+    /* สไตล์สำหรับปุ่ม +/- และช่องกรอกจำนวนของรายการเพิ่มเติม */
+    #mainQuotationTable .qty-wrapper{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-wrap:nowrap;
+        white-space:nowrap;
+        gap: 4px; /* ลดช่องว่างลงนิดนึงเพื่อไม่ให้ล้นตาราง */
+    }
+    #mainQuotationTable .btn-qty-minus,
+    #mainQuotationTable .btn-qty-plus{
+        flex:0 0 auto;
+        width: 24px;
+        height: 24px;
+        border: 1px solid #9C6B3E;
+        background: #FFFFFF;
+        color: #9C6B3E;
+        border-radius: 4px;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #mainQuotationTable .btn-qty-minus:hover,
+    #mainQuotationTable .btn-qty-plus:hover{
+        background:#FBF2E3;
+    }
+    #mainQuotationTable .qty-wrapper .qty-input{
+        flex:0 0 auto;
+        width: 38px; /* ลดความกว้างกล่องตัวเลขลงนิดนึง */
+        text-align:center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 2px 0;
+    }
+    /* ซ่อนช่อง input จำนวน ให้อ่านได้อย่างเดียว */
+    .qty-input[readonly] {
+        background-color: transparent !important;
+        border: none !important;
+        outline: none !important;
+        color: #333 !important;
+        font-weight: 600 !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+        -moz-appearance: textfield;
+        text-align: center;
+    }
+    .qty-input[readonly]::-webkit-outer-spin-button,
+    .qty-input[readonly]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    /* ปุ่มดินสอสำหรับกดโชว์ +/- */
+    .btn-pencil-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        color: #D9A441;
+        padding: 2px;
+        transition: transform 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-pencil-toggle:hover {
+        transform: scale(1.15);
+    }
+</style>
 </head>
 <body>
 
@@ -72,10 +145,19 @@
 								<td class="label">วันที่จัดงาน:</td>
 								<td class="value"><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy" /> เวลา ${b.eventTime} น.</td>
 							</tr>
-							<tr>
-								<td class="label">รูปแบบพิธี:</td>
-								<td class="value">${b.ceremony.ceremonyType}</td>
-							</tr>
+							   <tr>
+                            <td class="label">รูปแบบพิธี:</td>
+                            <td class="value">${b.ceremony.ceremonyType}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">รูปแบบการจอง:</td>
+                            <td class="value">
+                                <c:choose>
+                                    <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
+                                    <c:otherwise>${b.ceremony.ceremonyName}</c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
 						</table>
 					</div>
 					<div class="meta-box-right">
@@ -100,11 +182,10 @@
                     <colgroup>
                         <col style="width: 50px;">  
                         <col style="width: auto;">  
-                        <col style="width: 80px;">  
+                        <col style="width: 140px;">  <!-- ขยายเป็น 140px เพื่อให้ปุ่ม +/- ไม่โดนตัดล้นกรอบ -->
                         <col style="width: 80px;">  
                         <col style="width: 120px;"> 
                         <col style="width: 120px;"> 
-                        <col class="delete-col" style="width: 50px;">  
                     </colgroup>
 					<thead>
 						<tr>
@@ -114,7 +195,6 @@
 							<th class="text-center">หน่วย</th>
 							<th class="text-right">ราคา/หน่วย</th>
 							<th class="text-right">จำนวนเงิน</th>
-							<th class="text-center delete-col">ลบ</th>
 						</tr>
 					</thead>
 
@@ -144,7 +224,7 @@
                     </c:choose>
 
 					<tbody>
-						<%-- 1. แถวราคาแพ็กเกจ (ไม่แสดงถ้าเป็นแบบกรอกความต้องการเอง เพราะไม่มีแพ็กเกจ ให้ขึ้นรายการอุปกรณ์เลย) --%>
+						<%-- 1. แถวราคาแพ็กเกจ --%>
 						<c:if test="${!isCustomRequest}">
 						<tr class="static-row package-main-row no-qty-convert">
 							<td class="text-center row-number">1</td>
@@ -152,20 +232,19 @@
 								<strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
 								<input type="hidden" name="bookingItemNames" value="${b.ceremony.ceremonyName}">
 							</td>
-							<td><input type="number" name="bookingQtys" value="1" class="clean-input text-center qty-input locked-look" readonly></td>
+                            <!-- ล็อกช่องจำนวน -->
+							<td><input type="number" name="bookingQtys" value="1" class="qty-input" readonly></td>
 							<td class="text-center">แพ็กเกจ</td>
-							<td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input locked-look" readonly onchange="calculateGrandTotal()"></td>
+							<!-- ใส่ readonly -->
+							<td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
 							<td class="text-right"><span class="subtotal">0.00</span></td>
-							<td class="text-center delete-col">-</td>
 						</tr>
 						</c:if>
 
-						<%-- ลิสต์รายการที่อยู่ในแพ็กเกจ (ใช้ 7 คอลัมน์เดี่ยวๆ ห้ามใช้ colspan) --%>
+						<%-- ลิสต์รายการที่อยู่ในแพ็กเกจ --%>
 						<c:if test="${not empty packageIncludedItems && !isCustomRequest}">
 							<tr class="package-included-row no-qty-convert static-row">
-								<td></td>
-                                <td class="package-includes-title text-left" style="padding-left: 20px !important;">ประกอบไปด้วยรายการดังนี้:</td>
-                                <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                <td colspan="6" class="package-includes-title text-left" style="padding-left: 20px !important;">ประกอบไปด้วยรายการดังนี้:</td>
 							</tr>
 							<c:forEach var="pkgItem" items="${packageIncludedItems}">
 								<tr class="package-included-row no-qty-convert static-row">
@@ -180,7 +259,6 @@
 									<td class="text-center">${pkgItem.unit}</td>
 									<td class="text-center text-muted">-</td>
 									<td class="text-center text-muted">-</td>
-									<td class="text-center delete-col">-</td>
 								</tr>
 							</c:forEach>
 						</c:if>
@@ -206,7 +284,7 @@
                                             <c:if test="${fn:trim(item.itemName) eq selectedSangName}">
                                                 <c:if test="${!printedSangHeader}">
                                                     <tr class="group-row">
-                                                        <td></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                                        <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดสังฆทาน</td>
                                                     </tr>
                                                     <c:set var="printedSangHeader" value="true" />
                                                 </c:if>
@@ -221,14 +299,13 @@
                                                         <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                         <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                     </td>
-                                                    <td><input type="number" name="bookingQtys" value="${sangQty}" class="clean-input text-center qty-input locked-look" readonly min="1" onchange="calculateGrandTotal()"></td>
+                                                    <td><input type="number" name="bookingQtys" value="${sangQty}" class="qty-input" readonly></td>
                                                     <td class="text-center">${item.unit}</td>
                                                     <td>
                                                         <c:set var="sangPrice" value="${isFreeSang ? '0.00' : item.pricePerUnit}" />
-                                                        <input type="number" name="bookingPrices" value="${sangPrice}" step="0.01" min="0" class="clean-input text-right price-input locked-look" readonly onchange="calculateGrandTotal()">
+                                                        <input type="number" name="bookingPrices" value="${sangPrice}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
                                                     </td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>
-                                                    <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
                                                 </tr>
                                             </c:if>
                                         </c:forEach>
@@ -251,7 +328,7 @@
                                             <c:if test="${fn:trim(item.itemName) eq selectedFoodName}">
                                                 <c:if test="${!printedFoodHeader}">
                                                     <tr class="group-row">
-                                                        <td></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                                        <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดภัตตาหารปิ่นโต</td>
                                                     </tr>
                                                     <c:set var="printedFoodHeader" value="true" />
                                                 </c:if>
@@ -261,11 +338,10 @@
                                                         ${item.itemName} <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                         <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                     </td>
-                                                    <td><input type="number" name="bookingQtys" value="${foodQty}" class="clean-input text-center qty-input locked-look" readonly min="1" onchange="calculateGrandTotal()"></td>
+                                                    <td><input type="number" name="bookingQtys" value="${foodQty}" class="qty-input" readonly></td>
                                                     <td class="text-center">${item.unit}</td>
-                                                    <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input locked-look" readonly onchange="calculateGrandTotal()"></td>
+                                                    <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>
-                                                    <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
                                                 </tr>
                                             </c:if>
                                         </c:forEach>
@@ -278,7 +354,7 @@
                                     <c:forEach var="item" items="${items}">
                                         <c:if test="${fn:trim(item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">
                                             <tr class="group-row">
-                                                <td></td><td class="category-header-text">หมวดบริการและการดำเนินการ</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                                <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดบริการและการดำเนินการ</td>
                                             </tr>
                                             <tr class="static-row">
                                                 <td class="text-center row-number"></td>
@@ -286,11 +362,10 @@
                                                     ${item.itemName} <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                     <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                 </td>
-                                                <td><input type="number" name="bookingQtys" value="${monkCount}" class="clean-input text-center qty-input locked-look" readonly min="1" onchange="calculateGrandTotal()"></td>
+                                                <td><input type="number" name="bookingQtys" value="${monkCount}" class="qty-input" readonly></td>
                                                 <td class="text-center">${item.unit}</td>
-                                                <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input locked-look" readonly onchange="calculateGrandTotal()"></td>
+                                                <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                                 <td class="text-right"><span class="subtotal">0.00</span></td>
-                                                <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
                                             </tr>
                                         </c:if>
                                     </c:forEach>
@@ -300,7 +375,7 @@
                         </c:when>
 
                         <c:otherwise>
-                            <%-- แพ็กเกจปกติ: สังฆทาน -> อาหาร -> บริการ -> อุปกรณ์เสริม --%>
+                            <%-- แพ็กเกจปกติ --%>
                             <c:set var="sangQty" value="1" />
                             <c:forEach var="d" items="${b.details}">
                                 <c:if test="${fn:contains(d.question.questionsText,'สังฆทาน') && fn:contains(d.question.questionsText,'จำนวน')}">
@@ -316,7 +391,7 @@
                                             <c:if test="${fn:trim(item.itemName) eq selectedSangName}">
                                                 <c:if test="${!printedSangHeader}">
                                                     <tr class="group-row">
-                                                        <td></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                                        <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดสังฆทาน</td>
                                                     </tr>
                                                     <c:set var="printedSangHeader" value="true" />
                                                 </c:if>
@@ -331,14 +406,13 @@
                                                         <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                         <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                     </td>
-                                                    <td><input type="number" name="bookingQtys" value="${sangQty}" class="clean-input text-center qty-input locked-look" readonly min="1" onchange="calculateGrandTotal()"></td>
+                                                    <td><input type="number" name="bookingQtys" value="${sangQty}" class="qty-input" readonly></td>
                                                     <td class="text-center">${item.unit}</td>
                                                     <td>
                                                         <c:set var="sangPrice" value="${isFreeSang ? '0.00' : item.pricePerUnit}" />
-                                                        <input type="number" name="bookingPrices" value="${sangPrice}" step="0.01" min="0" class="clean-input text-right price-input locked-look" readonly onchange="calculateGrandTotal()">
+                                                        <input type="number" name="bookingPrices" value="${sangPrice}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
                                                     </td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>
-                                                    <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
                                                 </tr>
                                             </c:if>
                                         </c:forEach>
@@ -361,7 +435,7 @@
                                             <c:if test="${fn:trim(item.itemName) eq selectedFoodName}">
                                                 <c:if test="${!printedFoodHeader}">
                                                     <tr class="group-row">
-                                                        <td></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                                        <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดภัตตาหารปิ่นโต</td>
                                                     </tr>
                                                     <c:set var="printedFoodHeader" value="true" />
                                                 </c:if>
@@ -371,11 +445,10 @@
                                                         ${item.itemName} <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                         <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                     </td>
-                                                    <td><input type="number" name="bookingQtys" value="${foodQty}" class="clean-input text-center qty-input locked-look" readonly min="1" onchange="calculateGrandTotal()"></td>
+                                                    <td><input type="number" name="bookingQtys" value="${foodQty}" class="qty-input" readonly></td>
                                                     <td class="text-center">${item.unit}</td>
-                                                    <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input locked-look" readonly onchange="calculateGrandTotal()"></td>
+                                                    <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>
-                                                    <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
                                                 </tr>
                                             </c:if>
                                         </c:forEach>
@@ -398,21 +471,13 @@
 						    <strong>ความต้องการเพิ่มเติม:</strong>
                             <button type="button" class="btn-add-item" onclick="openItemModal()">+ เพิ่มรายการเพิ่มเติม</button>
                         </div>
-						<textarea name="detailNotes" class="remarks-textarea locked-look" readonly placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${additionalNote}</textarea>
+						<textarea name="detailNotes" class="remarks-textarea" placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${additionalNote}</textarea>
 					</div>
 					
                     <div class="totals-box">
                         <input type="hidden" id="discountValue" value="${discountValue}">
 						<table class="totals-table">
-                            <tr>
-                                <td class="tot-label">รูปแบบพิธี:</td>
-                                <td class="tot-value">
-                                    <c:choose>
-                                        <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
-                                        <c:otherwise>${b.ceremony.ceremonyName}</c:otherwise>
-                                    </c:choose>
-                                </td>
-                            </tr>
+                          
                             <tr>
                                 <td class="tot-label">
                                     <c:choose>
@@ -422,10 +487,12 @@
                                 </td>
                                 <td class="tot-value">฿ <span id="summaryPackage">0.00</span></td>
                             </tr>
+                            <c:if test="${!isCustomRequest}">
                             <tr>
                                 <td class="tot-label">รายการเพิ่มเติม:</td>
                                 <td class="tot-value">฿ <span id="summaryExtra">0.00</span></td>
                             </tr>
+                            </c:if>
                             <c:if test="${!isCustomRequest && isMonkSelfInvite}">
                                 <tr>
                                     <td class="tot-label">ส่วนลดนิมนต์เอง:</td>
@@ -442,11 +509,7 @@
 
 			</div>
 
-            <%-- ปุ่มแก้ไขรายการย้ายมาไว้มุมล่างของเอกสาร คู่กับปุ่มบันทึก --%>
-            <div class="bottom-toolbar">
-                <button type="button" id="toggleEditBtn" class="btn-toggle-edit" onclick="toggleEditMode()">
-                    <span>✏️</span> แก้ไขรายการ
-                </button>
+            <div class="bottom-toolbar" style="text-align: center; margin-top: 30px;">
                 <button type="submit" class="btn-save-doc">บันทึกและออกใบเสนอราคา</button>
             </div>
 		</form>
@@ -504,171 +567,9 @@
 <script src="${pageContext.request.contextPath}/static/js/quotationCreate.js"></script>
 
 <script>
-    window.ensureGroupHeader = function(tbody) {
-        if (!tbody) return;
-        if (tbody.querySelector('.group-row')) return;
-        var GROUP_LABELS = {
-            'group-equipment':  'หมวดอุปกรณ์พิธีกรรม',
-            'group-food':       'หมวดภัตตาหารปิ่นโต',
-            'group-sangkathan': 'หมวดสังฆทาน',
-            'group-service':    'หมวดบริการและการดำเนินการ',
-            'group-extra':      'หมวดอุปกรณ์เสริม'
-        };
-        var label = GROUP_LABELS[tbody.id] || '';
-        var headerRow = document.createElement('tr');
-        headerRow.className = 'group-row';
-        headerRow.innerHTML = '<td></td><td class="category-header-text">' + label + '</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>';
-        tbody.prepend(headerRow);
-    };
-
-    window.addSelectedItemsToTable = function() {
-        if (selectedItemIds.size === 0) {
-            alert('กรุณาเลือกรายการอย่างน้อย 1 รายการ');
-            return;
-        }
-
-        var dataStore = document.getElementById('itemDataStore');
-
-        selectedItemIds.forEach(function(itemId) {
-            var dataEl = dataStore.querySelector('.item-data[data-id="' + itemId + '"]');
-            if (!dataEl) return;
-
-            var itemName = dataEl.getAttribute('data-name');
-            var itemDesc = dataEl.getAttribute('data-detail') || '';
-            var price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
-            var unit     = dataEl.getAttribute('data-unit');
-            var itemType = dataEl.getAttribute('data-type') || '';
-
-            var scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
-            var monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
-            var initialQty   = scalesByMonk ? monkCount : 1;
-
-            var targetBody = document.getElementById('group-service');
-            if (itemType.includes('อุปกรณ์พิธีกรรม')) targetBody = document.getElementById('group-equipment');
-            else if (itemType.includes('อุปกรณ์เสริม')) targetBody = document.getElementById('group-extra');
-            else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
-            else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
-
-            ensureGroupHeader(targetBody);
-
-            var tr = document.createElement('tr');
-            tr.className = 'dynamic-row';
-            tr.setAttribute('data-item-id', itemId);
-            
-            var isEditing = document.getElementById('mainQuotationTable').classList.contains('is-editing');
-            var lockClass = isEditing ? '' : 'locked-look';
-            var readOnlyAttr = isEditing ? '' : 'readonly';
-            var descHtml = itemDesc ? '<br><span class="text-muted" style="font-size:12px;">' + itemDesc + '</span>' : '';
-
-            tr.innerHTML = 
-                '<td class="text-center row-number"></td>' +
-                '<td>' + itemName + descHtml + '<input type="hidden" name="extraItemIds" value="' + itemId + '"></td>' +
-                '<td><input type="number" name="extraQtys" value="' + initialQty + '" min="1" class="clean-input text-center qty-input ' + lockClass + '" ' + readOnlyAttr + ' onchange="calculateGrandTotal()"></td>' +
-                '<td class="text-center">' + unit + '</td>' +
-                '<td><input type="number" name="extraPrices" value="' + price.toFixed(2) + '" step="0.01" min="0" class="clean-input text-right price-input ' + lockClass + '" ' + readOnlyAttr + ' onchange="calculateGrandTotal()"></td>' +
-                '<td class="text-right"><span class="subtotal">0.00</span></td>' +
-                '<td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>';
-
-            targetBody.appendChild(tr);
-        });
-        
-        selectedItemIds.clear();
-        closeItemModal();
-        if(typeof reIndexRows === 'function') reIndexRows();
-        calculateGrandTotal();
-    };
-
-    window.calculateGrandTotal = function() {
-        var packageTotal = 0.0;
-        var extraTotal = 0.0;
-        var discount = parseFloat(document.getElementById('discountValue').value) || 0;
-        var isCustomRequest = window.IS_CUSTOM_REQUEST === true;
-
-        document.querySelectorAll('.static-row, .dynamic-row').forEach(function(row) {
-            if (row.classList.contains('package-included-row')) return;
-
-            var qInput = row.querySelector('input[name="extraQtys"], input[name="bookingQtys"]');
-            var pInput = row.querySelector('input[name="extraPrices"], input[name="bookingPrices"]');
-
-            if (qInput && pInput) {
-                var qty = parseFloat(qInput.value) || 0;
-                var price = parseFloat(pInput.value) || 0;
-                var subtotal = qty * price;
-
-                var subtotalSpan = row.querySelector('.subtotal');
-                if (subtotalSpan) subtotalSpan.innerText = subtotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-
-                var parentTbody = row.closest('tbody');
-                var isManuallyAddedExtra = parentTbody && parentTbody.id === 'group-extra';
-
-                if (row.classList.contains('package-main-row')) {
-                    packageTotal += subtotal;
-                } else if (isCustomRequest && !isManuallyAddedExtra) {
-                    /* กรอกความต้องการเอง: รายการอุปกรณ์/สังฆทาน/อาหาร/บริการที่มาจากคำตอบ ถือเป็น "รายการหลัก" ไม่ใช่ของเพิ่มเติม */
-                    packageTotal += subtotal;
-                } else {
-                    extraTotal += subtotal;
-                }
-            }
-        });
-
-        var summaryPackage = document.getElementById('summaryPackage');
-        if (summaryPackage) summaryPackage.innerText = packageTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-
-        var summaryExtra = document.getElementById('summaryExtra');
-        if (summaryExtra) summaryExtra.innerText = extraTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-
-        var grandTotal = packageTotal + extraTotal - discount;
-        if (grandTotal < 0) grandTotal = 0;
-
-        var grandTotalSpan = document.getElementById('grandTotal');
-        if (grandTotalSpan) grandTotalSpan.innerText = grandTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-    };
-
-    (function () {
-        var editUnlocked = false;
-        function applyLockState() {
-            var inputs = document.querySelectorAll(
-                '#mainQuotationTable .qty-input:not([data-locked]),' +
-                '#mainQuotationTable .price-input,' +
-                '#mainQuotationTable .note-input'
-            );
-            inputs.forEach(function (el) {
-                el.readOnly = !editUnlocked;
-                el.classList.toggle('locked-look', !editUnlocked);
-            });
-            var textarea = document.querySelector('.remarks-textarea');
-            if (textarea) {
-                textarea.readOnly = !editUnlocked;
-                textarea.classList.toggle('locked-look', !editUnlocked);
-            }
-        }
-        function updateToggleBtn() {
-            var btn = document.getElementById('toggleEditBtn');
-            if (!btn) return;
-            btn.classList.toggle('active', editUnlocked);
-            btn.innerHTML = editUnlocked ? '<span>🔒</span> ล็อกรายการ (ดูตัวอย่าง)' : '<span>✏️</span> แก้ไขรายการ';
-        }
-        window.toggleEditMode = function () {
-            editUnlocked = !editUnlocked;
-            var table = document.getElementById('mainQuotationTable');
-            if (editUnlocked) {
-                table.classList.add('is-editing'); 
-            } else {
-                table.classList.remove('is-editing');
-            }
-            applyLockState();
-            updateToggleBtn();
-        };
-        document.addEventListener('DOMContentLoaded', function () {
-            applyLockState();
-            updateToggleBtn();
-            var table = document.getElementById('mainQuotationTable');
-            if (table && window.MutationObserver) {
-                new MutationObserver(applyLockState).observe(table, { childList: true, subtree: true });
-            }
-        });
-    })();
+    document.addEventListener('DOMContentLoaded', function () {
+        if(typeof calculateGrandTotal === 'function') calculateGrandTotal();
+    });
 </script>
 </body>
 </html>

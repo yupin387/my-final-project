@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=19">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationDetail.css?v=1">
 </head>
 <body>
 
@@ -79,14 +79,14 @@
                         </tr>
                         <tr>
                             <td class="label">รูปแบบพิธี:</td>
-                            <td class="value">${b.ceremony.ceremonyType} (${b.ceremony.ceremonyName})</td>
+                            <td class="value">${b.ceremony.ceremonyType}</td>
                         </tr>
                         <tr>
                             <td class="label">รูปแบบการจอง:</td>
                             <td class="value">
                                 <c:choose>
                                     <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
-                                    <c:otherwise>แพ็กเกจอิ่มบุญ</c:otherwise>
+                                    <c:otherwise>${b.ceremony.ceremonyName}</c:otherwise>
                                 </c:choose>
                             </td>
                         </tr>
@@ -186,7 +186,8 @@
                     <c:set var="equipBlock">
                         <c:set var="printedEquip" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์')}">
+                            <!-- เปลี่ยนเงื่อนไขให้เจาะจงเฉพาะ "อุปกรณ์พิธีกรรม" -->
+                            <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                                 <c:if test="${!printedEquip}">
                                     <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td><td></td></tr>
                                     <c:set var="printedEquip" value="true"/>
@@ -280,6 +281,31 @@
                             </c:if>
                         </c:forEach>
                     </c:set>
+                    
+                    <!-- สร้างบล็อกใหม่สำหรับอุปกรณ์เสริมโดยเฉพาะ -->
+                    <c:set var="extraBlock">
+                        <c:set var="printedExtra" value="false"/>
+                        <c:forEach var="d" items="${details}">
+                            <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+                                <c:if test="${!printedExtra}">
+                                    <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                    <c:set var="printedExtra" value="true"/>
+                                </c:if>
+                                <tr>
+                                    <td class="text-center row-number"></td>
+                                    <td>
+                                        ${d.item.itemName}
+                                        <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
+                                    </td>
+                                    <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0" /></td>
+                                    <td class="text-center">${d.item.unit}</td>
+                                    <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
+                                    <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2" /></td>
+                                    <td class="text-muted">${not empty d.note ? d.note : '-'}</td>
+                                </tr>
+                            </c:if>
+                        </c:forEach>
+                    </c:set>
 
                     <c:choose>
                         <c:when test="${isCustomRequest}">
@@ -287,12 +313,14 @@
                             ${sangBlock}
                             ${foodBlock}
                             ${servBlock}
+                            ${extraBlock}
                         </c:when>
                         <c:otherwise>
                             ${sangBlock}
                             ${foodBlock}
                             ${servBlock}
                             ${equipBlock}
+                            ${extraBlock}
                         </c:otherwise>
                     </c:choose>
                 </tbody>
@@ -347,13 +375,13 @@
                 </div>
             </div>
         </div>
-
-        <%-- ปุ่มกลับย้ายมาล่างสุด --%>
-        <div style="text-align: center; margin-bottom: 30px;" class="no-print">
-            <a href="${pageContext.request.contextPath}/organizer/quotation" class="btn-back-bottom">← กลับไปรายการใบเสนอราคา</a>
-        </div>
     </div>
 
+   <%-- ปุ่มกลับหน้ารายการ: ไว้ล่างสุดท้ายของกระดาษ/หน้าเว็บจริงๆ (ใต้ footer) --%>
+    <div class="back-bottom-wrap no-print">
+        <a href="${pageContext.request.contextPath}/organizer/quotation" class="btn-back-bottom">← กลับไปรายการใบเสนอราคา</a>
+    </div>
+    
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-brand">
@@ -364,6 +392,8 @@
             <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
         </div>
     </footer>
+
+ 
 
 <script>
     function toggleDropdown() { document.getElementById('dropdownMenu').classList.toggle('show'); }

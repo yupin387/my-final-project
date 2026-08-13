@@ -154,23 +154,21 @@ body {
 
 /* ===== หัวเอกสารใบเสนอราคา (โลโก้บริษัท + ชื่อเอกสาร) ===== */
 .doc-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-bottom: 12px;
+    text-align: center;
+    padding-bottom: 20px;
     border-bottom: 2px solid var(--doc-brown);
-    margin-bottom: 16px;
+    margin-bottom: 25px;
 }
-.company-info h2 { font-size: 20px; color: var(--doc-brown); }
-.company-info p { font-size: 12.5px; color: #555; margin-top: 2px; }
+.company-info h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--doc-brown); }
+.company-info p { font-size: 14px; color: #444; line-height: 1.5; }
 
 .doc-title-box {
-    text-align: right;
+    margin-top: 25px;
     color: var(--doc-brown);
-    margin: 0;
 }
-.doc-title-box h1 { font-size: 24px; font-weight: 700; letter-spacing: 1px; }
-.doc-title-box p { font-size: 13px; color: #777; }
+.doc-title-box h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; }
+.doc-title-box p { text-align: center; color: #555; }
+
 
 /* ===== ข้อมูลลูกค้าและตาราง Meta ===== */
 .doc-meta-row {
@@ -184,14 +182,14 @@ body {
 .meta-box-right { min-width: 260px; }
 
 .plain-info-table,
-.layout-table { border-collapse: collapse; }
+.layout-table { border-collapse: collapse; width: 100%; }
 .plain-info-table td,
 .layout-table td { padding: 4px 10px 4px 0; font-size: 13.5px; vertical-align: top; color: #333; }
 .plain-info-table .label,
 .layout-table .label { font-weight: 700; color: #666; width: 100px; }
 
 .bordered-meta-table,
-.layout-table.bordered { border-collapse: collapse; min-width: 220px; border: 1.5px solid var(--doc-brown); }
+.layout-table.bordered { border-collapse: collapse; width: 100%; border: 1.5px solid var(--doc-brown); }
 .bordered-meta-table td,
 .layout-table.bordered td { border: 1px solid var(--doc-brown); padding: 6px 10px; font-size: 13px; }
 .bordered-meta-table .meta-label { color: var(--doc-brown); font-weight: 700; width: 80px; }
@@ -209,6 +207,7 @@ body {
     border-collapse: collapse;
     border: 1.5px solid #555;
     margin-bottom: 20px;
+    table-layout: fixed; /* Added from original detail CSS */
 }
 
 .items-table th,
@@ -227,8 +226,19 @@ body {
     border: 1px solid #555;
     padding: 6px 8px;
     font-size: 13px;
-    vertical-align: top;
+    vertical-align: middle; /* Added from original detail CSS */
+    overflow: hidden; /* Added from original detail CSS */
+    word-wrap: break-word; /* Added from original detail CSS */
     color: #333;
+}
+
+/* คลาสซ่อนเส้นคั่น (ยกเว้นหัวตาราง) */
+.no-border-table td {
+    border-top: none;
+    border-bottom: none;
+}
+.no-border-table tbody tr:last-child td {
+    border-bottom: 1px solid #555;
 }
 
 .text-center { text-align: center; }
@@ -247,6 +257,11 @@ body {
     padding: 8px 6px;
 }
 .category-header-text { font-weight: 700; color: var(--doc-brown); font-size: 13.5px; text-align: center; }
+
+/* แถวรายละเอียดแพ็กเกจ */
+.package-includes-title { font-weight: 700; font-size: 13.5px; border-top: none !important; border-bottom: none !important; padding-top: 15px !important; color: #333; }
+.package-included-row td { border-top: none !important; border-bottom: none !important; padding-top: 2px !important; padding-bottom: 2px !important; color: #555; }
+.indented-item { padding-left: 35px !important; }
 
 /* ช่องกรอกข้อความสำหรับขอแก้ไข */
 .member-inline-input {
@@ -270,10 +285,11 @@ body {
 .totals-wrap { display: flex; justify-content: flex-end; margin-top: 15px; }
 .totals-box { width: 350px; }
 .totals-table { width: 100%; border-collapse: collapse; border: 1.5px solid var(--doc-brown); }
-.totals-table td { border: 1px solid var(--doc-brown); padding: 8px 12px; font-size: 14px; }
-.tot-label { color: var(--doc-brown); font-weight: 700; }
-.tot-value { text-align: right; }
-.total-amount { font-size: 18px; font-weight: 700; color: #c62828; }
+.totals-table td { border: 1px solid var(--doc-brown); padding: 12px 15px; font-weight: 600; font-size: 15px;}
+.tot-label { background: var(--cream-warm); width: 55%; text-align: left; color: var(--doc-brown); }
+.tot-value { text-align: right; width: 45%; }
+.grand-total-row td { font-weight: 700; font-size: 18px; }
+.total-amount { text-align: right; font-size: 22px !important; color: #B91C1C !important; font-weight: 700; }
 
 .terms-note { margin-top: 16px; font-size: 12px; color: #777; padding-top: 8px; }
 
