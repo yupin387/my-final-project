@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GLOBAL STYLES & BODY  (ธีมชมพู-ทอง เหมือนโลโก้ บุญมีนำพา รับจัดงานบุญ)
+   GLOBAL STYLES & BODY  (ธีมชมพู-ทอง บุญมีนำพา รับจัดงานบุญ)
    ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&display=swap');
@@ -18,11 +18,10 @@
 	--gold-pale: #FBD0DE;
 	--gold-glow: #FFE3EC;
 
-	/* ===== สีทองจริง (ตามกรอบทองของโลโก้) ใช้คู่กับชมพูด้านบนสำหรับธีม "ชมพู-ทอง" ===== */
+	/* ===== สีทองจริง (ตามกรอบทองของโลโก้) ===== */
 	--accent-gold: #D9A441;
 	--accent-gold-mid: #E8C878;
 	--accent-gold-pale: #F7E3B0;
-	/* สีน้ำตาล-ทองเข้ม ใช้แทนชมพูสำหรับข้อความ/หัวข้อในเนื้อหา ให้หน้าไม่ชมพูจนเกินไป */
 	--accent-brown: #9C6B1F;
 
 	--cream: #FFFFFF;
@@ -42,7 +41,7 @@
 	--shadow-gold: rgba(217, 164, 65, 0.18);
 	--shadow-warm: rgba(0, 0, 0, 0.07);
 
-	/* ===== Footer / Navbar colors — ให้ตรงกับ home.css เป๊ะๆ ===== */
+	/* ===== Footer / Navbar colors ===== */
 	--footer-dark-1: #C7405F;
 	--footer-dark-2: #D94F76;
 	--footer-dark-3: #E0577F;
@@ -62,7 +61,7 @@ body {
 }
 
 /* ==========================================================================
-   NAVBAR — ให้ตรงกับ home.css เป๊ะๆ (gradient stop, เส้นขอบทอง, เงา, ขนาดโลโก้/ตัวอักษร)
+   NAVBAR
    ========================================================================== */
 .navbar-custom {
 	background: linear-gradient(135deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
@@ -83,9 +82,7 @@ body {
 .navbar-custom::before {
 	content: '';
 	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
+	top: 0; left: 0; right: 0;
 	height: 2px;
 	background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6),
 		rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
@@ -98,7 +95,6 @@ body {
 	gap: 12px;
 }
 
-/* โลโก้ navbar — ขนาดให้ตรงกับ home (76px) */
 .lotus-icon {
 	background: rgba(255, 255, 255, 0.18);
 	width: 76px;
@@ -123,7 +119,7 @@ body {
 
 .nav-brand-text {
 	color: #FFFFFF;
-	font-family: 'Charmonman', sans-serif;
+	font-family: 'Charmonman', sans-serif; /* คงฟอนต์ชื่อระบบเดิม */
 	font-size: 34px;
 	font-weight: 800;
 	letter-spacing: 0.5px;
@@ -140,10 +136,10 @@ body {
 }
 
 .nav-link-item {
-	font-family: 'Charmonman', sans-serif;
+	font-family: 'Sarabun', sans-serif; /* ปรับเป็น Sarabun */
 	color: #FFFFFF;
 	text-decoration: none;
-	font-size: 17px;
+	font-size: 14px;
 	font-weight: 600;
 	padding: 8px 16px;
 	border-radius: 6px;
@@ -163,11 +159,16 @@ body {
 	font-weight: 700;
 }
 
-/* ===== User Profile Pill (แคปซูลขอบขาวโปร่งแสง เหมือนหน้า home) ===== */
+/* ===== DROPDOWNS & PROFILE ===== */
 .dropdown-wrap {
 	position: relative;
 	display: inline-block;
-	padding-bottom: 10px;
+}
+
+.nav-dropdown-wrap:hover .nav-dropdown-panel {
+	visibility: visible;
+	opacity: 1;
+	transform: translateY(0);
 }
 
 .user-profile-pill {
@@ -201,6 +202,7 @@ body {
 	font-weight: 800;
 	font-size: 1rem;
 	flex-shrink: 0;
+	font-family: 'Sarabun', sans-serif;
 }
 
 .user-info-text {
@@ -210,33 +212,40 @@ body {
 }
 
 .user-name-nav {
-	font-family: 'Charmonman', sans-serif;
+	font-family: 'Sarabun', sans-serif; /* ปรับเป็น Sarabun */
 	font-size: 0.88rem;
 	font-weight: 700;
 	color: #FFFFFF;
 }
 
 .user-role-nav {
-	font-family: 'Charmonman', sans-serif;
-	font-size: 0.7rem;
-	color: rgba(255, 255, 255, 0.75);
+	font-family: 'Sarabun', sans-serif; /* ปรับเป็น Sarabun */
+	font-size: 0.72rem;
+	color: rgba(255, 255, 255, 0.85);
 }
 
 .dropdown-menu-custom {
 	visibility: hidden;
 	opacity: 0;
 	position: absolute;
-	top: calc(100% - 10px);
+	top: calc(100% + 4px);
 	right: 0;
 	background-color: #FFFFFF;
-	border: 1px solid var(--cream-border);
-	border-radius: 10px;
-	min-width: 175px;
+	border: 1px solid var(--accent-gold-pale);
+	border-radius: 12px;
+	min-width: 180px;
 	box-shadow: 0 8px 28px rgba(199, 64, 95, 0.18);
 	z-index: 99999;
 	padding: 0;
 	transform: translateY(-8px);
 	transition: all 0.25s ease;
+	overflow: hidden;
+}
+
+.nav-dropdown-panel {
+	left: 0;
+	right: auto;
+	min-width: 200px;
 }
 
 .dropdown-menu-custom.show {
@@ -247,7 +256,7 @@ body {
 
 .dropdown-link {
 	display: block;
-	padding: 13px 20px;
+	padding: 12px 18px;
 	font-family: 'Sarabun', sans-serif;
 	font-size: 14px;
 	font-weight: 600;
@@ -255,21 +264,17 @@ body {
 	text-decoration: none;
 	background: #FFFFFF;
 	border-bottom: 1px solid var(--cream-mid);
-	transition: background 0.2s;
+	transition: background 0.2s, color 0.2s;
 	text-align: left;
 }
 
 .dropdown-link:last-child {
 	border-bottom: none;
-	border-radius: 0 0 10px 10px;
-}
-
-.dropdown-link:first-child {
-	border-radius: 10px 10px 0 0;
 }
 
 .dropdown-link:hover {
 	background: #FFF3F7;
+	color: var(--footer-dark-1);
 }
 
 .dropdown-link.danger {
@@ -281,14 +286,59 @@ body {
 }
 
 /* ==========================================================================
-   PAGE CONTENT — ลดโทนชมพูลง ใช้โทนทอง/น้ำตาลอุ่นแทนเพื่อไม่ให้หน้าดูชมพูจัดเกินไป
+   PAGE CONTENT & CARDS
    ========================================================================== */
 .page-wrapper {
 	flex: 1;
-	padding: 40px;
+	padding: 40px 20px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+}
+
+.booking-notice {
+	max-width: 860px;
+	width: 100%;
+	margin: 0 auto 18px;
+	padding: 14px 20px;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	background: linear-gradient(135deg, #FFFDF8, #FFF9EF);
+	border: 2px solid var(--accent-gold-pale);
+	border-left: 6px solid var(--accent-gold);
+	border-radius: 14px;
+	box-shadow: 0 6px 16px rgba(217, 164, 65, .15);
+}
+
+.notice-icon {
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background: #FFFFFF;
+	color: var(--accent-gold);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
+	flex-shrink: 0;
+	border: 2px solid var(--accent-gold-pale);
+	box-shadow: 0 2px 8px rgba(217, 164, 65, .15);
+}
+
+.notice-content strong {
+	display: block;
+	color: var(--accent-brown);
+	font-size: 15px;
+	font-weight: 700;
+	margin-bottom: 2px;
+}
+
+.notice-content p {
+	margin: 0;
+	color: #666;
+	font-size: 13px;
+	line-height: 1.5;
 }
 
 .detail-card {
@@ -302,16 +352,6 @@ body {
 	position: relative;
 }
 
-.detail-card::before {
-	content: '';
-	position: absolute;
-	top: 0; left: 24px; right: 24px;
-	height: 2px;
-	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
-	z-index: 1;
-}
-
-/* หัวการ์ด — เปลี่ยนจากพื้นชมพูเข้มเป็นพื้นครีมอ่อน + เส้นขอบทอง ให้เนื้อหาหน้าไม่ชมพูทั้งหมด */
 .card-header-bar {
 	background: linear-gradient(135deg, #FFFDF8 0%, #FFF9EF 100%);
 	padding: 24px 32px;
@@ -319,7 +359,6 @@ body {
 	justify-content: space-between;
 	align-items: center;
 	border-bottom: 2px solid var(--accent-gold-mid);
-	position: relative;
 }
 
 .booking-id-badge {
@@ -342,9 +381,7 @@ body {
 	margin: 0;
 }
 
-/* ==========================================================================
-   STATUS PILL
-   ========================================================================== */
+/* Status Badges */
 .status-pill {
 	display: inline-block;
 	padding: 8px 20px;
@@ -357,47 +394,12 @@ body {
 	color: var(--brown-dark);
 }
 
-.status-pending {
-	background: var(--cream-warm);
-	color: #b8860b;
-	border-color: var(--accent-gold-mid);
-}
-
-.status-approved {
-	background: #e8f5e9;
-	color: #2e7d32;
-	border-color: #a5d6a7;
-}
-
-.status-quoted {
-	background: #e8f4fd;
-	color: #0d5c8f;
-	border-color: #90caf9;
-}
-
-.status-confirmed {
-	background: #e8f5e9;
-	color: #2e7d32;
-	border-color: #a5d6a7;
-}
-
-.status-completed {
-	background: #e8f5e9;
-	color: #1b5e20;
-	border-color: #81c784;
-}
-
-.status-rejected {
-	background: #fdecea;
-	color: #c62828;
-	border-color: #ef9a9a;
-}
-
-.status-cancelled {
-	background: #f3f3f3;
-	color: #777;
-	border-color: #d6d6d6;
-}
+.status-pending { background: #fff8e1; color: #b8860b; border-color: var(--accent-gold-mid); }
+.status-approved, .status-confirmed { background: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; }
+.status-quoted { background: #e8f4fd; color: #0d5c8f; border-color: #90caf9; }
+.status-completed { background: #e8f5e9; color: #1b5e20; border-color: #81c784; }
+.status-rejected { background: #fdecea; color: #c62828; border-color: #ef9a9a; }
+.status-cancelled { background: #f3f3f3; color: #777; border-color: #d6d6d6; }
 
 .section {
 	padding: 24px 32px;
@@ -412,7 +414,10 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	letter-spacing: 0.3px;
+}
+
+.section-title i {
+	color: var(--accent-gold);
 }
 
 .section-title::after {
@@ -441,9 +446,112 @@ body {
 	color: var(--text-dark);
 }
 
-.info-value.highlight {
-	color: var(--brown-mid);
+.sub-detail-text {
+	font-weight: 400;
+	font-size: 13px;
+	color: var(--text-muted);
+	margin-top: 2px;
+}
+
+.price-text {
+	color: var(--accent-brown);
+	font-size: 1.1rem;
 	font-weight: 700;
+}
+
+.price-badge {
+	color: var(--accent-brown);
+	font-size: 13px;
+	font-weight: bold;
+}
+
+/* Package Inclusions Chip Box */
+.package-inclusions-box {
+	background-color: #FFFDF8;
+	border: 1px dashed var(--accent-gold);
+	border-radius: 12px;
+	padding: 16px;
+	margin-top: 14px;
+}
+
+.package-inclusions-title {
+	font-weight: 700;
+	color: var(--accent-brown);
+	margin-bottom: 10px;
+	font-size: 0.92rem;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.package-items-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 8px;
+}
+
+.package-item-chip {
+	background: #ffffff;
+	padding: 6px 12px;
+	border-radius: 8px;
+	font-size: 0.88rem;
+	color: var(--text-dark);
+	border: 1px solid var(--accent-gold-pale);
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.package-item-chip i {
+	color: #10b981;
+}
+
+/* Maps & Gallery */
+.map-container {
+	width: 100%;
+	height: 220px;
+	border-radius: 12px;
+	overflow: hidden;
+	border: 1px solid var(--accent-gold-pale);
+	margin-top: 8px;
+}
+
+.map-iframe {
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+.btn-map-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 8px;
+	font-size: 0.88rem;
+	color: var(--accent-brown);
+	text-decoration: none;
+	font-weight: 700;
+}
+
+.btn-map-link:hover {
+	color: var(--accent-gold);
+	text-decoration: underline;
+}
+
+.image-gallery {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 6px;
+}
+
+.location-img {
+	width: 110px;
+	height: 110px;
+	object-fit: cover;
+	border-radius: 10px;
+	border: 2px solid var(--accent-gold-pale);
+	box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .divider {
@@ -470,19 +578,18 @@ body {
 	font-family: 'Sarabun', sans-serif;
 }
 
-/* ปุ่มเขียนรีวิว (สีเขียวพรีเมียม) */
 .btn-review {
 	background: linear-gradient(135deg, #28a745, #218838);
 	color: #FFFFFF;
-	border: none;
+	text-decoration: none;
+	display: inline-block;
 	box-shadow: 0 3px 10px rgba(40, 167, 69, 0.25);
 }
 
 .btn-review:hover {
 	background: linear-gradient(135deg, #218838, #1e7e34);
-	transform: translateY(-1px);
-	box-shadow: 0 5px 16px rgba(40, 167, 69, 0.35);
 	color: #FFFFFF;
+	transform: translateY(-1px);
 }
 
 .btn-reviewed {
@@ -513,12 +620,9 @@ body {
 }
 
 /* ==========================================================================
-   FOOTER — ให้ตรงกับ home.css เป๊ะๆ (gradient, เส้นขอบทอง, เงา, ขนาดโลโก้/ตัวอักษร)
+   FOOTER
    ========================================================================== */
-.footer-top {
-	display: block;
-}
-
+.footer-top { display: block; }
 .site-footer {
 	background: linear-gradient(135deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 50%, var(--footer-dark-3) 100%);
 	color: rgba(255, 255, 255, 0.92);
@@ -548,7 +652,6 @@ body {
 .footer-brand .lotus-icon {
 	background: rgba(255,255,255,0.18);
 	border: 1.5px solid rgba(255,255,255,0.5);
-	box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
 	width: 46px;
 	height: 46px;
 }
@@ -565,7 +668,6 @@ body {
 	line-height: 1.7;
 	color: rgba(255, 255, 255, 0.9);
 	max-width: 320px;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .footer-heading {
@@ -576,25 +678,10 @@ body {
 	margin-bottom: 14px;
 }
 
-.footer-col a {
-	display: block;
-	color: rgba(255, 255, 255, 0.92);
-	text-decoration: none;
-	font-size: 0.9rem;
-	margin-bottom: 10px;
-	transition: color 0.2s ease;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.footer-col a:hover {
-	color: #FFFFFF;
-}
-
 .footer-contact-col p {
 	font-size: 0.9rem;
 	color: rgba(255, 255, 255, 0.92);
 	margin: 0 0 10px;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .footer-bottom {
@@ -605,99 +692,14 @@ body {
 	color: rgba(255, 255, 255, 0.7);
 }
 
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-@media ( max-width : 768px) {
-	.navbar-custom {
-		flex-wrap: wrap;
-		gap: 10px;
-		padding: 12px 16px;
-		min-height: 76px;
-	}
-	.nav-brand-text {
-		font-size: 20px;
-	}
-	.lotus-icon {
-		width: 46px;
-		height: 46px;
-		font-size: 24px;
-	}
-	.page-wrapper {
-		padding: 20px;
-	}
-	.card-header-bar {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 12px;
-	}
-	.info-row {
-		flex-direction: column;
-		gap: 4px;
-	}
-	.info-label {
-		width: auto;
-	}
-	.action-bar {
-		flex-direction: column;
-		gap: 14px;
-		align-items: flex-start;
-	}
-	.footer-content {
-		grid-template-columns: 1fr 1fr;
-	}
-}
-
-@media (max-width: 520px) {
-	.footer-content {
-		grid-template-columns: 1fr;
-	}
-}
-
-.booking-notice{
-    max-width:860px;
-    width:100%;
-    margin:0 auto 18px;
-    padding:14px 20px;
-    display:flex;
-    align-items:center;
-    gap:16px;
-
-    background:linear-gradient(135deg,#FFFDF8,#FFF9EF);
-    border:2px solid var(--accent-gold-pale);
-    border-left:6px solid var(--accent-gold);
-    border-radius:14px;
-
-    box-shadow:0 6px 16px rgba(217,164,65,.15);
-}
-
-.notice-icon{
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    background:#FFFFFF;
-    color:var(--accent-gold);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:22px;
-    flex-shrink:0;
-    border:2px solid var(--accent-gold-pale);
-    box-shadow:0 2px 8px rgba(217,164,65,.15);
-}
-
-
-.notice-content strong{
-    display:block;
-    color:var(--accent-brown);
-    font-size:15px;
-    font-weight:700;
-    margin-bottom:3px;
-}
-
-.notice-content p{
-    margin:0;
-    color:#666;
-    font-size:13px;
-    line-height:1.6;
+/* Responsive */
+@media (max-width : 768px) {
+	.navbar-custom { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: 76px; }
+	.nav-brand-text { font-size: 20px; }
+	.lotus-icon { width: 46px; height: 46px; }
+	.card-header-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+	.info-row { flex-direction: column; gap: 4px; }
+	.info-label { width: auto; }
+	.action-bar { flex-direction: column; gap: 14px; align-items: flex-start; }
+	.footer-content { grid-template-columns: 1fr; }
 }

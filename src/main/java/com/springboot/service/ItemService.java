@@ -80,4 +80,9 @@ public class ItemService {
     public List<Item> getItemsByTypeName(String typeName) {
         return itemRepo.findByItemType_ItemTypeName(typeName);
     }
+    
+    // ค้นหาและดึงรายการอุปกรณ์ที่ผูกอยู่กับรหัสพิธีกรรม/แพ็กเกจ (Ceremony ID)
+    public List<Item> getItemsByCeremonyId(int ceremonyId) {
+        return itemRepo.findByCeremonies_CeremonyId(ceremonyId);
+    }
 }

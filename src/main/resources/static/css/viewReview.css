@@ -78,7 +78,7 @@ body {
     align-items: center;
     gap: 12px;
     color: #FFFFFF;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif; /* คงฟอนต์โลโก้แบรนด์เดิม */
     font-size: 32px;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -121,10 +121,10 @@ body {
 }
 
 .nav-item {
-    font-family: 'Charmonman', sans-serif;
+    font-family: 'Sarabun', sans-serif; /* ปรับเป็น Sarabun */
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 6px;
@@ -140,7 +140,7 @@ body {
 button.nav-item {
     background: none;
     border: none;
-    font-family: 'Charmonman', sans-serif;
+    font-family: 'Sarabun', sans-serif; /* ปรับเป็น Sarabun */
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -185,6 +185,7 @@ button.nav-item {
 .nav-dropdown-menu a {
     display: block;
     padding: 11px 20px;
+    font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-mid);
@@ -204,6 +205,7 @@ button.nav-item {
     color: #FFFFFF;
     padding: 9px 22px;
     border-radius: 50px;
+    font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     font-weight: 700;
     text-decoration: none;
@@ -243,14 +245,15 @@ button.nav-item {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Sarabun', sans-serif;
     font-weight: 800;
     font-size: 1rem;
     flex-shrink: 0;
 }
 
 .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name-nav  { font-family: 'Charmonman', sans-serif; font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
-.user-role-nav  { font-family: 'Charmonman', sans-serif; font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
+.user-name-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.88rem; font-weight: 700; color: #FFFFFF; } /* ปรับเป็น Sarabun */
+.user-role-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.72rem; color: rgba(255, 255, 255, 0.85); } /* ปรับเป็น Sarabun */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -270,6 +273,7 @@ button.nav-item {
 .dropdown-link {
     display: block;
     padding: 13px 20px;
+    font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-mid);

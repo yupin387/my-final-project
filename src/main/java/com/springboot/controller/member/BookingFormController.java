@@ -273,21 +273,31 @@ public class BookingFormController {
 
     @GetMapping("/viewBooking/{id}")
     public String viewBooking(@PathVariable String id, Model model, HttpSession session) {
+        // 1. ดึงข้อมูลการจองหลัก
         BookingForm booking = bookingService.getBookingById(id);
         if (booking == null) return "redirect:/home";
 
         boolean alreadyReviewed = reviewService.hasAlreadyReviewed(id);
 
+        // 2. ดึง "รายการแพ็กเกจหลัก" (เฉพาะอุปกรณ์ที่อยู่ในแพ็กเกจนั้นๆ)
+        // หมายเหตุ: เช็กว่าในคลาส BookingForm คุณตั้งชื่อ Getter ว่า getCeremony() หรือไม่ ถ้าใช่ใช้ตามนี้ได้เลย
+        List<Item> packageItems = booking.getCeremony().getItems();
+
+        // 3. ดึง "ของเสริม" (เพื่อเอาไปแสดงเป็นตัวเลือกเพิ่มเติมให้ลูกค้า)
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
 
+        // 4. ส่งค่าทั้งหมดไปที่ Model
         model.addAttribute("booking", booking);
+        model.addAttribute("packageItems", packageItems); // <-- เพิ่มบรรทัดนี้ ส่งอุปกรณ์แพ็กเกจหลักไป
         model.addAttribute("hasReview", alreadyReviewed);
         model.addAttribute("pintoItems", pintoItems);
         model.addAttribute("sanghatharnItems", sanghatharnItems);
+
         // FIX: เดิมหน้านี้ไม่ได้ set ceremonyTypes ทำให้เมนู dropdown "บริการ/แพ็กเกจ"
         // ใน navbar ของ viewBooking.jsp ว่างเปล่า (${ceremonyTypes} ไม่มีค่า)
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
+        
         return "viewBooking";
     }
     
@@ -321,4 +331,6 @@ public class BookingFormController {
         
         return "redirect:/home";
     }
+    
+    
 }

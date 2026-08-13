@@ -11,7 +11,13 @@
     <%-- เพิ่มฟอนต์ Charmonman (ฟอนต์สคริปต์ไทยแบบเดียวกับที่แคปมา) ไว้ใช้กับหัวข้อ/แบรนด์
          ส่วนเนื้อหาทั่วไปยังใช้ Sarabun เหมือนเดิมเพื่อความอ่านง่าย --%>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=11">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=13">
+    <%-- FIX: เพิ่ม Leaflet CSS — จำเป็นสำหรับกล่องแผนที่ #locationMap ด้านล่าง
+         (เดิมมีแค่ JS เรียก L.map(...) แต่ไม่เคยโหลด Leaflet เข้ามาเลย ทำให้
+         initLocationMap() เจอ typeof L === 'undefined' แล้วออกจากฟังก์ชันทันที) --%>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
 </head>
 <body>
 
@@ -95,7 +101,19 @@
         <c:set var="startInCustomMode" value="${param.custom == 'true'}"/>
 
         <%-- =========================================================
-             ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่ / รูปภาพ
+             ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่
+
+             FIX เลย์เอาต์ (รอบ 2): เดิมย้าย "📸 รูปภาพสถานที่จัดงาน" ไปไว้
+             คอลัมน์ซ้ายต่อจาก "วันและเวลาจัดงาน" แต่กลับทำให้ซ้ายสูงกว่าขวา
+             มาก (Grid บังคับความสูงแถวเท่ากับคอลัมน์ที่สูงสุด) เกิดช่องว่าง
+             โล่งๆ ใต้การ์ดแผนที่ฝั่งขวาแทน — แก้ผิดทาง
+
+             แนวทางที่ถูกต้อง: เอาการ์ดรูปภาพออกจากทั้ง 2 คอลัมน์ไปเลย ให้เหลือ
+             แค่ "วันที่กรอกฟอร์ม + ปฏิทินย่อ" (ซ้าย) คู่กับ "ที่อยู่ + แผนที่"
+             (ขวา) ซึ่งความสูงใกล้เคียงกันโดยธรรมชาติอยู่แล้ว ไม่ต้องฝืนจับคู่
+             ส่วนการ์ดรูปภาพย้ายไปเป็นการ์ดเต็มความกว้าง (full-width) วางต่อ
+             ท้าย grid แทน จะได้ไม่มีปัญหาเรื่องความสูง 2 คอลัมน์ไม่เท่ากันอีก
+             และเนื้อหาไหลต่อกันแบบไม่มีช่องว่างเกินจำเป็น
              ========================================================= --%>
         <div class="form-grid">
             <div>
@@ -155,35 +173,64 @@
                 </div>
             </div>
 
-            <div>
-                <div class="form-card">
-                    <div class="card-header">สถานที่จัดพิธี</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <%-- เปลี่ยน label ให้ชัดเจนว่าเป็นที่อยู่ที่จะจัดงาน ไม่ใช่ที่อยู่ของผู้จอง
-                                 เพราะบางครั้งผู้จองไม่ได้พักอาศัยอยู่ที่บ้านที่จะจัดงาน --%>
-                            <label class="form-label">ที่อยู่ที่ต้องการจัดงาน <span class="required" style="color:red;">*</span></label>
-                            <textarea name="eventAddress" class="form-control" rows="3" required
-                                      placeholder="เช่น 123/45 หมู่บ้านบุญรักษา ตำบลสุทธิ อำเภอเมือง จังหวัดเชียงใหม่ 50000"></textarea>
-                        </div>
-                        <div class="form-group" style="margin-top:16px;">
-                            <label class="form-label">📸 รูปภาพสถานที่จัดงาน<span class="required" style="color:red;">*</span></label>
-                            <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
-                                อัปโหลดได้หลายรูป เพื่อให้ทีมงานเตรียมการได้ถูกต้อง
-                            </p>
-                            <div id="imagePreviewBox" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
-                            <button type="button" onclick="document.getElementById('imgPicker').click()"
-                                    style="cursor:pointer;background:#FBD0DE;border:1px dashed #E0577F;
-                                           padding:8px 16px;border-radius:8px;color:#B0345A;font-size:13px;">
-                                + เพิ่มรูป
-                            </button>
-                            <input type="file" id="imgPicker" accept="image/*" style="display:none">
-                            <div id="base64Container"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <div class="form-card">
+			    <div class="card-header">สถานที่จัดพิธี</div>
+			    <div class="card-body">
+			        <!-- 1. ที่อยู่ -->
+			        <div class="form-group">
+			            <label class="form-label">ที่อยู่ที่ต้องการจัดงาน <span class="required" style="color:red;">*</span></label>
+			            <textarea name="eventAddress" id="eventAddressField" class="form-control" rows="3" required
+			                      placeholder="เช่น 123/45 หมู่บ้านบุญรักษา ตำบลสุทธิ อำเภอเมือง จังหวัดเชียงใหม่ 50000"></textarea>
+			        </div>
+			
+			        <!-- 2. ปักหมุดแผนที่ -->
+			        <div class="form-group" style="margin-top:16px;">
+			            <label class="form-label">📍 ปักหมุดตำแหน่งที่จัดงาน</label>
+			            <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
+			                คลิกบนแผนที่ หรือลากหมุดเพื่อระบุตำแหน่งจริงของสถานที่จัดงาน (ช่วยให้ทีมงานเดินทางไปถูกจุด)
+			            </p>
+			
+			            <div class="map-picker-search-row">
+			                <input type="text" id="mapSearchInput" class="form-control"
+			                       placeholder="พิมพ์ชื่อสถานที่ / ที่อยู่เพื่อค้นหาบนแผนที่...">
+			                <button type="button" class="map-picker-btn" onclick="searchLocationOnMap()">ค้นหา</button>
+			                <button type="button" class="map-picker-btn map-picker-btn-outline" onclick="useCurrentLocationOnMap()">
+			                    ใช้ตำแหน่งปัจจุบัน
+			                </button>
+			            </div>
+			
+			            <div id="locationMap" class="location-map-box"></div>
+			
+			            <p id="mapSelectedText" class="map-picker-selected-text">ยังไม่ได้ปักหมุดตำแหน่ง</p>
+			            <a id="mapNavLink" href="#" target="_blank" rel="noopener" class="map-picker-nav-link" style="display:none;">
+			                🧭 เปิดนำทางใน Google Maps
+			            </a>
+			
+			            <input type="hidden" name="eventLat" id="eventLat">
+			            <input type="hidden" name="eventLng" id="eventLng">
+			        </div>
+			
+			        <!-- เส้นคั่นเพื่อความเป็นระเบียบ -->
+			        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+			
+			        <!-- 3. รูปภาพสถานที่ (ย้ายมาไว้ข้างในนี้) -->
+			        <div class="form-group">
+			            <label class="form-label">📸 รูปภาพสถานที่จัดงาน <span class="required" style="color:red;">*</span></label>
+			            <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
+			                อัปโหลดได้หลายรูป เพื่อให้ทีมงานเตรียมการได้ถูกต้อง
+			            </p>
+			            <div id="imagePreviewBox" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+			            <button type="button" onclick="document.getElementById('imgPicker').click()"
+			                    style="cursor:pointer;background:#FBD0DE;border:1px dashed #E0577F;
+			                           padding:8px 16px;border-radius:8px;color:#B0345A;font-size:13px;">
+			                + เพิ่มรูป
+			            </button>
+			            <input type="file" id="imgPicker" accept="image/*" style="display:none">
+			            <div id="base64Container"></div>
+			        </div>
+			    </div>
+			</div>
+		</div> 
 
         <%-- =========================================================
              1. รายละเอียดการจอง — ใช้ชุดคำถามเดียวกันทั้ง 2 โหมด
@@ -544,7 +591,7 @@
 
 <style>
 /* หมายเหตุ: ธีมสีชมพูทอง (--accent-gold), การ์ด item-card, mini-cal, card-header ฯลฯ
-   ถูกย้ายไปกำหนดไว้ที่ bookingForm.css (v11) แล้วทั้งหมด เพื่อไม่ให้ซ้ำซ้อน/ชนกัน
+   ถูกย้ายไปกำหนดไว้ที่ bookingForm.css (v13) แล้วทั้งหมด เพื่อไม่ให้ซ้ำซ้อน/ชนกัน
    เหลือไว้ในนี้เฉพาะสไตล์ที่ยังไม่มีอยู่ใน CSS ไฟล์หลัก คือ lightbox และ nav-dropdown */
 
 .image-lightbox {
@@ -1000,6 +1047,13 @@ window.dayQuality = {
 };
 </script>
 
+<%-- FIX: เพิ่ม Leaflet JS — ต้องโหลดก่อนไฟล์ bookingForm.js เพราะ initLocationMap()
+     (เรียกจาก DOMContentLoaded ในไฟล์นั้น) ต้องใช้ตัวแปร global L จาก Leaflet
+     ถ้าไม่มีบรรทัดนี้ กล่องแผนที่ #locationMap จะขึ้นเป็นกรอบว่างเปล่า
+     ค้นหา/ปักหมุด/ใช้ตำแหน่งปัจจุบันจะไม่ทำงานเลย --%>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
 <script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=8"></script>
 <script src="${pageContext.request.contextPath}/static/js/miniBookingCalendar.js?v=1"></script>
 
