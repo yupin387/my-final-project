@@ -23,7 +23,7 @@
             <a href="${pageContext.request.contextPath}/organizer/bookings" class="nav-item">รายการจอง</a>
             <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a>
             <a href="${pageContext.request.contextPath}/organizer/questions" class="nav-item active">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation" class="nav-item">ใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/organizer/quotation" class="nav-item">จัดการใบเสนอราคา</a>
         </nav>
         <div class="user-info" onclick="toggleDropdown()">
             <div class="user-avatar">A</div>
@@ -54,8 +54,7 @@
                 <span class="orn-diamond-sm"></span>
                 <span class="orn-line"></span>
             </div>
-            <div class="header-lotus">🪷</div>
-            <span class="question-id-badge">ID: ${question.questionsId}</span>
+            
             <h1>แก้ไขคำถาม</h1>
             <p>ปรับปรุงข้อความคำถามหรือเปลี่ยนประเภทพิธี</p>
             <div class="header-gold-line"></div>
@@ -81,9 +80,6 @@
                            value="${question.questionsText}" required/>
                 </div>
 
-                <%-- แก้ไข: เหลือ dropdown เดียวให้เลือกแค่ "ประเภทงาน" ไม่ต้องเลือกแพ็กเกจ
-                     ระบบจะเลือกแพ็กเกจแรกของประเภทนั้นให้อัตโนมัติฝั่ง service
-                     auto-select ค่าเดิมจาก question.ceremony.ceremonyType --%>
                 <div class="form-group">
                     <label for="ceremonyType">ประเภทงาน</label>
                     <div class="select-wrapper">

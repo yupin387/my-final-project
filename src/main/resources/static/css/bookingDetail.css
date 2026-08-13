@@ -12,31 +12,32 @@
 
 
 :root {
-    --gold:          #E0577F;
-    --gold-mid:      #EC6E96;
-    --gold-light:    #F49CB9;
-    --gold-pale:     #FBD0DE;
-    --gold-glow:     #FFE3EC;
+    --gold:          #A9752E;
+    --gold-mid:      #C0923F;
+    --gold-light:    #D9B87A;
+    --gold-pale:     #F0E2C7;
+    --gold-glow:     #FFF8ED;
     --cream:         #FFFFFF;
-    --cream-warm:    #FFF6F9;
-    --cream-mid:     #FDEEF3;
-    --cream-border:  #F3C4D5;
-    --cream-border-soft: #F6D4E1;
+    --cream-warm:    #FFFBF3;
+    --cream-mid:     #FBF2E3;
+    --cream-border:  #E8D5B7;
+    --cream-border-soft: #EDE0C8;
     --text-dark:     #1A1A1A;
     --text-mid:      #333333;
     --text-muted:    #777777;
     --brown-dark:    #1A1A1A;
     --brown-mid:     #3A3A3A;
 
-    /* สีทองจริง ใช้คู่กับชมพูสำหรับธีม "ชมพู-ทอง" ให้ตรงกับหน้าอื่นๆ */
+    --shadow-gold: rgba(169, 117, 46, 0.18);
+    --shadow-warm: rgba(169, 117, 46, 0.14);
+
+    /* สีทองจริง ใช้คู่กับน้ำตาลสำหรับธีม "น้ำตาล-ทอง-ขาว" ให้ตรงกับหน้าอื่นๆ */
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
 
-    /* footer gradient เดียวกับ navbar (เหมือน home) */
-    --footer-grad-1: #C7405F;
-    --footer-grad-2: #D94F76;
-    --footer-grad-3: #E0577F;
+    /* สีน้ำตาลล้วน ใช้กับ navbar / footer / card-header (เหมือน home) */
+    --brand-brown: #9C6B3E;
 }
 
 body {
@@ -47,10 +48,10 @@ body {
 }
 
 /* ==========================================================================
-   NAVBAR (ขนาด/ฟอนต์ตรงกับ home.css .navbar-custom เป๊ะ, สีชมพูเดิม)
+   NAVBAR (ขนาด/ฟอนต์ตรงกับ home.css .navbar-custom เป๊ะ, สีน้ำตาลล้วน)
    ========================================================================== */
 .navbar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: var(--brand-brown);
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -61,7 +62,7 @@ body {
     top: 0;
     z-index: 10000;
     min-height: 92px;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 4px 20px rgba(122, 82, 48, 0.32);
     overflow: visible;
 }
 
@@ -123,14 +124,14 @@ body {
 .nav-item {
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
 }
 
 .nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
@@ -181,7 +182,7 @@ body {
     border: 1px solid var(--cream-border);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px var(--shadow-gold, rgba(224, 87, 127, 0.16));
+    box-shadow: 0 8px 28px var(--shadow-gold);
     z-index: 99999;
     overflow: hidden;
 }
@@ -241,13 +242,13 @@ body {
     border-radius: 18px;
     overflow: hidden;
     border: 1.5px solid var(--accent-gold);
-    box-shadow: 0 8px 32px rgba(224, 87, 127, 0.14);
+    box-shadow: 0 8px 32px var(--shadow-warm);
     width: 100%;
     max-width: 860px;
 }
 
 .card-header-bar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: var(--brand-brown);
     padding: 24px 32px;
     display: flex;
     justify-content: space-between;
@@ -317,7 +318,7 @@ body {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 16px;
     font-weight: 700;
-    color: #B0345A;
+    color: var(--gold);
     margin-bottom: 18px;
     display: flex;
     align-items: center;
@@ -342,7 +343,7 @@ body {
 .info-label {
     width: 200px;
     min-width: 200px;       /* ป้องกันไม่ให้ความกว้างถูกบีบย่อลง */
-    color: #C77E96;
+    color: var(--gold-mid);
     font-size: 13px;
     font-weight: 600;
 }
@@ -431,7 +432,7 @@ body {
     padding: 32px 36px 28px;
     max-width: 420px;
     width: 90%;
-    box-shadow: 0 16px 60px rgba(224, 87, 127, 0.22);
+    box-shadow: 0 16px 60px rgba(139, 90, 43, 0.24);
     text-align: center;
 }
 
@@ -537,14 +538,14 @@ body {
 }
 
 /* ==========================================================================
-   FOOTER (เหมือน home.css .site-footer, สีชมพูเดิม)
+   FOOTER (เหมือน home.css .site-footer, สีน้ำตาลล้วน)
    ========================================================================== */
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    background: var(--brand-brown);
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
     border-top: 3px solid #FFFFFF;
-    box-shadow: 0 -6px 18px rgba(224, 87, 127, 0.25);
+    box-shadow: 0 -6px 18px rgba(122, 82, 48, 0.22);
     position: relative;
     z-index: 2;
 }

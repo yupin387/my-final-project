@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
-/* ===== CSS Variables (pink-gold theme, matched to itemList/bookingList/staffAssignmentList) ===== */
 :root {
     --gold:          #E0577F;
     --gold-mid:      #EC6E96;
@@ -25,18 +24,12 @@
     --brown-dark:    #1A1A1A;
     --brown-mid:     #3A3A3A;
 
-    /* สีทองจริง ใช้คู่กับชมพูสำหรับธีม "ชมพู-ทอง" */
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
 
     --shadow-gold:   rgba(224, 87, 127, 0.16);
     --shadow-warm:   rgba(224, 87, 127, 0.10);
-
-    /* ===== Footer colors (same gradient as navbar) ===== */
-    --footer-grad-1: #C7405F;
-    --footer-grad-2: #D94F76;
-    --footer-grad-3: #E0577F;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
@@ -50,22 +43,21 @@ body {
 }
 
 /* ==========================================================================
-   NAVBAR (เหมือนหน้า list)
+   NAVBAR (สีฟ้าครามเรียบ ไม่ไล่สี)
    ========================================================================== */
 .navbar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: #4B85BE;
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid;
-    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
+    border-bottom: 3px solid #E2B85B;
     min-height: 92px;
     position: sticky;
     top: 0;
     z-index: 10000;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 4px 16px rgba(59, 107, 156, 0.25);
 }
 
 .navbar::before {
@@ -84,7 +76,7 @@ body {
 }
 
 .navbar .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.2);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -94,7 +86,7 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
     object-fit: cover;
@@ -107,7 +99,7 @@ body {
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.25);
 }
 
 .navbar-right {
@@ -118,12 +110,12 @@ body {
 
 .navbar-menu {
     display: flex;
-    gap: 2px;
+    gap: 4px;
     align-items: center;
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     font-size: 17px;
     font-weight: 700;
@@ -131,19 +123,18 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
 }
 
 .nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
-.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
+.nav-item.active { background: #FFFFFF; color: #3A6B9C; font-weight: 700; }
 
 .user-info {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     white-space: nowrap;
@@ -152,13 +143,13 @@ body {
     transition: background 0.2s;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
+.user-info:hover { background: rgba(255, 255, 255, 0.3); }
 
 .user-avatar {
     background: #FFFFFF;
-    color: var(--gold);
-    width: 36px;
-    height: 36px;
+    color: #3A6B9C;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -170,7 +161,7 @@ body {
 
 .user-detail { display: flex; flex-direction: column; line-height: 1.2; }
 .user-name   { color: #FFFFFF; font-size: 14px; font-weight: 700; }
-.arrow       { color: rgba(255, 255, 255, 0.85); font-size: 12px; margin-left: 4px; }
+.arrow       { color: #FFFFFF; font-size: 11px; margin-left: 4px; opacity: 0.9; }
 
 .dropdown-menu {
     display: none;
@@ -178,10 +169,10 @@ body {
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1.5px solid var(--accent-gold-pale);
+    border: 1.5px solid #C5A044;
     border-radius: 12px;
     min-width: 180px;
-    box-shadow: 0 8px 28px var(--shadow-gold);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
     z-index: 999;
     overflow: hidden;
 }
@@ -266,7 +257,7 @@ body {
    CARD HEADER (หัวข้อหลัก)
    ========================================================================== */
 .card-header-bar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: #3A6B9C;
     padding: 28px 32px 22px;
     text-align: center;
     border-bottom: 2px solid var(--accent-gold-mid);
@@ -395,7 +386,7 @@ body {
 }
 
 /* ==========================================================================
-   TYPE RADIO (ตัวกรองประเภท Item) — สีทองล้วน ไม่ไล่สี
+   TYPE RADIO
    ========================================================================== */
 .type-options { display: flex; gap: 10px; flex-wrap: wrap; }
 .type-options input[type="radio"] { display: none; }
@@ -422,7 +413,7 @@ body {
 }
 
 /* ==========================================================================
-   CEREMONY CHECKBOXES (จัดกลุ่มตามประเภทงาน)
+   CEREMONY CHECKBOXES
    ========================================================================== */
 .ceremony-box {
     display: flex;
@@ -521,24 +512,16 @@ body {
 }
 
 /* ==========================================================================
-   FOOTER (เหมือนหน้า list)
+   FOOTER (สีฟ้าครามเรียบ)
    ========================================================================== */
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    background: #4B85BE;
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
-    border-top: 3px solid var(--accent-gold-pale);
-    box-shadow: 0 -6px 18px rgba(224, 87, 127, 0.25);
+    border-top: 3px solid #E2B85B;
+    box-shadow: 0 -6px 18px rgba(59, 107, 156, 0.2);
     position: relative;
     z-index: 2;
-}
-
-.site-footer::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .footer-content {
@@ -559,13 +542,13 @@ body {
 }
 
 .footer-lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.2);
     width: 40px;
     height: 40px;
     max-width: 40px;
     max-height: 40px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
     object-fit: cover;
     flex-shrink: 0;
 }
@@ -580,15 +563,6 @@ body {
 .footer-tagline {
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-}
-
-.footer-bottom {
-    text-align: center;
-    padding: 12px 20px 18px;
-    font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* ==========================================================================

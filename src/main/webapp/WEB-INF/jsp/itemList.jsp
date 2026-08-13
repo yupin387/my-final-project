@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>รายการ Item - บุญมีนำพา จัดงานบุญ</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/itemList.css?v=2">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/itemList.css?v=3">
 </head>
 <body>
 
@@ -42,8 +42,6 @@
             </div>
         </div>
     </nav>
-
-
 
     <%-- ========== PAGE WRAPPER ========== --%>
     <div class="page-wrapper">
@@ -98,10 +96,6 @@
                             <td class="item-name">${item.itemName}</td>
                             <td><span class="type-badge">${item.itemType.itemTypeName}</span></td>
                             <td>
-                                <%-- แก้ไข: เดิมวน item.ceremonies ตรง ๆ ซึ่งมีได้ถึง 12 แถวต่อ item
-                                     (3 ประเภทงาน x 4 ระดับแพ็กเกจ) เลยโชว์ชื่อแพ็กเกจซ้ำ ๆ 12 อัน
-                                     เปลี่ยนมาใช้ itemCeremonyTypes ที่ Controller คำนวณ "ประเภทงานไม่ซ้ำ"
-                                     ไว้ล่วงหน้าแล้ว จะได้เห็นแค่สูงสุด 3 แท็ก (ทำบุญบ้าน/ขึ้นบ้านใหม่/ทำบุญออฟฟิศ) --%>
                                 <c:forEach var="t" items="${itemCeremonyTypes[item.itemId]}">
                                     <span class="ceremony-tag">${t}</span>
                                 </c:forEach>
@@ -132,8 +126,7 @@
             </table>
         </div>
 
-
-    </div><%-- /page-wrapper --%>
+    </div>
 
     <%-- ===== FOOTER ===== --%>
     <footer class="site-footer">
@@ -145,7 +138,6 @@
             </div>
             <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
         </div>
-      
     </footer>
 
     <%-- ========== CONFIRM DELETE MODAL ========== --%>
@@ -158,7 +150,6 @@
                 <div class="orn-diamond-sm"></div>
                 <div class="orn-line right"></div>
             </div>
-            
             <div class="modal-title">ยืนยันการลบ</div>
             <div class="modal-desc">คุณต้องการลบรายการนี้ใช่หรือไม่?<br>การกระทำนี้ไม่สามารถย้อนกลับได้</div>
             <div class="modal-actions">
@@ -169,6 +160,15 @@
     </div>
 
     <script src="${pageContext.request.contextPath}/static/js/itemList.js"></script>
-
+    <script>
+    function toggleDropdown() {
+        document.getElementById('dropdownMenu').classList.toggle('show');
+    }
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-info')) {
+            document.getElementById('dropdownMenu').classList.remove('show');
+        }
+    });
+    </script>
 </body>
 </html>

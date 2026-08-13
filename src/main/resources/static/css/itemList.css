@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
-/* ===== CSS Variables (pink-gold theme, matched to bookingList/staffAssignmentList) ===== */
 :root {
     --gold:          #E0577F;
     --gold-mid:      #EC6E96;
@@ -25,7 +24,6 @@
     --brown-dark:    #1A1A1A;
     --brown-mid:     #3A3A3A;
 
-    /* สีทองจริง ใช้คู่กับชมพูสำหรับธีม "ชมพู-ทอง" */
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
@@ -33,10 +31,9 @@
     --shadow-gold:   rgba(224, 87, 127, 0.16);
     --shadow-warm:   rgba(224, 87, 127, 0.10);
 
-    /* ===== Footer colors (same gradient as navbar) ===== */
-    --footer-grad-1: #C7405F;
-    --footer-grad-2: #D94F76;
-    --footer-grad-3: #E0577F;
+    --footer-grad-1: #3A6B9C;
+    --footer-grad-2: #4B85BE;
+    --footer-grad-3: #5E9CD3;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,21 +47,20 @@ body {
     flex-direction: column;
 }
 
-/* ========== NAVBAR ========== */
+/* ========== NAVBAR (สีฟ้าครามเรียบ ไม่ไล่สี) ========== */
 .navbar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: #4B85BE;
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid;
-    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
+    border-bottom: 3px solid #E2B85B;
     min-height: 92px;
     position: sticky;
     top: 0;
     z-index: 10000;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 4px 16px rgba(59, 107, 156, 0.25);
 }
 
 .navbar::before {
@@ -75,7 +71,7 @@ body {
     background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
-/* ---- Brand (โลโก้) ---- */
+/* ---- Brand ---- */
 .navbar-brand {
     display: flex;
     align-items: center;
@@ -85,7 +81,7 @@ body {
 
 .navbar .lotus-icon,
 .navbar-brand .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.2);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -95,7 +91,7 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
     object-fit: cover;
@@ -108,7 +104,7 @@ body {
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.25);
 }
 
 /* ---- Nav Right ---- */
@@ -120,12 +116,12 @@ body {
 
 .navbar-menu {
     display: flex;
-    gap: 2px;
+    gap: 4px;
     align-items: center;
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     font-size: 17px;
     font-weight: 700;
@@ -133,20 +129,19 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
 }
 
 .nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
-.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
+.nav-item.active { background: #FFFFFF; color: #3A6B9C; font-weight: 700; }
 
 /* ---- User Info ---- */
 .user-info {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     white-space: nowrap;
@@ -155,13 +150,13 @@ body {
     transition: background 0.2s;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
+.user-info:hover { background: rgba(255, 255, 255, 0.3); }
 
 .user-avatar {
     background: #FFFFFF;
-    color: var(--gold);
-    width: 36px;
-    height: 36px;
+    color: #3A6B9C;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -171,8 +166,8 @@ body {
     flex-shrink: 0;
 }
 
-.user-name { color: #FFFFFF; font-size: 14px; font-weight: 700; }
-.arrow     { color: rgba(255, 255, 255, 0.85); font-size: 12px; margin-left: 4px; }
+.user-name { color: #FFFFFF; font-size: 14px; font-weight: 700; font-family: 'Sarabun', sans-serif; }
+.arrow     { color: #FFFFFF; font-size: 11px; margin-left: 4px; opacity: 0.9; }
 
 /* ---- Dropdown ---- */
 .dropdown-menu {
@@ -181,10 +176,10 @@ body {
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1.5px solid var(--accent-gold-pale);
+    border: 1.5px solid #C5A044;
     border-radius: 12px;
     min-width: 180px;
-    box-shadow: 0 8px 28px var(--shadow-gold);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
     z-index: 999;
     overflow: hidden;
 }
@@ -300,7 +295,7 @@ body {
 .list-header h1 {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 2rem;
-    color: var(--brown-dark);
+    color: #3A6B9C;
     font-weight: 700;
     margin-bottom: 4px;
 }
@@ -398,7 +393,7 @@ body {
 
 /* ========== CARD HEADER BAR ========== */
 .card-header-bar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: #3A6B9C;
     padding: 16px 28px;
     display: flex;
     justify-content: space-between;
@@ -565,7 +560,6 @@ tr:hover td { background: var(--cream-warm); }
     );
 }
 
-/* Ornament ใน modal */
 .modal-ornament {
     display: flex;
     align-items: center;
@@ -597,12 +591,6 @@ tr:hover td { background: var(--cream-warm); }
     background: var(--accent-gold-pale);
     transform: rotate(45deg);
     flex-shrink: 0;
-}
-
-.modal-icon {
-    font-size: 38px;
-    margin-bottom: 8px;
-    filter: drop-shadow(0 2px 8px rgba(217, 164, 65, 0.4));
 }
 
 .modal-title {
@@ -659,7 +647,6 @@ tr:hover td { background: var(--cream-warm); }
 
 .modal-btn-confirm:hover { opacity: 0.9; transform: translateY(-1px); }
 
-/* ===== Keyframes ===== */
 @keyframes fadeIn {
     from { opacity: 0; }
     to   { opacity: 1; }
@@ -672,21 +659,13 @@ tr:hover td { background: var(--cream-warm); }
 
 /* ========== FOOTER ========== */
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    background: #4B85BE;
     color: rgba(255, 255, 255, 0.92);
     margin-top: auto;
-    border-top: 3px solid var(--accent-gold-pale);
-    box-shadow: 0 -6px 18px rgba(224, 87, 127, 0.25);
+    border-top: 3px solid #E2B85B;
+    box-shadow: 0 -6px 18px rgba(59, 107, 156, 0.2);
     position: relative;
     z-index: 2;
-}
-
-.site-footer::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
 }
 
 .footer-content {
@@ -708,13 +687,13 @@ tr:hover td { background: var(--cream-warm); }
 
 .site-footer .lotus-icon,
 .footer-lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.2);
     width: 40px;
     height: 40px;
     max-width: 40px;
     max-height: 40px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
     object-fit: cover;
     flex-shrink: 0;
 }
@@ -729,15 +708,6 @@ tr:hover td { background: var(--cream-warm); }
 .footer-tagline {
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-}
-
-.footer-bottom {
-    text-align: center;
-    padding: 12px 20px 18px;
-    font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* ========== RESPONSIVE ========== */

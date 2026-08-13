@@ -68,17 +68,27 @@ public class BookingService {
     /**
      * สำหรับ Organizer: อนุมัติการจอง (เปลี่ยนสถานะเป็น Approved)
      */
+    /**
+     * สำหรับ Organizer: อนุมัติการจอง (เปลี่ยนสถานะเป็น Approved)
+     */
     @Transactional
     public void approveBooking(String id) {
         updateStatus(id, "Approved");
     }
 
     /**
-     * สำหรับ Organizer: ปฏิเสธการจอง (เปลี่ยนสถานะเป็น Rejected)
+     * สำหรับ Organizer: ปฏิเสธการจอง (เปลี่ยนสถานะเป็น Rejected พร้อมระบุเหตุผล)
+     * (แก้ไขใหม่ รับค่า rejectDetail และ throw Exception)
      */
     @Transactional
-    public void rejectBooking(String id) {
-        updateStatus(id, "Rejected");
+    public void rejectBooking(String id, String rejectDetail) throws Exception {
+        BookingForm booking = bookingRepo.findById(id)
+                .orElseThrow(() -> new Exception("ไม่พบข้อมูลการจองรหัส: " + id));
+        
+        booking.setBookingStatus("Rejected");
+        booking.setRejectDetail(rejectDetail); // เซ็ตเหตุผลที่ปฏิเสธ
+        
+        bookingRepo.save(booking);
     }
 
     /**

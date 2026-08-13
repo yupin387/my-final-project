@@ -28,6 +28,14 @@ public class BookingForm {
 
 	@Column(name = "addressimage")
 	private String addressImage;
+	
+	// เพิ่มตัวแปรนี้ต่อจากฟิลด์อื่นๆ ในคลาส BookingForm
+	@Column(name = "rejectdetail", columnDefinition = "TEXT")
+	private String rejectDetail;
+
+	// ... (ฟิลด์อื่นๆ ที่มีอยู่เดิม)
+
+	
 
 	@Column(name = "bookingstatus", nullable = false)
 	private String bookingStatus;
@@ -115,6 +123,15 @@ public class BookingForm {
 	public void setAddressImage(String addressImage) {
 		this.addressImage = addressImage;
 	}
+	
+	// เพิ่ม Getter และ Setter
+		public String getRejectDetail() {
+		    return rejectDetail;
+		}
+
+		public void setRejectDetail(String rejectDetail) {
+		    this.rejectDetail = rejectDetail;
+		}
 
 	public String getBookingStatus() {
 		return bookingStatus;

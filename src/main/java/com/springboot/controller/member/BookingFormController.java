@@ -321,7 +321,9 @@ public class BookingFormController {
         if (loginUser == null) return "redirect:/loginMember";
         
         try {
-            bookingService.rejectBooking(id);
+            // เพิ่มพารามิเตอร์ที่ 2 เป็นข้อความเหตุผลอัตโนมัติ
+            bookingService.rejectBooking(id, "ผู้จองยกเลิกรายการจองด้วยตนเอง"); 
+            
             ra.addFlashAttribute("success", "ยกเลิกรายการจองสำเร็จแล้ว");
         } catch(Exception e) {
             ra.addFlashAttribute("error", "เกิดข้อผิดพลาดในการยกเลิก: " + e.getMessage());
