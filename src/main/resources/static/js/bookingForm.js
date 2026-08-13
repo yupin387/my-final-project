@@ -102,3 +102,88 @@ function syncAnswer(hiddenId, value) {
     const el = document.getElementById(hiddenId);
     if (el) el.value = value;
 }
+
+/* ===== ปักหมุดตำแหน่งที่จัดงาน (Leaflet + OpenStreetMap) ===== */
+var locationMap, locationMarker;
+var DEFAULT_MAP_CENTER = [18.7883, 98.9853]; // เชียงใหม่ (ค่าเริ่มต้น)
+
+function initLocationMap() {
+    var mapEl = document.getElementById('locationMap');
+    if (!mapEl || typeof L === 'undefined') return;
+
+    locationMap = L.map('locationMap').setView(DEFAULT_MAP_CENTER, 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(locationMap);
+
+    locationMap.on('click', function(e) {
+        setMapPin(e.latlng.lat, e.latlng.lng);
+    });
+}
+
+function setMapPin(lat, lng) {
+    if (!locationMap) return;
+
+    if (!locationMarker) {
+        locationMarker = L.marker([lat, lng], { draggable: true }).addTo(locationMap);
+        locationMarker.on('dragend', function() {
+            var pos = locationMarker.getLatLng();
+            updatePinInfo(pos.lat, pos.lng);
+        });
+    } else {
+        locationMarker.setLatLng([lat, lng]);
+    }
+
+    locationMap.setView([lat, lng], locationMap.getZoom() < 14 ? 15 : locationMap.getZoom());
+    updatePinInfo(lat, lng);
+}
+
+function updatePinInfo(lat, lng) {
+    document.getElementById('eventLat').value = lat.toFixed(6);
+    document.getElementById('eventLng').value = lng.toFixed(6);
+
+    var text = document.getElementById('mapSelectedText');
+    if (text) text.innerText = 'ตำแหน่งที่เลือก: ' + lat.toFixed(6) + ', ' + lng.toFixed(6);
+
+    var link = document.getElementById('mapNavLink');
+    if (link) {
+        link.href = 'https://www.google.com/maps?q=' + lat + ',' + lng;
+        link.style.display = 'inline-block';
+    }
+}
+
+function searchLocationOnMap() {
+    var q = document.getElementById('mapSearchInput').value.trim();
+    if (!q) return;
+
+    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q))
+        .then(function(res) { return res.json(); })
+        .then(function(results) {
+            if (results && results.length > 0) {
+                var lat = parseFloat(results[0].lat);
+                var lng = parseFloat(results[0].lon);
+                setMapPin(lat, lng);
+            } else {
+                alert('ไม่พบตำแหน่งที่ค้นหา ลองระบุที่อยู่ให้ละเอียดขึ้น');
+            }
+        })
+        .catch(function() {
+            alert('ค้นหาตำแหน่งไม่สำเร็จ กรุณาลองใหม่');
+        });
+}
+
+function useCurrentLocationOnMap() {
+    if (!navigator.geolocation) {
+        alert('เบราว์เซอร์นี้ไม่รองรับการระบุตำแหน่งปัจจุบัน');
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(function(pos) {
+        setMapPin(pos.coords.latitude, pos.coords.longitude);
+    }, function() {
+        alert('ไม่สามารถเข้าถึงตำแหน่งปัจจุบันได้ กรุณาปักหมุดบนแผนที่เอง');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initLocationMap);

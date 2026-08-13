@@ -1,12 +1,21 @@
 // ===== Dropdown =====
 function toggleDropdown() {
-    document.getElementById('dropdownMenu')?.classList.toggle('show');
+    const menu = document.getElementById('dropdownMenu');
+    if (menu) {
+        menu.classList.toggle('show');
+    }
 }
 
+// ใช้การคลิกที่ document แล้วเช็คว่าคลิกนอกปุ่มโปรไฟล์หรือไม่
 document.addEventListener('click', function (e) {
-    const userInfo = document.querySelector('.user-info');
-    if (userInfo && !userInfo.contains(e.target)) {
-        document.getElementById('dropdownMenu')?.classList.remove('show');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    // ถ้าคลิกไม่อยู่ใน profileDropdown ให้ปิดเมนู
+    if (profileDropdown && !profileDropdown.contains(e.target)) {
+        if (dropdownMenu) {
+            dropdownMenu.classList.remove('show');
+        }
     }
 });
 

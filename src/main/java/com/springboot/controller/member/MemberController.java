@@ -95,15 +95,17 @@ public class MemberController {
             return "redirect:/loginMember";
         }
         
-        // ดึงข้อมูลล่าสุดจาก DB
+        // ข้อมูลล่าสุดจาก DB
         Member latestData = memberService.getMemberById(user.getMemberId());
         
-        // จุดสำคัญ: ถ้าหาข้อมูลไม่เจอ ให้เอาตัวจาก Session มาโชว์แก้ขัดไปก่อนป้องกันหน้าพัง 
         if (latestData == null) {
             latestData = user;
         }
-        
         model.addAttribute("member", latestData);
+        
+        // 🚩 เพิ่มบรรทัดนี้เข้าไปตรงนี้ครับ!
+        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        
         return "editProfile";
     }
  

@@ -1,34 +1,50 @@
-// ===== Dropdown Toggle =====
-function toggleDropdown() {
-    event.stopPropagation(); // สำคัญมาก เพื่อป้องกันไม่ให้คลิกซ้ำซ้อนกับโค้ดด้านล่าง
+/**
+ * viewBooking.js - Interactive Scripts for Member Booking Summary Page
+ */
+
+// Toggle Dropdown Menu (สำหรับโปรไฟล์ผู้ใช้)
+function toggleDropdown(event) {
+    if (event) {
+        event.stopPropagation();
+    }
     const menu = document.getElementById('dropdownMenu');
     if (menu) {
         menu.classList.toggle('show');
     }
 }
 
+// ซ่อน Dropdown เมื่อคลิกพื้นที่อื่นภายนอก
 document.addEventListener('click', function (e) {
-    const userInfo = document.querySelector('.user-info');
+    const userPill = document.querySelector('.user-profile-pill');
     const menu = document.getElementById('dropdownMenu');
     if (menu && menu.classList.contains('show')) {
-        if (userInfo && !userInfo.contains(e.target) && !menu.contains(e.target)) {
+        if (userPill && !userPill.contains(e.target) && !menu.contains(e.target)) {
             menu.classList.remove('show');
         }
     }
 });
 
-
-function confirmCancel(bookingId) {
-    if (confirm('ต้องการยกเลิกการจองนี้ใช่หรือไม่?')) {
-        window.location.href = contextPath + '/booking/cancel/' + bookingId;
+// แสดง Modal ยืนยันการยกเลิกรายการจอง
+function showCancelModal(bookingId) {
+    const baseUrl = (typeof contextPath !== 'undefined') ? contextPath : '';
+    const cancelUrl = baseUrl + '/booking/cancel/' + bookingId;
+    
+    const confirmBtn = document.getElementById('confirmCancelUrl');
+    if (confirmBtn) {
+        confirmBtn.setAttribute('href', cancelUrl);
+    }
+    
+    const cancelModalElement = document.getElementById('cancelModal');
+    if (cancelModalElement) {
+        const cancelModal = new bootstrap.Modal(cancelModalElement);
+        cancelModal.show();
     }
 }
 
-// ===== Cancel Modal =====
-function showCancelModal(bookingId) {
-    // ใช้ contextPath ที่ส่งมาจาก JSP แทน EL syntax
-    const cancelUrl = contextPath + '/booking/cancel/' + bookingId;
-    document.getElementById('confirmCancelUrl').setAttribute('href', cancelUrl);
-    var myModal = new bootstrap.Modal(document.getElementById('cancelModal'));
-    myModal.show();
+// ยืนยันการยกเลิกแบบ Confirm Box สำรอง (เผื่อใช้กรณีไม่ผ่าน Modal)
+function confirmCancel(bookingId) {
+    if (confirm('ต้องการยกเลิกการจองนี้ใช่หรือไม่?')) {
+        const baseUrl = (typeof contextPath !== 'undefined') ? contextPath : '';
+        window.location.href = baseUrl + '/booking/cancel/' + bookingId;
+    }
 }

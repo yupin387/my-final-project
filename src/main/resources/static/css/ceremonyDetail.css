@@ -877,8 +877,7 @@ body {
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 5px;
-    /*color: var(--brown-dark);*/
-    color: #B0345A; /* 👈 เพิ่มบรรทัดนี้เข้าไป (หรือใช้สี #E0577F ตามชอบครับ) */
+    color: #B0345A;
 }
 .cd-package-option-price {
     font-size: 1.1rem;
@@ -947,8 +946,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-/* ===== แก้: สีข้อความ "คำถาม" ในการ์ดชวนสงสัย เปลี่ยนจากแดงจัด #A6222F
-   เป็นน้ำตาลเข้ม (--brown-dark) ให้กลืนกับหัวข้ออื่นๆ ในหน้า ===== */
 .cd-curiosity-question {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 1.7rem;
@@ -980,11 +977,10 @@ body {
 }
 
 /* ============================================================
-   ===== NAVBAR (navbar-custom) — sync ให้ตรงกับ home.css/home.jsp เป๊ะ
-   (เพิ่ม font-family ครอบทั้งหมด + ปรับขนาด font ให้เท่ากัน)
+   ===== NAVBAR (navbar-custom) — sync ให้ตรงกับ home.css/home.jsp
    ============================================================ */
 .navbar-custom {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 0 40px;
     display: flex;
@@ -1006,10 +1002,9 @@ body {
     height: 2px;
     background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
 }
-/* บังคับให้ elements ลูกทั้งหมดในแถบเมนูเป็นฟอนต์ Charmonman เหมือนกันหมด ให้ตรงกับ home.css เป๊ะ */
 .navbar-custom,
 .navbar-custom * {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
 }
 .navbar-brand-wrap {
     display: flex;
@@ -1057,7 +1052,7 @@ body {
 .nav-link-item {
     color: #FFFFFF;
     text-decoration: none;
-    font-size: 17px;
+    font-size: 14px; /* 👈 ปรับจาก 17px เป็น 14px */
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 6px;
@@ -1082,10 +1077,10 @@ body {
     border-radius: 8px;
     padding: 9px 22px;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 14px; /* 👈 ปรับจาก 16px เป็น 14px ให้กลมกลืน */
     transition: all 0.2s;
     white-space: nowrap;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 .btn-register-nav:hover {
@@ -1169,7 +1164,7 @@ body {
 .dropdown-link.danger      { color: #c0392b; }
 .dropdown-link.danger:hover{ background: #fff5f5; }
 
-/* dropdown เมนู บริการ/แพ็กเกจ และ ปฏิทิน (เฉพาะหน้านี้ home ไม่มี) */
+/* dropdown เมนู บริการ/แพ็กเกจ และ ปฏิทิน */
 .nav-dropdown-wrap { position: relative; display: inline-block; }
 .nav-dropdown-toggle { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
 .nav-caret { font-size: 0.7rem; transition: transform 0.2s ease; }
@@ -1194,7 +1189,7 @@ body {
 .nav-dropdown-link {
     display: block;
     padding: 10px 18px;
-    font-size: 0.92rem;
+    font-size: 14px; /* 👈 ปรับให้เป็น 14px ตรงกัน */
     color: var(--brown-dark);
     text-decoration: none;
     white-space: nowrap;
@@ -1264,4 +1259,21 @@ body {
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 12px;
+}
+
+/* ===== กล่องหมายเหตุสีแดง ===== */
+.cd-important-note {
+    display: block;
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: #FDECEA;
+    border-left: 3px solid #C0392B;
+    border-radius: 6px;
+    color: #C0392B;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.7;
+}
+.cd-important-note strong {
+    color: #A6222F;
 }
