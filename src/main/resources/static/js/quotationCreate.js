@@ -10,44 +10,59 @@ const GROUP_LABELS = {
 
 const selectedItemIds = new Set();
 
-// ฟังก์ชันเปิด-ปิดโหมดแก้ไขจำนวน (ซ่อน/โชว์ปุ่ม +/-)
-function toggleEditQty(btn) {
-    const wrapper = btn.closest('.qty-wrapper');
-    const minusBtn = wrapper.querySelector('.btn-qty-minus');
-    const plusBtn = wrapper.querySelector('.btn-qty-plus');
-    
-    if (minusBtn.style.display === 'none') {
-        // เปิดโหมดแก้ไข
-        minusBtn.style.display = 'inline-flex';
-        plusBtn.style.display = 'inline-flex';
-        btn.innerHTML = '✔️'; // เปลี่ยนรูปดินสอเป็นเครื่องหมายถูก
-        btn.title = 'ยืนยันจำนวน';
-    } else {
-        // ปิดโหมดแก้ไข
-        minusBtn.style.display = 'none';
-        plusBtn.style.display = 'none';
-        btn.innerHTML = '✏️'; // เปลี่ยนกลับเป็นดินสอ
-        btn.title = 'แก้ไขจำนวน';
+// แสดงจำนวน + ไอคอนปากกา (กดแล้วค่อยเปลี่ยนเป็นปุ่ม -/+)
+function buildQtyCell(value, inputName, isEditable) {
+    if (isEditable) {
+        return `
+            <div class="qty-wrapper" data-mode="view">
+                <span class="qty-display">${value}</span>
+                <input type="number" name="${inputName}" value="${value}" min="1" class="qty-input" readonly style="display:none;">
+                <button type="button" class="btn-qty-minus" onclick="adjustQty(this, -1)" style="display:none;">-</button>
+                <button type="button" class="btn-qty-plus" onclick="adjustQty(this, 1)" style="display:none;">+</button>
+                <button type="button" class="btn-qty-edit" onclick="toggleQtyEdit(this)" title="แก้ไขจำนวน">✏️</button>
+            </div>`;
     }
-}
-
-// ฟังก์ชันสร้างช่องจำนวนที่มีรูปดินสอซ่อน +/- ไว้ตอนแรก (เรียงลำดับ: - | ตัวเลข | + | ดินสอ)
-function buildQtyCell(value, inputName) {
     return `
         <div class="qty-wrapper">
-            <button type="button" class="btn-qty-minus" onclick="adjustQty(this, -1)" style="display:none;">−</button>
             <input type="number" name="${inputName}" value="${value}" min="1" class="qty-input" readonly>
-            <button type="button" class="btn-qty-plus" onclick="adjustQty(this, 1)" style="display:none;">+</button>
-            <button type="button" class="btn-pencil-toggle" onclick="toggleEditQty(this)" title="แก้ไขจำนวน">✏️</button>
         </div>`;
+}
+
+// สลับโหมด: กดปากกา -> โชว์ปุ่ม -/+ , กดซ้ำ -> กลับเป็นตัวเลขเฉยๆ
+function toggleQtyEdit(btn) {
+    const wrapper = btn.closest('.qty-wrapper');
+    const display = wrapper.querySelector('.qty-display');
+    const input   = wrapper.querySelector('.qty-input');
+    const minus   = wrapper.querySelector('.btn-qty-minus');
+    const plus    = wrapper.querySelector('.btn-qty-plus');
+
+    const isEditing = wrapper.getAttribute('data-mode') === 'edit';
+
+    if (isEditing) {
+        wrapper.setAttribute('data-mode', 'view');
+        display.style.display = '';
+        input.style.display = 'none';
+        minus.style.display = 'none';
+        plus.style.display = 'none';
+        btn.textContent = '✏️';
+    } else {
+        wrapper.setAttribute('data-mode', 'edit');
+        display.style.display = 'none';
+        input.style.display = '';
+        minus.style.display = '';
+        plus.style.display = '';
+        btn.textContent = '✕';
+    }
 }
 
 // ฟังก์ชันกดปรับเพิ่ม/ลดจำนวน
 function adjustQty(btn, delta) {
-    const input = btn.parentElement.querySelector('.qty-input');
+    const wrapper = btn.parentElement;
+    const input   = wrapper.querySelector('.qty-input');
+    const display = wrapper.querySelector('.qty-display');
     let val = parseInt(input.value) || 1;
     val = val + delta;
-    
+
     // ถ้าน้อยกว่าหรือเท่ากับ 0 จะถามเพื่อลบรายการทิ้ง
     if (val <= 0) {
         if (confirm('คุณต้องการลบรายการนี้ออกจากใบเสนอราคาใช่หรือไม่?')) {
@@ -60,8 +75,9 @@ function adjustQty(btn, delta) {
         }
         return;
     }
-    
+
     input.value = val;
+    if (display) display.textContent = val;
     calculateGrandTotal();
 }
 
@@ -81,14 +97,17 @@ function getCurrentCategory() {
     return activeTab ? activeTab.getAttribute('data-category') : 'อุปกรณ์พิธีกรรม';
 }
 
+// สร้างหัวข้อหมวดหมู่ โดยข้อความจะอยู่แค่คอลัมน์ 2 เท่านั้น และมีเซลล์ว่างสำหรับคอลัมน์อื่นเพื่อให้ตีเส้นได้ตามภาพ
 function ensureGroupHeader(tbody) {
     if (!tbody) return;
     if (tbody.querySelector('.group-row')) return;
     const label = GROUP_LABELS[tbody.id] || '';
     const headerRow = document.createElement('tr');
     headerRow.className = 'group-row';
-    // สร้าง 6 คอลัมน์ เอาชื่อหมวดไว้ซ้ายมือสุดโดยการใช้ colspan="6" แต่ชิดซ้าย
-    headerRow.innerHTML = `<td colspan="6" class="category-header-text" style="text-align: left !important; padding-left: 25px !important;">${label}</td>`;
+    headerRow.innerHTML =
+        `<td class="no-index"></td>` +
+        `<td class="category-header-text">${label}</td>` +
+        `<td></td><td></td><td></td><td></td>`;
     tbody.prepend(headerRow);
 }
 
@@ -268,14 +287,17 @@ function addSelectedItemsToTable() {
         const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
         const unit     = dataEl.getAttribute('data-unit');
         const itemType = dataEl.getAttribute('data-type') || '';
-        
+
+        const isEquipment = itemType.includes('อุปกรณ์พิธีกรรม'); 
+        const isExtra     = itemType.includes('อุปกรณ์เสริม');    
+
         const scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
         const monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
         const initialQty   = scalesByMonk ? monkCount : 1;
 
         let targetBody = document.getElementById('group-service');
-        if (itemType.includes('อุปกรณ์พิธีกรรม')) targetBody = document.getElementById('group-equipment');
-        else if (itemType.includes('อุปกรณ์เสริม')) targetBody = document.getElementById('group-extra');
+        if (isEquipment) targetBody = document.getElementById('group-equipment');
+        else if (isExtra) targetBody = document.getElementById('group-extra');
         else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
         else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
 
@@ -285,16 +307,17 @@ function addSelectedItemsToTable() {
         tr.className = 'dynamic-row';
         tr.setAttribute('data-item-id', itemId);
 
-        // ตัดคอลัมน์ลบทิ้ง เหลือ 6 คอลัมน์ และเรียกใช้ฟังก์ชัน buildQtyCell สร้างช่องจำนวน
+        const showDesc = !!itemDesc && !isEquipment;
+
         tr.innerHTML = `
                 <td class="row-number text-center"></td>
                 <td>
                     ${itemName}
-                    ${itemDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
+                    ${showDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
                     <input type="hidden" name="extraItemIds" value="${itemId}">
                 </td>
                 <td>
-                    ${buildQtyCell(initialQty, 'extraQtys')}
+                    ${buildQtyCell(initialQty, 'extraQtys', isExtra)}
                 </td>
                 <td class="text-center">${unit}</td>
                 <td>

@@ -72,6 +72,18 @@
             color: #333;
             font-weight: 600;
         }
+
+        /* ===== สไตล์หัวข้อหมวดหมู่ให้เหมือนหน้าสร้างใบเสนอราคา ===== */
+        #mainQuotationTable tr.group-row td.category-header-text {
+            text-align: left !important;
+            padding-left: 8px !important;
+            white-space: nowrap;
+            color: #9C6B3E;
+            font-weight: bold;
+        }
+        #mainQuotationTable tr.group-row td {
+            background-color: #FBF2E3; /* สีพื้นหลังอ่อนๆ ให้เข้ากับธีมหมวดหมู่ */
+        }
     </style>
 </head>
 <body>
@@ -200,14 +212,14 @@
 
             <table id="mainQuotationTable" class="standard-table is-editing">
                <colgroup>
-    <col style="width: 60px;">
-    <col style="width: auto;">
-    <col style="width: 160px;">   <!-- จำนวน: ขยายให้กว้างพอสำหรับปุ่ม +/- อยู่แถวเดียวกัน -->
-    <col style="width: 70px;">
-    <col style="width: 110px;">
-    <col style="width: 110px;">
-    <col class="delete-col" style="width: 40px;">  <!-- ลบ: ให้เล็กที่สุด -->
-</colgroup>
+                    <col style="width: 60px;">
+                    <col style="width: auto;">
+                    <col style="width: 160px;">
+                    <col style="width: 70px;">
+                    <col style="width: 110px;">
+                    <col style="width: 110px;">
+                    <col class="delete-col" style="width: 40px;">
+                </colgroup>
                 <thead>
                     <tr>
                         <th class="text-center">ลำดับ</th>
@@ -237,9 +249,12 @@
                     </tr>
                     </c:if>
 
+                    <%-- นำส่วนแสดงรายละเอียดแพ็กเกจกลับมา --%>
                     <c:if test="${not empty packageIncludedItems && !isCustomRequest}">
                         <tr class="package-included-row no-qty-convert static-row">
-                            <td></td><td class="package-includes-title" style="padding-left: 20px !important;">ประกอบไปด้วยรายการดังนี้:</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                            <td></td>
+                            <td class="package-includes-title" style="padding-left: 20px !important;">ประกอบไปด้วยรายการดังนี้:</td>
+                            <td></td><td></td><td></td><td></td><td class="delete-col"></td>
                         </tr>
                         <c:forEach var="pkgItem" items="${packageIncludedItems}">
                             <c:set var="pkgItemQty" value="1"/>
@@ -262,16 +277,16 @@
                 <c:set var="equipmentBlockEdit">
                     <c:set var="printedEquipHeaderEdit" value="false" />
                     <c:forEach var="d" items="${details}">
-                        <!-- แก้เงื่อนไขให้ดึงเฉพาะ "อุปกรณ์พิธีกรรม" -->
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                             <c:if test="${!printedEquipHeaderEdit}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
                                 <c:set var="printedEquipHeaderEdit" value="true" />
                             </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
                                 <td>
-                                    ${d.item.itemName} <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
+                                    ${d.item.itemName} 
+                                    <%-- ซ่อนรายละเอียดของหมวดอุปกรณ์พิธีกรรม ไม่ให้แสดง --%>
                                     <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
                                 </td>
                                 <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
@@ -290,7 +305,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                             <c:if test="${!printedSangHeaderEdit}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
                                 <c:set var="printedSangHeaderEdit" value="true" />
                             </c:if>
                             <tr class="static-row" data-item-id="${d.item.itemId}">
@@ -323,7 +338,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                             <c:if test="${!printedFoodHeaderEdit}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
                                 <c:set var="printedFoodHeaderEdit" value="true" />
                             </c:if>
                             <tr class="static-row" data-item-id="${d.item.itemId}">
@@ -348,7 +363,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
                             <c:if test="${!printedServiceHeaderEdit}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดบริการและการดำเนินการ</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดบริการและการดำเนินการ</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
                                 <c:set var="printedServiceHeaderEdit" value="true" />
                             </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
@@ -374,7 +389,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
                             <c:if test="${!printedExtraHeaderEdit}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
                                 <c:set var="printedExtraHeaderEdit" value="true" />
                             </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
@@ -513,6 +528,7 @@
     window.CEREMONY_MONK_COUNT = ${empty monkCount ? 0 : monkCount};
     window.IS_CUSTOM_REQUEST = ${isCustomRequest};
 
+    // อัปเดตฟังก์ชันสร้างหัวข้อให้หน้าตาเหมือนหน้าสร้างใบเสนอราคา (เว้นช่องแรกให้สีและโครงสร้างตรงกัน)
     window.ensureGroupHeader = function(tbody) {
         if (!tbody) return;
         if (tbody.querySelector('.group-row')) return;
@@ -526,7 +542,7 @@
         var label = GROUP_LABELS[tbody.id] || '';
         var headerRow = document.createElement('tr');
         headerRow.className = 'group-row';
-        headerRow.innerHTML = '<td></td><td class="category-header-text">' + label + '</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>';
+        headerRow.innerHTML = '<td class="no-index"></td><td class="category-header-text">' + label + '</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>';
         tbody.prepend(headerRow);
     };
 
@@ -553,7 +569,9 @@
             var initialQty   = scalesByMonk ? monkCount : 1;
 
             var targetBody = document.getElementById('group-service');
-            if (itemType.includes('อุปกรณ์พิธีกรรม')) targetBody = document.getElementById('group-equipment');
+            var isEquipment = itemType.includes('อุปกรณ์พิธีกรรม');
+
+            if (isEquipment) targetBody = document.getElementById('group-equipment');
             else if (itemType.includes('อุปกรณ์เสริม')) targetBody = document.getElementById('group-extra');
             else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
             else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
@@ -564,7 +582,8 @@
             tr.className = 'dynamic-row';
             tr.setAttribute('data-item-id', itemId);
 
-            var descHtml = itemDesc ? '<br><span class="text-muted" style="font-size:12px;">' + itemDesc + '</span>' : '';
+            // ซ่อนรายละเอียด (itemDesc) สำหรับหมวดอุปกรณ์พิธีกรรม
+            var descHtml = (itemDesc && !isEquipment) ? '<br><span class="text-muted" style="font-size:12px;">' + itemDesc + '</span>' : '';
 
             // ใช้ buildQtyCell (มีปุ่ม +/-) จาก quotationEdit.js เพื่อให้แถวที่เพิ่มใหม่หน้าตาเหมือนแถวเดิมทุกประการ
             var qtyCellHtml = (typeof buildQtyCell === 'function')
@@ -576,7 +595,6 @@
                 '<td>' + itemName + descHtml + '<input type="hidden" name="extraItemIds" value="' + itemId + '"></td>' +
                 '<td>' + qtyCellHtml + '</td>' +
                 '<td class="text-center">' + unit + '</td>' +
-                /* เพิ่ม readonly ให้กับแถวที่ถูกสร้างใหม่ผ่าน JavaScript ด้วย */
                 '<td><input type="number" name="extraPrices" value="' + price.toFixed(2) + '" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>' +
                 '<td class="text-right"><span class="subtotal">0.00</span></td>' +
                 '<td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>';

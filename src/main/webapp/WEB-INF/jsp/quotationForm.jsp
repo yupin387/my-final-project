@@ -17,8 +17,33 @@
         justify-content:center;
         flex-wrap:nowrap;
         white-space:nowrap;
-        gap: 4px; /* ลดช่องว่างลงนิดนึงเพื่อไม่ให้ล้นตาราง */
+        gap: 4px; 
     }
+    #mainQuotationTable .btn-qty-edit{
+    flex:0 0 auto;
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: transparent;
+    color: #9CA3AF; /* สีเทา */
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    opacity: 0.75;
+}
+#mainQuotationTable .btn-qty-edit:hover{
+    opacity: 1;
+}
+#mainQuotationTable .qty-display{
+    font-weight: 600;
+    color: #333;
+    min-width: 14px;
+    text-align: center;
+}
     #mainQuotationTable .btn-qty-minus,
     #mainQuotationTable .btn-qty-plus{
         flex:0 0 auto;
@@ -28,12 +53,13 @@
         background: #FFFFFF;
         color: #9C6B3E;
         border-radius: 4px;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 1;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        padding-bottom: 2px;
     }
     #mainQuotationTable .btn-qty-minus:hover,
     #mainQuotationTable .btn-qty-plus:hover{
@@ -41,7 +67,7 @@
     }
     #mainQuotationTable .qty-wrapper .qty-input{
         flex:0 0 auto;
-        width: 38px; /* ลดความกว้างกล่องตัวเลขลงนิดนึง */
+        width: 38px; 
         text-align:center;
         border: 1px solid #ddd;
         border-radius: 4px;
@@ -65,21 +91,17 @@
         -webkit-appearance: none;
         margin: 0;
     }
-    /* ปุ่มดินสอสำหรับกดโชว์ +/- */
-    .btn-pencil-toggle {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 14px;
-        color: #D9A441;
-        padding: 2px;
-        transition: transform 0.2s;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+
+    /* บังคับหัวข้อหมวดหมู่ให้อยู่แค่คอลัมน์ 2 และชิดซ้ายเสมอ สีตัวอักษรน้ำตาลตามรูป */
+    #mainQuotationTable tr.group-row td.category-header-text{
+        text-align: left !important;
+        padding-left: 8px !important;
+        white-space: nowrap;
+        color: #9C6B3E;
+        font-weight: bold;
     }
-    .btn-pencil-toggle:hover {
-        transform: scale(1.15);
+    #mainQuotationTable tr.group-row td {
+        background-color: #FBF2E3; /* สีพื้นหลังอ่อนๆ ให้เข้ากับธีมหมวดหมู่ */
     }
 </style>
 </head>
@@ -182,7 +204,7 @@
                     <colgroup>
                         <col style="width: 50px;">  
                         <col style="width: auto;">  
-                        <col style="width: 140px;">  <!-- ขยายเป็น 140px เพื่อให้ปุ่ม +/- ไม่โดนตัดล้นกรอบ -->
+                        <col style="width: 140px;">  
                         <col style="width: 80px;">  
                         <col style="width: 120px;"> 
                         <col style="width: 120px;"> 
@@ -198,7 +220,6 @@
 						</tr>
 					</thead>
 
-					<%-- กำหนดตัวแปรแพ็กเกจและการนิมนต์พระ --%>
 					<c:set var="monkInviteType" value="" />
 					<c:set var="monkCount" value="" />
 					<c:forEach var="d" items="${b.details}">
@@ -209,7 +230,6 @@
                     <c:set var="isMonkSelfInvite" value="${fn:contains(monkInviteType,'นิมนต์เอง')}" />
                     <c:set var="discountValue" value="0" />
                     
-                    <%-- ตั้งค่าตัวแปรกรณีที่เป็นงาน กรอกความต้องการเบื้องต้น --%>
                     <c:set var="isCustomRequest" value="${fn:contains(b.ceremony.ceremonyName, 'ความต้องการเบื้องต้น')}" />
                     <c:choose>
                         <c:when test="${isCustomRequest}">
@@ -224,7 +244,6 @@
                     </c:choose>
 
 					<tbody>
-						<%-- 1. แถวราคาแพ็กเกจ --%>
 						<c:if test="${!isCustomRequest}">
 						<tr class="static-row package-main-row no-qty-convert">
 							<td class="text-center row-number">1</td>
@@ -232,16 +251,13 @@
 								<strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
 								<input type="hidden" name="bookingItemNames" value="${b.ceremony.ceremonyName}">
 							</td>
-                            <!-- ล็อกช่องจำนวน -->
 							<td><input type="number" name="bookingQtys" value="1" class="qty-input" readonly></td>
 							<td class="text-center">แพ็กเกจ</td>
-							<!-- ใส่ readonly -->
 							<td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
 							<td class="text-right"><span class="subtotal">0.00</span></td>
 						</tr>
 						</c:if>
 
-						<%-- ลิสต์รายการที่อยู่ในแพ็กเกจ --%>
 						<c:if test="${not empty packageIncludedItems && !isCustomRequest}">
 							<tr class="package-included-row no-qty-convert static-row">
                                 <td colspan="6" class="package-includes-title text-left" style="padding-left: 20px !important;">ประกอบไปด้วยรายการดังนี้:</td>
@@ -264,7 +280,6 @@
 						</c:if>
                     </tbody>
 
-                    <%-- สลับลำดับตารางตามประเภทงาน --%>
                     <c:choose>
                         <c:when test="${isCustomRequest}">
                             <tbody id="group-equipment"></tbody>
@@ -284,7 +299,9 @@
                                             <c:if test="${fn:trim(item.itemName) eq selectedSangName}">
                                                 <c:if test="${!printedSangHeader}">
                                                     <tr class="group-row">
-                                                        <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดสังฆทาน</td>
+                                                        <td class="no-index"></td>
+                                                        <td class="category-header-text">หมวดสังฆทาน</td>
+                                                        <td></td><td></td><td></td><td></td>
                                                     </tr>
                                                     <c:set var="printedSangHeader" value="true" />
                                                 </c:if>
@@ -328,7 +345,9 @@
                                             <c:if test="${fn:trim(item.itemName) eq selectedFoodName}">
                                                 <c:if test="${!printedFoodHeader}">
                                                     <tr class="group-row">
-                                                        <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดภัตตาหารปิ่นโต</td>
+                                                        <td class="no-index"></td>
+                                                        <td class="category-header-text">หมวดภัตตาหารปิ่นโต</td>
+                                                        <td></td><td></td><td></td><td></td>
                                                     </tr>
                                                     <c:set var="printedFoodHeader" value="true" />
                                                 </c:if>
@@ -354,7 +373,9 @@
                                     <c:forEach var="item" items="${items}">
                                         <c:if test="${fn:trim(item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">
                                             <tr class="group-row">
-                                                <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดบริการและการดำเนินการ</td>
+                                                <td class="no-index"></td>
+                                                <td class="category-header-text">หมวดบริการและการดำเนินการ</td>
+                                                <td></td><td></td><td></td><td></td>
                                             </tr>
                                             <tr class="static-row">
                                                 <td class="text-center row-number"></td>
@@ -375,7 +396,6 @@
                         </c:when>
 
                         <c:otherwise>
-                            <%-- แพ็กเกจปกติ --%>
                             <c:set var="sangQty" value="1" />
                             <c:forEach var="d" items="${b.details}">
                                 <c:if test="${fn:contains(d.question.questionsText,'สังฆทาน') && fn:contains(d.question.questionsText,'จำนวน')}">
@@ -391,7 +411,9 @@
                                             <c:if test="${fn:trim(item.itemName) eq selectedSangName}">
                                                 <c:if test="${!printedSangHeader}">
                                                     <tr class="group-row">
-                                                        <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดสังฆทาน</td>
+                                                        <td class="no-index"></td>
+                                                        <td class="category-header-text">หมวดสังฆทาน</td>
+                                                        <td></td><td></td><td></td><td></td>
                                                     </tr>
                                                     <c:set var="printedSangHeader" value="true" />
                                                 </c:if>
@@ -435,7 +457,9 @@
                                             <c:if test="${fn:trim(item.itemName) eq selectedFoodName}">
                                                 <c:if test="${!printedFoodHeader}">
                                                     <tr class="group-row">
-                                                        <td colspan="6" class="category-header-text" style="text-align: left !important;">หมวดภัตตาหารปิ่นโต</td>
+                                                        <td class="no-index"></td>
+                                                        <td class="category-header-text">หมวดภัตตาหารปิ่นโต</td>
+                                                        <td></td><td></td><td></td><td></td>
                                                     </tr>
                                                     <c:set var="printedFoodHeader" value="true" />
                                                 </c:if>
@@ -464,7 +488,6 @@
 
 				</table>
 
-				<%-- 4. ส่วนท้าย --%>
 				<div class="doc-footer">
 					<div class="remarks-box">
                         <div class="remarks-header">

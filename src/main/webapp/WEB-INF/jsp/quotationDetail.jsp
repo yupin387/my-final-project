@@ -9,6 +9,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationDetail.css?v=1">
+<style>
+    /* สไตล์หัวข้อหมวดหมู่ให้เหมือนหน้าสร้างใบเสนอราคา */
+    .standard-table tr.group-row td.category-header-text {
+        text-align: left !important;
+        padding-left: 8px !important;
+        white-space: nowrap;
+        color: #9C6B3E;
+        font-weight: bold;
+    }
+    .standard-table tr.group-row td {
+        background-color: #FBF2E3; /* สีพื้นหลังอ่อนๆ */
+    }
+
+    /* สไตล์สำหรับป้ายแจ้งเตือน (Flash Banner) */
+    .flash-banner {
+        padding: 12px 20px;
+        margin: 0 auto 20px;
+        max-width: 800px;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .flash-banner-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    .flash-banner-error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+</style>
 </head>
 <body>
 
@@ -39,6 +73,15 @@
     </nav>
 
     <div class="page-wrapper">
+        
+        <%-- ส่วนแสดงแจ้งเตือน (Flash Message) --%>
+        <c:if test="${not empty success}">
+            <div class="flash-banner flash-banner-success" id="flashBanner">✓ ${success}</div>
+        </c:if>
+        <c:if test="${not empty error}">
+            <div class="flash-banner flash-banner-error" id="flashBanner">⚠ ${error}</div>
+        </c:if>
+
         <div class="a4-document">
 
             <c:set var="monkInviteType" value="" />
@@ -157,7 +200,7 @@
                                 <td class="text-center">แพ็กเกจ</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
                                 <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2" /></td>
-                                <td class="text-muted">${not empty d.note ? d.note : '-'}</td>
+                                <td class="text-muted">-</td>
                             </tr>
                         </c:if>
                     </c:forEach>
@@ -186,23 +229,32 @@
                     <c:set var="equipBlock">
                         <c:set var="printedEquip" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <!-- เปลี่ยนเงื่อนไขให้เจาะจงเฉพาะ "อุปกรณ์พิธีกรรม" -->
                             <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                                 <c:if test="${!printedEquip}">
-                                    <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                    <tr class="group-row">
+                                        <td></td>
+                                        <td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td>
+                                        <td></td><td></td><td></td><td></td><td></td>
+                                    </tr>
                                     <c:set var="printedEquip" value="true"/>
                                 </c:if>
                                 <tr>
                                     <td class="text-center row-number"></td>
                                     <td>
                                         ${d.item.itemName}
-                                        <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
+                                        <c:if test="${not empty d.item.itemDetail && !isCustomRequest}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
                                     </td>
                                     <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0" /></td>
                                     <td class="text-center">${d.item.unit}</td>
                                     <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
                                     <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2" /></td>
-                                    <td class="text-muted">${not empty d.note ? d.note : '-'}</td>
+                                    <td class="text-muted">
+                                        <c:choose>
+                                            <c:when test="${not empty d.note and d.item.itemName ne 'เก้าอี้' and fn:contains(d.note, 'เก้าอี้')}">-</c:when>
+                                            <c:when test="${not empty d.note}">${d.note}</c:when>
+                                            <c:otherwise>-</c:otherwise>
+                                        </c:choose>
+                                    </td>
                                 </tr>
                             </c:if>
                         </c:forEach>
@@ -213,7 +265,11 @@
                         <c:forEach var="d" items="${details}">
                             <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                                 <c:if test="${!printedSang}">
-                                    <tr class="group-row"><td></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                    <tr class="group-row">
+                                        <td></td>
+                                        <td class="category-header-text">หมวดสังฆทาน</td>
+                                        <td></td><td></td><td></td><td></td><td></td>
+                                    </tr>
                                     <c:set var="printedSang" value="true"/>
                                 </c:if>
                                 <tr>
@@ -228,7 +284,13 @@
                                     <td class="text-center">${d.item.unit}</td>
                                     <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${isFreeSang ? 0.00 : d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
                                     <td class="text-right"><fmt:formatNumber value="${isFreeSang ? 0.00 : d.subtotal}" minFractionDigits="2" /></td>
-                                    <td class="text-muted">${not empty d.note ? d.note : '-'}</td>
+                                    <td class="text-muted">
+                                        <c:choose>
+                                            <c:when test="${not empty d.note and d.item.itemName ne 'เก้าอี้' and fn:contains(d.note, 'เก้าอี้')}">-</c:when>
+                                            <c:when test="${not empty d.note}">${d.note}</c:when>
+                                            <c:otherwise>-</c:otherwise>
+                                        </c:choose>
+                                    </td>
                                 </tr>
                             </c:if>
                         </c:forEach>
@@ -239,7 +301,11 @@
                         <c:forEach var="d" items="${details}">
                             <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                                 <c:if test="${!printedFood}">
-                                    <tr class="group-row"><td></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                    <tr class="group-row">
+                                        <td></td>
+                                        <td class="category-header-text">หมวดภัตตาหารปิ่นโต</td>
+                                        <td></td><td></td><td></td><td></td><td></td>
+                                    </tr>
                                     <c:set var="printedFood" value="true"/>
                                 </c:if>
                                 <tr>
@@ -252,7 +318,13 @@
                                     <td class="text-center">${d.item.unit}</td>
                                     <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
                                     <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2" /></td>
-                                    <td class="text-muted">${not empty d.note ? d.note : '-'}</td>
+                                    <td class="text-muted">
+                                        <c:choose>
+                                            <c:when test="${not empty d.note and d.item.itemName ne 'เก้าอี้' and fn:contains(d.note, 'เก้าอี้')}">-</c:when>
+                                            <c:when test="${not empty d.note}">${d.note}</c:when>
+                                            <c:otherwise>-</c:otherwise>
+                                        </c:choose>
+                                    </td>
                                 </tr>
                             </c:if>
                         </c:forEach>
@@ -263,7 +335,11 @@
                         <c:forEach var="d" items="${details}">
                             <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('บริการ')}">
                                 <c:if test="${!printedServ}">
-                                    <tr class="group-row"><td></td><td class="category-header-text">หมวดบริการและการดำเนินการ</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                    <tr class="group-row">
+                                        <td></td>
+                                        <td class="category-header-text">หมวดบริการและการดำเนินการ</td>
+                                        <td></td><td></td><td></td><td></td><td></td>
+                                    </tr>
                                     <c:set var="printedServ" value="true"/>
                                 </c:if>
                                 <tr>
@@ -276,19 +352,28 @@
                                     <td class="text-center">${d.item.unit}</td>
                                     <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
                                     <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2" /></td>
-                                    <td class="text-muted">${not empty d.note ? d.note : '-'}</td>
+                                    <td class="text-muted">
+                                        <c:choose>
+                                            <c:when test="${not empty d.note and d.item.itemName ne 'เก้าอี้' and fn:contains(d.note, 'เก้าอี้')}">-</c:when>
+                                            <c:when test="${not empty d.note}">${d.note}</c:when>
+                                            <c:otherwise>-</c:otherwise>
+                                        </c:choose>
+                                    </td>
                                 </tr>
                             </c:if>
                         </c:forEach>
                     </c:set>
                     
-                    <!-- สร้างบล็อกใหม่สำหรับอุปกรณ์เสริมโดยเฉพาะ -->
                     <c:set var="extraBlock">
                         <c:set var="printedExtra" value="false"/>
                         <c:forEach var="d" items="${details}">
                             <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
                                 <c:if test="${!printedExtra}">
-                                    <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                    <tr class="group-row">
+                                        <td></td>
+                                        <td class="category-header-text">หมวดอุปกรณ์เสริม</td>
+                                        <td></td><td></td><td></td><td></td><td></td>
+                                    </tr>
                                     <c:set var="printedExtra" value="true"/>
                                 </c:if>
                                 <tr>
@@ -301,7 +386,13 @@
                                     <td class="text-center">${d.item.unit}</td>
                                     <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
                                     <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2" /></td>
-                                    <td class="text-muted">${not empty d.note ? d.note : '-'}</td>
+                                    <td class="text-muted">
+                                        <c:choose>
+                                            <c:when test="${not empty d.note and d.item.itemName ne 'เก้าอี้' and fn:contains(d.note, 'เก้าอี้')}">-</c:when>
+                                            <c:when test="${not empty d.note}">${d.note}</c:when>
+                                            <c:otherwise>-</c:otherwise>
+                                        </c:choose>
+                                    </td>
                                 </tr>
                             </c:if>
                         </c:forEach>
@@ -377,7 +468,6 @@
         </div>
     </div>
 
-   <%-- ปุ่มกลับหน้ารายการ: ไว้ล่างสุดท้ายของกระดาษ/หน้าเว็บจริงๆ (ใต้ footer) --%>
     <div class="back-bottom-wrap no-print">
         <a href="${pageContext.request.contextPath}/organizer/quotation" class="btn-back-bottom">← กลับไปรายการใบเสนอราคา</a>
     </div>
@@ -393,15 +483,12 @@
         </div>
     </footer>
 
- 
-
 <script>
     function toggleDropdown() { document.getElementById('dropdownMenu').classList.toggle('show'); }
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.user-info')) document.getElementById('dropdownMenu').classList.remove('show');
     });
 
-    // Auto index row numbers
     document.addEventListener('DOMContentLoaded', function() {
         var rows = document.querySelectorAll('.standard-table tbody tr:not(.group-row):not(.package-included-row)');
         var count = 1;
@@ -409,6 +496,12 @@
             var numCell = row.querySelector('.row-number');
             if(numCell) numCell.innerText = count++;
         });
+
+        // สคริปต์ซ่อนหน้าต่างแจ้งเตือนหลัง 5 วินาที (ถ้ามี)
+        setTimeout(function() { 
+            var banner = document.getElementById('flashBanner'); 
+            if(banner) banner.style.display = 'none'; 
+        }, 5000);
     });
 </script>
 </body>
