@@ -13,11 +13,15 @@ public class Ceremony {
     private int ceremonyId;
 
     @Column(name = "ceremonytype", nullable = false, length = 100)
-    // ค่าที่เป็นไปได้: ทำบุญบ้าน, ขึ้นบ้านใหม่, ทำบุญออฟฟิศ (มีแค่ 3 ค่าตายตัว)
+    // ค่าที่เป็นไปได้:
+    // ทำบุญบ้าน
+    // ขึ้นบ้านใหม่
+    // ทำบุญบริษัทหรือออฟฟิศ
     private String ceremonyType;
 
     @Column(name = "ceremonyname", nullable = false, length = 100)
-    // ค่าที่เป็นไปได้: มาตรฐาน, อิ่มบุญ, พรีเมียม, ประเมินตามความต้องการ (ชื่อแพ็กเกจ)
+    // ชื่อแพ็กเกจ เช่น
+    // มาตรฐาน, อิ่มบุญ, พรีเมียม, ประเมินตามความต้องการ
     private String ceremonyName;
 
     @Column(name = "ceremonydetail", length = 255)
@@ -26,19 +30,36 @@ public class Ceremony {
     @Column(name = "baseprice", nullable = false)
     private double basePrice;
 
-    @ManyToMany(mappedBy = "ceremonies")
-    private List<Item> items;
+    /*
+     * รายการสินค้า/บริการที่อยู่ในแพ็กเกจ
+     * โดยมี CeremonyItem เป็นตารางกลาง
+     * เพื่อเก็บจำนวน (quantity) ของแต่ละรายการ
+     */
+    @OneToMany(
+        mappedBy = "ceremony",
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER
+    )
+    private List<CeremonyItem> ceremonyItems;
 
     public Ceremony() {
     }
 
-    public Ceremony(String ceremonyType, String ceremonyName, String ceremonyDetail, double basePrice) {
-        super();
+    public Ceremony(
+            String ceremonyType,
+            String ceremonyName,
+            String ceremonyDetail,
+            double basePrice) {
+
         this.ceremonyType = ceremonyType;
         this.ceremonyName = ceremonyName;
         this.ceremonyDetail = ceremonyDetail;
         this.basePrice = basePrice;
     }
+
+    // =========================================================
+    // Getter / Setter
+    // =========================================================
 
     public int getCeremonyId() {
         return ceremonyId;
@@ -80,11 +101,11 @@ public class Ceremony {
         this.basePrice = basePrice;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<CeremonyItem> getCeremonyItems() {
+        return ceremonyItems;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setCeremonyItems(List<CeremonyItem> ceremonyItems) {
+        this.ceremonyItems = ceremonyItems;
     }
 }

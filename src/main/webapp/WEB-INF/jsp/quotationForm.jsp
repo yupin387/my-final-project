@@ -539,10 +539,44 @@
 	</div>
 
 	<div id="itemDataStore" style="display: none;">
-		<c:forEach var="item" items="${extraSelectableItems}">
-			<div class="item-data" data-id="${item.itemId}" data-name="${item.itemName}" data-detail="${item.itemDetail}" data-unit="${item.unit}" data-price="${item.pricePerUnit}" data-type="${item.itemType.itemTypeName}"></div>
-		</c:forEach>
-	</div>
+        <%-- ดึงประเภทงาน (ceremonyType) จากตัวแปร b (หน้าสร้าง) --%>
+        <c:set var="currentCeremonyType" value="${not empty b ? b.ceremony.ceremonyType : ''}" />
+        
+        <c:forEach var="item" items="${extraSelectableItems}">
+            <c:set var="skipItem" value="false" />
+            
+            <%-- กรองอุปกรณ์พิธีกรรมให้ตรงกับประเภทงาน --%>
+            <c:if test="${item.itemType.itemTypeName == 'อุปกรณ์พิธีกรรม'}">
+                <c:choose>
+                    <c:when test="${currentCeremonyType == 'ทำบุญบ้าน'}">
+                        <c:if test="${item.itemName == 'โต๊ะหมู่บูชาไม้สัก' || item.itemName == 'พระพุทธรูปประดิษฐาน' || item.itemName == 'ชุดเจิมประตูหน้าต่าง' || item.itemName == 'ป้ายฤกษ์เปิดกิจการ' || item.itemName == 'พุ่มเงินพุ่มทอง' || fn:contains(item.itemName, 'สำนักงาน') || fn:contains(item.itemName, 'เปิดกิจการ')}">
+                            <c:set var="skipItem" value="true"/>
+                        </c:if>
+                    </c:when>
+                    <c:when test="${currentCeremonyType == 'ขึ้นบ้านใหม่'}">
+                        <c:if test="${item.itemName == 'พานพุ่มดอกไม้สดถวายพระ' || item.itemName == 'ป้ายฤกษ์เปิดกิจการ' || item.itemName == 'พุ่มเงินพุ่มทอง' || fn:contains(item.itemName, 'สำนักงาน') || fn:contains(item.itemName, 'เปิดกิจการ')}">
+                            <c:set var="skipItem" value="true"/>
+                        </c:if>
+                    </c:when>
+                    <c:when test="${currentCeremonyType == 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                        <c:if test="${item.itemName == 'พานพุ่มดอกไม้สดถวายพระ' || item.itemName == 'ชุดเจิมประตูหน้าต่าง' || item.itemName == 'พระพุทธรูปประดิษฐาน'}">
+                            <c:set var="skipItem" value="true"/>
+                        </c:if>
+                    </c:when>
+                </c:choose>
+            </c:if>
+            
+            <c:if test="${!skipItem}">
+                <div class="item-data" 
+                     data-id="${item.itemId}" 
+                     data-name="${item.itemName}" 
+                     data-detail="${item.itemDetail}" 
+                     data-unit="${item.unit}" 
+                     data-price="${item.pricePerUnit}" 
+                     data-type="${item.itemType.itemTypeName}"></div>
+            </c:if>
+        </c:forEach>
+    </div>
 
 	<div id="itemSelectionModal" class="modal-overlay">
 		<div class="modal-card">

@@ -7,110 +7,135 @@ import java.util.List;
 @Table(name = "item")
 public class Item {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "itemid")
-	private int itemId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "itemid")
+    private int itemId;
 
-	@Column(name = "itemname", nullable = false, length = 100)
-	private String itemName;
+    @Column(name = "itemname", nullable = false, length = 100)
+    private String itemName;
 
-	@Column(name = "itemdetail")
-	private String itemDetail;
+    @Column(name = "itemdetail")
+    private String itemDetail;
 
-	@Column(name = "unit", nullable = false, length = 20)
-	private String unit;
+    @Column(name = "unit", nullable = false, length = 20)
+    private String unit;
 
-	@Column(name = "priceperunit", nullable = false)
-	private double pricePerUnit;
+    @Column(name = "priceperunit", nullable = false)
+    private double pricePerUnit;
 
-	@Column(name = "isactive")
-	private Boolean isActive = true;
+    @Column(name = "isactive")
+    private Boolean isActive = true;
 
-	@ManyToOne
-	@JoinColumn(name = "itemtypeid", nullable = false)
-	private ItemType itemType;
+    // =========================================================
+    // ประเภท Item
+    // =========================================================
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "itemceremony", joinColumns = @JoinColumn(name = "itemid"),
+    @ManyToOne
+    @JoinColumn(name = "itemtypeid", nullable = false)
+    private ItemType itemType;
 
-			inverseJoinColumns = @JoinColumn(name = "ceremonyid"))
-	private List<Ceremony> ceremonies;
+    // =========================================================
+    // รายการ Ceremony ที่ Item นี้ถูกใช้
+    // ผ่านตารางกลาง CeremonyItem
+    // =========================================================
 
-	public Item() {
-	}
+    @OneToMany(mappedBy = "item")
+    private List<CeremonyItem> ceremonyItems;
 
-	public Item(String itemName, String itemDetail, String unit, double pricePerUnit, ItemType itemType,
-			List<Ceremony> ceremonies) {
-		this.itemName = itemName;
-		this.itemDetail = itemDetail;
-		this.unit = unit;
-		this.pricePerUnit = pricePerUnit;
-		this.itemType = itemType;
-		this.ceremonies = ceremonies;
-	}
+    // =========================================================
+    // Constructor
+    // =========================================================
 
-	public Boolean getIsActive() {
-		return isActive;
-	}
+    public Item() {
+    }
 
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
+    /*
+     * Constructor สำหรับสร้าง Item ใหม่
+     *
+     * ไม่ต้องส่ง ceremonyItems เข้ามา
+     * เพราะความสัมพันธ์กับ Ceremony
+     * จะถูกสร้างผ่าน CeremonyItem
+     */
+    public Item(
+            String itemName,
+            String itemDetail,
+            String unit,
+            double pricePerUnit,
+            ItemType itemType) {
 
-	public String getItemName() {
-		return itemName;
-	}
+        this.itemName = itemName;
+        this.itemDetail = itemDetail;
+        this.unit = unit;
+        this.pricePerUnit = pricePerUnit;
+        this.itemType = itemType;
+    }
 
-	public int getItemId() {
-		return itemId;
-	}
+    // =========================================================
+    // Getter / Setter
+    // =========================================================
 
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
-	}
+    public int getItemId() {
+        return itemId;
+    }
 
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
-	}
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
 
-	public String getItemDetail() {
-		return itemDetail;
-	}
+    public String getItemName() {
+        return itemName;
+    }
 
-	public void setItemDetail(String itemDetail) {
-		this.itemDetail = itemDetail;
-	}
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
 
-	public String getUnit() {
-		return unit;
-	}
+    public String getItemDetail() {
+        return itemDetail;
+    }
 
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
+    public void setItemDetail(String itemDetail) {
+        this.itemDetail = itemDetail;
+    }
 
-	public double getPricePerUnit() {
-		return pricePerUnit;
-	}
+    public String getUnit() {
+        return unit;
+    }
 
-	public void setPricePerUnit(double pricePerUnit) {
-		this.pricePerUnit = pricePerUnit;
-	}
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
 
-	public ItemType getItemType() {
-		return itemType;
-	}
+    public double getPricePerUnit() {
+        return pricePerUnit;
+    }
 
-	public void setItemType(ItemType itemType) {
-		this.itemType = itemType;
-	}
+    public void setPricePerUnit(double pricePerUnit) {
+        this.pricePerUnit = pricePerUnit;
+    }
 
-	public List<Ceremony> getCeremonies() {
-		return ceremonies;
-	}
+    public Boolean getIsActive() {
+        return isActive;
+    }
 
-	public void setCeremonies(List<Ceremony> ceremonies) {
-		this.ceremonies = ceremonies;
-	}
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public ItemType getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(ItemType itemType) {
+        this.itemType = itemType;
+    }
+
+    public List<CeremonyItem> getCeremonyItems() {
+        return ceremonyItems;
+    }
+
+    public void setCeremonyItems(List<CeremonyItem> ceremonyItems) {
+        this.ceremonyItems = ceremonyItems;
+    }
 }

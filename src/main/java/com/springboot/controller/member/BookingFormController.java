@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.model.BookingForm;
 import com.springboot.model.Ceremony;
+import com.springboot.model.CeremonyItem;
 import com.springboot.model.Item;
 import com.springboot.model.Member;
 import com.springboot.model.QuestionsDetail;
@@ -58,14 +58,11 @@ public class BookingFormController {
     @Autowired
     private CeremonyService ceremonyService;
 
-    // ใช้แสดงปฏิทินย่อในฟอร์มจอง (เลือกวันได้พร้อมเช็คว่าง/เต็มคิว)
     @Autowired
     private AuspiciousCalendarService auspiciousCalendarService;
 
-    // จำนวนทีมงาน/คิวที่รับได้ต่อวัน ให้ตรงกับ TEAM_COUNT ใน UserController
     private static final int TEAM_COUNT = 2;
 
-    // แคชวันฤกษ์ดีของหน้าฟอร์มจอง แยกตัวแปรออกจาก UserController เพื่อไม่ต้องแก้ไฟล์นั้นเลย
     private Map<String, List<Map<String, String>>> dayQualityCache = new LinkedHashMap<>();
 
     @PostConstruct
@@ -82,13 +79,11 @@ public class BookingFormController {
             }
             dayQualityCache = normalized;
         } catch (Exception e) {
-            System.err.println("[BookingFormController] ดึงข้อมูลวันฤกษ์ดีไม่สำเร็จ (ปฏิทินในฟอร์มจะไม่มีแท็ก ★/▲): "
-                + e.getMessage());
+            System.err.println("[BookingFormController] ดึงข้อมูลวันฤกษ์ดีไม่สำเร็จ: " + e.getMessage());
             dayQualityCache = new LinkedHashMap<>();
         }
     }
 
-    // เติมข้อมูลปฏิทิน (วันว่าง/เต็มคิว/ฤกษ์ดี) ให้ model ก่อน return view — ใช้ร่วมกันทั้ง 3 ฟอร์ม
     private void addCalendarAttributes(Model model) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<String> confirmedDates = bookingService.getAllBookings().stream()
@@ -188,14 +183,6 @@ public class BookingFormController {
         return "fillBookingForm3";
     }
 
-    /*
-     * FIX: เดิมเมธอดนี้ return เฉพาะ "mainName" อย่างเดียว ทำให้ลิงก์ในเมนู dropdown
-     * "บริการ/แพ็กเกจ" ของหน้า bookingForm.jsp / viewBooking.jsp ที่อ้างอิง
-     * ${t.representativeId} ไม่มีค่า (ลิงก์จะกลายเป็น /ceremony/detail/ เฉยๆ)
-     * จึงต้องหา "ตัวแทน" ของแต่ละประเภทงานบุญ (representative ceremony) และใส่
-     * representativeId เข้าไปด้วย ให้ตรงกับ logic เดียวกันกับ buildCeremonyTypes()
-     * ใน UserController (เรียงตามราคาแล้วเลือกตัวที่ถูกที่สุดเป็นตัวแทน)
-     */
     private List<Map<String, Object>> buildCeremonyTypesForFooter() {
         List<Ceremony> all = ceremonyService.getAllCeremonies();
         Map<String, List<Ceremony>> grouped = all.stream()
@@ -218,8 +205,6 @@ public class BookingFormController {
         return result;
     }
 
-
-    /*===========แก้===========*/
     @PostMapping("/saveBooking")
     public String saveBooking(@ModelAttribute BookingForm booking,
     		                  @RequestParam Map<String, String> allParams,
@@ -269,36 +254,99 @@ public class BookingFormController {
         BookingForm saved = bookingService.saveBooking(booking);
         return "redirect:/viewBooking/" + saved.getBookingId();
     }
-    
 
     @GetMapping("/viewBooking/{id}")
     public String viewBooking(@PathVariable String id, Model model, HttpSession session) {
-        // 1. ดึงข้อมูลการจองหลัก
         BookingForm booking = bookingService.getBookingById(id);
         if (booking == null) return "redirect:/home";
 
         boolean alreadyReviewed = reviewService.hasAlreadyReviewed(id);
 
-        // 2. ดึง "รายการแพ็กเกจหลัก" (เฉพาะอุปกรณ์ที่อยู่ในแพ็กเกจนั้นๆ)
-        // หมายเหตุ: เช็กว่าในคลาส BookingForm คุณตั้งชื่อ Getter ว่า getCeremony() หรือไม่ ถ้าใช่ใช้ตามนี้ได้เลย
-        List<Item> packageItems = booking.getCeremony().getItems();
+        List<CeremonyItem> packageItems = new ArrayList<>();
+        if (booking.getCeremony() != null && booking.getCeremony().getCeremonyItems() != null) {
+            packageItems = booking.getCeremony().getCeremonyItems().stream()
+                .filter(ci -> ci.getItem() != null)
+                .collect(Collectors.toList());
+        }
 
-        // 3. ดึง "ของเสริม" (เพื่อเอาไปแสดงเป็นตัวเลือกเพิ่มเติมให้ลูกค้า)
+        // ===================================================================
+        // ถ้าเป็นแพ็กเกจ "กรอกความต้องการเบื้องต้น" ให้เพิ่มอุปกรณ์ที่ผูกกับ
+        // จำนวนพระสงฆ์แบบ dynamic ตามคำตอบที่ลูกค้ากรอกจริง (ไม่ใช่ค่าคงที่)
+        // ===================================================================
+        if (booking.getCeremony() != null
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName())) {
+
+            int monkCount = extractMonkCount(booking);
+
+            if (monkCount > 0) {
+                List<CeremonyItem> monkRelatedItems = buildMonkRelatedItems(booking.getCeremony(), monkCount);
+                packageItems.addAll(monkRelatedItems);
+            }
+        }
+
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
 
-        // 4. ส่งค่าทั้งหมดไปที่ Model
         model.addAttribute("booking", booking);
-        model.addAttribute("packageItems", packageItems); // <-- เพิ่มบรรทัดนี้ ส่งอุปกรณ์แพ็กเกจหลักไป
+        model.addAttribute("packageItems", packageItems);
         model.addAttribute("hasReview", alreadyReviewed);
         model.addAttribute("pintoItems", pintoItems);
         model.addAttribute("sanghatharnItems", sanghatharnItems);
-
-        // FIX: เดิมหน้านี้ไม่ได้ set ceremonyTypes ทำให้เมนู dropdown "บริการ/แพ็กเกจ"
-        // ใน navbar ของ viewBooking.jsp ว่างเปล่า (${ceremonyTypes} ไม่มีค่า)
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
-        
+
         return "viewBooking";
+    }
+
+    /**
+     * อ่านคำตอบของคำถาม "จำนวนพระสงฆ์" จาก booking.details แล้วแปลงเป็นตัวเลข
+     * คืนค่า 0 ถ้าไม่มีคำตอบ หรือแปลงตัวเลขไม่ได้
+     */
+    private int extractMonkCount(BookingForm booking) {
+        if (booking.getDetails() == null) return 0;
+
+        return booking.getDetails().stream()
+            .filter(d -> d.getQuestion() != null
+                    && "จำนวนพระสงฆ์".equals(d.getQuestion().getQuestionsText()))
+            .findFirst()
+            .map(d -> {
+                try {
+                    String raw = d.getAnswer() == null ? "" : d.getAnswer().replaceAll("[^0-9]", "");
+                    return raw.isEmpty() ? 0 : Integer.parseInt(raw);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+            })
+            .orElse(0);
+    }
+
+    /**
+     * สร้างรายการอุปกรณ์ที่ quantity ขึ้นกับจำนวนพระสงฆ์จริง
+     * (ไม่ได้ save ลง DB แค่สร้างไว้แสดงผลชั่วคราวเท่านั้น)
+     */
+    private List<CeremonyItem> buildMonkRelatedItems(Ceremony ceremony, int monkCount) {
+        List<CeremonyItem> result = new ArrayList<>();
+
+        List<Item> serviceItems = itemService.getItemsByTypeName("บริการ");
+        List<Item> ritualItems = itemService.getItemsByTypeName("อุปกรณ์พิธีกรรม");
+
+        findItemByName(serviceItems, "บริการประสานงานนิมนต์พระ")
+            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+
+        findItemByName(ritualItems, "อาสนะพระสงฆ์")
+            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+
+        findItemByName(ritualItems, "ตาลปัตรพร้อมขาตั้ง")
+            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+
+        findItemByName(ritualItems, "กรวยดอกไม้ถวายพระสงฆ์")
+            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+
+        return result;
+    }
+
+    
+    private java.util.Optional<Item> findItemByName(List<Item> items, String name) {
+        return items.stream().filter(i -> name.equals(i.getItemName())).findFirst();
     }
     
     @GetMapping("/latestBooking")
@@ -311,7 +359,7 @@ public class BookingFormController {
         if (latest != null && latest.getBookingId() != null) {
             return "redirect:/viewBooking/" + latest.getBookingId();
         } else {
-            return "redirect:/booking"; 
+            return "redirect:/booking";
         }
     }
     
@@ -321,9 +369,7 @@ public class BookingFormController {
         if (loginUser == null) return "redirect:/loginMember";
         
         try {
-            // เพิ่มพารามิเตอร์ที่ 2 เป็นข้อความเหตุผลอัตโนมัติ
-            bookingService.rejectBooking(id, "ผู้จองยกเลิกรายการจองด้วยตนเอง"); 
-            
+            bookingService.rejectBooking(id, "ผู้จองยกเลิกรายการจองด้วยตนเอง");
             ra.addFlashAttribute("success", "ยกเลิกรายการจองสำเร็จแล้ว");
         } catch(Exception e) {
             ra.addFlashAttribute("error", "เกิดข้อผิดพลาดในการยกเลิก: " + e.getMessage());
@@ -331,6 +377,4 @@ public class BookingFormController {
         
         return "redirect:/home";
     }
-    
-    
 }

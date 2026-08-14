@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GLOBAL
+   GLOBAL & COLOR VARIABLES (ธีมน้ำตาล - ทอง - ขาว)
    ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
 
@@ -10,33 +10,31 @@
     font-family: 'Sarabun', sans-serif;
 }
 
-
 :root {
-    --gold:          #A9752E;
-    --gold-mid:      #C0923F;
-    --gold-light:    #D9B87A;
-    --gold-pale:     #F0E2C7;
-    --gold-glow:     #FFF8ED;
-    --cream:         #FFFFFF;
-    --cream-warm:    #FFFBF3;
-    --cream-mid:     #FBF2E3;
-    --cream-border:  #E8D5B7;
+    --gold:              #A9752E;
+    --gold-mid:          #C0923F;
+    --gold-light:        #D9B87A;
+    --gold-pale:         #F0E2C7;
+    --gold-glow:         #FFF8ED;
+    --cream:             #FFFFFF;
+    --cream-warm:        #FFFBF3;
+    --cream-mid:         #FBF2E3;
+    --cream-border:      #E8D5B7;
     --cream-border-soft: #EDE0C8;
-    --text-dark:     #1A1A1A;
-    --text-mid:      #333333;
-    --text-muted:    #777777;
-    --brown-dark:    #1A1A1A;
-    --brown-mid:     #3A3A3A;
+    --text-dark:         #1A1A1A;
+    --text-mid:          #333333;
+    --text-muted:        #777777;
+    --brown-dark:        #1A1A1A;
+    --brown-mid:         #3A3A3A;
 
     --shadow-gold: rgba(169, 117, 46, 0.18);
     --shadow-warm: rgba(169, 117, 46, 0.14);
 
-    /* สีทองจริง ใช้คู่กับน้ำตาลสำหรับธีม "น้ำตาล-ทอง-ขาว" ให้ตรงกับหน้าอื่นๆ */
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
+    --accent-brown:     #8B5A2B;
 
-    /* สีน้ำตาลล้วน ใช้กับ navbar / footer / card-header (เหมือน home) */
     --brand-brown: #9C6B3E;
 }
 
@@ -48,7 +46,7 @@ body {
 }
 
 /* ==========================================================================
-   NAVBAR (ขนาด/ฟอนต์ตรงกับ home.css .navbar-custom เป๊ะ, สีน้ำตาลล้วน)
+   NAVBAR (คงเดิม)
    ========================================================================== */
 .navbar {
     background: var(--brand-brown);
@@ -66,14 +64,6 @@ body {
     overflow: visible;
 }
 
-.navbar::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
-}
-
 .navbar-brand-wrap {
     display: flex;
     align-items: center;
@@ -81,18 +71,14 @@ body {
     text-decoration: none;
 }
 
-.navbar .lotus-icon,
-.navbar-brand-wrap .lotus-icon {
+.navbar .lotus-icon {
     background: rgba(255, 255, 255, 0.18);
     width: 76px;
     height: 76px;
-    max-width: 76px;
-    max-height: 76px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
     border: 1.5px solid rgba(255, 255, 255, 0.55);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
@@ -104,7 +90,6 @@ body {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 30px;
     font-weight: 700;
-    letter-spacing: 0.5px;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3);
     white-space: nowrap;
 }
@@ -129,16 +114,10 @@ body {
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
-    white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-    font-family: 'Sarabun', sans-serif;
 }
 
-.nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
-.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
-
-/* ===== User Profile Pill ===== */
-.dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
+.nav-item:hover { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
+.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; }
 
 .user-info {
     display: flex;
@@ -149,10 +128,7 @@ body {
     border-radius: 50px;
     border: 1.5px solid rgba(255, 255, 255, 0.45);
     cursor: pointer;
-    transition: background 0.2s;
 }
-
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
 
 .user-avatar {
     background: #FFFFFF;
@@ -164,53 +140,18 @@ body {
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 1rem;
-    flex-shrink: 0;
 }
 
-.user-detail  { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name    { color: #FFFFFF; font-size: 0.88rem; font-weight: 700; }
-.user-role    { color: rgba(255, 255, 255, 0.75); font-size: 0.7rem; }
-.arrow        { color: #FFFFFF; font-size: 12px; margin-left: 2px; }
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: calc(100% - 10px);
-    right: 0;
-    background: #FFFFFF;
-    border: 1px solid var(--cream-border);
-    border-radius: 10px;
-    min-width: 175px;
-    box-shadow: 0 8px 28px var(--shadow-gold);
-    z-index: 99999;
-    overflow: hidden;
-}
-
-.dropdown-menu.show { display: block; }
-
-.dropdown-item {
-    display: block;
-    padding: 13px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-mid);
-    text-decoration: none;
-    border-bottom: 1px solid var(--cream-mid);
-    transition: background 0.2s;
-}
-
-.dropdown-item:last-child  { border-bottom: none; }
-.dropdown-item:hover       { background: var(--cream-warm); }
-.dropdown-item.danger      { color: #c0392b; }
-.dropdown-item.danger:hover{ background: #fff5f5; }
+.user-detail { display: flex; flex-direction: column; line-height: 1.2; }
+.user-name { color: #FFFFFF; font-size: 0.88rem; font-weight: 700; }
+.user-role { color: rgba(255, 255, 255, 0.75); font-size: 0.7rem; }
 
 /* ==========================================================================
-   PAGE WRAPPER
+   PAGE WRAPPER & BACK BUTTON
    ========================================================================== */
 .page-wrapper {
     flex: 1;
-    padding: 32px 40px 60px;
+    padding: 36px 20px 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -218,10 +159,8 @@ body {
 
 .back-link-row {
     width: 100%;
-    max-width: 860px;
+    max-width: 1000px;
     margin-bottom: 16px;
-    margin-left: 0;     
-    margin-right: auto;
 }
 
 .back-link {
@@ -229,123 +168,147 @@ body {
     text-decoration: none;
     font-size: 14px;
     font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     transition: color 0.2s;
 }
 
 .back-link:hover { color: var(--accent-gold); }
 
 /* ==========================================================================
-   DETAIL CARD
+   BOOKING SHEET DOCUMENT (เอกสารแผ่นกระดาษตามดีไซน์ viewBooking)
    ========================================================================== */
-.detail-card {
+.booking-sheet-document {
     background: #FFFFFF;
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1.5px solid var(--accent-gold);
-    box-shadow: 0 8px 32px var(--shadow-warm);
+    border-radius: 12px;
+    border: 1px solid var(--cream-border);
+    box-shadow: 0 10px 30px var(--shadow-warm);
     width: 100%;
-    max-width: 860px;
-}
-
-.card-header-bar {
-    background: var(--brand-brown);
-    padding: 24px 32px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid var(--accent-gold-mid);
+    max-width: 1000px;
+    padding: 45px 50px;
     position: relative;
 }
 
-.card-header-bar::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+/* Header เอกสาร */
+.sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 20px;
 }
 
-.booking-id-badge {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.22);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: #FFFFFF;
-    padding: 4px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 8px;
+.company-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-.card-header-bar h2 {
+.brand-logo {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-gold-pale);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.company-name {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent-brown);
+    margin: 0 0 2px 0;
+}
+
+.company-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.document-title-box {
+    text-align: right;
+}
+
+.doc-title {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 24px;
     font-weight: 700;
-    color: #FFFFFF;
-    margin: 0;
-    text-shadow: 0 1px 8px rgba(0,0,0,0.25);
-}
-
-/* ==========================================================================
-   STATUS PILL
-   ========================================================================== */
-.status-pill {
-    display: inline-block;
-    padding: 8px 20px;
-    border-radius: 24px;
-    font-size: 13px;
-    font-weight: 700;
-    white-space: nowrap;
-    background: #FFFEF9;
-    border: 1px solid var(--accent-gold);
     color: var(--brown-dark);
+    margin: 0 0 4px 0;
 }
 
-.status-pending   { background: var(--cream-warm); color: #b8860b;  border-color: var(--accent-gold-mid); }
-.status-approved  { background: #e8f5e9;            color: #2e7d32;  border-color: #a5d6a7; }
-.status-quoted    { background: #e8f4fd;            color: #0d5c8f;  border-color: #90caf9; }
-.status-confirmed { background: #e8f5e9;            color: #2e7d32;  border-color: #a5d6a7; }
-.status-completed { background: #e8f5e9;            color: #1b5e20;  border-color: #81c784; }
-.status-rejected  { background: #fdecea;            color: #c62828;  border-color: #ef9a9a; }
-.status-cancelled { background: #f3f3f3;            color: #777;     border-color: #d6d6d6; }
+.doc-no {
+    font-size: 14px;
+    color: var(--text-mid);
+}
+
+.sheet-divider-bold {
+    border: none;
+    border-top: 3px double var(--accent-gold);
+    margin: 0 0 25px 0;
+    opacity: 0.8;
+}
+
+/* กล่องย่อยสองคอลัมน์แบบ grid */
+.sheet-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.sheet-box {
+    background: var(--cream-warm);
+    border: 1px solid var(--cream-border-soft);
+    border-radius: 8px;
+    padding: 18px 22px;
+    height: 100%;
+}
 
 /* ==========================================================================
-   SECTION & INFO ROWS
+   SECTIONS & INFO ROWS
    ========================================================================== */
-.section { padding: 24px 32px; }
+.section {
+    padding: 15px 0;
+}
 
 .section-title {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
-    color: var(--gold);
-    margin-bottom: 18px;
+    color: var(--accent-brown);
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    letter-spacing: 0.3px;
+    gap: 8px;
+    border-bottom: 1px dashed var(--accent-gold-pale);
+    padding-bottom: 6px;
 }
 
-.section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--accent-gold-pale);
+.section-title i {
+    color: var(--accent-gold);
 }
 
 .info-row {
     display: flex;
-    flex-direction: row;    /* บังคับให้เรียงต่อกันในแนวนอน */
-    align-items: flex-start; /* จัดให้ข้อความชิดด้านบนตรงกัน (กรณีข้อความยาวหลายบรรทัด) */
-    margin-bottom: 12px;
+    align-items: baseline;
+    margin-bottom: 10px;
 }
 
 .info-label {
     width: 200px;
-    min-width: 200px;       /* ป้องกันไม่ให้ความกว้างถูกบีบย่อลง */
+    min-width: 200px;
     color: var(--gold-mid);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
+    flex-shrink: 0;
 }
 
 .info-value {
@@ -355,16 +318,154 @@ body {
     color: var(--text-dark);
 }
 
-.divider { border: none; border-top: 1px solid var(--cream-mid); margin: 0 32px; }
+.price-text {
+    color: var(--gold);
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.divider {
+    border: none;
+    border-top: 1px dashed var(--cream-border);
+    margin: 18px 0;
+}
 
 /* ==========================================================================
-   ACTION BAR
+   PACKAGE INCLUSIONS BOX (กล่องรายการอุปกรณ์ในแพ็กเกจ)
    ========================================================================== */
-.action-bar {
-    padding: 20px 32px 28px;
-    border-top: 1.5px solid var(--cream-mid);
+.package-inclusions-box {
+    background-color: var(--cream-warm);
+    border: 1px solid var(--cream-border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-top: 14px;
+    box-shadow: 0 2px 6px rgba(169, 117, 46, 0.05);
+}
+
+.package-inclusions-title {
+    font-weight: 700;
+    color: var(--accent-brown);
+    margin-bottom: 12px;
+    font-size: 0.95rem;
     display: flex;
     align-items: center;
+    gap: 8px;
+}
+
+.package-inclusions-title i {
+    color: var(--gold);
+    font-size: 18px;
+}
+
+.package-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px 16px;
+}
+
+.package-item-chip {
+    background: #FFFFFF;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    border: 1px solid var(--cream-border-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.package-item-chip i {
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.chip-title { flex-grow: 1; }
+.chip-qty { color: var(--accent-brown); }
+
+.no-items-text {
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 4px 0;
+}
+
+/* ==========================================================================
+   STATUS PILLS
+   ========================================================================== */
+.status-pill {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    background: #FFFEF9;
+    border: 1px solid var(--accent-gold);
+    color: var(--brown-dark);
+}
+
+.status-pending   { background: var(--cream-warm); color: #b8860b; border-color: var(--accent-gold-mid); }
+.status-approved  { background: #e8f5e9;            color: #2e7d32; border-color: #a5d6a7; }
+.status-quoted    { background: #e8f4fd;            color: #0d5c8f; border-color: #90caf9; }
+.status-confirmed { background: #e8f5e9;            color: #2e7d32; border-color: #a5d6a7; }
+.status-completed { background: #e8f5e9;            color: #1b5e20; border-color: #81c784; }
+.status-rejected  { background: #fdecea;            color: #c62828; border-color: #ef9a9a; }
+
+/* ==========================================================================
+   MAPS & GALLERY
+   ========================================================================== */
+.map-container {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--cream-border-soft);
+}
+
+.map-iframe { width: 100%; height: 100%; border: 0; }
+
+.btn-map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 0.88rem;
+    color: var(--accent-brown);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.btn-map-link:hover { text-decoration: underline; }
+
+.image-gallery { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.location-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--cream-border-soft);
+}
+
+.no-img-box {
+    background: var(--cream-warm);
+    border: 1px dashed var(--cream-border);
+    padding: 30px;
+    text-align: center;
+    color: var(--text-muted);
+    border-radius: 8px;
+    font-size: 0.92rem;
+}
+
+/* ==========================================================================
+   ACTION BAR & BUTTONS (คงปุ่มเดิม)
+   ========================================================================== */
+.action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 22px;
+    margin-top: 20px;
+    border-top: 2px solid var(--cream-mid);
 }
 
 .action-btn-group {
@@ -380,7 +481,6 @@ body {
     cursor: pointer;
     border: none;
     transition: all 0.2s;
-    font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     text-decoration: none;
     display: inline-block;
@@ -390,13 +490,11 @@ body {
     background: linear-gradient(135deg, #28a745, #218838);
     color: #FFFFFF;
     box-shadow: 0 3px 10px rgba(40, 167, 69, 0.25);
-    border: none;
 }
 
 .btn-approve:hover {
     background: linear-gradient(135deg, #218838, #1e7e34);
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(40, 167, 69, 0.35);
     color: #FFFFFF;
 }
 
@@ -411,8 +509,17 @@ body {
     transform: translateY(-1px);
 }
 
+.btn-back {
+    color: var(--brown-mid);
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.btn-back:hover { color: var(--accent-gold); }
+
 /* ==========================================================================
-   MODAL
+   MODALS (คงเดิม)
    ========================================================================== */
 .modal-overlay {
     position: fixed;
@@ -457,7 +564,6 @@ body {
     padding: 10px 20px;
     margin-bottom: 14px;
     display: inline-block;
-    min-width: 160px;
 }
 
 .modal-id-reject {
@@ -465,25 +571,12 @@ body {
     background: #fdecea;
 }
 
-.modal-id-text {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--brown-mid);
-}
-
+.modal-id-text { font-size: 15px; font-weight: 700; color: var(--brown-mid); }
 .modal-id-text-reject { color: #c62828; }
 
-.modal-footer-note {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-bottom: 22px;
-}
+.modal-footer-note { font-size: 12px; color: var(--text-muted); margin-bottom: 22px; }
 
-.modal-btn-group {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
+.modal-btn-group { display: flex; gap: 12px; justify-content: center; }
 
 .btn-modal-cancel {
     padding: 10px 24px;
@@ -492,13 +585,8 @@ body {
     background: var(--cream-warm);
     color: var(--text-mid);
     font-weight: 700;
-    font-family: 'Sarabun', sans-serif;
     cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s;
 }
-
-.btn-modal-cancel:hover { background: var(--cream-mid); }
 
 .btn-modal-approve {
     padding: 10px 24px;
@@ -506,17 +594,7 @@ body {
     background: linear-gradient(135deg, #28a745, #218838);
     color: #FFFFFF;
     font-weight: 700;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
     text-decoration: none;
-    transition: all 0.2s;
-    box-shadow: 0 3px 10px rgba(40, 167, 69, 0.25);
-}
-
-.btn-modal-approve:hover {
-    background: linear-gradient(135deg, #218838, #1e7e34);
-    transform: translateY(-1px);
-    color: #FFFFFF;
 }
 
 .btn-modal-reject {
@@ -525,102 +603,138 @@ body {
     background: #c62828;
     color: #FFFFFF;
     font-weight: 700;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
     text-decoration: none;
-    transition: all 0.2s;
-}
-
-.btn-modal-reject:hover {
-    background: #a01f1f;
-    transform: translateY(-1px);
-    color: #FFFFFF;
 }
 
 /* ==========================================================================
-   FOOTER (เหมือน home.css .site-footer, สีน้ำตาลล้วน)
+   FOOTER (คงเดิม)
    ========================================================================== */
-.site-footer {
-    background: var(--brand-brown);
+.footer-custom {
+    background-color: var(--brand-brown);
     color: rgba(255, 255, 255, 0.92);
+    padding: 32px 0;
     margin-top: auto;
-    border-top: 3px solid #FFFFFF;
-    box-shadow: 0 -6px 18px rgba(122, 82, 48, 0.22);
-    position: relative;
-    z-index: 2;
+    border-top: 4px solid var(--accent-gold);
 }
 
-.site-footer::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
-}
-
-.footer-content {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    max-width: 1200px;
+.footer-container {
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 30px 24px;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
 }
+
+.footer-left { flex: 1.2; min-width: 240px; }
 
 .footer-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 10px;
 }
 
-.site-footer .lotus-icon,
-.footer-lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
-    width: 40px;
-    height: 40px;
-    max-width: 40px;
-    max-height: 40px;
+.footer-logo {
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
-    object-fit: cover;
+    overflow: hidden;
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    background: #FFFFFF;
     flex-shrink: 0;
 }
 
-.footer-brand-text {
+.footer-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+.footer-brand-title {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: #FFFFFF;
 }
 
-.footer-tagline {
-    font-size: 0.85rem;
+.footer-desc {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.footer-right { flex: 0.8; min-width: 200px; }
+
+.footer-heading {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+}
+
+.footer-contact-list { display: flex; flex-direction: column; gap: 6px; }
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    font-size: 0.85rem;
 }
 
-.footer-bottom {
-    text-align: center;
-    padding: 12px 20px 18px;
-    font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
+/* Responsive */
 @media (max-width: 768px) {
-    .navbar         { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
-    .nav-brand-text { font-size: 22px; }
-    .navbar .lotus-icon,
-    .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
-    .page-wrapper   { padding: 20px 16px 40px; }
-    .card-header-bar{ flex-direction: column; align-items: flex-start; gap: 12px; }
-    .info-row       { flex-direction: column; gap: 4px; }
-    .info-label     { width: auto; }
-    .action-btn-group { flex-direction: column; }
-    .footer-content { flex-direction: column; align-items: flex-start; }
+    .booking-sheet-document { padding: 25px 20px; }
+    .sheet-header { flex-direction: column; gap: 15px; }
+    .document-title-box { text-align: left; }
+    .sheet-cols { grid-template-columns: 1fr; }
+    .info-row { flex-direction: column; gap: 2px; }
+    .info-label { width: auto; }
+    .action-bar { flex-direction: column; gap: 15px; align-items: flex-start; }
+    .footer-container { flex-direction: column; gap: 22px; padding: 0 20px; }
+}
+
+
+.dropdown-wrap {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: #FFFFFF;
+    border: 1px solid var(--cream-border);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    min-width: 160px;
+    overflow: hidden;
+    z-index: 10001;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 12px 18px;
+    color: var(--text-dark);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.15s;
+}
+
+.dropdown-item:hover {
+    background: var(--cream-warm);
+}
+
+.dropdown-item.danger {
+    color: #c62828;
+}
+
+.dropdown-item.danger:hover {
+    background: #fdecea;
 }

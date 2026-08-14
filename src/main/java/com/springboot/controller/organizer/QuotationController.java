@@ -1,6 +1,7 @@
 package com.springboot.controller.organizer;
 
 import com.springboot.model.*;
+import com.springboot.repository.ItemRepository;
 import com.springboot.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Controller
 @RequestMapping("/organizer/quotation")
 public class QuotationController {
 
-    // ชื่อ item บริการนิมนต์พระ ต้องตรงกับที่ seed ไว้ใน Run.java เป๊ะๆ
-    // ใช้เป็นค่าคงที่กลาง กันพิมพ์ผิดไม่ตรงกันระหว่างจุดที่อ้างอิง
     private static final String MONK_INVITE_SERVICE_ITEM_NAME = "บริการประสานงานนิมนต์พระ";
 
     @Autowired
@@ -27,7 +25,9 @@ public class QuotationController {
     @Autowired
     private BookingService bookingService;
 
-    // แสดงรายการใบเสนอราคา โดยรองรับการกรองข้อมูลตามสถานะ
+    @Autowired
+    private ItemRepository itemRepo;
+
     @GetMapping
     public String listAllQuotations(
             @RequestParam(name = "status", defaultValue = "All") String status,
@@ -51,43 +51,41 @@ public class QuotationController {
         return "quotationList";
     }
 
-    // แสดงหน้าฟอร์มสำหรับสร้างใบเสนอราคาใหม่
     @GetMapping("/create/{bookingId}")
     public String createQuotationForm(@PathVariable String bookingId, Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
 
         BookingForm booking = bookingService.getBookingById(bookingId);
-
         List<BookingFormDetail> validDetails = buildValidDetails(booking);
 
         model.addAttribute("b", booking);
         model.addAttribute("validDetails", validDetails);
-
-        // FIX: ดึงข้อความ "ความต้องการเพิ่มเติม" ที่ลูกค้ากรอกไว้ตอนจอง มาแสดงในหน้า
-        // ใบเสนอราคา เป็นข้อมูลอ้างอิงให้ผู้จัดงานอ่านแล้วไปเพิ่มรายการ/ราคาเองผ่าน
-        // ปุ่ม "เลือกรายการวัสดุอุปกรณ์เสริม" (ไม่ auto-fill ราคา เพราะเป็น freetext
-        // จับคู่กับชื่อ item ในระบบไม่ได้ตรงๆ เหมือนสังฆทาน/ปิ่นโตที่เป็นการเลือกจากรายการ)
         model.addAttribute("additionalNote", extractAdditionalNote(booking));
 
-        int ceremonyId = booking.getCeremony().getCeremonyId();
-        List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
-        model.addAttribute("items", allItems);
-
-        // เช็คว่าเป็นรูปแบบ "กรอกความต้องการเบื้องต้น" หรือไม่
         boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
         model.addAttribute("isCustomRequest", isCustomRequest);
 
-        List<Item> packageIncludedItems = computePackageIncludedItems(allItems, isCustomRequest);
+        // 1. ดึงรายการสินค้าทั้งหมดในระบบ (เพื่อให้ JSP สามารถ Match ชื่อสังฆทานและปิ่นโตเจอ)
+        List<Item> allSystemItems = itemRepo.findAll();
+        model.addAttribute("items", allSystemItems);
+
+        // 2. ดึงรายการสินค้าเฉพาะของพิธี เพื่อใช้คำนวณของที่รวมในแพ็กเกจ
+        List<Item> ceremonyItems;
+        if (isCustomRequest) {
+            ceremonyItems = allSystemItems;
+        } else {
+            int ceremonyId = booking.getCeremony().getCeremonyId();
+            ceremonyItems = quotationService.getItemsByCeremonyId(ceremonyId);
+        }
+
+        // 3. คำนวณรายการที่รวมในแพ็กเกจ
+        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems, isCustomRequest);
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
-        // กรอกความต้องการเบื้องต้น: ทุก item ต้องเลือกเองทั้งหมด ไม่มีอะไรถูกตัดออกไปเป็น "ของแถม"
-        List<Item> extraSelectableItems = new ArrayList<>(allItems);
+        // 4. รายการที่สามารถเลือกเพิ่มใน Popup Modal (ดึงจากสินค้าทั้งหมด แล้วตัดรายการที่มีในแพ็กเกจออก)
+        List<Item> extraSelectableItems = new ArrayList<>(allSystemItems);
         extraSelectableItems.removeAll(packageIncludedItems);
 
-        // FIX: กรณี "กรอกความต้องการเบื้องต้น" หน้า quotationForm.jsp จะดึง
-        // "บริการประสานงานนิมนต์พระ" มาใส่ในตารางอัตโนมัติให้แล้ว (จำนวน = จำนวนพระที่กรอกไว้
-        // ตอนจอง และเฉพาะเมื่อเลือก "ให้ทางร้านนิมนต์" เท่านั้น) จึงต้องตัด item ตัวนี้ออกจาก
-        // popup เลือกรายการเสริม ไม่งั้นผู้จัดงานจะกดเพิ่มซ้ำเข้าไปได้อีกรอบ กลายเป็น 2 แถว
         if (isCustomRequest) {
             extraSelectableItems.removeIf(i -> MONK_INVITE_SERVICE_ITEM_NAME.equals(i.getItemName()));
         }
@@ -97,7 +95,6 @@ public class QuotationController {
         return "quotationForm";
     }
 
-    // บันทึกใบเสนอราคาใหม่
     @PostMapping("/save")
     public String saveQuotation(@RequestParam String bookingId,
                                 @RequestParam(required = false) List<Integer> extraItemIds,
@@ -120,7 +117,6 @@ public class QuotationController {
         }
     }
 
-    // แสดงรายละเอียดใบเสนอราคา
     @GetMapping("/detail/{id}")
     public String quotationDetail(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
@@ -131,24 +127,25 @@ public class QuotationController {
         model.addAttribute("q", quotation);
         model.addAttribute("details", details);
 
-        // FIX: quotationDetail.jsp ใช้ ${b.ceremony.ceremonyName} ("รูปแบบการจอง")
-        // แต่ไม่เคยมีการ addAttribute("b", ...) มาก่อน เลยว่างเปล่าเสมอ
         model.addAttribute("b", quotation.getBookingForm());
-
-        // FIX: โชว์หมายเหตุความต้องการเพิ่มเติมในหน้ารายละเอียดด้วยเช่นกัน
         model.addAttribute("additionalNote", extractAdditionalNote(quotation.getBookingForm()));
 
-        // เหมือนหน้า create/edit: คำนวณรายการที่ผูกกับ "ทุกแพ็กเกจ" เพื่อแสดงเป็น bullet list ในกล่องแพ็กเกจ
-        int ceremonyId = quotation.getBookingForm().getCeremony().getCeremonyId();
-        List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
         boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(quotation.getBookingForm().getCeremony().getCeremonyName());
+
+        List<Item> allItems;
+        if (isCustomRequest) {
+            allItems = itemRepo.findAll();
+        } else {
+            int ceremonyId = quotation.getBookingForm().getCeremony().getCeremonyId();
+            allItems = quotationService.getItemsByCeremonyId(ceremonyId);
+        }
+
         List<Item> packageIncludedItems = computePackageIncludedItems(allItems, isCustomRequest);
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
         return "quotationDetail";
     }
 
-    // แสดงหน้าฟอร์มสำหรับแก้ไขใบเสนอราคา โดยดึงข้อมูลใบเสนอราคา, รายละเอียดรายการ และรายการสินค้าตามประเภทพิธีมาแสดง
     @GetMapping("/edit/{id}")
     public String editQuotationForm(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
@@ -159,34 +156,34 @@ public class QuotationController {
         model.addAttribute("q", quotation);
         model.addAttribute("details", details);
 
-        // หมายเหตุ: editQuotation.jsp ใช้ ${q.bookingForm...} และดึงรายการจาก ${details} (ข้อมูลที่บันทึกไว้จริง)
-        // ไม่ได้ใช้ "b"/"validDetails" เหมือนหน้า create เลยไม่ต้อง addAttribute สองตัวนี้ที่นี่
         BookingForm booking = quotation.getBookingForm();
-        int ceremonyId = booking.getCeremony().getCeremonyId();
-        List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
 
-        // FIX: โชว์หมายเหตุความต้องการเพิ่มเติมในหน้าแก้ไขด้วยเช่นกัน (ใช้ booking ตัวเดียวกันนี้)
-        model.addAttribute("additionalNote", extractAdditionalNote(booking));
-
-        // เหมือนกับ createQuotationForm: "items" ต้องเป็นรายการเต็ม เผื่อ JSP ส่วนอื่นต้องอ้างอิง
-        model.addAttribute("items", allItems);
-
-        // เช็คว่าเป็นรูปแบบ "กรอกความต้องการเบื้องต้น" หรือไม่ (ใช้ตัดสินว่าจะโชว์แถวราคาแพ็กเกจ/bullet list หรือไม่)
         boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
         model.addAttribute("isCustomRequest", isCustomRequest);
 
-        // packageIncludedItems: อุปกรณ์/บริการพื้นฐานที่ผูกกับทุกแพ็กเกจ (แสดงเป็น bullet list เท่านั้น)
-        // มีความหมายเฉพาะแพ็กเกจจริงเท่านั้น กรอกความต้องการเบื้องต้นไม่มีของแถมฟรี
-        List<Item> packageIncludedItems = computePackageIncludedItems(allItems, isCustomRequest);
+        // 1. ดึงรายการสินค้าทั้งหมดในระบบ
+        List<Item> allSystemItems = itemRepo.findAll();
+        model.addAttribute("items", allSystemItems);
+
+        // 2. ดึงรายการสินค้าเฉพาะของพิธี
+        List<Item> ceremonyItems;
+        if (isCustomRequest) {
+            ceremonyItems = allSystemItems;
+        } else {
+            int ceremonyId = booking.getCeremony().getCeremonyId();
+            ceremonyItems = quotationService.getItemsByCeremonyId(ceremonyId);
+        }
+
+        model.addAttribute("additionalNote", extractAdditionalNote(booking));
+
+        // 3. คำนวณรายการในแพ็กเกจ
+        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems, isCustomRequest);
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
-        // extraSelectableItems: ใช้ใน popup เท่านั้น (ตัดของที่ผูกกับทุกแพ็กเกจออก กันเลือกซ้ำ)
-        // กรอกความต้องการเบื้องต้น: packageIncludedItems ว่าง เลยเท่ากับว่าทุก item เลือกได้ใน popup หมด
-        List<Item> extraSelectableItems = new ArrayList<>(allItems);
+        // 4. รายการสำหรับเลือกใน Modal
+        List<Item> extraSelectableItems = new ArrayList<>(allSystemItems);
         extraSelectableItems.removeAll(packageIncludedItems);
 
-        // FIX: เหมือนหน้า create — กรณี custom request ตัด "บริการประสานงานนิมนต์พระ" ออกจาก popup
-        // เพื่อไม่ให้เลือกซ้ำกับแถวที่ระบบ auto-add ให้ (ถ้า editQuotation.jsp ทำ auto-add แบบเดียวกัน)
         if (isCustomRequest) {
             extraSelectableItems.removeIf(i -> MONK_INVITE_SERVICE_ITEM_NAME.equals(i.getItemName()));
         }
@@ -196,7 +193,6 @@ public class QuotationController {
         return "editQuotation";
     }
     
-    // อัปเดตใบเสนอราคา
     @PostMapping("/update")
     public String updateQuotation(@RequestParam String quotationId,
                                   @RequestParam(required = false) List<Integer> extraItemIds,
@@ -225,14 +221,13 @@ public class QuotationController {
         return quotationService.getItemsByCeremonyId(ceremonyId);
     }
 
-    // ===== Helper ที่ดึงมาจาก createQuotationForm() เดิม เพื่อใช้ซ้ำใน edit/detail ได้ =====
-
     private List<BookingFormDetail> buildValidDetails(BookingForm booking) {
         List<BookingFormDetail> validDetails = new ArrayList<>();
         for (BookingFormDetail d : booking.getDetails()) {
             String ans = d.getAnswer();
             if ((d.getQuestion().getQuestionsText().contains("ภัตตาหาร") ||
                  d.getQuestion().getQuestionsText().contains("สังฆทาน") ||
+                 d.getQuestion().getQuestionsText().contains("อุปกรณ์") ||
                  d.getQuestion().getQuestionsText().contains("พระ"))
                 && ans != null && !ans.equals("ไม่ต้องการ") && !ans.equals("ไม่") && !ans.matches("^[0-9]+$")) {
                 validDetails.add(d);
@@ -241,25 +236,27 @@ public class QuotationController {
         return validDetails;
     }
 
+    // ฟังก์ชันถูกแก้ไขเพื่อให้ดึงของที่อยู่ในแพ็กเกจได้ครบถ้วน
     private List<Item> computePackageIncludedItems(List<Item> allItems, boolean isCustomRequest) {
         List<Item> packageIncludedItems = new ArrayList<>();
-        if (!isCustomRequest) {
+        if (!isCustomRequest && allItems != null) {
             for (Item it : allItems) {
-                String typeName = it.getItemType().getItemTypeName();
-                boolean isFoodOrSangkathan = typeName.equals("ภัตตาหารปิ่นโต") || typeName.equals("สังฆทาน");
-                boolean isOptionalExtra = typeName.equals("อุปกรณ์เสริม (เลือกเพิ่มเอง)"); // ใหม่
-                boolean isBundledInAllPackages = it.getCeremonies() != null && it.getCeremonies().size() >= 9;
-                if (!isFoodOrSangkathan && !isOptionalExtra && isBundledInAllPackages) {
-                    packageIncludedItems.add(it);
+                if (it.getItemType() != null) {
+                    String typeName = it.getItemType().getItemTypeName();
+                    boolean isPackage = "แพ็กเกจ".equals(typeName);
+                    boolean isFoodOrSangkathan = "ภัตตาหารปิ่นโต".equals(typeName) || "สังฆทาน".equals(typeName);
+                    boolean isOptionalExtra = "อุปกรณ์เสริม (เลือกเพิ่มเอง)".equals(typeName);
+                    
+                    // ตัดเงื่อนไข size() >= 9 ออก และเช็คแค่ว่าไม่ใช่อาหาร สังฆทาน หรืออุปกรณ์เสริม ก็ให้ดึงมาโชว์ในแพ็กเกจเลย
+                    if (!isPackage && !isFoodOrSangkathan && !isOptionalExtra) {
+                        packageIncludedItems.add(it);
+                    }
                 }
             }
         }
         return packageIncludedItems;
     }
 
-    // FIX: ดึงคำตอบข้อความอิสระของคำถาม "มีความต้องการเพิ่มเติมหรือไม่" มาแสดงในใบเสนอราคา
-    // เป็นข้อมูลอ้างอิงให้ผู้จัดงานอ่าน (ไม่ auto-fill ราคา เพราะเป็น freetext จับคู่กับ item ไม่ได้
-    // ตรงๆ เหมือนสังฆทาน/ปิ่นโตที่เป็นการเลือกจากรายการที่มีชื่อ item ตรงกันเป๊ะ)
     private String extractAdditionalNote(BookingForm booking) {
         for (BookingFormDetail d : booking.getDetails()) {
             if (d.getQuestion().getQuestionsText().contains("ความต้องการเพิ่มเติม")) {

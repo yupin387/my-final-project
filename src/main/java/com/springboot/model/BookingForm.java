@@ -50,6 +50,12 @@ public class BookingForm {
 
 	@OneToOne(mappedBy = "bookingForm")
 	private Quotation quotation;
+	
+	@Column(name = "eventlat")
+	private Double eventLat;
+
+	@Column(name = "eventlng")
+	private Double eventLng;
 
 	@OneToMany(mappedBy = "bookingForm", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<BookingFormDetail> details;
@@ -58,21 +64,27 @@ public class BookingForm {
 
 	}
 
+
 	public BookingForm(String bookingId, Date bookingDate, Date eventDate, String eventTime, String eventAddress,
-			String bookingStatus, Member member, Ceremony ceremony, Quotation quotation,
-			List<BookingFormDetail> details) {
+			String addressImage, String rejectDetail, String bookingStatus, Member member, Ceremony ceremony,
+			Quotation quotation, Double eventLat, Double eventLng, List<BookingFormDetail> details) {
 		super();
 		this.bookingId = bookingId;
 		this.bookingDate = bookingDate;
 		this.eventDate = eventDate;
 		this.eventTime = eventTime;
 		this.eventAddress = eventAddress;
+		this.addressImage = addressImage;
+		this.rejectDetail = rejectDetail;
 		this.bookingStatus = bookingStatus;
 		this.member = member;
 		this.ceremony = ceremony;
 		this.quotation = quotation;
+		this.eventLat = eventLat;
+		this.eventLng = eventLng;
 		this.details = details;
 	}
+
 
 	public String getBookingId() {
 		return bookingId;
@@ -163,6 +175,22 @@ public class BookingForm {
 
 	public void setQuotation(Quotation quotation) {
 		this.quotation = quotation;
+	}
+	
+	public Double getEventLat() {
+		return eventLat;
+	}
+
+	public void setEventLat(Double eventLat) {
+		this.eventLat = eventLat;
+	}
+
+	public Double getEventLng() {
+		return eventLng;
+	}
+
+	public void setEventLng(Double eventLng) {
+		this.eventLng = eventLng;
 	}
 
 	public List<BookingFormDetail> getDetails() {

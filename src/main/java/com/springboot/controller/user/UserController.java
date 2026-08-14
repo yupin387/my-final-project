@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.springboot.model.Ceremony;
+import com.springboot.model.CeremonyItem;
 import com.springboot.model.Item;
 import com.springboot.model.Member;
 import com.springboot.service.AuspiciousCalendarService;
@@ -126,8 +127,6 @@ public class UserController {
         return "redirect:/loginMember?successRegister";
     }
 
-    
-    
     @GetMapping("/home")
     public String home(Model model) {
         model.addAttribute("ceremonyTypes", buildCeremonyTypes());
@@ -193,11 +192,6 @@ public class UserController {
         return ceremonyTypes;
     }
 
-    /**
-     * ตัดคำว่า "วัน" นำหน้าออก (ถ้ามี) เพื่อให้เทียบ label ได้ทนต่อกรณี
-     * ต้นทาง (Google Calendar) พิมพ์ตกคำว่า "วัน" ไป เช่น
-     * "มหาสิทธิโชค" ที่ควรจะเป็น "วันมหาสิทธิโชค"
-     */
     private static String stripDayPrefix(String s) {
         if (s == null) return "";
         return s.startsWith("วัน") ? s.substring(3) : s;
@@ -219,9 +213,6 @@ public class UserController {
                 String label = tag.get("label");
                 if (label == null) return false;
 
-                // เทียบแบบตัดคำว่า "วัน" นำหน้าออกทั้งสองฝั่งก่อน
-                // เพื่อกันกรณีต้นทางพิมพ์ตกคำว่า "วัน" (เช่น "มหาสิทธิโชค"
-                // แทนที่จะเป็น "วันมหาสิทธิโชค") ไม่ให้หลุดจากตารางสรุป
                 String labelCore = stripDayPrefix(label);
                 return MAIN_GOOD_LABELS.stream()
                         .anyMatch(keyword -> labelCore.contains(stripDayPrefix(keyword)));
@@ -274,7 +265,7 @@ public class UserController {
         Ceremony ceremony = ceremonyService.getCeremonyById(id);
         if (ceremony == null) return "redirect:/home";
         
-        model.addAttribute("ceremonyTypes", buildCeremonyTypes()); // ← เพิ่มบรรทัดนี้
+        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
 
         String mainType = ceremony.getCeremonyType() == null ? "" : ceremony.getCeremonyType().trim();
 
@@ -291,17 +282,22 @@ public class UserController {
         List<Item> pintoItems       = new ArrayList<>();
         List<Item> sangkhathanItems = new ArrayList<>();
 
-        for (Item item : ceremony.getItems()) {
-            String typeName = item.getItemType().getItemTypeName();
+        if (ceremony.getCeremonyItems() != null) {
+            for (CeremonyItem ci : ceremony.getCeremonyItems()) {
+                Item item = ci.getItem();
+                if (item != null && item.getItemType() != null) {
+                    String typeName = item.getItemType().getItemTypeName();
 
-            if (typeName.contains("อุปกรณ์")) {
-                equipmentList.add(item);
-            } else if (typeName.contains("ปิ่นโต")) {
-                pintoItems.add(item);
-            } else if (typeName.contains("บริการ")) {
-                serviceList.add(item);
-            } else if (typeName.contains("สังฆทาน")) {
-                sangkhathanItems.add(item);
+                    if (typeName.contains("อุปกรณ์")) {
+                        equipmentList.add(item);
+                    } else if (typeName.contains("ปิ่นโต")) {
+                        pintoItems.add(item);
+                    } else if (typeName.contains("บริการ")) {
+                        serviceList.add(item);
+                    } else if (typeName.contains("สังฆทาน")) {
+                        sangkhathanItems.add(item);
+                    }
+                }
             }
         }
 

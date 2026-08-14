@@ -191,16 +191,88 @@ public class OrganizerController {
         
         if (booking == null) return "redirect:/organizer/bookings";
 
-        // ⬅️ เพิ่ม 2 บรรทัดนี้ เพื่อให้ JSP โชว์ราคาชุดปิ่นโต/สังฆทานที่เลือกได้
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
 
+        // 🌟 ดึงรายการอุปกรณ์จากแพ็กเกจ แล้วส่งไปให้ JSP ในชื่อ "packageItems" 🌟
+        List<CeremonyItem> packageItems = new java.util.ArrayList<>();
+        if (booking.getCeremony() != null && booking.getCeremony().getCeremonyItems() != null) {
+            packageItems.addAll(booking.getCeremony().getCeremonyItems());
+        }
+
+        // ===================================================================
+        // ถ้าเป็นแพ็กเกจ "กรอกความต้องการเบื้องต้น" ให้เพิ่มอุปกรณ์ที่ผูกกับ
+        // จำนวนพระสงฆ์แบบ dynamic ตามคำตอบที่ลูกค้ากรอกจริง (ไม่ใช่ค่าคงที่)
+        // ===================================================================
+        if (booking.getCeremony() != null
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName())) {
+
+            int monkCount = extractMonkCount(booking);
+
+            if (monkCount > 0) {
+                List<CeremonyItem> monkRelatedItems = buildMonkRelatedItems(booking.getCeremony(), monkCount);
+                packageItems.addAll(monkRelatedItems);
+            }
+        }
+
+        model.addAttribute("packageItems", packageItems);
+
         model.addAttribute("b", booking);
-        model.addAttribute("pintoItems", pintoItems);         // ⬅️ เพิ่ม
-        model.addAttribute("sanghatharnItems", sanghatharnItems); // ⬅️ เพิ่ม
+        model.addAttribute("pintoItems", pintoItems);         
+        model.addAttribute("sanghatharnItems", sanghatharnItems); 
         return "bookingDetail";
     }
 
+    /**
+     * อ่านคำตอบของคำถาม "จำนวนพระสงฆ์" จาก booking.details แล้วแปลงเป็นตัวเลข
+     * คืนค่า 0 ถ้าไม่มีคำตอบ หรือแปลงตัวเลขไม่ได้
+     */
+    private int extractMonkCount(BookingForm booking) {
+        if (booking.getDetails() == null) return 0;
+
+        return booking.getDetails().stream()
+            .filter(d -> d.getQuestion() != null
+                    && "จำนวนพระสงฆ์".equals(d.getQuestion().getQuestionsText()))
+            .findFirst()
+            .map(d -> {
+                try {
+                    String raw = d.getAnswer() == null ? "" : d.getAnswer().replaceAll("[^0-9]", "");
+                    return raw.isEmpty() ? 0 : Integer.parseInt(raw);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+            })
+            .orElse(0);
+    }
+
+    /**
+     * สร้างรายการอุปกรณ์ที่ quantity ขึ้นกับจำนวนพระสงฆ์จริง
+     * (ไม่ได้ save ลง DB แค่สร้างไว้แสดงผลชั่วคราวเท่านั้น)
+     */
+    private List<CeremonyItem> buildMonkRelatedItems(Ceremony ceremony, int monkCount) {
+        List<CeremonyItem> result = new java.util.ArrayList<>();
+
+        List<Item> serviceItems = itemService.getItemsByTypeName("บริการ");
+        List<Item> ritualItems = itemService.getItemsByTypeName("อุปกรณ์พิธีกรรม");
+
+        findItemByName(serviceItems, "บริการประสานงานนิมนต์พระ")
+            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+
+        findItemByName(ritualItems, "อาสนะพระสงฆ์")
+            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+
+        findItemByName(ritualItems, "ตาลปัตรพร้อมขาตั้ง")
+            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+
+        findItemByName(ritualItems, "กรวยดอกไม้ถวายพระสงฆ์")
+            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+
+        return result;
+    }
+
+    private java.util.Optional<Item> findItemByName(List<Item> items, String name) {
+        return items.stream().filter(i -> name.equals(i.getItemName())).findFirst();
+    }
     // อนุมัติรายการจองเพื่อให้สามารถดำเนินการในขั้นตอนจัดทำใบเสนอราคาต่อไปได้
     @GetMapping("/organizer/bookings/approve/{id}")
     public String approveBooking(@PathVariable String id, HttpSession session, RedirectAttributes ra) {

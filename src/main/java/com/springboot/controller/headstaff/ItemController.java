@@ -1,6 +1,7 @@
 package com.springboot.controller.headstaff;
 
 import com.springboot.model.Ceremony;
+import com.springboot.model.CeremonyItem;
 import com.springboot.model.Item;
 import com.springboot.service.ItemService;
 import com.springboot.service.CeremonyService;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -34,12 +36,9 @@ public class ItemController {
 
     // ลำดับระดับแพ็กเกจตายตัว ใช้จัดเรียง checkbox ภายในแต่ละกลุ่มประเภทงาน
     private static final List<String> PACKAGE_ORDER =
-        List.of("มาตรฐาน", "อิ่มบุญ", "พรีเมียม", "กำหนดเอง");
+        List.of("มาตรฐาน", "อิ่มบุญ", "พรีเมียม", "กรอกความต้องการเบื้องต้น");
 
-    // แก้ไข: หน้าเพิ่ม/แก้ไขอุปกรณ์เดิมวน ceremonies ทั้ง 12 แถวเป็น list เดียวแบน ๆ
-    // แล้วโชว์แค่ ceremonyName (ชื่อแพ็กเกจ) ทำให้ checkbox 12 อันมีชื่อซ้ำกัน 4 แบบ x 3 รอบ
-    // แยกไม่ออกว่าอันไหนเป็นของประเภทงานไหน จึง group ceremony ตาม ceremonyType ไว้ล่วงหน้า
-    // (เรียงประเภทงานและระดับแพ็กเกจตามลำดับตายตัว) ให้ JSP แสดงเป็นกลุ่มมีหัวข้อคั่นแทน
+    // จัดกลุ่ม Ceremony ตามประเภทงาน (ceremonyType)
     private Map<String, List<Ceremony>> groupCeremoniesByType(List<Ceremony> allCeremonies) {
         Map<String, List<Ceremony>> grouped = new LinkedHashMap<>();
         for (String type : CEREMONY_TYPE_ORDER) {
@@ -63,8 +62,8 @@ public class ItemController {
     // แสดงรายการอุปกรณ์ทั้งหมดโดยกรองเฉพาะรายการที่ยังเปิดใช้งานอยู่ (Active)
     @GetMapping
     public String listItem(@RequestParam(required = false) String typeId, 
-					    	Model model, 
-					    	HttpSession session) {
+                           Model model, 
+                           HttpSession session) {
         if (session.getAttribute("currentStaff") == null) {
             return "redirect:/loginorganizer"; 
         }
@@ -81,19 +80,20 @@ public class ItemController {
         model.addAttribute("itemTypes", itemService.getAllItemTypes());
         model.addAttribute("selectedType", typeId != null ? typeId : "all");
 
-        // แก้ไข: item หนึ่งรายการผูกกับ Ceremony ได้สูงสุด 12 แถว (3 ประเภทงาน x 4 ระดับแพ็กเกจ)
-        // ถ้าโชว์ ceremony.ceremonyName ตรง ๆ ในหน้าตาราง จะเห็นชื่อแพ็กเกจซ้ำ ๆ 12 อัน
-        // แทนที่จะเป็นแค่ 3 ประเภทงานหลัก จึงคำนวณ "ประเภทงานที่ไม่ซ้ำ" ต่อ item ไว้ล่วงหน้า
-        // ที่นี่ (ทำ dedupe ด้วย JSTL ล้วน ๆ ทำยาก) แล้วส่งเป็น Map<itemId, List<ceremonyType>>
-        // ให้ JSP ใช้แทนการวน item.ceremonies ตรง ๆ
+        // แก้ไขจุดบกพร่อง: อ่านข้อมูล Ceremony ผ่านตารางกลาง CeremonyItem
         Map<Integer, List<String>> itemCeremonyTypes = new LinkedHashMap<>();
         for (Item item : items) {
-            List<Ceremony> ceremonies = item.getCeremonies();
-            Set<String> distinctTypes = ceremonies == null
-                ? new LinkedHashSet<>()
-                : ceremonies.stream()
-                    .map(Ceremony::getCeremonyType)
+            List<CeremonyItem> ceremonyItems = item.getCeremonyItems();
+            
+            Set<String> distinctTypes;
+            if (ceremonyItems == null) {
+                distinctTypes = new LinkedHashSet<>();
+            } else {
+                distinctTypes = ceremonyItems.stream()
+                    .filter(ci -> ci.getCeremony() != null)
+                    .map(ci -> ci.getCeremony().getCeremonyType())
                     .collect(Collectors.toCollection(LinkedHashSet::new));
+            }
 
             List<String> orderedTypes = CEREMONY_TYPE_ORDER.stream()
                 .filter(distinctTypes::contains)
@@ -113,7 +113,6 @@ public class ItemController {
         
         model.addAttribute("item", new Item());
         model.addAttribute("itemTypes", itemService.getAllItemTypes());
-        // แก้ไข: ส่ง ceremony ที่ group ตามประเภทงานแล้ว แทน list แบนที่แยกประเภทไม่ออก
         model.addAttribute("groupedCeremonies", groupCeremoniesByType(ceremonyService.getAllCeremonies()));
         
         return "addItem"; 
@@ -125,18 +124,25 @@ public class ItemController {
         if (session.getAttribute("currentStaff") == null) return "redirect:/loginorganizer";
         
         Item item = itemService.getItemById(id);
+        
+        // ดึงรายการ ceremonyId ทั้งหมดที่ Item นี้ถูกใช้อยู่ส่งไปให้ JSP แสดงผล Checkbox ล่วงหน้า
+        List<Integer> selectedCeremonyIds = new ArrayList<>();
+        if (item.getCeremonyItems() != null) {
+            selectedCeremonyIds = item.getCeremonyItems().stream()
+                .filter(ci -> ci.getCeremony() != null)
+                .map(ci -> ci.getCeremony().getCeremonyId())
+                .collect(Collectors.toList());
+        }
+
         model.addAttribute("item", item);
         model.addAttribute("itemTypes", itemService.getAllItemTypes());
-        // แก้ไข: ส่ง ceremony ที่ group ตามประเภทงานแล้ว แทน list แบนที่แยกประเภทไม่ออก
         model.addAttribute("groupedCeremonies", groupCeremoniesByType(ceremonyService.getAllCeremonies()));
+        model.addAttribute("selectedCeremonyIds", selectedCeremonyIds);
         
         return "editItem"; 
     }
 
-    // บันทึกข้อมูลการเพิ่มหรือแก้ไขอุปกรณ์ พร้อมเชื่อมโยงประเภทและพิธีที่เกี่ยวข้อง
-    // หมายเหตุ: การตรวจสอบห้ามสร้าง/แก้ไข item ประเภท "แพ็กเกจ" ผ่านฟอร์มนี้ ทำไว้ที่
-    // ItemService.saveItem() แล้ว (อยู่ใกล้จุดที่บันทึกจริง ใช้ itemTypeRepo.findById(typeId)
-    // ที่มีอยู่แล้วโดยตรง ไม่ต้องดึง getAllItemTypes() มา filter ซ้ำที่นี่)
+    // บันทึกข้อมูลการเพิ่มหรือแก้ไขอุปกรณ์
     @PostMapping("/save")
     public String saveItem(@ModelAttribute Item item,
                            @RequestParam int typeId,
@@ -152,7 +158,7 @@ public class ItemController {
         return "redirect:/staff/items";
     }
    
-    // ทำการลบอุปกรณ์แบบ Soft Delete โดยการเปลี่ยนสถานะการใช้งานแทนการลบทิ้งจริง
+    // ทำการลบอุปกรณ์แบบ Soft Delete 
     @PostMapping("/delete/{id}")
     public String deleteItem(@PathVariable int id, RedirectAttributes ra) {
         try {

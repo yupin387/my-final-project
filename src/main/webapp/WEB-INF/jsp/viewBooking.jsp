@@ -7,11 +7,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ใบรายละเอียดการจอง - ระบบรับจัดงานบุญ</title>
+    <title>ใบสรุปรายละเอียดการจอง #${booking.bookingId} - บุญมีนำพา</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewBooking.css?v=21">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewBooking.css?v=27">
 </head>
 <body>
 
@@ -77,213 +77,235 @@
 
 <div class="page-wrapper">
 
-    <div class="booking-notice">
-        <div class="notice-icon"><i class="bi bi-telephone-inbound-fill"></i></div>
-        <div class="notice-content">
-            <strong>รอการติดต่อจากทีมงาน</strong>
-            <p>ทีมงานจะติดต่อกลับเพื่อนัดหมายวันและเวลาสำหรับลงพื้นที่สำรวจสถานที่จัดงาน</p>
+    <%-- แจ้งเตือนกรณีรอการติดต่อ --%>
+    <c:if test="${booking.bookingStatus == 'Pending'}">
+        <div class="booking-notice">
+            <div class="notice-icon"><i class="bi bi-telephone-inbound-fill"></i></div>
+            <div class="notice-content">
+                <strong>รอการติดต่อจากทีมงาน</strong>
+                <p>ทีมงานจะติดต่อกลับเพื่อนัดหมายวันและเวลาสำหรับลงพื้นที่สำรวจสถานที่จัดงาน</p>
+            </div>
         </div>
-    </div>
+    </c:if>
 
-    <div class="detail-card">
-        <%-- Header --%>
-        <div class="card-header-bar">
-            <div>
-                <span class="booking-id-badge">รหัสการจอง: #${booking.bookingId}</span>
-                <h2>สรุปรายละเอียดการจองพิธีทำบุญ</h2>
-            </div>
-            <span class="status-pill status-${fn:toLowerCase(booking.bookingStatus)}">
-                <c:choose>
-                    <c:when test="${booking.bookingStatus == 'Pending'}">รอดำเนินการ</c:when>
-                    <c:when test="${booking.bookingStatus == 'Approved'}">อนุมัติแล้ว</c:when>
-                    <c:when test="${booking.bookingStatus == 'Quoted'}">ออกใบเสนอราคาแล้ว</c:when>
-                    <c:when test="${booking.bookingStatus == 'Confirmed'}">ยืนยันแล้ว</c:when>
-                    <c:when test="${booking.bookingStatus == 'Completed'}">เสร็จสิ้น</c:when>
-                    <c:when test="${booking.bookingStatus == 'Rejected'}">ปฏิเสธแล้ว</c:when>
-                    <c:when test="${booking.bookingStatus == 'Cancelled'}">ยกเลิกแล้ว</c:when>
-                    <c:otherwise>${booking.bookingStatus}</c:otherwise>
-                </c:choose>
-            </span>
-        </div>
-
-        <%-- 1. ข้อมูลผู้จอง --%>
-        <div class="section">
-            <div class="section-title"><i class="bi bi-person-fill"></i> ข้อมูลผู้จอง</div>
-            <div class="info-row">
-                <span class="info-label">ชื่อ-นามสกุล</span>
-                <span class="info-value">คุณ ${booking.member.memberFirstName} ${booking.member.memberLastName}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">เบอร์โทรศัพท์</span>
-                <span class="info-value">${booking.member.phoneNumber}</span>
-            </div>
-            <c:if test="${not empty booking.member.memberEmail}">
-                <div class="info-row">
-                    <span class="info-label">อีเมล</span>
-                    <span class="info-value">${booking.member.memberEmail}</span>
+    <%-- กระดาษเอกสารใบสรุปการจอง --%>
+    <div class="booking-sheet-document">
+        
+        <%-- Header เอกสาร --%>
+        <div class="sheet-header">
+            <div class="company-brand">
+                <div class="brand-logo">
+                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา" onerror="this.style.display='none'">
                 </div>
-            </c:if>
+                <div>
+                    <h1 class="company-name">บุญมีนำพา รับจัดงานบุญ</h1>
+                    <p class="company-sub">บริการรับจัดงานบุญ พิธีทำบุญบ้าน และงานพิธีสงฆ์ทุกรูปแบบ</p>
+                </div>
+            </div>
+            
+            <div class="document-title-box">
+                <h2 class="doc-title">ใบสรุปรายละเอียดการจอง</h2>
+                <div class="doc-no">รหัสรายการจอง: <strong>#${booking.bookingId}</strong></div>
+                <div class="mt-2">
+                    <span class="status-pill status-${fn:toLowerCase(booking.bookingStatus)}">
+                        <c:choose>
+                            <c:when test="${booking.bookingStatus == 'Pending'}">รอดำเนินการ</c:when>
+                            <c:when test="${booking.bookingStatus == 'Approved'}">อนุมัติแล้ว</c:when>
+                            <c:when test="${booking.bookingStatus == 'Quoted'}">ออกใบเสนอราคาแล้ว</c:when>
+                            <c:when test="${booking.bookingStatus == 'Confirmed'}">ยืนยันแล้ว</c:when>
+                            <c:when test="${booking.bookingStatus == 'Completed'}">เสร็จสิ้น</c:when>
+                            <c:when test="${booking.bookingStatus == 'Rejected'}">ปฏิเสธแล้ว</c:when>
+                            <c:when test="${booking.bookingStatus == 'Cancelled'}">ยกเลิกแล้ว</c:when>
+                            <c:otherwise>${booking.bookingStatus}</c:otherwise>
+                        </c:choose>
+                    </span>
+                </div>
+            </div>
         </div>
 
-        <hr class="divider">
+        <hr class="sheet-divider-bold">
 
-        <%-- 2. วันและสถานที่จัดงาน + แผนที่ --%>
+        <%-- 1. ข้อมูลผู้ใช้บริการ & กำหนดการ --%>
         <div class="section">
-            <div class="section-title"><i class="bi bi-geo-alt-fill"></i> รายละเอียดวันที่และสถานที่จัดงาน</div>
-            <div class="info-row">
-                <span class="info-label">วันที่จัดงาน</span>
-                <span class="info-value"><fmt:formatDate value="${booking.eventDate}" pattern="dd MMMM yyyy"/></span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">เวลาเริ่มพิธี</span>
-                <span class="info-value">${booking.eventTime} น.</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">สถานที่จัดงาน</span>
-                <span class="info-value">${booking.eventAddress}</span>
-            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="sheet-box">
+                        <div class="section-title"><i class="bi bi-person-fill"></i> ข้อมูลผู้ใช้บริการ</div>
+                        <div class="info-row">
+                            <span class="info-label">ชื่อ-นามสกุล</span>
+                            <span class="info-value">คุณ ${booking.member.memberFirstName} ${booking.member.memberLastName}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">เบอร์โทรศัพท์</span>
+                            <span class="info-value">${booking.member.phoneNumber}</span>
+                        </div>
+                        <c:if test="${not empty booking.member.memberEmail}">
+                            <div class="info-row">
+                                <span class="info-label">อีเมล</span>
+                                <span class="info-value">${booking.member.memberEmail}</span>
+                            </div>
+                        </c:if>
+                    </div>
+                </div>
 
-            <c:if test="${not empty booking.eventAddress}">
-                <div class="info-row" style="margin-top:12px;">
-                    <span class="info-label">แผนที่ปักหมุด</span>
-                    <div class="info-value" style="width:100%;">
+                <div class="col-md-6">
+                    <div class="sheet-box">
+                        <div class="section-title"><i class="bi bi-calendar-event-fill"></i> กำหนดการและสถานที่</div>
+                        <div class="info-row">
+                            <span class="info-label">วันที่จัดงาน</span>
+                            <span class="info-value"><fmt:formatDate value="${booking.eventDate}" pattern="dd MMMM yyyy"/></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">เวลาเริ่มพิธี</span>
+                            <span class="info-value">${booking.eventTime} น.</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">สถานที่จัดงาน</span>
+                            <span class="info-value">${booking.eventAddress}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%-- 2. แผนที่และรูปภาพสถานที่ --%>
+        <c:if test="${not empty booking.eventAddress}">
+            <div class="section pt-0">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="section-title"><i class="bi bi-geo-alt-fill"></i> แผนที่ปักหมุดสถานที่</div>
+                        <c:set var="mapQuery" value="${not empty booking.eventLat && not empty booking.eventLng ? booking.eventLat += ',' += booking.eventLng : fn:escapeXml(booking.eventAddress)}" />
                         <div class="map-container">
                             <iframe class="map-iframe" loading="lazy" allowfullscreen
-                                src="https://maps.google.com/maps?q=${fn:escapeXml(booking.eventAddress)}&t=&z=15&ie=UTF8&iwloc=&output=embed">
+                                src="https://maps.google.com/maps?q=${mapQuery}&t=&z=16&ie=UTF8&iwloc=&output=embed">
                             </iframe>
                         </div>
-                        <a href="https://www.google.com/maps/search/?api=1&query=${fn:escapeXml(booking.eventAddress)}" 
-                           target="_blank" class="btn-map-link">
+                        <a href="https://www.google.com/maps/search/?api=1&query=${mapQuery}" target="_blank" class="btn-map-link">
                             <i class="bi bi-box-arrow-up-right"></i> เปิดนำทางใน Google Maps
                         </a>
                     </div>
-                </div>
-            </c:if>
 
-            <div class="info-row" style="margin-top:12px;">
-                <span class="info-label">รูปภาพสถานที่</span>
-                <span class="info-value">
-                    <c:choose>
-                        <c:when test="${not empty booking.addressImage}">
-                            <div class="image-gallery">
-                                <c:forEach items="${fn:split(booking.addressImage, ',')}" var="imgFile">
-                                    <c:set var="trimmed" value="${fn:trim(imgFile)}"/>
-                                    <c:if test="${not empty trimmed}">
-                                        <img src="${pageContext.request.contextPath}/uploads/address/${trimmed}" class="location-img" alt="สถานที่จัดงาน" onerror="this.style.display='none'">
-                                    </c:if>
-                                </c:forEach>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <span style="color:var(--text-muted); font-weight:normal;">- ไม่มีรูปภาพสถานที่ -</span>
-                        </c:otherwise>
-                    </c:choose>
-                </span>
+                    <div class="col-md-6">
+                        <div class="section-title"><i class="bi bi-images"></i> รูปภาพสถานที่ประกอบ</div>
+                        <c:choose>
+                            <c:when test="${not empty booking.addressImage}">
+                                <div class="image-gallery">
+                                    <c:forEach items="${fn:split(booking.addressImage, ',')}" var="imgFile">
+                                        <c:set var="trimmed" value="${fn:trim(imgFile)}"/>
+                                        <c:if test="${not empty trimmed}">
+                                            <img src="${pageContext.request.contextPath}/uploads/address/${trimmed}" class="location-img" alt="สถานที่จัดงาน" onerror="this.style.display='none'">
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="no-img-box">
+                                    <i class="bi bi-image"></i> ไม่มีรูปภาพสถานที่
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
             </div>
-        </div>
+        </c:if>
 
         <hr class="divider">
 
-        <%-- 3. แพ็กเกจที่จอง (ดึงจากตาราง ceremony และ item ใน DB จริง) --%>
+        <%-- 3. รายละเอียดแพ็กเกจ --%>
         <div class="section">
-            <div class="section-title"><i class="bi bi-box-seam-fill"></i> แพ็กเกจงานบุญที่เลือก</div>
+            <div class="section-title"><i class="bi bi-box-seam-fill"></i> รายละเอียดแพ็กเกจงานบุญ</div>
             
-            <div class="info-row">
-                <span class="info-label">ประเภทงานบุญ</span>
-                <span class="info-value">${booking.ceremony.ceremonyType}</span>
-            </div>
-            
-            <div class="info-row">
-                <span class="info-label">รูปแบบ/แพ็กเกจ</span>
-                <span class="info-value">${booking.ceremony.ceremonyName}</span>
-            </div>
-            
-            <c:if test="${not empty booking.ceremony.basePrice}">
-                <div class="info-row">
-                    <span class="info-label">ราคาเริ่มต้นแพ็กเกจ</span>
-                    <span class="info-value price-text">
-                        ฿<fmt:formatNumber value="${booking.ceremony.basePrice}" pattern="#,###"/>
-                    </span>
-                </div>
-            </c:if>
-
-            <%-- รายละเอียดคำอธิบายแพ็กเกจ --%>
-            <c:if test="${not empty booking.ceremony.ceremonyDetail}">
-                <div class="package-inclusions-box" style="margin-top: 15px;">
-                    <div class="package-inclusions-title">
-                        <i class="bi bi-info-circle-fill"></i> รายละเอียดแพ็กเกจ:
+            <div class="sheet-box mb-3">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="info-row mb-0">
+                            <span class="info-label">ประเภทงานบุญ</span>
+                            <span class="info-value">${booking.ceremony.ceremonyType}</span>
+                        </div>
                     </div>
-                    <div style="padding: 10px 5px; color: var(--text-dark); line-height: 1.7; font-size: 0.95rem;">
-                        ${booking.ceremony.ceremonyDetail}
+                    <div class="col-md-6">
+                        <div class="info-row mb-0">
+                            <span class="info-label">ชื่อแพ็กเกจ</span>
+                            <span class="info-value">${booking.ceremony.ceremonyName}</span>
+                        </div>
                     </div>
+                    <c:if test="${not empty booking.ceremony.basePrice}">
+                        <div class="col-12 mt-2 pt-2 border-top">
+                            <div class="info-row mb-0">
+                                <span class="info-label">ราคาเริ่มต้นแพ็กเกจ</span>
+                                <span class="info-value price-text">
+                                    ฿<fmt:formatNumber value="${booking.ceremony.basePrice}" pattern="#,###"/>
+                                </span>
+                            </div>
+                        </div>
+                    </c:if>
                 </div>
-            </c:if>
+            </div>
 
-            <%-- รายการอุปกรณ์และบริการที่รวมในแพ็กเกจ (Dynamic จาก DB) --%>
-            <div class="package-inclusions-box" style="margin-top: 15px;">
-                <div class="package-inclusions-title" style="margin-bottom: 12px; font-weight: 600;">
-                    <i class="bi bi-check-circle-fill" style="color: #28a745;"></i> สิ่งที่รวมอยู่ในแพ็กเกจนี้ (อุปกรณ์และบริการ):
+            <div class="package-inclusions-box">
+                <div class="package-inclusions-title">
+                    <i class="bi bi-check-circle-fill" style="color: #28a745;"></i> สิ่งที่รวมอยู่ในแพ็กเกจ :
                 </div>
-                
+
                 <c:choose>
                     <c:when test="${not empty packageItems}">
-                        <div class="package-items-grid" style="display: flex; flex-wrap: wrap; gap: 8px;">
-                            <c:forEach var="item" items="${packageItems}">
-                                <%-- กรองเอาเฉพาะอุปกรณ์/บริการหลัก (ไม่เอา itemTypeId 5: แพ็กเกจ และ 6: ตัวเลือกเสริม) --%>
-                                <c:if test="${item.itemType.itemTypeId != 5 && item.itemType.itemTypeId != 6}">
-                                    <div class="package-item-chip" style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 20px; padding: 5px 12px; font-size: 0.9rem;">
-                                        <i class="bi bi-check2" style="color: #28a745;"></i> ${item.itemName}
+                        <div class="package-items-grid">
+                            <c:forEach var="pi" items="${packageItems}">
+                                <c:if test="${pi.item.itemType.itemTypeId != 5 && pi.item.itemType.itemTypeId != 6}">
+                                    <div class="package-item-chip">
+                                        <i class="bi bi-check2"></i>
+                                        <span class="flex-grow-1">${pi.item.itemName}</span>
+                                        <strong class="text-secondary ms-1">${pi.quantity} ${pi.item.unit}</strong>
                                     </div>
                                 </c:if>
                             </c:forEach>
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <div style="color: var(--text-muted); font-style: italic; padding: 5px 0;">
-                            - ไม่มีรายการอุปกรณ์ในระบบ -
-                        </div>
+                        <div class="text-muted fst-italic py-1">- ไม่มีรายการอุปกรณ์ในระบบ -</div>
                     </c:otherwise>
                 </c:choose>
             </div>
         </div>
 
-        <hr class="divider">
+        <%-- 4. ตัวเลือกและความต้องการเพิ่มเติม --%>
+        <c:if test="${not empty booking.details}">
+            <hr class="divider">
+            <div class="section">
+                <c:forEach items="${booking.details}" var="d">
 
-        <%-- 4. รายละเอียดคำตอบเพิ่มเติม (แยกหัวข้อย่อยสีทองตามหมวดหมู่) --%>
-		<c:if test="${not empty booking.details}">
-		    <div class="section">
-		        <c:forEach items="${booking.details}" var="d">
-		
-		            <%-- หัวข้อที่ 1: การนิมนต์พระสงฆ์ --%>
-		            <c:if test="${d.question.questionsText eq 'รูปแบบการนิมนต์พระสงฆ์'}">
-		                <div class="section-title mt-3"><i class="bi bi-person-badge"></i> การนิมนต์พระสงฆ์</div>
-		            </c:if>
-		
-		            <%-- หัวข้อที่ 2: ชุดภัตตาหารปิ่นโต --%>
-		            <c:if test="${d.question.questionsText eq 'ต้องการชุดภัตตาหารปิ่นโตหรือไม่'}">
-		                <div class="section-title mt-4"><i class="bi bi-box-seam"></i> ชุดภัตตาหารปิ่นโต</div>
-		            </c:if>
-		
-		            <%-- หัวข้อที่ 3: ชุดสังฆทาน --%>
-		            <c:if test="${d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
-		                <div class="section-title mt-4"><i class="bi bi-gift"></i> ชุดสังฆทาน</div>
-		            </c:if>
-		
-		            <%-- หัวข้อที่ 4: รายการเพิ่มเติม --%>
-		            <c:if test="${d.question.questionsText eq 'มีความต้องการเพิ่มเติมหรือไม่'}">
-		                <div class="section-title mt-4"><i class="bi bi-plus-circle"></i> รายการเพิ่มเติม</div>
-		            </c:if>
-		
-		            <%-- แถวแสดงคำถาม - คำตอบ ตาม CSS เดิมของคุณ --%>
-		            <div class="info-row">
-		                <span class="info-label"><c:out value="${d.question.questionsText}" default="รายการ"/></span>
-		                <span class="info-value"><c:out value="${d.answer}" default="-"/></span>
-		            </div>
-		
-		        </c:forEach>
-		    </div>
-		    <hr class="divider">
-		</c:if>
+                    <c:if test="${d.question.questionsText eq 'รูปแบบการนิมนต์พระสงฆ์'}">
+                        <div class="section-title mt-3">
+                            <i class="bi bi-journal-text"></i> การนิมนต์พระสงฆ์
+                        </div>
+                    </c:if>
+
+                    <c:if test="${d.question.questionsText eq 'ต้องการชุดภัตตาหารปิ่นโตหรือไม่'}">
+                        <div class="section-title mt-4">
+                            <i class="bi bi-box-seam"></i> ชุดภัตตาหารปิ่นโต
+                        </div>
+                    </c:if>
+
+                    <c:if test="${d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
+                        <div class="section-title mt-4">
+                            <i class="bi bi-gift"></i> ชุดสังฆทาน
+                        </div>
+                    </c:if>
+
+                    <c:if test="${d.question.questionsText eq 'มีความต้องการเพิ่มเติมหรือไม่'}">
+                        <div class="section-title mt-4">
+                            <i class="bi bi-plus-circle"></i> รายการเพิ่มเติม
+                        </div>
+                    </c:if>
+
+                    <div class="info-row">
+                        <span class="info-label" style="width: 300px;"><c:out value="${d.question.questionsText}" default="รายการ"/></span>
+                        <span class="info-value"><c:out value="${d.answer}" default="-"/></span>
+                    </div>
+
+                </c:forEach>
+            </div>
+        </c:if>
 
         <%-- Action Bar --%>
         <div class="action-bar">
@@ -292,7 +314,9 @@
                     <c:when test="${booking.bookingStatus == 'Completed'}">
                         <c:choose>
                             <c:when test="${empty hasReview || !hasReview}">
-                                <a href="${pageContext.request.contextPath}/review/write/${booking.bookingId}" class="btn btn-review">เขียนรีวิวความประทับใจ</a>
+                                <a href="${pageContext.request.contextPath}/review/write/${booking.bookingId}" class="btn btn-review">
+                                    <i class="bi bi-star-fill me-1"></i> เขียนรีวิวความประทับใจ
+                                </a>
                             </c:when>
                             <c:otherwise>
                                 <button class="btn btn-reviewed" disabled>คุณได้รีวิวงานนี้แล้ว</button>
@@ -301,7 +325,7 @@
                     </c:when>
                     <c:when test="${booking.bookingStatus == 'Pending'}">
                         <button type="button" class="btn btn-cancel" onclick="showCancelModal('${booking.bookingId}')">
-                            ยกเลิกรายการจอง
+                            <i class="bi bi-x-circle me-1"></i> ยกเลิกรายการจอง
                         </button>
                     </c:when>
                 </c:choose>
@@ -310,6 +334,48 @@
         </div>
     </div>
 </div>
+
+<%-- Footer (ถอดแบบหน้า Home ตามรูปภาพ) --%>
+<footer class="footer-custom">
+    <div class="footer-container">
+        <%-- ฝั่งซ้าย --%>
+        <div class="footer-left">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ" onerror="this.style.display='none'">
+                </div>
+                <span class="footer-brand-title">บุญมี รับจัดงานบุญ</span>
+            </div>
+            <p class="footer-desc">
+                รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ
+            </p>
+            <div class="footer-socials">
+                <a href="#" class="social-btn"><i class="bi bi-facebook" style="color: #1877F2;"></i> Facebook</a>
+                <a href="#" class="social-btn"><i class="bi bi-youtube" style="color: #FF0000;"></i> YouTube</a>
+                <a href="#" class="social-btn"><i class="bi bi-line" style="color: #00B900;"></i> LINE OA</a>
+            </div>
+        </div>
+
+        <%-- ฝั่งขวา --%>
+        <div class="footer-right">
+            <h5 class="footer-heading">ติดต่อเรา</h5>
+            <div class="footer-contact-list">
+                <div class="contact-item">
+                    <i class="bi bi-telephone-fill"></i> โทร. 08X-XXX-XXXX
+                </div>
+                <div class="contact-item">
+                    <i class="bi bi-chat-fill"></i> LINE OA: @boonmee
+                </div>
+                <div class="contact-item">
+                    <i class="bi bi-envelope-fill"></i> boonmee@gmail.com
+                </div>
+                <div class="contact-item">
+                    <i class="bi bi-geo-alt-fill"></i> บริการในพื้นที่และจังหวัดใกล้เคียง
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <%-- Modal ยกเลิก --%>
 <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
@@ -320,7 +386,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body text-center" style="padding:24px 15px; color:var(--text-mid);">
-                คุณต้องการยกเลิกรายการจองนี้ใช่หรือไม่? <br><small class="text-muted">(หากยกเลิกแล้วจะไม่สามารถย้อนกลับได้)</small>
+                คุณต้องการยกเลิกรายการจอง <strong>#${booking.bookingId}</strong> ใช่หรือไม่? <br>
+                <small class="text-muted">(หากยกเลิกแล้วจะไม่สามารถย้อนกลับได้)</small>
             </div>
             <div class="modal-footer" style="justify-content:center; gap:15px; border-top:1px solid var(--cream-border-soft); background:#fafafa;">
                 <button type="button" class="btn" style="background:#e0e0e0; color:#333; font-weight:600;" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
@@ -334,6 +401,6 @@
 <script>
     const contextPath = "${pageContext.request.contextPath}";
 </script>
-<script src="${pageContext.request.contextPath}/static/js/viewBooking.js?v=21"></script>
+<script src="${pageContext.request.contextPath}/static/js/viewBooking.js?v=27"></script>
 </body>
 </html>
