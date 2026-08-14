@@ -74,13 +74,13 @@ public class Run {
 			// =========================================================
 
 			Ceremony c10 = new Ceremony("ทำบุญบ้าน", "กรอกความต้องการเบื้องต้น",
-					"ลูกค้ากรอกรายละเอียดงานเบื้องต้น และให้ผู้จัดงานจัดบริการพร้อมประเมินราคา (เริ่มต้น)", 8000.0);
+					"ลูกค้ากรอกรายละเอียดงานเบื้องต้น และให้ผู้จัดงานจัดบริการพร้อมประเมินราคา (เริ่มต้น)", 0.0);
 
 			Ceremony c11 = new Ceremony("ขึ้นบ้านใหม่", "กรอกความต้องการเบื้องต้น",
-					"ลูกค้ากรอกรายละเอียดงานเบื้องต้น และให้ผู้จัดงานจัดบริการพร้อมประเมินราคา (เริ่มต้น)", 8000.0);
+					"ลูกค้ากรอกรายละเอียดงานเบื้องต้น และให้ผู้จัดงานจัดบริการพร้อมประเมินราคา (เริ่มต้น)", 0.0);
 
 			Ceremony c12 = new Ceremony("ทำบุญบริษัทหรือออฟฟิศ", "กรอกความต้องการเบื้องต้น",
-					"ลูกค้ากรอกรายละเอียดงานเบื้องต้น และให้ผู้จัดงานจัดบริการพร้อมประเมินราคา (เริ่มต้น)", 8000.0);
+					"ลูกค้ากรอกรายละเอียดงานเบื้องต้น และให้ผู้จัดงานจัดบริการพร้อมประเมินราคา (เริ่มต้น)", 0.0);
 
 			ceremonyRepo.saveAllAndFlush(Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12));
 
@@ -580,6 +580,7 @@ public class Run {
 
 			ceremonyItemRepo.save(new CeremonyItem(c9, photographer, 1));
 			ceremonyItemRepo.save(new CeremonyItem(c9, premiumFlower, 1));
+
 			// =========================================================
 			// กรอกความต้องการเบื้องต้น : c10 (ทำบุญบ้าน), c11 (ขึ้นบ้านใหม่), c12 (ออฟฟิศ)
 			// รวมทั้งบริการพื้นฐานร่วม + อุปกรณ์พิธีกรรมเฉพาะประเภทงาน
@@ -623,39 +624,41 @@ public class Run {
 			ceremonyItemRepo.save(new CeremonyItem(c12, ribbonSet, 1));
 
 			// =========================================================
-			// 7. QuestionsDetail
+			// 6.1 สังฆทานเซตมาตรฐาน (299) — รวมอยู่ในทุกแพ็กเกจ ทุกประเภทงาน
+			// (ฟรี ไม่คิดเงินเพิ่ม เพราะรวมอยู่ใน basePrice อยู่แล้ว)
 			// =========================================================
 
-			List<Ceremony> ceremonyTypeRepresentatives = Arrays.asList(c1, c4, c7);
-
-			List<QuestionsDetail> questions = new ArrayList<>();
-
-			for (Ceremony c : ceremonyTypeRepresentatives) {
-
-				questions.add(new QuestionsDetail("รูปแบบการนิมนต์พระสงฆ์", c));
-
-				questions.add(new QuestionsDetail("จำนวนพระสงฆ์", c));
-
-				questions.add(new QuestionsDetail("รายละเอียดการนิมนต์พระสงฆ์", c));
-
-				questions.add(new QuestionsDetail("ต้องการชุดภัตตาหารปิ่นโตหรือไม่", c));
-
-				questions.add(new QuestionsDetail("เลือกชุดภัตตาหารปิ่นโต", c));
-
-				questions.add(new QuestionsDetail("จำนวนชุดภัตตาหารปิ่นโต", c));
-
-				questions.add(new QuestionsDetail("ต้องการสังฆทานหรือไม่", c));
-
-				questions.add(new QuestionsDetail("เลือกชุดสังฆทานที่ต้องการ", c));
-
-				questions.add(new QuestionsDetail("จำนวนชุดสังฆทาน", c));
-
-				questions.add(new QuestionsDetail("จำนวนแขก", c));
-
-				questions.add(new QuestionsDetail("มีความต้องการเพิ่มเติมหรือไม่", c));
+			for (Ceremony c : allCeremonies) {
+				ceremonyItemRepo.save(new CeremonyItem(c, sanghaStandard, 1));
 			}
 
-			qRepo.saveAllAndFlush(questions);
+			// =========================================================
+			// 7. QuestionsDetail (Many-to-Many กับ Ceremony)
+			// คำถามชุดเดียวกัน สร้างครั้งเดียว แล้วผูกกับทุก Ceremony
+			// เพื่อไม่ให้ text คำถามซ้ำในฐานข้อมูล
+			// =========================================================
+
+			QuestionsDetail q1 = new QuestionsDetail("รูปแบบการนิมนต์พระสงฆ์");
+			QuestionsDetail q2 = new QuestionsDetail("จำนวนพระสงฆ์");
+			QuestionsDetail q3 = new QuestionsDetail("รายละเอียดการนิมนต์พระสงฆ์");
+			QuestionsDetail q4 = new QuestionsDetail("ต้องการชุดภัตตาหารปิ่นโตหรือไม่");
+			QuestionsDetail q5 = new QuestionsDetail("เลือกชุดภัตตาหารปิ่นโต");
+			QuestionsDetail q6 = new QuestionsDetail("จำนวนชุดภัตตาหารปิ่นโต");
+			QuestionsDetail q7 = new QuestionsDetail("ต้องการสังฆทานหรือไม่");
+			QuestionsDetail q8 = new QuestionsDetail("เลือกชุดสังฆทานที่ต้องการ");
+			QuestionsDetail q9 = new QuestionsDetail("จำนวนชุดสังฆทาน");
+			QuestionsDetail q11 = new QuestionsDetail("มีความต้องการเพิ่มเติมหรือไม่");
+
+			List<QuestionsDetail> allQuestions = Arrays.asList(
+					q1, q2, q3, q4, q5, q6, q7, q8, q9,  q11);
+
+			qRepo.saveAllAndFlush(allQuestions);
+
+			// ผูกคำถามชุดเดียวกันนี้เข้ากับทุก ceremony
+			for (Ceremony c : allCeremonies) {
+				c.setQuestions(allQuestions);
+			}
+			ceremonyRepo.saveAllAndFlush(allCeremonies);
 
 			// =========================================================
 			// 8. Member

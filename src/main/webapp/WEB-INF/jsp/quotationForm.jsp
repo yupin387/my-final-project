@@ -92,16 +92,40 @@
         margin: 0;
     }
 
-    /* บังคับหัวข้อหมวดหมู่ให้อยู่แค่คอลัมน์ 2 และชิดซ้ายเสมอ สีตัวอักษรน้ำตาลตามรูป */
+    /* หัวข้อหมวดหมู่ + ปุ่ม + ติดกันในแถวเดียว */
     #mainQuotationTable tr.group-row td.category-header-text{
         text-align: left !important;
         padding-left: 8px !important;
+        padding-right: 12px !important;
         white-space: nowrap;
         color: #9C6B3E;
         font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
     #mainQuotationTable tr.group-row td {
         background-color: #FBF2E3; /* สีพื้นหลังอ่อนๆ ให้เข้ากับธีมหมวดหมู่ */
+    }
+    #mainQuotationTable .btn-add-group-inline{
+        flex: 0 0 auto;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid #9C6B3E;
+        background: #FFFFFF;
+        color: #9C6B3E;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+    #mainQuotationTable .btn-add-group-inline:hover{
+        background: #FFFFFF;
+        transform: scale(1.05);
     }
 </style>
 </head>
@@ -281,8 +305,19 @@
                     </tbody>
 
                     <c:choose>
+                        <%-- ============ โหมด: กรอกเอง (ครบ 5 หมวด) ============ --%>
                         <c:when test="${isCustomRequest}">
-                            <tbody id="group-equipment"></tbody>
+
+                            <tbody id="group-equipment" data-category="อุปกรณ์พิธีกรรม">
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดอุปกรณ์พิธีกรรม
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์พิธีกรรม')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
+                            </tbody>
 
                             <c:set var="sangQty" value="1" />
                             <c:forEach var="d" items="${b.details}">
@@ -290,25 +325,24 @@
                                     <c:if test="${not empty d.answer && d.answer != '0'}"><c:set var="sangQty" value="${d.answer}" /></c:if>
                                 </c:if>
                             </c:forEach>
-                            <tbody id="group-sangkathan">
-                                <c:set var="printedSangHeader" value="false" />
+                            <tbody id="group-sangkathan" data-category="สังฆทาน">
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดสังฆทาน
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('สังฆทาน')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
                                 <c:forEach var="detail" items="${validDetails}">
                                     <c:if test="${fn:contains(detail.question.questionsText,'สังฆทาน') && fn:contains(detail.question.questionsText,'เลือก')}">
                                         <c:set var="selectedSangName" value="${fn:trim(detail.answer)}" />
                                         <c:forEach var="item" items="${items}">
                                             <c:if test="${fn:trim(item.itemName) eq selectedSangName}">
-                                                <c:if test="${!printedSangHeader}">
-                                                    <tr class="group-row">
-                                                        <td class="no-index"></td>
-                                                        <td class="category-header-text">หมวดสังฆทาน</td>
-                                                        <td></td><td></td><td></td><td></td>
-                                                    </tr>
-                                                    <c:set var="printedSangHeader" value="true" />
-                                                </c:if>
                                                 <tr class="static-row">
                                                     <td class="text-center row-number"></td>
                                                     <td>
-                                                        ${item.itemName} 
+                                                        ${item.itemName}
                                                         <c:set var="isFreeSang" value="${!isCustomRequest && (item.pricePerUnit == 299.0 || item.pricePerUnit == 299)}" />
                                                         <c:if test="${isFreeSang}">
                                                             <span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / รวมในแพ็กเกจ)</span>
@@ -336,21 +370,20 @@
                                     <c:if test="${not empty d.answer && d.answer != '0'}"><c:set var="foodQty" value="${d.answer}" /></c:if>
                                 </c:if>
                             </c:forEach>
-                            <tbody id="group-food">
-                                <c:set var="printedFoodHeader" value="false" />
+                            <tbody id="group-food" data-category="ภัตตาหาร">
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดภัตตาหารปิ่นโต
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('ภัตตาหาร')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
                                 <c:forEach var="detail" items="${validDetails}">
                                     <c:if test="${fn:contains(detail.question.questionsText,'ภัตตาหาร') && fn:contains(detail.question.questionsText,'เลือก')}">
                                         <c:set var="selectedFoodName" value="${fn:trim(detail.answer)}" />
                                         <c:forEach var="item" items="${items}">
                                             <c:if test="${fn:trim(item.itemName) eq selectedFoodName}">
-                                                <c:if test="${!printedFoodHeader}">
-                                                    <tr class="group-row">
-                                                        <td class="no-index"></td>
-                                                        <td class="category-header-text">หมวดภัตตาหารปิ่นโต</td>
-                                                        <td></td><td></td><td></td><td></td>
-                                                    </tr>
-                                                    <c:set var="printedFoodHeader" value="true" />
-                                                </c:if>
                                                 <tr class="static-row">
                                                     <td class="text-center row-number"></td>
                                                     <td>
@@ -368,15 +401,18 @@
                                 </c:forEach>
                             </tbody>
 
-                            <tbody id="group-service">
+                            <tbody id="group-service" data-category="บริการ">
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดบริการและการดำเนินการ
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('บริการ')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
                                 <c:if test="${not isMonkSelfInvite && not empty monkCount}">
                                     <c:forEach var="item" items="${items}">
                                         <c:if test="${fn:trim(item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">
-                                            <tr class="group-row">
-                                                <td class="no-index"></td>
-                                                <td class="category-header-text">หมวดบริการและการดำเนินการ</td>
-                                                <td></td><td></td><td></td><td></td>
-                                            </tr>
                                             <tr class="static-row">
                                                 <td class="text-center row-number"></td>
                                                 <td>
@@ -392,35 +428,47 @@
                                     </c:forEach>
                                 </c:if>
                             </tbody>
-                            <tbody id="group-extra"></tbody>
+
+                            <tbody id="group-extra" data-category="อุปกรณ์เสริม">
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดอุปกรณ์เสริม
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์เสริม')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
+                            </tbody>
+
                         </c:when>
 
+                        <%-- ============ โหมด: แพ็กเกจ (ไม่มีหมวดอุปกรณ์พิธีกรรม/บริการ เพราะรวมในแพ็กเกจแล้ว) ============ --%>
                         <c:otherwise>
+
                             <c:set var="sangQty" value="1" />
                             <c:forEach var="d" items="${b.details}">
                                 <c:if test="${fn:contains(d.question.questionsText,'สังฆทาน') && fn:contains(d.question.questionsText,'จำนวน')}">
                                     <c:if test="${not empty d.answer && d.answer != '0'}"><c:set var="sangQty" value="${d.answer}" /></c:if>
                                 </c:if>
                             </c:forEach>
-                            <tbody id="group-sangkathan">
-                                <c:set var="printedSangHeader" value="false" />
+                            <tbody id="group-sangkathan" data-category="สังฆทาน">
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดสังฆทาน
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('สังฆทาน')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
                                 <c:forEach var="detail" items="${validDetails}">
                                     <c:if test="${fn:contains(detail.question.questionsText,'สังฆทาน') && fn:contains(detail.question.questionsText,'เลือก')}">
                                         <c:set var="selectedSangName" value="${fn:trim(detail.answer)}" />
                                         <c:forEach var="item" items="${items}">
                                             <c:if test="${fn:trim(item.itemName) eq selectedSangName}">
-                                                <c:if test="${!printedSangHeader}">
-                                                    <tr class="group-row">
-                                                        <td class="no-index"></td>
-                                                        <td class="category-header-text">หมวดสังฆทาน</td>
-                                                        <td></td><td></td><td></td><td></td>
-                                                    </tr>
-                                                    <c:set var="printedSangHeader" value="true" />
-                                                </c:if>
                                                 <tr class="static-row">
                                                     <td class="text-center row-number"></td>
                                                     <td>
-                                                        ${item.itemName} 
+                                                        ${item.itemName}
                                                         <c:set var="isFreeSang" value="${!isCustomRequest && (item.pricePerUnit == 299.0 || item.pricePerUnit == 299)}" />
                                                         <c:if test="${isFreeSang}">
                                                             <span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / รวมในแพ็กเกจ)</span>
@@ -448,21 +496,20 @@
                                     <c:if test="${not empty d.answer && d.answer != '0'}"><c:set var="foodQty" value="${d.answer}" /></c:if>
                                 </c:if>
                             </c:forEach>
-                            <tbody id="group-food">
-                                <c:set var="printedFoodHeader" value="false" />
+                            <tbody id="group-food" data-category="ภัตตาหาร">
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดภัตตาหารปิ่นโต
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('ภัตตาหาร')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
                                 <c:forEach var="detail" items="${validDetails}">
                                     <c:if test="${fn:contains(detail.question.questionsText,'ภัตตาหาร') && fn:contains(detail.question.questionsText,'เลือก')}">
                                         <c:set var="selectedFoodName" value="${fn:trim(detail.answer)}" />
                                         <c:forEach var="item" items="${items}">
                                             <c:if test="${fn:trim(item.itemName) eq selectedFoodName}">
-                                                <c:if test="${!printedFoodHeader}">
-                                                    <tr class="group-row">
-                                                        <td class="no-index"></td>
-                                                        <td class="category-header-text">หมวดภัตตาหารปิ่นโต</td>
-                                                        <td></td><td></td><td></td><td></td>
-                                                    </tr>
-                                                    <c:set var="printedFoodHeader" value="true" />
-                                                </c:if>
                                                 <tr class="static-row">
                                                     <td class="text-center row-number"></td>
                                                     <td>
@@ -480,9 +527,17 @@
                                 </c:forEach>
                             </tbody>
 
-                            <tbody id="group-service"></tbody>
-                            <tbody id="group-equipment"></tbody>
-                            <tbody id="group-extra"></tbody>
+                            <tbody id="group-extra" data-category="อุปกรณ์เสริม">
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดอุปกรณ์เสริม
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์เสริม')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td>
+                                </tr>
+                            </tbody>
+
                         </c:otherwise>
                     </c:choose>
 
@@ -492,7 +547,6 @@
 					<div class="remarks-box">
                         <div class="remarks-header">
 						    <strong>ความต้องการเพิ่มเติม:</strong>
-                            <button type="button" class="btn-add-item" onclick="openItemModal()">+ เพิ่มรายการเพิ่มเติม</button>
                         </div>
 						<textarea name="detailNotes" class="remarks-textarea" placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${additionalNote}</textarea>
 					</div>
@@ -581,16 +635,9 @@
 	<div id="itemSelectionModal" class="modal-overlay">
 		<div class="modal-card">
 			<div class="modal-header">
-				<h3>เลือกอุปกรณ์และบริการเสริม</h3>
+				<h3 id="itemModalTitle">เลือกรายการเพิ่มเติม</h3>
 				<button type="button" class="close-btn" onclick="closeItemModal()">✕</button>
 			</div>
-            <div class="category-tabs">
-                <button type="button" class="category-tab active" data-category="อุปกรณ์พิธีกรรม" onclick="switchCategoryTab(this,'อุปกรณ์พิธีกรรม')">อุปกรณ์พิธีกรรม</button>
-                <button type="button" class="category-tab" data-category="ภัตตาหาร" onclick="switchCategoryTab(this,'ภัตตาหาร')">ภัตตาหารปิ่นโต</button>
-                <button type="button" class="category-tab" data-category="สังฆทาน" onclick="switchCategoryTab(this,'สังฆทาน')">สังฆทาน</button>
-                <button type="button" class="category-tab" data-category="บริการ" onclick="switchCategoryTab(this,'บริการ')">บริการและดำเนินการ</button>
-                <button type="button" class="category-tab" data-category="อุปกรณ์เสริม" onclick="switchCategoryTab(this,'อุปกรณ์เสริม')">อุปกรณ์เสริม</button>
-            </div>
 			<div class="modal-body">
 				<div class="picker-toolbar">
 					<label class="select-all-label"> <input type="checkbox" id="selectAllVisible" onchange="toggleSelectAllVisible(this)"> เลือกทั้งหมดในหมวดนี้</label>

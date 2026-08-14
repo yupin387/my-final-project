@@ -57,8 +57,8 @@
             </div>
         </div>
 
-        <a href="${pageContext.request.contextPath}/latestBooking" class="nav-link-item">การจอง</a>
-        <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-link-item">ใบเสนอราคา</a>
+        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">การจอง</a>
+       
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
     <div class="dropdown-wrap">

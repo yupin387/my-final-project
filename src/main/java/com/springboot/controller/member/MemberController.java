@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -102,39 +103,71 @@ public class MemberController {
         return "redirect:/home";
     }
 
+    // เดิม: ดึงใบเสนอราคา "ล่าสุด" ของสมาชิกเสมอ ไม่ว่าจะกดจาก booking ไหน
+    // ยังคงไว้เผื่อมีที่อื่นเรียกใช้อยู่ (เช่นเมนู/แดชบอร์ดที่อยากโชว์ใบล่าสุด)
     @GetMapping("/member/quotation/list")
     public String showLatestQuotation(HttpSession session, Model model) {
         Member user = (Member) session.getAttribute("user");
         if (user == null) return "redirect:/loginMember";
 
-        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
-
         Quotation latestQ = quotationService.getLatestQuotationByMemberId(user.getMemberId());
 
         if (latestQ == null) {
-            return "redirect:/memberQuotationDetail";
+            return "redirect:/myBookings";
         }
 
-        List<QuotationDetail> details = quotationService.getDetailsByQuotationId(latestQ.getQuotationId());
-        
-        model.addAttribute("q", latestQ);
+        populateQuotationDetailModel(latestQ, model);
+        return "memberQuotationDetail";
+    }
+
+    // FIX: ใหม่ — endpoint สำหรับดูใบเสนอราคาของ "booking รายการที่เลือกจริงๆ" ตาม quotationId
+    // แก้ปัญหาที่ปุ่ม "ใบเสนอราคา" ใน myBookingList.jsp เดิมลิงก์ไปหน้า /viewBooking/{id}#quotationSection
+    // ซึ่งเป็นหน้ารายละเอียดการจอง ไม่ใช่หน้าใบเสนอราคา ทำให้กดแล้วไม่เจอใบเสนอราคาจริง
+    @GetMapping("/member/quotation/detail/{quotationId}")
+    public String showQuotationDetail(@PathVariable String quotationId, HttpSession session, Model model) {
+        Member user = (Member) session.getAttribute("user");
+        if (user == null) return "redirect:/loginMember";
+
+        Quotation q = quotationService.getQuotationById(quotationId);
+        if (q == null) {
+            return "redirect:/myBookings?error=quotationNotFound";
+        }
+
+        // FIX: กันไม่ให้สมาชิกคนอื่นเดา quotationId แล้วดูใบเสนอราคาของคนอื่นได้
+        boolean isOwner = q.getBookingForm() != null
+                && q.getBookingForm().getMember() != null
+                && q.getBookingForm().getMember().getMemberId() == user.getMemberId();
+        if (!isOwner) {
+            return "redirect:/myBookings?error=noAccess";
+        }
+
+        populateQuotationDetailModel(q, model);
+        return "memberQuotationDetail";
+    }
+
+    // FIX: ดึง logic ที่ซ้ำกันระหว่าง showLatestQuotation และ showQuotationDetail
+    // มารวมไว้ที่เดียว เพื่อไม่ให้ต้องแก้ 2 จุดทุกครั้งที่ปรับ model attribute
+    private void populateQuotationDetailModel(Quotation q, Model model) {
+        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+
+        List<QuotationDetail> details = quotationService.getDetailsByQuotationId(q.getQuotationId());
+
+        model.addAttribute("q", q);
         model.addAttribute("details", details);
-        
-        BookingForm booking = latestQ.getBookingForm();
+
+        BookingForm booking = q.getBookingForm();
         if (booking != null) {
             model.addAttribute("b", booking);
-            
+
             if (booking.getCeremony() != null) {
                 int ceremonyId = booking.getCeremony().getCeremonyId();
                 List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
                 boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
-                
+
                 List<Item> packageIncludedItems = computePackageIncludedItems(allItems, isCustomRequest);
                 model.addAttribute("packageIncludedItems", packageIncludedItems);
             }
         }
-        
-        return "memberQuotationDetail";
     }
     
     @PostMapping("/member/quotation/confirm")
@@ -151,19 +184,17 @@ public class MemberController {
     
     @PostMapping("/member/quotation/revise-all")
     public String memberReviseAllItems(@RequestParam String quotationId,
-                                       @RequestParam(required = false) List<Integer> itemIds,
-                                       @RequestParam(required = false) List<String> memberNotes,
+                                       @RequestParam(required = false) String memberNote,
                                        RedirectAttributes ra) {
         try {
-            quotationService.submitMemberRevision(quotationId, itemIds, memberNotes);
+            quotationService.submitMemberRevision(quotationId, memberNote);
             ra.addFlashAttribute("success", "ส่งรายการแจ้งขอแก้ไขให้ออแกไนเซอร์เรียบร้อยแล้ว");
-            return "redirect:/member/quotation/list";
+            return "redirect:/member/quotation/detail/" + quotationId;
         } catch (Exception e) {
             ra.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
-            return "redirect:/member/quotation/list";
+            return "redirect:/member/quotation/detail/" + quotationId;
         }
     }
-    
     // อัปเดตฟังก์ชันนี้เพื่อให้ดึงไอเท็มในแพ็กเกจได้ครบถ้วน เหมือนฝั่ง Organizer
     private List<Item> computePackageIncludedItems(List<Item> allItems, boolean isCustomRequest) {
         List<Item> packageIncludedItems = new ArrayList<>();

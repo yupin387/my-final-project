@@ -151,6 +151,12 @@ public class BookingService {
     }
     
     
+    /**
+     * สำหรับ Member: ดูรายการจองทั้งหมดของตนเอง (สำหรับหน้า list)
+     */
+    public List<BookingForm> getBookingsByMember(int memberId) {
+        return bookingRepo.findByMemberId(memberId);
+    }
     //=================================================================================================
     //================================================================================================
   

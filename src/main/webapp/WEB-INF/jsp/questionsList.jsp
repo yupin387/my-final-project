@@ -107,8 +107,10 @@
                         <td class="question-text">${q.questionsText}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${not empty q.ceremony}">
-                                    <span class="ceremony-tag">${q.ceremony.ceremonyType}</span>
+                                <c:when test="${not empty q.ceremonies}">
+                                    <c:forEach var="cm" items="${q.ceremonies}">
+                                        <span class="ceremony-tag">${cm.ceremonyType}</span>
+                                    </c:forEach>
                                 </c:when>
                                 <c:otherwise>
                                     <span class="ceremony-tag all-tag">ใช้กับทุกประเภทพิธี</span>

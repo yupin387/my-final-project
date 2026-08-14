@@ -1,16 +1,20 @@
 package com.springboot.repository;
+
 import com.springboot.model.QuestionsDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+
 import java.util.List;
-@Repository
+
 public interface QuestionsRepository extends JpaRepository<QuestionsDetail, Integer> {
 
-    @Query("SELECT q FROM QuestionsDetail q LEFT JOIN FETCH q.ceremony ORDER BY q.ceremony.ceremonyName ASC")
+    // ดึงคำถามทั้งหมด พร้อม fetch ceremonies มาด้วย (กัน N+1 / lazy loading พัง)
+    @Query("SELECT DISTINCT q FROM QuestionsDetail q LEFT JOIN FETCH q.ceremonies")
     List<QuestionsDetail> findAllWithCeremony();
 
-    @Query("SELECT q FROM QuestionsDetail q WHERE q.ceremony.ceremonyId = :ceremonyId OR q.ceremony IS NULL")
+    // คำถามที่ผูกกับ ceremony นี้โดยตรง + คำถาม "กลาง" ที่ไม่ผูกกับ ceremony ไหนเลย (ceremonies ว่าง)
+    @Query("SELECT DISTINCT q FROM QuestionsDetail q LEFT JOIN q.ceremonies c " +
+           "WHERE c.ceremonyId = :ceremonyId OR q.ceremonies IS EMPTY")
     List<QuestionsDetail> findByCeremonyIdIncludingGlobal(@Param("ceremonyId") int ceremonyId);
 }

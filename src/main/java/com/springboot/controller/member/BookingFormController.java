@@ -252,7 +252,7 @@ public class BookingFormController {
         }
 
         BookingForm saved = bookingService.saveBooking(booking);
-        return "redirect:/viewBooking/" + saved.getBookingId();
+        return "redirect:/myBookings";
     }
 
     @GetMapping("/viewBooking/{id}")
@@ -376,5 +376,17 @@ public class BookingFormController {
         }
         
         return "redirect:/home";
+    }
+    
+    @GetMapping("/myBookings")
+    public String myBookings(Model model, HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("user");
+        if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
+
+        List<BookingForm> bookings = bookingService.getBookingsByMember(loginUser.getMemberId());
+        model.addAttribute("bookings", bookings);
+        model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
+
+        return "myBookingList";
     }
 }

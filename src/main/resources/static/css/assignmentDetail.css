@@ -725,6 +725,106 @@ body {
     background: #c0392b;
 }
 
+/* =========================================
+   Modal อัปเดตสถานะงาน (FIX: ใหม่ — dropdown สวยๆ
+   แทนที่หน้า updateStatus.jsp เดิม ใช้โครง modal
+   เดียวกับ damageModal แต่สลับสีธีมเป็นฟ้า/น้ำเงิน
+   ให้เข้ากับปุ่ม/navbar และแยก class ไม่ให้ชนกัน
+   ========================================= */
+.status-modal-box {
+    max-width: 480px;
+}
+
+.status-modal-header {
+    background: linear-gradient(135deg, #3A6B9C, #4B85BE);
+}
+
+#statusForm {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.status-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.status-select-dot {
+    position: absolute;
+    left: 16px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #94a3b8;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    pointer-events: none;
+    transition: background 0.2s ease;
+}
+
+.status-select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 14px 40px 14px 38px;
+    border: 2px solid #94a3b8;
+    border-radius: 12px;
+    background: var(--white);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.status-select:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.status-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.status-select-arrow {
+    position: absolute;
+    right: 16px;
+    font-size: 14px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.status-select-hint {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    min-height: 20px;
+}
+
+.btn-save-status {
+    padding: 10px 24px;
+    border: none;
+    background: linear-gradient(135deg, #3A6B9C, #4B85BE);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    transition: 0.2s;
+    box-shadow: 0 3px 12px rgba(75, 133, 190, 0.3);
+}
+
+.btn-save-status:hover {
+    background: linear-gradient(135deg, #2f5a85, #3f77ac);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba(75, 133, 190, 0.4);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
     .navbar { padding: 0 16px; }

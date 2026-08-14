@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ข้อมูลงาน - ${a.assignId}</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/assignmentDetail.css?v=3">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/assignmentDetail.css?v=4">
 </head>
 <body>
 
@@ -52,8 +52,10 @@
         <div class="card">
             <div class="card-header-bar">
                 <span>รายละเอียดข้อมูลงาน</span>
-                <a href="${pageContext.request.contextPath}/staff/assignments/update-status/${a.bookingForm.bookingId}"
-                   class="btn-update-status">🔄 อัปเดตสถานะงาน</a>
+                <%-- FIX: เดิมเป็น <a> ลิงก์ไปหน้า updateStatus.jsp แยกต่างหาก
+                     ตอนนี้เปลี่ยนเป็นปุ่มเปิด modal dropdown ในหน้าเดียวกันแทน
+                     ไม่ต้องเปลี่ยนหน้าเลย --%>
+                <button type="button" class="btn-update-status" onclick="openStatusModal()">🔄 อัปเดตสถานะงาน</button>
             </div>
 
             <div class="card-body">
@@ -184,6 +186,85 @@
         </div>
     </div>
 
+    <%-- ========================================================
+         Modal อัปเดตสถานะงาน (FIX: ใหม่ — แทนที่การลิงก์ไปหน้า
+         updateStatus.jsp แยก ด้วย modal dropdown ในหน้านี้เลย
+         ฟอร์ม submit ปกติไปที่ endpoint เดิม (/update-status/save)
+         พร้อม field เดิมทุกตัว (bookingId, jobStatus) เพื่อไม่ต้อง
+         แก้ controller ========================================== --%>
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal-box status-modal-box">
+            <div class="modal-header status-modal-header">
+                <span class="modal-title">🔄 อัปเดตสถานะงาน</span>
+                <span class="modal-close" onclick="closeStatusModal()">&times;</span>
+            </div>
+            <form id="statusForm"
+                  action="${pageContext.request.contextPath}/staff/assignments/update-status/save"
+                  method="post">
+                <input type="hidden" name="bookingId" value="${a.bookingForm.bookingId}">
+
+                <div class="form-group">
+                    <label class="form-label">เลือกสถานะปัจจุบันของงานพิธีกรรม</label>
+
+                    <div class="status-select-wrapper">
+                        <span class="status-select-dot" id="statusSelectDot"></span>
+                        <select name="jobStatus" id="statusSelect" class="status-select" onchange="updateStatusPreview()">
+                            <option value="Assigned"    data-color="#94a3b8" ${status == 'Assigned'    ? 'selected' : ''}>มอบหมายงานแล้ว (Assigned)</option>
+                            <option value="Preparing"   data-color="#f59e0b" ${status == 'Preparing'   ? 'selected' : ''}>กำลังเตรียมงาน (Preparing)</option>
+                            <option value="In_Progress" data-color="#3b82f6" ${status == 'In_Progress' ? 'selected' : ''}>กำลังดำเนินการ (In Progress)</option>
+                            <option value="Completed"   data-color="#22c55e" ${status == 'Completed'   ? 'selected' : ''}>เสร็จสิ้นงานบุญ (Completed)</option>
+                        </select>
+                        <span class="status-select-arrow">▾</span>
+                    </div>
+
+                    <p class="status-select-hint" id="statusSelectHint"></p>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel-modal" onclick="closeStatusModal()">ยกเลิก</button>
+                    <button type="submit" class="btn-save-status">บันทึกสถานะ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="${pageContext.request.contextPath}/static/js/assignmentDetail.js"></script>
+
+    <%-- FIX: สคริปต์เฉพาะของ modal อัปเดตสถานะ ตั้งชื่อฟังก์ชันแยกจาก
+         assignmentDetail.js (openDamageModal/closeDamageModal) เพื่อไม่ชนกัน --%>
+    <script>
+        var statusHints = {
+            'Assigned':    'พนักงานรับทราบงานแล้ว รอเริ่มดำเนินการ',
+            'Preparing':   'จัดหาอุปกรณ์และของใช้สำหรับพิธีกรรม',
+            'In_Progress': 'พนักงานกำลังปฏิบัติงานที่สถานที่จัดงาน',
+            'Completed':   'งานเสร็จสมบูรณ์ เคลียร์หน้างานเรียบร้อย'
+        };
+
+        function openStatusModal() {
+            document.getElementById('statusModal').classList.add('show');
+            updateStatusPreview();
+        }
+
+        function closeStatusModal() {
+            document.getElementById('statusModal').classList.remove('show');
+        }
+
+        function updateStatusPreview() {
+            var select = document.getElementById('statusSelect');
+            var opt = select.options[select.selectedIndex];
+            var color = opt.getAttribute('data-color');
+
+            document.getElementById('statusSelectDot').style.background = color;
+            document.getElementById('statusSelect').style.borderColor = color;
+            document.getElementById('statusSelectHint').textContent = statusHints[opt.value] || '';
+        }
+
+        // ปิด modal เมื่อคลิกพื้นหลังนอกกล่อง (เหมือน damageModal)
+        document.getElementById('statusModal').addEventListener('click', function (e) {
+            if (e.target === this) closeStatusModal();
+        });
+
+        document.addEventListener('DOMContentLoaded', updateStatusPreview);
+    </script>
 </body>
 </html>

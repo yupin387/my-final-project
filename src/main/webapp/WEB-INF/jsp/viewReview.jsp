@@ -10,6 +10,39 @@
 	    <title>รีวิว: ระบบรับจัดงานบุญ</title>
 	    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewReview.css">
+	    <%-- FIX: เพิ่มสไตล์สำหรับแถบดาวที่กดกรองได้ (bar-row กลายเป็น <a> แล้ว) และแท็ก
+	         "กำลังกรอง" — ใส่ inline ไว้ในหน้านี้เพื่อไม่ต้องรอแก้ไฟล์ viewReview.css แยก
+	         ย้ายไปไว้ใน viewReview.css ทีหลังได้ถ้าต้องการ --%>
+	    <style>
+	        .bar-row-link {
+	            text-decoration: none;
+	            color: inherit;
+	            cursor: pointer;
+	            border-radius: 8px;
+	            padding: 2px 4px;
+	            transition: background-color 0.15s ease;
+	        }
+	        .bar-row-link:hover {
+	            background-color: rgba(217, 164, 65, 0.12);
+	        }
+	        .bar-row-active {
+	            background-color: rgba(217, 164, 65, 0.22);
+	            outline: 1px solid #D9A441;
+	        }
+	        .active-rating-tag {
+	            display: inline-flex;
+	            align-items: center;
+	            gap: 8px;
+	            margin: 10px 0 20px;
+	            font-size: 14px;
+	            color: var(--text-muted);
+	        }
+	        .clear-rating-link {
+	            color: #C7405F;
+	            text-decoration: underline;
+	            font-weight: 600;
+	        }
+	    </style>
 	</head>
 	<body>
 	
@@ -43,14 +76,12 @@
 	                <button type="button" class="nav-item nav-dropdown-toggle">ปฏิทิน <span class="caret">▾</span></button>
 	                <div class="nav-dropdown-menu">
 	                    <a href="${pageContext.request.contextPath}/calendar">ปฏิทินคิวงาน</a>
-	                    <c:if test="${not empty sessionScope.user}">
-	                        <a href="${pageContext.request.contextPath}/latestBooking">การจองของฉัน</a>
-	                    </c:if>
+	                   
 	                </div>
 	            </div>
 
 	            <c:if test="${not empty sessionScope.user}">
-	                <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-item">ใบเสนอราคา</a>
+	               <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">การจอง</a>
 	            </c:if>
 	            <a href="${pageContext.request.contextPath}/reviews" class="nav-item active">รีวิว</a>
 	            <c:if test="${empty sessionScope.user}">
@@ -97,17 +128,44 @@
 	         หมายเหตุ: ค่า type ต้องตรงกับ Ceremony.ceremonyType ในฐานข้อมูลเป๊ะ ๆ
 	         ("ทำบุญบริษัทหรือออฟฟิศ" ไม่ใช่ "ทำบุญออฟฟิศ" — อิงตาม UserController)
 	         Controller (/reviews) กรอง reviews ที่ booking.ceremony.ceremonyType ตรงกับค่านี้
-	         และส่ง selectedCeremonyType กลับมาที่ view --%>
+	         และส่ง selectedCeremonyType กลับมาที่ view
+	         FIX: แต่ละลิงก์ตอนนี้พ่วงค่า rating (ถ้ามีการกรองดาวอยู่) ไปด้วย เพื่อให้สลับ
+	         ประเภทงานโดยไม่ทำให้ตัวกรองดาวที่เลือกไว้หายไป ==== --%>
 	    <div class="filter-wrapper">
-	        <a href="${pageContext.request.contextPath}/reviews"
-	           class="btn-filter ${empty selectedCeremonyType ? 'active-link' : ''}">ทั้งหมด</a>
-	        <a href="<c:url value='/reviews'><c:param name='type' value='ทำบุญบ้าน'/></c:url>"
-	           class="btn-filter ${selectedCeremonyType == 'ทำบุญบ้าน' ? 'active-link' : ''}">งานทำบุญบ้าน</a>
-	        <a href="<c:url value='/reviews'><c:param name='type' value='ขึ้นบ้านใหม่'/></c:url>"
-	           class="btn-filter ${selectedCeremonyType == 'ขึ้นบ้านใหม่' ? 'active-link' : ''}">งานขึ้นบ้านใหม่</a>
-	        <a href="<c:url value='/reviews'><c:param name='type' value='ทำบุญบริษัทหรือออฟฟิศ'/></c:url>"
-	           class="btn-filter ${selectedCeremonyType == 'ทำบุญบริษัทหรือออฟฟิศ' ? 'active-link' : ''}">งานทำบุญออฟฟิศ</a>
+	        <c:url var="urlAll" value="/reviews">
+	            <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+	        </c:url>
+	        <a href="${urlAll}" class="btn-filter ${empty selectedCeremonyType ? 'active-link' : ''}">ทั้งหมด</a>
+
+	        <c:url var="urlHome" value="/reviews">
+	            <c:param name="type" value="ทำบุญบ้าน"/>
+	            <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+	        </c:url>
+	        <a href="${urlHome}" class="btn-filter ${selectedCeremonyType == 'ทำบุญบ้าน' ? 'active-link' : ''}">งานทำบุญบ้าน</a>
+
+	        <c:url var="urlNewHouse" value="/reviews">
+	            <c:param name="type" value="ขึ้นบ้านใหม่"/>
+	            <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+	        </c:url>
+	        <a href="${urlNewHouse}" class="btn-filter ${selectedCeremonyType == 'ขึ้นบ้านใหม่' ? 'active-link' : ''}">งานขึ้นบ้านใหม่</a>
+
+	        <c:url var="urlCompany" value="/reviews">
+	            <c:param name="type" value="ทำบุญบริษัทหรือออฟฟิศ"/>
+	            <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+	        </c:url>
+	        <a href="${urlCompany}" class="btn-filter ${selectedCeremonyType == 'ทำบุญบริษัทหรือออฟฟิศ' ? 'active-link' : ''}">งานทำบุญออฟฟิศ</a>
 	    </div>
+
+	    <%-- FIX: แท็กบอกว่ากำลังกรองดาวอยู่ + ปุ่มล้าง (คงค่า type เดิมไว้ ถ้ามี) --%>
+	    <c:if test="${not empty selectedRating}">
+	        <c:url var="urlClearRating" value="/reviews">
+	            <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+	        </c:url>
+	        <div class="active-rating-tag">
+	            กำลังกรอง: ${selectedRating} ดาว
+	            <a href="${urlClearRating}" class="clear-rating-link">✕ ล้างตัวกรองดาว</a>
+	        </div>
+	    </c:if>
 	
 	    <%-- ========== SUMMARY CARD ========== --%>
 	    <div class="summary-card">
@@ -124,20 +182,28 @@
 	            <div class="rating-count">จากผู้ใช้บริการทั้งหมด ${reviews.size()} ท่าน</div>
 	        </div>
 	        <div class="summary-divider-v"></div>
+	        <%-- FIX: แถบสัดส่วนดาวแต่ละแถวตอนนี้เป็นลิงก์ที่กดกรองรีวิวตามจำนวนดาวนั้นได้
+	             ไปที่ /reviews?rating={star} (พ่วง type เดิมไปด้วยถ้ามีการกรองประเภทงานอยู่) --%>
 	        <div class="rating-bars">
-	            <div class="rating-bars-title">สัดส่วนการให้คะแนน</div>
+	            <div class="rating-bars-title">สัดส่วนการให้คะแนน (กดเพื่อกรอง)</div>
 	            <c:forEach begin="1" end="5" var="i">
 	                <c:set var="star"  value="${6 - i}"/>
 	                <c:set var="count" value="${starCounts[star] != null ? starCounts[star] : 0}"/>
 	                <c:set var="total" value="${reviews.size() > 0 ? reviews.size() : 1}"/>
 	                <c:set var="pct"   value="${count * 100 / total}"/>
-	                <div class="bar-row">
+
+	                <c:url var="urlStar" value="/reviews">
+	                    <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+	                    <c:param name="rating" value="${star}"/>
+	                </c:url>
+
+	                <a href="${urlStar}" class="bar-row bar-row-link ${selectedRating == star ? 'bar-row-active' : ''}">
 	                    <span class="bar-label">${star} ดาว</span>
 	                    <div class="bar-track">
 	                        <div class="bar-fill" style="width:${pct}%"></div>
 	                    </div>
 	                    <span style="width:24px; font-size:12px; color:var(--text-muted);">${count}</span>
-	                </div>
+	                </a>
 	            </c:forEach>
 	        </div>
 	    </div>

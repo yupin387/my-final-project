@@ -1,0 +1,153 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>รายการจองของฉัน - บุญมีนำพา จัดงานบุญ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=14">
+</head>
+<body>
+
+<%-- ===== NAVBAR ===== --%>
+<nav class="navbar-custom">
+    <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
+        <div class="lotus-icon">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
+        </div>
+        <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
+    </a>
+    <div class="navbar-center">
+        <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
+        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">การจอง</a>
+ 
+        <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
+    </div>
+    <div class="dropdown-wrap">
+        <div class="user-profile-pill" onclick="toggleDropdown()">
+            <div class="avatar-circle-nav">${fn:substring(sessionScope.user.memberFirstName, 0, 1)}</div>
+            <div class="user-info-text">
+                <span class="user-name-nav">${sessionScope.user.memberFirstName} ${sessionScope.user.memberLastName}</span>
+                <span class="user-role-nav">สมาชิก</span>
+            </div>
+        </div>
+        <div class="dropdown-menu-custom" id="dropdownMenu">
+            <a href="${pageContext.request.contextPath}/editProfile" class="dropdown-link">โปรไฟล์ของฉัน</a>
+            <a href="${pageContext.request.contextPath}/logout" class="dropdown-link danger">ออกจากระบบ</a>
+        </div>
+    </div>
+</nav>
+
+<%-- ===== HERO BANNER ===== --%>
+<div class="hero-banner hero-home">
+    <div class="hero-content">
+        <span class="hero-tag">รายการของฉัน</span>
+        <h1>รายการจองงานบุญ</h1>
+        <p>ดูสถานะ รายละเอียด และใบเสนอราคาของการจองแต่ละรายการ</p>
+    </div>
+</div>
+
+<div class="page-wrapper">
+    <div class="mybooking-card">
+        <div class="mybooking-card-header">
+            <span>รายการจองทั้งหมดของฉัน</span>
+            <span class="mybooking-count">พบทั้งหมด ${fn:length(bookings)} รายการ</span>
+        </div>
+
+        <c:choose>
+        <c:when test="${empty bookings}">
+            <div class="mybooking-empty">
+                <p>คุณยังไม่มีรายการจอง</p>
+                <a href="${pageContext.request.contextPath}/home" class="btn-mybooking btn-mybooking-primary">จองงานบุญเลย</a>
+            </div>
+        </c:when>
+        <c:otherwise>
+        <div class="mybooking-table-wrap">
+            <table class="mybooking-table">
+                <thead>
+                    <tr>
+                        <th>รหัสจอง</th>
+                        <th>วันที่จอง</th>
+                        <th>วันจัดงาน</th>
+                        <th>ประเภทพิธี</th>
+                        <th>สถานะ</th>
+                        <th>ดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="b" items="${bookings}">
+                        <tr>
+                            <td><strong>${b.bookingId}</strong></td>
+                            <td><fmt:formatDate value="${b.bookingDate}" pattern="dd/MM/yyyy"/></td>
+                            <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
+                            <td>${b.ceremony.ceremonyName}</td>
+                            <td>
+                                <span class="mb-badge mb-badge-${b.bookingStatus}">${b.bookingStatus}</span>
+                            </td>
+                            <td class="mybooking-actions">
+                                <a href="${pageContext.request.contextPath}/viewBooking/${b.bookingId}"
+                                   class="btn-mybooking btn-mybooking-view">ดูรายละเอียด</a>
+
+                                <c:choose>
+                                    <c:when test="${not empty b.quotation}">
+    <a href="${pageContext.request.contextPath}/member/quotation/detail/${b.quotation.quotationId}"
+       class="btn-mybooking btn-mybooking-quote">ใบเสนอราคา</a>
+</c:when>
+                                    <c:otherwise>
+                                        <span class="btn-mybooking btn-mybooking-disabled">รอใบเสนอราคา</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+        </c:otherwise>
+        </c:choose>
+    </div>
+</div>
+
+<%-- ===== FOOTER ===== --%>
+<footer class="site-footer">
+    <div class="container footer-content footer-content-slim">
+        <div class="footer-col footer-brand-col">
+            <div class="footer-brand">
+                <div class="lotus-icon">
+                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
+                </div>
+                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+            </div>
+            <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+            <div class="footer-social">
+                <a href="#" class="footer-social-link">📘 Facebook</a>
+                <a href="#" class="footer-social-link">▶️ YouTube</a>
+                <a href="#" class="footer-social-link">💬 LINE OA</a>
+            </div>
+        </div>
+        <div class="footer-col footer-contact-col">
+            <h4 class="footer-heading">ติดต่อเรา</h4>
+            <p>📞 โทร. 08X-XXX-XXXX</p>
+            <p>💬 LINE OA: @boonmee</p>
+            <p>✉️ boonmee@gmail.com</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+function toggleDropdown() {
+    document.getElementById('dropdownMenu').classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.user-profile-pill')) {
+        var m = document.getElementById('dropdownMenu');
+        if (m) m.classList.remove('show');
+    }
+});
+</script>
+</body>
+</html>

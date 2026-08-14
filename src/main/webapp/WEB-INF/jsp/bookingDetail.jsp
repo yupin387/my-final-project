@@ -11,6 +11,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bookingDetail.css">
+    <style>
+        /* ===== สรุปค่าใช้จ่ายโดยประมาณ (คำนวณฝั่ง JSTL ล้วน ไม่แตะ Controller/Java) ===== */
+        .cost-summary-box {
+            margin-top: 16px;
+            border: 2px solid var(--gold-mid, #b8860b);
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .cost-summary-title {
+            background: #fdf3e7;
+            padding: 12px 18px;
+            font-weight: 700;
+            color: #7a4a1e;
+            border-bottom: 1px solid #e8d3a0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cost-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            border-bottom: 1px dashed #eee2cf;
+            font-size: 0.98rem;
+        }
+        .cost-row:last-child { border-bottom: none; }
+        .cost-row .cost-label { color: #555; }
+        .cost-row .cost-value { font-weight: 600; color: #222; }
+        .cost-row.cost-discount .cost-value { color: #d9534f; }
+        .cost-row.cost-total {
+            background: #fff8f0;
+            padding: 14px 18px;
+        }
+        .cost-row.cost-total .cost-label { font-weight: 700; color: #7a4a1e; }
+        .cost-row.cost-total .cost-value { font-size: 1.25rem; font-weight: 800; color: #d9534f; }
+        .cost-summary-note {
+            padding: 8px 18px 14px;
+            font-size: 0.82rem;
+            color: #999;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
 
@@ -147,6 +191,110 @@
         
         <hr class="divider">
 
+        <%-- ===================================================================
+             คำนวณค่าใช้จ่ายโดยประมาณล่วงหน้า (JSTL ล้วน ไม่แตะ Java/Controller)
+             ใช้ค่าจาก packageItems / pintoItems / sanghatharnItems ที่มีอยู่แล้ว
+             =================================================================== --%>
+
+        <%-- -- การนิมนต์พระสงฆ์ -- --%>
+        <c:set var="monkType" value=""/>
+        <c:set var="monkQty" value="0"/>
+        <c:forEach items="${b.details}" var="d">
+            <c:if test="${fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')}">
+                <c:set var="monkType" value="${fn:trim(d.answer)}"/>
+            </c:if>
+            <c:if test="${fn:contains(d.question.questionsText, 'จำนวนพระ')}">
+                <c:set var="monkQty" value="${empty fn:trim(d.answer) ? 0 : fn:trim(d.answer)}"/>
+            </c:if>
+        </c:forEach>
+        <c:set var="isSelfInvite" value="${fn:contains(monkType, 'นิมนต์เอง')}"/>
+
+        <%-- -- สังฆทาน -- --%>
+        <c:set var="sangWant" value="ต้องการ"/>
+        <c:set var="sanghaChoiceName" value=""/>
+        <c:set var="sanghaQty" value="0"/>
+        <c:forEach items="${b.details}" var="d">
+            <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน') && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
+                <c:set var="sangWant" value="${fn:trim(d.answer)}"/>
+            </c:if>
+            <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
+                <c:set var="sanghaChoiceName" value="${fn:trim(d.answer)}"/>
+            </c:if>
+            <c:if test="${fn:contains(d.question.questionsText, 'จำนวน') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
+                <c:set var="sanghaQty" value="${empty fn:trim(d.answer) ? 0 : fn:trim(d.answer)}"/>
+            </c:if>
+        </c:forEach>
+        <%-- ชุดสังฆทานมาตรฐาน (299) แถมฟรีในแพ็กเกจอยู่แล้ว: ถ้าเลือกชุดนี้ ให้ซ่อนหัวข้อทั้งหมด + ไม่คิดราคาเพิ่ม --%>
+        <c:set var="hideSangha" value="${sanghaChoiceName eq 'ชุดสังฆทานมาตรฐาน'}"/>
+        <c:set var="sanghaPrice" value="0"/>
+        <c:if test="${not hideSangha}">
+            <c:forEach items="${sanghatharnItems}" var="sItem2">
+                <c:if test="${sItem2.itemName eq sanghaChoiceName}">
+                    <c:set var="sanghaPrice" value="${sItem2.pricePerUnit}"/>
+                </c:if>
+            </c:forEach>
+        </c:if>
+        <c:set var="sanghaTotal" value="0"/>
+        <c:if test="${sangWant == 'ต้องการ' && not hideSangha}">
+            <c:set var="sanghaTotal" value="${sanghaPrice * sanghaQty}"/>
+        </c:if>
+
+        <%-- -- ปิ่นโต -- --%>
+        <c:set var="pintoWant" value="ไม่ต้องการ"/>
+        <c:set var="pintoChoiceName" value=""/>
+        <c:set var="pintoQty" value="0"/>
+        <c:forEach items="${b.details}" var="d">
+            <c:if test="${(fn:contains(d.question.questionsText, 'ภัตตาหาร') || fn:contains(d.question.questionsText, 'ปิ่นโต')) && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
+                <c:set var="pintoWant" value="${fn:trim(d.answer)}"/>
+            </c:if>
+            <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
+                <c:set var="pintoChoiceName" value="${fn:trim(d.answer)}"/>
+            </c:if>
+            <c:if test="${fn:contains(d.question.questionsText, 'จำนวน') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
+                <c:set var="pintoQty" value="${empty fn:trim(d.answer) ? 0 : fn:trim(d.answer)}"/>
+            </c:if>
+        </c:forEach>
+        <c:set var="pintoPrice" value="0"/>
+        <c:forEach items="${pintoItems}" var="pItem2">
+            <c:if test="${pItem2.itemName eq pintoChoiceName}">
+                <c:set var="pintoPrice" value="${pItem2.pricePerUnit}"/>
+            </c:if>
+        </c:forEach>
+        <c:set var="pintoTotal" value="0"/>
+        <c:if test="${pintoWant == 'ต้องการ'}">
+            <c:set var="pintoTotal" value="${pintoPrice * pintoQty}"/>
+        </c:if>
+
+        <c:set var="additionalTotal" value="${pintoTotal + sanghaTotal}"/>
+
+        <%-- -- ประเภทงาน: แพ็กเกจ หรือ กรอกความต้องการเบื้องต้น -- --%>
+        <c:set var="isCustomRequest" value="${b.ceremony.basePrice == 0 || fn:contains(b.ceremony.ceremonyName, 'กรอกความต้องการ')}"/>
+
+        <c:if test="${isCustomRequest}">
+            <%-- รวมราคารายการที่ระบบจัดให้อัตโนมัติ (ไม่รวมประเภทแพ็กเกจ/อุปกรณ์เสริม) --%>
+            <c:set var="fixedItemsTotal" value="0"/>
+            <c:forEach var="pi2" items="${packageItems}">
+                <c:if test="${pi2.item.itemType.itemTypeId != 5 && pi2.item.itemType.itemTypeId != 6}">
+                    <c:set var="fixedItemsTotal" value="${fixedItemsTotal + (pi2.item.pricePerUnit * pi2.quantity)}"/>
+                </c:if>
+            </c:forEach>
+            <%-- ค่านิมนต์พระ 1,300/รูป (บริการนิมนต์ 500 + อาสนะ 250 + ตาลปัตร 350 + กรวยดอกไม้ 200) เฉพาะกรณีไม่ได้นิมนต์เอง --%>
+            <c:set var="monkCost" value="0"/>
+            <c:if test="${not isSelfInvite}">
+                <c:set var="monkCost" value="${monkQty * 1300}"/>
+            </c:if>
+            <c:set var="packageLabel" value="ค่าบริการพื้นฐาน (ตามรายการที่จัดให้)"/>
+            <c:set var="packageValue" value="${fixedItemsTotal + monkCost}"/>
+            <c:set var="discountValue" value="0"/>
+        </c:if>
+        <c:if test="${not isCustomRequest}">
+            <c:set var="packageLabel" value="ราคาแพ็กเกจ"/>
+            <c:set var="packageValue" value="${b.ceremony.basePrice}"/>
+            <c:set var="discountValue" value="${isSelfInvite ? 1500 : 0}"/>
+        </c:if>
+
+        <c:set var="grandTotal" value="${packageValue + additionalTotal - discountValue}"/>
+
         <%-- 3. รายละเอียดงานบุญและแพ็กเกจ --%>
         <div class="section">
             <div class="section-title"><i class="bi bi-box-seam-fill"></i> รายละเอียดแพ็กเกจงานบุญ</div>
@@ -198,6 +346,32 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+
+            <%-- ===== สรุปค่าใช้จ่ายโดยประมาณ ===== --%>
+            <div class="cost-summary-box">
+                <div class="cost-summary-title"><i class="bi bi-calculator-fill"></i> สรุปค่าใช้จ่ายโดยประมาณ</div>
+                <div class="cost-row">
+                    <span class="cost-label">${packageLabel}:</span>
+                    <span class="cost-value">฿<fmt:formatNumber value="${packageValue}" pattern="#,##0.00"/></span>
+                </div>
+                <c:if test="${additionalTotal > 0}">
+                    <div class="cost-row">
+                        <span class="cost-label">รายการเพิ่มเติม:</span>
+                        <span class="cost-value">฿<fmt:formatNumber value="${additionalTotal}" pattern="#,##0.00"/></span>
+                    </div>
+                </c:if>
+                <c:if test="${discountValue > 0}">
+                    <div class="cost-row cost-discount">
+                        <span class="cost-label">ส่วนลดนิมนต์เอง:</span>
+                        <span class="cost-value">- ฿<fmt:formatNumber value="${discountValue}" pattern="#,##0.00"/></span>
+                    </div>
+                </c:if>
+                <div class="cost-row cost-total">
+                    <span class="cost-label">ยอดรวมสุทธิ:</span>
+                    <span class="cost-value">฿<fmt:formatNumber value="${grandTotal}" pattern="#,##0.00"/></span>
+                </div>
+                <div class="cost-summary-note">* เป็นราคาประมาณการเบื้องต้นเท่านั้น ราคาจริงยืนยันอีกครั้งตอนออกใบเสนอราคา</div>
+            </div>
         </div>
 
         <hr class="divider">
@@ -205,13 +379,6 @@
         <%-- 4. การนิมนต์พระสงฆ์ --%>
         <div class="section">
             <div class="section-title"><i class="bi bi-journal-text"></i> การนิมนต์พระสงฆ์</div>
-
-            <c:set var="monkType" value=""/>
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')}">
-                    <c:set var="monkType" value="${fn:trim(d.answer)}"/>
-                </c:if>
-            </c:forEach>
 
             <c:forEach items="${b.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')}">
@@ -232,18 +399,11 @@
             </c:forEach>
         </div>
 
+        <%-- 5. ชุดสังฆทาน — ซ่อนทั้งหมดถ้าเลือกเป็นเซตมาตรฐาน (299) เพราะรวมอยู่ในแพ็กเกจแล้ว --%>
+        <c:if test="${not hideSangha}">
         <hr class="divider">
-
-        <%-- 5. ชุดสังฆทาน --%>
         <div class="section">
             <div class="section-title"><i class="bi bi-gift"></i> ชุดสังฆทาน</div>
-
-            <c:set var="sangWant" value="ต้องการ"/>
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน') && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
-                    <c:set var="sangWant" value="${fn:trim(d.answer)}"/>
-                </c:if>
-            </c:forEach>
 
             <c:forEach items="${b.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน') && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
@@ -263,19 +423,13 @@
                 </c:if>
             </c:forEach>
         </div>
+        </c:if>
 
         <hr class="divider">
 
         <%-- 6. ชุดภัตตาหารปิ่นโต --%>
         <div class="section">
             <div class="section-title"><i class="bi bi-box-seam"></i> ชุดภัตตาหารปิ่นโต</div>
-
-            <c:set var="pintoWant" value="ไม่ต้องการ"/>
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${(fn:contains(d.question.questionsText, 'ภัตตาหาร') || fn:contains(d.question.questionsText, 'ปิ่นโต')) && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
-                    <c:set var="pintoWant" value="${fn:trim(d.answer)}"/>
-                </c:if>
-            </c:forEach>
 
             <c:forEach items="${b.details}" var="d">
                 <c:if test="${(fn:contains(d.question.questionsText, 'ภัตตาหาร') || fn:contains(d.question.questionsText, 'ปิ่นโต')) && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">

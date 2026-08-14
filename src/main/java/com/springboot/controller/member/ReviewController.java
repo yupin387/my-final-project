@@ -86,12 +86,22 @@ public class ReviewController {
 
     // 3. หน้าดูรีวิวของประเภทงานนั้นๆ (แยกตาม ceremonyId เดี่ยว ๆ)
     @GetMapping("/reviews/{ceremonyId}")
-    public String viewReviewsByCeremony(@PathVariable int ceremonyId, Model model) {
+    public String viewReviewsByCeremony(@PathVariable int ceremonyId,
+                                         @RequestParam(value = "rating", required = false) Integer rating,
+                                         Model model) {
         List<Review> allReviews = reviewService.getAllReviews();
 
         List<Review> reviews = allReviews.stream()
             .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == ceremonyId)
             .collect(Collectors.toList());
+
+        // FIX: เพิ่มกรองตามจำนวนดาว เหมือนกับใน viewAllReviews() เพื่อให้ rating-bars
+        // ที่กดได้ในหน้านี้ทำงานสอดคล้องกัน (คำนวณจาก Math.round เหมือน starCounts ด้านล่าง)
+        if (rating != null) {
+            reviews = reviews.stream()
+                .filter(r -> Math.round(r.getRating()) == rating)
+                .collect(Collectors.toList());
+        }
 
         double avg = reviews.stream().mapToDouble(Review::getRating).average().orElse(0.0);
         Map<Long, Long> starCounts = reviews.stream()
@@ -101,6 +111,7 @@ public class ReviewController {
         model.addAttribute("avgRating", avg);
         model.addAttribute("starCounts", starCounts);
         model.addAttribute("selectedCeremonyId", ceremonyId);
+        model.addAttribute("selectedRating", rating); // FIX: ส่งกลับไปให้ JSP ไฮไลต์แถบดาวที่เลือกอยู่
 
         // FIX: เดิมหน้านี้ไม่ได้ set ceremonyTypes ทำให้เมนู dropdown "บริการ/แพ็กเกจ"
         // ใน navbar ของ viewReview.jsp ว่างเปล่า
@@ -110,12 +121,16 @@ public class ReviewController {
     }
 
     // 4. หน้าดูรีวิวทั้งหมด (รวมทุกงาน) + รองรับกรองตามประเภทงานผ่าน query param "type"
+    // และกรองตามจำนวนดาวผ่าน query param "rating"
     // FIX: เดิมเมธอดนี้ไม่รับพารามิเตอร์ "type" เลย ทำให้ปุ่มกรอง (btn-filter) ใน
     // viewReview.jsp ที่ลิงก์ไป /reviews?type=ทำบุญบ้าน ฯลฯ ไม่มีผลอะไร (แสดงรีวิวทั้งหมดเสมอ
     // และ ${selectedCeremonyType} ก็ไม่เคยมีค่า ปุ่ม active-link เลยไม่ทำงานด้วย)
+    // FIX: เพิ่มพารามิเตอร์ "rating" เพื่อให้กดที่แถบสัดส่วนดาวใน summary-card แล้วกรอง
+    // เฉพาะรีวิวที่ได้คะแนนตามดาวนั้น ๆ ได้ (ใช้ร่วมกับ type พร้อมกันได้)
     @GetMapping("/reviews")
     public String viewAllReviews(
             @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "rating", required = false) Integer rating,
             Model model) {
 
         List<Review> allReviews = reviewService.getAllReviews();
@@ -123,13 +138,21 @@ public class ReviewController {
         List<Review> reviews = allReviews;
         if (type != null && !type.trim().isEmpty()) {
             String typeTrimmed = type.trim();
-            reviews = allReviews.stream()
+            reviews = reviews.stream()
                 .filter(r -> r.getBookingForm() != null
                         && r.getBookingForm().getCeremony() != null
                         && typeTrimmed.equals(
                             r.getBookingForm().getCeremony().getCeremonyType() == null
                                 ? ""
                                 : r.getBookingForm().getCeremony().getCeremonyType().trim()))
+                .collect(Collectors.toList());
+        }
+
+        // FIX: กรองตามดาว — ปัดเศษด้วย Math.round เหมือนตอนสร้าง starCounts ด้านล่าง
+        // เพื่อให้ rating=4 ครอบคลุมรีวิวที่ให้คะแนน 3.5-4.4 ตามเกณฑ์เดียวกับที่แสดงในแถบสัดส่วน
+        if (rating != null) {
+            reviews = reviews.stream()
+                .filter(r -> Math.round(r.getRating()) == rating)
                 .collect(Collectors.toList());
         }
 
@@ -145,6 +168,7 @@ public class ReviewController {
         model.addAttribute("avgRating", avg);
         model.addAttribute("starCounts", starCounts);
         model.addAttribute("selectedCeremonyType", type);
+        model.addAttribute("selectedRating", rating); // FIX: ส่งกลับไปให้ JSP ไฮไลต์ปุ่ม/แถบดาวที่เลือกอยู่
 
         // FIX: เพิ่ม ceremonyTypes ให้ dropdown "บริการ/แพ็กเกจ" ใน navbar ของ viewReview.jsp
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());

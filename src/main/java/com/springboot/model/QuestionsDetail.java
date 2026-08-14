@@ -1,6 +1,7 @@
 package com.springboot.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Questionsdetail")
@@ -11,30 +12,32 @@ public class QuestionsDetail {
     @Column(name = "questionsid")
     private int questionsId;
 
-    @Column(name = "questionstext", nullable = false)
+    @Column(name = "questionstext", nullable = false, unique = true)
     private String questionsText;
 
-    @ManyToOne
-    @JoinColumn(name = "ceremonyid")
-    private Ceremony ceremony;
+    // =========================================================
+    // Many-to-Many กับ Ceremony
+    // (ฝั่งนี้เป็น "inverse side" ใช้ mappedBy เพราะฝั่งเจ้าของ
+    //  ความสัมพันธ์ (owning side) อยู่ที่ Ceremony.java)
+    // =========================================================
+    @ManyToMany(mappedBy = "questions")
+    private List<Ceremony> ceremonies;
 
     public QuestionsDetail() {}
 
-    public QuestionsDetail(String questionsText, Ceremony ceremony) {
+    public QuestionsDetail(String questionsText) {
         this.questionsText = questionsText;
-        this.ceremony = ceremony;
     }
 
     public int getQuestionsId() {
         return questionsId;
     }
-    
 
     public void setQuestionsId(int questionsId) {
-		this.questionsId = questionsId;
-	}
+        this.questionsId = questionsId;
+    }
 
-	public String getQuestionsText() {
+    public String getQuestionsText() {
         return questionsText;
     }
 
@@ -42,11 +45,11 @@ public class QuestionsDetail {
         this.questionsText = questionsText;
     }
 
-    public Ceremony getCeremony() {
-        return ceremony;
+    public List<Ceremony> getCeremonies() {
+        return ceremonies;
     }
 
-    public void setCeremony(Ceremony ceremony) {
-        this.ceremony = ceremony;
+    public void setCeremonies(List<Ceremony> ceremonies) {
+        this.ceremonies = ceremonies;
     }
 }

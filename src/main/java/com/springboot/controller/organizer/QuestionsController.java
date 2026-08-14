@@ -24,13 +24,9 @@ public class QuestionsController {
     @Autowired
     private CeremonyService ceremonyService;
 
-    // ลำดับประเภทงานตายตัว ใช้ populate dropdown "ประเภทงาน" ในฟอร์มเพิ่ม/แก้คำถาม
     private static final List<String> CEREMONY_TYPE_ORDER =
         List.of("ทำบุญบ้าน", "ขึ้นบ้านใหม่", "ทำบุญบริษัทหรือออฟฟิศ");
 
-    // ===== หน้ารายการคำถาม — กรองตาม "ประเภทงานบุญ" (ceremonyType) ไม่ใช่รายแพ็กเกจ (ceremonyId)
-    //       เพราะประเภทงานมีแค่ 3 ค่าตายตัว (ทำบุญบ้าน / ขึ้นบ้านใหม่ / ทำบุญออฟฟิศ)
-    //       ในขณะที่แพ็กเกจ (ceremonyId) มีได้หลายรายการต่อประเภทงาน จึงไม่ควรใช้กรอง tab =====
     @GetMapping
     public String listQuestions(@RequestParam(required = false, defaultValue = "all") String ceremonyType,
                                 Model model, HttpSession session) {
@@ -52,9 +48,11 @@ public class QuestionsController {
         if ("all".equals(ceremonyType)) {
             questions = allQuestions;
         } else {
+            // แก้ไข: เช็คจาก list ของ ceremonies แทนที่จะเช็คตัวเดียว
             questions = allQuestions.stream()
-                    .filter(q -> q.getCeremony() != null
-                            && ceremonyType.equals(q.getCeremony().getCeremonyType()))
+                    .filter(q -> q.getCeremonies() != null
+                            && q.getCeremonies().stream()
+                                    .anyMatch(c -> ceremonyType.equals(c.getCeremonyType())))
                     .collect(Collectors.toList());
         }
 
@@ -66,20 +64,16 @@ public class QuestionsController {
         return "questionsList";
     }
 
-    // ===== หน้าฟอร์มเพิ่มคำถาม =====
     @GetMapping("/add")
     public String showAddForm(Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) {
             return "redirect:/loginorganizer";
         }
 
-        // แก้ไข: ฟอร์มเหลือแค่เลือก "ประเภทงาน" (3 ตัวเลือก) ไม่ต้องส่ง groupedCeremonies
-        // ที่แยกแพ็กเกจแล้ว เพราะ service จะเลือกแพ็กเกจแรกของประเภทนั้นให้อัตโนมัติ
         model.addAttribute("ceremonyTypes", CEREMONY_TYPE_ORDER);
         return "addQuestion";
     }
 
-    // ===== บันทึกการเพิ่มคำถาม =====
     @PostMapping("/add")
     public String processAdd(@RequestParam String questionText,
                              @RequestParam String ceremonyType,
@@ -93,7 +87,6 @@ public class QuestionsController {
         return "redirect:/organizer/questions";
     }
 
-    // ===== หน้าฟอร์มแก้ไขคำถาม =====
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id,
                                Model model,
@@ -109,12 +102,18 @@ public class QuestionsController {
             return "redirect:/organizer/questions";
         }
 
+        // แก้ไข: เดิมอ่านจาก question.getCeremony().getCeremonyType() ตัวเดียว
+        // ตอนนี้เป็น list -> ใช้ตัวแรกเป็นตัวแทนแสดงใน dropdown ของฟอร์มแก้ไข
+        String currentCeremonyType = (question.getCeremonies() != null && !question.getCeremonies().isEmpty())
+                ? question.getCeremonies().get(0).getCeremonyType()
+                : "ALL";
+
         model.addAttribute("question", question);
+        model.addAttribute("currentCeremonyType", currentCeremonyType);
         model.addAttribute("ceremonyTypes", CEREMONY_TYPE_ORDER);
         return "editQuestion";
     }
 
-    // ===== บันทึกการแก้ไข =====
     @PostMapping("/update")
     public String updateQuestion(@RequestParam int questionsId,
                                  @RequestParam String questionsText,
@@ -129,7 +128,6 @@ public class QuestionsController {
         return "redirect:/organizer/questions";
     }
 
-    // ===== ลบคำถาม =====
     @PostMapping("/delete/{id}")
     public String deleteQuestion(@PathVariable int id,
                                  HttpSession session,

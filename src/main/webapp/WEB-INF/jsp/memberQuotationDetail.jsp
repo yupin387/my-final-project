@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=10">
     <style>
-        /* สไตล์หัวข้อหมวดหมู่ให้เหมือนหน้าแก้ไข/สร้างใบเสนอราคา */
         .items-table tr.group-row td.category-header-text {
             text-align: left !important;
             padding-left: 8px !important;
@@ -20,13 +19,37 @@
             font-weight: bold;
         }
         .items-table tr.group-row td {
-            background-color: #FFFFFF; /* เปลี่ยนเป็นสีขาวล้วน */
+            background-color: #FFFFFF;
+        }
+        .member-note-section {
+            margin-top: 24px;
+            padding: 16px;
+            border: 1px solid #E5D3B3;
+            border-radius: 8px;
+            background: #FFFBF5;
+        }
+        .member-note-section label {
+            display: block;
+            font-weight: 700;
+            color: #9C6B3E;
+            margin-bottom: 8px;
+        }
+        .member-note-section textarea {
+            width: 100%;
+            min-height: 90px;
+            padding: 10px 12px;
+            border: 1px solid #D8C4A0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
 
-<%-- ========== NAVBAR (เหมือนหน้า Home ทุกสี/ขนาด) ========== --%>
+<%-- ========== NAVBAR ========== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
@@ -59,8 +82,8 @@
             </div>
         </div>
 
-        <a href="${pageContext.request.contextPath}/latestBooking" class="nav-link-item">การจอง</a>
-        <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-link-item active">ใบเสนอราคา</a>
+        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">การจอง</a>
+
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
 
@@ -85,7 +108,6 @@
 
     <div class="sheet">
 
-        <%-- ตัวแปรร่วมของเอกสาร: คำนวณไว้ตั้งแต่ต้นเพื่อใช้ทั้งในส่วนข้อมูลเมตาและตารางรายการ --%>
         <c:set var="packageName" value="${q.bookingForm.ceremony.ceremonyName}"/>
         <c:set var="isCustomRequest" value="${q.bookingForm.ceremony.ceremonyName == 'กรอกความต้องการเบื้องต้น'}"/>
         <c:set var="monkInviteType" value=""/>
@@ -100,7 +122,7 @@
         </c:forEach>
         <c:set var="isMonkSelfInvite" value="${fn:contains(monkInviteType,'นิมนต์เอง')}"/>
 
-        <%-- ===== หัวเอกสาร (เหมือนใบเสนอราคาฝั่ง organizer) ===== --%>
+        <%-- ===== หัวเอกสาร ===== --%>
         <div class="doc-header">
             <div class="company-info">
               <h2>บริษัท บุญมีนำพา จัดงานบุญ </h2>
@@ -113,7 +135,7 @@
             </div>
         </div>
 
-        <%-- ===== แถวข้อมูลเมตา: ข้อมูลลูกค้า / เลขที่-สถานะ ===== --%>
+        <%-- ===== แถวข้อมูลเมตา ===== --%>
         <div class="doc-meta-row">
             <div class="meta-box-left">
                 <table class="layout-table">
@@ -179,7 +201,7 @@
             </div>
         </div>
 
-        <%-- ===== ตารางรายการ ===== --%>
+        <%-- ===== ตารางรายการ (ไม่มีคอลัมน์หมายเหตุต่อแถวแล้ว) ===== --%>
         <table class="items-table">
             <colgroup>
                 <col style="width: 70px;">
@@ -188,7 +210,6 @@
                 <col style="width: 70px;">
                 <col style="width: 100px;">
                 <col style="width: 100px;">
-                <col style="width: 230px;">
             </colgroup>
             <thead>
                 <tr>
@@ -198,13 +219,12 @@
                     <th class="text-center">หน่วย</th>
                     <th class="text-right">ราคา/หน่วย</th>
                     <th class="text-right">จำนวนเงิน</th>
-                    <th class="text-left">หมายเหตุ / แจ้งขอแก้ไข</th>
                 </tr>
             </thead>
             <tbody>
                 <c:set var="count" value="1"/>
 
-                <%-- ===== หมวดแพ็กเกจหลัก (เรียงอยู่บนสุดเสมอ) ===== --%>
+                <%-- ===== หมวดแพ็กเกจหลัก ===== --%>
                 <c:forEach var="d" items="${details}">
                     <c:if test="${d.item != null && d.item.itemName == packageName}">
                         <tr>
@@ -222,19 +242,10 @@
                             <td class="text-center">แพ็กเกจ</td>
                             <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
                             <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2"/></td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${q.quotationStatus != 'Confirmed'}">
-                                        <input type="hidden" class="row-item-id" value="${d.item.itemId}">
-                                        <input type="text" class="member-inline-input row-item-note" placeholder="พิมพ์เพิ่มเรื่องแพ็กเกจ (ถ้ามี)...">
-                                    </c:when>
-                                    <c:otherwise>-</c:otherwise>
-                                </c:choose>
-                            </td>
                         </tr>
                     </c:if>
                 </c:forEach>
-                
+
                 <%-- ===== แสดงซับไอเทม (packageIncludedItems) ===== --%>
                 <c:if test="${not empty packageIncludedItems}">
                     <tr>
@@ -244,7 +255,6 @@
                         <td class="text-center"></td>
                         <td class="text-right"></td>
                         <td class="text-right"></td>
-                        <td class="text-center"></td>
                     </tr>
                     <c:forEach var="subItem" items="${packageIncludedItems}">
                         <c:set var="subItemQty" value="1"/>
@@ -260,7 +270,6 @@
                             <td class="text-center">${subItem.unit}</td>
                             <td class="text-right">-</td>
                             <td class="text-right">-</td>
-                            <td class="text-center">-</td>
                         </tr>
                     </c:forEach>
                 </c:if>
@@ -271,7 +280,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                             <c:if test="${!printedEquip}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td></tr>
                                 <c:set var="printedEquip" value="true"/>
                             </c:if>
                             <tr>
@@ -283,15 +292,6 @@
                                 <td class="text-center">${d.item.unit}</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
                                 <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2"/></td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${q.quotationStatus != 'Confirmed'}">
-                                            <input type="hidden" class="row-item-id" value="${d.item.itemId}">
-                                            <input type="text" class="member-inline-input row-item-note" placeholder="พิมพ์เพิ่มเรื่องอุปกรณ์ (ถ้ามี)...">
-                                        </c:when>
-                                        <c:otherwise>-</c:otherwise>
-                                    </c:choose>
-                                </td>
                             </tr>
                         </c:if>
                     </c:forEach>
@@ -303,7 +303,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                             <c:if test="${!printedSang}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                <tr class="group-row"><td></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td></tr>
                                 <c:set var="printedSang" value="true"/>
                             </c:if>
                             <tr>
@@ -317,15 +317,6 @@
                                 <td class="text-center">${d.item.unit}</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${isFreeSang ? 0.00 : d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
                                 <td class="text-right"><fmt:formatNumber value="${isFreeSang ? 0.00 : d.subtotal}" minFractionDigits="2"/></td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${q.quotationStatus != 'Confirmed'}">
-                                            <input type="hidden" class="row-item-id" value="${d.item.itemId}">
-                                            <input type="text" class="member-inline-input row-item-note" placeholder="พิมพ์เพิ่มเรื่องสังฆทาน (ถ้ามี)...">
-                                        </c:when>
-                                        <c:otherwise>-</c:otherwise>
-                                    </c:choose>
-                                </td>
                             </tr>
                         </c:if>
                     </c:forEach>
@@ -337,7 +328,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                             <c:if test="${!printedFood}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                <tr class="group-row"><td></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td></tr>
                                 <c:set var="printedFood" value="true"/>
                             </c:if>
                             <tr>
@@ -349,15 +340,6 @@
                                 <td class="text-center">${d.item.unit}</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
                                 <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2"/></td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${q.quotationStatus != 'Confirmed'}">
-                                            <input type="hidden" class="row-item-id" value="${d.item.itemId}">
-                                            <input type="text" class="member-inline-input row-item-note" placeholder="พิมพ์เพิ่มเรื่องอาหาร (ถ้ามี)...">
-                                        </c:when>
-                                        <c:otherwise>-</c:otherwise>
-                                    </c:choose>
-                                </td>
                             </tr>
                         </c:if>
                     </c:forEach>
@@ -369,7 +351,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
                             <c:if test="${!printedServ}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดบริการและการดำเนินการ</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                <tr class="group-row"><td></td><td class="category-header-text">หมวดบริการและการดำเนินการ</td><td></td><td></td><td></td><td></td></tr>
                                 <c:set var="printedServ" value="true"/>
                             </c:if>
                             <tr>
@@ -381,15 +363,6 @@
                                 <td class="text-center">${d.item.unit}</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
                                 <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2"/></td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${q.quotationStatus != 'Confirmed'}">
-                                            <input type="hidden" class="row-item-id" value="${d.item.itemId}">
-                                            <input type="text" class="member-inline-input row-item-note" placeholder="พิมพ์แจ้งขอแก้ไข (ถ้ามี)...">
-                                        </c:when>
-                                        <c:otherwise>-</c:otherwise>
-                                    </c:choose>
-                                </td>
                             </tr>
                         </c:if>
                     </c:forEach>
@@ -401,7 +374,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
                             <c:if test="${!printedExtra}">
-                                <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td><td></td></tr>
+                                <tr class="group-row"><td></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td></tr>
                                 <c:set var="printedExtra" value="true"/>
                             </c:if>
                             <tr>
@@ -413,21 +386,12 @@
                                 <td class="text-center">${d.item.unit}</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
                                 <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2"/></td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${q.quotationStatus != 'Confirmed'}">
-                                            <input type="hidden" class="row-item-id" value="${d.item.itemId}">
-                                            <input type="text" class="member-inline-input row-item-note" placeholder="พิมพ์เพิ่มเรื่องอุปกรณ์เสริม (ถ้ามี)...">
-                                        </c:when>
-                                        <c:otherwise>-</c:otherwise>
-                                    </c:choose>
-                                </td>
                             </tr>
                         </c:if>
                     </c:forEach>
                 </c:set>
 
-                <%-- ===== ลำดับการแสดงผล (ตามประเภทงาน) ===== --%>
+                <%-- ===== ลำดับการแสดงผล ===== --%>
                 <c:choose>
                     <c:when test="${isCustomRequest}">
                         ${equipBlock}
@@ -447,7 +411,7 @@
             </tbody>
         </table>
 
-        <%-- ===== สรุปยอด: ราคาแพ็กเกจ / รายการเพิ่มเติม / ส่วนลดนิมนต์เอง / ยอดรวมสุทธิ ===== --%>
+        <%-- ===== สรุปยอด ===== --%>
         <div class="totals-wrap">
             <div class="totals-box">
                 <c:set var="sumExtra" value="0"/>
@@ -499,7 +463,21 @@
             </div>
         </div>
 
-        <%-- ===== ปุ่มยืนยัน / แจ้งขอแก้ไข (โซนของสมาชิก ไม่พิมพ์ออกกระดาษ) ===== --%>
+        <%-- ===== หมายเหตุ / คอมเม้นรวมทั้งใบ (แสดงของเดิมถ้ามี + ให้กรอกใหม่) ===== --%>
+        <c:if test="${q.quotationStatus != 'Confirmed'}">
+            <div class="member-note-section no-print">
+                <label for="memberNoteInput">หมายเหตุ / แจ้งขอแก้ไข (คอมเม้นรวมทั้งใบ)</label>
+                <textarea id="memberNoteInput" placeholder="พิมพ์ข้อความแจ้งขอแก้ไขรายการที่ต้องการ..."><c:if test="${not empty q.note}">${q.note}</c:if></textarea>
+            </div>
+        </c:if>
+        <c:if test="${q.quotationStatus == 'Confirmed' && not empty q.note}">
+            <div class="member-note-section">
+                <label>หมายเหตุ</label>
+                <p style="margin:0;">${q.note}</p>
+            </div>
+        </c:if>
+
+        <%-- ===== ปุ่มยืนยัน / แจ้งขอแก้ไข ===== --%>
         <div class="action-section no-print">
             <c:choose>
                 <c:when test="${q.quotationStatus != 'Confirmed'}">
@@ -525,7 +503,7 @@
 
 <form id="cleanSubmitForm" action="${pageContext.request.contextPath}/member/quotation/revise-all" method="post" style="display:none;">
     <input type="hidden" name="quotationId" value="${q.quotationId}">
-    <div id="hiddenFieldsContainer"></div>
+    <input type="hidden" id="memberNoteHidden" name="memberNote" value="">
 </form>
 
 <div id="confirmModal" class="custom-modal">
@@ -574,21 +552,13 @@
 
 <script>
     function packAndSubmitReviseForm() {
-        const rows = document.querySelectorAll('.items-table tbody tr');
-        const container = document.getElementById('hiddenFieldsContainer');
-        container.innerHTML = "";
-        let hasData = false;
-        rows.forEach(row => {
-            const idInput = row.querySelector('.row-item-id');
-            const noteInput = row.querySelector('.row-item-note');
-            if (idInput && noteInput && noteInput.value.trim() !== "") {
-                hasData = true;
-                const idHidden = document.createElement('input'); idHidden.name = 'itemIds'; idHidden.value = idInput.value;
-                const noteHidden = document.createElement('input'); noteHidden.name = 'memberNotes'; noteHidden.value = noteInput.value.trim();
-                container.appendChild(idHidden); container.appendChild(noteHidden);
-            }
-        });
-        if (!hasData) { alert('กรุณากรอกข้อความร้องขอแก้ไขอย่างน้อย 1 รายการ'); return; }
+        const noteInput = document.getElementById('memberNoteInput');
+        const note = noteInput ? noteInput.value.trim() : "";
+        if (note === "") {
+            alert('กรุณากรอกข้อความแจ้งขอแก้ไข');
+            return;
+        }
+        document.getElementById('memberNoteHidden').value = note;
         document.getElementById('cleanSubmitForm').submit();
     }
     function showConfirmModal() { document.getElementById('confirmModal').style.display = 'flex'; }

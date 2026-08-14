@@ -42,6 +42,20 @@ public class Ceremony {
     )
     private List<CeremonyItem> ceremonyItems;
 
+    /*
+     * คำถามที่ใช้ถามลูกค้าสำหรับพิธีนี้
+     * Many-to-Many กับ QuestionsDetail (ฝั่งนี้เป็น owning side)
+     * ใช้ตารางกลาง ceremony_question เก็บแค่คู่ FK (ceremonyid, questionsid)
+     * ไม่มี attribute เพิ่มเติม จึงไม่ต้องมี Entity กลาง
+     */
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "ceremony_question",
+        joinColumns = @JoinColumn(name = "ceremonyid"),
+        inverseJoinColumns = @JoinColumn(name = "questionsid")
+    )
+    private List<QuestionsDetail> questions;
+
     public Ceremony() {
     }
 
@@ -50,7 +64,6 @@ public class Ceremony {
             String ceremonyName,
             String ceremonyDetail,
             double basePrice) {
-
         this.ceremonyType = ceremonyType;
         this.ceremonyName = ceremonyName;
         this.ceremonyDetail = ceremonyDetail;
@@ -107,5 +120,13 @@ public class Ceremony {
 
     public void setCeremonyItems(List<CeremonyItem> ceremonyItems) {
         this.ceremonyItems = ceremonyItems;
+    }
+
+    public List<QuestionsDetail> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<QuestionsDetail> questions) {
+        this.questions = questions;
     }
 }

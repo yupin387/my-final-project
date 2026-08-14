@@ -11,7 +11,51 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewBooking.css?v=27">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewBooking.css?v=28">
+    <style>
+        /* ===== สรุปค่าใช้จ่ายโดยประมาณ (คำนวณฝั่ง JS ล้วน ไม่แตะ backend) ===== */
+        .cost-summary-box {
+            margin-top: 16px;
+            border: 2px solid var(--accent-gold, #d4af37);
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .cost-summary-title {
+            background: var(--cream-warm, #fdf3e7);
+            padding: 12px 18px;
+            font-weight: 700;
+            color: var(--accent-brown, #7a4a1e);
+            border-bottom: 1px solid var(--accent-gold-pale, #e8d3a0);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cost-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            border-bottom: 1px dashed var(--cream-border-soft, #eee2cf);
+            font-size: 0.98rem;
+        }
+        .cost-row:last-child { border-bottom: none; }
+        .cost-row .cost-label { color: var(--text-mid, #555); }
+        .cost-row .cost-value { font-weight: 600; color: #222; }
+        .cost-row.cost-discount .cost-value { color: #d9534f; }
+        .cost-row.cost-total {
+            background: #fff8f0;
+            padding: 14px 18px;
+        }
+        .cost-row.cost-total .cost-label { font-weight: 700; color: var(--accent-brown, #7a4a1e); }
+        .cost-row.cost-total .cost-value { font-size: 1.25rem; font-weight: 800; color: #d9534f; }
+        .cost-summary-note {
+            padding: 8px 18px 14px;
+            font-size: 0.82rem;
+            color: #999;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
 
@@ -45,8 +89,8 @@
             </div>
         </div>
 
-        <a href="${pageContext.request.contextPath}/latestBooking" class="nav-link-item active">การจอง</a>
-        <a href="${pageContext.request.contextPath}/member/quotation/list" class="nav-link-item">ใบเสนอราคา</a>
+        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">การจอง</a>
+
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
 
@@ -249,10 +293,10 @@
 
                 <c:choose>
                     <c:when test="${not empty packageItems}">
-                        <div class="package-items-grid">
+                        <div class="package-items-grid" id="packageItemsGrid">
                             <c:forEach var="pi" items="${packageItems}">
                                 <c:if test="${pi.item.itemType.itemTypeId != 5 && pi.item.itemType.itemTypeId != 6}">
-                                    <div class="package-item-chip">
+                                    <div class="package-item-chip" data-price="${pi.item.pricePerUnit}" data-qty="${pi.quantity}">
                                         <i class="bi bi-check2"></i>
                                         <span class="flex-grow-1">${pi.item.itemName}</span>
                                         <strong class="text-secondary ms-1">${pi.quantity} ${pi.item.unit}</strong>
@@ -266,42 +310,81 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+
+            <%-- ===== สรุปค่าใช้จ่ายโดยประมาณ (คำนวณด้วย JS จากคำตอบในฟอร์ม) ===== --%>
+            <div class="cost-summary-box" id="costSummaryBox">
+                <div class="cost-summary-title"><i class="bi bi-calculator-fill"></i> สรุปค่าใช้จ่ายโดยประมาณ</div>
+                <div class="cost-row">
+                    <span class="cost-label" id="costPackageLabel">ราคาแพ็กเกจ:</span>
+                    <span class="cost-value" id="costPackageValue">-</span>
+                </div>
+                <div class="cost-row" id="costAdditionalRow" style="display:none;">
+                    <span class="cost-label">รายการเพิ่มเติม:</span>
+                    <span class="cost-value" id="costAdditionalValue">-</span>
+                </div>
+                <div class="cost-row cost-discount" id="costDiscountRow" style="display:none;">
+                    <span class="cost-label">ส่วนลดนิมนต์เอง:</span>
+                    <span class="cost-value" id="costDiscountValue">-</span>
+                </div>
+                <div class="cost-row cost-total">
+                    <span class="cost-label">ยอดรวมสุทธิ:</span>
+                    <span class="cost-value" id="costTotalValue">-</span>
+                </div>
+                <div class="cost-summary-note">* เป็นราคาประมาณการเบื้องต้นเท่านั้น ราคาจริงจะยืนยันโดยทีมงานอีกครั้ง</div>
+            </div>
         </div>
 
         <%-- 4. ตัวเลือกและความต้องการเพิ่มเติม --%>
         <c:if test="${not empty booking.details}">
+
+            <%-- หาคำตอบ "เลือกชุดสังฆทานที่ต้องการ" ล่วงหน้า เพื่อเช็คว่าเป็นเซตมาตรฐาน (299)
+                 ที่แถมฟรีในแพ็กเกจอยู่แล้วหรือไม่ ถ้าใช่ ให้ซ่อนหัวข้อ "ชุดสังฆทาน" ทั้งหมด --%>
+            <c:set var="sanghaChoice" value="" />
+            <c:forEach items="${booking.details}" var="dd">
+                <c:if test="${dd.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
+                    <c:set var="sanghaChoice" value="${fn:trim(dd.answer)}" />
+                </c:if>
+            </c:forEach>
+            <c:set var="hideSangha" value="${sanghaChoice eq 'ชุดสังฆทานมาตรฐาน'}" />
+
             <hr class="divider">
-            <div class="section">
+            <div class="section" id="bookingDetailsSection">
                 <c:forEach items="${booking.details}" var="d">
 
-                    <c:if test="${d.question.questionsText eq 'รูปแบบการนิมนต์พระสงฆ์'}">
-                        <div class="section-title mt-3">
-                            <i class="bi bi-journal-text"></i> การนิมนต์พระสงฆ์
-                        </div>
-                    </c:if>
+                    <c:set var="isSanghaQuestion" value="${d.question.questionsText eq 'ต้องการสังฆทานหรือไม่' or d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ' or d.question.questionsText eq 'จำนวนชุดสังฆทาน'}" />
 
-                    <c:if test="${d.question.questionsText eq 'ต้องการชุดภัตตาหารปิ่นโตหรือไม่'}">
-                        <div class="section-title mt-4">
-                            <i class="bi bi-box-seam"></i> ชุดภัตตาหารปิ่นโต
-                        </div>
-                    </c:if>
+                    <c:if test="${not (isSanghaQuestion and hideSangha)}">
 
-                    <c:if test="${d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
-                        <div class="section-title mt-4">
-                            <i class="bi bi-gift"></i> ชุดสังฆทาน
-                        </div>
-                    </c:if>
+                        <c:if test="${d.question.questionsText eq 'รูปแบบการนิมนต์พระสงฆ์'}">
+                            <div class="section-title mt-3">
+                                <i class="bi bi-journal-text"></i> การนิมนต์พระสงฆ์
+                            </div>
+                        </c:if>
 
-                    <c:if test="${d.question.questionsText eq 'มีความต้องการเพิ่มเติมหรือไม่'}">
-                        <div class="section-title mt-4">
-                            <i class="bi bi-plus-circle"></i> รายการเพิ่มเติม
-                        </div>
-                    </c:if>
+                        <c:if test="${d.question.questionsText eq 'ต้องการชุดภัตตาหารปิ่นโตหรือไม่'}">
+                            <div class="section-title mt-4">
+                                <i class="bi bi-box-seam"></i> ชุดภัตตาหารปิ่นโต
+                            </div>
+                        </c:if>
 
-                    <div class="info-row">
-                        <span class="info-label" style="width: 300px;"><c:out value="${d.question.questionsText}" default="รายการ"/></span>
-                        <span class="info-value"><c:out value="${d.answer}" default="-"/></span>
-                    </div>
+                        <c:if test="${d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
+                            <div class="section-title mt-4">
+                                <i class="bi bi-gift"></i> ชุดสังฆทาน
+                            </div>
+                        </c:if>
+
+                        <c:if test="${d.question.questionsText eq 'มีความต้องการเพิ่มเติมหรือไม่'}">
+                            <div class="section-title mt-4">
+                                <i class="bi bi-plus-circle"></i> รายการเพิ่มเติม
+                            </div>
+                        </c:if>
+
+                        <div class="info-row" data-qtext="${fn:trim(d.question.questionsText)}" data-answer="${fn:trim(d.answer)}">
+                            <span class="info-label" style="width: 300px;"><c:out value="${d.question.questionsText}" default="รายการ"/></span>
+                            <span class="info-value"><c:out value="${d.answer}" default="-"/></span>
+                        </div>
+
+                    </c:if>
 
                 </c:forEach>
             </div>
@@ -401,6 +484,143 @@
 <script>
     const contextPath = "${pageContext.request.contextPath}";
 </script>
-<script src="${pageContext.request.contextPath}/static/js/viewBooking.js?v=27"></script>
+
+<%-- ===================================================================
+     สรุปค่าใช้จ่ายโดยประมาณ — คำนวณฝั่ง JS ล้วนๆ จากคำตอบในฟอร์ม
+     ไม่มีการแก้ไข Controller / Java ใดๆ ทั้งสิ้น
+     =================================================================== --%>
+<script>
+(function () {
+    // ราคาต่อชุด อ้างอิงจากข้อมูล seed ใน Run.java (ItemType: สังฆทาน / ปิ่นโต)
+    var PRICE_MAP = {
+        "ปิ่นโตชุดประหยัด": 299,
+        "ปิ่นโตชุดมาตรฐาน": 399,
+        "ปิ่นโตชุดพรีเมียม": 499,
+        "ปิ่นโตชุดพิเศษ": 599,
+        "ชุดสังฆทานมาตรฐาน": 299,
+        "ชุดสังฆทานพรีเมียม": 399,
+        "ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน": 499
+    };
+
+    // ค่าใช้จ่ายต่อพระ 1 รูป กรณี "กรอกความต้องการเบื้องต้น" (ไม่ได้นิมนต์เอง)
+    // = บริการนิมนต์ 500 + อาสนะ 250 + ตาลปัตร 350 + กรวยดอกไม้ 200
+    var MONK_COST_PER_RUP = 500 + 250 + 350 + 200; // 1,300 บาท/รูป
+
+    var SELF_INVITE_DISCOUNT = 1500;
+
+    function fmtMoney(n) {
+        n = Math.round((n || 0) * 100) / 100;
+        return '฿' + n.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function collectAnswers() {
+        var answers = {};
+        document.querySelectorAll('#bookingDetailsSection .info-row[data-qtext]').forEach(function (row) {
+            var q = row.getAttribute('data-qtext');
+            var a = row.getAttribute('data-answer');
+            if (q && !(q in answers)) {
+                answers[q] = a;
+            }
+        });
+        return answers;
+    }
+
+    function calcCostSummary() {
+        var box = document.getElementById('costSummaryBox');
+        if (!box) return;
+
+        var basePriceRaw = "${booking.ceremony.basePrice}";
+        var basePrice = parseFloat(basePriceRaw) || 0;
+        var ceremonyName = "${fn:trim(booking.ceremony.ceremonyName)}";
+        var isCustomRequest = (basePrice === 0) || (ceremonyName.indexOf('กรอกความต้องการ') !== -1);
+
+        var answers = collectAnswers();
+
+        // --- ปิ่นโต ---
+        var pintoTotal = 0;
+        var wantPinto = answers['ต้องการชุดภัตตาหารปิ่นโตหรือไม่'];
+        var pintoName = answers['เลือกชุดภัตตาหารปิ่นโต'];
+        var pintoQty = parseInt(answers['จำนวนชุดภัตตาหารปิ่นโต'], 10) || 0;
+        if (pintoName && pintoQty > 0 && (!wantPinto || wantPinto.indexOf('ไม่') === -1)) {
+            pintoTotal = (PRICE_MAP[pintoName] || 0) * pintoQty;
+        }
+
+        // --- สังฆทาน ---
+        // หมายเหตุ: ถ้าลูกค้าเลือก "ชุดสังฆทานมาตรฐาน" (299) ซึ่งแถมฟรีในแพ็กเกจอยู่แล้ว
+        // แถวคำถาม-คำตอบส่วนนี้จะไม่ถูก render ออกมาใน HTML เลย (ซ่อนตั้งแต่ฝั่ง JSP)
+        // ทำให้ answers['เลือกชุดสังฆทานที่ต้องการ'] เป็น undefined และไม่ถูกคิดราคาเพิ่มโดยอัตโนมัติ
+        // จะคิดราคาเพิ่มก็ต่อเมื่อเลือกชุดอื่นที่ไม่ใช่มาตรฐาน (เช่น พรีเมียม 399 / ผ้าไตร 499)
+        var sanghaTotal = 0;
+        var wantSangha = answers['ต้องการสังฆทานหรือไม่'];
+        var sanghaName = answers['เลือกชุดสังฆทานที่ต้องการ'];
+        var sanghaQty = parseInt(answers['จำนวนชุดสังฆทาน'], 10) || 0;
+        if (sanghaName && sanghaQty > 0 && (!wantSangha || wantSangha.indexOf('ไม่') === -1)) {
+            sanghaTotal = (PRICE_MAP[sanghaName] || 0) * sanghaQty;
+        }
+
+        var additionalTotal = pintoTotal + sanghaTotal;
+
+        // --- นิมนต์เอง ---
+        var inviteAnswer = answers['รูปแบบการนิมนต์พระสงฆ์'] || '';
+        var isSelfInvite = inviteAnswer.indexOf('นิมนต์เอง') !== -1;
+
+        var packageLabel, packageValue, discount = 0;
+
+        if (isCustomRequest) {
+            // รวมรายการที่ระบบจัดให้อัตโนมัติ (สถานที่ เจ้าหน้าที่ มัคนายก ฯลฯ + อุปกรณ์พิธีเฉพาะงาน)
+            var fixedItemsTotal = 0;
+            document.querySelectorAll('#packageItemsGrid .package-item-chip[data-price]').forEach(function (chip) {
+                var price = parseFloat(chip.getAttribute('data-price')) || 0;
+                var qty = parseFloat(chip.getAttribute('data-qty')) || 0;
+                fixedItemsTotal += price * qty;
+            });
+
+            // ค่านิมนต์พระ (เฉพาะกรณีใช้บริการนิมนต์ ไม่ได้นิมนต์เอง)
+            var monkTotal = 0;
+            if (!isSelfInvite) {
+                var monkQty = parseInt(answers['จำนวนพระสงฆ์'], 10) || 0;
+                monkTotal = monkQty * MONK_COST_PER_RUP;
+            }
+
+            packageLabel = 'ค่าบริการพื้นฐาน (ตามรายการที่จัดให้):';
+            packageValue = fixedItemsTotal + monkTotal;
+            discount = 0; // กรอกความต้องการเบื้องต้น ไม่มีส่วนลดนิมนต์เอง
+        } else {
+            packageLabel = 'ราคาแพ็กเกจ:';
+            packageValue = basePrice;
+            discount = isSelfInvite ? SELF_INVITE_DISCOUNT : 0;
+        }
+
+        var grandTotal = packageValue + additionalTotal - discount;
+        if (grandTotal < 0) grandTotal = 0;
+
+        // --- render ---
+        document.getElementById('costPackageLabel').textContent = packageLabel;
+        document.getElementById('costPackageValue').textContent = fmtMoney(packageValue);
+
+        var addRow = document.getElementById('costAdditionalRow');
+        if (additionalTotal > 0) {
+            addRow.style.display = '';
+            document.getElementById('costAdditionalValue').textContent = fmtMoney(additionalTotal);
+        } else {
+            addRow.style.display = 'none';
+        }
+
+        var discRow = document.getElementById('costDiscountRow');
+        if (discount > 0) {
+            discRow.style.display = '';
+            document.getElementById('costDiscountValue').textContent = '- ' + fmtMoney(discount);
+        } else {
+            discRow.style.display = 'none';
+        }
+
+        document.getElementById('costTotalValue').textContent = fmtMoney(grandTotal);
+    }
+
+    document.addEventListener('DOMContentLoaded', calcCostSummary);
+})();
+</script>
+
+<script src="${pageContext.request.contextPath}/static/js/viewBooking.js?v=28"></script>
 </body>
 </html>

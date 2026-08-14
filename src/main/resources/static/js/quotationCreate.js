@@ -1,14 +1,23 @@
 // ===== quotationCreate.js =====
 
-const GROUP_LABELS = {
-    'group-equipment':  'หมวดอุปกรณ์พิธีกรรม',
-    'group-food':       'หมวดภัตตาหารปิ่นโต',
-    'group-sangkathan': 'หมวดสังฆทาน',
-    'group-service':    'หมวดบริการและการดำเนินการ',
-    'group-extra':      'หมวดอุปกรณ์เสริม' 
+const CATEGORY_LABELS = {
+    'อุปกรณ์พิธีกรรม': 'อุปกรณ์พิธีกรรม',
+    'ภัตตาหาร':        'ภัตตาหารปิ่นโต',
+    'สังฆทาน':         'สังฆทาน',
+    'บริการ':          'บริการและดำเนินการ',
+    'อุปกรณ์เสริม':     'อุปกรณ์เสริม'
+};
+
+const CATEGORY_TO_TBODY = {
+    'อุปกรณ์พิธีกรรม': 'group-equipment',
+    'ภัตตาหาร':        'group-food',
+    'สังฆทาน':         'group-sangkathan',
+    'บริการ':          'group-service',
+    'อุปกรณ์เสริม':     'group-extra'
 };
 
 const selectedItemIds = new Set();
+let currentModalCategory = null;
 
 // แสดงจำนวน + ไอคอนปากกา (กดแล้วค่อยเปลี่ยนเป็นปุ่ม -/+)
 function buildQtyCell(value, inputName, isEditable) {
@@ -67,9 +76,7 @@ function adjustQty(btn, delta) {
     if (val <= 0) {
         if (confirm('คุณต้องการลบรายการนี้ออกจากใบเสนอราคาใช่หรือไม่?')) {
             const row = btn.closest('tr');
-            const tbody = row.parentElement;
             row.remove();
-            removeGroupHeaderIfEmpty(tbody);
             reIndexRows();
             calculateGrandTotal();
         }
@@ -92,54 +99,24 @@ function getExistingItemIds() {
     return ids;
 }
 
-function getCurrentCategory() {
-    const activeTab = document.querySelector('.category-tab.active');
-    return activeTab ? activeTab.getAttribute('data-category') : 'อุปกรณ์พิธีกรรม';
-}
+function openItemModal(category) {
+    if (!CATEGORY_TO_TBODY[category]) return;
+    currentModalCategory = category;
 
-// สร้างหัวข้อหมวดหมู่ โดยข้อความจะอยู่แค่คอลัมน์ 2 เท่านั้น และมีเซลล์ว่างสำหรับคอลัมน์อื่นเพื่อให้ตีเส้นได้ตามภาพ
-function ensureGroupHeader(tbody) {
-    if (!tbody) return;
-    if (tbody.querySelector('.group-row')) return;
-    const label = GROUP_LABELS[tbody.id] || '';
-    const headerRow = document.createElement('tr');
-    headerRow.className = 'group-row';
-    headerRow.innerHTML =
-        `<td class="no-index"></td>` +
-        `<td class="category-header-text">${label}</td>` +
-        `<td></td><td></td><td></td><td></td>`;
-    tbody.prepend(headerRow);
-}
+    const title = document.getElementById('itemModalTitle');
+    if (title) title.textContent = 'เพิ่มรายการหมวด: ' + (CATEGORY_LABELS[category] || category);
 
-function removeGroupHeaderIfEmpty(tbody) {
-    if (!tbody || !tbody.id || !tbody.id.startsWith('group-')) return;
-    const remaining = tbody.querySelectorAll('tr.static-row, tr.dynamic-row');
-    if (remaining.length === 0) {
-        const header = tbody.querySelector('.group-row');
-        if (header) header.remove();
-    }
-}
-
-function openItemModal() {
-    renderItemPicker();
+    renderItemPicker(category);
     document.getElementById('itemSelectionModal').style.display = 'flex';
 }
 
 function closeItemModal() {
     document.getElementById('itemSelectionModal').style.display = 'none';
-}
-
-function switchCategoryTab(tabEl, category) {
-    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-    tabEl.classList.add('active');
-    renderItemPicker(category);
+    selectedItemIds.clear();
+    currentModalCategory = null;
 }
 
 function renderItemPicker(category) {
-    if (!category) {
-        category = getCurrentCategory();
-    }
-
     const grid = document.getElementById('itemPickerGrid');
     const existingIds = getExistingItemIds();
     grid.innerHTML = '';
@@ -233,14 +210,13 @@ function updateSelectedCount() {
 function toggleSelectAllVisible(checkbox) {
     const checked = checkbox.checked;
     const dataStore = document.getElementById('itemDataStore');
-    if (!dataStore) return;
+    if (!dataStore || !currentModalCategory) return;
 
-    const category    = getCurrentCategory();
     const existingIds = getExistingItemIds();
 
     dataStore.querySelectorAll('.item-data').forEach(dataEl => {
         const itemType = dataEl.getAttribute('data-type') || '';
-        if (!itemType.includes(category)) return;
+        if (!itemType.includes(currentModalCategory)) return;
 
         const itemId = String(dataEl.getAttribute('data-id'));
         if (existingIds.has(itemId)) return;
@@ -249,20 +225,19 @@ function toggleSelectAllVisible(checkbox) {
         else selectedItemIds.delete(itemId);
     });
 
-    renderItemPicker();
+    renderItemPicker(currentModalCategory);
 }
 
 function updateSelectAllState() {
     const selectAllCb = document.getElementById('selectAllVisible');
-    if (!selectAllCb) return;
+    if (!selectAllCb || !currentModalCategory) return;
 
     const dataStore = document.getElementById('itemDataStore');
     if (!dataStore) return;
 
-    const category     = getCurrentCategory();
     const existingIds  = getExistingItemIds();
     const allSelectableIds = [...dataStore.querySelectorAll('.item-data')]
-        .filter(el => (el.getAttribute('data-type') || '').includes(category))
+        .filter(el => (el.getAttribute('data-type') || '').includes(currentModalCategory))
         .map(el => String(el.getAttribute('data-id')))
         .filter(id => !existingIds.has(id));
 
@@ -275,58 +250,54 @@ function addSelectedItemsToTable() {
         alert('กรุณาเลือกรายการอย่างน้อย 1 รายการ');
         return;
     }
+    if (!currentModalCategory) return;
 
-    const dataStore = document.getElementById('itemDataStore');
+ 
+	const targetBody = document.getElementById(CATEGORY_TO_TBODY[currentModalCategory]);
+	    if (!targetBody) return;
 
-    selectedItemIds.forEach(itemId => {
-        const dataEl = dataStore.querySelector(`.item-data[data-id="${itemId}"]`);
-        if (!dataEl) return;
+	    const dataStore = document.getElementById('itemDataStore');
+	    const isEquipment = currentModalCategory === 'อุปกรณ์พิธีกรรม';
 
-        const itemName = dataEl.getAttribute('data-name');
-        const itemDesc = dataEl.getAttribute('data-detail') || '';
-        const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
-        const unit     = dataEl.getAttribute('data-unit');
-        const itemType = dataEl.getAttribute('data-type') || '';
+	    selectedItemIds.forEach(itemId => {
+	        const dataEl = dataStore.querySelector(`.item-data[data-id="${itemId}"]`);
+	        if (!dataEl) return;
 
-        const isEquipment = itemType.includes('อุปกรณ์พิธีกรรม'); 
-        const isExtra     = itemType.includes('อุปกรณ์เสริม');    
+	        const itemName = dataEl.getAttribute('data-name');
+	        const itemDesc = dataEl.getAttribute('data-detail') || '';
+	        const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
+	        const unit     = dataEl.getAttribute('data-unit');
 
-        const scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
-        const monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
-        const initialQty   = scalesByMonk ? monkCount : 1;
+	        const scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
+	        const monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
+	        const initialQty   = scalesByMonk ? monkCount : 1;
 
-        let targetBody = document.getElementById('group-service');
-        if (isEquipment) targetBody = document.getElementById('group-equipment');
-        else if (isExtra) targetBody = document.getElementById('group-extra');
-        else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
-        else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
+	        const showDesc = !!itemDesc && !isEquipment;
 
-        ensureGroupHeader(targetBody);
+	        const tr = document.createElement('tr');
+	        tr.className = 'dynamic-row';
+	        tr.setAttribute('data-item-id', itemId);
 
-        const tr = document.createElement('tr');
-        tr.className = 'dynamic-row';
-        tr.setAttribute('data-item-id', itemId);
+	        tr.innerHTML = `
+	                <td class="row-number text-center"></td>
+	                <td>
+	                    ${itemName}
+	                    ${showDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
+	                    <input type="hidden" name="extraItemIds" value="${itemId}">
+	                </td>
+	                <td>
+	                    ${buildQtyCell(initialQty, 'extraQtys', true)}
+	                </td>
+	                <td class="text-center">${unit}</td>
+	                <td>
+	                    <input type="number" name="extraPrices" value="${price.toFixed(2)}" step="0.01" min="0" class="clean-input text-right price-input" readonly>
+	                </td>
+	                <td class="text-right"><span class="subtotal">0.00</span></td>`;
 
-        const showDesc = !!itemDesc && !isEquipment;
+	        targetBody.appendChild(tr);
+	    });
 
-        tr.innerHTML = `
-                <td class="row-number text-center"></td>
-                <td>
-                    ${itemName}
-                    ${showDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
-                    <input type="hidden" name="extraItemIds" value="${itemId}">
-                </td>
-                <td>
-                    ${buildQtyCell(initialQty, 'extraQtys', isExtra)}
-                </td>
-                <td class="text-center">${unit}</td>
-                <td>
-                    <input type="number" name="extraPrices" value="${price.toFixed(2)}" step="0.01" min="0" class="clean-input text-right price-input" readonly>
-                </td>
-                <td class="text-right"><span class="subtotal">0.00</span></td>`;
-
-        targetBody.appendChild(tr);
-    });
+      
 
     selectedItemIds.clear();
     closeItemModal();
@@ -344,7 +315,7 @@ function reIndexRows() {
 function calculateGrandTotal() {
     let packageTotal = 0.0;
     let extraTotal = 0.0;
-    
+
     const discountEl = document.getElementById('discountValue');
     const discount = discountEl ? (parseFloat(discountEl.value) || 0) : 0;
     const isCustomRequest = window.IS_CUSTOM_REQUEST === true;
@@ -364,7 +335,7 @@ function calculateGrandTotal() {
             if (subtotalSpan) {
                 subtotalSpan.innerText = subtotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
             }
-            
+
             const parentTbody = row.closest('tbody');
             const isManuallyAddedExtra = parentTbody && parentTbody.id === 'group-extra';
 

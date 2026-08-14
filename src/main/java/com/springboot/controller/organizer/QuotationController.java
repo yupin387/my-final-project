@@ -100,13 +100,13 @@ public class QuotationController {
                                 @RequestParam(required = false) List<Integer> extraItemIds,
                                 @RequestParam(required = false) List<Integer> extraQtys,
                                 @RequestParam(required = false) List<Double> extraPrices,
-                                @RequestParam(required = false) List<String> detailNotes,
+                                @RequestParam(required = false) String note,
                                 @RequestParam(required = false) List<String> bookingItemNames,
                                 @RequestParam(required = false) List<Integer> bookingQtys,
                                 @RequestParam(required = false) List<Double> bookingPrices,
                                 RedirectAttributes ra) {
         try {
-            quotationService.createQuotation(bookingId, extraItemIds, extraQtys, extraPrices, detailNotes,
+            quotationService.createQuotation(bookingId, extraItemIds, extraQtys, extraPrices, note,
                                              bookingItemNames, bookingQtys, bookingPrices);
             ra.addFlashAttribute("success", "สร้างใบเสนอราคาสำเร็จ");
             return "redirect:/organizer/quotation";
@@ -198,13 +198,13 @@ public class QuotationController {
                                   @RequestParam(required = false) List<Integer> extraItemIds,
                                   @RequestParam(required = false) List<Integer> extraQtys,
                                   @RequestParam(required = false) List<Double> extraPrices,
-                                  @RequestParam(required = false) List<String> detailNotes,
+                                  @RequestParam(required = false) String note,
                                   @RequestParam(required = false) List<String> bookingItemNames,
                                   @RequestParam(required = false) List<Integer> bookingQtys,
                                   @RequestParam(required = false) List<Double> bookingPrices,
                                   RedirectAttributes ra) {
         try {
-            quotationService.updateQuotation(quotationId, extraItemIds, extraQtys, extraPrices, detailNotes,
+            quotationService.updateQuotation(quotationId, extraItemIds, extraQtys, extraPrices, note,
                                              bookingItemNames, bookingQtys, bookingPrices);
             ra.addFlashAttribute("success", "แก้ไขใบเสนอราคาเรียบร้อยแล้ว");
             return "redirect:/organizer/quotation/detail/" + quotationId;
@@ -214,7 +214,6 @@ public class QuotationController {
             return "redirect:/organizer/quotation/edit/" + quotationId;
         }
     }
-
     @GetMapping("/api/get-items-by-ceremony/{ceremonyId}")
     @ResponseBody
     public List<Item> getItemsByCeremony(@PathVariable int ceremonyId) {
