@@ -1,63 +1,74 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
+/* =========================================================
+   COLOR SYSTEM
+   ส้ม (หลัก, navbar/footer) + น้ำตาลอ่อน (ตัดในการ์ด) + ทอง (ตกแต่ง)
+   ธีมเดียวกับหน้า staffAssignmentList / itemList / addItem / editItem
+   ========================================================= */
 :root {
-    --gold:          #E0577F;
-    --gold-mid:      #EC6E96;
-    --gold-light:    #F49CB9;
-    --gold-pale:     #FBD0DE;
-    --gold-glow:     #FFE3EC;
+    /* พื้นหลังสีครีมอมพีชสว่างๆ */
+    --bg-light:       #FCF6F0;
 
-    --cream:         #FFFFFF;
-    --cream-warm:    #FFF6F9;
-    --cream-mid:     #FDEEF3;
-    --cream-deep:    #F9DDE9;
-    --cream-border:  #F3C4D5;
-    --cream-border-soft: #F6D4E1;
+    /* สีหลัก — ส้มพีช/ส้มจีวร (navbar + footer) */
+    --peach-primary:  #E28F66;
+    --peach-hover:    #D17A4F;
+    --peach-pale:     #FDF0E8;
+    --peach-deep:     #B5613A;
 
-    --white:         #FFFFFF;
+    /* สีน้ำตาลอ่อน — ใช้ตัดกับส้มตรงแถบหัวการ์ด */
+    --brown-light:      #9C7852;
+    --brown-light-deep: #7C5A3B;
+    --brown-light-pale: #F3E9DE;
 
-    --text-dark:     #1A1A1A;
-    --text-mid:      #333333;
-    --text-body:     #444444;
-    --text-muted:    #777777;
-    --text-light:    #999999;
+    /* สีทอง — ใช้ตกแต่ง/เส้นคั่น */
+    --gold-primary:   #C99A3D;
+    --gold-hover:     #AD8130;
+    --gold-pale:      #FBF1DC;
+    --gold-light:     #F6E2BA;
 
-    --brown-dark:    #1A1A1A;
-    --brown-mid:     #3A3A3A;
+    /* สีน้ำตาลมอคค่า (ตัวหนังสือหลัก) */
+    --brown-text:     #5A4A42;
+    --brown-muted:    #8D7A70;
 
-    --accent-gold:      #D9A441;
-    --accent-gold-mid:  #E8C878;
-    --accent-gold-pale: #F7E3B0;
+    /* สีแจ้งเตือน */
+    --green-primary:  #1e6b3a;
+    --green-pale:     #f0faf4;
+    --green-border:   #bbf7d0;
+    --red-primary:    #c62828;
+    --red-pale:       #fff0f0;
+    --red-border:     #fecaca;
 
-    --shadow-gold:   rgba(224, 87, 127, 0.16);
-    --shadow-warm:   rgba(224, 87, 127, 0.10);
+    /* สีขอบและเงา */
+    --white:          #FFFFFF;
+    --card-border:    #F5E6DD;
+    --shadow-soft:    rgba(226, 143, 102, 0.15);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background: var(--cream-warm);
-    color: var(--text-dark);
+    background: var(--bg-light);
+    color: var(--brown-text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* ===== NAVBAR (สีฟ้าครามเรียบ ไม่ไล่สี)[cite: 28] ===== */
+/* ===== NAVBAR ===== */
 .navbar-custom {
-    background: #4B85BE;
+    background: var(--peach-primary);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid #E2B85B;
+    border-bottom: 3px solid var(--gold-primary);
     min-height: 92px;
     position: sticky;
     top: 0;
     z-index: 10000;
     overflow: visible;
-    box-shadow: 0 4px 16px rgba(59, 107, 156, 0.25);
+    box-shadow: 0 4px 15px rgba(226, 143, 102, 0.2);
 }
 
 .navbar-custom::before {
@@ -65,7 +76,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+    background: var(--gold-light);
 }
 
 .navbar-brand-wrap {
@@ -76,7 +87,7 @@ body {
 }
 
 .navbar-lotus {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.25);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -87,19 +98,18 @@ body {
     justify-content: center;
     font-size: 32px;
     border: 1.5px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
     flex-shrink: 0;
     object-fit: cover;
 }
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 30px;
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .navbar-right {
@@ -123,17 +133,16 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    font-family: 'Sarabun', sans-serif;
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.3);
     color: #FFFFFF;
 }
 
 .nav-item.active {
     background: #FFFFFF;
-    color: #3A6B9C;
+    color: var(--peach-primary);
     font-weight: 700;
 }
 
@@ -155,14 +164,14 @@ body {
 
 .user-avatar {
     background: #FFFFFF;
-    color: #3A6B9C;
+    color: var(--peach-primary);
     width: 36px; height: 36px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 16px; font-weight: 800; flex-shrink: 0;
 }
 
-.user-name { color: #FFFFFF; font-size: 14px; font-weight: 700; font-family: 'Sarabun', sans-serif; }
+.user-name { color: #FFFFFF; font-size: 14px; font-weight: 700; }
 .arrow     { color: #FFFFFF; font-size: 12px; margin-left: 4px; opacity: 0.9; }
 
 .dropdown-menu {
@@ -170,10 +179,10 @@ body {
     position: absolute;
     top: calc(100% + 10px); right: 0;
     background: var(--white);
-    border: 1.5px solid #C5A044;
+    border: 1px solid var(--card-border);
     border-radius: 12px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 28px var(--shadow-soft);
     z-index: 99999;
     overflow: hidden;
 }
@@ -186,20 +195,19 @@ body {
     gap: 10px;
     padding: 13px 18px;
     font-size: 14px; font-weight: 600;
-    color: var(--text-mid);
+    color: var(--brown-text);
     text-decoration: none;
     transition: background 0.2s;
-    border-bottom: 1px solid var(--cream-mid);
-    font-family: 'Sarabun', sans-serif;
+    border-bottom: 1px solid var(--card-border);
 }
 
 .dropdown-item:last-child   { border-bottom: none; }
-.dropdown-item:hover        { background: var(--cream-warm); }
-.dropdown-item.active       { background: var(--cream-warm); color: var(--brown-dark); }
-.dropdown-item.danger       { color: #c62828; }
-.dropdown-item.danger:hover { background: #fff0f0; color: #c62828; }
+.dropdown-item:hover        { background: var(--peach-pale); color: var(--peach-hover); }
+.dropdown-item.active       { background: var(--peach-pale); color: var(--peach-hover); }
+.dropdown-item.danger       { color: var(--red-primary); }
+.dropdown-item.danger:hover { background: var(--red-pale); color: var(--red-primary); }
 
-/* ===== PAGE WRAPPER[cite: 28] ===== */
+/* ===== PAGE WRAPPER ===== */
 .page-wrapper {
     flex: 1;
     padding: 48px 20px;
@@ -208,13 +216,13 @@ body {
     align-items: flex-start;
 }
 
-/* ===== PROFILE CARD[cite: 28] ===== */
+/* ===== PROFILE CARD ===== */
 .profile-card {
     background: var(--white);
-    border-radius: 24px;
+    border-radius: 14px;
     overflow: hidden;
-    border: 1.5px solid var(--accent-gold);
-    box-shadow: 0 8px 40px var(--shadow-warm);
+    border: 1.5px solid var(--card-border);
+    box-shadow: 0 10px 40px var(--shadow-soft);
     width: 100%;
     max-width: 640px;
     position: relative;
@@ -225,22 +233,16 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg,
-        transparent,
-        var(--accent-gold-pale) 20%,
-        var(--accent-gold) 50%,
-        var(--accent-gold-pale) 80%,
-        transparent
-    );
+    background: var(--gold-primary);
     z-index: 1;
 }
 
-/* Card Header[cite: 28] */
+/* Card Header — สีน้ำตาลอ่อนตัดกับส้มของ navbar */
 .card-header {
-    background: #3A6B9C;
+    background: var(--brown-light);
     padding: 30px 36px;
     text-align: center;
-    border-bottom: 2px solid var(--accent-gold-mid);
+    border-bottom: 2px solid var(--brown-light-deep);
     position: relative;
 }
 
@@ -249,7 +251,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
+    background: var(--gold-primary);
 }
 
 .header-ornament {
@@ -263,46 +265,45 @@ body {
 .header-ornament .orn-line {
     width: 46px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-pale));
+    background: var(--gold-light);
 }
 
 .header-ornament .orn-line.right {
-    background: linear-gradient(90deg, var(--accent-gold-pale), transparent);
+    background: var(--gold-light);
 }
 
 .header-ornament .orn-diamond {
     width: 8px;
     height: 8px;
-    background: var(--accent-gold-pale);
+    background: var(--gold-light);
     transform: rotate(45deg);
     flex-shrink: 0;
-    box-shadow: 0 0 6px rgba(247, 227, 176, 0.7);
+    box-shadow: 0 0 6px rgba(246, 226, 186, 0.7);
 }
 
 .card-header h2 {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 26px;
     font-weight: 700;
     margin: 0;
     color: #FFFFFF;
-    text-shadow: 0 1px 10px rgba(0,0,0,0.15);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.15);
     display: inline-block;
 }
 
 .card-header p {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.88);
     font-size: 13px;
     margin-top: 6px;
 }
 
-/* Card Body[cite: 28] */
+/* Card Body */
 .card-body { padding: 32px 36px 36px; }
 
-/* ===== ALERTS[cite: 28] ===== */
+/* ===== ALERTS ===== */
 .alert-success {
-    background: #f0faf4;
-    color: #1e6b3a;
-    border: 1px solid #bbf7d0;
+    background: var(--green-pale);
+    color: var(--green-primary);
+    border: 1px solid var(--green-border);
     border-radius: 10px;
     padding: 13px 16px;
     margin-bottom: 24px;
@@ -312,9 +313,9 @@ body {
 }
 
 .alert-error {
-    background: #fff0f0;
-    color: #c62828;
-    border: 1px solid #fecaca;
+    background: var(--red-pale);
+    color: var(--red-primary);
+    border: 1px solid var(--red-border);
     border-radius: 10px;
     padding: 13px 16px;
     margin-bottom: 24px;
@@ -323,7 +324,7 @@ body {
     text-align: center;
 }
 
-/* ===== FORM[cite: 28] ===== */
+/* ===== FORM ===== */
 form {
     display: flex;
     flex-direction: column;
@@ -345,7 +346,7 @@ form {
 .form-label {
     font-size: 12px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--brown-muted);
     text-transform: uppercase;
     letter-spacing: 0.7px;
     display: flex;
@@ -356,37 +357,37 @@ form {
 .form-control {
     width: 100%;
     padding: 12px 16px;
-    border: 1.5px solid var(--cream-border-soft);
+    border: 1.5px solid var(--card-border);
     border-radius: 10px;
     font-size: 14px;
     font-family: 'Sarabun', sans-serif;
-    background: var(--cream-warm);
-    color: var(--text-dark);
+    background: var(--bg-light);
+    color: var(--brown-text);
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
 .form-control:focus {
-    border-color: var(--accent-gold);
+    border-color: var(--gold-primary);
     background: var(--white);
-    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
+    box-shadow: 0 0 0 3px rgba(201, 154, 61, 0.18);
 }
 
 .form-control-readonly {
-    background: var(--cream-mid);
-    color: var(--text-muted);
+    background: var(--brown-light-pale);
+    color: var(--brown-muted);
     cursor: not-allowed;
     border-style: dashed;
 }
 
-/* Divider[cite: 28] */
+/* Divider */
 .divider {
     border: none;
-    border-top: 1.5px solid var(--cream-mid);
+    border-top: 1.5px solid var(--brown-light-pale);
     margin: 4px 0;
 }
 
-/* ===== BUTTONS[cite: 28] ===== */
+/* ===== BUTTONS ===== */
 .form-actions {
     display: flex;
     gap: 12px;
@@ -395,7 +396,7 @@ form {
 
 .btn-submit {
     flex: 1;
-    background: var(--accent-gold);
+    background: var(--peach-primary);
     color: #FFFFFF;
     border: none;
     border-radius: 12px;
@@ -403,21 +404,20 @@ form {
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
-    font-family: 'Sarabun', sans-serif;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px var(--shadow-gold);
+    box-shadow: 0 4px 14px var(--shadow-soft);
 }
 
 .btn-submit:hover {
-    opacity: 0.92;
+    background: var(--peach-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(224, 87, 127, 0.4);
+    box-shadow: 0 6px 20px rgba(226, 143, 102, 0.35);
 }
 
 .btn-back {
     background: var(--white);
-    color: var(--text-muted);
-    border: 1.5px solid var(--cream-border);
+    color: var(--brown-muted);
+    border: 1.5px solid var(--card-border);
     border-radius: 12px;
     padding: 12px 24px;
     font-size: 15px;
@@ -428,20 +428,43 @@ form {
 }
 
 .btn-back:hover {
-    background: var(--cream-warm);
-    color: var(--brown-dark);
-    border-color: var(--accent-gold);
+    background: var(--peach-pale);
+    color: var(--brown-text);
+    border-color: var(--gold-primary);
 }
 
-/* ========== FOOTER (สีฟ้าครามเรียบ)[cite: 28] ========== */
+/* ========== LOTUS CORNER DECORATION ========== */
+.lotus-decoration {
+    position: absolute;
+    bottom: 0;
+    right: 24px;
+    width: 170px;
+    height: auto;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 500;
+}
+
+@media (max-width: 768px) {
+    .lotus-decoration { width: 100px; right: 16px; }
+}
+
+/* ========== FOOTER — ส้มเหมือน navbar ========== */
 .site-footer {
-    background: #4B85BE;
-    color: rgba(255, 255, 255, 0.92);
+    background: var(--peach-primary);
+    color: rgba(255, 255, 255, 0.95);
     margin-top: auto;
-    border-top: 3px solid #E2B85B;
-    box-shadow: 0 -6px 18px rgba(59, 107, 156, 0.2);
+    border-top: 3px solid var(--gold-primary);
     position: relative;
     z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold-light);
 }
 
 .footer-content {
@@ -452,7 +475,7 @@ form {
     gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 30px 24px;
+    padding: 25px 24px;
 }
 
 .footer-brand {
@@ -468,14 +491,13 @@ form {
     max-width: 40px;
     max-height: 40px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
     object-fit: cover;
     flex-shrink: 0;
 }
 
 .footer-brand-text {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -485,7 +507,7 @@ form {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* ===== Responsive[cite: 28] ===== */
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
     .navbar-custom { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
     .navbar-menu   { display: none; }

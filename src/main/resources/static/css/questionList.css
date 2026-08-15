@@ -1,64 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
-/* ===== CSS Variables (matched to bookingList.css / headStaffList.css brown-gold-white theme) ===== */
+/* ===== CSS Variables (เขียวใบตองอ่อน-ทอง-ดาวเรือง theme, organizer) ===== */
 :root {
-    --gold:          #A9752E;
-    --gold-mid:      #C0923F;
-    --gold-light:    #D9B87A;
-    --gold-pale:     #F0E2C7;
-    --gold-glow:     #FFF8ED;
-    --cream:         #FFFFFF;
-    --cream-warm:    #FFFBF3;
-    --cream-mid:     #FBF2E3;
-    --cream-deep:    #F3E3C7;
-    --cream-border:  #E8D5B7;
-    --cream-border-soft: #EDE0C8;
-    --white:         #FFFFFF;
-    --text-dark:     #1A1A1A;
-    --text-mid:      #333333;
-    --text-body:     #444444;
-    --text-muted:    #777777;
-    --text-light:    #999999;
-    --brown-dark:    #1A1A1A;
-    --brown-mid:     #3A3A3A;
-    --shadow-gold:   rgba(169, 117, 46, 0.18);
-    --shadow-warm:   rgba(169, 117, 46, 0.12);
+    --green-deep:      #6FA84F;
+    --green-forest:    #7DBB5E;
+    --green-mid:       #9BCE72;
 
-    /* สีทองจริง ใช้คู่กับน้ำตาลสำหรับธีม "น้ำตาล-ทอง-ขาว" ให้ตรงกับหน้าอื่นๆ */
+    --green-banana:       #A9D97A;
+    --green-banana-light: #C9E8A8;
+    --green-pale:         #EEF7E1;
+    --green-glow:         #F7FBF0;
+
+    --gold:          #D9A441;
+    --gold-mid:      #E8BE66;
+    --gold-light:    #F3DA9E;
+    --gold-pale:     #FBF0D4;
+    --gold-glow:     #FFFBEF;
+
+    --cream:             #ECF2D2;
+    --cream-warm:        #F7FBF0;
+    --cream-mid:         #FBF4E2;
+    --cream-deep:        #F2E6C4;
+    --cream-border:      #E9DCB0;
+    --cream-border-soft: #F0E6C8;
+
+    --white:             #FFFFFF;
+
+    --text-dark:         #3A3020;
+    --text-mid:          #5C4E32;
+    --text-body:         #5A5240;
+    --text-muted:        #8C8168;
+    --text-light:        #ABA189;
+
+    --brown-dark:        #4A3D22;
+    --brown-mid:         #5C4E32;
+
+    --shadow-green:      rgba(111, 168, 79, 0.18);
+    --shadow-warm:       rgba(217, 164, 65, 0.20);
+
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
 
-    /* ===== สีน้ำตาลล้วน ใช้กับ navbar / card-header / footer ===== */
-    --brand-brown: #9C6B3E;
+    --brand-green:      #74B457;
+    --brand-green-dark: #5C9645;
+
+    /* ตำแหน่งรูปดอกบัวตกแต่ง (วางไฟล์ที่ /static/images/lotus-decor.png) */
+    --lotus-img: url('../images/lotus-decor.png');
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: var(--cream-warm);
+    background-color: var(--cream);
     color: var(--text-dark);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* ========== NAVBAR (matches bookingList.css / headStaffList.css) ========== */
+/* ========== NAVBAR ========== */
 .navbar {
-    background: var(--brand-brown);
+    background: var(--brand-green);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid;
-    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
-    min-height: 92px;
+    border-bottom: 3px solid var(--accent-gold);
     position: sticky;
     top: 0;
     z-index: 10000;
-    overflow: visible;
-    box-shadow: 0 4px 20px rgba(122, 82, 48, 0.32);
+    min-height: 92px;
+    box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
 }
 
 .navbar::before {
@@ -66,10 +80,9 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+    background: var(--accent-gold-mid);
 }
 
-/* ---- Brand (โลโก้) ---- */
 .navbar-brand {
     display: flex;
     align-items: center;
@@ -93,24 +106,22 @@ body {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     flex-shrink: 0;
     object-fit: cover;
-    color: #FFFFFF;
 }
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 32px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 30px;
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
-/* ---- Nav Right ---- */
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
 .navbar-menu {
@@ -131,59 +142,58 @@ body {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     font-family: 'Sarabun', sans-serif;
 }
-
 .nav-item:hover { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
-.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
+.nav-item.active { background: #FFFFFF; color: var(--green-forest); font-weight: 700; text-shadow: none; }
 
-/* ---- User Info ---- */
+/* ===== User Pill ===== */
 .user-info {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    padding: 6px 14px 6px 6px;
+    border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
-    padding: 6px 16px 6px 6px;
-    border-radius: 50px;
-    white-space: nowrap;
-    position: relative;
-    cursor: pointer;
     color: #FFFFFF;
+    cursor: pointer;
     transition: background 0.2s;
+    position: relative;
+    white-space: nowrap;
 }
 
 .user-info:hover { background: rgba(255, 255, 255, 0.25); }
 
 .user-avatar {
     background: #FFFFFF;
-    color: var(--gold);
-    width: 36px;
-    height: 36px;
+    color: var(--green-forest);
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
     font-weight: 800;
+    font-size: 1rem;
     flex-shrink: 0;
 }
 
 .user-detail { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name   { color: #FFFFFF; font-size: 13px; font-weight: 700; }
-.user-role   { color: rgba(255, 255, 255, 0.75); font-size: 11px; }
-.arrow       { color: #FFFFFF; font-size: 12px; margin-left: 4px; opacity: 0.85; }
+.user-name   { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; font-family: 'Sarabun', sans-serif; }
+.user-role   { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
+.arrow       { color: #FFFFFF; font-size: 11px; margin-left: 2px; opacity: 0.8; }
 
-/* ---- Dropdown ---- */
+/* ===== Dropdown ===== */
 .dropdown-menu {
     display: none;
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1.5px solid var(--accent-gold-pale);
-    border-radius: 12px;
-    min-width: 180px;
-    box-shadow: 0 8px 28px var(--shadow-gold);
-    z-index: 999;
+    border: 1px solid var(--accent-gold-pale);
+    border-radius: 10px;
+    min-width: 175px;
+    box-shadow: 0 8px 28px var(--shadow-warm);
+    z-index: 99999;
     overflow: hidden;
 }
 
@@ -191,82 +201,79 @@ body {
 
 .dropdown-item {
     display: block;
-    padding: 14px 18px;
+    padding: 13px 20px;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-mid);
     text-decoration: none;
     transition: background 0.2s;
-    text-align: center;
     font-family: 'Sarabun', sans-serif;
-    border-bottom: 1px solid var(--cream-mid);
 }
 
-.dropdown-item:last-child { border-bottom: none; }
-.dropdown-item:hover { background: var(--cream-warm); color: var(--brown-dark); }
-.dropdown-item.danger { color: #c0392b; }
-.dropdown-item.danger:hover { background: #fff5f5; }
+.dropdown-item:hover       { background: var(--cream-warm); color: var(--brown-dark); }
+.dropdown-item.danger      { color: #c0392b; }
+.dropdown-item.danger:hover{ background: #fff5f5; }
 
-/* ========== WAVE DIVIDER AFTER NAVBAR ========== */
-.navbar-wave {
-    display: block;
+/* ========== FLASH BANNER ========== */
+.flash-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 36px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Sarabun', sans-serif;
     width: 100%;
-    overflow: hidden;
-    line-height: 0;
-    height: 36px;
-    background: var(--brand-brown);
+    border-bottom: 1.5px solid;
+    transition: opacity 0.4s ease;
+    opacity: 1;
 }
+
+.flash-banner-success {
+    background: var(--green-pale);
+    border-color: var(--green-banana);
+    color: var(--green-deep);
+}
+
+.flash-banner-error {
+    background: #fff5f5;
+    border-color: #f5c0c0;
+    color: #c0392b;
+}
+
+.flash-banner-hide { opacity: 0; }
 
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     flex: 1;
-    padding: 36px 40px 72px;
-    max-width: 1550px;
+    padding: 32px 24px 56px;
+    max-width: 1200px; /* ปรับลดลงมาเป็นระดับกลางเพื่อไม่ให้กว้างเกินไป */
     margin: 0 auto;
-    width: 95%;
+    width: 92%; /* คืนค่าสัดส่วนขอบข้างให้สวยงามพอดี */
 }
 
-/* ========== ALERT ========== */
-.alert {
-    padding: 12px 18px;
-    border-radius: 10px;
-    margin-bottom: 22px;
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.alert-success {
-    background: linear-gradient(135deg, #E8F5E9, #F1F8E9);
-    color: #2e7d32;
-    border: 1px solid #A5D6A7;
-}
-
-/* ========== SECTION ORNAMENT ========== */
+/* ========== ORNAMENT ========== */
 .section-ornament {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 6px;
+    gap: 6px;
+    margin-bottom: 14px;
 }
 
 .ornament-line {
     flex: 1;
-    max-width: 100px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-mid));
+    background: var(--green-banana);
+    max-width: 60px;
 }
 
-.ornament-line.right { background: linear-gradient(90deg, var(--accent-gold-mid), transparent); }
+.ornament-line.right { background: var(--green-banana); }
 
 .ornament-diamond {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     background: var(--accent-gold);
     transform: rotate(45deg);
-    flex-shrink: 0;
 }
 
 .ornament-diamond-sm {
@@ -274,7 +281,6 @@ body {
     height: 5px;
     background: var(--accent-gold-pale);
     transform: rotate(45deg);
-    flex-shrink: 0;
 }
 
 /* ========== LIST HEADER ========== */
@@ -285,82 +291,89 @@ body {
     margin-bottom: 24px;
 }
 
+.list-header > div {
+    position: relative;
+    padding-left: 66px;
+    min-height: 56px;
+}
+
+/* ดอกบัวตกแต่งข้างหัวข้อ */
+.list-header > div::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 56px;
+    height: 56px;
+    background-image: var(--lotus-img);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 4px 8px rgba(217, 164, 65, 0.28));
+    pointer-events: none;
+}
+
 .list-header h1 {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 30px;
-    color: var(--brown-dark);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1.7rem;
+    color: var(--text-dark);
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 }
 
 .list-header p {
     font-size: 13px;
     color: var(--text-muted);
-}
-
-.gold-line {
-    width: 55px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), var(--accent-gold), var(--accent-gold-mid), transparent);
-    border-radius: 2px;
-    margin-top: 8px;
-}
-
-.btn-add {
-    background: var(--accent-gold);
-    color: #FFFFFF;
-    padding: 11px 22px;
-    text-decoration: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    font-family: 'Sarabun', sans-serif;
-    transition: all 0.2s;
-    white-space: nowrap;
-    box-shadow: 0 3px 12px var(--shadow-gold);
-}
-
-.btn-add:hover {
-    background: var(--accent-gold-mid);
-    transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(217, 164, 65, 0.35);
+    padding-left: 2px;
+    border-bottom: 2px solid var(--accent-gold-mid);
+    display: inline-block;
+    padding-bottom: 3px;
 }
 
 /* ========== TABS ========== */
 .tabs-wrapper {
     display: flex;
-    gap: 10px;
-    margin-bottom: 22px;
+    gap: 8px;
+    margin-bottom: 20px;
     overflow-x: auto;
     padding-bottom: 4px;
 }
 
 .tab-btn {
-    padding: 9px 20px;
-    border: 1.5px solid var(--accent-gold);
+    padding: 8px 20px;
+    border: 1.5px solid var(--brand-green-dark);
     border-radius: 20px;
     text-decoration: none;
-    color: var(--text-mid);
+    color: var(--brand-green-dark);
     background: var(--white);
     white-space: nowrap;
     font-size: 13px;
     font-weight: 600;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    transition: all 0.2s;
     font-family: 'Sarabun', sans-serif;
+    box-shadow: 0 2px 6px var(--shadow-warm);
 }
 
-.tab-btn:hover { background: var(--cream-warm); border-color: var(--accent-gold); color: var(--accent-gold); }
-.tab-btn.active { background: var(--accent-gold); color: #FFFFFF; border-color: var(--accent-gold); }
+.tab-btn:hover {
+    background: var(--green-pale);
+    box-shadow: 0 2px 8px var(--shadow-green);
+}
+
+.tab-btn.active {
+    background: var(--brand-green-dark);
+    color: #FFFFFF;
+    border-color: var(--brand-green-dark);
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(92, 150, 69, 0.45);
+}
 
 /* ========== CONTENT CARD ========== */
 .content-card {
     background: var(--white);
     border-radius: 18px;
     overflow: hidden;
-    border: 1.5px solid var(--accent-gold);
-    box-shadow: 0 4px 24px var(--shadow-warm);
+    border: 1.5px solid var(--green-banana);
+    box-shadow: 0 6px 32px var(--shadow-warm);
     position: relative;
 }
 
@@ -369,43 +382,45 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
+    background: var(--accent-gold);
     z-index: 1;
 }
 
 /* ========== CARD HEADER BAR ========== */
 .card-header-bar {
-    background: var(--brand-brown);
+    background: var(--gold);
     padding: 15px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: #FFFFFF;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-weight: 700;
-    font-size: 17px;
+    font-size: 16px;
+    position: relative;
+    border-bottom: 2px solid var(--green-mid);
+    font-family: 'Sarabun', sans-serif;
 }
 
 .header-count {
-    font-family: 'Sarabun', sans-serif;
     font-size: 12px;
     color: #FFFFFF;
     opacity: 0.85;
+    font-family: 'Sarabun', sans-serif;
     font-weight: 600;
 }
 
 /* ========== TABLE ========== */
-table { width: 100%; border-collapse: collapse; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 
 th {
-    background: var(--cream-warm);
-    color: var(--text-mid);
+    background: var(--green-glow);
+    color: var(--text-dark);
     padding: 14px 18px;
     text-align: left;
     font-size: 12px;
     font-weight: 700;
-    border-bottom: 2px solid var(--accent-gold-pale);
-    letter-spacing: 0.3px;
+    border-bottom: 2px solid var(--green-banana-light);
+    font-family: 'Sarabun', sans-serif;
 }
 
 td {
@@ -414,185 +429,123 @@ td {
     font-size: 14px;
     vertical-align: middle;
     color: var(--text-body);
+    font-family: 'Sarabun', sans-serif;
+    word-wrap: break-word;
 }
 
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--cream-warm); }
+tr:hover td { background: var(--green-glow); }
 
-/* ---- Circle Number ---- */
-.circle-num {
-    background: var(--accent-gold);
-    color: #FFFFFF;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 12px;
+.quotation-id {
+    font-weight: 700;
+    color: var(--brown-dark);
+    font-size: 14px;
 }
 
-.question-text { font-weight: 500; color: var(--text-dark); }
+.customer-name {
+    display: block;
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 14px;
+    margin-bottom: 3px;
+}
 
-/* ---- Ceremony Tag ---- */
-.ceremony-tag {
-    background: var(--cream-mid);
-    color: var(--gold);
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-weight: 600;
+.ceremony-name {
+    display: block;
     font-size: 12px;
+    color: var(--text-muted);
+}
+
+.date-cell { color: var(--text-body); }
+
+/* ========== STATUS BADGES ========== */
+.status-badge {
+    display: inline-block;
+    padding: 5px 13px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.status-pending {
+    background: var(--gold-glow);
+    color: #8a6d1c;
     border: 1px solid var(--accent-gold-mid);
 }
 
-.all-tag {
-    background: #f0f8f0;
-    color: #2e7d32;
-    border: 1px solid #a5d6a7;
+.status-revised {
+    background: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
 }
 
-/* ---- Action Buttons ---- */
-.action-links { display: flex; gap: 8px; align-items: center; }
+.status-confirmed {
+    background: var(--green-pale);
+    color: var(--green-deep);
+    border: 1px solid var(--green-banana);
+}
 
-.btn-edit {
-    color: var(--accent-gold);
+/* ========== BTN VIEW ========== */
+.content-card table td a.btn-view {
+    display: inline-block;
+    color: var(--brand-green-dark);
+    background: var(--white);
+    border: 1.5px solid var(--brand-green-dark);
+    padding: 7px 16px;
+    border-radius: 8px;
     text-decoration: none;
+    font-size: 13px;
     font-weight: 700;
-    font-size: 12px;
-    padding: 5px 12px;
-    border: 1.5px solid var(--accent-gold);
-    border-radius: 7px;
-    background: var(--cream-warm);
-    transition: background 0.2s;
-    cursor: pointer;
     font-family: 'Sarabun', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
 }
 
-.btn-edit:hover { background: var(--cream-mid); border-color: var(--accent-gold-mid); }
-
-.btn-del {
-    color: #c62828;
-    background: #fff0f0;
-    border: 1px solid #ffb3b3;
-    padding: 5px 12px;
-    border-radius: 7px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: 'Sarabun', sans-serif;
-    transition: background 0.2s, color 0.2s;
+.content-card table td a.btn-view:hover {
+    background: var(--brand-green-dark);
+    color: #FFFFFF;
+    border-color: var(--brand-green-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(92, 150, 69, 0.3);
 }
 
-.btn-del:hover { background: #c62828; color: white; }
-
-/* ---- Empty State ---- */
+/* ========== EMPTY STATE ========== */
 .empty-state {
     text-align: center;
-    padding: 50px;
+    padding: 60px 20px !important;
     color: var(--text-muted);
+}
+
+.empty-state p {
     font-size: 15px;
-}
-
-/* ========== KANOK DIVIDER (ลายกนกตกแต่ง) ========== */
-.kanok-divider {
-    display: block;
-    width: 100%;
-    margin-top: 32px;
-    opacity: 0.7;
-}
-
-/* ========== MODAL (Bootstrap ถูก override ให้เข้ากับธีม) ========== */
-.modal-content {
-    border-radius: 18px !important;
-    border: 2px solid var(--accent-gold) !important;
-    box-shadow: 0 12px 40px var(--shadow-gold) !important;
-    font-family: 'Sarabun', sans-serif;
-}
-
-.modal-header {
-    border-bottom: none !important;
-    padding: 22px 22px 10px !important;
-    position: relative;
-}
-
-.modal-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 20px; right: 20px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), transparent);
-}
-
-.modal-title {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif !important;
-    color: var(--brown-dark) !important;
-    font-weight: 700 !important;
-    font-size: 20px !important;
-}
-
-.modal-ornament {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.modal-ornament .ornament-line {
-    max-width: 50px;
-}
-
-.modal-body {
-    text-align: center;
-    padding: 14px 22px 20px !important;
+    margin-bottom: 14px;
     color: var(--text-body);
-    font-size: 15px;
-    line-height: 1.7;
 }
 
-.modal-footer {
-    border-top: none !important;
-    justify-content: center !important;
-    padding-bottom: 26px !important;
-    gap: 12px;
+.empty-link {
+    color: var(--accent-gold);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 14px;
+    border-bottom: 1.5px solid var(--accent-gold-mid);
+    padding-bottom: 2px;
+    transition: color 0.2s;
 }
 
-.modal-footer .btn-light {
-    background: var(--cream-warm) !important;
-    border: 1.5px solid var(--accent-gold) !important;
-    color: var(--brown-mid) !important;
-    font-weight: 700 !important;
-    font-family: 'Sarabun', sans-serif !important;
-    border-radius: 10px !important;
-    padding: 9px 26px !important;
-    transition: background 0.2s;
-}
+.empty-link:hover { color: var(--gold-mid); }
 
-.modal-footer .btn-light:hover { background: var(--cream-mid) !important; }
-
-#confirmDeleteForm .btn-del {
-    padding: 9px 26px !important;
-    font-size: 14px !important;
-    border-radius: 10px !important;
-}
-
-/* ========== FOOTER (matches bookingList.css / headStaffList.css) ========== */
-.footer-strip {
-    display: block;
-    width: 100%;
-    line-height: 0;
-    margin-top: auto;
-}
-
+/* ========== FOOTER ========== */
 .site-footer {
-    background: var(--brand-brown);
-    color: rgba(255, 255, 255, 0.92);
+    background: var(--brand-green);
+    color: rgba(255, 255, 255, 0.95);
     margin-top: auto;
-    border-top: 3px solid var(--accent-gold-pale);
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    border-top: 3px solid var(--accent-gold);
+    box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
     position: relative;
     z-index: 2;
+    overflow: hidden;
 }
 
 .site-footer::before {
@@ -600,7 +553,24 @@ tr:hover td { background: var(--cream-warm); }
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+    background: var(--accent-gold-mid);
+}
+
+/* ดอกบัวตกแต่งใน footer */
+.site-footer::after {
+    content: '';
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 76px;
+    height: 76px;
+    background-image: var(--lotus-img);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    pointer-events: none;
 }
 
 .footer-content {
@@ -612,6 +582,8 @@ tr:hover td { background: var(--cream-warm); }
     max-width: 1200px;
     margin: 0 auto;
     padding: 30px 24px;
+    position: relative;
+    z-index: 1;
 }
 
 .footer-brand {
@@ -631,16 +603,11 @@ tr:hover td { background: var(--cream-warm); }
     border: 1.5px solid rgba(255, 255, 255, 0.45);
     object-fit: cover;
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    color: #FFFFFF;
 }
 
 .footer-brand-text {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 1.3rem;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -660,17 +627,22 @@ tr:hover td { background: var(--cream-warm); }
 }
 
 /* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+    .page-wrapper { padding: 24px 16px 40px; width: 100%; max-width: 100%; }
+    th, td { padding: 12px 12px; font-size: 13px; }
+}
+
 @media (max-width: 768px) {
-    .page-wrapper { padding: 20px 16px 36px; }
     .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
-    .navbar-brand { order: 0; }
-    .navbar-right { order: 2; width: 100%; justify-content: space-between; }
-    .navbar-menu { display: none; }
+    .navbar-menu { flex-wrap: wrap; gap: 4px; }
+    .navbar-title { font-size: 22px; }
     .navbar .lotus-icon,
     .navbar-brand .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     .list-header { flex-direction: column; gap: 14px; }
-    .btn-add { width: 100%; text-align: center; }
+    .list-header > div { padding-left: 0; }
+    .list-header > div::before { display: none; }
     table { font-size: 13px; }
     th, td { padding: 10px 12px; }
     .footer-content { flex-direction: column; align-items: flex-start; }
+    .site-footer::after { display: none; }
 }

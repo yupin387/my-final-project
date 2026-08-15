@@ -9,82 +9,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=18">
-    <style>
-        /* ===== ปรับคอลัมน์ "จำนวน" (ปุ่ม +/-) ให้กว้างขึ้นและอยู่แถวเดียวกัน ===== */
-        #mainQuotationTable .qty-wrapper{
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            flex-wrap:nowrap;
-            white-space:nowrap;
-            gap:6px;
-        }
-        #mainQuotationTable .btn-qty-minus,
-        #mainQuotationTable .btn-qty-plus{
-            flex:0 0 auto;
-            width:26px;
-            height:26px;
-            border:1px solid #9C6B3E;
-            background:#FFFFFF;
-            color:#9C6B3E;
-            border-radius:4px;
-            font-size:15px;
-            line-height:1;
-            cursor:pointer;
-        }
-        #mainQuotationTable .btn-qty-minus:hover,
-        #mainQuotationTable .btn-qty-plus:hover{
-            background:#FBF2E3;
-        }
-        #mainQuotationTable .qty-wrapper .qty-input{
-            flex:0 0 auto;
-            width:52px;
-            text-align:center;
-        }
-        /* ===== ปุ่มลบ (ถังขยะ) ให้เล็กและเป็นสีแดง ===== */
-        #mainQuotationTable td.delete-col{
-            padding:4px !important;
-            text-align:center;
-        }
-        #mainQuotationTable .btn-remove{
-            width:26px;
-            height:26px;
-            padding:0;
-            border:1px solid #FCA5A5;
-            background:#FEE2E2;
-            color:#DC2626;
-            border-radius:6px;
-            font-size:13px;
-            line-height:1;
-            cursor:pointer;
-        }
-        #mainQuotationTable .btn-remove:hover{
-            background:#DC2626;
-            border-color:#DC2626;
-            color:#FFFFFF;
-        }
-        
-        /* สไตล์สำหรับช่อง input ที่เป็น readonly ให้ดูเหมือนข้อความธรรมดา หรือดูแก้ไม่ได้ */
-        .price-input[readonly] {
-            background-color: transparent;
-            border: none;
-            outline: none;
-            color: #333;
-            font-weight: 600;
-        }
+   <style>
+    /* ===== ปรับคอลัมน์ "จำนวน" (ปุ่ม +/-) ให้กว้างขึ้นและอยู่แถวเดียวกัน ===== */
+    #mainQuotationTable .qty-wrapper{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-wrap:nowrap;
+        white-space:nowrap;
+        gap:6px;
+    }
+    #mainQuotationTable .btn-qty-minus,
+    #mainQuotationTable .btn-qty-plus{
+        flex:0 0 auto;
+        width:26px;
+        height:26px;
+        border:1px solid var(--brand-green-dark);
+        background:#FFFFFF;
+        color:var(--brand-green-dark);
+        border-radius:4px;
+        font-size:15px;
+        line-height:1;
+        cursor:pointer;
+    }
+    #mainQuotationTable .btn-qty-minus:hover,
+    #mainQuotationTable .btn-qty-plus:hover{
+        background:var(--green-glow);
+    }
+    #mainQuotationTable .qty-wrapper .qty-input{
+        flex:0 0 auto;
+        width:52px;
+        text-align:center;
+    }
+    /* ===== ปุ่มลบ (ถังขยะ) ให้เล็กและเป็นสีแดง (คงสีแดงไว้เพื่อสื่อความหมาย "ลบ") ===== */
+    #mainQuotationTable td.delete-col{
+        padding:4px !important;
+        text-align:center;
+    }
+    #mainQuotationTable .btn-remove{
+        width:26px;
+        height:26px;
+        padding:0;
+        border:1px solid #FCA5A5;
+        background:#FEE2E2;
+        color:#DC2626;
+        border-radius:6px;
+        font-size:13px;
+        line-height:1;
+        cursor:pointer;
+    }
+    #mainQuotationTable .btn-remove:hover{
+        background:#DC2626;
+        border-color:#DC2626;
+        color:#FFFFFF;
+    }
+    
+    /* สไตล์สำหรับช่อง input ที่เป็น readonly ให้ดูเหมือนข้อความธรรมดา หรือดูแก้ไม่ได้ */
+    .price-input[readonly] {
+        background-color: transparent;
+        border: none;
+        outline: none;
+        color: #333;
+        font-weight: 600;
+    }
 
-        /* ===== สไตล์หัวข้อหมวดหมู่ให้เหมือนหน้าสร้างใบเสนอราคา ===== */
-        #mainQuotationTable tr.group-row td.category-header-text {
-            text-align: left !important;
-            padding-left: 8px !important;
-            white-space: nowrap;
-            color: #9C6B3E;
-            font-weight: bold;
-        }
-        #mainQuotationTable tr.group-row td {
-            background-color: #FBF2E3; /* สีพื้นหลังอ่อนๆ ให้เข้ากับธีมหมวดหมู่ */
-        }
-    </style>
+    /* ===== สไตล์หัวข้อหมวดหมู่ให้เหมือนหน้าสร้างใบเสนอราคา (พร้อมปุ่ม + ในแถวเดียวกัน) ===== */
+    #mainQuotationTable tr.group-row td.category-header-text {
+        text-align: left !important;
+        padding-left: 8px !important;
+        padding-right: 12px !important;
+        white-space: nowrap;
+        color: var(--brand-green-dark);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    #mainQuotationTable tr.group-row td {
+        background-color: var(--green-glow); /* สีพื้นหลังอ่อนๆ โทนเขียวให้เข้ากับธีมหมวดหมู่ */
+    }
+    #mainQuotationTable .btn-add-group-inline{
+        flex: 0 0 auto;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid var(--brand-green-dark);
+        background: #FFFFFF;
+        color: var(--brand-green-dark);
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+    #mainQuotationTable .btn-add-group-inline:hover{
+        background: #FFFFFF;
+        transform: scale(1.05);
+    }
+</style>
 </head>
 <body>
 
@@ -279,7 +303,14 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                             <c:if test="${!printedEquipHeaderEdit}">
-                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดอุปกรณ์พิธีกรรม
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์พิธีกรรม')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                </tr>
                                 <c:set var="printedEquipHeaderEdit" value="true" />
                             </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
@@ -305,7 +336,14 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                             <c:if test="${!printedSangHeaderEdit}">
-                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดสังฆทาน</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดสังฆทาน
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('สังฆทาน')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                </tr>
                                 <c:set var="printedSangHeaderEdit" value="true" />
                             </c:if>
                             <tr class="static-row" data-item-id="${d.item.itemId}">
@@ -338,7 +376,14 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                             <c:if test="${!printedFoodHeaderEdit}">
-                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดภัตตาหารปิ่นโต</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดภัตตาหารปิ่นโต
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('ภัตตาหาร')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                </tr>
                                 <c:set var="printedFoodHeaderEdit" value="true" />
                             </c:if>
                             <tr class="static-row" data-item-id="${d.item.itemId}">
@@ -363,7 +408,14 @@
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
                             <c:if test="${!printedServiceHeaderEdit}">
-                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดบริการและการดำเนินการ</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดบริการและการดำเนินการ
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('บริการ')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                </tr>
                                 <c:set var="printedServiceHeaderEdit" value="true" />
                             </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
@@ -383,13 +435,20 @@
                     </c:forEach>
                 </c:set>
 
-                <!-- เพิ่มบล็อกสำหรับหมวดอุปกรณ์เสริมแยกต่างหาก -->
+                <!-- บล็อกสำหรับหมวดอุปกรณ์เสริม -->
                 <c:set var="extraEquipmentBlockEdit">
                     <c:set var="printedExtraHeaderEdit" value="false" />
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
                             <c:if test="${!printedExtraHeaderEdit}">
-                                <tr class="group-row"><td class="no-index"></td><td class="category-header-text">หมวดอุปกรณ์เสริม</td><td></td><td></td><td></td><td></td><td class="delete-col"></td></tr>
+                                <tr class="group-row">
+                                    <td class="no-index"></td>
+                                    <td class="category-header-text">
+                                        หมวดอุปกรณ์เสริม
+                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์เสริม')" title="เพิ่มรายการหมวดนี้">+</button>
+                                    </td>
+                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                                </tr>
                                 <c:set var="printedExtraHeaderEdit" value="true" />
                             </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
@@ -409,6 +468,8 @@
                     </c:forEach>
                 </c:set>
 
+                <%-- แพ็กเกจ: ไม่ต้องมีหมวดอุปกรณ์พิธีกรรม และหมวดบริการ (รวมอยู่ในแพ็กเกจแล้ว) เหมือนหน้าสร้าง --%>
+                <%-- กรอกความต้องการเอง: ไม่ต้องมีหมวดแพ็กเกจ (จัดการแยกไว้ด้านบนแล้วด้วย c:if !isCustomRequest) --%>
                 <c:choose>
                     <c:when test="${isCustomRequest}">
                         <tbody id="group-equipment">${equipmentBlockEdit}</tbody>
@@ -420,8 +481,6 @@
                     <c:otherwise>
                         <tbody id="group-sangkathan">${sangkathanBlockEdit}</tbody>
                         <tbody id="group-food">${foodBlockEdit}</tbody>
-                        <tbody id="group-service">${serviceBlockEdit}</tbody>
-                        <tbody id="group-equipment">${equipmentBlockEdit}</tbody>
                         <tbody id="group-extra">${extraEquipmentBlockEdit}</tbody>
                     </c:otherwise>
                 </c:choose>
@@ -432,9 +491,8 @@
                 <div class="remarks-box">
                     <div class="remarks-header">
                         <strong>ความต้องการเพิ่มเติม:</strong>
-                        <button type="button" class="btn-add-item" onclick="openItemModal()">+ เพิ่มรายการเพิ่มเติม</button>
                     </div>
-                    <textarea name="detailNotes" class="remarks-textarea" placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${additionalNote}</textarea>
+                    <textarea name="detailNotes" class="remarks-textarea" placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${q.note}</textarea>
                 </div>
                 
                 <div class="totals-box">
@@ -522,15 +580,8 @@
 <div id="itemSelectionModal" class="modal-overlay">
     <div class="modal-card">
         <div class="modal-header">
-            <h3>เลือกอุปกรณ์และบริการเสริม</h3>
+            <h3 id="itemModalTitle">เลือกรายการเพิ่มเติม</h3>
             <button type="button" class="close-btn" onclick="closeItemModal()">✕</button>
-        </div>
-        <div class="category-tabs">
-            <button type="button" class="category-tab active" data-category="อุปกรณ์พิธีกรรม" onclick="switchCategoryTab(this,'อุปกรณ์พิธีกรรม')">อุปกรณ์พิธีกรรม</button>
-            <button type="button" class="category-tab" data-category="ภัตตาหาร" onclick="switchCategoryTab(this,'ภัตตาหาร')">ภัตตาหารปิ่นโต</button>
-            <button type="button" class="category-tab" data-category="สังฆทาน" onclick="switchCategoryTab(this,'สังฆทาน')">สังฆทาน</button>
-            <button type="button" class="category-tab" data-category="บริการ" onclick="switchCategoryTab(this,'บริการ')">บริการและดำเนินการ</button>
-            <button type="button" class="category-tab" data-category="อุปกรณ์เสริม" onclick="switchCategoryTab(this,'อุปกรณ์เสริม')">อุปกรณ์เสริม</button>
         </div>
         <div class="modal-body">
             <div class="picker-toolbar">
@@ -562,6 +613,44 @@
     window.CEREMONY_MONK_COUNT = ${empty monkCount ? 0 : monkCount};
     window.IS_CUSTOM_REQUEST = ${isCustomRequest};
 
+    // ป้ายหมวดหมู่ (สำหรับตั้งชื่อหัวข้อป๊อปอัพ ให้เหมือนหน้าสร้าง)
+    var CATEGORY_LABELS_EDIT = {
+        'อุปกรณ์พิธีกรรม': 'อุปกรณ์พิธีกรรม',
+        'ภัตตาหาร':        'ภัตตาหารปิ่นโต',
+        'สังฆทาน':         'สังฆทาน',
+        'บริการ':          'บริการและดำเนินการ',
+        'อุปกรณ์เสริม':     'อุปกรณ์เสริม'
+    };
+
+    // หมวดหมู่ที่กำลังเปิดป๊อปอัพอยู่ ณ ขณะนี้ (แทนที่การใช้แท็บแบบเดิม ให้เหมือนหน้าสร้างที่กดปุ่ม + ในแต่ละหมวดโดยตรง)
+    var currentEditCategory = null;
+
+    // เปิดป๊อปอัพเพิ่มรายการ โดยระบุหมวดหมู่ตรงจากปุ่ม + ของแต่ละหมวด (เหมือนหน้าสร้างใบเสนอราคา)
+    window.openItemModal = function (category) {
+        currentEditCategory = category || null;
+
+        var title = document.getElementById('itemModalTitle');
+        if (title) {
+            title.textContent = currentEditCategory
+                ? 'เพิ่มรายการหมวด: ' + (CATEGORY_LABELS_EDIT[currentEditCategory] || currentEditCategory)
+                : 'เลือกรายการเพิ่มเติม';
+        }
+
+        renderItemPicker(currentEditCategory);
+        document.getElementById('itemSelectionModal').style.display = 'flex';
+    };
+
+    window.closeItemModal = function () {
+        document.getElementById('itemSelectionModal').style.display = 'none';
+        selectedItemIds.clear();
+        currentEditCategory = null;
+    };
+
+    // ให้ toggleSelectAllVisible / updateSelectAllState (ในไฟล์ quotationEdit.js) อ้างอิงหมวดหมู่ปัจจุบันจากตัวแปรนี้แทนแท็บ
+    window.getCurrentCategory = function () {
+        return currentEditCategory;
+    };
+
     // อัปเดตฟังก์ชันสร้างหัวข้อให้หน้าตาเหมือนหน้าสร้างใบเสนอราคา (เว้นช่องแรกให้สีและโครงสร้างตรงกัน)
     window.ensureGroupHeader = function(tbody) {
         if (!tbody) return;
@@ -573,10 +662,19 @@
             'group-service':    'หมวดบริการและการดำเนินการ',
             'group-extra':      'หมวดอุปกรณ์เสริม'
         };
+        var category = {
+            'group-equipment':  'อุปกรณ์พิธีกรรม',
+            'group-food':       'ภัตตาหาร',
+            'group-sangkathan': 'สังฆทาน',
+            'group-service':    'บริการ',
+            'group-extra':      'อุปกรณ์เสริม'
+        }[tbody.id] || '';
         var label = GROUP_LABELS[tbody.id] || '';
         var headerRow = document.createElement('tr');
         headerRow.className = 'group-row';
-        headerRow.innerHTML = '<td class="no-index"></td><td class="category-header-text">' + label + '</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>';
+        headerRow.innerHTML = '<td class="no-index"></td><td class="category-header-text">' + label +
+            (category ? ' <button type="button" class="btn-add-group-inline" onclick="openItemModal(\'' + category + '\')" title="เพิ่มรายการหมวดนี้">+</button>' : '') +
+            '</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>';
         tbody.prepend(headerRow);
     };
 
@@ -609,6 +707,8 @@
             else if (itemType.includes('อุปกรณ์เสริม')) targetBody = document.getElementById('group-extra');
             else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
             else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
+
+            if (!targetBody) return; // หมวดนี้ไม่มีในโหมดปัจจุบัน (เช่น แพ็กเกจไม่มีหมวดอุปกรณ์พิธีกรรม/บริการ)
 
             ensureGroupHeader(targetBody);
 

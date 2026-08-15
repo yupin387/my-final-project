@@ -113,10 +113,11 @@
                                         <div class="ceremony-type-options">
                                             <c:forEach var="c" items="${entry.value}">
                                                 <div class="ceremony-item">
+                                                    <!-- แก้ไขจุดนี้: เปลี่ยนจาก item.ceremonies เป็น selectedCeremonyIds -->
                                                     <input type="checkbox" name="ceremonyIds"
                                                         value="${c.ceremonyId}" id="cer_${c.ceremonyId}"
-                                                        <c:forEach var="ic" items="${item.ceremonies}">
-                                                            <c:if test="${ic.ceremonyId == c.ceremonyId}">checked</c:if>
+                                                        <c:forEach var="selectedId" items="${selectedCeremonyIds}">
+                                                            <c:if test="${selectedId == c.ceremonyId}">checked</c:if>
                                                         </c:forEach>>
                                                     <label for="cer_${c.ceremonyId}" class="ceremony-check-label">${c.ceremonyName}</label>
                                                 </div>
@@ -161,21 +162,21 @@
                                          pre-select หน่วยเดิมของ item ให้เลย ต้องเช็คจาก ${item.unit}
                                          (ค่าที่มีอยู่จริงในฐานข้อมูล) แทน --%>
                                   <select name="unit" required>
-    <option value="">-- เลือกหน่วย --</option>
-    <option value="ชุด"     ${item.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
-    <option value="ชิ้น"    ${item.unit == 'ชิ้น'    ? 'selected' : ''}>ชิ้น</option>
-    <option value="โหล"     ${item.unit == 'โหล'     ? 'selected' : ''}>โหล</option>
-    <option value="เครื่อง" ${item.unit == 'เครื่อง' ? 'selected' : ''}>เครื่อง</option>
-    <option value="รูป"     ${item.unit == 'รูป'     ? 'selected' : ''}>รูป</option>
-    <option value="ตัว"     ${item.unit == 'ตัว'     ? 'selected' : ''}>ตัว</option>
-    <option value="ใบ"      ${item.unit == 'ใบ'      ? 'selected' : ''}>ใบ</option>
-    <option value="เถา"     ${item.unit == 'เถา'     ? 'selected' : ''}>เถา</option>
-    <option value="อัน"     ${item.unit == 'อัน'     ? 'selected' : ''}>อัน</option>
-    <option value="คู่"     ${item.unit == 'คู่'     ? 'selected' : ''}>คู่</option>
-    <option value="องค์"    ${item.unit == 'องค์'    ? 'selected' : ''}>องค์</option>
-    <option value="ผืน"     ${item.unit == 'ผืน'     ? 'selected' : ''}>ผืน</option>
-    <option value="ต้น"     ${item.unit == 'ต้น'     ? 'selected' : ''}>ต้น</option>
-</select>
+                                    <option value="">-- เลือกหน่วย --</option>
+                                    <option value="ชุด"     ${item.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
+                                    <option value="ชิ้น"    ${item.unit == 'ชิ้น'    ? 'selected' : ''}>ชิ้น</option>
+                                    <option value="โหล"     ${item.unit == 'โหล'     ? 'selected' : ''}>โหล</option>
+                                    <option value="เครื่อง" ${item.unit == 'เครื่อง' ? 'selected' : ''}>เครื่อง</option>
+                                    <option value="รูป"     ${item.unit == 'รูป'     ? 'selected' : ''}>รูป</option>
+                                    <option value="ตัว"     ${item.unit == 'ตัว'     ? 'selected' : ''}>ตัว</option>
+                                    <option value="ใบ"      ${item.unit == 'ใบ'      ? 'selected' : ''}>ใบ</option>
+                                    <option value="เถา"     ${item.unit == 'เถา'     ? 'selected' : ''}>เถา</option>
+                                    <option value="อัน"     ${item.unit == 'อัน'     ? 'selected' : ''}>อัน</option>
+                                    <option value="คู่"     ${item.unit == 'คู่'     ? 'selected' : ''}>คู่</option>
+                                    <option value="องค์"    ${item.unit == 'องค์'    ? 'selected' : ''}>องค์</option>
+                                    <option value="ผืน"     ${item.unit == 'ผืน'     ? 'selected' : ''}>ผืน</option>
+                                    <option value="ต้น"     ${item.unit == 'ต้น'     ? 'selected' : ''}>ต้น</option>
+                                  </select>
                                 </div>
                             </div>
                         </div>
@@ -192,20 +193,35 @@
             </div>
         </div>
     </div>
+    
+<%-- ===== Footer (สำหรับหัวหน้างาน) ===== --%>
+<footer class="site-footer">
 
-    <%-- ===== FOOTER (เหมือนหน้า list) ===== --%>
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                     alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-                <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
-            </div>
-            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
+    <%-- ===== ลายดอกบัวมุมล่างขวา (เกาะติด footer) ===== --%>
+    <img src="${pageContext.request.contextPath}/static/images/lotus-corner.png"
+         alt="" class="lotus-decoration" aria-hidden="true">
+
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
-      
-    </footer>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
+    </div>
+
+</footer>
 
     <script src="${pageContext.request.contextPath}/static/js/editItem.js"></script>
+    <script>
+    function toggleDropdown() {
+        document.getElementById('dropdownMenu').classList.toggle('show');
+    }
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-info')) {
+            document.getElementById('dropdownMenu').classList.remove('show');
+        }
+    });
+    </script>
 </body>
 </html>

@@ -136,19 +136,24 @@
             </div>
         </div>
     </div>
+    
+<%-- ===== Footer (สำหรับหัวหน้างาน) ===== --%>
+<footer class="site-footer">
 
-    <%-- ===== FOOTER ===== --%>
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                     alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-                <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
-            </div>
-            <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
+    <%-- ===== ลายดอกบัวมุมล่างขวา (เกาะติด footer) ===== --%>
+    <img src="${pageContext.request.contextPath}/static/images/lotus-corner.png"
+         alt="" class="lotus-decoration" aria-hidden="true">
+
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
-     
-    </footer>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
+    </div>
+
+</footer>
 
     <%-- Modal รายงานความเสียหาย --%>
     <div class="modal-overlay" id="damageModal">

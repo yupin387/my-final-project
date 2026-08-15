@@ -1,41 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
-/* ===== CSS Variables (matched to addHeadStaff.css brown-gold-white theme) ===== */
+/* ===== CSS Variables (เขียวใบตองอ่อน-ทอง-ดาวเรือง theme, organizer) ===== */
 :root {
-    --gold:              #A9752E;
-    --gold-mid:          #C0923F;
-    --gold-light:        #D9B87A;
-    --gold-pale:         #F0E2C7;
-    --gold-glow:         #FFF8ED;
+    --green-deep:      #6FA84F;
+    --green-forest:    #7DBB5E;
+    --green-mid:       #9BCE72;
 
-    --cream:             #FFFBF3;
-    --cream-warm:        #FFFBF3;
-    --cream-mid:         #FBF2E3;
-    --cream-deep:        #F3E3C7;
-    --cream-border:      #E8D5B7;
-    --cream-border-soft: #EDE0C8;
+    --green-banana:       #A9D97A;
+    --green-banana-light: #C9E8A8;
+    --green-pale:         #EEF7E1;
+    --green-glow:         #F7FBF0;
+
+    --gold:          #D9A441;
+    --gold-mid:      #E8BE66;
+    --gold-light:    #F3DA9E;
+    --gold-pale:     #FBF0D4;
+    --gold-glow:     #FFFBEF;
+
+    --cream:             #ECF2D2;
+    --cream-warm:        #F7FBF0;
+    --cream-mid:         #FBF4E2;
+    --cream-deep:        #F2E6C4;
+    --cream-border:      #E9DCB0;
+    --cream-border-soft: #E4EFC9;
 
     --white:             #FFFFFF;
 
-    --text-dark:         #1A1A1A;
-    --text-mid:          #333333;
-    --text-body:         #444444;
-    --text-muted:        #777777;
-    --text-light:        #999999;
+    --text-dark:         #3A3020;
+    --text-mid:          #5C4E32;
+    --text-body:         #5A5240;
+    --text-muted:        #8C8168;
+    --text-light:        #ABA189;
 
-    --brown-dark:        #1A1A1A;
-    --brown-mid:         #3A3A3A;
+    --brown-dark:        #4A3D22;
+    --brown-mid:         #5C4E32;
 
-    --shadow-gold:       rgba(169, 117, 46, 0.18);
-    --shadow-warm:       rgba(169, 117, 46, 0.12);
+    --shadow-green:      rgba(111, 168, 79, 0.18);
+    --shadow-warm:       rgba(217, 164, 65, 0.20);
 
-    /* สีทองจริง ใช้กับ ornament/หัวข้อ/ปุ่ม */
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
 
-    /* ===== สีน้ำตาลล้วน ใช้กับ navbar / card-header / footer ===== */
-    --brand-brown: #9C6B3E;
+    --brand-green:      #74B457;
+    --brand-green-dark: #5C9645;
+
+    /* ตำแหน่งรูปดอกบัวตกแต่ง (วางไฟล์ที่ /static/images/lotus-decor.png) */
+    --lotus-img: url('../images/lotus-decor.png');
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,19 +62,18 @@ body {
 
 /* ========== NAVBAR ========== */
 .navbar {
-    background: var(--brand-brown);
+    background: var(--brand-green);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid;
-    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
+    border-bottom: 3px solid var(--accent-gold);
     position: sticky;
     top: 0;
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(122, 82, 48, 0.32);
+    box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
 }
 
 .navbar::before {
@@ -71,7 +81,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+    background: var(--accent-gold-mid);
 }
 
 .navbar-brand {
@@ -101,8 +111,8 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 32px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 30px;
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
@@ -135,17 +145,8 @@ body {
     font-family: 'Sarabun', sans-serif;
 }
 
-.nav-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #FFFFFF;
-}
-
-.nav-item.active {
-    background: #FFFFFF;
-    color: var(--gold);
-    font-weight: 700;
-    text-shadow: none;
-}
+.nav-item:hover { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
+.nav-item.active { background: #FFFFFF; color: var(--green-forest); font-weight: 700; text-shadow: none; }
 
 /* ===== User Info / Pill ===== */
 .user-info {
@@ -163,13 +164,11 @@ body {
     white-space: nowrap;
 }
 
-.user-info:hover {
-    background: rgba(255, 255, 255, 0.25);
-}
+.user-info:hover { background: rgba(255, 255, 255, 0.25); }
 
 .user-avatar {
     background: #FFFFFF;
-    color: var(--gold);
+    color: var(--green-forest);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -181,22 +180,9 @@ body {
     flex-shrink: 0;
 }
 
-.user-detail {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-}
-
-.user-name {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: #FFFFFF;
-}
-
-.user-role {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.75);
-}
+.user-detail { display: flex; flex-direction: column; line-height: 1.2; }
+.user-name   { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
+.user-role   { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
 
 /* ===== Dropdown ===== */
 .dropdown-menu {
@@ -208,7 +194,7 @@ body {
     border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px var(--shadow-gold);
+    box-shadow: 0 8px 28px var(--shadow-warm);
     z-index: 99999;
     overflow: hidden;
 }
@@ -229,12 +215,7 @@ body {
 }
 
 .dropdown-item:last-child { border-bottom: none; }
-
-.dropdown-item:hover {
-    background: var(--cream-warm);
-    color: var(--brown-dark);
-}
-
+.dropdown-item:hover { background: var(--cream-warm); color: var(--brown-dark); }
 .dropdown-item.danger { color: #c0392b; }
 .dropdown-item.danger:hover { background: #fff5f5; }
 
@@ -253,10 +234,10 @@ body {
     background: var(--white);
     border-radius: 20px;
     overflow: hidden;
-    border: 1.5px solid var(--accent-gold);
+    border: 1.5px solid var(--green-banana);
     box-shadow: 0 6px 32px var(--shadow-warm);
     width: 100%;
-    max-width: 660px;
+    max-width: 620px;
     position: relative;
 }
 
@@ -265,27 +246,18 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg,
-        transparent, var(--accent-gold-pale) 20%, var(--accent-gold) 50%, var(--accent-gold-pale) 80%, transparent);
+    background: var(--accent-gold);
     z-index: 1;
 }
 
 /* ========== CARD HEADER ========== */
 .card-header-bar {
-    background: var(--brand-brown);
-    padding: 34px 32px 30px;
+    background: var(--brand-green);
+    padding: 34px 32px 28px;
     text-align: center;
     position: relative;
     overflow: hidden;
     border-bottom: 2px solid var(--accent-gold-mid);
-}
-
-.card-header-bar::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
 }
 
 .card-header-bar::after {
@@ -293,12 +265,26 @@ body {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-mid), var(--accent-gold), var(--accent-gold-mid), transparent);
+    background: var(--accent-gold-mid);
+}
+
+/* ดอกบัวตกแต่งบนหัวการ์ด */
+.card-header-bar::before {
+    content: '';
+    display: block;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 6px;
+    background-image: var(--lotus-img);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18));
 }
 
 .card-header-bar h1 {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 1.8rem;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1.7rem;
     color: #FFFFFF;
     font-weight: 700;
     margin-bottom: 8px;
@@ -307,7 +293,7 @@ body {
 
 .card-header-bar p {
     font-size: 0.88rem;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 /* ---- ornament in header ---- */
@@ -321,12 +307,19 @@ body {
 
 .header-ornament .orn-line {
     flex: 1; max-width: 80px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-pale));
+    background: rgba(255, 255, 255, 0.55);
 }
 
-.header-ornament .orn-line:last-child { background: linear-gradient(90deg, var(--accent-gold-pale), transparent); }
-.header-ornament .orn-diamond { width: 8px; height: 8px; background: var(--accent-gold-pale); transform: rotate(45deg); box-shadow: 0 0 6px rgba(247, 227, 176, 0.7); }
+.header-ornament .orn-diamond { width: 8px; height: 8px; background: var(--gold-pale); transform: rotate(45deg); box-shadow: 0 0 6px rgba(247, 227, 176, 0.7); }
 .header-ornament .orn-diamond-sm { width: 4px; height: 4px; background: rgba(247, 227, 176, 0.85); transform: rotate(45deg); }
+
+.header-gold-line {
+    width: 55px;
+    height: 3px;
+    background: var(--gold-pale);
+    border-radius: 2px;
+    margin: 10px auto 0;
+}
 
 /* ========== CARD BODY ========== */
 .card-body {
@@ -353,7 +346,7 @@ body {
 .section-label {
     font-size: 12px;
     font-weight: 700;
-    color: var(--accent-gold);
+    color: var(--brand-green-dark);
     margin-bottom: 22px;
     display: flex;
     align-items: center;
@@ -488,7 +481,6 @@ body {
     flex-wrap: wrap;
 }
 
-/* ปุ่มยืนยัน สีทองล้วน */
 .btn-submit {
     background: var(--accent-gold);
     color: #FFFFFF;
@@ -500,19 +492,19 @@ body {
     cursor: pointer;
     transition: all 0.2s;
     font-family: 'Sarabun', sans-serif;
-    box-shadow: 0 3px 12px var(--shadow-gold);
+    box-shadow: 0 3px 12px var(--shadow-warm);
 }
 
 .btn-submit:hover {
-    background: var(--accent-gold-mid);
+    background: #C4922F;
     transform: translateY(-1px);
     box-shadow: 0 5px 18px rgba(217, 164, 65, 0.35);
 }
 
 .btn-cancel {
     background: var(--white);
-    color: var(--brown-mid);
-    border: 1.5px solid var(--cream-border);
+    color: var(--brand-green-dark);
+    border: 1.5px solid var(--green-banana);
     border-radius: 10px;
     padding: 12px 24px;
     font-size: 15px;
@@ -523,19 +515,20 @@ body {
 }
 
 .btn-cancel:hover {
-    background: var(--cream-warm);
-    border-color: var(--accent-gold);
+    background: var(--green-glow);
+    border-color: var(--brand-green-dark);
 }
 
 /* ========== FOOTER ========== */
 .site-footer {
-    background: var(--brand-brown);
-    color: rgba(255, 255, 255, 0.92);
+    background: var(--brand-green);
+    color: rgba(255, 255, 255, 0.95);
     margin-top: auto;
-    border-top: 3px solid var(--accent-gold-pale);
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    border-top: 3px solid var(--accent-gold);
+    box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
     position: relative;
     z-index: 2;
+    overflow: hidden;
 }
 
 .site-footer::before {
@@ -543,7 +536,24 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+    background: var(--accent-gold-mid);
+}
+
+/* ดอกบัวตกแต่งใน footer */
+.site-footer::after {
+    content: '';
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 76px;
+    height: 76px;
+    background-image: var(--lotus-img);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    pointer-events: none;
 }
 
 .footer-content {
@@ -555,6 +565,8 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 30px 24px;
+    position: relative;
+    z-index: 1;
 }
 
 .footer-brand {
@@ -581,8 +593,8 @@ body {
 }
 
 .footer-brand-text {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 1.3rem;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -603,7 +615,9 @@ body {
     .page-wrapper    { padding: 24px 14px 48px; }
     .card-body       { padding: 22px 20px 28px; }
     .card-header-bar { padding: 26px 20px 22px; }
+    .card-header-bar::before { width: 42px; height: 42px; }
     .form-actions    { flex-direction: column; }
     .btn-submit, .btn-cancel { width: 100%; text-align: center; }
     .footer-content  { flex-direction: column; align-items: flex-start; }
+    .site-footer::after { display: none; }
 }

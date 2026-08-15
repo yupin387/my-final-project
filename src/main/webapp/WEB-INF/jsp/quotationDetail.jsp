@@ -14,11 +14,11 @@
         text-align: left !important;
         padding-left: 8px !important;
         white-space: nowrap;
-        color: #9C6B3E;
+        color: var(--brand-green-dark);
         font-weight: bold;
     }
     .standard-table tr.group-row td {
-        background-color: #FBF2E3;
+        background-color: var(--green-glow);
     }
 
     .flash-banner {
@@ -30,40 +30,48 @@
         font-weight: 600;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+    
+    /* เปลี่ยนจากสีเขียวเป็นสีฟ้า */
     .flash-banner-success {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
+        background-color: #DBEAFE;
+        color: #1D4ED8;
+        border: 1px solid #93C5FD;
     }
+    
     .flash-banner-error {
         background-color: #f8d7da;
         color: #721c24;
         border: 1px solid #f5c6cb;
     }
 
-    .quotation-note-box {
-        margin-top: 16px;
-    }
-    .quotation-note-box .note-title {
-        font-weight: 700;
-        color: #9C6B3E;
-        margin-bottom: 8px;
-        display: block;
-    }
-    .quotation-note-box .note-box-inner {
-        padding: 14px 18px;
-        border: 1.5px solid #E0A94A;
+    /* ===== ความต้องการเพิ่มเติม ===== */
+    .remarks-box {
+        flex: 1;
+        margin-right: 20px;
+        border: 1px solid var(--green-banana-light);
         border-radius: 8px;
-        background: #FFFDF9;
-        min-height: 90px;
+        padding: 16px;
+        background: var(--green-glow);
+        box-sizing: border-box;
     }
-    .quotation-note-box .note-text {
-        margin: 0;
+    .remarks-box .remarks-header {
+        margin-bottom: 8px;
+    }
+    .remarks-box .remarks-header strong {
+        color: var(--brand-green-dark);
+    }
+    .remarks-box .remarks-textarea {
         white-space: pre-wrap;
-        color: #4A3B2A;
+        min-height: 90px;
+        padding: 10px 12px;
+        border: 1px solid var(--green-banana-light);
+        border-radius: 6px;
+        background: #FFFFFF;
+        font-size: 14px;
+        line-height: 1.6;
     }
-    .quotation-note-box .note-text.note-empty {
-        color: #B5A692;
+    .remarks-box .note-empty {
+        color: var(--text-muted);
         font-style: normal;
     }
 </style>
@@ -401,21 +409,19 @@
                 </tbody>
             </table>
 
-            <div class="quotation-note-box">
-                <span class="note-title">ความต้องการเพิ่มเติม:</span>
-                <div class="note-box-inner">
-                    <c:choose>
-                        <c:when test="${not empty q.note}">
-                            <p class="note-text">${q.note}</p>
-                        </c:when>
-                        <c:otherwise>
-                            <p class="note-text note-empty">ไม่มีความต้องการเพิ่มเติม</p>
-                        </c:otherwise>
-                    </c:choose>
+            <div class="doc-footer" style="justify-content: space-between; align-items: flex-start;">
+                <div class="remarks-box">
+                    <div class="remarks-header">
+                        <strong>ความต้องการเพิ่มเติม:</strong>
+                    </div>
+                    <div class="remarks-textarea">
+                        <c:choose>
+                            <c:when test="${not empty q.note}">${q.note}</c:when>
+                            <c:otherwise><span class="note-empty">ไม่มีความต้องการเพิ่มเติม</span></c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
-            </div>
 
-            <div class="doc-footer" style="justify-content: flex-end;">
                 <div class="totals-box" style="width: 350px;">
                     <c:set var="sumExtra" value="0" />
                     <c:set var="sumPackage" value="0" />

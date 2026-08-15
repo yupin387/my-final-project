@@ -1,30 +1,79 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+/* =========================================================
+   COLOR SYSTEM
+   ส้ม (หลัก, navbar/footer) + น้ำตาลอ่อน (ตัดในการ์ด) + ทอง (ตกแต่ง)
+   สถานะงานใช้สีสื่อความหมายสากล: เขียว = เสร็จ, ฟ้า = กำลังทำ
+   ========================================================= */
+:root {
+    /* พื้นหลังสีครีมอมพีชสว่างๆ */
+    --bg-light:       #FCF6F0;
+
+    /* สีหลัก — ส้มพีช/ส้มจีวร (navbar + footer) */
+    --peach-primary:  #E28F66;
+    --peach-hover:    #D17A4F;
+    --peach-pale:     #FDF0E8;
+    --peach-deep:     #B5613A;
+
+    /* สีน้ำตาลอ่อน — ใช้ตัดกับส้มตรงแถบหัวการ์ด */
+    --brown-light:      #9C7852;
+    --brown-light-deep: #7C5A3B;
+    --brown-light-pale: #F3E9DE;
+
+    /* สีทอง — ใช้ตกแต่ง/เส้นคั่น */
+    --gold-primary:   #C99A3D;
+    --gold-hover:     #AD8130;
+    --gold-pale:      #FBF1DC;
+    --gold-light:     #F6E2BA;
+
+    /* สีน้ำตาลมอคค่า (ตัวหนังสือหลัก) */
+    --brown-text:     #5A4A42;
+    --brown-muted:    #8D7A70;
+
+    /* สีสถานะงาน */
+    --green-primary:  #3E9C6A;
+    --green-pale:     #E7F5EC;
+    --blue-primary:   #2E75C4;
+    --blue-pale:      #E8F1FB;
+
+    /* สีขอบและเงา */
+    --white:          #FFFFFF;
+    --card-border:    #F5E6DD;
+    --shadow-soft:    rgba(226, 143, 102, 0.15);
+}
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: #E6E8EA;
-    color: #333333;
+    background-color: var(--bg-light);
+    color: var(--brown-text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* ========== NAVBAR (ขนาดเท่าเดิม + สีฟ้าครามอ่อนๆ นวลตา) ========== */
-/* ========== NAVBAR (สีฟ้าครามเรียบ ไม่ไล่สี) ========== */
+/* ========== NAVBAR ========== */
 .navbar {
-    background: #4B85BE;
+    background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid #E2B85B;
+    border-bottom: 3px solid var(--gold-primary);
     position: sticky;
     top: 0;
     z-index: 10000;
     min-height: 92px;
-    box-shadow: 0 4px 16px rgba(59, 107, 156, 0.25);
+    box-shadow: 0 4px 15px rgba(226, 143, 102, 0.2);
+}
+
+.navbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold-light);
 }
 
 .navbar-brand-wrap {
@@ -32,12 +81,11 @@ body {
     align-items: center;
     gap: 12px;
     text-decoration: none;
-    color: inherit;
 }
 
 .navbar .lotus-icon,
 .navbar-brand-wrap .lotus-icon {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.25);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -47,16 +95,16 @@ body {
     align-items: center;
     justify-content: center;
     border: 1.5px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
     flex-shrink: 0;
     object-fit: cover;
 }
 
 .navbar-title {
-    color: #FFFFFF;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    color: var(--white);
     font-size: 32px;
     font-weight: 700;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .navbar-right {
@@ -75,23 +123,21 @@ body {
 .nav-item {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
-    font-family: 'Sarabun', sans-serif;
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.3);
+    color: var(--white);
 }
 
 .nav-item.active {
-    background: #FFFFFF;
-    color: #3A6B9C;
-    font-weight: 700;
+    background: var(--white);
+    color: var(--peach-primary);
 }
 
 /* User pill */
@@ -103,7 +149,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--white);
     cursor: pointer;
     position: relative;
 }
@@ -111,19 +157,20 @@ body {
 .user-info:hover { background: rgba(255, 255, 255, 0.3); }
 
 .user-avatar {
-    background: #FFFFFF;
-    color: #3A6B9C;
+    background: var(--white);
+    color: var(--peach-primary);
     width: 34px;
     height: 34px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 16px;
 }
 
-.user-name { font-size: 14px; font-weight: 700; color: #FFFFFF; font-family: 'Sarabun', sans-serif; }
-.arrow { color: #FFFFFF; font-size: 11px; margin-left: 2px; opacity: 0.9; }
+.user-name { font-size: 15px; font-weight: 700; color: var(--white); }
+.arrow { color: var(--white); font-size: 11px; opacity: 0.9; }
 
 /* Dropdown */
 .dropdown-menu {
@@ -131,11 +178,11 @@ body {
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    background: #FFFFFF;
-    border: 1px solid #C5A044;
+    background: var(--white);
+    border: 1px solid var(--card-border);
     border-radius: 8px;
     min-width: 150px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 20px var(--shadow-soft);
     z-index: 99999;
     overflow: hidden;
 }
@@ -145,22 +192,20 @@ body {
 .dropdown-item {
     display: flex;
     align-items: center;
-    gap: 10px;
     padding: 12px 16px;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    color: #333;
+    color: var(--brown-text);
     text-decoration: none;
-    background: #FFFFFF;
-    border-bottom: 1px solid #EEE;
+    background: var(--white);
+    border-bottom: 1px solid var(--card-border);
     transition: background 0.2s;
 }
 
 .dropdown-item:last-child  { border-bottom: none; }
-.dropdown-item:hover       { background: #F5F5F5; }
-.dropdown-item.danger      { color: #c0392b; }
-.dropdown-item.danger:hover{ background: #fff5f5; }
+.dropdown-item:hover       { background: var(--peach-pale); color: var(--peach-hover); }
+.dropdown-item.danger      { color: #D9534F; }
+.dropdown-item.danger:hover{ background: #FDF1F0; }
 
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
@@ -169,7 +214,20 @@ body {
     width: 92%;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
+
+/* ========== FLASH BANNER ========== */
+.flash-banner {
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+}
+.flash-banner-success { background: var(--gold-pale); color: var(--gold-hover); border: 1.5px solid var(--gold-primary); }
+.flash-banner-error { background: #FDF1F0; color: #D9534F; border: 1.5px solid #F5C6CB; }
 
 /* ========== LIST HEADER ========== */
 .list-header {
@@ -188,149 +246,188 @@ body {
     flex: 1;
     max-width: 120px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, #C5A044);
+    background: var(--gold-primary);
 }
-.ornament-line.right {
-    background: linear-gradient(90deg, #C5A044, transparent);
-}
+.ornament-line.right { background: var(--gold-primary); }
 .ornament-diamond {
     width: 10px; height: 10px;
-    background: #C5A044;
+    background: var(--peach-primary);
     transform: rotate(45deg);
 }
 .ornament-diamond-sm {
     width: 5px; height: 5px;
-    background: #E2B85B;
+    background: var(--gold-primary);
     transform: rotate(45deg);
 }
 
 .list-header h1 {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 2rem;
-    color: #3A6B9C;
+    font-size: 2.2rem;
+    color: var(--brown-text);
     font-weight: 700;
     margin-bottom: 6px;
 }
 
-.list-header p { font-size: 13px; color: #666; }
+.list-header p { font-size: 14px; color: var(--brown-muted); }
 
 .gold-line {
     width: 60px;
     height: 3px;
-    background: linear-gradient(90deg, transparent, #C5A044, #E2B85B, #C5A044, transparent);
+    background: linear-gradient(90deg, var(--peach-primary), var(--gold-primary));
     border-radius: 2px;
     margin: 10px auto 0;
 }
 
-/* ========== FLASH BANNER ========== */
-.flash-banner {
-    padding: 14px 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-}
-.flash-banner-success { background: #dcfce7; color: #166534; border: 1.5px solid #86efac; }
-.flash-banner-error { background: #fee2e2; color: #991b1b; border: 1.5px solid #fca5a5; }
-
 /* ========== CONTENT CARD ========== */
 .content-card {
-    background: #FFFFFF;
+    background: var(--white);
     border-radius: 12px;
     overflow: hidden;
-    border: 1px solid #D1D1D1;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1.5px solid var(--card-border);
+    box-shadow: 0 8px 30px var(--shadow-soft);
+    position: relative;
 }
 
+.content-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--peach-primary), var(--gold-primary));
+}
+
+/* แถบหัวการ์ด "รายการงานทั้งหมด" — สีน้ำตาลอ่อนตัดกับส้มของ navbar */
 .card-header-bar {
-    background: #3A6B9C;
+    background: var(--brown-light);
     padding: 16px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #FFFFFF;
+    color: var(--white);
     font-weight: 700;
-    font-size: 15px;
+    font-size: 16px;
+    border-bottom: 2px solid var(--brown-light-deep);
 }
 
-.header-count { font-size: 13px; opacity: 0.85; }
+.header-count { font-size: 14px; opacity: 0.95; }
 
 /* ========== TABLE ========== */
 table { width: 100%; border-collapse: collapse; }
 
 th {
-    background: #F0F6FB;
-    color: #3A6B9C;
+    background: var(--brown-light-pale);
+    color: var(--brown-text);
     padding: 14px 18px;
     text-align: left;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
-    border-bottom: 2px solid #D1D1D1;
+    border-bottom: 2px solid var(--card-border);
 }
 
 td {
     padding: 14px 18px;
-    border-bottom: 1px solid #EEE;
-    font-size: 14px;
+    border-bottom: 1px solid var(--bg-light);
+    font-size: 15px;
     vertical-align: middle;
-    color: #333;
+    color: var(--brown-muted);
 }
 
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: #F9F9F9; }
+tr:hover td { background: var(--peach-pale); }
 
 .assign-id {
-    color: #3A6B9C;
+    color: var(--brown-text);
     font-weight: 700;
-    font-family: monospace;
-    font-size: 13px;
-    background: #EBF3FA;
+    font-size: 14px;
+    background: var(--gold-light);
     padding: 3px 10px;
     border-radius: 4px;
-    border: 1px solid #CBD5E1;
+    border: 1px solid var(--gold-primary);
 }
 
-.ceremony-name { font-weight: 700; color: #111; }
+.ceremony-name { font-weight: 700; color: var(--brown-text); }
 
+/* ========== STATUS BADGES ==========
+   Assigned = เทาน้ำตาลกลาง, Preparing = ทอง, In_Progress = ฟ้า, Completed = เขียว */
 .status-badge {
     display: inline-block;
-    padding: 4px 12px;
+    padding: 5px 12px;
     border-radius: 12px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
 }
-.status-Assigned { background: #ECEFF1; color: #546E7A; border: 1px solid #B0BEC5; }
-.status-Preparing { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; }
-.status-In_Progress { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
-.status-Completed { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+.status-Assigned    { background: #F0EDE9; color: #756860; border: 1px solid #D9D2CD; }
+.status-Preparing   { background: var(--gold-light); color: var(--gold-hover); border: 1px solid var(--gold-primary); }
+.status-In_Progress { background: var(--blue-pale); color: var(--blue-primary); border: 1px solid #A9C7EA; }
+.status-Completed   { background: var(--green-pale); color: var(--green-primary); border: 1px solid #A8D5B7; }
 
+/* ========== BUTTONS ========== */
 .btn-view {
     display: inline-flex;
     align-items: center;
     gap: 5px;
     padding: 6px 14px;
     border-radius: 6px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     text-decoration: none;
-    border: 1.5px solid #3A6B9C;
-    background: #FFFFFF;
-    color: #3A6B9C;
+    border: 1.5px solid var(--peach-primary);
+    background: var(--white);
+    color: var(--peach-primary);
     transition: 0.2s;
 }
-.btn-view:hover { background: #3A6B9C; color: #FFFFFF; }
+.btn-view:hover { background: var(--peach-primary); color: var(--white); }
 
-.empty-state { text-align: center; padding: 50px; color: #777; }
+.empty-state { text-align: center; padding: 50px; color: var(--brown-muted); }
 
-/* ========== FOOTER ========== */
-.site-footer {
-    background: linear-gradient(135deg, #3A6B9C 0%, #4B85BE 50%, #5E9CD3 100%);
-    color: rgba(255, 255, 255, 0.9);
-    margin-top: auto;
-    border-top: 3px solid #C5A044;
+/* ========== LOTUS CORNER DECORATION ==========
+   ใช้ fixed + z-index สูง เพื่อให้ลอยเหนือทุกอย่างเสมอ ไม่ว่าคอนเทนต์
+   ในตารางจะสั้นหรือยาวแค่ไหน จะได้ไม่โดน footer บังหรือโดนตัดขอบจอ */
+.lotus-decoration {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 170px;
+    height: auto;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 500;
 }
-.footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 25px 24px; }
+
+@media (max-width: 768px) {
+    .lotus-decoration { width: 100px; bottom: 16px; right: 16px; }
+}
+
+/* ========== FOOTER — ส้มเหมือน navbar ========== */
+.site-footer {
+    background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
+    color: rgba(255, 255, 255, 0.95);
+    margin-top: auto;
+    border-top: 3px solid var(--gold-primary);
+    position: relative;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold-light);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 25px 24px;
+}
+
 .footer-brand { display: flex; align-items: center; gap: 10px; }
-.site-footer .lotus-icon { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.5); object-fit: cover; }
-.footer-brand-text { font-family: 'Charmonman', serif; font-size: 1.2rem; font-weight: 700; color: #FFF; }
-.footer-tagline { font-size: 0.85rem; color: #DDD; }
+.site-footer .lotus-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    object-fit: cover;
+}
+.footer-brand-text { font-size: 1.2rem; font-weight: 700; color: var(--white); }
+.footer-tagline { font-size: 0.9rem; color: rgba(255, 255, 255, 0.9); }

@@ -8,126 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>จัดทำใบเสนอราคา - บุญมีนำพา จัดงานบุญ</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=18">
-<style>
-    /* สไตล์สำหรับปุ่ม +/- และช่องกรอกจำนวนของรายการเพิ่มเติม */
-    #mainQuotationTable .qty-wrapper{
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-wrap:nowrap;
-        white-space:nowrap;
-        gap: 4px; 
-    }
-    #mainQuotationTable .btn-qty-edit{
-    flex:0 0 auto;
-    width: 22px;
-    height: 22px;
-    border: none;
-    background: transparent;
-    color: #9CA3AF; /* สีเทา */
-    font-size: 13px;
-    line-height: 1;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    opacity: 0.75;
-}
-#mainQuotationTable .btn-qty-edit:hover{
-    opacity: 1;
-}
-#mainQuotationTable .qty-display{
-    font-weight: 600;
-    color: #333;
-    min-width: 14px;
-    text-align: center;
-}
-    #mainQuotationTable .btn-qty-minus,
-    #mainQuotationTable .btn-qty-plus{
-        flex:0 0 auto;
-        width: 24px;
-        height: 24px;
-        border: 1px solid #9C6B3E;
-        background: #FFFFFF;
-        color: #9C6B3E;
-        border-radius: 4px;
-        font-size: 16px;
-        line-height: 1;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding-bottom: 2px;
-    }
-    #mainQuotationTable .btn-qty-minus:hover,
-    #mainQuotationTable .btn-qty-plus:hover{
-        background:#FBF2E3;
-    }
-    #mainQuotationTable .qty-wrapper .qty-input{
-        flex:0 0 auto;
-        width: 38px; 
-        text-align:center;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 2px 0;
-    }
-    /* ซ่อนช่อง input จำนวน ให้อ่านได้อย่างเดียว */
-    .qty-input[readonly] {
-        background-color: transparent !important;
-        border: none !important;
-        outline: none !important;
-        color: #333 !important;
-        font-weight: 600 !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-        width: 100% !important;
-        -moz-appearance: textfield;
-        text-align: center;
-    }
-    .qty-input[readonly]::-webkit-outer-spin-button,
-    .qty-input[readonly]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    /* หัวข้อหมวดหมู่ + ปุ่ม + ติดกันในแถวเดียว */
-    #mainQuotationTable tr.group-row td.category-header-text{
-        text-align: left !important;
-        padding-left: 8px !important;
-        padding-right: 12px !important;
-        white-space: nowrap;
-        color: #9C6B3E;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    #mainQuotationTable tr.group-row td {
-        background-color: #FBF2E3; /* สีพื้นหลังอ่อนๆ ให้เข้ากับธีมหมวดหมู่ */
-    }
-    #mainQuotationTable .btn-add-group-inline{
-        flex: 0 0 auto;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        border: 1px solid #9C6B3E;
-        background: #FFFFFF;
-        color: #9C6B3E;
-        font-size: 14px;
-        line-height: 1;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-    }
-    #mainQuotationTable .btn-add-group-inline:hover{
-        background: #FFFFFF;
-        transform: scale(1.05);
-    }
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=19">
 </head>
 <body>
 
@@ -442,7 +323,7 @@
 
                         </c:when>
 
-                        <%-- ============ โหมด: แพ็กเกจ (ไม่มีหมวดอุปกรณ์พิธีกรรม/บริการ เพราะรวมในแพ็กเกจแล้ว) ============ --%>
+                        <%-- ============ โหมด: แพ็กเกจ ============ --%>
                         <c:otherwise>
 
                             <c:set var="sangQty" value="1" />

@@ -196,19 +196,24 @@
 			</div>
 		</div>
 	</div>
-
-	<%-- ===== FOOTER (เหมือนหน้า list) ===== --%>
-	<footer class="site-footer">
-		<div class="footer-content">
-			<div class="footer-brand">
-				<img src="${pageContext.request.contextPath}/static/images/logoo.png"
-					 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-				<span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
-			</div>
-			<p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
-		</div>
 	
-	</footer>
+<%-- ===== Footer (สำหรับหัวหน้างาน) ===== --%>
+<footer class="site-footer">
+
+    <%-- ===== ลายดอกบัวมุมล่างขวา (เกาะติด footer) ===== --%>
+    <img src="${pageContext.request.contextPath}/static/images/lotus-corner.png"
+         alt="" class="lotus-decoration" aria-hidden="true">
+
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
+    </div>
+
+</footer>
 
 	<script src="${pageContext.request.contextPath}/static/js/itemList.js"></script>
 </body>

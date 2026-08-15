@@ -85,9 +85,10 @@
                     <div class="select-wrapper">
                         <select id="ceremonyType" name="ceremonyType" required>
                             <option value="">-- เลือกประเภทงาน --</option>
+                            <!-- แก้ไขจุดนี้โดยใช้ currentCeremonyType ที่ส่งมาจาก Controller -->
                             <c:forEach var="type" items="${ceremonyTypes}">
                                 <option value="${type}"
-                                    ${question.ceremony != null && type == question.ceremony.ceremonyType ? 'selected' : ''}>${type}</option>
+                                    ${currentCeremonyType != null && type == currentCeremonyType ? 'selected' : ''}>${type}</option>
                             </c:forEach>
                         </select>
                     </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap');
 
 * {
 	margin: 0;
@@ -10,33 +10,46 @@
 html, body { width: 100%; }
 
 :root {
-    --gold:              #A9752E;
-    --gold-mid:          #C0923F;
-    --gold-light:        #D9B87A;
-    --gold-pale:         #F0E2C7;
-    --gold-glow:         #FFF8ED;
+    --gold:              #D9A441;
+    --gold-mid:          #E8BE66;
+    --gold-light:        #F3DA9E;
+    --gold-pale:         #FBF0D4;
+    --gold-glow:         #FFFBEF;
 
-    --cream:             #FFFBF3;
-    --cream-warm:        #FFFBF3;
-    --cream-mid:         #FBF2E3;
-    --cream-deep:        #F3E3C7;
-    --cream-border:      #E8D5B7;
-    --cream-border-soft: #EDE0C8;
+    --green-deep:         #6FA84F;
+    --green-forest:       #7DBB5E;
+    --green-mid:          #9BCE72;
+    --green-banana:       #A9D97A;
+    --green-banana-light: #C9E8A8;
+    --green-pale:         #EEF7E1;
+    --green-glow:         #F7FBF0;
+
+    --cream:             #ECF2D2;
+    --cream-warm:        #F7FBF0;
+    --cream-mid:         #FBF4E2;
+    --cream-deep:        #F2E6C4;
+    --cream-border:      #E9DCB0;
+    --cream-border-soft: #E4EFC9;
 
     --white:             #FFFFFF;
 
-    --text-dark:         #1A1A1A;
-    --text-mid:          #333333;
+    /* สีตัวอักษรและเส้นกรอบ */
+    --text-dark:         #333333; 
+    --text-mid:          #555555;
     --text-muted:        #777777;
-    --brown-dark:        #1A1A1A;
-    --brown-mid:         #3A3A3A;
+    --brown-dark:        #333333;
+    --brown-mid:         #555555;
 
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
     --accent-gold-dark: #B8860B;
 
-    --brand-brown:      #9C6B3E;
+    --brand-green:       #74B457;
+    --brand-green-dark:  #5C9645;
+
+    /* ตำแหน่งรูปดอกบัวตกแต่ง */
+    --lotus-img: url('../images/lotus-decor.png');
 }
 
 body {
@@ -46,20 +59,19 @@ body {
 	flex-direction: column;
 }
 
-/* ===== Navbar (น้ำตาลทอง) ===== */
+/* ===== Navbar (เขียว-ทอง) ===== */
 .navbar {
-	background: var(--brand-brown);
+	background: var(--brand-green);
 	padding: 0 40px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	border-bottom: 3px solid;
-	border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
+	border-bottom: 3px solid var(--accent-gold);
 	position: sticky;
 	top: 0;
 	z-index: 10000;
 	min-height: 92px;
-	box-shadow: 0 4px 20px rgba(122, 82, 48, 0.32);
+	box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
 }
 
 .navbar::before {
@@ -67,7 +79,7 @@ body {
 	position: absolute;
 	top: 0; left: 0; right: 0;
 	height: 2px;
-	background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+	background: var(--accent-gold-mid);
 }
 
 .navbar-brand,
@@ -94,8 +106,8 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 32px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 28px;
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
@@ -132,7 +144,7 @@ body {
 
 .nav-item.active {
 	background: #FFFFFF;
-	color: var(--gold);
+	color: var(--green-forest);
 	font-weight: 700;
 }
 
@@ -158,7 +170,7 @@ body {
 
 .user-avatar {
 	background: #FFFFFF;
-	color: var(--gold);
+	color: var(--green-forest);
 	width: 36px;
 	height: 36px;
 	border-radius: 50%;
@@ -204,7 +216,7 @@ body {
 	border: 1px solid var(--accent-gold-pale);
 	border-radius: 10px;
 	min-width: 160px;
-	box-shadow: 0 8px 28px var(--shadow-gold);
+	box-shadow: 0 8px 28px var(--shadow-warm, rgba(217,164,65,0.2));
 	z-index: 999;
 	overflow: hidden;
 }
@@ -266,7 +278,7 @@ body {
 
 .a4-document,
 .sheet {
-    width: 270mm; /* <--- เปลี่ยนค่าตรงนี้ครับ เช่น 220mm หรือ 1000px */
+    width: 270mm;
     max-width: 100%;
     min-height: 297mm;
     margin: 0 auto 20px auto;
@@ -280,13 +292,13 @@ body {
 /* ===== Letterhead ===== */
 .letterhead {
     display: flex; align-items: center; gap: 16px;
-    border-bottom: 2px solid var(--brand-brown);
+    border-bottom: 2px solid var(--brand-green-dark);
     padding-bottom: 10px;
     margin-bottom: 14px;
 }
 .letterhead .logo { width: 60px; height: 60px; object-fit: contain; flex-shrink: 0; }
 .letterhead .company-block { flex: 1; text-align: center; }
-.letterhead .company-name { font-size: 24px; color: var(--brand-brown); }
+.letterhead .company-name { font-size: 24px; color: var(--text-dark); }
 .letterhead .company-sub { font-size: 13px; color: #555; margin-top: 2px; }
 
 /* ===== Title + doc meta ===== */
@@ -298,11 +310,11 @@ body {
     font-size: 22px; font-weight: 700; letter-spacing: 1px;
     color: #333; align-self: center; flex: 1; text-align: center;
 }
-.doc-meta-box { border: 1px solid var(--brand-brown); border-radius: 4px; min-width: 190px; }
+.doc-meta-box { border: 1px solid var(--brand-green-dark); border-radius: 4px; min-width: 190px; }
 .doc-meta-box table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .doc-meta-box td { padding: 5px 8px; border-bottom: 1px solid var(--cream-border); }
 .doc-meta-box tr:last-child td { border-bottom: none; }
-.doc-meta-box .meta-label { color: var(--brand-brown); font-weight: 600; white-space: nowrap; }
+.doc-meta-box .meta-label { color: var(--text-dark); font-weight: 600; white-space: nowrap; }
 .doc-meta-box .meta-value { text-align: right; }
 
 .status-pill {
@@ -312,9 +324,9 @@ body {
     font-size: 12px;
     font-weight: 700;
 }
-.status-Pending  { background: #FFF3CD; color: #8A6100; }
-.status-Confirmed{ background: #DCF5E3; color: #146C2E; }
-.status-Revised  { background: #FDE2E2; color: #A31212; }
+.status-Pending  { background: #FFF3CD; color: #8A6100; border: 1px solid var(--gold-mid); }
+.status-Confirmed{ background: var(--green-pale); color: var(--green-deep); border: 1px solid var(--green-banana); }
+.status-Revised  { background: #FDE2E2; color: #A31212; border: 1px solid #ef9a9a; }
 
 /* ===== Info panel ===== */
 .info-panel {
@@ -324,13 +336,13 @@ body {
 .info-col { flex: 1; padding: 10px 14px; font-size: 13.5px; }
 .info-col + .info-col { border-left: 1px solid #ccc; }
 .info-row { display: flex; margin-bottom: 4px; }
-.info-row .info-label { width: 105px; color: var(--brand-brown); font-weight: 600; flex-shrink: 0; }
+.info-row .info-label { width: 105px; color: var(--text-dark); font-weight: 600; flex-shrink: 0; }
 .info-row .info-value { flex: 1; }
 
 /* ===== Items table ===== */
 table.items-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 table.items-table thead th {
-    background: var(--cream-warm); color: var(--brand-brown); border: 1px solid var(--brand-brown);
+    background: var(--cream-warm); color: var(--brand-green-dark); border: 1px solid var(--brand-green-dark);
     padding: 7px 6px; font-weight: 600;
 }
 table.items-table tbody td {
@@ -349,25 +361,25 @@ table.items-table tbody tr:last-child td { border-bottom: 1px solid #ddd; }
 .item-code { color: #555; }
 .item-name { font-weight: 600; }
 .item-detail { display: block; font-size: 12px; color: #777; margin-top: 2px; }
-.item-note   { display: block; font-size: 12px; color: var(--brand-brown); margin-top: 2px; font-style: italic; }
+.item-note   { display: block; font-size: 12px; color: var(--text-dark); margin-top: 2px; font-style: italic; }
 
 tr.package-row td { background: var(--cream-warm); }
-tr.package-row .item-name { color: var(--brand-brown); }
+tr.package-row .item-name { color: var(--text-dark); }
 tr.included-row td { color: #888; }
 .included-label {
-    font-size: 11px; font-weight: 700; color: var(--brand-brown);
+    font-size: 11px; font-weight: 700; color: var(--text-dark);
     background: var(--cream-warm); border: 1px solid var(--accent-gold);
     padding: 2px 8px; border-radius: 10px; display: inline-block;
 }
 
 /* ===== Totals ===== */
 .totals-wrap { display: flex; justify-content: flex-end; margin-top: 12px; }
-.totals-box { width: 260px; border: 1px solid var(--brand-brown); font-size: 14px; }
+.totals-box { width: 260px; border: 1px solid var(--brand-green-dark); font-size: 14px; }
 .totals-box table { width: 100%; border-collapse: collapse; }
 .totals-box td { padding: 8px 14px; }
 .totals-box tr:last-child td {
-    border-top: 1px solid var(--brand-brown);
-    background: var(--cream-warm); font-weight: 700; font-size: 16px; color: var(--brand-brown);
+    border-top: 1px solid var(--brand-green-dark);
+    background: var(--cream-warm); font-weight: 700; font-size: 16px; color: var(--text-dark);
 }
 .totals-box .t-label { text-align: left; }
 .totals-box .t-value { text-align: right; white-space: nowrap; }
@@ -380,7 +392,7 @@ tr.included-row td { color: #888; }
     padding-top: 8px;
 }
 
-/* ===== ปุ่มกลับหน้ารายการ: ล่างสุดท้ายจริงๆ ของหน้าเว็บ (นอกกระดาษ ใต้ footer) ===== */
+/* ===== ปุ่มกลับหน้ารายการ ===== */
 .back-bottom-wrap {
     width: 100%;
     text-align: center;
@@ -389,7 +401,7 @@ tr.included-row td { color: #888; }
 }
 .btn-back-bottom {
     display: inline-block;
-    background: var(--brand-brown);
+    background: var(--brand-green);
     color: #fff;
     text-decoration: none;
     padding: 10px 24px;
@@ -397,21 +409,22 @@ tr.included-row td { color: #888; }
     font-size: 14px;
     font-weight: 600;
     transition: 0.2s;
-    box-shadow: 0 3px 10px rgba(156, 107, 62, 0.3);
+    box-shadow: 0 3px 10px rgba(92, 150, 69, 0.3);
 }
 .btn-back-bottom:hover {
-    background: #7A5230;
+    background: var(--brand-green-dark);
     transform: translateY(-1px);
 }
 
-/* ===== FOOTER (น้ำตาลทอง) ===== */
+/* ===== FOOTER (เขียว-ทอง) ===== */
 .site-footer {
-    background: var(--brand-brown);
-    color: rgba(255, 255, 255, 0.92);
-    border-top: 3px solid var(--accent-gold-pale);
-    box-shadow: 0 -6px 18px rgba(122, 82, 48, 0.25);
+    background: var(--brand-green);
+    color: rgba(255, 255, 255, 0.95);
+    border-top: 3px solid var(--accent-gold);
+    box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
     position: relative;
     z-index: 2;
+    overflow: hidden;
 }
 
 .site-footer::before {
@@ -419,7 +432,24 @@ tr.included-row td { color: #888; }
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+    background: var(--accent-gold-mid);
+}
+
+/* ดอกบัวตกแต่งใน footer */
+.site-footer::after {
+    content: '';
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 76px;
+    height: 76px;
+    background-image: var(--lotus-img);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    pointer-events: none;
 }
 
 .footer-content {
@@ -431,6 +461,8 @@ tr.included-row td { color: #888; }
     max-width: 1200px;
     margin: 0 auto;
     padding: 30px 24px;
+    position: relative;
+    z-index: 1;
 }
 
 .footer-brand {
@@ -453,8 +485,8 @@ tr.included-row td { color: #888; }
 }
 
 .footer-brand-text {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 1.3rem;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;
 }
@@ -479,11 +511,11 @@ tr.included-row td { color: #888; }
     .navbar .lotus-icon,
     .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     .footer-content { flex-direction: column; align-items: flex-start; }
+    .site-footer::after { display: none; }
 }
 
 /* =========================================
-   เนื้อหาใบเสนอราคา (คลาสที่ใช้จริงใน quotationDetail.jsp
-   แต่ก่อนหน้านี้ไฟล์นี้ไม่มีสไตล์ให้ เลยขึ้นเป็นตัวหนังสือเปล่าๆ)
+   เนื้อหาใบเสนอราคา (คลาสที่ใช้จริงใน quotationDetail.jsp / quotationCreate.jsp)
    ========================================= */
 
 .text-center { text-align: center; }
@@ -493,29 +525,39 @@ tr.included-row td { color: #888; }
 .text-muted  { color: #777; font-size: 13px; }
 
 /* หัวกระดาษ */
-.doc-header { text-align: center; border-bottom: 2px solid var(--brand-brown); padding-bottom: 20px; margin-bottom: 25px; }
-.company-info h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--brand-brown); }
+.doc-header { text-align: center; border-bottom: 2px solid var(--brand-green-dark); padding-bottom: 20px; margin-bottom: 25px; }
+.company-info h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); }
 .company-info p { font-size: 14px; color: #444; line-height: 1.5; }
-.doc-title-box h1 { font-size: 26px; font-weight: 700; margin-top: 25px; color: var(--brand-brown); letter-spacing: 1px; }
+.doc-title-box h1 { font-size: 26px; font-weight: 700; margin-top: 25px; color: var(--text-dark); letter-spacing: 1px; }
 .doc-title-box p { text-align: center; color: #555; }
 
 /* แถวข้อมูลลูกค้า/เอกสาร */
 .doc-meta-row { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 14px; gap: 20px; }
 .meta-box-left { flex: 1; }
 .meta-box-right { width: 300px; }
+
+/* Layout Table: ตารางข้อมูลมุมขวาที่มีกรอบ */
 .layout-table { width: 100%; border-collapse: collapse; }
-.layout-table td { padding: 5px 8px; vertical-align: top; }
-.layout-table .label { font-weight: 700; width: 120px; color: var(--brand-brown); white-space: nowrap; }
-.layout-table.bordered { border: 1px solid var(--brand-brown); }
-.layout-table.bordered td { border: 1px solid var(--brand-brown); padding: 6px 10px; }
+.layout-table td { padding: 8px 12px; vertical-align: middle; border: none; }
+.layout-table .label { font-weight: 700; width: 120px; color: var(--text-dark); white-space: nowrap; font-size: 14px; }
+.layout-table .value { font-size: 14px; color: var(--text-dark); }
+
+/* ใส่ขอบดำให้กับตารางและเซลล์ด้านในทั้งหมด เหมือนในรูป */
+.layout-table.bordered { 
+    border: 1px solid var(--text-dark); 
+    border-radius: 0; 
+}
+.layout-table.bordered td { 
+    border: 1px solid var(--text-dark); 
+}
 
 /* ตารางรายการ */
 .standard-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; table-layout: fixed; }
 .standard-table th, .standard-table td { border: 1px solid #333; padding: 8px; font-size: 14px; vertical-align: middle; overflow: hidden; word-wrap: break-word; }
-.standard-table th { background-color: var(--brand-brown); color: #FFF; font-weight: 700; text-align: center; }
+.standard-table th { background-color: var(--brand-green-dark); color: #FFF; font-weight: 700; text-align: center; }
 
-.group-row td { background: #FFFBF3 !important; }
-.category-header-text { font-weight: 800 !important; color: var(--brand-brown) !important; font-size: 14.5px !important; text-align: center !important; }
+.group-row td { background: var(--green-glow) !important; }
+.category-header-text { font-weight: 800 !important; color: var(--text-dark) !important; font-size: 14.5px !important; text-align: center !important; }
 
 .package-includes-title { font-weight: 700; font-size: 13.5px; border-top: none !important; border-bottom: none !important; padding-top: 15px !important; color: #333; }
 .package-included-row td { border-top: none !important; border-bottom: none !important; padding-top: 2px !important; padding-bottom: 2px !important; color: #555; }
@@ -524,14 +566,14 @@ tr.included-row td { color: #888; }
 /* สรุปยอด */
 .doc-footer { display: flex; justify-content: space-between; gap: 30px; align-items: stretch; }
 .totals-table { width: 100%; border-collapse: collapse; height: 100%; }
-.totals-table td { border: 1px solid var(--brand-brown); padding: 12px 15px; font-weight: 600; font-size: 15px; }
-.tot-label { background: var(--cream-warm); width: 55%; text-align: left; color: var(--brand-brown); }
+.totals-table td { border: 1px solid var(--brand-green-dark); padding: 12px 15px; font-weight: 600; font-size: 15px; }
+.tot-label { background: var(--cream-warm); width: 55%; text-align: left; color: var(--text-dark); }
 .tot-value { text-align: right; width: 45%; }
 .grand-total-row td { font-weight: 700; font-size: 18px; }
 .total-amount { text-align: right; font-size: 22px !important; color: #B91C1C !important; font-weight: 700; }
 
 /* =========================================
-   สไตล์สำหรับ Modal (ป๊อปอัปเลือกอุปกรณ์)
+   Modal (ป๊อปอัปเลือกอุปกรณ์)
    ========================================= */
 .modal-overlay {
     display: none;
@@ -561,7 +603,7 @@ tr.included-row td { color: #888; }
 
 .modal-header {
     padding: 20px;
-    background: var(--brand-brown);
+    background: var(--brand-green);
     color: #fff;
     display: flex;
     justify-content: space-between;
@@ -602,8 +644,8 @@ tr.included-row td { color: #888; }
 }
 
 .category-tab.active {
-    color: var(--brand-brown);
-    border-bottom-color: var(--brand-brown);
+    color: var(--brand-green-dark);
+    border-bottom-color: var(--brand-green-dark);
 }
 
 .modal-body {
@@ -629,7 +671,7 @@ tr.included-row td { color: #888; }
 }
 
 .selected-count-badge {
-    background: var(--brand-brown);
+    background: var(--brand-green-dark);
     color: #fff;
     padding: 4px 12px;
     border-radius: 20px;
@@ -655,13 +697,13 @@ tr.included-row td { color: #888; }
 }
 
 .item-pick-card:hover {
-    border-color: var(--brand-brown);
+    border-color: var(--brand-green-dark);
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 .item-pick-card.selected {
-    border-color: var(--brand-brown);
-    background: var(--cream-warm);
+    border-color: var(--brand-green-dark);
+    background: var(--green-pale);
 }
 
 .item-pick-card.disabled {
@@ -674,7 +716,7 @@ tr.included-row td { color: #888; }
     margin-top: 4px;
     width: 18px;
     height: 18px;
-    accent-color: var(--brand-brown);
+    accent-color: var(--brand-green-dark);
 }
 
 .item-pick-info {
@@ -711,7 +753,7 @@ tr.included-row td { color: #888; }
 
 .item-pick-price {
     font-weight: 700;
-    color: var(--brand-brown);
+    color: var(--brand-green-dark);
 }
 
 .item-already-added {
@@ -751,16 +793,16 @@ tr.included-row td { color: #888; }
 }
 
 .btn-submit-modal {
-    background: var(--brand-brown);
+    background: var(--brand-green-dark);
     color: #fff;
 }
 
 .btn-submit-modal:hover {
-    background: #8a5e35;
+    background: #4d7f3a;
 }
 
 /* =========================================
-   1. กล่องข้อความความต้องการเพิ่มเติม (ปรับให้สวยงามและดูมีมิติ)
+   1. กล่องข้อความความต้องการเพิ่มเติม
    ========================================= */
 .remarks-box {
     flex: 1;
@@ -776,7 +818,7 @@ tr.included-row td { color: #888; }
     align-items: center;
     margin-bottom: 12px;
     font-size: 15px;
-    color: var(--brand-brown);
+    color: var(--text-dark);
 }
 .remarks-textarea {
     width: 100%;
@@ -797,7 +839,7 @@ tr.included-row td { color: #888; }
 }
 
 /* =========================================
-   2. ปุ่มเพิ่มรายการเพิ่มเติม (สีทองล้วน มีลูกเล่นตอนชี้)
+   2. ปุ่มเพิ่มรายการเพิ่มเติม (สีทองล้วน)
    ========================================= */
 .btn-add-item {
     background: var(--gold-mid) !important;
@@ -818,10 +860,10 @@ tr.included-row td { color: #888; }
 }
 
 /* =========================================
-   3. ปุ่มบันทึกการแก้ไข (เปลี่ยนเป็นสีเขียว)
+   3. ปุ่มบันทึกการแก้ไข (เขียวเข้ม)
    ========================================= */
 .btn-save-doc {
-    background: #28a745 !important;
+    background: var(--brand-green-dark) !important;
     color: #FFFFFF !important;
     border: none;
     padding: 12px 32px;
@@ -830,43 +872,160 @@ tr.included-row td { color: #888; }
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    box-shadow: 0 4px 12px rgba(92, 150, 69, 0.35);
 }
 .btn-save-doc:hover {
-    background: #218838 !important;
+    background: #4d7f3a !important;
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+    box-shadow: 0 6px 15px rgba(92, 150, 69, 0.45);
 }
 
 /* =========================================
-   4. ขยายกล่องสรุปยอดรวม (ให้กว้างขึ้นและชัดเจน)
+   4. ขยายกล่องสรุปยอดรวม
    ========================================= */
 .totals-box {
-    width: 360px !important; /* เพิ่มความกว้างจากเดิม 260px */
-    border: 2px solid var(--brand-brown) !important;
+    width: 360px !important;
+    border: 2px solid var(--brand-green-dark) !important;
     border-radius: 8px;
     overflow: hidden;
 }
 .totals-table td {
-    padding: 12px 18px !important; /* เพิ่มระยะขอบด้านในให้อ่านง่ายขึ้น */
+    padding: 12px 18px !important;
 }
 
 /* =========================================
-   5. แก้ปัญหาราคา/หน่วยไม่ขึ้น (บังคับแสดงสีข้อความและลบลูกศร)
+   5. ราคา/หน่วย (ตัวเลขอ่านง่าย ไม่มีลูกศร)
    ========================================= */
 .price-input, .price-input[readonly] {
     width: 100%;
     text-align: right;
-    color: #333333 !important; /* บังคับให้ตัวเลขเป็นสีเทาเข้ม */
+    color: #333333 !important;
     font-weight: 600 !important;
     background: transparent !important;
     border: none !important;
     outline: none !important;
-    -moz-appearance: textfield; /* ซ่อนลูกศรขึ้นลงใน Firefox */
+    -moz-appearance: textfield;
 }
-/* ซ่อนลูกศรขึ้นลงใน Chrome, Safari, Edge */
 .price-input::-webkit-outer-spin-button,
 .price-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+/* =========================================
+   6. ปุ่ม +/- และช่องกรอกจำนวน
+   ========================================= */
+#mainQuotationTable .qty-wrapper{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:nowrap;
+    white-space:nowrap;
+    gap: 4px;
+}
+#mainQuotationTable .btn-qty-edit{
+    flex:0 0 auto;
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: transparent;
+    color: #9CA3AF;
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    opacity: 0.75;
+}
+#mainQuotationTable .btn-qty-edit:hover{
+    opacity: 1;
+}
+#mainQuotationTable .qty-display{
+    font-weight: 600;
+    color: #333;
+    min-width: 14px;
+    text-align: center;
+}
+#mainQuotationTable .btn-qty-minus,
+#mainQuotationTable .btn-qty-plus{
+    flex:0 0 auto;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--brand-green-dark);
+    background: #FFFFFF;
+    color: var(--brand-green-dark);
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 2px;
+}
+#mainQuotationTable .btn-qty-minus:hover,
+#mainQuotationTable .btn-qty-plus:hover{
+    background: var(--green-glow);
+}
+#mainQuotationTable .qty-wrapper .qty-input{
+    flex:0 0 auto;
+    width: 38px;
+    text-align:center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 2px 0;
+}
+.qty-input[readonly] {
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    color: #333 !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+    -moz-appearance: textfield;
+    text-align: center;
+}
+.qty-input[readonly]::-webkit-outer-spin-button,
+.qty-input[readonly]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#mainQuotationTable tr.group-row td.category-header-text{
+    text-align: left !important;
+    padding-left: 8px !important;
+    padding-right: 12px !important;
+    white-space: nowrap;
+    color: var(--text-dark);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#mainQuotationTable tr.group-row td {
+    background-color: var(--green-glow);
+}
+#mainQuotationTable .btn-add-group-inline{
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--brand-green-dark);
+    background: #FFFFFF;
+    color: var(--brand-green-dark);
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+#mainQuotationTable .btn-add-group-inline:hover{
+    background: #FFFFFF;
+    transform: scale(1.05);
 }

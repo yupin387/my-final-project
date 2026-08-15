@@ -11,50 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bookingDetail.css">
-    <style>
-        /* ===== สรุปค่าใช้จ่ายโดยประมาณ (คำนวณฝั่ง JSTL ล้วน ไม่แตะ Controller/Java) ===== */
-        .cost-summary-box {
-            margin-top: 16px;
-            border: 2px solid var(--gold-mid, #b8860b);
-            border-radius: 14px;
-            overflow: hidden;
-            background: #fff;
-        }
-        .cost-summary-title {
-            background: #fdf3e7;
-            padding: 12px 18px;
-            font-weight: 700;
-            color: #7a4a1e;
-            border-bottom: 1px solid #e8d3a0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .cost-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 18px;
-            border-bottom: 1px dashed #eee2cf;
-            font-size: 0.98rem;
-        }
-        .cost-row:last-child { border-bottom: none; }
-        .cost-row .cost-label { color: #555; }
-        .cost-row .cost-value { font-weight: 600; color: #222; }
-        .cost-row.cost-discount .cost-value { color: #d9534f; }
-        .cost-row.cost-total {
-            background: #fff8f0;
-            padding: 14px 18px;
-        }
-        .cost-row.cost-total .cost-label { font-weight: 700; color: #7a4a1e; }
-        .cost-row.cost-total .cost-value { font-size: 1.25rem; font-weight: 800; color: #d9534f; }
-        .cost-summary-note {
-            padding: 8px 18px 14px;
-            font-size: 0.82rem;
-            color: #999;
-            font-style: italic;
-        }
-    </style>
 </head>
 <body>
 
@@ -346,32 +302,6 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-
-            <%-- ===== สรุปค่าใช้จ่ายโดยประมาณ ===== --%>
-            <div class="cost-summary-box">
-                <div class="cost-summary-title"><i class="bi bi-calculator-fill"></i> สรุปค่าใช้จ่ายโดยประมาณ</div>
-                <div class="cost-row">
-                    <span class="cost-label">${packageLabel}:</span>
-                    <span class="cost-value">฿<fmt:formatNumber value="${packageValue}" pattern="#,##0.00"/></span>
-                </div>
-                <c:if test="${additionalTotal > 0}">
-                    <div class="cost-row">
-                        <span class="cost-label">รายการเพิ่มเติม:</span>
-                        <span class="cost-value">฿<fmt:formatNumber value="${additionalTotal}" pattern="#,##0.00"/></span>
-                    </div>
-                </c:if>
-                <c:if test="${discountValue > 0}">
-                    <div class="cost-row cost-discount">
-                        <span class="cost-label">ส่วนลดนิมนต์เอง:</span>
-                        <span class="cost-value">- ฿<fmt:formatNumber value="${discountValue}" pattern="#,##0.00"/></span>
-                    </div>
-                </c:if>
-                <div class="cost-row cost-total">
-                    <span class="cost-label">ยอดรวมสุทธิ:</span>
-                    <span class="cost-value">฿<fmt:formatNumber value="${grandTotal}" pattern="#,##0.00"/></span>
-                </div>
-                <div class="cost-summary-note">* เป็นราคาประมาณการเบื้องต้นเท่านั้น ราคาจริงยืนยันอีกครั้งตอนออกใบเสนอราคา</div>
-            </div>
         </div>
 
         <hr class="divider">
@@ -413,7 +343,7 @@
 
             <c:forEach items="${b.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${sangWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${sanghatharnItems}" var="sItem"><c:if test="${sItem.itemName == fn:trim(d.answer)}"><span style="color:var(--gold-mid);font-size:13px;"> — ฿<fmt:formatNumber value="${sItem.pricePerUnit}" pattern="#,###"/> / ${sItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${sangWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${sanghatharnItems}" var="sItem"><c:if test="${sItem.itemName == fn:trim(d.answer)}"><span style="color:var(--gold-text);font-size:13px;"> — ฿<fmt:formatNumber value="${sItem.pricePerUnit}" pattern="#,###"/> / ${sItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
 
@@ -439,7 +369,7 @@
 
             <c:forEach items="${b.details}" var="d">
                 <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${pintoWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${pintoItems}" var="pItem"><c:if test="${pItem.itemName == fn:trim(d.answer)}"><span style="color:var(--gold-mid);font-size:13px;"> — ฿<fmt:formatNumber value="${pItem.pricePerUnit}" pattern="#,###"/> / ${pItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
+                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${pintoWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${pintoItems}" var="pItem"><c:if test="${pItem.itemName == fn:trim(d.answer)}"><span style="color:var(--gold-text);font-size:13px;"> — ฿<fmt:formatNumber value="${pItem.pricePerUnit}" pattern="#,###"/> / ${pItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
                 </c:if>
             </c:forEach>
 
@@ -463,6 +393,34 @@
                 </div>
             </c:if>
         </c:forEach>
+
+        <%-- ===== สรุปค่าใช้จ่ายโดยประมาณ — กล่องเล็ก ชิดขวา ก่อนแถบปุ่มด้านล่างสุด ===== --%>
+        <div class="cost-summary-wrap">
+            <div class="cost-summary-box">
+                <div class="cost-summary-title"><i class="bi bi-calculator-fill"></i> สรุปค่าใช้จ่ายโดยประมาณ</div>
+                <div class="cost-row">
+                    <span class="cost-label">${packageLabel}:</span>
+                    <span class="cost-value">฿<fmt:formatNumber value="${packageValue}" pattern="#,##0.00"/></span>
+                </div>
+                <c:if test="${additionalTotal > 0}">
+                    <div class="cost-row">
+                        <span class="cost-label">รายการเพิ่มเติม:</span>
+                        <span class="cost-value">฿<fmt:formatNumber value="${additionalTotal}" pattern="#,##0.00"/></span>
+                    </div>
+                </c:if>
+                <c:if test="${discountValue > 0}">
+                    <div class="cost-row cost-discount">
+                        <span class="cost-label">ส่วนลดนิมนต์เอง:</span>
+                        <span class="cost-value">- ฿<fmt:formatNumber value="${discountValue}" pattern="#,##0.00"/></span>
+                    </div>
+                </c:if>
+                <div class="cost-row cost-total">
+                    <span class="cost-label">ยอดรวมสุทธิ:</span>
+                    <span class="cost-value">฿<fmt:formatNumber value="${grandTotal}" pattern="#,##0.00"/></span>
+                </div>
+                <div class="cost-summary-note">* เป็นราคาประมาณการเบื้องต้นเท่านั้น ราคาจริงยืนยันอีกครั้งตอนออกใบเสนอราคา</div>
+            </div>
+        </div>
 
         <%-- Action Bar (คงปุ่มกดและฟังก์ชันเดิมตามเงื่อนไข) --%>
         <div class="action-bar">
@@ -488,27 +446,17 @@
     </div>
 </div>
 
-<%-- ===== FOOTER (คงเดิมตามเงื่อนไข) ===== --%>
-<footer class="footer-custom">
-    <div class="footer-container">
-        <div class="footer-left">
-            <div class="footer-brand">
-                <div class="footer-logo">
-                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา" onerror="this.style.display='none'">
-                </div>
-                <span class="footer-brand-title">บุญมีนำพา จัดงานบุญ</span>
-            </div>
-            <p class="footer-desc">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
-        <div class="footer-right">
-            <h5 class="footer-heading">ติดต่อเรา</h5>
-            <div class="footer-contact-list">
-                <div class="contact-item">📞 โทร. 08X-XXX-XXXX</div>
-                <div class="contact-item">💬 LINE OA: @boonmee</div>
-                <div class="contact-item">✉️ boonmee@gmail.com</div>
-            </div>
-        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>
+   
 </footer>
 
 <%-- Modal อนุมัติ (คงเดิมตามเงื่อนไข) --%>

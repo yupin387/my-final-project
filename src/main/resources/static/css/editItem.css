@@ -1,63 +1,71 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
+/* =========================================================
+   COLOR SYSTEM
+   ส้ม (หลัก, navbar/footer) + น้ำตาลอ่อน (ตัดในการ์ด) + ทอง (ตกแต่ง)
+   ธีมเดียวกับหน้า staffAssignmentList / itemList
+   ========================================================= */
 :root {
-    --gold:          #E0577F;
-    --gold-mid:      #EC6E96;
-    --gold-light:    #F49CB9;
-    --gold-pale:     #FBD0DE;
-    --gold-glow:     #FFE3EC;
+    /* พื้นหลังสีครีมอมพีชสว่างๆ */
+    --bg-light:       #FCF6F0;
 
-    --cream:         #FFFFFF;
-    --cream-warm:    #FFF6F9;
-    --cream-mid:     #FDEEF3;
-    --cream-border:  #F3C4D5;
-    --cream-border-soft: #F6D4E1;
+    /* สีหลัก — ส้มพีช/ส้มจีวร (navbar + footer) */
+    --peach-primary:  #E28F66;
+    --peach-hover:    #D17A4F;
+    --peach-pale:     #FDF0E8;
+    --peach-deep:     #B5613A;
 
-    --white:         #FFFFFF;
+    /* สีน้ำตาลอ่อน — ใช้ตัดกับส้มตรงแถบหัวการ์ด */
+    --brown-light:      #9C7852;
+    --brown-light-deep: #7C5A3B;
+    --brown-light-pale: #F3E9DE;
 
-    --text-dark:     #1A1A1A;
-    --text-mid:      #333333;
-    --text-body:     #444444;
-    --text-muted:    #777777;
-    --text-light:    #999999;
+    /* สีทอง — ใช้ตกแต่ง/เส้นคั่น */
+    --gold-primary:   #C99A3D;
+    --gold-hover:     #AD8130;
+    --gold-pale:      #FBF1DC;
+    --gold-light:     #F6E2BA;
 
-    --brown-dark:    #1A1A1A;
-    --brown-mid:     #3A3A3A;
+    /* สีน้ำตาลมอคค่า (ตัวหนังสือหลัก) */
+    --brown-text:     #5A4A42;
+    --brown-muted:    #8D7A70;
 
-    --accent-gold:      #D9A441;
-    --accent-gold-mid:  #E8C878;
-    --accent-gold-pale: #F7E3B0;
+    /* สีแจ้งเตือน */
+    --red-primary:    #D9534F;
+    --red-pale:       #FDF1F0;
 
-    --shadow-gold:   rgba(224, 87, 127, 0.16);
-    --shadow-warm:   rgba(224, 87, 127, 0.10);
+    /* สีขอบและเงา */
+    --white:          #FFFFFF;
+    --card-border:    #F5E6DD;
+    --shadow-soft:    rgba(226, 143, 102, 0.15);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
 
 body {
-    background-color: var(--cream-warm);
-    color: var(--text-dark);
+    background-color: var(--bg-light);
+    color: var(--brown-text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 /* ==========================================================================
-   NAVBAR (สีฟ้าครามเรียบ ไม่ไล่สี)
+   NAVBAR
    ========================================================================== */
 .navbar {
-    background: #4B85BE;
+    background: var(--peach-primary);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid #E2B85B;
+    border-bottom: 3px solid var(--gold-primary);
     min-height: 92px;
     position: sticky;
     top: 0;
     z-index: 10000;
     overflow: visible;
-    box-shadow: 0 4px 16px rgba(59, 107, 156, 0.25);
+    box-shadow: 0 4px 15px rgba(226, 143, 102, 0.2);
 }
 
 .navbar::before {
@@ -65,7 +73,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+    background: var(--gold-light);
 }
 
 .navbar-brand {
@@ -76,7 +84,7 @@ body {
 }
 
 .navbar .lotus-icon {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.25);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -87,19 +95,18 @@ body {
     justify-content: center;
     font-size: 32px;
     border: 1.5px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
     flex-shrink: 0;
     object-fit: cover;
 }
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 32px;
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .navbar-right {
@@ -117,17 +124,16 @@ body {
 .nav-item {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    font-family: 'Sarabun', sans-serif;
 }
 
-.nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
-.nav-item.active { background: #FFFFFF; color: #3A6B9C; font-weight: 700; }
+.nav-item:hover  { background: rgba(255, 255, 255, 0.3); color: #FFFFFF; }
+.nav-item.active { background: #FFFFFF; color: var(--peach-primary); font-weight: 700; }
 
 .user-info {
     display: flex;
@@ -147,7 +153,7 @@ body {
 
 .user-avatar {
     background: #FFFFFF;
-    color: #3A6B9C;
+    color: var(--peach-primary);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -169,10 +175,10 @@ body {
     top: calc(100% + 10px);
     right: 0;
     background: var(--white);
-    border: 1.5px solid #C5A044;
+    border: 1px solid var(--card-border);
     border-radius: 12px;
     min-width: 180px;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 28px var(--shadow-soft);
     z-index: 999;
     overflow: hidden;
 }
@@ -186,16 +192,16 @@ body {
     padding: 13px 18px;
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-mid);
+    color: var(--brown-text);
     text-decoration: none;
     transition: background 0.2s;
-    border-bottom: 1px solid var(--cream-mid);
+    border-bottom: 1px solid var(--card-border);
 }
 
 .dropdown-item:last-child { border-bottom: none; }
-.dropdown-item:hover { background: var(--cream-warm); color: var(--brown-dark); }
-.dropdown-item.danger { color: #c62828; }
-.dropdown-item.danger:hover { background: #fff0f0; color: #c62828; }
+.dropdown-item:hover { background: var(--peach-pale); color: var(--peach-hover); }
+.dropdown-item.danger { color: var(--red-primary); }
+.dropdown-item.danger:hover { background: var(--red-pale); color: var(--red-primary); }
 
 /* ==========================================================================
    FLASH / ALERT
@@ -208,9 +214,9 @@ body {
 }
 
 .alert.error {
-    background: #fff0f0;
-    color: #c62828;
-    border: 1px solid #ffb3b3;
+    background: var(--red-pale);
+    color: var(--red-primary);
+    border: 1px solid #F1B4B1;
 }
 
 /* ==========================================================================
@@ -229,10 +235,10 @@ body {
    ========================================================================== */
 .content-card {
     background: var(--white);
-    border-radius: 20px;
+    border-radius: 12px;
     overflow: hidden;
-    border: 1.5px solid var(--accent-gold);
-    box-shadow: 0 6px 32px var(--shadow-warm);
+    border: 1.5px solid var(--card-border);
+    box-shadow: 0 8px 30px var(--shadow-soft);
     width: 100%;
     max-width: 700px;
     position: relative;
@@ -243,24 +249,18 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg,
-        transparent,
-        var(--accent-gold-pale) 20%,
-        var(--accent-gold) 50%,
-        var(--accent-gold-pale) 80%,
-        transparent
-    );
+    background: var(--gold-primary);
     z-index: 1;
 }
 
 /* ==========================================================================
-   CARD HEADER (หัวข้อหลัก)
+   CARD HEADER (หัวข้อหลัก) — สีน้ำตาลอ่อนตัดกับส้มของ navbar
    ========================================================================== */
 .card-header-bar {
-    background: #3A6B9C;
+    background: var(--brown-light);
     padding: 28px 32px 22px;
     text-align: center;
-    border-bottom: 2px solid var(--accent-gold-mid);
+    border-bottom: 2px solid var(--brown-light-deep);
     position: relative;
 }
 
@@ -269,7 +269,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
+    background: var(--gold-primary);
 }
 
 .header-ornament {
@@ -283,35 +283,34 @@ body {
 .header-ornament .orn-line {
     width: 46px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold-pale));
+    background: var(--gold-light);
 }
 
 .header-ornament .orn-line.right {
-    background: linear-gradient(90deg, var(--accent-gold-pale), transparent);
+    background: var(--gold-light);
 }
 
 .header-ornament .orn-diamond {
     width: 8px;
     height: 8px;
-    background: var(--accent-gold-pale);
+    background: var(--gold-light);
     transform: rotate(45deg);
     flex-shrink: 0;
-    box-shadow: 0 0 6px rgba(247, 227, 176, 0.7);
+    box-shadow: 0 0 6px rgba(246, 226, 186, 0.7);
 }
 
 .card-header-bar h1 {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 26px;
     font-weight: 700;
     margin-bottom: 6px;
     color: #FFFFFF;
-    text-shadow: 0 1px 10px rgba(0,0,0,0.15);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.15);
     display: inline-block;
 }
 
 .card-header-bar p {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.88);
 }
 
 /* ==========================================================================
@@ -325,7 +324,7 @@ body {
 .section-label {
     font-size: 13px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--brown-muted);
     margin-bottom: 14px;
     display: flex;
     align-items: center;
@@ -338,7 +337,7 @@ body {
     content: '';
     flex: 1;
     height: 1px;
-    background: var(--cream-border);
+    background: var(--card-border);
 }
 
 /* ==========================================================================
@@ -353,7 +352,7 @@ body {
 .form-group label {
     font-size: 13px;
     font-weight: 700;
-    color: var(--brown-dark);
+    color: var(--brown-text);
 }
 
 .form-group input[type="text"],
@@ -362,12 +361,12 @@ body {
 .form-group textarea {
     width: 100%;
     padding: 11px 14px;
-    border: 1.5px solid var(--cream-border-soft);
+    border: 1.5px solid var(--card-border);
     border-radius: 8px;
     font-size: 14px;
     outline: none;
-    background: var(--cream-warm);
-    color: #333;
+    background: var(--bg-light);
+    color: var(--brown-text);
     font-family: 'Sarabun', sans-serif;
     transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
@@ -375,13 +374,13 @@ body {
 .form-group textarea { height: 100px; resize: vertical; line-height: 1.6; }
 
 .form-group input::placeholder,
-.form-group textarea::placeholder { color: #C98BA3; }
+.form-group textarea::placeholder { color: #CBAF9A; }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
+    border-color: var(--gold-primary);
+    box-shadow: 0 0 0 3px rgba(201, 154, 61, 0.18);
     background: #FFFFFF;
 }
 
@@ -393,23 +392,23 @@ body {
 
 .type-label {
     padding: 8px 18px;
-    border: 1.5px solid var(--cream-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
-    background: var(--cream-warm);
-    color: var(--text-mid);
+    background: var(--bg-light);
+    color: var(--brown-text);
     transition: all 0.2s;
 }
 
-.type-label:hover { background: var(--cream-mid); border-color: var(--accent-gold); }
+.type-label:hover { background: var(--peach-pale); border-color: var(--gold-primary); }
 
 .type-options input[type="radio"]:checked + .type-label {
-    background: var(--accent-gold);
+    background: var(--gold-primary);
     color: #FFFFFF;
-    border-color: var(--accent-gold);
-    box-shadow: 0 2px 8px var(--shadow-gold);
+    border-color: var(--gold-primary);
+    box-shadow: 0 2px 8px var(--shadow-soft);
 }
 
 /* ==========================================================================
@@ -419,10 +418,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    background: var(--cream-warm);
+    background: var(--bg-light);
     padding: 16px;
     border-radius: 10px;
-    border: 1.5px solid var(--cream-border);
+    border: 1.5px solid var(--card-border);
 }
 
 .ceremony-type-group { display: flex; flex-direction: column; gap: 8px; }
@@ -430,11 +429,11 @@ body {
 .ceremony-type-heading {
     font-size: 12px;
     font-weight: 700;
-    color: var(--accent-gold);
+    color: var(--gold-hover);
     text-transform: uppercase;
     letter-spacing: 0.4px;
     padding-bottom: 4px;
-    border-bottom: 1px dashed var(--cream-border);
+    border-bottom: 1px dashed var(--card-border);
 }
 
 .ceremony-type-options { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -444,7 +443,7 @@ body {
 .ceremony-item input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: var(--gold);
+    accent-color: var(--peach-primary);
     cursor: pointer;
     flex-shrink: 0;
 }
@@ -452,7 +451,7 @@ body {
 .ceremony-check-label {
     font-size: 14px;
     font-weight: 600;
-    color: var(--brown-dark);
+    color: var(--brown-text);
     cursor: pointer;
 }
 
@@ -461,7 +460,7 @@ body {
    ========================================================================== */
 .divider {
     border: none;
-    border-top: 1px solid var(--cream-mid);
+    border-top: 1px solid var(--brown-light-pale);
     margin: 4px 0;
 }
 
@@ -471,7 +470,7 @@ body {
 .form-actions { display: flex; gap: 12px; align-items: center; }
 
 .btn-submit {
-    background: var(--accent-gold);
+    background: var(--peach-primary);
     color: #FFFFFF;
     border: none;
     border-radius: 10px;
@@ -480,20 +479,19 @@ body {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
-    font-family: 'Sarabun', sans-serif;
-    box-shadow: 0 4px 14px var(--shadow-gold);
+    box-shadow: 0 4px 14px var(--shadow-soft);
 }
 
 .btn-submit:hover {
-    opacity: 0.92;
+    background: var(--peach-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(224, 87, 127, 0.4);
+    box-shadow: 0 6px 20px rgba(226, 143, 102, 0.35);
 }
 
 .btn-cancel {
     background: #FFFFFF;
-    color: var(--brown-mid);
-    border: 1.5px solid var(--cream-border);
+    color: var(--brown-text);
+    border: 1.5px solid var(--card-border);
     border-radius: 10px;
     padding: 12px 24px;
     font-size: 15px;
@@ -501,27 +499,51 @@ body {
     text-decoration: none;
     display: inline-block;
     transition: all 0.2s;
-    font-family: 'Sarabun', sans-serif;
     cursor: pointer;
 }
 
 .btn-cancel:hover {
-    background: var(--cream-warm);
-    border-color: var(--accent-gold);
-    color: var(--brown-dark);
+    background: var(--peach-pale);
+    border-color: var(--gold-primary);
+    color: var(--brown-text);
 }
 
 /* ==========================================================================
-   FOOTER (สีฟ้าครามเรียบ)
+   LOTUS CORNER DECORATION
+   ========================================================================== */
+.lotus-decoration {
+    position: absolute;
+    bottom: 0;
+    right: 24px;
+    width: 170px;
+    height: auto;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 500;
+}
+
+@media (max-width: 768px) {
+    .lotus-decoration { width: 100px; right: 16px; }
+}
+
+/* ==========================================================================
+   FOOTER — ส้มเหมือน navbar
    ========================================================================== */
 .site-footer {
-    background: #4B85BE;
-    color: rgba(255, 255, 255, 0.92);
+    background: var(--peach-primary);
+    color: rgba(255, 255, 255, 0.95);
     margin-top: auto;
-    border-top: 3px solid #E2B85B;
-    box-shadow: 0 -6px 18px rgba(59, 107, 156, 0.2);
+    border-top: 3px solid var(--gold-primary);
     position: relative;
     z-index: 2;
+}
+
+.site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold-light);
 }
 
 .footer-content {
@@ -532,7 +554,7 @@ body {
     gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 30px 24px;
+    padding: 25px 24px;
 }
 
 .footer-brand {
@@ -548,20 +570,19 @@ body {
     max-width: 40px;
     max-height: 40px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
     object-fit: cover;
     flex-shrink: 0;
 }
 
 .footer-brand-text {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;
 }
 
 .footer-tagline {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.9);
 }
 

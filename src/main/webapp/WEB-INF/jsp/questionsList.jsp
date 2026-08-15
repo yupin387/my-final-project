@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -95,7 +96,7 @@
             <thead>
                 <tr>
                     <th width="8%">ลำดับ</th>
-                    <th width="52%">ข้อความคำถาม</th>
+                    <th width="40%">ข้อความคำถาม</th>
                     <th width="22%">ประเภทพิธี</th>
                     <th width="18%">จัดการ</th>
                 </tr>
@@ -108,9 +109,22 @@
                         <td>
                             <c:choose>
                                 <c:when test="${not empty q.ceremonies}">
-                                    <c:forEach var="cm" items="${q.ceremonies}">
-                                        <span class="ceremony-tag">${cm.ceremonyType}</span>
-                                    </c:forEach>
+                                    <c:choose>
+                                        <%-- กำลังกรองดูเฉพาะพิธีใดพิธีหนึ่งอยู่ -> โชว์แค่แท็กของพิธีนั้นพิธีเดียว --%>
+                                        <c:when test="${not empty selectedCeremonyType and selectedCeremonyType ne 'all'}">
+                                            <span class="ceremony-tag">${selectedCeremonyType}</span>
+                                        </c:when>
+                                        <%-- ดู "ทั้งหมด" -> โชว์ประเภทพิธีที่เกี่ยวข้องแบบไม่ซ้ำ (สูงสุดตามประเภทจริง) --%>
+                                        <c:otherwise>
+                                            <c:set var="shownTypes" value="|" />
+                                            <c:forEach var="cm" items="${q.ceremonies}">
+                                                <c:if test="${not fn:contains(shownTypes, '|'.concat(cm.ceremonyType).concat('|'))}">
+                                                    <span class="ceremony-tag">${cm.ceremonyType}</span>
+                                                    <c:set var="shownTypes" value="${shownTypes}${cm.ceremonyType}|" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:when>
                                 <c:otherwise>
                                     <span class="ceremony-tag all-tag">ใช้กับทุกประเภทพิธี</span>
