@@ -275,12 +275,13 @@ body {
     box-sizing: border-box;
 }
 
-/* ฝั่งขวา: ตารางสรุปยอด */
+/* ฝั่งขวา: ตารางสรุปยอด (ตั้งให้ชิดขวาเสมอแม้ไม่มีกล่องฝั่งซ้าย) */
 .totals-wrap { 
     display: flex; 
     justify-content: flex-end; 
     margin-top: 0; 
     flex-shrink: 0;
+    margin-left: auto; 
 }
 .totals-box { 
     width: 350px; 
@@ -365,6 +366,6 @@ body {
     .doc-meta-row { flex-direction: column; }
     .sheet { width: 100%; padding: 20px 14px; }
     .summary-flex-row { flex-direction: column; }
-    .totals-wrap { width: 100%; justify-content: flex-start; }
+    .totals-wrap { width: 100%; justify-content: flex-start; margin-left: 0; }
     .totals-box { width: 100%; }
 }

@@ -147,23 +147,26 @@
         </div>
     </div>
 
-    <%-- ===== แถวปุ่มกรองดาวด้านล่าง (ขนาดใหญ่ขึ้น) ===== --%>
-    <div class="star-filter-row">
-        <c:forEach begin="1" end="5" var="i">
-            <c:set var="star"  value="${6 - i}"/>
-            <c:set var="count" value="${starCounts[star] != null ? starCounts[star] : 0}"/>
-
-            <c:url var="urlStarBtn" value="/reviews">
-                <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
-                <c:param name="rating" value="${star}"/>
-            </c:url>
-
-            <a href="${urlStarBtn}" class="btn-star-filter ${selectedRating == star ? 'active-link' : ''}">
-                ${star}<span class="btn-star-filter-icon">★</span>
-                <span class="btn-star-filter-count">(${count})</span>
-            </a>
-        </c:forEach>
-    </div>
+    <%-- ===== แถวปุ่มกรองดาวด้านล่าง (ขนาดใหญ่ขึ้น)
+     FIX: กดปุ่มดาวที่กำลังกรองอยู่ซ้ำ (toggle) จะเอาตัวกรอง rating ออก
+     กลับไปแสดงทั้งหมด หรือทั้งหมดของประเภทงานที่เลือกอยู่ (ถ้ามีการกรอง type ค้างอยู่) ===== --%>
+	<div class="star-filter-row">
+	    <c:forEach begin="1" end="5" var="i">
+	        <c:set var="star"  value="${6 - i}"/>
+	        <c:set var="count" value="${starCounts[star] != null ? starCounts[star] : 0}"/>
+	        <c:set var="isActiveStar" value="${selectedRating == star}"/>
+	
+	        <c:url var="urlStarBtn" value="/reviews">
+	            <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+	            <c:if test="${!isActiveStar}"><c:param name="rating" value="${star}"/></c:if>
+	        </c:url>
+	
+	        <a href="${urlStarBtn}" class="btn-star-filter ${isActiveStar ? 'active-link' : ''}">
+	            ${star}<span class="btn-star-filter-icon">★</span>
+	            <span class="btn-star-filter-count">(${count})</span>
+	        </a>
+	    </c:forEach>
+	</div>
 
     <%-- ========== KANOK DIVIDER ========== --%>
     <svg viewBox="0 0 860 32" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%; height:32px; margin: 12px 0 28px;">

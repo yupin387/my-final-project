@@ -25,9 +25,10 @@
     --text-body:         #444444;
     --text-muted:        #777777;
     --text-light:        #999999;
-
-    --brown-dark:        #1A1A1A;
-    --brown-mid:         #3A3A3A;
+    
+    /* แก้ให้ตรงกับธีมของหน้าอื่น (myBookings, viewBooking ฯลฯ) */
+	--brown-dark:        #7A2340;
+	--brown-mid:         #A83A5C;
 
     --shadow-gold:       rgba(224, 87, 127, 0.14);
     --shadow-warm:       rgba(0, 0, 0, 0.07);
@@ -42,6 +43,7 @@
     --footer-dark-2: #ECC974;
     --footer-dark-3: #D6A544;
 }
+
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 

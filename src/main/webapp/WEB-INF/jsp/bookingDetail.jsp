@@ -7,18 +7,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>รายละเอียดการจอง - บุญมีนำพา จัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+    <title>ใบสรุปรายละเอียดการจอง #${b.bookingId} - บุญมีนำพา</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bookingDetail.css">
+    <style>
+        /* ซ่อนดอกไม้/ใบบัวตกแต่งที่อาจบังข้อความ */
+        .sheet-header .lotus-overlay, .document-title-box::after, .document-title-box::before, .sheet-header::after {
+            display: none !important;
+        }
+
+        /* ===== สรุปค่าใช้จ่ายโดยประมาณ (คำนวณฝั่ง JS/JSTL เทียบเท่าฝั่ง Member) ===== */
+        .cost-summary-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        .cost-summary-box {
+            border: 2px solid var(--accent-gold, #d4af37);
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fff;
+            width: 100%;
+            max-width: 380px;
+        }
+        .cost-summary-title {
+            background: var(--cream-warm, #fdf3e7);
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--accent-brown, #7a4a1e);
+            border-bottom: 1px solid var(--accent-gold-pale, #e8d3a0);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cost-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 16px;
+            border-bottom: 1px dashed var(--cream-border-soft, #eee2cf);
+            font-size: 0.86rem;
+        }
+        .cost-row:last-child { border-bottom: none; }
+        .cost-row .cost-label { color: var(--text-mid, #555); }
+        .cost-row .cost-value { font-weight: 600; color: #222; }
+        .cost-row.cost-discount .cost-value { color: #d9534f; }
+        .cost-row.cost-total {
+            background: #fff8f0;
+            padding: 11px 16px;
+        }
+        .cost-row.cost-total .cost-label { font-weight: 700; color: var(--accent-brown, #7a4a1e); font-size: 0.86rem; }
+        .cost-row.cost-total .cost-value { font-size: 1.05rem; font-weight: 800; color: #d9534f; }
+        .cost-summary-note {
+            padding: 6px 16px 10px;
+            font-size: 0.74rem;
+            color: #999;
+            font-style: italic;
+        }
+        @media (max-width: 868px) {
+            .cost-summary-wrapper { justify-content: stretch; }
+            .cost-summary-box { max-width: 100%; }
+        }
+    </style>
 </head>
 <body>
 
-<%-- ===== NAVBAR (คงเดิมตามเงื่อนไข) ===== --%>
+<%-- ===== NAVBAR (คงเดิมตามระบบ Organizer) ===== --%>
 <nav class="navbar">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/organizer/bookings" style="text-decoration: none;">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-             alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
+             alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon" onerror="this.style.display='none'">
         <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
@@ -51,33 +112,34 @@
         <a href="${pageContext.request.contextPath}/organizer/bookings" class="back-link"><i class="bi bi-arrow-left"></i> กลับรายการจอง</a>
     </div>
 
-    <%-- เอกสารแผ่นกระดาษ (Paper Sheet Document) --%>
+    <%-- กระดาษเอกสารใบสรุปการจอง --%>
     <div class="booking-sheet-document">
-
-        <%-- Header เอกสารส่วนหัว --%>
-        <div class="sheet-header">
-            <div class="company-brand">
+        
+        <%-- Header เอกสาร --%>
+        <div class="sheet-header" style="flex-direction: row; justify-content: space-between; align-items: flex-start; text-align: left;">
+            <div class="company-brand" style="align-self: center;">
                 <div class="brand-logo">
                     <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา" onerror="this.style.display='none'">
                 </div>
                 <div>
-                    <h1 class="company-name">บุญมีนำพา รับจัดงานบุญ</h1>
-                    <p class="company-sub">บริการรับจัดงานบุญ พิธีทำบุญบ้าน และงานพิธีสงฆ์ทุกรูปแบบ</p>
+                    <h1 class="company-name" style="text-align: left;">บุญมีนำพา รับจัดงานบุญ</h1>
+                    <p class="company-sub" style="text-align: left;">บริการรับจัดงานบุญ พิธีทำบุญบ้าน และงานพิธีสงฆ์ทุกรูปแบบ</p>
                 </div>
             </div>
             
-            <div class="document-title-box">
-                <h2 class="doc-title">สรุปรายละเอียดการจอง</h2>
-                <div class="doc-no">รหัสการจอง: <strong>#${b.bookingId}</strong></div>
-                <div style="margin-top: 8px;">
+            <div class="document-title-box" style="padding-top: 0; text-align: right;">
+                <h2 class="doc-title">ใบสรุปรายละเอียดการจอง</h2>
+                <div class="doc-no">รหัสรายการจอง: <strong>#${b.bookingId}</strong></div>
+                <div class="mt-2">
                     <span class="status-pill status-${fn:toLowerCase(b.bookingStatus)}">
                         <c:choose>
                             <c:when test="${b.bookingStatus == 'Pending'}">รอดำเนินการ</c:when>
-                            <c:when test="${b.bookingStatus == 'Approved'}">รับงานแล้ว</c:when>
-                            <c:when test="${b.bookingStatus == 'Quoted'}">เสนอราคาแล้ว</c:when>
+                            <c:when test="${b.bookingStatus == 'Approved'}">อนุมัติแล้ว</c:when>
+                            <c:when test="${b.bookingStatus == 'Quoted'}">ออกใบเสนอราคาแล้ว</c:when>
                             <c:when test="${b.bookingStatus == 'Confirmed'}">ยืนยันแล้ว</c:when>
-                            <c:when test="${b.bookingStatus == 'Rejected'}">ปฏิเสธแล้ว</c:when>
                             <c:when test="${b.bookingStatus == 'Completed'}">เสร็จสิ้น</c:when>
+                            <c:when test="${b.bookingStatus == 'Rejected'}">ปฏิเสธแล้ว</c:when>
+                            <c:when test="${b.bookingStatus == 'Cancelled'}">ยกเลิกแล้ว</c:when>
                             <c:otherwise>${b.bookingStatus}</c:otherwise>
                         </c:choose>
                     </span>
@@ -87,31 +149,54 @@
 
         <hr class="sheet-divider-bold">
 
-        <%-- 1. ข้อมูลผู้จอง + วันและสถานที่ (ปรับเป็น 2 คอลัมน์) --%>
+        <%-- 1. ข้อมูลผู้ใช้บริการ & กำหนดการ --%>
         <div class="section">
-            <div class="sheet-cols">
-                <div class="sheet-box">
-                    <div class="section-title"><i class="bi bi-person-fill"></i> ข้อมูลผู้ใช้บริการ</div>
-                    <div class="info-row"><span class="info-label">ชื่อ-นามสกุล</span><span class="info-value">คุณ ${b.member.memberFirstName} ${b.member.memberLastName}</span></div>
-                    <div class="info-row"><span class="info-label">เบอร์โทรศัพท์</span><span class="info-value">${b.member.phoneNumber}</span></div>
-                    <c:if test="${not empty b.member.memberEmail}">
-                        <div class="info-row"><span class="info-label">อีเมล</span><span class="info-value">${b.member.memberEmail}</span></div>
-                    </c:if>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="sheet-box">
+                        <div class="section-title"><i class="bi bi-person-fill"></i> ข้อมูลผู้ใช้บริการ</div>
+                        <div class="info-row">
+                            <span class="info-label">ชื่อ-นามสกุล</span>
+                            <span class="info-value">คุณ ${b.member.memberFirstName} ${b.member.memberLastName}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">เบอร์โทรศัพท์</span>
+                            <span class="info-value">${b.member.phoneNumber}</span>
+                        </div>
+                        <c:if test="${not empty b.member.memberEmail}">
+                            <div class="info-row">
+                                <span class="info-label">อีเมล</span>
+                                <span class="info-value">${b.member.memberEmail}</span>
+                            </div>
+                        </c:if>
+                    </div>
                 </div>
-                <div class="sheet-box">
-                    <div class="section-title"><i class="bi bi-calendar-event-fill"></i> กำหนดการและสถานที่</div>
-                    <div class="info-row"><span class="info-label">วันที่จัดงาน</span><span class="info-value"><fmt:formatDate value="${b.eventDate}" pattern="dd MMMM yyyy"/></span></div>
-                    <div class="info-row"><span class="info-label">เวลาเริ่มพิธี</span><span class="info-value">${b.eventTime} น.</span></div>
-                    <div class="info-row"><span class="info-label">สถานที่จัดงาน</span><span class="info-value">${b.eventAddress}</span></div>
+
+                <div class="col-md-6">
+                    <div class="sheet-box">
+                        <div class="section-title"><i class="bi bi-calendar-event-fill"></i> กำหนดการและสถานที่</div>
+                        <div class="info-row">
+                            <span class="info-label">วันที่จัดงาน</span>
+                            <span class="info-value"><fmt:formatDate value="${b.eventDate}" pattern="dd MMMM yyyy"/></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">เวลาเริ่มพิธี</span>
+                            <span class="info-value">${b.eventTime} น.</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">สถานที่จัดงาน</span>
+                            <span class="info-value">${b.eventAddress}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <%-- 2. แผนที่ + รูปภาพสถานที่จัดงาน (2 คอลัมน์) --%>
+        <%-- 2. แผนที่และรูปภาพสถานที่ --%>
         <c:if test="${not empty b.eventAddress}">
-            <div class="section" style="padding-top: 0;">
-                <div class="sheet-cols">
-                    <div>
+            <div class="section pt-0">
+                <div class="row g-4">
+                    <div class="col-md-6">
                         <div class="section-title"><i class="bi bi-geo-alt-fill"></i> แผนที่ปักหมุดสถานที่</div>
                         <c:set var="mapQuery" value="${not empty b.eventLat && not empty b.eventLng ? b.eventLat += ',' += b.eventLng : fn:escapeXml(b.eventAddress)}" />
                         <div class="map-container">
@@ -123,7 +208,8 @@
                             <i class="bi bi-box-arrow-up-right"></i> เปิดนำทางใน Google Maps
                         </a>
                     </div>
-                    <div>
+
+                    <div class="col-md-6">
                         <div class="section-title"><i class="bi bi-images"></i> รูปภาพสถานที่ประกอบ</div>
                         <c:choose>
                             <c:when test="${not empty b.addressImage}">
@@ -131,300 +217,204 @@
                                     <c:forEach items="${fn:split(b.addressImage, ',')}" var="imgFile">
                                         <c:set var="trimmed" value="${fn:trim(imgFile)}"/>
                                         <c:if test="${not empty trimmed}">
-                                            <img src="${pageContext.request.contextPath}/uploads/address/${trimmed}" class="location-img" onerror="this.style.display='none'">
+                                            <img src="${pageContext.request.contextPath}/uploads/address/${trimmed}" class="location-img" alt="สถานที่จัดงาน" onerror="this.style.display='none'">
                                         </c:if>
                                     </c:forEach>
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <div class="no-img-box"><i class="bi bi-image"></i> ไม่มีรูปภาพสถานที่</div>
+                                <div class="no-img-box">
+                                    <i class="bi bi-image"></i> ไม่มีรูปภาพสถานที่
+                                </div>
                             </c:otherwise>
                         </c:choose>
                     </div>
                 </div>
             </div>
         </c:if>
-        
+
         <hr class="divider">
 
-        <%-- ===================================================================
-             คำนวณค่าใช้จ่ายโดยประมาณล่วงหน้า (JSTL ล้วน ไม่แตะ Java/Controller)
-             ใช้ค่าจาก packageItems / pintoItems / sanghatharnItems ที่มีอยู่แล้ว
-             =================================================================== --%>
+        <%-- ตัวแปรควบคุมการแสดงผล --%>
+        <c:set var="basePriceVal" value="${b.ceremony.basePrice}" />
+        <c:set var="isCustomRequest" value="${empty basePriceVal || basePriceVal == 0 || fn:indexOf(b.ceremony.ceremonyName, 'กรอกความต้องการ') ne -1}" />
 
-        <%-- -- การนิมนต์พระสงฆ์ -- --%>
-        <c:set var="monkType" value=""/>
-        <c:set var="monkQty" value="0"/>
-        <c:forEach items="${b.details}" var="d">
-            <c:if test="${fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')}">
-                <c:set var="monkType" value="${fn:trim(d.answer)}"/>
-            </c:if>
-            <c:if test="${fn:contains(d.question.questionsText, 'จำนวนพระ')}">
-                <c:set var="monkQty" value="${empty fn:trim(d.answer) ? 0 : fn:trim(d.answer)}"/>
+        <c:set var="sanghaChoice" value="" />
+        <c:forEach items="${b.details}" var="dd">
+            <c:if test="${dd.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
+                <c:set var="sanghaChoice" value="${fn:trim(dd.answer)}" />
             </c:if>
         </c:forEach>
-        <c:set var="isSelfInvite" value="${fn:contains(monkType, 'นิมนต์เอง')}"/>
+        <c:set var="showSanghaSeparately" value="${isCustomRequest || (not empty sanghaChoice && sanghaChoice ne 'ชุดสังฆทานมาตรฐาน')}" />
+        <c:set var="hideSangha" value="${!showSanghaSeparately}" />
 
-        <%-- -- สังฆทาน -- --%>
-        <c:set var="sangWant" value="ต้องการ"/>
-        <c:set var="sanghaChoiceName" value=""/>
-        <c:set var="sanghaQty" value="0"/>
-        <c:forEach items="${b.details}" var="d">
-            <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน') && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
-                <c:set var="sangWant" value="${fn:trim(d.answer)}"/>
-            </c:if>
-            <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
-                <c:set var="sanghaChoiceName" value="${fn:trim(d.answer)}"/>
-            </c:if>
-            <c:if test="${fn:contains(d.question.questionsText, 'จำนวน') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
-                <c:set var="sanghaQty" value="${empty fn:trim(d.answer) ? 0 : fn:trim(d.answer)}"/>
-            </c:if>
-        </c:forEach>
-        <%-- ชุดสังฆทานมาตรฐาน (299) แถมฟรีในแพ็กเกจอยู่แล้ว: ถ้าเลือกชุดนี้ ให้ซ่อนหัวข้อทั้งหมด + ไม่คิดราคาเพิ่ม --%>
-        <c:set var="hideSangha" value="${sanghaChoiceName eq 'ชุดสังฆทานมาตรฐาน'}"/>
-        <c:set var="sanghaPrice" value="0"/>
-        <c:if test="${not hideSangha}">
-            <c:forEach items="${sanghatharnItems}" var="sItem2">
-                <c:if test="${sItem2.itemName eq sanghaChoiceName}">
-                    <c:set var="sanghaPrice" value="${sItem2.pricePerUnit}"/>
-                </c:if>
-            </c:forEach>
-        </c:if>
-        <c:set var="sanghaTotal" value="0"/>
-        <c:if test="${sangWant == 'ต้องการ' && not hideSangha}">
-            <c:set var="sanghaTotal" value="${sanghaPrice * sanghaQty}"/>
-        </c:if>
-
-        <%-- -- ปิ่นโต -- --%>
-        <c:set var="pintoWant" value="ไม่ต้องการ"/>
-        <c:set var="pintoChoiceName" value=""/>
-        <c:set var="pintoQty" value="0"/>
-        <c:forEach items="${b.details}" var="d">
-            <c:if test="${(fn:contains(d.question.questionsText, 'ภัตตาหาร') || fn:contains(d.question.questionsText, 'ปิ่นโต')) && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
-                <c:set var="pintoWant" value="${fn:trim(d.answer)}"/>
-            </c:if>
-            <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
-                <c:set var="pintoChoiceName" value="${fn:trim(d.answer)}"/>
-            </c:if>
-            <c:if test="${fn:contains(d.question.questionsText, 'จำนวน') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
-                <c:set var="pintoQty" value="${empty fn:trim(d.answer) ? 0 : fn:trim(d.answer)}"/>
-            </c:if>
-        </c:forEach>
-        <c:set var="pintoPrice" value="0"/>
-        <c:forEach items="${pintoItems}" var="pItem2">
-            <c:if test="${pItem2.itemName eq pintoChoiceName}">
-                <c:set var="pintoPrice" value="${pItem2.pricePerUnit}"/>
-            </c:if>
-        </c:forEach>
-        <c:set var="pintoTotal" value="0"/>
-        <c:if test="${pintoWant == 'ต้องการ'}">
-            <c:set var="pintoTotal" value="${pintoPrice * pintoQty}"/>
-        </c:if>
-
-        <c:set var="additionalTotal" value="${pintoTotal + sanghaTotal}"/>
-
-        <%-- -- ประเภทงาน: แพ็กเกจ หรือ กรอกความต้องการเบื้องต้น -- --%>
-        <c:set var="isCustomRequest" value="${b.ceremony.basePrice == 0 || fn:contains(b.ceremony.ceremonyName, 'กรอกความต้องการ')}"/>
-
-        <c:if test="${isCustomRequest}">
-            <%-- รวมราคารายการที่ระบบจัดให้อัตโนมัติ (ไม่รวมประเภทแพ็กเกจ/อุปกรณ์เสริม) --%>
-            <c:set var="fixedItemsTotal" value="0"/>
-            <c:forEach var="pi2" items="${packageItems}">
-                <c:if test="${pi2.item.itemType.itemTypeId != 5 && pi2.item.itemType.itemTypeId != 6}">
-                    <c:set var="fixedItemsTotal" value="${fixedItemsTotal + (pi2.item.pricePerUnit * pi2.quantity)}"/>
-                </c:if>
-            </c:forEach>
-            <%-- ค่านิมนต์พระ 1,300/รูป (บริการนิมนต์ 500 + อาสนะ 250 + ตาลปัตร 350 + กรวยดอกไม้ 200) เฉพาะกรณีไม่ได้นิมนต์เอง --%>
-            <c:set var="monkCost" value="0"/>
-            <c:if test="${not isSelfInvite}">
-                <c:set var="monkCost" value="${monkQty * 1300}"/>
-            </c:if>
-            <c:set var="packageLabel" value="ค่าบริการพื้นฐาน (ตามรายการที่จัดให้)"/>
-            <c:set var="packageValue" value="${fixedItemsTotal + monkCost}"/>
-            <c:set var="discountValue" value="0"/>
-        </c:if>
-        <c:if test="${not isCustomRequest}">
-            <c:set var="packageLabel" value="ราคาแพ็กเกจ"/>
-            <c:set var="packageValue" value="${b.ceremony.basePrice}"/>
-            <c:set var="discountValue" value="${isSelfInvite ? 1500 : 0}"/>
-        </c:if>
-
-        <c:set var="grandTotal" value="${packageValue + additionalTotal - discountValue}"/>
-
-        <%-- 3. รายละเอียดงานบุญและแพ็กเกจ --%>
+        <%-- 3. รายละเอียดแพ็กเกจ / ความต้องการ --%>
         <div class="section">
-            <div class="section-title"><i class="bi bi-box-seam-fill"></i> รายละเอียดแพ็กเกจงานบุญ</div>
+            <div class="section-title">
+                <i class="bi bi-box-seam-fill"></i>
+                <c:choose>
+                    <c:when test="${isCustomRequest}">รายละเอียดงานบุญ (แจ้งความต้องการเบื้องต้น)</c:when>
+                    <c:otherwise>รายละเอียดแพ็กเกจงานบุญ</c:otherwise>
+                </c:choose>
+            </div>
             
-            <div class="sheet-box" style="margin-bottom: 16px;">
-                <div class="info-row">
-                    <span class="info-label">ประเภทงานบุญ</span>
-                    <span class="info-value">${b.ceremony.ceremonyType}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">ชื่อแพ็กเกจ</span>
-                    <span class="info-value">
-                        ${b.ceremony.ceremonyName}
-                        <c:if test="${not empty b.ceremony.ceremonyDetail}">
-                            <div style="font-weight:400;font-size:13px;color:var(--gold-mid);margin-top:2px;">${b.ceremony.ceremonyDetail}</div>
-                        </c:if>
-                    </span>
-                </div>
-                <c:if test="${b.ceremony.basePrice > 0}">
-                    <div class="info-row">
-                        <span class="info-label">ราคาเริ่มต้น</span>
-                        <span class="info-value price-text">฿<fmt:formatNumber value="${b.ceremony.basePrice}" pattern="#,###"/></span>
+            <div class="sheet-box mb-3">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="info-row mb-0">
+                            <span class="info-label">ประเภทงานบุญ</span>
+                            <span class="info-value">${b.ceremony.ceremonyType}</span>
+                        </div>
                     </div>
-                </c:if>
+                    <div class="col-md-6">
+                        <div class="info-row mb-0">
+                            <span class="info-label">
+                                <c:choose>
+                                    <c:when test="${isCustomRequest}">รูปแบบบริการ</c:when>
+                                    <c:otherwise>ชื่อแพ็กเกจ</c:otherwise>
+                                </c:choose>
+                            </span>
+                            <span class="info-value">${b.ceremony.ceremonyName}</span>
+                        </div>
+                    </div>
+                    <c:if test="${not isCustomRequest && not empty b.ceremony.basePrice}">
+                        <div class="col-12 mt-2 pt-2 border-top">
+                            <div class="info-row mb-0">
+                                <span class="info-label">ราคาเริ่มต้นแพ็กเกจ</span>
+                                <span class="info-value price-text">
+                                    ฿<fmt:formatNumber value="${b.ceremony.basePrice}" pattern="#,###"/>
+                                </span>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
             </div>
 
-            <%-- สิ่งที่รวมอยู่ในแพ็กเกจ --%>
             <div class="package-inclusions-box">
                 <div class="package-inclusions-title">
-                    <i class="bi bi-check-circle-fill"></i> สิ่งที่รวมอยู่ในแพ็กเกจ :
+                    <i class="bi bi-check-circle-fill" style="color: #28a745;"></i>
+                    <c:choose>
+                        <c:when test="${isCustomRequest}">รายการบริการพื้นฐานที่จัดให้ :</c:when>
+                        <c:otherwise>สิ่งที่รวมอยู่ในแพ็กเกจ :</c:otherwise>
+                    </c:choose>
                 </div>
 
                 <c:choose>
                     <c:when test="${not empty packageItems}">
-                        <div class="package-items-grid">
+                        <div class="package-items-grid" id="packageItemsGrid">
                             <c:forEach var="pi" items="${packageItems}">
-                                <c:if test="${pi.item.itemType.itemTypeId != 5 && pi.item.itemType.itemTypeId != 6}">
-                                    <div class="package-item-chip">
+                                <c:if test="${pi.item.itemType.itemTypeId != 5 && pi.item.itemType.itemTypeId != 6
+                                              && !(showSanghaSeparately && pi.item.itemName eq 'ชุดสังฆทานมาตรฐาน')}">
+                                    <div class="package-item-chip" data-price="${pi.item.pricePerUnit}" data-qty="${pi.quantity}" data-name="${fn:trim(pi.item.itemName)}">
                                         <i class="bi bi-check2"></i>
-                                        <span class="chip-title">${pi.item.itemName}</span>
-                                        <strong class="chip-qty">${pi.quantity} ${pi.item.unit}</strong>
+                                        <span class="flex-grow-1">${pi.item.itemName}</span>
+                                        <strong class="text-secondary ms-1">${pi.quantity} ${pi.item.unit}</strong>
                                     </div>
                                 </c:if>
                             </c:forEach>
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <div class="no-items-text">- ไม่มีรายการอุปกรณ์ในระบบ -</div>
+                        <div class="text-muted fst-italic py-1">- ไม่มีรายการอุปกรณ์ในระบบ -</div>
                     </c:otherwise>
                 </c:choose>
             </div>
         </div>
 
-        <hr class="divider">
+        <%-- 4. ตัวเลือกและความต้องการเพิ่มเติม --%>
+        <c:if test="${not empty b.details}">
 
-        <%-- 4. การนิมนต์พระสงฆ์ --%>
-        <div class="section">
-            <div class="section-title"><i class="bi bi-journal-text"></i> การนิมนต์พระสงฆ์</div>
+            <c:set var="sanghaHeaderPrinted" value="false" />
+            <c:set var="additionalHeadingPrinted" value="false" />
 
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'รูปแบบการนิมนต์')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
-                </c:if>
-            </c:forEach>
+            <hr class="divider">
+            <div class="section" id="bookingDetailsSection">
+                <c:forEach items="${b.details}" var="d">
 
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'รายละเอียดการนิมนต์พระสงฆ์')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value" style="white-space:pre-line;"><c:choose><c:when test="${monkType == 'นิมนต์เอง'}">-</c:when><c:when test="${not empty fn:trim(d.answer) && fn:trim(d.answer) != ','}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
-                </c:if>
-            </c:forEach>
+                    <c:set var="isSanghaQuestion" value="${d.question.questionsText eq 'ต้องการสังฆทานหรือไม่' or d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ' or d.question.questionsText eq 'จำนวนชุดสังฆทาน'}" />
+                    
+                    <c:if test="${not (isSanghaQuestion and hideSangha)}">
+                    
+                        <%-- แสดงหัวข้อใหญ่ "รายการเพิ่มเติมนอกเหนือจากแพ็กเกจ" พร้อมคลาส .section-title ให้เป็นสีเขียวเหมือนหัวข้ออื่นๆ --%>
+                        <c:if test="${!isCustomRequest && not additionalHeadingPrinted && (d.question.questionsText eq 'รูปแบบการนิมนต์พระสงฆ์' or d.question.questionsText eq 'ต้องการชุดภัตตาหารปิ่นโตหรือไม่' or d.question.questionsText eq 'ต้องการสังฆทานหรือไม่')}">
+                            <div class="section-title mt-4">
+                                <i class="bi bi-plus-circle-fill"></i> รายการเพิ่มเติมนอกเหนือจากแพ็กเกจ
+                            </div>
+                            <c:set var="additionalHeadingPrinted" value="true" />
+                        </c:if>
 
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'จำนวนพระ')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${not empty fn:trim(d.answer) && fn:trim(d.answer) != ','}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
-                </c:if>
-            </c:forEach>
-        </div>
+                        <c:if test="${d.question.questionsText eq 'รูปแบบการนิมนต์พระสงฆ์'}">
+                            <div class="section-title mt-3">
+                                <i class="bi bi-journal-text"></i> การนิมนต์พระสงฆ์
+                            </div>
+                        </c:if>
 
-        <%-- 5. ชุดสังฆทาน — ซ่อนทั้งหมดถ้าเลือกเป็นเซตมาตรฐาน (299) เพราะรวมอยู่ในแพ็กเกจแล้ว --%>
-        <c:if test="${not hideSangha}">
-        <hr class="divider">
-        <div class="section">
-            <div class="section-title"><i class="bi bi-gift"></i> ชุดสังฆทาน</div>
+                        <c:if test="${d.question.questionsText eq 'ต้องการชุดภัตตาหารปิ่นโตหรือไม่'}">
+                            <div class="section-title mt-4">
+                                <i class="bi bi-box-seam"></i> ชุดภัตตาหารปิ่นโต
+                            </div>
+                        </c:if>
 
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'สังฆทาน') && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>ไม่ต้องการ</c:otherwise></c:choose></span></div>
-                </c:if>
-            </c:forEach>
+                        <c:if test="${isSanghaQuestion and showSanghaSeparately and not sanghaHeaderPrinted}">
+                            <div class="section-title mt-4">
+                                <i class="bi bi-gift"></i> ชุดสังฆทาน
+                            </div>
+                            <c:set var="sanghaHeaderPrinted" value="true" />
+                        </c:if>
 
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${sangWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${sanghatharnItems}" var="sItem"><c:if test="${sItem.itemName == fn:trim(d.answer)}"><span style="color:var(--gold-text);font-size:13px;"> — ฿<fmt:formatNumber value="${sItem.pricePerUnit}" pattern="#,###"/> / ${sItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
-                </c:if>
-            </c:forEach>
+                        <c:if test="${d.question.questionsText eq 'มีความต้องการเพิ่มเติมหรือไม่'}">
+                            <div class="section-title mt-4">
+                                <i class="bi bi-plus-circle"></i> รายการเพิ่มเติม
+                            </div>
+                        </c:if>
 
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'จำนวน') && fn:contains(d.question.questionsText, 'สังฆทาน')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${sangWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
-                </c:if>
-            </c:forEach>
-        </div>
+                        <div class="info-row" data-qtext="${fn:trim(d.question.questionsText)}" data-answer="${fn:trim(d.answer)}">
+						    <span class="info-label" style="width: 300px;"><c:out value="${d.question.questionsText}" default="รายการ"/></span>
+						    <span class="info-value">
+						        <c:out value="${d.answer}" default="-"/>
+						        <c:if test="${d.question.questionsText eq 'เลือกชุดภัตตาหารปิ่นโต' or d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
+						            <c:choose>
+						                <c:when test="${d.answer eq 'ปิ่นโตชุดประหยัด' or d.answer eq 'ชุดสังฆทานมาตรฐาน'}">(299 บาท)</c:when>
+						                <c:when test="${d.answer eq 'ปิ่นโตชุดมาตรฐาน' or d.answer eq 'ชุดสังฆทานพรีเมียม'}">(399 บาท)</c:when>
+						                <c:when test="${d.answer eq 'ปิ่นโตชุดพรีเมียม' or d.answer eq 'ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน'}">(499 บาท)</c:when>
+						                <c:when test="${d.answer eq 'ปิ่นโตชุดพิเศษ'}">(599 บาท)</c:when>
+						            </c:choose>
+						        </c:if>
+						    </span>
+						</div>
+                    </c:if>
+
+                </c:forEach>
+            </div>
         </c:if>
 
-        <hr class="divider">
-
-        <%-- 6. ชุดภัตตาหารปิ่นโต --%>
-        <div class="section">
-            <div class="section-title"><i class="bi bi-box-seam"></i> ชุดภัตตาหารปิ่นโต</div>
-
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${(fn:contains(d.question.questionsText, 'ภัตตาหาร') || fn:contains(d.question.questionsText, 'ปิ่นโต')) && !fn:contains(d.question.questionsText, 'เลือก') && !fn:contains(d.question.questionsText, 'จำนวน')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>ไม่ต้องการ</c:otherwise></c:choose></span></div>
-                </c:if>
-            </c:forEach>
-
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'เลือก') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${pintoWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}<c:forEach items="${pintoItems}" var="pItem"><c:if test="${pItem.itemName == fn:trim(d.answer)}"><span style="color:var(--gold-text);font-size:13px;"> — ฿<fmt:formatNumber value="${pItem.pricePerUnit}" pattern="#,###"/> / ${pItem.unit}</span></c:if></c:forEach></c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
-                </c:if>
-            </c:forEach>
-
-            <c:forEach items="${b.details}" var="d">
-                <c:if test="${fn:contains(d.question.questionsText, 'จำนวน') && fn:contains(d.question.questionsText, 'ปิ่นโต')}">
-                    <div class="info-row"><span class="info-label">${d.question.questionsText}</span><span class="info-value"><c:choose><c:when test="${pintoWant != 'ต้องการ'}">-</c:when><c:when test="${not empty fn:trim(d.answer)}">${fn:trim(d.answer)}</c:when><c:otherwise>-</c:otherwise></c:choose></span></div>
-                </c:if>
-            </c:forEach>
-        </div>
-
-        <%-- 7. หมายเหตุเพิ่มเติม --%>
-        <c:forEach items="${b.details}" var="d">
-            <c:if test="${fn:contains(d.question.questionsText, 'ความต้องการเพิ่มเติม')}">
-                <hr class="divider">
-                <div class="section">
-                    <div class="section-title"><i class="bi bi-plus-circle"></i> หมายเหตุเพิ่มเติม</div>
-                    <div class="info-row">
-                        <span class="info-label">${d.question.questionsText}</span>
-                        <span class="info-value" style="white-space: pre-line;">${not empty fn:trim(d.answer) ? fn:trim(d.answer) : '-'}</span>
-                    </div>
-                </div>
-            </c:if>
-        </c:forEach>
-
-        <%-- ===== สรุปค่าใช้จ่ายโดยประมาณ — กล่องเล็ก ชิดขวา ก่อนแถบปุ่มด้านล่างสุด ===== --%>
-        <div class="cost-summary-wrap">
-            <div class="cost-summary-box">
+        <%-- สรุปค่าใช้จ่ายโดยประมาณ --%>
+        <div class="cost-summary-wrapper">
+            <div class="cost-summary-box" id="costSummaryBox">
                 <div class="cost-summary-title"><i class="bi bi-calculator-fill"></i> สรุปค่าใช้จ่ายโดยประมาณ</div>
                 <div class="cost-row">
-                    <span class="cost-label">${packageLabel}:</span>
-                    <span class="cost-value">฿<fmt:formatNumber value="${packageValue}" pattern="#,##0.00"/></span>
+                    <span class="cost-label" id="costPackageLabel">ราคาแพ็กเกจ:</span>
+                    <span class="cost-value" id="costPackageValue">-</span>
                 </div>
-                <c:if test="${additionalTotal > 0}">
-                    <div class="cost-row">
-                        <span class="cost-label">รายการเพิ่มเติม:</span>
-                        <span class="cost-value">฿<fmt:formatNumber value="${additionalTotal}" pattern="#,##0.00"/></span>
-                    </div>
-                </c:if>
-                <c:if test="${discountValue > 0}">
-                    <div class="cost-row cost-discount">
-                        <span class="cost-label">ส่วนลดนิมนต์เอง:</span>
-                        <span class="cost-value">- ฿<fmt:formatNumber value="${discountValue}" pattern="#,##0.00"/></span>
-                    </div>
-                </c:if>
+                <div class="cost-row" id="costAdditionalRow" style="display:none;">
+                    <span class="cost-label">รายการเพิ่มเติม:</span>
+                    <span class="cost-value" id="costAdditionalValue">-</span>
+                </div>
+                <div class="cost-row cost-discount" id="costDiscountRow" style="display:none;">
+                    <span class="cost-label">ส่วนลดนิมนต์เอง:</span>
+                    <span class="cost-value" id="costDiscountValue">-</span>
+                </div>
                 <div class="cost-row cost-total">
                     <span class="cost-label">ยอดรวมสุทธิ:</span>
-                    <span class="cost-value">฿<fmt:formatNumber value="${grandTotal}" pattern="#,##0.00"/></span>
+                    <span class="cost-value" id="costTotalValue">-</span>
                 </div>
-                <div class="cost-summary-note">* เป็นราคาประมาณการเบื้องต้นเท่านั้น ราคาจริงยืนยันอีกครั้งตอนออกใบเสนอราคา</div>
+                <div class="cost-summary-note">* หมายเหตุ: ราคาดังกล่าวเป็นเพียงราคาโดยประมาณเบื้องต้น และยังไม่รวมค่าใช้จ่ายเพิ่มเติมตามความต้องการของลูกค้า โดยทีมงานจะตรวจสอบรายละเอียดและยืนยันราคาอีกครั้ง</div>
             </div>
         </div>
 
-        <%-- Action Bar (คงปุ่มกดและฟังก์ชันเดิมตามเงื่อนไข) --%>
+        <%-- Action Bar --%>
         <div class="action-bar">
-            <div class="action-btn-group">
+            <div>
                 <c:choose>
                     <c:when test="${b.bookingStatus == 'Pending'}">
                         <button type="button" class="btn btn-approve"
@@ -437,7 +427,7 @@
                         </button>
                     </c:when>
                     <c:when test="${b.bookingStatus == 'Approved' || b.bookingStatus == 'Quoted'}">
-                        <a href="${pageContext.request.contextPath}/organizer/quotation/create/${b.bookingId}" class="btn btn-approve">จัดการใบเสนอราคา</a>
+                        <a href="${pageContext.request.contextPath}/organizer/quotation/create/${b.bookingId}" class="btn btn-approve text-decoration-none">จัดการใบเสนอราคา</a>
                     </c:when>
                 </c:choose>
             </div>
@@ -446,20 +436,14 @@
     </div>
 </div>
 
-<!-- ===== FOOTER ===== -->
-<footer class="site-footer">
-    <div class="footer-content">
-        <div class="footer-brand">
-            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                 alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
-        </div>
-        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+<%-- Footer --%>
+<footer class="site-footer" style="padding: 30px 0; background: #fff; border-top: 1px solid #eee; text-align: center;">
+    <div class="container">
+        <p class="text-muted mb-0" style="font-size: 13.5px;">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ — บุญมีนำพา จัดงานบุญ</p>
     </div>
-   
 </footer>
 
-<%-- Modal อนุมัติ (คงเดิมตามเงื่อนไข) --%>
+<%-- Modal อนุมัติ --%>
 <div id="approveModal" class="modal-overlay" style="display: none;">
     <div class="modal-card">
         <h3 class="modal-title">ยืนยันอนุมัติการจอง</h3>
@@ -475,7 +459,7 @@
     </div>
 </div>
 
-<%-- Modal ปฏิเสธ (คงเดิมตามเงื่อนไข) --%>
+<%-- Modal ปฏิเสธ --%>
 <div id="rejectModal" class="modal-overlay" style="display: none;">
     <div class="modal-card">
         <h3 class="modal-title">ยืนยันการปฏิเสธงาน</h3>
@@ -500,6 +484,149 @@
         </form>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const contextPath = "${pageContext.request.contextPath}";
+</script>
+
+<%-- Script คำนวณค่าใช้จ่ายอัตโนมัติ --%>
+<script>
+(function () {
+    var PRICE_MAP = {
+        "ปิ่นโตชุดประหยัด": 299,
+        "ปิ่นโตชุดมาตรฐาน": 399,
+        "ปิ่นโตชุดพรีเมียม": 499,
+        "ปิ่นโตชุดพิเศษ": 599,
+        "ชุดสังฆทานมาตรฐาน": 299,
+        "ชุดสังฆทานพรีเมียม": 399,
+        "ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน": 499
+    };
+
+    var MONK_COST_PER_RUP = 500 + 250 + 350 + 200; // 1,300 บาท/รูป
+    var SELF_INVITE_DISCOUNT = 1500;
+
+    function fmtMoney(n) {
+        n = Math.round((n || 0) * 100) / 100;
+        return '฿' + n.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function collectAnswers() {
+        var answers = {};
+        document.querySelectorAll('#bookingDetailsSection .info-row[data-qtext]').forEach(function (row) {
+            var q = row.getAttribute('data-qtext');
+            var a = row.getAttribute('data-answer');
+            if (q && !(q in answers)) {
+                answers[q] = a;
+            }
+        });
+        return answers;
+    }
+
+    function appendPricesToAnswers() {
+        document.querySelectorAll('#bookingDetailsSection .info-row[data-qtext]').forEach(function (row) {
+            var qText = row.getAttribute('data-qtext');
+            if (qText === 'เลือกชุดภัตตาหารปิ่นโต' || qText === 'เลือกชุดสังฆทานที่ต้องการ') {
+                var valueSpan = row.querySelector('.info-value');
+                if (valueSpan) {
+                    var choiceName = valueSpan.textContent.trim();
+                    if (PRICE_MAP[choiceName] !== undefined && choiceName.indexOf('(') === -1) {
+                        var price = PRICE_MAP[choiceName];
+                        valueSpan.textContent = choiceName + ' (' + price.toLocaleString('th-TH') + ' บาท)';
+                    }
+                }
+            }
+        });
+    }
+
+    function calcCostSummary() {
+        var box = document.getElementById('costSummaryBox');
+        if (!box) return;
+
+        appendPricesToAnswers();
+
+        var basePriceRaw = "${b.ceremony.basePrice}";
+        var basePrice = parseFloat(basePriceRaw) || 0;
+        var ceremonyName = "${fn:trim(b.ceremony.ceremonyName)}";
+        var isCustomRequest = (basePrice === 0) || (ceremonyName.indexOf('กรอกความต้องการ') !== -1);
+
+        var answers = collectAnswers();
+
+        var pintoTotal = 0;
+        var wantPinto = answers['ต้องการชุดภัตตาหารปิ่นโตหรือไม่'];
+        var pintoName = answers['เลือกชุดภัตตาหารปิ่นโต'];
+        var pintoQty = parseInt(answers['จำนวนชุดภัตตาหารปิ่นโต'], 10) || 0;
+        if (pintoName && pintoQty > 0 && (!wantPinto || wantPinto.indexOf('ไม่') === -1)) {
+            pintoTotal = (PRICE_MAP[pintoName] || 0) * pintoQty;
+        }
+
+        var sanghaTotal = 0;
+        var wantSangha = answers['ต้องการสังฆทานหรือไม่'];
+        var sanghaName = answers['เลือกชุดสังฆทานที่ต้องการ'];
+        var sanghaQty = parseInt(answers['จำนวนชุดสังฆทาน'], 10) || 0;
+        if (sanghaName && sanghaQty > 0 && (!wantSangha || wantSangha.indexOf('ไม่') === -1)) {
+            sanghaTotal = (PRICE_MAP[sanghaName] || 0) * sanghaQty;
+        }
+
+        var additionalTotal = pintoTotal + sanghaTotal;
+
+        var inviteAnswer = answers['รูปแบบการนิมนต์พระสงฆ์'] || '';
+        var isSelfInvite = inviteAnswer.indexOf('นิมนต์เอง') !== -1;
+
+        var packageLabel, packageValue, discount = 0;
+
+        if (isCustomRequest) {
+            var fixedItemsTotal = 0;
+            document.querySelectorAll('#packageItemsGrid .package-item-chip[data-price]').forEach(function (chip) {
+                if (chip.getAttribute('data-name') === 'ชุดสังฆทานมาตรฐาน') return;
+                var price = parseFloat(chip.getAttribute('data-price')) || 0;
+                var qty = parseFloat(chip.getAttribute('data-qty')) || 0;
+                fixedItemsTotal += price * qty;
+            });
+
+            var monkTotal = 0;
+            if (!isSelfInvite) {
+                var monkQty = parseInt(answers['จำนวนพระสงฆ์'], 10) || 0;
+                monkTotal = monkQty * MONK_COST_PER_RUP;
+            }
+
+            packageLabel = 'ค่าบริการพื้นฐาน (ตามรายการที่จัดให้):';
+            packageValue = fixedItemsTotal + monkTotal;
+            discount = 0;
+        } else {
+            packageLabel = 'ราคาแพ็กเกจ:';
+            packageValue = basePrice;
+            discount = isSelfInvite ? SELF_INVITE_DISCOUNT : 0;
+        }
+
+        var grandTotal = packageValue + additionalTotal - discount;
+        if (grandTotal < 0) grandTotal = 0;
+
+        document.getElementById('costPackageLabel').textContent = packageLabel;
+        document.getElementById('costPackageValue').textContent = fmtMoney(packageValue);
+
+        var addRow = document.getElementById('costAdditionalRow');
+        if (additionalTotal > 0) {
+            addRow.style.display = '';
+            document.getElementById('costAdditionalValue').textContent = fmtMoney(additionalTotal);
+        } else {
+            addRow.style.display = 'none';
+        }
+
+        var discRow = document.getElementById('costDiscountRow');
+        if (discount > 0) {
+            discRow.style.display = '';
+            document.getElementById('costDiscountValue').textContent = '- ' + fmtMoney(discount);
+        } else {
+            discRow.style.display = 'none';
+        }
+
+        document.getElementById('costTotalValue').textContent = fmtMoney(grandTotal);
+    }
+
+    document.addEventListener('DOMContentLoaded', calcCostSummary);
+})();
+</script>
 
 <script src="${pageContext.request.contextPath}/static/js/bookingDetail.js"></script>
 </body>

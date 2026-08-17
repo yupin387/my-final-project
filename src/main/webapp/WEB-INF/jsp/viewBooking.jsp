@@ -266,13 +266,7 @@
 
         <hr class="divider">
 
-        <%-- ===== ตัวแปรควบคุมการแสดงผล คำนวณล่วงหน้าก่อนเข้าส่วนที่ 3 =====
-             isCustomRequest      : true ถ้าเป็นแบบกรอกความต้องการเอง (ไม่ใช่แพ็กเกจสำเร็จรูป)
-             sanghaChoice         : คำตอบ "เลือกชุดสังฆทานที่ต้องการ" ของลูกค้า (ถ้ามี)
-             showSanghaSeparately : true = ต้องแยกหัวข้อ "ชุดสังฆทาน" ออกมาแสดงต่างหากพร้อมราคา
-                                     (กรอกเอง เสมอ, หรือเลือกแพ็กเกจแต่เปลี่ยนชุดสังฆทานเป็นอย่างอื่นที่ไม่ใช่ชุดมาตรฐาน 299)
-                                     เมื่อ true ต้องตัดชิปชุดสังฆทานมาตรฐานออกจากรายการที่รวมอยู่ในแพ็กเกจด้วย
-             hideSangha           : true = ไม่ต้องแสดงคำถาม-คำตอบสังฆทานซ้ำในลิสต์รายละเอียด (เพราะโชว์ในรายการแพ็กเกจแล้ว หรือไม่มีคำตอบเลย) --%>
+        <%-- ===== ตัวแปรควบคุมการแสดงผล คำนวณล่วงหน้าก่อนเข้าส่วนที่ 3 ===== --%>
         <c:set var="basePriceVal" value="${booking.ceremony.basePrice}" />
         <c:set var="isCustomRequest" value="${empty basePriceVal || basePriceVal == 0 || fn:indexOf(booking.ceremony.ceremonyName, 'กรอกความต้องการ') ne -1}" />
 
@@ -340,7 +334,6 @@
                     <c:when test="${not empty packageItems}">
                         <div class="package-items-grid" id="packageItemsGrid">
                             <c:forEach var="pi" items="${packageItems}">
-                                <%-- ตัดชิปชุดสังฆทานมาตรฐานออก ถ้าจะไปแสดงแยกต่างหากข้างล่างแทน (กันโชว์ซ้ำ) --%>
                                 <c:if test="${pi.item.itemType.itemTypeId != 5 && pi.item.itemType.itemTypeId != 6
                                               && !(showSanghaSeparately && pi.item.itemName eq 'ชุดสังฆทานมาตรฐาน')}">
                                     <div class="package-item-chip" data-price="${pi.item.pricePerUnit}" data-qty="${pi.quantity}" data-name="${fn:trim(pi.item.itemName)}">
@@ -366,6 +359,12 @@
 
             <hr class="divider">
             <div class="section" id="bookingDetailsSection">
+                <%-- เพิ่มหัวข้อ "รายการเพิ่มเติมนอกเหนือจากแพ็กเกจ" ไว้ด้านบนสุด ให้เหมือนฝั่ง Organizer โดยใช้สไตล์ section-title ของ Member --%>
+				<c:if test="${not isCustomRequest}">
+				    <div class="section-title">
+				        <i class="bi bi-plus-circle"></i> รายการเพิ่มเติมนอกเหนือจากแพ็กเกจ
+				    </div>
+				</c:if>
                 <c:forEach items="${booking.details}" var="d">
 
                     <c:set var="isSanghaQuestion" value="${d.question.questionsText eq 'ต้องการสังฆทานหรือไม่' or d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ' or d.question.questionsText eq 'จำนวนชุดสังฆทาน'}" />
@@ -384,8 +383,6 @@
                             </div>
                         </c:if>
 
-                        <%-- แสดงหัวข้อ "ชุดสังฆทาน" ก่อนคำถามสังฆทานคำถามแรกที่เจอ (ไม่ผูกกับคำถามใดคำถามหนึ่งโดยเฉพาะ
-                             เพราะบางรายการจองอาจไม่มีคำถาม "ต้องการสังฆทานหรือไม่" เก็บไว้) --%>
                         <c:if test="${isSanghaQuestion and showSanghaSeparately and not sanghaHeaderPrinted}">
                             <div class="section-title mt-4">
                                 <i class="bi bi-gift"></i> ชุดสังฆทาน
@@ -403,7 +400,6 @@
 						    <span class="info-label" style="width: 300px;"><c:out value="${d.question.questionsText}" default="รายการ"/></span>
 						    <span class="info-value">
 						        <c:out value="${d.answer}" default="-"/>
-						        <%-- เพิ่ม Logic เช็คชื่อชุดปิ่นโต/สังฆทาน เพื่อเติมราคาต่อท้าย --%>
 						        <c:if test="${d.question.questionsText eq 'เลือกชุดภัตตาหารปิ่นโต' or d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
 						            <c:choose>
 						                <c:when test="${d.answer eq 'ปิ่นโตชุดประหยัด' or d.answer eq 'ชุดสังฆทานมาตรฐาน'}">(299 บาท)</c:when>
@@ -420,7 +416,7 @@
             </div>
         </c:if>
 
-        <%-- สรุปค่าใช้จ่ายโดยประมาณ (คำนวณด้วย JS จากคำตอบในฟอร์ม) — ย้ายมาไว้มุมล่างขวา เหนือ Action Bar --%>
+        <%-- สรุปค่าใช้จ่ายโดยประมาณ --%>
         <div class="cost-summary-wrapper">
             <div class="cost-summary-box" id="costSummaryBox">
                 <div class="cost-summary-title"><i class="bi bi-calculator-fill"></i> สรุปค่าใช้จ่ายโดยประมาณ</div>
@@ -472,7 +468,7 @@
     </div>
 </div>
 
-<%-- Footer (ถอดแบบหน้า Home ตามรูปภาพ) --%>
+<%-- Footer --%>
 <footer class="site-footer">
 		<div class="footer-top">
 			<svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
@@ -540,13 +536,8 @@
     const contextPath = "${pageContext.request.contextPath}";
 </script>
 
-<%-- ===================================================================
-     สรุปค่าใช้จ่ายโดยประมาณ — คำนวณฝั่ง JS ล้วนๆ จากคำตอบในฟอร์ม
-     ไม่มีการแก้ไข Controller / Java ใดๆ ทั้งสิ้น
-     =================================================================== --%>
 <script>
 (function () {
-    // ราคาต่อชุด อ้างอิงจากข้อมูล seed ใน Run.java (ItemType: สังฆทาน / ปิ่นโต)
     var PRICE_MAP = {
         "ปิ่นโตชุดประหยัด": 299,
         "ปิ่นโตชุดมาตรฐาน": 399,
@@ -557,7 +548,6 @@
         "ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน": 499
     };
 
-    // ค่าใช้จ่ายต่อพระ 1 รูป กรณี "กรอกความต้องการเบื้องต้น" (ไม่ได้นิมนต์เอง)
     var MONK_COST_PER_RUP = 500 + 250 + 350 + 200; // 1,300 บาท/รูป
     var SELF_INVITE_DISCOUNT = 1500;
 
@@ -579,7 +569,6 @@
     }
 
     function appendPricesToAnswers() {
-        // วิ่งหาแถวข้อมูลที่เป็นการเลือกชุดปิ่นโตหรือชุดสังฆทาน เพื่อเติมราคาวงเล็บต่อท้ายชื่อ
         document.querySelectorAll('#bookingDetailsSection .info-row[data-qtext]').forEach(function (row) {
             var qText = row.getAttribute('data-qtext');
             if (qText === 'เลือกชุดภัตตาหารปิ่นโต' || qText === 'เลือกชุดสังฆทานที่ต้องการ') {
@@ -599,7 +588,6 @@
         var box = document.getElementById('costSummaryBox');
         if (!box) return;
 
-        // เติมวงเล็บราคาต่อท้ายชื่อชุดปิ่นโต/สังฆทานก่อนคำนวณ
         appendPricesToAnswers();
 
         var basePriceRaw = "${booking.ceremony.basePrice}";
@@ -609,7 +597,6 @@
 
         var answers = collectAnswers();
 
-        // --- ปิ่นโต ---
         var pintoTotal = 0;
         var wantPinto = answers['ต้องการชุดภัตตาหารปิ่นโตหรือไม่'];
         var pintoName = answers['เลือกชุดภัตตาหารปิ่นโต'];
@@ -618,7 +605,6 @@
             pintoTotal = (PRICE_MAP[pintoName] || 0) * pintoQty;
         }
 
-        // --- สังฆทาน ---
         var sanghaTotal = 0;
         var wantSangha = answers['ต้องการสังฆทานหรือไม่'];
         var sanghaName = answers['เลือกชุดสังฆทานที่ต้องการ'];
@@ -629,7 +615,6 @@
 
         var additionalTotal = pintoTotal + sanghaTotal;
 
-        // --- นิมนต์เอง ---
         var inviteAnswer = answers['รูปแบบการนิมนต์พระสงฆ์'] || '';
         var isSelfInvite = inviteAnswer.indexOf('นิมนต์เอง') !== -1;
 
@@ -638,8 +623,6 @@
         if (isCustomRequest) {
             var fixedItemsTotal = 0;
             document.querySelectorAll('#packageItemsGrid .package-item-chip[data-price]').forEach(function (chip) {
-                // กันซ้ำ: ชุดสังฆทานมาตรฐานจะถูกคิดแยกในแถว "รายการเพิ่มเติม" อยู่แล้ว
-                // (เมื่อแยกหัวข้อ "ชุดสังฆทาน" ออกมาต่างหาก) จึงต้องไม่นับในค่าบริการพื้นฐานอีก
                 if (chip.getAttribute('data-name') === 'ชุดสังฆทานมาตรฐาน') return;
                 var price = parseFloat(chip.getAttribute('data-price')) || 0;
                 var qty = parseFloat(chip.getAttribute('data-qty')) || 0;
@@ -664,7 +647,6 @@
         var grandTotal = packageValue + additionalTotal - discount;
         if (grandTotal < 0) grandTotal = 0;
 
-        // --- render ---
         document.getElementById('costPackageLabel').textContent = packageLabel;
         document.getElementById('costPackageValue').textContent = fmtMoney(packageValue);
 

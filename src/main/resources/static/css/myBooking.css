@@ -364,7 +364,7 @@ img.lotus-icon {
     background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
     color: var(--brown-dark);
     padding-top: 0;
-    padding-bottom: 0;
+    padding-bottom: 24px;
     border-top: 3px solid;
     border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     box-shadow: 0 -8px 24px rgba(184, 134, 47, 0.14);
@@ -373,11 +373,15 @@ img.lotus-icon {
     margin-top: 40px;
 }
 
+.footer-top { display: block; }
+
 .footer-content {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
     gap: 30px;
     padding: 48px 20px 30px;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .footer-content.footer-content-slim {

@@ -120,6 +120,19 @@
 
 <%-- ===== FOOTER ===== --%>
 <footer class="site-footer">
+    <div class="footer-top">
+        <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
+             style="display: block; width: 100%; height: 8px;">
+            <rect width="1200" height="8" fill="url(#footerGrad)" />
+            <defs>
+                <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
+                    <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+                    <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
     <div class="container footer-content footer-content-slim">
         <div class="footer-col footer-brand-col">
             <div class="footer-brand">
@@ -140,6 +153,7 @@
             <p>📞 โทร. 08X-XXX-XXXX</p>
             <p>💬 LINE OA: @boonmee</p>
             <p>✉️ boonmee@gmail.com</p>
+            <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
         </div>
     </div>
 </footer>
