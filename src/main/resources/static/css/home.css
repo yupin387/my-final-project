@@ -197,8 +197,9 @@ img.lotus-icon {
     font-weight: 700;
 }
 
+/* ===== ปุ่มสมัครสมาชิกบน Navbar (เปลี่ยนเป็นสีชมพู) ===== */
 .btn-register-nav {
-    background: var(--footer-grad-2); /* ใช้สีชมพูทึบ ไม่ไล่สี */
+    background: var(--gold); /* เปลี่ยนสีพื้นหลังเป็นสีชมพู */
     color: #FFFFFF;
     font-weight: 700;
     border: none;
@@ -209,13 +210,14 @@ img.lotus-icon {
     transition: all 0.2s;
     white-space: nowrap;
     font-family: 'Sarabun', sans-serif;
-    box-shadow: 0 2px 8px rgba(199, 64, 95, 0.3);
+    box-shadow: 0 2px 8px rgba(184, 80, 115, 0.35); /* เปลี่ยนสีเงาให้เข้ากับสีชมพู */
 }
 
 .btn-register-nav:hover {
-    background: var(--footer-grad-1); /* เปลี่ยนเฉดเข้มขึ้นเล็กน้อยเมื่อเอาเมาส์วาง */
+    background: var(--brown-mid); /* สีชมพูที่เข้มขึ้นเมื่อเอาเมาส์ชี้ */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(184, 80, 115, 0.45);
 }
-
 /* ===== User Profile Pill (บนแถบเมนูครีม-ทอง) ===== */
 .user-profile-pill {
     background: rgba(255, 255, 255, 0.55);
@@ -868,23 +870,38 @@ img.lotus-icon {
 
 .meaning-card {
     background: var(--white);
-    border: 1.5px solid var(--card-border-soft);
+    border: 2px solid var(--accent-gold-pale);
     border-radius: 14px;
-    padding: 16px 14px;
-    box-shadow: 0 4px 14px var(--shadow-warm);
+    padding: 40px 14px 16px;
+    margin-top: 20px;
+    box-shadow: 0 10px 30px rgba(184, 134, 47, 0.12);
+    position: relative;
+    z-index: 1;
+}
+
+.meaning-card::before, .condition-card::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border: 1.5px dashed var(--accent-gold-mid);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: -1;
 }
 
 .meaning-card-icon {
-    width: 52px;
-    height: 52px;
+    width: 68px;
+    height: 68px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold-glow), var(--gold-pale));
-    border: 1.5px solid var(--card-border);
+    background: linear-gradient(135deg, #FFFFFF, var(--gold-pale));
+    border: 2px solid var(--accent-gold);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    margin: 0 auto 12px;
+    font-size: 2.2rem;
+    margin: -70px auto 16px;
+    box-shadow: 0 4px 12px var(--shadow-gold), inset 0 0 10px rgba(184,134,47,0.15);
+    color: var(--accent-gold);
 }
 
 .meaning-card-title {
@@ -1266,11 +1283,28 @@ img.lotus-icon {
 }
 
 .gallery-item img:hover { transform: scale(1.06); }
+
 /* ========== CONDITIONS & STEPS ========== */
 .section-conditions {
     background: #FDF0F5;
     position: relative;
     overflow: hidden;
+}
+
+.section-conditions::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    right: -40px;
+    width: 350px;
+    height: 350px;
+    background-image: url('../images/img25.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+    transform: rotate(-15deg);
 }
 
 .conditions-grid {
@@ -1287,11 +1321,13 @@ img.lotus-icon {
 }
 
 .condition-card {
+    position: relative;
+    z-index: 1;
     background: var(--white);
-    border: 1.5px solid var(--card-border-soft);
+    border: 2px solid var(--accent-gold-pale);
     border-radius: 14px;
     padding: 28px 30px;
-    box-shadow: 0 4px 18px var(--shadow-gold);
+    box-shadow: 0 10px 30px rgba(184, 134, 47, 0.12);
 }
 
 .condition-card-full {
@@ -1618,20 +1654,6 @@ img.lotus-icon {
     font-size: 0.9rem;
 }
 
-/* ========== Decorative SVG dividers hidden per client request ========== */
-.thai-divider {
-    height: 1px !important;
-    background: var(--card-border-soft) !important;
-}
-.thai-divider svg,
-.thai-divider path,
-.thai-divider circle,
-.thai-divider ellipse,
-.thai-divider line,
-.thai-divider g {
-    display: none !important;
-}
-
 .ritual-steps-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1831,3 +1853,102 @@ img.lotus-icon {
         margin-top: 76px;
     }
 }
+
+/* ========== UNIFIED CARD LAYOUT: รวม steps+conditions+why-choose+gallery เป็นการ์ดขาวใบเดียว ========== */
+.unified-home-wrap {
+    background: var(--page-bg);
+    padding: 46px 16px 70px;
+}
+
+.unified-home-card {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: 28px;
+    border: 1.5px solid var(--card-border-soft);
+    box-shadow: 0 20px 60px rgba(184, 134, 47, 0.14);
+    overflow: hidden;
+}
+
+.section-pad-unified { padding: 44px 0; }
+
+/* เดิม .section-conditions มีพื้นหลังชมพูทึบ + watermark ลอย -> ตอนนี้อยู่ในการ์ดขาวแล้ว ปิดพื้นหลังเดิม */
+.unified-home-card .section-conditions { background: transparent; }
+.unified-home-card .section-conditions::after { display: none; }
+.unified-home-card .section-packages { background: transparent; }
+.unified-home-card .section-gallery { background: transparent; }
+
+/* เส้นทองบางๆ คั่นระหว่างหัวข้อ แทน wave/kanok divider เต็มจอ */
+.unified-divider {
+    height: 1px;
+    max-width: 1000px;
+    margin: 8px auto;
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale) 15%, var(--accent-gold) 50%, var(--accent-gold-pale) 85%, transparent);
+    opacity: 0.65;
+}
+
+/* ========== เงื่อนไขการให้บริการ: layout 2 คอลัมน์ รูป + list (ตาม mockup) ========== */
+.condition-card-split {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    align-items: stretch;
+    padding: 22px;
+}
+.condition-image-side {
+    border-radius: 16px;
+    overflow: hidden;
+    min-height: 260px;
+    box-shadow: 0 8px 22px rgba(184, 134, 47, 0.2);
+}
+.condition-image-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.condition-list-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.condition-list-check {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.condition-list-check li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 14px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-mid);
+}
+.condition-list-check li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-gold);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+@media (max-width: 760px) {
+    .condition-card-split { grid-template-columns: 1fr; }
+    .condition-image-side { min-height: 200px; }
+}
+
+/* ========== ขั้นตอนการให้บริการ: กระชับขึ้นให้พอดีในการ์ด ========== */
+.ritual-flow-row-single .ritual-step-img-wrap { width: 80px; height: 80px; }
+.ritual-flow-row-single .ritual-step-title { font-size: 0.85rem; min-height: 32px; }
+.ritual-flow-row-single .ritual-step-desc { font-size: 0.72rem; line-height: 1.5; }
+.ritual-flow-row-single .ritual-flow-arrow { margin-top: 74px; }

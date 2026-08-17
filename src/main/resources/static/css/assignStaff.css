@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
 /* ===== CSS Variables (เขียวใบตองอ่อน-ทอง-ดาวเรือง) ===== */
 :root {
@@ -258,7 +258,7 @@ body {
 
 /* ========== CARD HEADER (เขียว-ทอง + ดอกบัว) ========== */
 .assign-header {
-    background: var(--brand-green);
+    background: var(--accent-gold); /* เปลี่ยนตรงนี้เป็นสีเหลือง */
     padding: 26px 30px 22px;
     text-align: center;
     border-bottom: 3px solid var(--accent-gold-pale);
@@ -492,9 +492,10 @@ body {
 }
 
 /* ===== Submit Button (เขียวทึบ) ===== */
+/* สีปุ่มปกติ */
 .btn-submit {
-    background: var(--brand-green-dark);
-    color: #FFFFFF;
+    background: var(--accent-gold); /* เปลี่ยนสีพื้นหลังปุ่มเป็นสีเหลือง */
+    color: #FFFFFF; /* หากสีเหลืองสว่างไป สามารถเปลี่ยนตัวหนังสือเป็นสีดำหรือ var(--text-dark) ได้ครับ */
     border: none;
     padding: 14px;
     border-radius: 11px;
@@ -504,15 +505,16 @@ body {
     cursor: pointer;
     letter-spacing: 0.3px;
     transition: all 0.25s;
-    box-shadow: 0 4px 14px rgba(92, 150, 69, 0.3);
+    box-shadow: 0 4px 14px var(--shadow-warm); /* เปลี่ยนสีเงาให้เข้ากับสีเหลือง */
     position: relative;
     overflow: hidden;
 }
 
+/* สีปุ่มเวลาเอาเมาส์ชี้ (Hover) */
 .btn-submit:hover {
-    background: #4d7f3a;
+    background: #C49132; /* สีเหลืองที่เข้มขึ้นเวลาเอาเมาส์ชี้ */
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(92, 150, 69, 0.4);
+    box-shadow: 0 8px 20px rgba(217, 164, 65, 0.4);
 }
 
 /* ===== Back Link ===== */

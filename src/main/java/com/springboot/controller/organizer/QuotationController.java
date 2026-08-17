@@ -108,6 +108,10 @@ public class QuotationController {
         try {
             quotationService.createQuotation(bookingId, extraItemIds, extraQtys, extraPrices, note,
                                              bookingItemNames, bookingQtys, bookingPrices);
+            
+            // เปลี่ยนจาก Quotation_Created กลับมาเป็น Approved ตามเดิม
+            bookingService.updateJobStatus(bookingId, "Approved");
+
             ra.addFlashAttribute("success", "สร้างใบเสนอราคาสำเร็จ");
             return "redirect:/organizer/quotation";
         } catch (Exception e) {
@@ -116,7 +120,6 @@ public class QuotationController {
             return "redirect:/organizer/quotation/create/" + bookingId;
         }
     }
-
     @GetMapping("/detail/{id}")
     public String quotationDetail(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";

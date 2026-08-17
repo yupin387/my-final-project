@@ -30,4 +30,6 @@ public interface BookingFormRepository extends JpaRepository<BookingForm, String
  // หาการจองทั้งหมดของสมาชิกคนนี้ เรียงจากล่าสุดไปเก่าสุด
     @Query("SELECT b FROM BookingForm b WHERE b.member.memberId = :memberId ORDER BY b.bookingDate DESC")
     List<BookingForm> findByMemberId(@Param("memberId") Integer memberId);
+    
+    
 }

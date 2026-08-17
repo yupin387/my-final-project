@@ -157,6 +157,16 @@ public class BookingService {
     public List<BookingForm> getBookingsByMember(int memberId) {
         return bookingRepo.findByMemberId(memberId);
     }
+    
+    @Transactional
+    public void updateStatusOnly(String bookingId, String status) {
+        BookingForm booking = bookingRepo.findById(bookingId).orElse(null);
+        if (booking != null) {
+            booking.setBookingStatus(status);
+            // ไม่ต้องสั่ง bookingRepo.save() ซ้ำก็ได้ เพราะอยู่ใน @Transactional 
+            // หรือจะใช้ bookingRepo.updateBookingStatus(bookingId, status) ก็ได้เช่นกัน
+        }
+    }
     //=================================================================================================
     //================================================================================================
   

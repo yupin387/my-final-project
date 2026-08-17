@@ -437,9 +437,14 @@
 </div>
 
 <%-- Footer --%>
-<footer class="site-footer" style="padding: 30px 0; background: #fff; border-top: 1px solid #eee; text-align: center;">
-    <div class="container">
-        <p class="text-muted mb-0" style="font-size: 13.5px;">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ — บุญมีนำพา จัดงานบุญ</p>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>
 </footer>
 

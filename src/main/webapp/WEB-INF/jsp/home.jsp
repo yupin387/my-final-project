@@ -295,30 +295,12 @@
 			<div class="hero-divider"></div>
 		</div>
 	</div>
+	<%-- ========== UNIFIED CARD: ขั้นตอน + เงื่อนไข + ทำไมต้องเลือกเรา + แกลเลอรี ========== --%>
+	<div class="unified-home-wrap">
+	<div class="unified-home-card">
 
-
-	<%-- ========== THAI WAVE DIVIDER: BANNER → WHY CHOOSE US ========== --%>
-	<svg class="thai-divider" viewBox="0 0 1200 48"
-		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-		style="display: block; background: #ffffff;">
-    <path
-			d="M0,0 L1200,0 L1200,16 Q1100,40 1000,20 Q900,2 800,28 Q700,48 600,28 Q500,8 400,30 Q300,48 200,24 Q100,4 0,22 Z"
-			fill="#B85073" opacity="0.07" />
-    <path
-			d="M0,8 Q150,44 300,18 Q450,-6 600,22 Q750,48 900,20 Q1050,-6 1200,18 L1200,48 L0,48 Z"
-			fill="#FCF2E4" />
-    <path
-			d="M0,26 Q100,10 200,26 Q300,44 400,26 Q500,10 600,26 Q700,44 800,26 Q900,10 1000,26 Q1100,44 1200,26"
-			stroke="#B8862F" stroke-width="1.5" fill="none" opacity="0.5" />
-    <circle cx="200" cy="26" r="3" fill="#B8862F" opacity="0.5" />
-    <circle cx="400" cy="26" r="3" fill="#B8862F" opacity="0.5" />
-    <circle cx="600" cy="26" r="3" fill="#B8862F" opacity="0.5" />
-    <circle cx="800" cy="26" r="3" fill="#B8862F" opacity="0.5" />
-    <circle cx="1000" cy="26" r="3" fill="#B8862F" opacity="0.5" />
-</svg>
-
-    <%-- ========== ขั้นตอนและเงื่อนไขการให้บริการ ========== --%>
-	<section class="section-pad section-conditions" id="stepsConditionsSection">
+	<%-- ========== ขั้นตอนและเงื่อนไขการให้บริการ ========== --%>
+	<section class="section-pad-unified section-conditions" id="stepsConditionsSection">
 	    <div class="container">
 	        <div class="section-lotus-deco">
 				<img src="${pageContext.request.contextPath}/static/images/img25.png"
@@ -343,8 +325,6 @@
 				<h3 class="subsection-title"><span class="subsection-num">1</span>ขั้นตอนการให้บริการ</h3>
 				<div class="condition-card condition-card-full">
 					<div class="ritual-flow-wrap">
-
-						<%-- ===== แถวเดียว: ขั้นตอน 1 ถึง 6 เรียงต่อกันด้วยลูกศร ===== --%>
 						<div class="ritual-flow-row ritual-flow-row-single">
 
 							<div class="ritual-step-item">
@@ -443,17 +423,22 @@
 							</div>
 
 						</div>
-
 					</div>
 				</div>
 			</div>
 
-			<%-- ----- หัวข้อย่อยที่ 2: เงื่อนไขการให้บริการ ----- --%>
+			<div class="unified-divider"></div>
+
+			<%-- ----- หัวข้อย่อยที่ 2: เงื่อนไขการให้บริการ (2 คอลัมน์ รูป + list) ----- --%>
 			<div class="subsection-block">
 				<h3 class="subsection-title"><span class="subsection-num">2</span>เงื่อนไขการให้บริการ</h3>
-				<div class="conditions-grid conditions-grid-single">
-					<div class="condition-card condition-card-full">
-						<ul class="condition-list">
+				<div class="condition-card condition-card-split">
+					<div class="condition-image-side">
+						<img src="${pageContext.request.contextPath}/static/images/condition-showcase.png"
+							alt="เครื่องสักการะและดอกบัว">
+					</div>
+					<div class="condition-list-side">
+						<ul class="condition-list-check">
 							<li>รับจัดงานบุญตามประเพณีภาคเหนือ
 								ถูกต้องตามหลักพิธีการ</li>
 							<li>การนิมนต์พระ ทางร้านเป็นผู้ดำเนินการนิมนต์ให้
@@ -471,8 +456,10 @@
 	    </div>
 	</section>
 
+	<div class="unified-divider"></div>
+
 	<%-- ========== ทำไมต้องเลือกบุญมี ========== --%>
-	<section class="section-pad section-packages" id="whyChooseSection">
+	<section class="section-pad-unified section-packages" id="whyChooseSection">
 		<div class="container">
 			<div class="section-ornament">
 				<div class="ornament-line"></div>
@@ -513,65 +500,10 @@
 		</div>
 	</section>
 
-	<%-- ========== THAI KANOK DIVIDER: WHY CHOOSE US → STEPS & CONDITIONS ========== --%>
-	<svg class="thai-divider" viewBox="0 0 1200 48"
-		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-		style="display: block; background: linear-gradient(#fff, #FCF2E4);">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F1E1D4"
-			stroke-width="1" opacity="0.6" />
-    <g fill="#B8862F" opacity="0.55">
-        <ellipse cx="600" cy="24" rx="18" ry="6"
-			transform="rotate(-30 600 24)" />
-        <ellipse cx="600" cy="24" rx="18" ry="6"
-			transform="rotate(30 600 24)" />
-        <ellipse cx="600" cy="24" rx="18" ry="6" />
-        <circle cx="600" cy="24" r="4" fill="#D4AD5F" />
-        <ellipse cx="480" cy="24" rx="14" ry="5"
-			transform="rotate(-30 480 24)" />
-        <ellipse cx="480" cy="24" rx="14" ry="5"
-			transform="rotate(30 480 24)" />
-        <circle cx="480" cy="24" r="3" fill="#D4AD5F" />
-        <ellipse cx="720" cy="24" rx="14" ry="5"
-			transform="rotate(-30 720 24)" />
-        <ellipse cx="720" cy="24" rx="14" ry="5"
-			transform="rotate(30 720 24)" />
-        <circle cx="720" cy="24" r="3" fill="#D4AD5F" />
-        <ellipse cx="360" cy="24" rx="10" ry="4"
-			transform="rotate(-30 360 24)" />
-        <ellipse cx="360" cy="24" rx="10" ry="4"
-			transform="rotate(30 360 24)" />
-        <circle cx="360" cy="24" r="2.5" fill="#D4AD5F" />
-        <ellipse cx="840" cy="24" rx="10" ry="4"
-			transform="rotate(-30 840 24)" />
-        <ellipse cx="840" cy="24" rx="10" ry="4"
-			transform="rotate(30 840 24)" />
-        <circle cx="840" cy="24" r="2.5" fill="#D4AD5F" />
-        <ellipse cx="240" cy="24" rx="7" ry="3"
-			transform="rotate(-30 240 24)" />
-        <ellipse cx="240" cy="24" rx="7" ry="3"
-			transform="rotate(30 240 24)" />
-        <ellipse cx="960" cy="24" rx="7" ry="3"
-			transform="rotate(-30 960 24)" />
-        <ellipse cx="960" cy="24" rx="7" ry="3"
-			transform="rotate(30 960 24)" />
-    </g>
-    <line x1="0" y1="4" x2="1200" y2="4" stroke="#F1E1D4"
-			stroke-width="0.5" opacity="0.4" />
-    <line x1="0" y1="44" x2="1200" y2="44" stroke="#F1E1D4"
-			stroke-width="0.5" opacity="0.4" />
-</svg>
-
-	<%-- ========== THAI KANOK DIVIDER: STEPS & CONDITIONS → GALLERY ========== --%>
-	<svg class="thai-divider" viewBox="0 0 1200 48"
-		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-		style="display: block; background: #FCF2E4;">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F1E1D4"
-			stroke-width="1" opacity="0.6" />
-    <circle cx="600" cy="24" r="4" fill="#D4AD5F" />
-</svg>
+	<div class="unified-divider"></div>
 
 	<%-- ========== GALLERY SECTION ========== --%>
-	<section class="section-pad section-gallery">
+	<section class="section-pad-unified section-gallery">
 		<div class="container">
 			<div class="section-ornament">
 				<div class="ornament-line"></div>
@@ -591,6 +523,10 @@
 			<div class="gallery-grid" id="galleryGrid"></div>
 		</div>
 	</section>
+
+	</div>
+	</div>
+	<%-- ========== END UNIFIED CARD ========== --%>
 
 	<%-- ========== FOOTER ========== --%>
 	<footer class="site-footer">

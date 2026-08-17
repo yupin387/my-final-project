@@ -300,7 +300,11 @@ function reIndexRows() {
 }
 
 function calculateGrandTotal() {
-    let totalAmount = 0.0;
+    let packageTotal = 0.0;
+    let extraTotal = 0.0;
+    const discountElement = document.getElementById('discountValue');
+    const discount = discountElement ? parseFloat(discountElement.value) || 0 : 0;
+    const isCustomRequest = window.IS_CUSTOM_REQUEST === true;
 
     document.querySelectorAll('.static-row, .dynamic-row').forEach(row => {
         if (row.classList.contains('package-included-row')) return;
@@ -317,16 +321,37 @@ function calculateGrandTotal() {
             if (subtotalSpan) {
                 subtotalSpan.innerText = subtotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
             }
-            totalAmount += subtotal;
+
+            if (row.classList.contains('package-main-row')) {
+                packageTotal += subtotal;
+            } else if (isCustomRequest) {
+                // ถ้าเป็นโหมดกรอกเอง: ทุกรายการในตาราง (รวมถึงอุปกรณ์เสริม) ให้ถือเป็น "ราคาตามรายการ" ทั้งหมด
+                packageTotal += subtotal;
+            } else {
+                // ถ้าเป็นโหมดแพ็กเกจปกติ: รายการที่อยู่นอกแพ็กเกจถึงจะนัดเป็น extraTotal (รายการเพิ่มเติม)
+                extraTotal += subtotal;
+            }
         }
     });
 
+    const summaryPackage = document.getElementById('summaryPackage');
+    if (summaryPackage) {
+        summaryPackage.innerText = packageTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+    }
+
+    const summaryExtra = document.getElementById('summaryExtra');
+    if (summaryExtra) {
+        summaryExtra.innerText = extraTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+    }
+
+    let grandTotal = packageTotal + extraTotal - discount;
+    if (grandTotal < 0) grandTotal = 0;
+
     const grandTotalSpan = document.getElementById('grandTotal');
     if (grandTotalSpan) {
-        grandTotalSpan.innerText = totalAmount.toLocaleString('th-TH', {minimumFractionDigits: 2});
+        grandTotalSpan.innerText = grandTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
     }
 }
-
 function validateForm() {
     const totalRows = document.querySelectorAll('.static-row, .dynamic-row').length;
     if (totalRows === 0) {

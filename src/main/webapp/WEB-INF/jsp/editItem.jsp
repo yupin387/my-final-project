@@ -98,22 +98,35 @@
 
                         <hr class="divider">
 
-                        <%-- ใช้กับพิธี --%>
+                        <%-- ใช้กับพิธี
+                             ปรับปรุง: เพิ่มคำอธิบายและปุ่ม "เลือกทั้งหมด / ล้างการเลือก" ต่อประเภทงาน
+                             ให้ตรงกับหน้า addItem.jsp เพื่อความสอดคล้องกันของ UX — item หนึ่งตัว
+                             เลือกได้มากกว่า 1 รายการ ข้ามประเภทงาน/ข้ามแพ็กเกจได้อิสระเหมือนกัน --%>
                         <div class="form-group">
                             <div class="section-label">ใช้กับพิธีไหนได้บ้าง</div>
-                            <%-- แก้ไข: เดิมวน ${ceremonies} แบบแบน ๆ ทั้ง 12 แถว โชว์แค่ชื่อแพ็กเกจ
-                                 (มาตรฐาน/อิ่มบุญ/พรีเมียม/กำหนดเอง) ซ้ำกัน 3 รอบ แยกไม่ออกว่าเป็นของ
-                                 ประเภทงานไหน เปลี่ยนมาวน ${groupedCeremonies} ที่ Controller จัดกลุ่ม
-                                 ตามประเภทงานไว้แล้ว แสดงเป็นกลุ่มมีหัวข้อคั่นแทน (ยังเช็ค checked
-                                 จาก item.ceremonies เหมือนเดิม) --%>
+                            <p style="font-size: 12px; color: var(--text-muted); margin: -4px 0 10px;">
+                                เลือกได้มากกว่า 1 รายการ และเลือกข้ามประเภทงาน/ข้ามแพ็กเกจได้อิสระ
+                                เช่น จะให้อุปกรณ์ชิ้นนี้อยู่ทั้งในแพ็กเกจมาตรฐานของทุกงาน
+                                และอยู่ใน "กรอกความต้องการเบื้องต้น" ด้วยพร้อมกันก็ได้<br>
+                                * ถ้าไม่เลือกเลย = ไม่ผูกกับแพ็กเกจใด ระบบจะถือว่าเป็นรายการ
+                                ที่ให้ลูกค้าเลือกเพิ่มเองภายหลัง
+                            </p>
                             <div class="ceremony-box">
                                 <c:forEach var="entry" items="${groupedCeremonies}">
                                     <div class="ceremony-type-group">
-                                        <div class="ceremony-type-heading">${entry.key}</div>
-                                        <div class="ceremony-type-options">
+                                        <div class="ceremony-type-heading-row">
+                                            <div class="ceremony-type-heading">${entry.key}</div>
+                                            <div class="ceremony-quick-actions">
+                                                <button type="button" class="btn-quick-select"
+                                                    onclick="setGroupChecked('grp_${entry.key}', true)">เลือกทั้งหมด</button>
+                                                <button type="button" class="btn-quick-select"
+                                                    onclick="setGroupChecked('grp_${entry.key}', false)">ล้างการเลือก</button>
+                                            </div>
+                                        </div>
+                                        <div class="ceremony-type-options" data-group="grp_${entry.key}">
                                             <c:forEach var="c" items="${entry.value}">
                                                 <div class="ceremony-item">
-                                                    <!-- แก้ไขจุดนี้: เปลี่ยนจาก item.ceremonies เป็น selectedCeremonyIds -->
+                                                    <!-- ใช้ selectedCeremonyIds จาก controller ในการเช็ค checked -->
                                                     <input type="checkbox" name="ceremonyIds"
                                                         value="${c.ceremonyId}" id="cer_${c.ceremonyId}"
                                                         <c:forEach var="selectedId" items="${selectedCeremonyIds}">
@@ -211,6 +224,16 @@
     </div>
 
 </footer>
+
+    <%-- ปุ่ม "เลือกทั้งหมด / ล้างการเลือก" ต่อกลุ่มประเภทงาน (เพิ่มให้ตรงกับ addItem.jsp) --%>
+    <script>
+        function setGroupChecked(groupKey, checked) {
+            var container = document.querySelector('.ceremony-type-options[data-group="' + groupKey + '"]');
+            if (!container) return;
+            var boxes = container.querySelectorAll('input[type="checkbox"]');
+            boxes.forEach(function (cb) { cb.checked = checked; });
+        }
+    </script>
 
     <script src="${pageContext.request.contextPath}/static/js/editItem.js"></script>
     <script>

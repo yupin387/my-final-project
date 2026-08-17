@@ -467,7 +467,7 @@ body {
 
 /* ===== Section Heading ===== */
 .section-heading {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif; /* เปลี่ยนฟอนต์ตรงนี้ให้เป็น Sarabun */
     font-size: 14px;
     font-weight: 700;
     color: var(--brown-text);

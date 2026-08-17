@@ -595,3 +595,24 @@ body {
     .form-row       { grid-template-columns: 1fr; }
     .footer-content { flex-direction: column; align-items: flex-start; }
 }
+
+.ceremony-type-heading-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.ceremony-quick-actions {
+    display: flex;
+    gap: 6px;
+}
+.btn-quick-select {
+    font-size: 12px;
+    padding: 3px 10px;
+    border: 1px solid var(--border, #ddd);
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+}
+.btn-quick-select:hover {
+    background: #f5f5f5;
+}

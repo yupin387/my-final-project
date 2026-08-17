@@ -36,8 +36,7 @@ public class ItemController {
 
     // ลำดับระดับแพ็กเกจตายตัว ใช้จัดเรียง checkbox ภายในแต่ละกลุ่มประเภทงาน
     private static final List<String> PACKAGE_ORDER =
-        List.of("มาตรฐาน", "อิ่มบุญ", "พรีเมียม", "กรอกความต้องการเบื้องต้น");
-
+    	    List.of("แพ็กเกจมาตรฐาน", "แพ็กเกจอิ่มบุญ", "แพ็กเกจพรีเมียม", "กรอกความต้องการเบื้องต้น");
     // จัดกลุ่ม Ceremony ตามประเภทงาน (ceremonyType)
     private Map<String, List<Ceremony>> groupCeremoniesByType(List<Ceremony> allCeremonies) {
         Map<String, List<Ceremony>> grouped = new LinkedHashMap<>();

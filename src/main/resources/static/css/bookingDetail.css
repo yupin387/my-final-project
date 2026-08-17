@@ -475,9 +475,14 @@ body {
 }
 .package-inclusions-title i { color: var(--accent-gold); font-size: 15px; }
 
+/* FIX: เดิมใช้ repeat(auto-fill, minmax(168px, 1fr)) ทำให้จำนวนคอลัมน์
+   ขึ้นอยู่กับความกว้างจริงของกล่อง พอกล่องกว้างพอ (จอใหญ่) เบราว์เซอร์จะ
+   ยัดได้ถึง 4-5 คอลัมน์ ไม่ตรงกับดีไซน์ต้นแบบที่ต้องการ 3 คอลัมน์คงที่
+   เปลี่ยนมา fix เป็น 3 คอลัมน์ตรงๆ แล้วค่อยลดคอลัมน์ผ่าน media query
+   ตอนจอเล็กแทน */
 .package-items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px 10px;
 }
 
@@ -878,8 +883,16 @@ body {
     .info-row { flex-direction: column; gap: 2px; }
     .info-label { width: auto; }
     .action-bar { flex-direction: column; gap: 14px; align-items: flex-start; }
-    
+
+    /* FIX: จอแท็บเล็ต/มือถือแนวนอน ลดจาก 3 เหลือ 2 คอลัมน์ ไม่ให้การ์ดแคบเกินไป */
+    .package-items-grid { grid-template-columns: repeat(2, 1fr); }
+
     /* Footer Mobile Styles */
     .footer-content { flex-direction: column; align-items: flex-start; }
     .site-footer::after { display: none; }
+}
+
+@media (max-width: 480px) {
+    /* FIX: จอมือถือแคบ ลดเหลือ 1 คอลัมน์ */
+    .package-items-grid { grid-template-columns: 1fr; }
 }

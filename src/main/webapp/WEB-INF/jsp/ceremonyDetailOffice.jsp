@@ -138,125 +138,92 @@
 		</div>
 	</div>
 
-	<%-- ========== ชวนสงสัย: ทำไมต้องทำบุญบริษัท (ธีมไทย) พร้อมรูปเณรน้อย 2 ฝั่งหันเข้าหากล่อง ========== --%>
-	<section class="cd-curiosity-teaser">
+	<%-- ========== HERO แนะนำงานทำบุญบริษัท: ข้อความซ้าย + รูปขวา + การ์ดลอย "รู้จักงานทำบุญออฟฟิศ"
+	     (โครงสร้างเดียวกับหน้าทำบุญบ้าน .cd-intro-hero เพื่อให้ธีม/เลย์เอาต์ตรงกัน) ========== --%>
+	<section class="cd-intro-hero">
+		<div class="cd-intro-hero-petal cd-intro-hero-petal--tr"></div>
+		<div class="cd-intro-hero-petal cd-intro-hero-petal--bl"></div>
 
-		<div class="cd-curiosity-side-img left">
-			<img src="${pageContext.request.contextPath}/static/images/img23.png"
-				alt="เณรน้อย">
-		</div>
+		<div class="cd-intro-hero-inner">
+			<div class="cd-intro-hero-text">
+				<div class="cd-intro-hero-icon">
+					<svg width="40" height="40" viewBox="0 0 48 34">
+						<path d="M24 4 C24 4 20 12 24 20 C28 12 24 4 24 4 Z" fill="#E0577F"/>
+						<path d="M24 8 C24 8 16 13 15 22 C21 20 24 14 24 8 Z" fill="#F49CB9"/>
+						<path d="M24 8 C24 8 32 13 33 22 C27 20 24 14 24 8 Z" fill="#F49CB9"/>
+						<path d="M14 22 C14 22 22 24 24 30 C16 30 14 26 14 22 Z" fill="#E0577F"/>
+						<path d="M34 22 C34 22 26 24 24 30 C32 30 34 26 34 22 Z" fill="#E0577F"/>
+					</svg>
+				</div>
 
-		<div class="cd-curiosity-card">
-			<svg class="cd-curiosity-corner tl" viewBox="0 0 42 42">
-            <path
-					d="M0 0 H14 C14 4 12 6 8 6 C10 10 8 14 4 14 C4 18 2 20 0 20 Z"
-					fill="#D9A441" />
-            <path d="M0 0 H42 V3 H3 V42 H0 Z" fill="#D9A441" />
-        </svg>
-			<svg class="cd-curiosity-corner tr" viewBox="0 0 42 42">
-            <path
-					d="M0 0 H14 C14 4 12 6 8 6 C10 10 8 14 4 14 C4 18 2 20 0 20 Z"
-					fill="#D9A441" />
-            <path d="M0 0 H42 V3 H3 V42 H0 Z" fill="#D9A441" />
-        </svg>
-			<svg class="cd-curiosity-corner bl" viewBox="0 0 42 42">
-            <path
-					d="M0 0 H14 C14 4 12 6 8 6 C10 10 8 14 4 14 C4 18 2 20 0 20 Z"
-					fill="#D9A441" />
-            <path d="M0 0 H42 V3 H3 V42 H0 Z" fill="#D9A441" />
-        </svg>
-			<svg class="cd-curiosity-corner br" viewBox="0 0 42 42">
-            <path
-					d="M0 0 H14 C14 4 12 6 8 6 C10 10 8 14 4 14 C4 18 2 20 0 20 Z"
-					fill="#D9A441" />
-            <path d="M0 0 H42 V3 H3 V42 H0 Z" fill="#D9A441" />
-        </svg>
+				<h2 class="cd-intro-hero-title">พิธีทำบุญบริษัท เพื่อความเป็นสิริมงคลและความเจริญก้าวหน้าขององค์กร</h2>
 
-			<div class="cd-curiosity-icon">
-				<svg width="48" height="34" viewBox="0 0 48 34">
-                <path d="M24 4 C24 4 20 12 24 20 C28 12 24 4 24 4 Z"
-						fill="#A6222F" />
-                <path d="M24 8 C24 8 16 13 15 22 C21 20 24 14 24 8 Z"
-						fill="#D9A441" />
-                <path d="M24 8 C24 8 32 13 33 22 C27 20 24 14 24 8 Z"
-						fill="#D9A441" />
-                <path d="M14 22 C14 22 22 24 24 30 C16 30 14 26 14 22 Z"
-						fill="#A6222F" />
-                <path d="M34 22 C34 22 26 24 24 30 C32 30 34 26 34 22 Z"
-						fill="#A6222F" />
-                <ellipse cx="24" cy="30" rx="10" ry="2" fill="#D9A441"
-						opacity="0.4" />
-            </svg>
+				<p class="cd-intro-hero-desc">
+					การทำบุญบริษัทหรือออฟฟิศ เป็นโอกาสในการเสริมสิริมงคลให้กับสถานที่ทำงาน
+					และผู้ที่ปฏิบัติงานภายในองค์กร หลายบริษัทนิยมจัดพิธีทำบุญเพื่อสร้างขวัญและกำลังใจ
+					รวมถึงเป็นการเริ่มต้นช่วงเวลาใหม่ ๆ ด้วยความเป็นสิริมงคล
+					อีกทั้งยังช่วยสร้างความสามัคคีและความสัมพันธ์อันดีระหว่างผู้บริหารและพนักงาน
+				</p>
+
+				<div class="cd-intro-hero-ornament">
+					<svg width="60" height="20" viewBox="0 0 60 20">
+						<line x1="0" y1="10" x2="20" y2="10" stroke="#D9A441" stroke-width="1"/>
+						<line x1="40" y1="10" x2="60" y2="10" stroke="#D9A441" stroke-width="1"/>
+						<path d="M30 4 C27 8 27 12 30 16 C33 12 33 8 30 4 Z" fill="#E0577F"/>
+						<path d="M24 10 C26 8 28 8 30 10 C28 12 26 12 24 10 Z" fill="#D9A441"/>
+						<path d="M36 10 C34 8 32 8 30 10 C32 12 34 12 36 10 Z" fill="#D9A441"/>
+					</svg>
+				</div>
 			</div>
 
-			<div class="cd-curiosity-question">
-				พิธีทำบุญบริษัท เพื่อความเป็นสิริมงคล<br>
-				และความเจริญก้าวหน้าขององค์กร
-			</div>
-			<div class="cd-curiosity-divider">
-				<span></span><i>◆</i><span></span>
-			</div>
-			<div class="cd-curiosity-answer">การทำบุญบริษัทหรือออฟฟิศ
-				เป็นโอกาสในการเสริมสิริมงคลให้กับสถานที่ทำงานและผู้ที่ปฏิบัติงานภายในองค์กร
-				หลายบริษัทนิยมจัดพิธีทำบุญเพื่อสร้างขวัญและกำลังใจ
-				รวมถึงเป็นการเริ่มต้นช่วงเวลาใหม่ ๆ ด้วยความเป็นสิริมงคล
-				นอกจากนี้ยังช่วยสร้างความสามัคคีและความสัมพันธ์อันดีระหว่างผู้บริหารและพนักงาน
-				ให้ทุกคนได้ร่วมกันทำกิจกรรมดี ๆ และสร้างบรรยากาศที่ดีในการทำงาน</div>
-		</div>
+			<div class="cd-intro-hero-photo-wrap">
+				<img src="${pageContext.request.contextPath}/static/images/b3.jpg"
+					 alt="ทีมงานให้คำปรึกษาการจัดงานทำบุญบริษัท" class="cd-intro-hero-photo">
 
-		<div class="cd-curiosity-side-img right">
-			<img src="${pageContext.request.contextPath}/static/images/img23.png"
-				alt="เณรน้อย">
-		</div>
-
-	</section>
-
-	<%-- ========== รู้จักงานทำบุญออฟฟิศ: ย้ายขึ้นบนสุด เป็นแบนเนอร์ภาพ + ไล่สีชมพู ========== --%>
-	<section class="cd-intro-banner">
-		<div class="cd-intro-banner-img">
-			<img src="${pageContext.request.contextPath}/static/images/b3.jpg"
-				alt="ทีมงานให้คำปรึกษาการจัดงาน">
-		</div>
-		<div class="cd-intro-banner-text">
-			<div class="cd-intro-banner-text-inner">
-				<div class="cd-intro-banner-title">รู้จักงานทำบุญออฟฟิศ</div>
-				<p class="cd-intro-banner-desc">งานทำบุญออฟฟิศหรือบริษัท
-					คือการนิมนต์พระสงฆ์มาประกอบพิธีสงฆ์ในสถานที่ทำงาน
-					เพื่อความเป็นสิริมงคล ในการดำเนินธุรกิจ นิยมจัดเมื่อเปิดบริษัทใหม่
-					ย้ายสำนักงาน หรือทำบุญประจำปีของกิจการ เชื่อว่าจะช่วยเสริมดวงการงาน
-					สร้างขวัญกำลังใจให้พนักงาน และเป็นการแสดงความเคารพต่อสถานที่ทำงาน
-					ก่อนเริ่มดำเนินกิจการหรือช่วงเวลาสำคัญของบริษัท</p>
+				<div class="cd-intro-float-card">
+					<div class="cd-intro-float-card-icon">🏢</div>
+					<div class="cd-intro-float-card-body">
+						<div class="cd-intro-float-card-title">รู้จักงานทำบุญออฟฟิศ</div>
+						<p class="cd-intro-float-card-desc">
+							งานทำบุญออฟฟิศหรือบริษัท คือการนิมนต์พระสงฆ์มาประกอบพิธีสงฆ์ในสถานที่ทำงาน
+							เพื่อความเป็นสิริมงคลในการดำเนินธุรกิจ นิยมจัดเมื่อเปิดบริษัทใหม่
+							ย้ายสำนักงาน หรือทำบุญประจำปีของกิจการ เชื่อว่าจะช่วยเสริมดวงการงาน
+							สร้างขวัญกำลังใจให้พนักงาน และเป็นการแสดงความเคารพต่อสถานที่ทำงาน
+							ก่อนเริ่มดำเนินกิจการหรือช่วงเวลาสำคัญของบริษัท
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
 
 	<%-- ========== KANOK DIVIDER ========== --%>
 <svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:48px;background:#FFF5F8;">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8C878" stroke-width="1" opacity="0.6"/>
-    <g fill="#D9A441" opacity="0.55">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F0A9C1" stroke-width="1" opacity="0.6"/>
+    <g fill="#E0577F" opacity="0.5">
         <ellipse cx="600" cy="24" rx="18" ry="6" transform="rotate(-30 600 24)"/>
         <ellipse cx="600" cy="24" rx="18" ry="6" transform="rotate(30 600 24)"/>
         <ellipse cx="600" cy="24" rx="18" ry="6"/>
-        <circle  cx="600" cy="24" r="4"   fill="#F7E3B0"/>
+        <circle  cx="600" cy="24" r="4"   fill="#D9A441"/>
         <ellipse cx="480" cy="24" rx="14" ry="5" transform="rotate(-30 480 24)"/>
         <ellipse cx="480" cy="24" rx="14" ry="5" transform="rotate(30 480 24)"/>
-        <circle  cx="480" cy="24" r="3"   fill="#F7E3B0"/>
+        <circle  cx="480" cy="24" r="3"   fill="#D9A441"/>
         <ellipse cx="720" cy="24" rx="14" ry="5" transform="rotate(-30 720 24)"/>
         <ellipse cx="720" cy="24" rx="14" ry="5" transform="rotate(30 720 24)"/>
-        <circle  cx="720" cy="24" r="3"   fill="#F7E3B0"/>
+        <circle  cx="720" cy="24" r="3"   fill="#D9A441"/>
         <ellipse cx="360" cy="24" rx="10" ry="4" transform="rotate(-30 360 24)"/>
         <ellipse cx="360" cy="24" rx="10" ry="4" transform="rotate(30 360 24)"/>
-        <circle  cx="360" cy="24" r="2.5" fill="#F7E3B0"/>
+        <circle  cx="360" cy="24" r="2.5" fill="#D9A441"/>
         <ellipse cx="840" cy="24" rx="10" ry="4" transform="rotate(-30 840 24)"/>
         <ellipse cx="840" cy="24" rx="10" ry="4" transform="rotate(30 840 24)"/>
-        <circle  cx="840" cy="24" r="2.5" fill="#F7E3B0"/>
+        <circle  cx="840" cy="24" r="2.5" fill="#D9A441"/>
         <ellipse cx="240" cy="24" rx="7"  ry="3" transform="rotate(-30 240 24)"/>
         <ellipse cx="240" cy="24" rx="7"  ry="3" transform="rotate(30 240 24)"/>
         <ellipse cx="960" cy="24" rx="7"  ry="3" transform="rotate(-30 960 24)"/>
         <ellipse cx="960" cy="24" rx="7"  ry="3" transform="rotate(30 960 24)"/>
     </g>
-    <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#E8C878" stroke-width="0.5" opacity="0.35"/>
-    <line x1="0" y1="42" x2="1200" y2="42" stroke="#E8C878" stroke-width="0.5" opacity="0.35"/>
+    <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#F0A9C1" stroke-width="0.5" opacity="0.35"/>
+    <line x1="0" y1="42" x2="1200" y2="42" stroke="#F0A9C1" stroke-width="0.5" opacity="0.35"/>
 </svg>
 
 	<%-- ========== MAIN CONTENT ========== --%>
@@ -371,17 +338,14 @@
 
 				<li>✅ มัคนายกดำเนินพิธี</li>
 
-				<li>✅ เลือกสินค้าและบริการเพิ่มเติมได้ เช่น ชุดสังฆทาน
-					ชุดปิ่นโต อุปกรณ์พิธีอื่น ๆ เพื่อให้เหมาะกับความต้องการของแต่ละงาน</li>
-					
 				<li>
-                ✅ เลือกสินค้าและบริการเพิ่มเติมได้ เช่น ชุดสังฆทาน ชุดปิ่นโต
-                <div class="cd-important-note">
-                    <strong>หมายเหตุ:</strong> ชุดสังฆทานที่รวมอยู่ในแพ็กเกจเป็นชุดมาตรฐานราคา 299 บาท/ชุด
-                    ตามจำนวนพระสงฆ์ของแพ็กเกจที่เลือก หากลูกค้าต้องการเปลี่ยนเป็นชุดสังฆทานราคาอื่นที่นอกเหนือจากชุดมาตรฐานนี้
-                    ทางร้านจะคิดค่าใช้จ่ายส่วนต่างเพิ่มเติมจากราคาแพ็กเกจที่ระบุไว้
-                </div>
-            </li>
+					✅ เลือกสินค้าและบริการเพิ่มเติมได้ เช่น ชุดสังฆทาน ชุดปิ่นโต
+					<div class="cd-important-note">
+						<strong>หมายเหตุ:</strong> ชุดสังฆทานที่รวมอยู่ในแพ็กเกจเป็นชุดมาตรฐานราคา 299 บาท/ชุด
+						ตามจำนวนพระสงฆ์ของแพ็กเกจที่เลือก หากลูกค้าต้องการเปลี่ยนเป็นชุดสังฆทานราคาอื่นที่นอกเหนือจากชุดมาตรฐานนี้
+						ทางร้านจะคิดค่าใช้จ่ายส่วนต่างเพิ่มเติมจากราคาแพ็กเกจที่ระบุไว้
+					</div>
+				</li>
 			</ul>
 		</div>
 

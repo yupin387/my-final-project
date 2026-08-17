@@ -192,57 +192,54 @@
             </thead>
             <tbody>
                 <c:set var="count" value="1"/>
+<%-- ===== 1. แสดงชื่อแพ็กเกจหลัก (พร้อมราคาและลำดับ) ===== --%>
+<c:if test="${!isCustomRequest}">
+    <tr class="static-row">
+        <td class="text-center row-number">1</td>
+        <td>
+            <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
+            <c:if test="${isMonkSelfInvite}"><br><span class="text-muted">(ลูกค้านิมนต์เอง)</span></c:if>
+        </td>
+        <td class="text-center">1</td>
+        <td class="text-center">แพ็กเกจ</td>
+        
+        <%-- ใช้ basePrice ตามโมเดล Ceremony --%>
+        <td class="text-right">
+            <fmt:formatNumber value="${b.ceremony.basePrice}" minFractionDigits="2" />
+        </td>
+        <td class="text-right">
+            <fmt:formatNumber value="${b.ceremony.basePrice}" minFractionDigits="2" />
+        </td>
+    </tr>
+</c:if>
 
-                <%-- ===== หมวดแพ็กเกจหลัก ===== --%>
-                <c:forEach var="d" items="${details}">
-                    <c:if test="${d.item != null && d.item.itemName == packageName}">
-                        <tr>
-                            <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
-                            <td>
-                                <span class="item-name">
-                                    <c:choose>
-                                        <c:when test="${isCustomRequest}">แพ็กเกจ: ${d.item.itemName}</c:when>
-                                        <c:otherwise><strong>แพ็กเกจ: ${d.item.itemName}</strong></c:otherwise>
-                                    </c:choose>
-                                </span>
-                                <c:if test="${isMonkSelfInvite}"><br><span class="text-muted">(ลูกค้านิมนต์เอง)</span></c:if>
-                            </td>
-                            <td class="text-center">1</td>
-                            <td class="text-center">แพ็กเกจ</td>
-                            <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
-                            <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2"/></td>
-                        </tr>
-                    </c:if>
-                </c:forEach>
-
-                <%-- ===== แสดงซับไอเทม (packageIncludedItems) ===== --%>
-                <c:if test="${not empty packageIncludedItems}">
-                    <tr>
-                        <td class="text-center"></td>
-                        <td style="padding-left: 8px; font-weight: bold;">ประกอบไปด้วยรายการดังนี้:</td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-right"></td>
-                        <td class="text-right"></td>
-                    </tr>
-                    <c:forEach var="subItem" items="${packageIncludedItems}">
-                        <c:set var="subItemQty" value="1"/>
-                        <c:if test="${(not empty subItem.itemDetail && fn:contains(subItem.itemDetail,'ต่อรูป')) || fn:contains(subItem.itemName,'ต่อรูป') || fn:contains(subItem.itemName,'พระสงฆ์')}">
-                            <c:set var="subItemQty" value="${not empty monkCount ? monkCount : 1}"/>
-                        </c:if>
-                        <tr>
-                            <td class="text-center"></td>
-                            <td style="padding-left: 20px;">
-                                - ${subItem.itemName}
-                            </td>
-                            <td class="text-center">${subItemQty}</td>
-                            <td class="text-center">${subItem.unit}</td>
-                            <td class="text-right">-</td>
-                            <td class="text-right">-</td>
-                        </tr>
-                    </c:forEach>
-                </c:if>
-
+<%-- ===== 2. แสดงรายการประกอบ (Sub-items) ===== --%>
+<c:if test="${not empty packageIncludedItems}">
+    <tr class="package-included-header">
+        <td class="text-center"></td>
+        <td style="padding-left: 8px; font-weight: bold;">ประกอบไปด้วยรายการดังนี้:</td>
+        <td class="text-center"></td>
+        <td class="text-center"></td>
+        <td class="text-right"></td>
+        <td class="text-right"></td>
+    </tr>
+    <c:forEach var="subItem" items="${packageIncludedItems}">
+        <c:set var="subItemQty" value="1"/>
+        <c:if test="${(not empty subItem.itemDetail && fn:contains(subItem.itemDetail,'ต่อรูป')) || fn:contains(subItem.itemName,'ต่อรูป') || fn:contains(subItem.itemName,'พระสงฆ์')}">
+            <c:set var="subItemQty" value="${not empty monkCount ? monkCount : 1}"/>
+        </c:if>
+        <tr>
+            <td class="text-center"></td>
+            <td style="padding-left: 20px;">
+                - ${subItem.itemName}
+            </td>
+            <td class="text-center">${subItemQty}</td>
+            <td class="text-center">${subItem.unit}</td>
+            <td class="text-right text-muted">-</td>
+            <td class="text-right text-muted">-</td>
+        </tr>
+    </c:forEach>
+</c:if>
                 <%-- ===== หมวดอุปกรณ์พิธีกรรม ===== --%>
                 <c:set var="equipBlock">
                     <c:set var="printedEquip" value="false"/>
@@ -407,23 +404,25 @@
             <div class="totals-wrap">
                 <div class="totals-box">
                     <c:set var="sumExtra" value="0"/>
-                    <c:set var="sumPackage" value="0"/>
-                    <c:forEach var="d" items="${details}">
-                        <c:if test="${d.item != null}">
-                            <c:choose>
-                                <c:when test="${d.item.itemName == packageName}">
-                                    <c:set var="sumPackage" value="${d.subtotal}"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:set var="itemVal" value="${d.subtotal}"/>
-                                    <c:if test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
-                                        <c:set var="itemVal" value="0"/>
-                                    </c:if>
-                                    <c:set var="sumExtra" value="${sumExtra + itemVal}"/>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:if>
-                    </c:forEach>
+<%-- ดึงราคา basePrice ของแพ็กเกจมาใส่ตัวแปร sumPackage โดยตรง --%>
+<c:set var="sumPackage" value="${isCustomRequest ? 0 : q.bookingForm.ceremony.basePrice}"/>
+
+<c:forEach var="d" items="${details}">
+    <c:if test="${d.item != null}">
+        <c:choose>
+            <c:when test="${d.item.itemName == packageName}">
+                <%-- ปล่อยผ่านหรือจัดการตามเดิม --%>
+            </c:when>
+            <c:otherwise>
+                <c:set var="itemVal" value="${d.subtotal}"/>
+                <c:if test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
+                    <c:set var="itemVal" value="0"/>
+                </c:if>
+                <c:set var="sumExtra" value="${sumExtra + itemVal}"/>
+            </c:otherwise>
+        </c:choose>
+    </c:if>
+</c:forEach>
 
                     <table class="totals-table">
                         <tr>
@@ -447,11 +446,13 @@
                                 <td class="tot-value text-danger">- ฿ 1,500.00</td>
                             </tr>
                         </c:if>
-                        <tr class="grand-total-row">
+<tr class="grand-total-row">
                             <td class="tot-label">ยอดรวมสุทธิ:</td>
-                            <td class="total-amount">฿ <fmt:formatNumber value="${q.totalAmount}" minFractionDigits="2"/></td>
-                        </tr>
-                    </table>
+                            <%-- แก้บรรทัดนี้: คำนวณยอดรวมสุทธิสดๆ ตรงนี้เลย --%>
+                            <td class="total-amount">
+                                ฿ <fmt:formatNumber value="${isCustomRequest ? (sumPackage + sumExtra) : (sumPackage + sumExtra - (isMonkSelfInvite ? 1500 : 0))}" minFractionDigits="2"/>
+                            </td>
+                        </tr>                    </table>
                 </div>
             </div>
 

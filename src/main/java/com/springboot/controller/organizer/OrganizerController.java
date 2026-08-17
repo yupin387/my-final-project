@@ -163,9 +163,11 @@ public class OrganizerController {
         //  ต้องดำเนินการต่อ (ทำใบเสนอราคา) — ยังไม่ใช่ขั้น "ยืนยันแล้ว"
         //  ซึ่งเป็นสถานะที่ "ลูกค้า" เป็นคนกดยืนยันเอง
         // ==========================================================
+     // ให้แก้ไขเงื่อนไขตรงส่วนนี้
         if ("Pending".equals(status)) {
-            List<BookingForm> bookings = bookingService.getBookingsByStatuses(
-                Arrays.asList("Pending", "Approved"));
+            // เปลี่ยนให้ดึงเฉพาะสถานะ "Pending" (หรือสถานะเริ่มต้นที่ยังไม่ทำใบเสนอราคา) เท่านั้น
+            List<BookingForm> bookings = bookingService.findByStatus("Pending");
+            
             model.addAttribute("bookings", bookings);
             model.addAttribute("currentStatus", status);
             return "bookingList_New";

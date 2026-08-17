@@ -31,7 +31,6 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
-    /* เปลี่ยนจากสีเขียวเป็นสีฟ้า */
     .flash-banner-success {
         background-color: #DBEAFE;
         color: #1D4ED8;
@@ -44,7 +43,6 @@
         border: 1px solid #f5c6cb;
     }
 
-    /* ===== ความต้องการเพิ่มเติม ===== */
     .remarks-box {
         flex: 1;
         margin-right: 20px;
@@ -217,21 +215,23 @@
                 </thead>
                 <tbody>
 
-                    <c:forEach var="d" items="${details}">
-                        <c:if test="${fn:trim(d.item.itemName) eq fn:trim(b.ceremony.ceremonyName)}">
-                            <tr class="static-row">
-                                <td class="text-center row-number"></td>
-                                <td>
-                                    <strong>แพ็กเกจ: ${d.item.itemName}</strong>
-                                    <c:if test="${isMonkSelfInvite}"><br><span class="text-muted">(ลูกค้านิมนต์เอง)</span></c:if>
-                                </td>
-                                <td class="text-center">1</td>
-                                <td class="text-center">แพ็กเกจ</td>
-                                <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
-                                <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2" /></td>
-                            </tr>
-                        </c:if>
-                    </c:forEach>
+<c:if test="${!isCustomRequest}">
+    <tr class="static-row">
+        <td class="text-center row-number"></td>
+        <td>
+            <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
+            <c:if test="${isMonkSelfInvite}"><br><span class="text-muted">(ลูกค้านิมนต์เอง)</span></c:if>
+        </td>
+        <td class="text-center">1</td>
+        <td class="text-center">แพ็กเกจ</td>
+        <td class="text-right">
+            <fmt:formatNumber value="${b.ceremony.basePrice}" minFractionDigits="2" />
+        </td>
+        <td class="text-right">
+            <fmt:formatNumber value="${b.ceremony.basePrice}" minFractionDigits="2" />
+        </td>
+    </tr>
+</c:if>
 
                     <c:if test="${not empty packageIncludedItems && !isCustomRequest}">
                         <tr class="package-included-row">
@@ -422,13 +422,14 @@
                     </div>
                 </div>
 
-                <div class="totals-box" style="width: 350px;">
+<div class="totals-box" style="width: 350px;">
                     <c:set var="sumExtra" value="0" />
-                    <c:set var="sumPackage" value="0" />
+                    <c:set var="sumPackage" value="${isCustomRequest ? 0 : b.ceremony.basePrice}" />
+                    
                     <c:forEach var="d" items="${details}">
                         <c:choose>
-                            <c:when test="${fn:trim(d.item.itemName) eq fn:trim(b.ceremony.ceremonyName)}">
-                                <c:set var="sumPackage" value="${d.subtotal}" />
+                            <%-- ถ้าไม่ใช่เคสกรอกเอง ให้เช็คตัดชื่อแพ็กเกจออกปกติ --%>
+                            <c:when test="${!isCustomRequest && fn:trim(d.item.itemName) eq fn:trim(b.ceremony.ceremonyName)}">
                             </c:when>
                             <c:otherwise>
                                 <c:set var="itemVal" value="${d.subtotal}" />
@@ -440,6 +441,10 @@
                         </c:choose>
                     </c:forEach>
 
+                    <%-- หากเป็นกรอกเอง ให้เอายอดรวมทั้งหมดจาก sumExtra มาเป็นราคาตามรายการ --%>
+                    <c:set var="displayPackagePrice" value="${isCustomRequest ? sumExtra : sumPackage}" />
+                    <c:set var="calculatedGrandTotal" value="${isCustomRequest ? sumExtra : (sumPackage + sumExtra - (isMonkSelfInvite ? 1500 : 0))}" />
+
                     <table class="totals-table">
                         <tr>
                             <td class="tot-label">
@@ -448,7 +453,8 @@
                                     <c:otherwise>ราคาแพ็กเกจ:</c:otherwise>
                                 </c:choose>
                             </td>
-                            <td class="tot-value">฿ <fmt:formatNumber value="${isCustomRequest ? (sumPackage + sumExtra) : sumPackage}" minFractionDigits="2"/></td>
+                            <%-- เปลี่ยนมาแสดงผลด้วยตัวแปร displayPackagePrice --%>
+                            <td class="tot-value">฿ <fmt:formatNumber value="${displayPackagePrice}" minFractionDigits="2"/></td>
                         </tr>
                         <c:if test="${!isCustomRequest}">
                             <tr>
@@ -464,7 +470,7 @@
                         </c:if>
                         <tr class="grand-total-row">
                             <td class="tot-label">ยอดรวมสุทธิ:</td>
-                            <td class="total-amount">฿ <fmt:formatNumber value="${q.totalAmount}" minFractionDigits="2"/></td>
+                            <td class="total-amount">฿ <fmt:formatNumber value="${calculatedGrandTotal}" minFractionDigits="2"/></td>
                         </tr>
                     </table>
                 </div>
