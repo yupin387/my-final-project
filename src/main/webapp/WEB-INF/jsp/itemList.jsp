@@ -24,11 +24,11 @@
         <a class="navbar-brand" href="${pageContext.request.contextPath}/staff/assignments">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
                  alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
-            <span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
+            <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
         </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
-                <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">รายการงาน</a>
+                <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">รายการงานที่ได้รับมอบหมาย</a>
                 <a href="${pageContext.request.contextPath}/staff/items" class="nav-item active">จัดการ Item</a>
             </nav>
             <div class="user-info" onclick="toggleDropdown()">

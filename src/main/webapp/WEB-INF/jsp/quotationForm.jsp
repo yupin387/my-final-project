@@ -99,7 +99,7 @@
 							</tr>
 							<tr>
 								<td class="label">ยืนยันภายใน (วัน):</td>
-								<td class="value"><input type="number" name="validDays" value="5" class="inline-input" style="width: 50px;"> วัน</td>
+								<td class="value">5 <input type="hidden" name="validDays" value="5"> วัน</td>
 							</tr>
 						</table>
 					</div>
@@ -109,10 +109,10 @@
                     <colgroup>
                         <col style="width: 50px;">  
                         <col style="width: auto;">  
-                        <col style="width: 140px;">  
+                        <col style="width: 130px;">  
                         <col style="width: 80px;">  
-                        <col style="width: 120px;"> 
-                        <col style="width: 120px;"> 
+                        <col style="width: 110px;"> 
+                        <col style="width: 110px;"> 
                     </colgroup>
 					<thead>
 						<tr>
@@ -156,7 +156,7 @@
 								<strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
 								<input type="hidden" name="bookingItemNames" value="${b.ceremony.ceremonyName}">
 							</td>
-							<td><input type="number" name="bookingQtys" value="1" class="qty-input" readonly></td>
+							<td class="text-center">1<input type="hidden" name="bookingQtys" value="1" class="qty-input"></td>
 							<td class="text-center">แพ็กเกจ</td>
 							<td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
 							<td class="text-right"><span class="subtotal">0.00</span></td>
@@ -165,7 +165,8 @@
 
 						<c:if test="${not empty packageIncludedItems && !isCustomRequest}">
 							<tr class="package-included-row no-qty-convert static-row">
-                                <td colspan="6" class="package-includes-title text-left" style="padding-left: 20px !important;">ประกอบไปด้วยรายการดังนี้:</td>
+                                <td class="no-index"></td>
+                                <td colspan="5" class="package-includes-title text-left">ประกอบไปด้วยรายการดังนี้:</td>
 							</tr>
 							<c:forEach var="pkgItem" items="${packageIncludedItems}">
 								<tr class="package-included-row no-qty-convert static-row">
@@ -231,7 +232,7 @@
                                                         <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                         <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                     </td>
-                                                    <td><input type="number" name="bookingQtys" value="${sangQty}" class="qty-input" readonly></td>
+                                                    <td class="text-center">${sangQty}<input type="hidden" name="bookingQtys" value="${sangQty}" class="qty-input"></td>
                                                     <td class="text-center">${item.unit}</td>
                                                     <td>
                                                         <c:set var="sangPrice" value="${isFreeSang ? '0.00' : item.pricePerUnit}" />
@@ -271,7 +272,7 @@
                                                         ${item.itemName} <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                         <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                     </td>
-                                                    <td><input type="number" name="bookingQtys" value="${foodQty}" class="qty-input" readonly></td>
+                                                    <td class="text-center">${foodQty}<input type="hidden" name="bookingQtys" value="${foodQty}" class="qty-input"></td>
                                                     <td class="text-center">${item.unit}</td>
                                                     <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>
@@ -300,7 +301,7 @@
                                                     ${item.itemName} <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                     <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                 </td>
-                                                <td><input type="number" name="bookingQtys" value="${monkCount}" class="qty-input" readonly></td>
+                                                <td class="text-center">${monkCount}<input type="hidden" name="bookingQtys" value="${monkCount}" class="qty-input"></td>
                                                 <td class="text-center">${item.unit}</td>
                                                 <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                                 <td class="text-right"><span class="subtotal">0.00</span></td>
@@ -357,7 +358,7 @@
                                                         <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                         <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                     </td>
-                                                    <td><input type="number" name="bookingQtys" value="${sangQty}" class="qty-input" readonly></td>
+                                                    <td class="text-center">${sangQty}<input type="hidden" name="bookingQtys" value="${sangQty}" class="qty-input"></td>
                                                     <td class="text-center">${item.unit}</td>
                                                     <td>
                                                         <c:set var="sangPrice" value="${isFreeSang ? '0.00' : item.pricePerUnit}" />
@@ -397,7 +398,7 @@
                                                         ${item.itemName} <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
                                                         <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                                     </td>
-                                                    <td><input type="number" name="bookingQtys" value="${foodQty}" class="qty-input" readonly></td>
+                                                    <td class="text-center">${foodQty}<input type="hidden" name="bookingQtys" value="${foodQty}" class="qty-input"></td>
                                                     <td class="text-center">${item.unit}</td>
                                                     <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap');
 
 * {
 	margin: 0;
@@ -76,6 +76,7 @@ body {
 	z-index: 10000;
 	min-height: 92px;
 	box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
+    overflow: visible;
 }
 
 .navbar::before {
@@ -92,27 +93,33 @@ body {
     align-items: center;
     gap: 12px;
     text-decoration: none;
+    position: relative;
 }
 
 .navbar .lotus-icon,
 .navbar-brand .lotus-icon,
 .navbar-brand-wrap .lotus-icon {
     background: rgba(255, 255, 255, 0.18);
-    width: 45px;
-    height: 45px;
-    max-width: 45px;
-    max-height: 45px;
+    width: 76px;
+    height: 76px;
+    max-width: 76px;
+    max-height: 76px;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
     border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
     object-fit: cover;
     flex-shrink: 0;
 }
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
+    font-family: 'Charmonman', cursive;
+    font-size: 34px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3);
@@ -372,9 +379,11 @@ body {
     border: 1.5px solid rgba(255, 255, 255, 0.45);
     object-fit: cover;
     flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
 }
 
 .footer-brand-text {
+    font-family: 'Charmonman', cursive;
     font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;
@@ -395,7 +404,7 @@ body {
 
 @media (max-width: 768px) {
     .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
-    .navbar-menu { flex-wrap: wrap; gap: 4px; }
+    .navbar-menu { flex-wrap: wrap; gap: 4px; display: none; }
     .navbar-title { font-size: 22px; }
     .navbar .lotus-icon,
     .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
@@ -417,17 +426,16 @@ body {
 .text-danger { color: #c62828 !important; }
 .text-muted  { color: var(--text-muted); font-size: 13px; }
 
-/* หัวกระดาษ (ปรับขนาดฟอนต์ให้ใหญ่เท่ากับหน้า Create) */
+/* หัวกระดาษ */
 .doc-header {
     text-align: center;
-    border-bottom: 2px solid var(--brand-green-dark);
+    border-bottom: 2px solid #000;
     padding-bottom: 20px;
     margin-bottom: 25px;
 }
 .company-info h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); }
 .company-info p { font-size: 14px; color: #444; line-height: 1.5; }
 
-/* นำดอกบัวด้านบนออก และปรับขนาดให้เท่าหน้า Create */
 .doc-title-box { position: relative; margin-top: 25px; }
 .doc-title-box h1 { font-size: 26px; font-weight: 700; color: var(--text-dark); letter-spacing: 1px; }
 .doc-title-box p { text-align: center; color: #555; font-size: 14px; margin-top: 2px; }
@@ -443,42 +451,53 @@ body {
 .layout-table .label { font-weight: 700; width: 120px; color: var(--text-dark); white-space: nowrap; font-size: 14px; }
 .layout-table .value { font-size: 14px; color: var(--text-dark); }
 
-/* ใส่ขอบสีน้ำตาลเข้มรอบนอก และเส้นคั่นตรงกลาง */
-.layout-table.bordered { 
-    border: 1px solid var(--brown-mid); 
-    border-radius: 0; 
+/* ใส่ขอบสีดำรอบนอก และเส้นคั่นตรงกลาง */
+.layout-table.bordered {
+    border: 1px solid #000;
+    border-radius: 0;
 }
-.layout-table.bordered td { 
-    border: 1px solid var(--brown-mid); 
+.layout-table.bordered td {
+    border: 1px solid #000;
 }
 
-/* ตารางรายการ (ขยายฟอนต์เป็น 14px เท่าหน้า Create) */
+/* ตารางรายการ */
 .standard-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; table-layout: fixed; }
-.standard-table th, .standard-table td { border: 1px solid #333; padding: 8px; font-size: 14px; vertical-align: middle; overflow: hidden; word-wrap: break-word; }
-.standard-table th { background-color: var(--brand-green-dark); color: #FFF; font-weight: 700; text-align: center; border-color: var(--brand-green-dark); }
+.standard-table th, .standard-table td { border: 1px solid #000; padding: 8px; font-size: 14px; vertical-align: middle; overflow: hidden; word-wrap: break-word; }
 
-.group-row td { background: var(--green-glow) !important; }
+/* แถบคอลัมน์หัวตาราง: เขียว -> เหลือง/ทอง */
+.standard-table th { background-color: var(--gold); color: #FFF; font-weight: 700; text-align: center; border-color: #000; }
+
+/* แถบหมวด (group-row): เขียว -> เหลืองอ่อน */
+.group-row td { background: var(--gold-pale) !important; }
 .category-header-text { font-weight: 800 !important; color: var(--text-dark) !important; font-size: 14.5px !important; text-align: center !important; }
 
 .package-includes-title { font-weight: 700; font-size: 13.5px; border-top: none !important; border-bottom: none !important; padding-top: 15px !important; color: var(--text-dark); }
-.package-included-row td { border-top: none !important; border-bottom: none !important; padding-top: 2px !important; padding-bottom: 2px !important; color: var(--text-muted); }
+.package-included-row td {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    color: var(--text-muted);
+}
 .indented-item { padding-left: 35px !important; }
 
-/* สรุปยอด */
+/* สรุปยอด: แถบสรุปราคา เขียว -> เหลืองอ่อน (โทนอ่อนตามที่ปรับ) */
 .doc-footer { display: flex; justify-content: space-between; gap: 30px; align-items: stretch; }
-.totals-box { border: 1px solid var(--brand-green-dark); border-radius: 4px; overflow: hidden; width: 360px; }
+.totals-box { border: 2px solid #000; border-radius: 4px; overflow: hidden; width: 360px; }
 .totals-table { width: 100%; border-collapse: collapse; height: 100%; }
-.totals-table td { border: 1px solid var(--brand-green-dark); padding: 12px 15px; font-weight: 600; font-size: 14px; }
-.tot-label { background: var(--green-glow); width: 55%; text-align: left; color: var(--text-dark); }
+.totals-table td { border: 1px solid #000; padding: 12px 15px; font-weight: 600; font-size: 14px; }
+.tot-label { background: var(--gold-pale); width: 55%; text-align: left; color: var(--text-dark); }
 .tot-value { text-align: right; width: 45%; white-space: nowrap; color: var(--text-dark); }
-.grand-total-row td { font-weight: 700; font-size: 16px; border-color: var(--brand-green-dark); background: var(--cream-warm); }
+.grand-total-row td { font-weight: 700; font-size: 16px; border-color: #000; background: var(--gold-light); }
 .total-amount { text-align: right; font-size: 19px !important; color: #B91C1C !important; font-weight: 800; }
 
-/* ===== ความต้องการเพิ่มเติม (กล่องด้านล่างคู่กับยอดรวม) ===== */
+/* ===== ความต้องการเพิ่มเติม ===== */
 .remarks-box {
     flex: 1;
     margin-right: 20px;
-    border: 1px solid var(--green-banana-light);
+    border: 1px solid #000;
     border-radius: 8px;
     padding: 16px;
     background: #FFFFFF;
@@ -491,7 +510,7 @@ body {
     white-space: pre-wrap;
     min-height: 120px;
     padding: 12px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #000;
     border-radius: 6px;
     background: #fdfdfd;
     font-size: 14px;

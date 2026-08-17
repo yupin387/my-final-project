@@ -1,45 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap');
 
 /* =========================================================
    COLOR SYSTEM
-   ส้ม (หลัก, navbar/footer) + น้ำตาลอ่อน (ตัดในการ์ด) + ทอง (ตกแต่ง)
-   สถานะงานใช้สีสื่อความหมายสากล: เขียว = เสร็จ, ฟ้า = กำลังทำ
+   ธีมงานบุญ: ส้ม (Navbar/Footer) + ส้มอ่อน/ครีม (ตาราง/การ์ด) + น้ำตาลอ่อน (ตัวหนังสือ)
    ========================================================= */
 :root {
-    /* พื้นหลังสีครีมอมพีชสว่างๆ */
-    --bg-light:       #FCF6F0;
+    /* พื้นหลังสีครีมสว่างๆ */
+    --bg-light:       #FFFBF5;
 
-    /* สีหลัก — ส้มพีช/ส้มจีวร (navbar + footer) */
-    --peach-primary:  #E28F66;
-    --peach-hover:    #D17A4F;
-    --peach-pale:     #FDF0E8;
-    --peach-deep:     #B5613A;
+    /* สีหลัก — ส้มสด ใช้กับ navbar/footer */
+    --peach-primary:  #E8703A;
+    --peach-hover:    #D45F2A;
+    --peach-pale:     #FDEEE4;
+    --peach-deep:     #B84B1F;
 
-    /* สีน้ำตาลอ่อน — ใช้ตัดกับส้มตรงแถบหัวการ์ด */
-    --brown-light:      #9C7852;
-    --brown-light-deep: #7C5A3B;
-    --brown-light-pale: #F3E9DE;
+    /* สีส้มอ่อน/ครีม — ใช้กับแถบหัวการ์ดและตาราง */
+    --orange-light:   #F3BA8B;
+    --orange-pale:    #FCF5E3;
 
-    /* สีทอง — ใช้ตกแต่ง/เส้นคั่น */
-    --gold-primary:   #C99A3D;
-    --gold-hover:     #AD8130;
+    /* สีทอง — ใช้เป็น accent/ตกแต่ง */
+    --gold-primary:   #D9A441;
+    --gold-hover:     #B8872F;
     --gold-pale:      #FBF1DC;
-    --gold-light:     #F6E2BA;
+    --gold-light:     #F3DA9E;
 
-    /* สีน้ำตาลมอคค่า (ตัวหนังสือหลัก) */
-    --brown-text:     #5A4A42;
-    --brown-muted:    #8D7A70;
+    /* สีน้ำตาล (ตัวหนังสือหลัก) */
+    --brown-text:     #4A3728; 
+    --brown-muted:    #8A7666;
 
     /* สีสถานะงาน */
-    --green-primary:  #3E9C6A;
-    --green-pale:     #E7F5EC;
+    --green-primary:  #2E9E5B;
+    --green-pale:     #E5F6EC;
     --blue-primary:   #2E75C4;
     --blue-pale:      #E8F1FB;
+    --yellow-status:  #F0A84E;
+    --yellow-pale:    #FCE4C0;
 
     /* สีขอบและเงา */
     --white:          #FFFFFF;
-    --card-border:    #F5E6DD;
-    --shadow-soft:    rgba(226, 143, 102, 0.15);
+    --card-border:    #F0E2D3;
+    --shadow-soft:    rgba(232, 112, 58, 0.15);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -64,8 +64,8 @@ body {
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 92px;
-    box-shadow: 0 4px 15px rgba(226, 143, 102, 0.2);
+    height: 92px;
+    box-shadow: 0 4px 15px rgba(184, 75, 31, 0.25);
 }
 
 .navbar::before {
@@ -102,9 +102,10 @@ body {
 
 .navbar-title {
     color: var(--white);
-    font-size: 32px;
-    font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    font-family: 'Charmonman', cursive;
+    font-size: 34px;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .navbar-right {
@@ -131,13 +132,13 @@ body {
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
     color: var(--white);
 }
 
 .nav-item.active {
     background: var(--white);
-    color: var(--peach-primary);
+    color: var(--peach-deep);
 }
 
 /* User pill */
@@ -158,7 +159,7 @@ body {
 
 .user-avatar {
     background: var(--white);
-    color: var(--peach-primary);
+    color: var(--peach-deep);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -226,12 +227,12 @@ body {
     font-weight: 600;
     font-size: 15px;
 }
-.flash-banner-success { background: var(--gold-pale); color: var(--gold-hover); border: 1.5px solid var(--gold-primary); }
+.flash-banner-success { background: var(--yellow-pale); color: var(--yellow-deep); border: 1.5px solid var(--yellow-status); }
 .flash-banner-error { background: #FDF1F0; color: #D9534F; border: 1.5px solid #F5C6CB; }
 
 /* ========== LIST HEADER ========== */
 .list-header {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     text-align: center;
 }
 
@@ -261,7 +262,7 @@ body {
 }
 
 .list-header h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
     color: var(--brown-text);
     font-weight: 700;
     margin-bottom: 6px;
@@ -275,6 +276,42 @@ body {
     background: linear-gradient(90deg, var(--peach-primary), var(--gold-primary));
     border-radius: 2px;
     margin: 10px auto 0;
+}
+
+/* ========== TABS & FILTER ========== */
+.tabs-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    justify-content: center;
+}
+
+.tab-btn {
+    padding: 9px 24px;
+    border: 1.5px solid var(--orange-light);
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--brown-text);
+    background: var(--white);
+    white-space: nowrap;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.tab-btn:hover {
+    background: var(--peach-pale);
+    box-shadow: 0 2px 8px var(--shadow-soft);
+}
+
+.tab-btn.active {
+    background: var(--orange-light);
+    color: var(--brown-text);
+    border-color: var(--orange-light);
+    box-shadow: 0 4px 14px rgba(243, 186, 139, 0.45);
 }
 
 /* ========== CONTENT CARD ========== */
@@ -291,43 +328,43 @@ body {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--peach-primary), var(--gold-primary));
+    background: var(--peach-primary);
 }
 
-/* แถบหัวการ์ด "รายการงานทั้งหมด" — สีน้ำตาลอ่อนตัดกับส้มของ navbar */
+/* แถบหัวการ์ด "รายการงานทั้งหมด" — สีส้มอ่อน/ครีม */
+/* แถบหัวการ์ด "รายการงานทั้งหมด" — เปลี่ยนเป็นสีเหลืองเข้ม */
 .card-header-bar {
-    background: var(--brown-light);
-    padding: 16px 24px;
+    background: #D49A00; /* สีเหลืองเข้ม หรือสามารถใช้ var(--gold-primary) แทนได้ */
+    padding: 14px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--white);
     font-weight: 700;
-    font-size: 16px;
-    border-bottom: 2px solid var(--brown-light-deep);
+    font-size: 15px;
 }
 
-.header-count { font-size: 14px; opacity: 0.95; }
+.header-count { font-size: 13px; opacity: 0.95; font-weight: 600; }
 
 /* ========== TABLE ========== */
 table { width: 100%; border-collapse: collapse; }
 
 th {
-    background: var(--brown-light-pale);
+    background: var(--orange-pale); 
     color: var(--brown-text);
-    padding: 14px 18px;
+    padding: 12px 18px; 
     text-align: left;
-    font-size: 15px;
+    font-size: 14px; 
     font-weight: 700;
     border-bottom: 2px solid var(--card-border);
 }
 
 td {
-    padding: 14px 18px;
+    padding: 12px 18px;
     border-bottom: 1px solid var(--bg-light);
-    font-size: 15px;
+    font-size: 14px;
     vertical-align: middle;
-    color: var(--brown-muted);
+    color: var(--brown-text); 
 }
 
 tr:last-child td { border-bottom: none; }
@@ -336,26 +373,31 @@ tr:hover td { background: var(--peach-pale); }
 .assign-id {
     color: var(--brown-text);
     font-weight: 700;
-    font-size: 14px;
-    background: var(--gold-light);
-    padding: 3px 10px;
-    border-radius: 4px;
-    border: 1px solid var(--gold-primary);
+    font-size: 13px; 
 }
 
-.ceremony-name { font-weight: 700; color: var(--brown-text); }
-
-/* ========== STATUS BADGES ==========
-   Assigned = เทาน้ำตาลกลาง, Preparing = ทอง, In_Progress = ฟ้า, Completed = เขียว */
-.status-badge {
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 12px;
+.ceremony-badge {
+    background: var(--green-pale);
+    color: var(--green-primary);
+    border: 1px solid var(--green-primary);
+    padding: 3px 12px;
+    border-radius: 20px;
     font-size: 13px;
     font-weight: 700;
+    display: inline-block;
+}
+
+/* ========== STATUS BADGES (ตรงตามที่มีใน JSP) ========== */
+.status-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
 }
 .status-Assigned    { background: #F0EDE9; color: #756860; border: 1px solid #D9D2CD; }
-.status-Preparing   { background: var(--gold-light); color: var(--gold-hover); border: 1px solid var(--gold-primary); }
+.status-Preparing   { background: var(--gold-pale); color: var(--gold-hover); border: 1px solid var(--gold-primary); }
 .status-In_Progress { background: var(--blue-pale); color: var(--blue-primary); border: 1px solid #A9C7EA; }
 .status-Completed   { background: var(--green-pale); color: var(--green-primary); border: 1px solid #A8D5B7; }
 
@@ -364,32 +406,30 @@ tr:hover td { background: var(--peach-pale); }
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 6px 14px;
+    padding: 5px 12px;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     text-decoration: none;
-    border: 1.5px solid var(--peach-primary);
+    border: 1.5px solid var(--green-primary);
     background: var(--white);
-    color: var(--peach-primary);
+    color: var(--green-primary);
     transition: 0.2s;
 }
-.btn-view:hover { background: var(--peach-primary); color: var(--white); }
+.btn-view:hover { background: var(--green-pale); }
 
 .empty-state { text-align: center; padding: 50px; color: var(--brown-muted); }
 
-/* ========== LOTUS CORNER DECORATION ==========
-   ใช้ fixed + z-index สูง เพื่อให้ลอยเหนือทุกอย่างเสมอ ไม่ว่าคอนเทนต์
-   ในตารางจะสั้นหรือยาวแค่ไหน จะได้ไม่โดน footer บังหรือโดนตัดขอบจอ */
+/* ========== LOTUS CORNER DECORATION ========== */
 .lotus-decoration {
-    position: fixed;
-    bottom: 24px;
+    position: absolute;
+    bottom: 0;
     right: 24px;
     width: 170px;
     height: auto;
     opacity: 0.9;
     pointer-events: none;
-    z-index: 500;
+    z-index: 1;
 }
 
 @media (max-width: 768px) {
@@ -429,5 +469,25 @@ tr:hover td { background: var(--peach-pale); }
     border: 1.5px solid rgba(255, 255, 255, 0.6);
     object-fit: cover;
 }
-.footer-brand-text { font-size: 1.2rem; font-weight: 700; color: var(--white); }
+.footer-brand-text {
+   font-family: 'Charmonman', cursive;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
 .footer-tagline { font-size: 0.9rem; color: rgba(255, 255, 255, 0.9); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+    .page-wrapper { padding: 24px 16px 40px; width: 100%; max-width: 100%; }
+}
+
+@media (max-width: 768px) {
+    .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
+    .navbar-menu { flex-wrap: wrap; gap: 4px; }
+    .navbar-title { font-size: 24px; }
+    .navbar .lotus-icon,
+    .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; }
+    .list-header h1 { font-size: 1.6rem; }
+    .footer-content { flex-direction: column; align-items: flex-start; gap: 10px; }
+}

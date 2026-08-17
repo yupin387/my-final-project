@@ -20,46 +20,35 @@ const selectedItemIds = new Set();
 let currentModalCategory = null;
 
 // แสดงจำนวน + ไอคอนปากกา (กดแล้วค่อยเปลี่ยนเป็นปุ่ม -/+)
+// การโชว์/ซ่อนปุ่ม -/+ และตัวเลข คุมด้วย CSS ผ่าน data-mode ทั้งหมด (ดู quotationCreate.css)
 function buildQtyCell(value, inputName, isEditable) {
     if (isEditable) {
         return `
             <div class="qty-wrapper" data-mode="view">
+                <button type="button" class="btn-qty-minus" onclick="adjustQty(this, -1)">-</button>
                 <span class="qty-display">${value}</span>
-                <input type="number" name="${inputName}" value="${value}" min="1" class="qty-input" readonly style="display:none;">
-                <button type="button" class="btn-qty-minus" onclick="adjustQty(this, -1)" style="display:none;">-</button>
-                <button type="button" class="btn-qty-plus" onclick="adjustQty(this, 1)" style="display:none;">+</button>
+                <input type="number" name="${inputName}" value="${value}" min="1" class="qty-input" readonly>
+                <button type="button" class="btn-qty-plus" onclick="adjustQty(this, 1)">+</button>
                 <button type="button" class="btn-qty-edit" onclick="toggleQtyEdit(this)" title="แก้ไขจำนวน">✏️</button>
             </div>`;
     }
     return `
-        <div class="qty-wrapper">
+        <div class="qty-wrapper" data-mode="view">
             <input type="number" name="${inputName}" value="${value}" min="1" class="qty-input" readonly>
         </div>`;
 }
 
 // สลับโหมด: กดปากกา -> โชว์ปุ่ม -/+ , กดซ้ำ -> กลับเป็นตัวเลขเฉยๆ
+// แก้แค่ attribute data-mode บน wrapper แล้วปล่อยให้ CSS เป็นคนคุมการโชว์/ซ่อนทั้งหมด
 function toggleQtyEdit(btn) {
     const wrapper = btn.closest('.qty-wrapper');
-    const display = wrapper.querySelector('.qty-display');
-    const input   = wrapper.querySelector('.qty-input');
-    const minus   = wrapper.querySelector('.btn-qty-minus');
-    const plus    = wrapper.querySelector('.btn-qty-plus');
-
     const isEditing = wrapper.getAttribute('data-mode') === 'edit';
 
     if (isEditing) {
         wrapper.setAttribute('data-mode', 'view');
-        display.style.display = '';
-        input.style.display = 'none';
-        minus.style.display = 'none';
-        plus.style.display = 'none';
         btn.textContent = '✏️';
     } else {
         wrapper.setAttribute('data-mode', 'edit');
-        display.style.display = 'none';
-        input.style.display = '';
-        minus.style.display = '';
-        plus.style.display = '';
         btn.textContent = '✕';
     }
 }
@@ -252,52 +241,52 @@ function addSelectedItemsToTable() {
     }
     if (!currentModalCategory) return;
 
- 
-	const targetBody = document.getElementById(CATEGORY_TO_TBODY[currentModalCategory]);
-	    if (!targetBody) return;
+    const targetBody = document.getElementById(CATEGORY_TO_TBODY[currentModalCategory]);
+    if (!targetBody) return;
 
-	    const dataStore = document.getElementById('itemDataStore');
-	    const isEquipment = currentModalCategory === 'อุปกรณ์พิธีกรรม';
+    const dataStore = document.getElementById('itemDataStore');
+    const isEquipment = currentModalCategory === 'อุปกรณ์พิธีกรรม';
+    
+    // กำหนดให้ "ทุกรายการที่เพิ่มผ่านปุ่ม +" สามารถแก้ไขจำนวนได้เสมอ
+    const canEditQty = true;
 
-	    selectedItemIds.forEach(itemId => {
-	        const dataEl = dataStore.querySelector(`.item-data[data-id="${itemId}"]`);
-	        if (!dataEl) return;
+    selectedItemIds.forEach(itemId => {
+        const dataEl = dataStore.querySelector(`.item-data[data-id="${itemId}"]`);
+        if (!dataEl) return;
 
-	        const itemName = dataEl.getAttribute('data-name');
-	        const itemDesc = dataEl.getAttribute('data-detail') || '';
-	        const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
-	        const unit     = dataEl.getAttribute('data-unit');
+        const itemName = dataEl.getAttribute('data-name');
+        const itemDesc = dataEl.getAttribute('data-detail') || '';
+        const price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
+        const unit     = dataEl.getAttribute('data-unit');
 
-	        const scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
-	        const monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
-	        const initialQty   = scalesByMonk ? monkCount : 1;
+        const scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
+        const monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
+        const initialQty   = scalesByMonk ? monkCount : 1;
 
-	        const showDesc = !!itemDesc && !isEquipment;
+        const showDesc = !!itemDesc && !isEquipment;
 
-	        const tr = document.createElement('tr');
-	        tr.className = 'dynamic-row';
-	        tr.setAttribute('data-item-id', itemId);
+        const tr = document.createElement('tr');
+        tr.className = 'dynamic-row';
+        tr.setAttribute('data-item-id', itemId);
 
-	        tr.innerHTML = `
-	                <td class="row-number text-center"></td>
-	                <td>
-	                    ${itemName}
-	                    ${showDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
-	                    <input type="hidden" name="extraItemIds" value="${itemId}">
-	                </td>
-	                <td>
-	                    ${buildQtyCell(initialQty, 'extraQtys', true)}
-	                </td>
-	                <td class="text-center">${unit}</td>
-	                <td>
-	                    <input type="number" name="extraPrices" value="${price.toFixed(2)}" step="0.01" min="0" class="clean-input text-right price-input" readonly>
-	                </td>
-	                <td class="text-right"><span class="subtotal">0.00</span></td>`;
+        tr.innerHTML = `
+                <td class="row-number text-center"></td>
+                <td>
+                    ${itemName}
+                    ${showDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
+                    <input type="hidden" name="extraItemIds" value="${itemId}">
+                </td>
+                <td>
+                    ${buildQtyCell(initialQty, 'extraQtys', canEditQty)}
+                </td>
+                <td class="text-center">${unit}</td>
+                <td>
+                    <input type="number" name="extraPrices" value="${price.toFixed(2)}" step="0.01" min="0" class="clean-input text-right price-input" readonly>
+                </td>
+                <td class="text-right"><span class="subtotal">0.00</span></td>`;
 
-	        targetBody.appendChild(tr);
-	    });
-
-      
+        targetBody.appendChild(tr);
+    });
 
     selectedItemIds.clear();
     closeItemModal();

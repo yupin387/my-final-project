@@ -126,14 +126,13 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 30px;
-    font-weight: 700;
+    font-family: 'Charmonman', cursive; /* เปลี่ยนตรงนี้เป็น Charmonman */
+     font-size: 34px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
-
 /* Nav links */
 .navbar-right {
     display: flex;
@@ -496,13 +495,13 @@ tbody tr:hover td { background: var(--green-glow); transition: background 0.15s;
 
 .badge-Pending    { background: var(--marigold-pale); color: #a5641f; border: 1px solid var(--marigold); }
 .badge-Quoted     { background: #e8f4fd; color: #1565c0; border: 1px solid #90caf9; }
+.badge-Approved   { background: #cce5ff; color: #004085; border: 1px solid #90caf9; }
 .badge-Rejected   { background: #fdecea; color: #c62828; border: 1px solid #ef9a9a; }
 .badge-Confirmed  { background: var(--gold-pale); color: #8a6d1c; border: 1px solid var(--accent-gold-mid); }
 .badge-Assigned   { background: #cce5ff; color: #004085; border: 1px solid #90caf9; }
 .badge-Preparing  { background: #e2d9f3; color: #6f42c1; border: 1px solid #ce93d8; }
 .badge-In_Progress{ background: var(--green-pale); color: var(--green-forest); border: 1px solid var(--green-banana); }
 .badge-Completed  { background: var(--green-pale); color: var(--green-deep); border: 1px solid var(--green-banana); }
-
 /* ========== ACTION BUTTONS ========== */
 .btn-action {
     display: inline-flex;
@@ -630,12 +629,11 @@ tbody tr:hover td { background: var(--green-glow); transition: background 0.15s;
 }
 
 .footer-brand-text {
-    font-family: 'Sarabun', sans-serif;
+    font-family: 'Charmonman', cursive; /* เปลี่ยนตรงนี้เป็น Charmonman */
     font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;
 }
-
 .footer-tagline {
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.9);

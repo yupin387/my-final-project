@@ -125,14 +125,13 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 30px;
-    font-weight: 700;
+    font-family: 'Charmonman', cursive; /* แก้ตรงนี้ */
+    font-size: 34px;                    /* แก้ขนาดตรงนี้ */
+    font-weight: 800;                   /* แก้ความหนาตรงนี้ */
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
-
 .navbar-right {
     display: flex;
     align-items: center;
@@ -592,7 +591,7 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
 }
 
 .footer-brand-text {
-    font-family: 'Sarabun', sans-serif;
+   font-family: 'Charmonman', cursive;
     font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;

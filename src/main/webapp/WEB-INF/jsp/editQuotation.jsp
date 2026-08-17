@@ -256,22 +256,23 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    <c:if test="${!isCustomRequest}">
-                    <tr class="static-row package-main-row no-qty-convert">
-                        <td class="text-center row-number">1</td>
-                        <td>
-                            <strong>แพ็กเกจ: ${packageName}</strong>
-                            <input type="hidden" name="bookingItemNames" value="${packageName}">
-                        </td>
-                        <td><input type="number" name="bookingQtys" value="1" class="clean-input text-center qty-input" readonly></td>
-                        <td class="text-center">แพ็กเกจ</td>
-                        <!-- ใส่ readonly ที่นี่ -->
-                        <td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
-                        <td class="text-right"><span class="subtotal">0.00</span></td>
-                        <td class="text-center delete-col">-</td>
-                    </tr>
-                    </c:if>
+  <tbody>
+    <c:if test="${!isCustomRequest}">
+    <tr class="static-row package-main-row no-qty-convert">
+        <td class="text-center row-number">1</td>
+        <td>
+            <strong>แพ็กเกจ: ${packageName}</strong>
+            <input type="hidden" name="bookingItemNames" value="${packageName}">
+        </td>
+        <!-- แก้ไขส่วนแสดงจำนวนตรงนี้ -->
+        <td class="text-center">1<input type="hidden" name="bookingQtys" value="1" class="qty-input"></td>
+        <td class="text-center">แพ็กเกจ</td>
+        <!-- ใส่ readonly ที่นี่ -->
+        <td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+        <td class="text-right"><span class="subtotal">0.00</span></td>
+        <td class="text-center delete-col">-</td>
+    </tr>
+    </c:if>
 
                     <%-- นำส่วนแสดงรายละเอียดแพ็กเกจกลับมา --%>
                     <c:if test="${not empty packageIncludedItems && !isCustomRequest}">

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap');
 
 * {
 	margin: 0;
@@ -7,49 +7,44 @@
 	font-family: 'Sarabun', sans-serif;
 }
 
-html, body { width: 100%; }
+html, body {
+	width: 100%;
+}
 
 :root {
-    --gold:              #D9A441;
-    --gold-mid:          #E8BE66;
-    --gold-light:        #F3DA9E;
-    --gold-pale:         #FBF0D4;
-    --gold-glow:         #FFFBEF;
-
-    --green-deep:         #6FA84F;
-    --green-forest:       #7DBB5E;
-    --green-mid:          #9BCE72;
-    --green-banana:       #A9D97A;
-    --green-banana-light: #C9E8A8;
-    --green-pale:         #EEF7E1;
-    --green-glow:         #F7FBF0;
-
-    --cream:             #ECF2D2;
-    --cream-warm:        #F7FBF0;
-    --cream-mid:         #FBF4E2;
-    --cream-deep:        #F2E6C4;
-    --cream-border:      #E9DCB0;
-    --cream-border-soft: #E4EFC9;
-
-    --white:             #FFFFFF;
-
-    /* สีตัวอักษรและเส้นกรอบ */
-    --text-dark:         #333333; 
-    --text-mid:          #555555;
-    --text-muted:        #777777;
-    --brown-dark:        #333333;
-    --brown-mid:         #555555;
-
-    --accent-gold:      #D9A441;
-    --accent-gold-mid:  #E8C878;
-    --accent-gold-pale: #F7E3B0;
-    --accent-gold-dark: #B8860B;
-
-    --brand-green:       #74B457;
-    --brand-green-dark:  #5C9645;
-
-    /* ตำแหน่งรูปดอกบัวตกแต่ง */
-    --lotus-img: url('../images/lotus-decor.png');
+	--gold: #D9A441;
+	--gold-mid: #E8BE66;
+	--gold-light: #F3DA9E;
+	--gold-pale: #FBF0D4;
+	--gold-glow: #FFFBEF;
+	--green-deep: #6FA84F;
+	--green-forest: #7DBB5E;
+	--green-mid: #9BCE72;
+	--green-banana: #A9D97A;
+	--green-banana-light: #C9E8A8;
+	--green-pale: #EEF7E1;
+	--green-glow: #F7FBF0;
+	--cream: #ECF2D2;
+	--cream-warm: #F7FBF0;
+	--cream-mid: #FBF4E2;
+	--cream-deep: #F2E6C4;
+	--cream-border: #E9DCB0;
+	--cream-border-soft: #E4EFC9;
+	--white: #FFFFFF;
+	/* สีตัวอักษรและเส้นกรอบ */
+	--text-dark: #333333;
+	--text-mid: #555555;
+	--text-muted: #777777;
+	--brown-dark: #333333;
+	--brown-mid: #555555;
+	--accent-gold: #D9A441;
+	--accent-gold-mid: #E8C878;
+	--accent-gold-pale: #F7E3B0;
+	--accent-gold-dark: #B8860B;
+	--brand-green: #74B457;
+	--brand-green-dark: #5C9645;
+	/* ตำแหน่งรูปดอกบัวตกแต่ง */
+	--lotus-img: url('../images/lotus-decor.png');
 }
 
 body {
@@ -59,7 +54,7 @@ body {
 	flex-direction: column;
 }
 
-/* ===== Navbar (เขียว-ทอง) ===== */
+/* ===== Navbar (เขียว-ทอง แบบเดียวกับหน้า List/Detail) ===== */
 .navbar {
 	background: var(--brand-green);
 	padding: 0 40px;
@@ -72,46 +67,52 @@ body {
 	z-index: 10000;
 	min-height: 92px;
 	box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
+    overflow: visible;
 }
 
 .navbar::before {
 	content: '';
 	position: absolute;
-	top: 0; left: 0; right: 0;
+	top: 0;
+	left: 0;
+	right: 0;
 	height: 2px;
 	background: var(--accent-gold-mid);
 }
 
-.navbar-brand,
-.navbar-brand-wrap {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
+.navbar-brand, .navbar-brand-wrap {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	text-decoration: none;
+    position: relative;
 }
 
-.navbar .lotus-icon,
-.navbar-brand .lotus-icon,
-.navbar-brand-wrap .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
-    width: 45px;
-    height: 45px;
-    max-width: 45px;
-    max-height: 45px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    object-fit: cover;
-    flex-shrink: 0;
+.navbar .lotus-icon, .navbar-brand .lotus-icon, .navbar-brand-wrap .lotus-icon {
+	background: rgba(255, 255, 255, 0.18);
+	width: 76px;
+	height: 76px;
+	max-width: 76px;
+	max-height: 76px;
+	border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+	border: 1.5px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+	object-fit: cover;
+	flex-shrink: 0;
 }
 
 .navbar-title {
-    color: #FFFFFF;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+	color: #FFFFFF;
+	font-family: 'Charmonman', cursive;
+	font-size: 34px;
+	font-weight: 800;
+	letter-spacing: 0.5px;
+	white-space: nowrap;
+	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-right {
@@ -127,16 +128,17 @@ body {
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.85);
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 8px 16px;
-    border-radius: 6px;
-    transition: background 0.2s, color 0.2s;
-    white-space: nowrap;
-    font-family: 'Sarabun', sans-serif;
+	color: rgba(255, 255, 255, 0.85);
+	text-decoration: none;
+	font-size: 15px;
+	font-weight: 700;
+	padding: 8px 16px;
+	border-radius: 6px;
+	transition: background 0.2s, color 0.2s;
+	white-space: nowrap;
+	font-family: 'Sarabun', sans-serif;
 }
+
 .nav-item:hover {
 	background: rgba(255, 255, 255, 0.2);
 	color: #FFFFFF;
@@ -216,7 +218,7 @@ body {
 	border: 1px solid var(--accent-gold-pale);
 	border-radius: 10px;
 	min-width: 160px;
-	box-shadow: 0 8px 28px var(--shadow-warm, rgba(217,164,65,0.2));
+	box-shadow: 0 8px 28px var(--shadow-warm, rgba(217, 164, 65, 0.2));
 	z-index: 999;
 	overflow: hidden;
 }
@@ -241,791 +243,1070 @@ body {
 	color: var(--brown-dark);
 }
 
-/* ===== ปุ่มแก้ไขใบเสนอราคา (ฟ้าอ่อน มุมขวา) ===== */
+/* ===== ปุ่มแก้ไขใบเสนอราคา ===== */
 .btn-blue-edit {
-    background: #DBEAFE !important;
-    color: #1D4ED8 !important;
-    border: 1.5px solid #93C5FD;
-    padding: 9px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    text-decoration: none !important;
-    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
-    transition: 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+	background: #DBEAFE !important;
+	color: #1D4ED8 !important;
+	border: 1.5px solid #93C5FD;
+	padding: 9px 20px;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	text-decoration: none !important;
+	box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
+	transition: 0.2s;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
 }
+
 .btn-blue-edit:hover {
-    background: #BFDBFE !important;
-    border-color: #60A5FA;
-    transform: translateY(-1px);
+	background: #BFDBFE !important;
+	border-color: #60A5FA;
+	transform: translateY(-1px);
 }
 
-/* ===== Page wrapper / A4 document (จัดกึ่งกลางหน้าจอเสมอ) ===== */
+/* ===== Page wrapper / A4 document ===== */
 .page-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    margin: 24px auto;
-    padding: 0 15px;
-    box-sizing: border-box;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	margin: 24px auto;
+	padding: 0 15px;
+	box-sizing: border-box;
 }
 
-.a4-document,
-.sheet {
-    width: 270mm;
-    max-width: 100%;
-    min-height: 297mm;
-    margin: 0 auto 20px auto;
-    background: #fff;
-    padding: 14mm 12mm;
-    position: relative;
-    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+.a4-document, .sheet {
+	width: 270mm;
+	max-width: 100%;
+	min-height: 297mm;
+	margin: 0 auto 20px auto;
+	background: #fff;
+	padding: 14mm 12mm;
+	position: relative;
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }
-.page-no { position: absolute; top: 8mm; right: 12mm; font-size: 12px; color: #777; }
 
-/* ===== Letterhead ===== */
+.page-no {
+	position: absolute;
+	top: 8mm;
+	right: 12mm;
+	font-size: 12px;
+	color: #777;
+}
+
 .letterhead {
-    display: flex; align-items: center; gap: 16px;
-    border-bottom: 2px solid var(--brand-green-dark);
-    padding-bottom: 10px;
-    margin-bottom: 14px;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	border-bottom: 2px solid #000;
+	padding-bottom: 10px;
+	margin-bottom: 14px;
 }
-.letterhead .logo { width: 60px; height: 60px; object-fit: contain; flex-shrink: 0; }
-.letterhead .company-block { flex: 1; text-align: center; }
-.letterhead .company-name { font-size: 24px; color: var(--text-dark); }
-.letterhead .company-sub { font-size: 13px; color: #555; margin-top: 2px; }
 
-/* ===== Title + doc meta ===== */
+.letterhead .logo {
+	width: 60px;
+	height: 60px;
+	object-fit: contain;
+	flex-shrink: 0;
+}
+
+.letterhead .company-block {
+	flex: 1;
+	text-align: center;
+}
+
+.letterhead .company-name {
+	font-size: 24px;
+	color: var(--text-dark);
+}
+
+.letterhead .company-sub {
+	font-size: 13px;
+	color: #555;
+	margin-top: 2px;
+}
+
 .doc-title-row {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    margin-bottom: 12px;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 12px;
 }
+
 .doc-title {
-    font-size: 22px; font-weight: 700; letter-spacing: 1px;
-    color: #333; align-self: center; flex: 1; text-align: center;
+	font-size: 22px;
+	font-weight: 700;
+	letter-spacing: 1px;
+	color: #333;
+	align-self: center;
+	flex: 1;
+	text-align: center;
 }
-.doc-meta-box { border: 1px solid var(--brand-green-dark); border-radius: 4px; min-width: 190px; }
-.doc-meta-box table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.doc-meta-box td { padding: 5px 8px; border-bottom: 1px solid var(--cream-border); }
-.doc-meta-box tr:last-child td { border-bottom: none; }
-.doc-meta-box .meta-label { color: var(--text-dark); font-weight: 600; white-space: nowrap; }
-.doc-meta-box .meta-value { text-align: right; }
+
+.doc-meta-box {
+	border: 1px solid #000;
+	border-radius: 4px;
+	min-width: 190px;
+}
+
+.doc-meta-box table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.doc-meta-box td {
+	padding: 5px 8px;
+	border-bottom: 1px solid #000;
+}
+
+.doc-meta-box tr:last-child td {
+	border-bottom: none;
+}
+
+.doc-meta-box .meta-label {
+	color: var(--text-dark);
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.doc-meta-box .meta-value {
+	text-align: right;
+}
 
 .status-pill {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 700;
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 10px;
+	font-size: 12px;
+	font-weight: 700;
 }
-.status-Pending  { background: #FFF3CD; color: #8A6100; border: 1px solid var(--gold-mid); }
-.status-Confirmed{ background: var(--green-pale); color: var(--green-deep); border: 1px solid var(--green-banana); }
-.status-Revised  { background: #FDE2E2; color: #A31212; border: 1px solid #ef9a9a; }
 
-/* ===== Info panel ===== */
+.status-Pending {
+	background: #FFF3CD;
+	color: #8A6100;
+	border: 1px solid var(--gold-mid);
+}
+
+.status-Confirmed {
+	background: var(--green-pale);
+	color: var(--green-deep);
+	border: 1px solid var(--green-banana);
+}
+
+.status-Revised {
+	background: #FDE2E2;
+	color: #A31212;
+	border: 1px solid #ef9a9a;
+}
+
 .info-panel {
-    display: flex; border: 1px solid #ccc; border-radius: 4px;
-    margin-bottom: 14px; overflow: hidden;
+	display: flex;
+	border: 1px solid #000;
+	border-radius: 4px;
+	margin-bottom: 14px;
+	overflow: hidden;
 }
-.info-col { flex: 1; padding: 10px 14px; font-size: 13.5px; }
-.info-col + .info-col { border-left: 1px solid #ccc; }
-.info-row { display: flex; margin-bottom: 4px; }
-.info-row .info-label { width: 105px; color: var(--text-dark); font-weight: 600; flex-shrink: 0; }
-.info-row .info-value { flex: 1; }
 
-/* ===== Items table ===== */
-table.items-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.info-col {
+	flex: 1;
+	padding: 10px 14px;
+	font-size: 13.5px;
+}
+
+.info-col+.info-col {
+	border-left: 1px solid #000;
+}
+
+.info-row {
+	display: flex;
+	margin-bottom: 4px;
+}
+
+.info-row .info-label {
+	width: 105px;
+	color: var(--text-dark);
+	font-weight: 600;
+	flex-shrink: 0;
+}
+
+.info-row .info-value {
+	flex: 1;
+}
+
+table.items-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13.5px;
+}
+
 table.items-table thead th {
-    background: var(--cream-warm); color: var(--brand-green-dark); border: 1px solid var(--brand-green-dark);
-    padding: 7px 6px; font-weight: 600;
+	background: var(--gold);
+	color: #FFFFFF;
+	border: 1px solid #000;
+	padding: 7px 6px;
+	font-weight: 600;
 }
-table.items-table tbody td {
-    border-left: 1px solid #ddd; border-right: 1px solid #ddd;
-    padding: 6px; vertical-align: top;
-}
-table.items-table tbody tr:last-child td { border-bottom: 1px solid #ddd; }
 
-.col-code   { width: 65px; text-align: center; }
-.col-name   { width: auto; }
-.col-qty    { width: 55px; text-align: right; }
-.col-unit   { width: 55px; text-align: center; }
-.col-price  { width: 90px; text-align: right; }
+table.items-table tbody td {
+	border-left: 1px solid #000;
+	border-right: 1px solid #000;
+	padding: 6px;
+	vertical-align: top;
+}
+
+table.items-table tbody tr:last-child td {
+	border-bottom: 1px solid #000;
+}
+
+.col-code { width: 65px; text-align: center; }
+.col-name { width: auto; }
+.col-qty { width: 55px; text-align: right; }
+.col-unit { width: 55px; text-align: center; }
+.col-price { width: 90px; text-align: right; }
 .col-amount { width: 100px; text-align: right; }
 
 .item-code { color: #555; }
 .item-name { font-weight: 600; }
 .item-detail { display: block; font-size: 12px; color: #777; margin-top: 2px; }
-.item-note   { display: block; font-size: 12px; color: var(--text-dark); margin-top: 2px; font-style: italic; }
+.item-note { display: block; font-size: 12px; color: var(--text-dark); margin-top: 2px; font-style: italic; }
 
-tr.package-row td { background: var(--cream-warm); }
+tr.package-row td { background: var(--gold-pale); }
 tr.package-row .item-name { color: var(--text-dark); }
 tr.included-row td { color: #888; }
 .included-label {
-    font-size: 11px; font-weight: 700; color: var(--text-dark);
-    background: var(--cream-warm); border: 1px solid var(--accent-gold);
-    padding: 2px 8px; border-radius: 10px; display: inline-block;
+	font-size: 11px;
+	font-weight: 700;
+	color: var(--text-dark);
+	background: var(--cream-warm);
+	border: 1px solid #000;
+	padding: 2px 8px;
+	border-radius: 10px;
+	display: inline-block;
 }
 
-/* ===== Totals ===== */
-.totals-wrap { display: flex; justify-content: flex-end; margin-top: 12px; }
-.totals-box { width: 260px; border: 1px solid var(--brand-green-dark); font-size: 14px; }
-.totals-box table { width: 100%; border-collapse: collapse; }
-.totals-box td { padding: 8px 14px; }
-.totals-box tr:last-child td {
-    border-top: 1px solid var(--brand-green-dark);
-    background: var(--cream-warm); font-weight: 700; font-size: 16px; color: var(--text-dark);
+.totals-wrap {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 12px;
 }
-.totals-box .t-label { text-align: left; }
-.totals-box .t-value { text-align: right; white-space: nowrap; }
 
 .terms-note {
-    margin-top: 16px;
-    font-size: 12px;
-    color: #777;
-    border-top: 1px dashed #ccc;
-    padding-top: 8px;
+	margin-top: 16px;
+	font-size: 12px;
+	color: #777;
+	border-top: 1px dashed #000;
+	padding-top: 8px;
 }
 
-/* ===== ปุ่มกลับหน้ารายการ ===== */
 .back-bottom-wrap {
-    width: 100%;
-    text-align: center;
-    padding: 24px 15px 32px;
-    background: var(--cream);
-}
-.btn-back-bottom {
-    display: inline-block;
-    background: var(--brand-green);
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: 0.2s;
-    box-shadow: 0 3px 10px rgba(92, 150, 69, 0.3);
-}
-.btn-back-bottom:hover {
-    background: var(--brand-green-dark);
-    transform: translateY(-1px);
+	width: 100%;
+	text-align: center;
+	padding: 24px 15px 32px;
+	background: var(--cream);
 }
 
-/* ===== FOOTER (เขียว-ทอง) ===== */
+.btn-back-bottom {
+	display: inline-block;
+	background: var(--brand-green);
+	color: #fff;
+	text-decoration: none;
+	padding: 10px 24px;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	transition: 0.2s;
+	box-shadow: 0 3px 10px rgba(92, 150, 69, 0.3);
+}
+
+.btn-back-bottom:hover {
+	background: var(--brand-green-dark);
+	transform: translateY(-1px);
+}
+
+/* ===== FOOTER (เขียว-ทอง แบบเดียวกับหน้า List/Detail) ===== */
 .site-footer {
-    background: var(--brand-green);
-    color: rgba(255, 255, 255, 0.95);
-    border-top: 3px solid var(--accent-gold);
-    box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
-    position: relative;
-    z-index: 2;
-    overflow: hidden;
+	background: var(--brand-green);
+	color: rgba(255, 255, 255, 0.95);
+    margin-top: auto;
+	border-top: 3px solid var(--accent-gold);
+	box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
+	position: relative;
+	z-index: 2;
+	overflow: hidden;
 }
 
 .site-footer::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--accent-gold-mid);
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: var(--accent-gold-mid);
 }
 
-/* ดอกบัวตกแต่งใน footer */
 .site-footer::after {
-    content: '';
-    position: absolute;
-    right: 24px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 76px;
-    height: 76px;
-    background-image: var(--lotus-img);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-    pointer-events: none;
+	content: '';
+	position: absolute;
+	right: 24px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 76px;
+	height: 76px;
+	background-image: var(--lotus-img);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+	pointer-events: none;
 }
 
 .footer-content {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px 24px;
-    position: relative;
-    z-index: 1;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 30px 24px;
+	position: relative;
+	z-index: 1;
 }
 
 .footer-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
-.site-footer .lotus-icon,
-.footer-lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
-    width: 40px;
-    height: 40px;
-    max-width: 40px;
-    max-height: 40px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
-    object-fit: cover;
-    flex-shrink: 0;
+.site-footer .lotus-icon, .footer-lotus-icon {
+	background: rgba(255, 255, 255, 0.18);
+	width: 40px;
+	height: 40px;
+	max-width: 40px;
+	max-height: 40px;
+	border-radius: 50%;
+	border: 1.5px solid rgba(255, 255, 255, 0.45);
+	object-fit: cover;
+	flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
 }
 
 .footer-brand-text {
-    font-family: 'Sarabun', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #FFFFFF;
+	font-family: 'Charmonman', cursive;
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: #FFFFFF;
 }
 
 .footer-tagline {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
+	font-size: 0.85rem;
+	color: rgba(255, 255, 255, 0.9);
 }
 
 @media print {
-    body { background: #fff; }
-    .sheet, .a4-document { box-shadow: none; margin: 0; width: auto; min-height: auto; }
-    .no-print { display: none !important; }
-    .site-footer { display: none !important; }
-    .back-bottom-wrap { display: none !important; }
+	body { background: #fff; }
+	.sheet, .a4-document { box-shadow: none; margin: 0; width: auto; min-height: auto; }
+	.no-print { display: none !important; }
+	.site-footer { display: none !important; }
+	.back-bottom-wrap { display: none !important; }
 }
 
-@media (max-width: 768px) {
-    .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
-    .navbar-menu { flex-wrap: wrap; gap: 4px; }
-    .navbar-title { font-size: 22px; }
-    .navbar .lotus-icon,
-    .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
-    .footer-content { flex-direction: column; align-items: flex-start; }
-    .site-footer::after { display: none; }
+@media ( max-width : 768px) {
+	.navbar {
+		flex-wrap: wrap;
+		gap: 10px;
+		padding: 12px 16px;
+		min-height: auto;
+	}
+	.navbar-menu {
+		display: none;
+	}
+	.navbar-title {
+		font-size: 22px;
+	}
+	.navbar .lotus-icon, .navbar-brand-wrap .lotus-icon {
+		width: 46px;
+		height: 46px;
+		max-width: 46px;
+		max-height: 46px;
+		font-size: 24px;
+	}
+	.footer-content {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.site-footer::after {
+		display: none;
+	}
 }
 
 /* =========================================
-   เนื้อหาใบเสนอราคา (คลาสที่ใช้จริงใน quotationDetail.jsp / quotationCreate.jsp)
+   เนื้อหาใบเสนอราคา
    ========================================= */
-
 .text-center { text-align: center; }
-.text-left   { text-align: left; }
-.text-right  { text-align: right; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
 .text-danger { color: #D32F2F !important; }
-.text-muted  { color: #777; font-size: 13px; }
+.text-muted { color: #777; font-size: 13px; }
 
-/* หัวกระดาษ */
-.doc-header { text-align: center; border-bottom: 2px solid var(--brand-green-dark); padding-bottom: 20px; margin-bottom: 25px; }
-.company-info h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); }
-.company-info p { font-size: 14px; color: #444; line-height: 1.5; }
-.doc-title-box h1 { font-size: 26px; font-weight: 700; margin-top: 25px; color: var(--text-dark); letter-spacing: 1px; }
-.doc-title-box p { text-align: center; color: #555; }
+.doc-header {
+	text-align: center;
+	border-bottom: 2px solid #000;
+	padding-bottom: 20px;
+	margin-bottom: 25px;
+}
 
-/* แถวข้อมูลลูกค้า/เอกสาร */
-.doc-meta-row { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 14px; gap: 20px; }
+.company-info h2 {
+	font-size: 22px;
+	font-weight: 700;
+	margin-bottom: 6px;
+	color: var(--text-dark);
+}
+
+.company-info p {
+	font-size: 14px;
+	color: #444;
+	line-height: 1.5;
+}
+
+.doc-title-box h1 {
+	font-size: 26px;
+	font-weight: 700;
+	margin-top: 25px;
+	color: var(--text-dark);
+	letter-spacing: 1px;
+}
+
+.doc-title-box p {
+	text-align: center;
+	color: #555;
+}
+
+.doc-meta-row {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 25px;
+	font-size: 14px;
+	gap: 20px;
+}
+
 .meta-box-left { flex: 1; }
 .meta-box-right { width: 300px; }
 
-/* Layout Table: ตารางข้อมูลมุมขวาที่มีกรอบ */
-.layout-table { width: 100%; border-collapse: collapse; }
-.layout-table td { padding: 8px 12px; vertical-align: middle; border: none; }
-.layout-table .label { font-weight: 700; width: 120px; color: var(--text-dark); white-space: nowrap; font-size: 14px; }
-.layout-table .value { font-size: 14px; color: var(--text-dark); }
-
-/* ใส่ขอบดำให้กับตารางและเซลล์ด้านในทั้งหมด เหมือนในรูป */
-.layout-table.bordered { 
-    border: 1px solid var(--text-dark); 
-    border-radius: 0; 
-}
-.layout-table.bordered td { 
-    border: 1px solid var(--text-dark); 
+.layout-table {
+	width: 100%;
+	border-collapse: collapse;
 }
 
-/* ตารางรายการ */
-.standard-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; table-layout: fixed; }
-.standard-table th, .standard-table td { border: 1px solid #333; padding: 8px; font-size: 14px; vertical-align: middle; overflow: hidden; word-wrap: break-word; }
-.standard-table th { background-color: var(--brand-green-dark); color: #FFF; font-weight: 700; text-align: center; }
+.layout-table td {
+	padding: 8px 12px;
+	vertical-align: middle;
+	border: none;
+}
 
-.group-row td { background: var(--green-glow) !important; }
-.category-header-text { font-weight: 800 !important; color: var(--text-dark) !important; font-size: 14.5px !important; text-align: center !important; }
+.layout-table .label {
+	font-weight: 700;
+	width: 120px;
+	color: var(--text-dark);
+	white-space: nowrap;
+	font-size: 14px;
+}
 
-.package-includes-title { font-weight: 700; font-size: 13.5px; border-top: none !important; border-bottom: none !important; padding-top: 15px !important; color: #333; }
-.package-included-row td { border-top: none !important; border-bottom: none !important; padding-top: 2px !important; padding-bottom: 2px !important; color: #555; }
-.indented-item { padding-left: 35px !important; }
+.layout-table .value {
+	font-size: 14px;
+	color: var(--text-dark);
+}
 
-/* สรุปยอด */
-.doc-footer { display: flex; justify-content: space-between; gap: 30px; align-items: stretch; }
-.totals-table { width: 100%; border-collapse: collapse; height: 100%; }
-.totals-table td { border: 1px solid var(--brand-green-dark); padding: 12px 15px; font-weight: 600; font-size: 15px; }
-.tot-label { background: var(--cream-warm); width: 55%; text-align: left; color: var(--text-dark); }
-.tot-value { text-align: right; width: 45%; }
-.grand-total-row td { font-weight: 700; font-size: 18px; }
-.total-amount { text-align: right; font-size: 22px !important; color: #B91C1C !important; font-weight: 700; }
+.layout-table.bordered {
+	border: 1px solid #000;
+	border-radius: 0;
+}
+
+.layout-table.bordered td {
+	border: 1px solid #000;
+}
+
+.standard-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 25px;
+	table-layout: fixed;
+}
+
+.standard-table th, .standard-table td {
+	border: 1px solid #000;
+	padding: 8px;
+	font-size: 14px;
+	vertical-align: middle;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+
+.standard-table th {
+	background-color: var(--gold);
+	color: #FFF;
+	font-weight: 700;
+	text-align: center;
+}
+
+.group-row td {
+	background: var(--gold-pale) !important;
+}
+
+.category-header-text {
+	font-weight: 800 !important;
+	color: var(--text-dark) !important;
+	font-size: 14.5px !important;
+	text-align: center !important;
+}
+
+.package-includes-title {
+	font-weight: 700;
+	font-size: 13.5px;
+	border-top: none !important;
+	border-bottom: none !important;
+	padding-top: 15px !important;
+	color: #333;
+}
+
+.package-included-row td {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    color: #555;
+}
+
+.indented-item {
+	padding-left: 35px !important;
+}
+
+.doc-footer {
+	display: flex;
+	justify-content: space-between;
+	gap: 30px;
+	align-items: stretch;
+}
+
+.totals-table {
+	width: 100%;
+	border-collapse: collapse;
+	height: 100%;
+}
+
+.totals-table td {
+	border: 1px solid #000;
+	padding: 12px 15px;
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.tot-label {
+	background: var(--gold-pale);
+	width: 55%;
+	text-align: left;
+	color: var(--text-dark);
+}
+.tot-value {
+	text-align: right;
+	width: 45%;
+}
+
+.grand-total-row td {
+	font-weight: 700;
+	font-size: 18px;
+	background: var(--gold-light);
+}
+.total-amount {
+	text-align: right;
+	font-size: 22px !important;
+	color: #B91C1C !important;
+	font-weight: 700;
+}
 
 /* =========================================
    Modal (ป๊อปอัปเลือกอุปกรณ์)
    ========================================= */
 .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 10000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 10000;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
 }
 
 .modal-card {
-    background: #fff;
-    width: 100%;
-    max-width: 900px;
-    height: 90vh;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    overflow: hidden;
+	background: #fff;
+	width: 100%;
+	max-width: 900px;
+	height: 90vh;
+	border-radius: 12px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
 }
 
 .modal-header {
-    padding: 20px;
-    background: var(--brand-green);
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+	padding: 20px;
+	background: var(--brand-green);
+	color: #fff;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .modal-header h3 {
-    margin: 0;
-    font-size: 20px;
+	margin: 0;
+	font-size: 20px;
 }
 
 .close-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 24px;
-    cursor: pointer;
+	background: none;
+	border: none;
+	color: #fff;
+	font-size: 24px;
+	cursor: pointer;
 }
 
 .category-tabs {
-    display: flex;
-    background: #f8f9fa;
-    padding: 10px 20px 0;
-    border-bottom: 1px solid #dee2e6;
-    overflow-x: auto;
+	display: flex;
+	background: #f8f9fa;
+	padding: 10px 20px 0;
+	border-bottom: 1px solid #000;
+	overflow-x: auto;
 }
 
 .category-tab {
-    padding: 10px 20px;
-    background: none;
-    border: none;
-    border-bottom: 3px solid transparent;
-    font-size: 16px;
-    font-weight: 600;
-    color: #495057;
-    cursor: pointer;
-    white-space: nowrap;
+	padding: 10px 20px;
+	background: none;
+	border: none;
+	border-bottom: 3px solid transparent;
+	font-size: 16px;
+	font-weight: 600;
+	color: #495057;
+	cursor: pointer;
+	white-space: nowrap;
 }
 
 .category-tab.active {
-    color: var(--brand-green-dark);
-    border-bottom-color: var(--brand-green-dark);
+	color: var(--brand-green-dark);
+	border-bottom-color: var(--brand-green-dark);
 }
 
 .modal-body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    background: #f8f9fa;
+	flex: 1;
+	overflow-y: auto;
+	padding: 20px;
+	background: #f8f9fa;
 }
 
 .picker-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
 }
 
 .select-all-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 600;
+	cursor: pointer;
 }
 
 .selected-count-badge {
-    background: var(--brand-green-dark);
-    color: #fff;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 14px;
+	background: var(--brand-green-dark);
+	color: #fff;
+	padding: 4px 12px;
+	border-radius: 20px;
+	font-size: 14px;
 }
 
 .item-picker-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 15px;
 }
 
 .item-pick-card {
-    background: #fff;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 15px;
-    display: flex;
-    gap: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
+	background: #fff;
+	border: 1px solid #000;
+	border-radius: 8px;
+	padding: 15px;
+	display: flex;
+	gap: 12px;
+	cursor: pointer;
+	transition: all 0.2s;
+	position: relative;
 }
 
 .item-pick-card:hover {
-    border-color: var(--brand-green-dark);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+	border-color: var(--brand-green-dark);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .item-pick-card.selected {
-    border-color: var(--brand-green-dark);
-    background: var(--green-pale);
+	border-color: var(--brand-green-dark);
+	background: var(--green-pale);
 }
 
 .item-pick-card.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background: #e9ecef;
+	opacity: 0.6;
+	cursor: not-allowed;
+	background: #e9ecef;
 }
 
 .popup-item-checkbox {
-    margin-top: 4px;
-    width: 18px;
-    height: 18px;
-    accent-color: var(--brand-green-dark);
+	margin-top: 4px;
+	width: 18px;
+	height: 18px;
+	accent-color: var(--brand-green-dark);
 }
 
 .item-pick-info {
-    flex: 1;
+	flex: 1;
 }
 
 .item-pick-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 5px;
 }
 
 .item-pick-name {
-    font-weight: 700;
-    color: #333;
+	font-weight: 700;
+	color: #333;
 }
 
 .item-pick-desc {
-    display: block;
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 8px;
+	display: block;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 8px;
 }
 
 .item-pick-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 14px;
 }
 
 .item-pick-unit {
-    color: #888;
+	color: #888;
 }
 
 .item-pick-price {
-    font-weight: 700;
-    color: var(--brand-green-dark);
+	font-weight: 700;
+	color: var(--brand-green-dark);
 }
 
 .item-already-added {
-    display: inline-block;
-    margin-top: 8px;
-    font-size: 12px;
-    color: #28a745;
-    font-weight: 600;
+	display: inline-block;
+	margin-top: 8px;
+	font-size: 12px;
+	color: #28a745;
+	font-weight: 600;
 }
 
 .modal-footer {
-    padding: 15px 20px;
-    background: #fff;
-    border-top: 1px solid #dee2e6;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+	padding: 15px 20px;
+	background: #fff;
+	border-top: 1px solid #000;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
 }
 
-.btn-cancel-modal,
-.btn-submit-modal {
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
+.btn-cancel-modal, .btn-submit-modal {
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	border: none;
 }
 
 .btn-cancel-modal {
-    background: #e9ecef;
-    color: #495057;
+	background: #e9ecef;
+	color: #495057;
 }
 
 .btn-cancel-modal:hover {
-    background: #dde2e6;
+	background: #dde2e6;
 }
 
 .btn-submit-modal {
-    background: var(--brand-green-dark);
-    color: #fff;
+	background: var(--brand-green-dark);
+	color: #fff;
 }
 
 .btn-submit-modal:hover {
-    background: #4d7f3a;
+	background: #4d7f3a;
 }
 
 /* =========================================
    1. กล่องข้อความความต้องการเพิ่มเติม
    ========================================= */
 .remarks-box {
-    flex: 1;
-    background: #FFFFFF;
-    border: 1px solid var(--accent-gold-pale);
-    border-radius: 8px;
-    padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+	flex: 1;
+	background: #FFFFFF;
+	border: 1px solid #000;
+	border-radius: 8px;
+	padding: 16px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
+
 .remarks-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    font-size: 15px;
-    color: var(--text-dark);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 12px;
+	font-size: 15px;
+	color: var(--text-dark);
 }
+
 .remarks-textarea {
-    width: 100%;
-    min-height: 120px;
-    padding: 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    font-size: 14px;
-    resize: vertical;
-    background: #fdfdfd;
-    transition: all 0.3s ease;
+	width: 100%;
+	min-height: 120px;
+	padding: 12px;
+	border: 1px solid #000;
+	border-radius: 6px;
+	font-size: 14px;
+	resize: vertical;
+	background: #fdfdfd;
+	transition: all 0.3s ease;
 }
+
 .remarks-textarea:focus {
-    border-color: var(--gold-mid);
-    outline: none;
-    background: #FFF;
-    box-shadow: 0 0 0 3px rgba(217, 184, 122, 0.2);
+	border-color: #000;
+	outline: none;
+	background: #FFF;
+	box-shadow: 0 0 0 3px rgba(217, 184, 122, 0.2);
 }
 
 /* =========================================
    2. ปุ่มเพิ่มรายการเพิ่มเติม (สีทองล้วน)
    ========================================= */
 .btn-add-item {
-    background: var(--gold-mid) !important;
-    color: #FFFFFF !important;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 5px rgba(192, 146, 63, 0.3);
+	background: var(--gold-mid) !important;
+	color: #FFFFFF !important;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 6px;
+	font-size: 13px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 5px rgba(192, 146, 63, 0.3);
 }
+
 .btn-add-item:hover {
-    background: var(--gold) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(192, 146, 63, 0.4);
+	background: var(--gold) !important;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(192, 146, 63, 0.4);
 }
 
 /* =========================================
    3. ปุ่มบันทึกการแก้ไข (เขียวเข้ม)
    ========================================= */
 .btn-save-doc {
-    background: var(--brand-green-dark) !important;
-    color: #FFFFFF !important;
-    border: none;
-    padding: 12px 32px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(92, 150, 69, 0.35);
+	background: var(--brand-green-dark) !important;
+	color: #FFFFFF !important;
+	border: none;
+	padding: 12px 32px;
+	border-radius: 8px;
+	font-size: 16px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: 0 4px 12px rgba(92, 150, 69, 0.35);
 }
+
 .btn-save-doc:hover {
-    background: #4d7f3a !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(92, 150, 69, 0.45);
+	background: #4d7f3a !important;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 15px rgba(92, 150, 69, 0.45);
 }
 
 /* =========================================
-   4. ขยายกล่องสรุปยอดรวม
+   4. ขยายกล่องสรุปยอดรวม (เส้นขอบดำ)
    ========================================= */
 .totals-box {
-    width: 360px !important;
-    border: 2px solid var(--brand-green-dark) !important;
-    border-radius: 8px;
-    overflow: hidden;
+	width: 360px !important;
+	border: 2px solid #000 !important;
+	border-radius: 8px;
+	overflow: hidden;
 }
+
 .totals-table td {
-    padding: 12px 18px !important;
+	padding: 12px 18px !important;
 }
 
 /* =========================================
    5. ราคา/หน่วย (ตัวเลขอ่านง่าย ไม่มีลูกศร)
    ========================================= */
 .price-input, .price-input[readonly] {
-    width: 100%;
-    text-align: right;
-    color: #333333 !important;
-    font-weight: 600 !important;
-    background: transparent !important;
-    border: none !important;
-    outline: none !important;
-    -moz-appearance: textfield;
+	width: 100%;
+	text-align: right;
+	color: #333333 !important;
+	font-weight: 600 !important;
+	background: transparent !important;
+	border: none !important;
+	outline: none !important;
+	-moz-appearance: textfield;
 }
-.price-input::-webkit-outer-spin-button,
-.price-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+
+.price-input::-webkit-outer-spin-button, .price-input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 /* =========================================
    6. ปุ่ม +/- และช่องกรอกจำนวน
    ========================================= */
-#mainQuotationTable .qty-wrapper{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:nowrap;
-    white-space:nowrap;
-    gap: 4px;
+#mainQuotationTable .qty-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+	gap: 3px;
+	width: 100%;
 }
-#mainQuotationTable .btn-qty-edit{
-    flex:0 0 auto;
-    width: 22px;
-    height: 22px;
-    border: none;
-    background: transparent;
-    color: #9CA3AF;
-    font-size: 13px;
-    line-height: 1;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    opacity: 0.75;
+
+/* โหมดดู (view): โชว์แค่ตัวเลข + ดินสอ */
+#mainQuotationTable .qty-wrapper[data-mode="view"] .btn-qty-minus,
+#mainQuotationTable .qty-wrapper[data-mode="view"] .btn-qty-plus,
+#mainQuotationTable .qty-wrapper[data-mode="view"] .qty-input {
+	display: none !important;
 }
-#mainQuotationTable .btn-qty-edit:hover{
-    opacity: 1;
+
+/* โหมดแก้ไข (edit): ซ่อนตัวเลขเฉยๆ โชว์ -  [เลข]  + */
+#mainQuotationTable .qty-wrapper[data-mode="edit"] .qty-display {
+	display: none !important;
 }
-#mainQuotationTable .qty-display{
-    font-weight: 600;
-    color: #333;
-    min-width: 14px;
-    text-align: center;
+#mainQuotationTable .qty-wrapper[data-mode="edit"] .qty-input {
+	display: inline-block !important;
 }
+
+#mainQuotationTable .btn-qty-edit {
+	flex: 0 0 auto;
+	width: 18px; height: 18px;
+	border: none;
+	background: #E5E7EB;
+	border-radius: 50%;
+	color: #6B7280;
+	font-size: 10px;
+	line-height: 1;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+#mainQuotationTable .qty-display {
+	font-weight: 600;
+	color: #333;
+	min-width: 12px;
+	text-align: center;
+	font-size: 13px;
+}
+
 #mainQuotationTable .btn-qty-minus,
-#mainQuotationTable .btn-qty-plus{
-    flex:0 0 auto;
-    width: 24px;
-    height: 24px;
-    border: 1px solid var(--brand-green-dark);
+#mainQuotationTable .btn-qty-plus {
+	flex: 0 0 auto;
+	width: 18px; height: 18px;
+	border: 1px solid #000;
+	background: #FFFFFF;
+	color: var(--brand-green-dark);
+	border-radius: 4px;
+	font-size: 13px;
+	line-height: 1;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+#mainQuotationTable .btn-qty-minus:hover,
+#mainQuotationTable .btn-qty-plus:hover {
+	background: var(--green-glow);
+}
+
+#mainQuotationTable .qty-wrapper .qty-input {
+	flex: 0 0 auto;
+	width: 26px;
+	text-align: center;
+	border: 1px solid #000;
+	border-radius: 4px;
+	padding: 1px 0;
+	font-size: 13px;
+}
+
+/* =========================================
+   สไตล์แถบหมวดหมู่ (Group Row) ตามภาพอ้างอิง
+   ========================================= */
+#mainQuotationTable tr.group-row td {
+    background-color: #FDF0D4 !important; /* สีเหลืองอ่อนตามรูปภาพ */
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+}
+
+#mainQuotationTable tr.group-row td.category-header-text {
+    text-align: left !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    color: #333333;
+    font-weight: 700;
+    font-size: 15.5px;
+}
+#mainQuotationTable tr.group-row td.category-header-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ปุ่ม + สีเขียววงกลม */
+#mainQuotationTable .btn-add-group-inline {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid #3E9C6A; /* ขอบสีเขียว */
     background: #FFFFFF;
-    color: var(--brand-green-dark);
-    border-radius: 4px;
-    font-size: 16px;
+    color: #3E9C6A; /* เครื่องหมาย + สีเขียว */
+    font-size: 18px;
+    font-weight: 400;
     line-height: 1;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding-bottom: 2px;
-}
-#mainQuotationTable .btn-qty-minus:hover,
-#mainQuotationTable .btn-qty-plus:hover{
-    background: var(--green-glow);
-}
-#mainQuotationTable .qty-wrapper .qty-input{
-    flex:0 0 auto;
-    width: 38px;
-    text-align:center;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 2px 0;
-}
-.qty-input[readonly] {
-    background-color: transparent !important;
-    border: none !important;
-    outline: none !important;
-    color: #333 !important;
-    font-weight: 600 !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    width: 100% !important;
-    -moz-appearance: textfield;
-    text-align: center;
-}
-.qty-input[readonly]::-webkit-outer-spin-button,
-.qty-input[readonly]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    transition: all 0.2s;
 }
 
-#mainQuotationTable tr.group-row td.category-header-text{
-    text-align: left !important;
-    padding-left: 8px !important;
-    padding-right: 12px !important;
-    white-space: nowrap;
-    color: var(--text-dark);
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-#mainQuotationTable tr.group-row td {
-    background-color: var(--green-glow);
-}
-#mainQuotationTable .btn-add-group-inline{
-    flex: 0 0 auto;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 1px solid var(--brand-green-dark);
-    background: #FFFFFF;
-    color: var(--brand-green-dark);
-    font-size: 14px;
-    line-height: 1;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-}
-#mainQuotationTable .btn-add-group-inline:hover{
-    background: #FFFFFF;
+#mainQuotationTable .btn-add-group-inline:hover {
+    background: #3E9C6A;
+    color: #FFFFFF;
     transform: scale(1.05);
 }
+

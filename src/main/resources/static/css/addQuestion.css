@@ -111,8 +111,8 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 30px;
+    font-family: 'Charmonman', cursive; /* เพิ่มฟอนต์ Charmonman */
+    font-size: 30px; /* ขนาดเท่าเดิมตาม CSS เดิม */
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
@@ -251,13 +251,14 @@ body {
 }
 
 /* ========== CARD HEADER ========== */
+/* ========== CARD HEADER ========== */
 .card-header-bar {
-    background: var(--brand-green);
+    background: var(--gold);              /* เปลี่ยนจาก var(--brand-green) เป็นสีเหลือง/ทอง */
     padding: 34px 32px 28px;
     text-align: center;
     position: relative;
     overflow: hidden;
-    border-bottom: 2px solid var(--accent-gold-mid);
+    border-bottom: 2px solid var(--green-banana);   /* เปลี่ยนเส้นขอบล่างเป็นเขียวตัดกับพื้นเหลือง */
 }
 
 .card-header-bar::after {
@@ -265,7 +266,7 @@ body {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 3px;
-    background: var(--accent-gold-mid);
+    background: var(--green-banana);      /* เปลี่ยนให้เข้าธีมเหลือง-เขียว */
 }
 
 /* ดอกบัวตกแต่งบนหัวการ์ด */
@@ -593,8 +594,8 @@ body {
 }
 
 .footer-brand-text {
-    font-family: 'Sarabun', sans-serif;
-    font-size: 1.2rem;
+    font-family: 'Charmonman', cursive; /* เพิ่มฟอนต์ Charmonman */
+    font-size: 1.2rem; /* ขนาดเท่าเดิมตาม CSS เดิม */
     font-weight: 700;
     color: #FFFFFF;
 }

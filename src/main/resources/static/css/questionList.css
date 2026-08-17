@@ -110,9 +110,9 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 30px;
-    font-weight: 700;
+    font-family: 'Charmonman', cursive; /* แก้ตรงนี้ */
+    font-size: 34px;                    /* แก้ขนาดตรงนี้ */
+    font-weight: 800;                   /* แก้ความหนาตรงนี้ */
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 2px 6px rgba(0,0,0,0.3);
@@ -606,7 +606,7 @@ tr:hover td { background: var(--green-glow); }
 }
 
 .footer-brand-text {
-    font-family: 'Sarabun', sans-serif;
+  font-family: 'Charmonman', cursive;
     font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;
@@ -645,4 +645,135 @@ tr:hover td { background: var(--green-glow); }
     th, td { padding: 10px 12px; }
     .footer-content { flex-direction: column; align-items: flex-start; }
     .site-footer::after { display: none; }
+}
+/* ========== GOLD LINE (ใต้ list-header) ========== */
+.gold-line {
+    width: 60px;
+    height: 3px;
+    background: var(--accent-gold);
+    margin-top: 10px;
+    border-radius: 2px;
+}
+
+/* ========== BTN ADD (เหลือง/ทอง) ========== */
+.btn-add {
+    display: inline-block;
+    background: var(--gold);
+    color: #FFFFFF;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
+    box-shadow: 0 4px 14px var(--shadow-warm);
+    transition: all 0.2s;
+    border: 1.5px solid var(--gold-mid);
+}
+.btn-add:hover {
+    background: var(--gold-mid);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px var(--shadow-warm);
+    color: #FFFFFF;
+}
+
+/* ========== ACTION LINKS (แก้ไข / ลบ) ========== */
+.action-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* แก้ไข - ฟ้า */
+.btn-edit {
+    display: inline-block;
+    color: #2E7BC4;
+    background: #EAF3FC;
+    border: 1.5px solid #2E7BC4;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.btn-edit:hover {
+    background: #2E7BC4;
+    color: #FFFFFF;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(46, 123, 196, 0.3);
+}
+
+/* ลบ - แดง */
+.btn-del {
+    display: inline-block;
+    color: #C0392B;
+    background: #FDECEA;
+    border: 1.5px solid #C0392B;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.btn-del:hover {
+    background: #C0392B;
+    color: #FFFFFF;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(192, 57, 43, 0.3);
+}
+
+/* ========== CIRCLE NUM (ลำดับ) ========== */
+.circle-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--green-pale);
+    color: var(--green-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* ========== CEREMONY TAG ========== */
+.ceremony-tag {
+    display: inline-block;
+    background: var(--green-glow);
+    color: var(--green-deep);
+    border: 1px solid var(--green-banana);
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    margin: 2px 3px 2px 0;
+    white-space: nowrap;
+}
+.ceremony-tag.all-tag {
+    background: var(--gold-pale);
+    color: #8a6d1c;
+    border-color: var(--accent-gold-mid);
+}
+
+/* ========== QUESTION TEXT ========== */
+.question-text {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+/* ========== ALERT SUCCESS ========== */
+.alert-success {
+    background: var(--green-pale);
+    border: 1.5px solid var(--green-banana);
+    color: var(--green-deep);
+    padding: 13px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
 }

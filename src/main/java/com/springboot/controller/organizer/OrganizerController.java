@@ -158,12 +158,27 @@ public class OrganizerController {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
 
         // ==========================================================
-        //  ดูแลงานที่ยืนยันแล้ว และงานที่เสร็จสิ้น
+        //  แท็บ "งานใหม่" (Pending): รวม Approved เข้าไปด้วย
+        //  เพราะ "รับงานแล้ว" (Approved) ยังถือเป็นงานที่ organizer
+        //  ต้องดำเนินการต่อ (ทำใบเสนอราคา) — ยังไม่ใช่ขั้น "ยืนยันแล้ว"
+        //  ซึ่งเป็นสถานะที่ "ลูกค้า" เป็นคนกดยืนยันเอง
+        // ==========================================================
+        if ("Pending".equals(status)) {
+            List<BookingForm> bookings = bookingService.getBookingsByStatuses(
+                Arrays.asList("Pending", "Approved"));
+            model.addAttribute("bookings", bookings);
+            model.addAttribute("currentStatus", status);
+            return "bookingList_New";
+        }
+
+        // ==========================================================
+        //  ดูแลงานที่ยืนยันแล้ว (ลูกค้ายืนยันเอง) และงานที่เสร็จสิ้น
         // ==========================================================
         if ("Confirmed".equals(status) || "Completed".equals(status)) {
             List<BookingForm> bookings;
             if ("Confirmed".equals(status)) {
-                bookings = bookingService.getBookingsByStatuses(Arrays.asList("Confirmed", "Assigned", "Preparing", "In_Progress"));
+                bookings = bookingService.getBookingsByStatuses(
+                    Arrays.asList("Confirmed", "Assigned", "Preparing", "In_Progress"));
             } else {
                 bookings = bookingService.findByStatus("Completed");
             }
@@ -173,7 +188,7 @@ public class OrganizerController {
         }
 
         // ==========================================================
-        // ดูแลงานใหม่ และงานยกเลิก
+        // งานยกเลิก (Rejected)
         // ==========================================================
         List<BookingForm> bookings = bookingService.findByStatus(status);
         model.addAttribute("bookings", bookings);

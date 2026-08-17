@@ -10,10 +10,10 @@
     --bg-light:       #FCF6F0;
 
     /* สีหลัก — ส้มพีช/ส้มจีวร (navbar + footer) */
-    --peach-primary:  #E28F66;
-    --peach-hover:    #D17A4F;
-    --peach-pale:     #FDF0E8;
-    --peach-deep:     #B5613A;
+    --peach-primary:  #E8703A;
+    --peach-hover:    #D45F2A;
+    --peach-pale:     #FDEEE4;
+    --peach-deep:     #B84B1F;
 
     /* สีน้ำตาลอ่อน — ใช้ตัดกับส้มตรงแถบหัวการ์ด */
     --brown-light:      #9C7852;
@@ -21,14 +21,14 @@
     --brown-light-pale: #F3E9DE;
 
     /* สีทอง — ใช้ตกแต่ง/เส้นคั่น */
-    --gold-primary:   #C99A3D;
-    --gold-hover:     #AD8130;
+    --gold-primary:   #D9A441;
+    --gold-hover:     #B8872F;
     --gold-pale:      #FBF1DC;
-    --gold-light:     #F6E2BA;
+    --gold-light:     #F3DA9E;
 
     /* สีน้ำตาลมอคค่า (ตัวหนังสือหลัก) */
-    --brown-text:     #5A4A42;
-    --brown-muted:    #8D7A70;
+    --brown-text:     #4A3728;
+    --brown-muted:    #8A7666;
 
     /* สีแจ้งเตือน */
     --green-primary:  #1e6b3a;
@@ -40,14 +40,24 @@
 
     /* สีขอบและเงา */
     --white:          #FFFFFF;
-    --card-border:    #F5E6DD;
-    --shadow-soft:    rgba(226, 143, 102, 0.15);
+    --card-border:    #F0E2D3;
+    --shadow-soft:    rgba(232, 112, 58, 0.15);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ===== บังคับใช้ฟอนต์ Sarabun กับทุกส่วนประกอบในหน้าเว็บ ===== */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Sarabun', sans-serif; 
+}
+
+/* บังคับ input, button ให้ใช้ฟอนต์ตามโครงสร้างหลักเสมอ */
+input, button, select, textarea {
+    font-family: inherit;
+}
 
 body {
-    font-family: 'Sarabun', sans-serif;
     background: var(--bg-light);
     color: var(--brown-text);
     min-height: 100vh;
@@ -57,7 +67,7 @@ body {
 
 /* ===== NAVBAR ===== */
 .navbar-custom {
-    background: var(--peach-primary);
+    background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -105,11 +115,12 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-size: 30px;
-    font-weight: 700;
+    font-family: 'Charmonman', cursive; 
+    font-size: 34px;                    
+    font-weight: 800;                   
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .navbar-right {
@@ -136,13 +147,13 @@ body {
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
     color: #FFFFFF;
 }
 
 .nav-item.active {
     background: #FFFFFF;
-    color: var(--peach-primary);
+    color: var(--peach-deep);
     font-weight: 700;
 }
 
@@ -164,7 +175,7 @@ body {
 
 .user-avatar {
     background: #FFFFFF;
-    color: var(--peach-primary);
+    color: var(--peach-deep);
     width: 36px; height: 36px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -233,16 +244,16 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: var(--gold-primary);
+    background: var(--peach-primary);
     z-index: 1;
 }
 
-/* Card Header — สีน้ำตาลอ่อนตัดกับส้มของ navbar */
+/* ===== Card Header — เปลี่ยนเป็นสีเหลืองเข้มทึบ ===== */
 .card-header {
-    background: var(--brown-light);
+    background: #D49A00;
     padding: 30px 36px;
     text-align: center;
-    border-bottom: 2px solid var(--brown-light-deep);
+    border-bottom: 2px solid #B8872F;
     position: relative;
 }
 
@@ -251,7 +262,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--gold-primary);
+    background: var(--gold-light);
 }
 
 .header-ornament {
@@ -360,7 +371,6 @@ form {
     border: 1.5px solid var(--card-border);
     border-radius: 10px;
     font-size: 14px;
-    font-family: 'Sarabun', sans-serif;
     background: var(--bg-light);
     color: var(--brown-text);
     outline: none;
@@ -383,7 +393,7 @@ form {
 /* Divider */
 .divider {
     border: none;
-    border-top: 1.5px solid var(--brown-light-pale);
+    border-top: 1.5px solid var(--card-border);
     margin: 4px 0;
 }
 
@@ -394,9 +404,10 @@ form {
     align-items: center;
 }
 
+/* ===== ปุ่มบันทึก สีฟ้าทึบ (ไม่ไล่สี) ===== */
 .btn-submit {
     flex: 1;
-    background: var(--peach-primary);
+    background: #3b82f6; 
     color: #FFFFFF;
     border: none;
     border-radius: 12px;
@@ -405,13 +416,13 @@ form {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px var(--shadow-soft);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
 }
 
 .btn-submit:hover {
-    background: var(--peach-hover);
+    background: #2563eb;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(226, 143, 102, 0.35);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
 }
 
 .btn-back {
@@ -451,7 +462,7 @@ form {
 
 /* ========== FOOTER — ส้มเหมือน navbar ========== */
 .site-footer {
-    background: var(--peach-primary);
+    background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
     color: rgba(255, 255, 255, 0.95);
     margin-top: auto;
     border-top: 3px solid var(--gold-primary);
@@ -497,6 +508,7 @@ form {
 }
 
 .footer-brand-text {
+	font-family: 'Charmonman', cursive;
     font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;

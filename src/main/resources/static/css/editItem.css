@@ -1,34 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap');
 
 /* =========================================================
    COLOR SYSTEM
-   ส้ม (หลัก, navbar/footer) + น้ำตาลอ่อน (ตัดในการ์ด) + ทอง (ตกแต่ง)
-   ธีมเดียวกับหน้า staffAssignmentList / itemList
+   ดึงชุดสีมาจากหน้า staffAssignmentList.css เพื่อให้เหมือนกัน 100%
    ========================================================= */
 :root {
-    /* พื้นหลังสีครีมอมพีชสว่างๆ */
-    --bg-light:       #FCF6F0;
+    /* พื้นหลังสีครีมสว่างๆ */
+    --bg-light:       #FFFBF5;
 
-    /* สีหลัก — ส้มพีช/ส้มจีวร (navbar + footer) */
-    --peach-primary:  #E28F66;
-    --peach-hover:    #D17A4F;
-    --peach-pale:     #FDF0E8;
-    --peach-deep:     #B5613A;
+    /* สีหลัก — ส้ม (Navbar/Footer) */
+    --peach-primary:  #E8703A;
+    --peach-hover:    #D45F2A;
+    --peach-pale:     #FDEEE4;
+    --peach-deep:     #B84B1F;
 
-    /* สีน้ำตาลอ่อน — ใช้ตัดกับส้มตรงแถบหัวการ์ด */
-    --brown-light:      #9C7852;
-    --brown-light-deep: #7C5A3B;
-    --brown-light-pale: #F3E9DE;
-
-    /* สีทอง — ใช้ตกแต่ง/เส้นคั่น */
-    --gold-primary:   #C99A3D;
-    --gold-hover:     #AD8130;
+    /* สีทอง/เหลืองเข้ม */
+    --gold-primary:   #D9A441;
+    --gold-hover:     #B8872F;
     --gold-pale:      #FBF1DC;
-    --gold-light:     #F6E2BA;
+    --gold-light:     #F3DA9E;
 
     /* สีน้ำตาลมอคค่า (ตัวหนังสือหลัก) */
-    --brown-text:     #5A4A42;
-    --brown-muted:    #8D7A70;
+    --brown-text:     #4A3728;
+    --brown-muted:    #8A7666;
 
     /* สีแจ้งเตือน */
     --red-primary:    #D9534F;
@@ -36,8 +30,8 @@
 
     /* สีขอบและเงา */
     --white:          #FFFFFF;
-    --card-border:    #F5E6DD;
-    --shadow-soft:    rgba(226, 143, 102, 0.15);
+    --card-border:    #F0E2D3;
+    --shadow-soft:    rgba(232, 112, 58, 0.15);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
@@ -54,7 +48,7 @@ body {
    NAVBAR
    ========================================================================== */
 .navbar {
-    background: var(--peach-primary);
+    background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -65,7 +59,7 @@ body {
     top: 0;
     z-index: 10000;
     overflow: visible;
-    box-shadow: 0 4px 15px rgba(226, 143, 102, 0.2);
+    box-shadow: 0 4px 15px rgba(184, 75, 31, 0.25);
 }
 
 .navbar::before {
@@ -102,11 +96,12 @@ body {
 
 .navbar-title {
     color: #FFFFFF;
-    font-size: 32px;
-    font-weight: 700;
+    font-family: 'Charmonman', cursive; 
+    font-size: 34px;                    
+    font-weight: 800;                   
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .navbar-right {
@@ -132,8 +127,8 @@ body {
     white-space: nowrap;
 }
 
-.nav-item:hover  { background: rgba(255, 255, 255, 0.3); color: #FFFFFF; }
-.nav-item.active { background: #FFFFFF; color: var(--peach-primary); font-weight: 700; }
+.nav-item:hover  { background: rgba(255, 255, 255, 0.25); color: #FFFFFF; }
+.nav-item.active { background: #FFFFFF; color: var(--peach-deep); font-weight: 700; }
 
 .user-info {
     display: flex;
@@ -153,7 +148,7 @@ body {
 
 .user-avatar {
     background: #FFFFFF;
-    color: var(--peach-primary);
+    color: var(--peach-deep);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -249,18 +244,18 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: var(--gold-primary);
+    background: var(--peach-primary);
     z-index: 1;
 }
 
 /* ==========================================================================
-   CARD HEADER (หัวข้อหลัก) — สีน้ำตาลอ่อนตัดกับส้มของ navbar
+   CARD HEADER (หัวข้อหลัก) — เปลี่ยนจากน้ำตาลเป็น "สีเหลืองเข้มทึบ"
    ========================================================================== */
 .card-header-bar {
-    background: var(--brown-light);
+    background: #D49A00;
     padding: 28px 32px 22px;
     text-align: center;
-    border-bottom: 2px solid var(--brown-light-deep);
+    border-bottom: 2px solid #B8872F;
     position: relative;
 }
 
@@ -269,7 +264,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--gold-primary);
+    background: var(--gold-light);
 }
 
 .header-ornament {
@@ -460,7 +455,7 @@ body {
    ========================================================================== */
 .divider {
     border: none;
-    border-top: 1px solid var(--brown-light-pale);
+    border-top: 1px solid var(--card-border);
     margin: 4px 0;
 }
 
@@ -469,8 +464,9 @@ body {
    ========================================================================== */
 .form-actions { display: flex; gap: 12px; align-items: center; }
 
+/* ===== ปุ่มบันทึก สีฟ้าทึบ (ไม่มีไล่สี) ===== */
 .btn-submit {
-    background: var(--peach-primary);
+    background: #3b82f6;
     color: #FFFFFF;
     border: none;
     border-radius: 10px;
@@ -479,13 +475,13 @@ body {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px var(--shadow-soft);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
 }
 
 .btn-submit:hover {
-    background: var(--peach-hover);
+    background: #2563eb;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(226, 143, 102, 0.35);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
 }
 
 .btn-cancel {
@@ -530,7 +526,7 @@ body {
    FOOTER — ส้มเหมือน navbar
    ========================================================================== */
 .site-footer {
-    background: var(--peach-primary);
+    background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
     color: rgba(255, 255, 255, 0.95);
     margin-top: auto;
     border-top: 3px solid var(--gold-primary);
@@ -576,6 +572,7 @@ body {
 }
 
 .footer-brand-text {
+	font-family: 'Charmonman', cursive;
     font-size: 1.2rem;
     font-weight: 700;
     color: #FFFFFF;

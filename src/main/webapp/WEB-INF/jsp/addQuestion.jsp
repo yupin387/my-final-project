@@ -5,8 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>เพิ่มคำถามพิธี - บุญมี รับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>เพิ่มคำถามพิธี - บุญมีนำพา จัดงานบุญ</title>
+    <!-- เพิ่มฟอนต์ Charmonman ตรงนี้ครับ -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addQuestion.css">
 </head>
 <body>
@@ -15,8 +16,8 @@
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-             alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-        <span class="navbar-title">บุญมี รับจัดงานบุญ</span>
+             alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
+        <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <div class="navbar-menu">
@@ -37,8 +38,6 @@
         </div>
     </div>
 </nav>
-
-
 
 <%-- ========== PAGE WRAPPER ========== --%>
 <div class="page-wrapper">
@@ -78,8 +77,6 @@
                         required value="${param.questionText}" />
                 </div>
 
-                <%-- แก้ไข: ตัด dropdown แพ็กเกจออก คำถามผูกกับ "ประเภทงาน" โดยตรง
-                     (ไม่ผูกกับแพ็กเกจย่อยของ Ceremony อีกต่อไป) เหลือ select เดียว --%>
                 <div class="form-group">
                     <label for="ceremonyType">ประเภทงาน</label>
                     <div class="select-wrapper">
@@ -126,22 +123,20 @@
 
 </div><%-- /page-wrapper --%>
 
-
-
 <!-- ===== FOOTER ===== -->
 <footer class="site-footer">
     <div class="footer-content">
         <div class="footer-brand">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                 alt="บุญมี รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+                 alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
         <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>
-   
 </footer>
 
-<script src="${pageContext.request.contextPath}/static/js/addHeadStaff.js"></script>
+<!-- แก้ไขชื่อสคริปต์ให้ถูกต้อง -->
+<script src="${pageContext.request.contextPath}/static/js/addQuestion.js"></script>
 <script>
     function toggleDropdown() {
         document.getElementById('dropdownMenu').classList.toggle('show');
