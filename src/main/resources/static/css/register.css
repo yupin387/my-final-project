@@ -15,8 +15,8 @@
     --pink-cta-light: #EC6E96;
     --pink-cta-dark:  #C7405F;
 
-    /* พื้นหลัง: ครีมชมพูอ่อนมาก + การ์ดขาว */
-    --cream:         #F9DCE6;
+    /* พื้นหลังหน้าเว็บปกติ + การ์ดขาว — ปรับให้ตรงกับค่ามาตรฐานของโปรเจกต์ */
+    --cream:         #FDF1F5;
     --cream-warm:    #FFFFFF;
     --cream-mid:     #FFF8F3;
     --cream-border:  #F3D9DC;
@@ -27,11 +27,12 @@
     --brown-dark:    #B8823A;
     --brown-mid:     #C79552;
 
-    /* สีเดิมของ navbar (คงไว้ตาม home.css) */
-    --nav-gold:       #E0577F;
-    --nav-gold-mid:   #EC6E96;
-    --nav-gold-light: #F49CB9;
-    --nav-gold-pale:  #FBD0DE;
+    /* Navbar — เปลี่ยนจากชมพูเข้มเป็นครีม-ทอง ให้ตรงกับหน้าอื่นในโปรเจกต์ */
+    --footer-grad-1: #F6E3B0;
+    --footer-grad-2: #ECC974;
+    --footer-grad-3: #D6A544;
+    --accent-gold-pale: #F7E3B0;
+    --accent-gold: #D9A441;
 }
 
 body {
@@ -43,29 +44,32 @@ body {
 }
 
 /* ==========================================================================
-   NAVBAR (เหมือน home.css — ขนาด/สี/ฟอนต์ + เส้นทองบน-ล่าง)
+   NAVBAR (ครีม-ทอง ให้ตรงกับหน้าอื่น)
    ========================================================================== */
 .main-navbar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
-    padding: 0 40px;
+    background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
+    padding: 0 40px; 
     display: flex;
     align-items: center;
-    border-top: 3px solid #E5BD6D;
-    border-bottom: 3px solid #E5BD6D;
+    justify-content: space-between; 
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
     position: sticky;
     top: 0;
     z-index: 10000;
-    min-height: 70px;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
-    position: relative;
+    min-height: 92px; /* ความสูงเดียวกับ home.css */
+    overflow: visible;
+    box-shadow: 0 4px 20px rgba(184, 134, 47, 0.28);
 }
 
 .main-navbar::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0; 
+    left: 0; 
+    right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.9), rgba(255,255,255,0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(184, 134, 47, 0.5), rgba(184, 134, 47, 0.9), rgba(184, 134, 47, 0.5), transparent);
 }
 
 .navbar-brand-wrap {
@@ -76,24 +80,30 @@ body {
 }
 
 .lotus-icon {
-    width: 70px;
-    height: 70px;
+    background: #FFFFFF;
+    width: 76px;  /* ขนาดโลโก้เดียวกับ home.css */
+    height: 76px; /* ขนาดโลโก้เดียวกับ home.css */
     border-radius: 50%;
-    object-fit: cover;
-    background: rgba(255, 255, 255, 0.18);
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 10px rgba(184, 134, 47, 0.22);
     flex-shrink: 0;
-    padding: 3px;
+    object-fit: cover;
+    padding: 0;
 }
 
+/* ชื่อระบบ — คงฟอนต์ Charmonman เดิมไว้ */
 .nav-brand-text {
-    color: #FFFFFF;
-    font-family: 'Charmonman', cursive;
-    font-weight: 700;
-    font-size: 34px;
+    color: var(--text-dark);
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-weight: 800; /* ความหนาเดียวกับ home.css */
+    font-size: 34px; /* ขนาดฟอนต์เดียวกับ home.css */
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    white-space: nowrap;
+    text-shadow: none;
 }
 
 /* ==========================================================================
@@ -162,9 +172,9 @@ body {
 
 .title-main {
     color: var(--brown-dark);
-    font-family: 'Charmonman', cursive;
+    font-family: 'Sarabun', sans-serif;
     font-weight: 700;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     letter-spacing: 0.5px;
     margin-bottom: 6px;
 }
@@ -172,6 +182,7 @@ body {
 .subtitle-muted {
     color: var(--text-mid);
     font-size: 0.88rem;
+    font-family: 'Sarabun', sans-serif;
 }
 
 .gold-line {
@@ -261,6 +272,7 @@ body {
     color: var(--text-mid);
     font-size: 0.82rem;
     font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
 }
 
 .or-divider::before,

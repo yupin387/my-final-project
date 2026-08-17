@@ -28,7 +28,8 @@
 	--cream-border: #F3C4D5;
 	--cream-border-soft: #F6D4E1;
 
-	--page-bg: #FFF6F8;
+	/* พื้นหลังหน้าเว็บ ไล่ชมพูอ่อนพาสเทล (ปรับให้ตรงกับ home.css) */
+	--page-bg: #FDF1F5;
 
 	--text-dark: #1A1A1A;
 	--text-mid: #3A3A3A;
@@ -37,10 +38,10 @@
 	--brown-dark: #7A2340;
 	--brown-mid: #A83A5C;
 
-	/* ===== Footer / Navbar gradient (ให้ตรงกับหน้า home) ===== */
-	--footer-grad-1: #C7405F;
-	--footer-grad-2: #D94F76;
-	--footer-grad-3: #E0577F;
+	/* ===== Footer / Navbar gradient — ปรับให้เป็นครีม-ทอง ให้ตรงกับหน้า home เป๊ะ ===== */
+	--footer-grad-1: #F6E3B0;
+	--footer-grad-2: #ECC974;
+	--footer-grad-3: #D6A544;
 }
 
 body {
@@ -55,7 +56,7 @@ body {
    ========================================================================== */
 .navbar-custom {
 	font-family: 'Charmonman', 'Noto Serif Thai', serif;
-	background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
+	background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
 	padding: 0 40px;
 	display: flex;
 	align-items: center;
@@ -67,7 +68,7 @@ body {
 	z-index: 10000;
 	min-height: 92px;
 	overflow: visible;
-	box-shadow: 0 4px 20px rgba(199, 64, 95, 0.35);
+	box-shadow: 0 4px 20px rgba(184, 134, 47, 0.28);
 }
 
 .navbar-custom,
@@ -105,8 +106,8 @@ body {
 	left: 0;
 	right: 0;
 	height: 2px;
-	background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6),
-		rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
+	background: linear-gradient(90deg, transparent, rgba(184, 134, 47, 0.5),
+		rgba(184, 134, 47, 0.9), rgba(184, 134, 47, 0.5), transparent);
 }
 
 .navbar-brand-wrap {
@@ -118,15 +119,15 @@ body {
 
 /* โลโก้ใช้รูปจริง ขนาดให้เท่า home เป๊ะ (76px) */
 .lotus-icon {
-	background: rgba(255, 255, 255, 0.18);
+	background: #FFFFFF;
 	width: 76px;
 	height: 76px;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border: 1.5px solid rgba(255, 255, 255, 0.55);
-	box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+	border: 1.5px solid var(--accent-gold-pale);
+	box-shadow: 0 0 10px rgba(184, 134, 47, 0.22);
 	flex-shrink: 0;
 	overflow: hidden;
 }
@@ -139,13 +140,13 @@ body {
 }
 
 .nav-brand-text {
-	color: #FFFFFF;
+	color: var(--brown-dark);
 	font-family: 'Charmonman', 'Noto Serif Thai', serif;
 	font-size: 34px;
 	font-weight: 800;
 	letter-spacing: 0.5px;
 	white-space: nowrap;
-	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+	text-shadow: none;
 }
 
 .navbar-center {
@@ -157,38 +158,38 @@ body {
 }
 
 .nav-link-item {
-	color: #FFFFFF;
+	color: var(--brown-dark);
 	text-decoration: none;
-	font-size: 17px;
+	font-size: 14px;
 	font-weight: 600;
 	padding: 8px 16px;
 	border-radius: 6px;
 	transition: background 0.2s, color 0.2s;
 	white-space: nowrap;
-	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	text-shadow: none;
 }
 
 .nav-link-item:hover {
-	background: rgba(255, 255, 255, 0.2);
-	color: #FFFFFF;
+	background: rgba(184, 134, 47, 0.14);
+	color: var(--brown-dark);
 }
 
 .nav-link-item.active {
-	background: #FFFFFF;
-	color: var(--gold);
+	background: var(--gold);
+	color: #FFFFFF;
 	font-weight: 700;
 }
 
 /* ===== User Profile Pill ===== */
 .user-profile-pill {
-	background: rgba(255, 255, 255, 0.15);
-	border: 1.5px solid rgba(255, 255, 255, 0.45);
+	background: rgba(255, 255, 255, 0.55);
+	border: 1.5px solid var(--accent-gold-pale);
 	padding: 6px 16px 6px 6px;
 	border-radius: 50px;
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	color: #FFFFFF;
+	color: var(--brown-dark);
 	cursor: pointer;
 	transition: background 0.2s;
 	position: relative;
@@ -196,12 +197,12 @@ body {
 }
 
 .user-profile-pill:hover {
-	background: rgba(255, 255, 255, 0.25);
+	background: rgba(255, 255, 255, 0.85);
 }
 
 .avatar-circle-nav {
-	background: #FFFFFF;
-	color: var(--gold);
+	background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+	color: #FFFFFF;
 	width: 34px;
 	height: 34px;
 	border-radius: 50%;
@@ -222,12 +223,12 @@ body {
 .user-name-nav {
 	font-size: 0.88rem;
 	font-weight: 700;
-	color: #FFFFFF;
+	color: var(--brown-dark);
 }
 
 .user-role-nav {
 	font-size: 0.7rem;
-	color: rgba(255, 255, 255, 0.75);
+	color: var(--brown-mid);
 }
 
 .dropdown-wrap {
@@ -246,7 +247,7 @@ body {
 	border: 1px solid var(--cream-border);
 	border-radius: 10px;
 	min-width: 175px;
-	box-shadow: 0 8px 28px rgba(199, 64, 95, 0.18);
+	box-shadow: 0 8px 28px rgba(184, 134, 47, 0.22);
 	z-index: 99999;
 	padding: 0;
 	transform: translateY(-8px);
@@ -366,7 +367,7 @@ body {
 }
 
 .hero-content h1 {
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-family: 'sarabun', serif;
 	color: #FFFDF5;
 	font-size: 34px;
 	font-weight: 700;
@@ -445,15 +446,16 @@ body {
 }
 
 .card-header {
-	background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+	background: linear-gradient(120deg, var(--gold-mid) 0%, var(--gold) 100%);
 	color: #FFFFFF;
 	padding: 13px 22px;
 	font-size: 16px;
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+	font-family: 'sarabun', serif;
 	font-weight: 700;
 	letter-spacing: 0.3px;
 	border-bottom: 2px solid;
-	border-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent) 1;
+	border-image: linear-gradient(90deg, transparent, rgba(224, 87, 127, 0.5), transparent) 1;
+	text-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 
 .card-body {
@@ -673,16 +675,16 @@ textarea.form-control {
 }
 
 /* ==========================================================================
-   FOOTER (ธีมเดียวกับหน้า home — สีชมพู gradient, layout 2 คอลัมน์แบบ slim,
+   FOOTER (ธีมเดียวกับหน้า home — ครีม-ทอง gradient, layout 2 คอลัมน์แบบ slim,
    โลโก้/ฟอนต์ ให้เท่า home เป๊ะ)
    ========================================================================== */
 .site-footer {
-	background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
-	color: rgba(255, 255, 255, 0.92);
+	background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+	color: var(--brown-dark);
 	padding-top: 0;
 	border-top: 3px solid;
 	border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
-	box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+	box-shadow: 0 -8px 24px rgba(184, 134, 47, 0.14);
 	margin-top: auto;
 }
 
@@ -724,12 +726,12 @@ textarea.form-control {
 
 /* โลโก้ในฟุตเตอร์ ให้เท่า home เป๊ะ (46px) */
 .footer-brand .lotus-icon {
-	background: rgba(255, 255, 255, 0.18);
+	background: #FFFFFF;
 	width: 46px;
 	height: 46px;
 	border-radius: 50%;
-	border: 1.5px solid rgba(255, 255, 255, 0.5);
-	box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+	border: 1.5px solid var(--accent-gold-pale);
+	box-shadow: 0 0 8px rgba(184, 134, 47, 0.18);
 	flex-shrink: 0;
 	object-fit: cover;
 }
@@ -738,15 +740,15 @@ textarea.form-control {
 	font-family: 'Charmonman', 'Noto Serif Thai', serif;
 	font-size: 1.6rem;
 	font-weight: 700;
-	color: #FFFFFF;
+	color: var(--brown-dark);
 }
 
 .footer-tagline {
 	font-size: 0.88rem;
 	line-height: 1.7;
-	color: rgba(255, 255, 255, 0.9);
+	color: var(--brown-mid);
 	max-width: 320px;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	text-shadow: none;
 }
 
 /* โซเชียลมีเดีย ใต้แท็กไลน์แบรนด์ (ให้ตรงกับหน้า home) */
@@ -760,23 +762,23 @@ textarea.form-control {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
-	color: #FFFFFF;
+	color: var(--brown-dark);
 	text-decoration: none;
 	font-size: 0.82rem;
 	font-weight: 600;
-	background: rgba(255, 255, 255, 0.16);
-	border: 1px solid rgba(255, 255, 255, 0.35);
+	background: rgba(255, 255, 255, 0.6);
+	border: 1px solid var(--accent-gold-pale);
 	padding: 7px 14px;
 	border-radius: 20px;
 	transition: background 0.2s;
 }
 .footer-social-link:hover {
-	background: rgba(255, 255, 255, 0.3);
+	background: rgba(255, 255, 255, 0.95);
 }
 
 .footer-heading {
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
-	color: #FFFFFF;
+	font-family: 'sarabun', serif;
+	color: var(--brown-dark);
 	font-size: 1.35rem;
 	font-weight: 700;
 	margin-bottom: 14px;
@@ -784,32 +786,32 @@ textarea.form-control {
 
 .footer-col a {
 	display: block;
-	color: rgba(255, 255, 255, 0.92);
+	color: var(--brown-mid);
 	text-decoration: none;
 	font-size: 0.9rem;
 	margin-bottom: 10px;
 	transition: color 0.2s ease;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	text-shadow: none;
 }
 
 .footer-col a:hover {
-	color: #FFFFFF;
+	color: var(--brown-dark);
 	text-decoration: underline;
 }
 
 .footer-contact-col p {
 	font-size: 0.9rem;
-	color: rgba(255, 255, 255, 0.92);
+	color: var(--brown-mid);
 	margin: 0 0 10px;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+	text-shadow: none;
 }
 
 .footer-bottom {
 	text-align: center;
 	padding: 16px 20px;
-	border-top: 1px solid rgba(255, 255, 255, 0.25);
+	border-top: 1px solid var(--accent-gold-pale);
 	font-size: 0.82rem;
-	color: rgba(255, 255, 255, 0.7);
+	color: var(--brown-mid);
 }
 
 /* ==========================================================================

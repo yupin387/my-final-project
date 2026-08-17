@@ -31,7 +31,7 @@
     --white:         #FFFFFF;
     --off-white:     #FFFBFA;
 
-    --page-bg:       #FFF6F8;
+    --page-bg:       #FDF1F5;
     --page-bg-deep:  #FDEBF0;
 
     --card-border:   #F0D6DC;
@@ -49,9 +49,10 @@
     --shadow-gold:   rgba(224, 87, 127, 0.16);
     --shadow-warm:   rgba(224, 87, 127, 0.10);
 
-    --footer-grad-1: #C7405F;
-    --footer-grad-2: #D94F76;
-    --footer-grad-3: #E0577F;
+    /* Navbar / Footer gradient */
+    --footer-grad-1: #F6E3B0;
+    --footer-grad-2: #ECC974;
+    --footer-grad-3: #D6A544;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -64,7 +65,7 @@ body {
 
 /* ========== NAVBAR ========== */
 .navbar-custom {
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
+    background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -76,7 +77,7 @@ body {
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(199, 64, 95, 0.35);
+    box-shadow: 0 4px 20px rgba(184, 134, 47, 0.28);
 }
 
 .navbar-custom::before {
@@ -84,7 +85,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(184, 134, 47, 0.5), rgba(184, 134, 47, 0.9), rgba(184, 134, 47, 0.5), transparent);
 }
 
 .navbar-brand-wrap {
@@ -95,7 +96,7 @@ body {
 }
 
 .navbar-custom .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: var(--white);
     width: 76px;
     height: 76px;
     border-radius: 50%;
@@ -103,8 +104,8 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 10px rgba(184, 134, 47, 0.22);
     flex-shrink: 0;
 }
 
@@ -117,14 +118,13 @@ img.lotus-icon {
 }
 
 .navbar-custom .nav-brand-text {
-    color: #FFFFFF;
+    color: var(--brown-dark);
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-style: normal;
     font-size: 34px;
     font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .navbar-center {
@@ -136,7 +136,8 @@ img.lotus-icon {
 }
 
 .nav-link-item {
-    color: #FFFFFF;
+    color: var(--brown-dark);
+    font-family: 'Sarabun', sans-serif;
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -144,17 +145,16 @@ img.lotus-icon {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .nav-link-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #FFFFFF;
+    background: rgba(184, 134, 47, 0.14);
+    color: var(--brown-dark);
 }
 
 .nav-link-item.active {
-    background: #FFFFFF;
-    color: var(--pink-deep-2);
+    background: var(--gold);
+    color: #FFFFFF;
     font-weight: 700;
 }
 
@@ -162,14 +162,14 @@ img.lotus-icon {
 .dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
 
 .user-profile-pill {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px solid var(--accent-gold-pale);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--brown-dark);
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
@@ -177,12 +177,12 @@ img.lotus-icon {
 }
 
 .user-profile-pill:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.85);
 }
 
 .avatar-circle-nav {
-    background: #FFFFFF;
-    color: var(--pink-deep-2);
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    color: #FFFFFF;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -195,8 +195,8 @@ img.lotus-icon {
 }
 
 .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name-nav  { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
-.user-role-nav  { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
+.user-name-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--brown-dark); }
+.user-role-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.7rem; color: var(--brown-mid); }
 
 .dropdown-menu-custom {
     visibility: hidden;
@@ -208,9 +208,8 @@ img.lotus-icon {
     border: 1px solid var(--card-border-soft);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(199, 64, 95, 0.18);
+    box-shadow: 0 8px 28px rgba(184, 134, 47, 0.22);
     z-index: 99999;
-    padding: 0;
     transform: translateY(-8px);
     transition: all 0.25s ease;
 }
@@ -241,63 +240,33 @@ img.lotus-icon {
 .dropdown-link.danger      { color: #c0392b; }
 .dropdown-link.danger:hover{ background: #fff5f5; }
 
-/* ========== HERO BANNER (ใช้กับหน้าเล็ก ๆ เช่น myBookings) ========== */
-.hero-banner {
-    position: relative;
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
-    padding: 56px 24px;
-    text-align: center;
-    overflow: hidden;
-}
-
-.hero-banner::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12), transparent 55%),
-                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.10), transparent 55%);
-    pointer-events: none;
-}
-
-.hero-banner .hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 640px;
-    margin: 0 auto;
-}
-
-.hero-banner .hero-tag {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.45);
-    color: #FFFFFF;
-    font-size: 0.78rem;
-    font-weight: 700;
-    padding: 5px 16px;
-    border-radius: 20px;
-    margin-bottom: 12px;
-}
-
-.hero-banner h1 {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 2.4rem;
-    font-weight: 700;
-    color: #FFFFFF;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.25);
-    margin-bottom: 8px;
-}
-
-.hero-banner p {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.95rem;
-    line-height: 1.7;
-}
-
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     width: 92%;
     max-width: 1100px;
     margin: 0 auto;
+    padding-bottom: 48px;
+}
+
+/* ========== SECTION ORNAMENT (หัวข้อสไตล์หน้า Home) ========== */
+.section-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.ornament-line {
+    width: 100px;
+    height: 1px;
+    background: var(--accent-gold);
+}
+
+.ornament-diamond {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-gold);
+    transform: rotate(45deg);
 }
 
 /* ========== MY BOOKINGS CARD / TABLE ========== */
@@ -316,15 +285,16 @@ img.lotus-icon {
     align-items: center;
     padding: 16px 22px;
     background: linear-gradient(90deg, var(--gold-pale), var(--pink-light));
+    font-family: 'Sarabun', sans-serif;
     font-weight: 600;
     color: var(--pink-deep-1);
 }
 
-.mybooking-count { font-size: 13px; font-weight: 400; color: var(--pink-deep-1); }
+.mybooking-count { font-family: 'Sarabun', sans-serif; font-size: 13px; font-weight: 400; color: var(--pink-deep-1); }
 
 .mybooking-table-wrap { overflow-x: auto; }
 
-.mybooking-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.mybooking-table { width: 100%; border-collapse: collapse; font-family: 'Sarabun', sans-serif; font-size: 14px; }
 
 .mybooking-table th {
     text-align: left;
@@ -347,6 +317,7 @@ img.lotus-icon {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 8px;
+    font-family: 'Sarabun', sans-serif;
     font-size: 12.5px;
     text-decoration: none;
     white-space: nowrap;
@@ -370,6 +341,7 @@ img.lotus-icon {
     display: inline-block;
     padding: 4px 12px;
     border-radius: 999px;
+    font-family: 'Sarabun', sans-serif;
     font-size: 12px;
     font-weight: 600;
 }
@@ -384,17 +356,18 @@ img.lotus-icon {
     text-align: center;
     padding: 48px 20px;
     color: var(--pink-deep-1);
+    font-family: 'Sarabun', sans-serif;
 }
 
 /* ========== FOOTER ========== */
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
-    color: rgba(255, 255, 255, 0.92);
+    background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    color: var(--brown-dark);
     padding-top: 0;
     padding-bottom: 0;
     border-top: 3px solid;
     border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 -8px 24px rgba(184, 134, 47, 0.14);
     position: relative;
     z-index: 2;
     margin-top: 40px;
@@ -429,12 +402,12 @@ img.lotus-icon {
 }
 
 .footer-brand .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: var(--white);
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 8px rgba(184, 134, 47, 0.18);
     flex-shrink: 0;
     object-fit: cover;
     display: flex;
@@ -446,41 +419,41 @@ img.lotus-icon {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 1.6rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--brown-dark);
 }
 
 .footer-tagline {
+    font-family: 'Sarabun', sans-serif;
     font-size: 0.88rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--brown-mid);
     max-width: 320px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .footer-heading {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    color: #FFFFFF;
-    font-size: 1.35rem;
+    font-family: 'Sarabun', sans-serif;
+    color: var(--brown-dark);
+    font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 14px;
 }
 
 .footer-col a {
     display: block;
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--brown-mid);
     text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
     font-size: 0.9rem;
     margin-bottom: 10px;
     transition: color 0.2s ease;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
-.footer-col a:hover { color: #FFFFFF; }
+.footer-col a:hover { color: var(--brown-dark); }
 
 .footer-contact-col p {
+    font-family: 'Sarabun', sans-serif;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--brown-mid);
     margin: 0 0 10px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .footer-social {
@@ -493,17 +466,18 @@ img.lotus-icon {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: #FFFFFF;
+    color: var(--brown-dark);
     text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
     font-size: 0.82rem;
     font-weight: 600;
-    background: rgba(255, 255, 255, 0.16);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--accent-gold-pale);
     padding: 7px 14px;
     border-radius: 20px;
     transition: background 0.2s;
 }
-.footer-social-link:hover { background: rgba(255, 255, 255, 0.3); }
+.footer-social-link:hover { background: rgba(255, 255, 255, 0.95); }
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
@@ -511,7 +485,5 @@ img.lotus-icon {
     .navbar-custom .nav-brand-text { font-size: 20px; }
     .navbar-custom .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
     .navbar-center { margin-left: 0; margin-right: 0; flex-wrap: wrap; justify-content: center; }
-    .hero-banner h1 { font-size: 1.8rem; }
-    .hero-banner { padding: 40px 16px; }
     .mybooking-card-header { flex-direction: column; align-items: flex-start; gap: 4px; }
 }

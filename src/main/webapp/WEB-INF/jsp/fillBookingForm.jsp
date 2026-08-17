@@ -185,7 +185,7 @@
 			
 			        <!-- 2. ปักหมุดแผนที่ -->
 			        <div class="form-group" style="margin-top:16px;">
-			            <label class="form-label">📍 ปักหมุดตำแหน่งที่จัดงาน</label>
+			            <label class="form-label">📍 ปักหมุดตำแหน่งที่จัดงาน <span class="required" style="color:red;">*</span></label>
 			            <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
 			                คลิกบนแผนที่ หรือลากหมุดเพื่อระบุตำแหน่งจริงของสถานที่จัดงาน (ช่วยให้ทีมงานเดินทางไปถูกจุด)
 			            </p>

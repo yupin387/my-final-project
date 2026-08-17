@@ -9,43 +9,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ใบเสนอราคาของฉัน - #${q.quotationId}</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=10">
-    <style>
-        .items-table tr.group-row td.category-header-text {
-            text-align: left !important;
-            padding-left: 8px !important;
-            white-space: nowrap;
-            color: #9C6B3E;
-            font-weight: bold;
-        }
-        .items-table tr.group-row td {
-            background-color: #FFFFFF;
-        }
-        .member-note-section {
-            margin-top: 24px;
-            padding: 16px;
-            border: 1px solid #E5D3B3;
-            border-radius: 8px;
-            background: #FFFBF5;
-        }
-        .member-note-section label {
-            display: block;
-            font-weight: 700;
-            color: #9C6B3E;
-            margin-bottom: 8px;
-        }
-        .member-note-section textarea {
-            width: 100%;
-            min-height: 90px;
-            padding: 10px 12px;
-            border: 1px solid #D8C4A0;
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=11">
+    <%-- FIX: ลบ inline <style> เดิมที่เคยอยู่ตรงนี้ออกทั้งหมด — มันมาทีหลัง external CSS
+         ใน <head> เดียวกัน จึงชนะ specificity เท่ากันและไปทับสีพื้นหลัง/สีตัวอักษรของ
+         .category-header-text และ .member-note-section ที่ตั้งไว้ใน memberQuotationDetail.css
+         (นี่คือสาเหตุที่แก้ CSS ไปแล้วแต่หน้าเว็บไม่เปลี่ยนตามที่ขอ) ตอนนี้ทุกสไตล์ของ
+         2 ส่วนนี้ย้ายไปอยู่ใน memberQuotationDetail.css แหล่งเดียวแล้ว --%>
 </head>
 <body>
 
@@ -411,71 +380,82 @@
             </tbody>
         </table>
 
-        <%-- ===== สรุปยอด ===== --%>
-        <div class="totals-wrap">
-            <div class="totals-box">
-                <c:set var="sumExtra" value="0"/>
-                <c:set var="sumPackage" value="0"/>
-                <c:forEach var="d" items="${details}">
-                    <c:if test="${d.item != null}">
-                        <c:choose>
-                            <c:when test="${d.item.itemName == packageName}">
-                                <c:set var="sumPackage" value="${d.subtotal}"/>
-                            </c:when>
-                            <c:otherwise>
-                                <c:set var="itemVal" value="${d.subtotal}"/>
-                                <c:if test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
-                                    <c:set var="itemVal" value="0"/>
-                                </c:if>
-                                <c:set var="sumExtra" value="${sumExtra + itemVal}"/>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:if>
-                </c:forEach>
+        <%-- =========================================================================
+             FIX: ย้าย "ความต้องการเพิ่มเติม" (member-note-section) มาอยู่คู่กับ
+             ตารางสรุปยอด (totals-wrap) ในแถวเดียวกัน โดยครอบทั้งสองด้วย
+             <div class="summary-flex-row"> ตามภาพตัวอย่างที่ขอ (โน้ตอยู่ซ้าย,
+             สรุปราคาอยู่ขวา) — เดิมสองบล็อกนี้แยกกันคนละก้อน วางซ้อนกันแนวตั้ง
+             ตัวแปร sumExtra/sumPackage ที่ใช้คำนวณยอดยังคงประกาศอยู่ในนี้เหมือนเดิม
+             ========================================================================= --%>
+        <div class="summary-flex-row">
 
-                <table class="totals-table">
-                    <tr>
-                        <td class="tot-label">
+            <%-- ===== หมายเหตุ / คอมเม้นรวมทั้งใบ (แสดงของเดิมถ้ามี + ให้กรอกใหม่) ===== --%>
+            <c:if test="${q.quotationStatus != 'Confirmed'}">
+                <div class="member-note-section no-print">
+                    <label for="memberNoteInput">ความต้องการเพิ่มเติม:</label>
+                    <textarea id="memberNoteInput" placeholder="ระบุความต้องการเพิ่มเติมที่นี่..."><c:if test="${not empty q.note}">${q.note}</c:if></textarea>
+                </div>
+            </c:if>
+            <c:if test="${q.quotationStatus == 'Confirmed' && not empty q.note}">
+                <div class="member-note-section">
+                    <label>หมายเหตุ</label>
+                    <p style="margin:0;">${q.note}</p>
+                </div>
+            </c:if>
+
+            <%-- ===== สรุปยอด ===== --%>
+            <div class="totals-wrap">
+                <div class="totals-box">
+                    <c:set var="sumExtra" value="0"/>
+                    <c:set var="sumPackage" value="0"/>
+                    <c:forEach var="d" items="${details}">
+                        <c:if test="${d.item != null}">
                             <c:choose>
-                                <c:when test="${isCustomRequest}">ราคาตามรายการ:</c:when>
-                                <c:otherwise>ราคาแพ็กเกจ:</c:otherwise>
+                                <c:when test="${d.item.itemName == packageName}">
+                                    <c:set var="sumPackage" value="${d.subtotal}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="itemVal" value="${d.subtotal}"/>
+                                    <c:if test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
+                                        <c:set var="itemVal" value="0"/>
+                                    </c:if>
+                                    <c:set var="sumExtra" value="${sumExtra + itemVal}"/>
+                                </c:otherwise>
                             </c:choose>
-                        </td>
-                        <td class="tot-value">฿ <fmt:formatNumber value="${isCustomRequest ? (sumPackage + sumExtra) : sumPackage}" minFractionDigits="2"/></td>
-                    </tr>
-                    <c:if test="${!isCustomRequest}">
-                        <tr>
-                            <td class="tot-label">รายการเพิ่มเติม:</td>
-                            <td class="tot-value">฿ <fmt:formatNumber value="${sumExtra}" minFractionDigits="2"/></td>
-                        </tr>
-                    </c:if>
-                    <c:if test="${!isCustomRequest && isMonkSelfInvite}">
-                        <tr>
-                            <td class="tot-label">ส่วนลดนิมนต์เอง:</td>
-                            <td class="tot-value text-danger">- ฿ 1,500.00</td>
-                        </tr>
-                    </c:if>
-                    <tr class="grand-total-row">
-                        <td class="tot-label">ยอดรวมสุทธิ:</td>
-                        <td class="total-amount">฿ <fmt:formatNumber value="${q.totalAmount}" minFractionDigits="2"/></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+                        </c:if>
+                    </c:forEach>
 
-        <%-- ===== หมายเหตุ / คอมเม้นรวมทั้งใบ (แสดงของเดิมถ้ามี + ให้กรอกใหม่) ===== --%>
-        <c:if test="${q.quotationStatus != 'Confirmed'}">
-            <div class="member-note-section no-print">
-                <label for="memberNoteInput">หมายเหตุ / แจ้งขอแก้ไข (คอมเม้นรวมทั้งใบ)</label>
-                <textarea id="memberNoteInput" placeholder="พิมพ์ข้อความแจ้งขอแก้ไขรายการที่ต้องการ..."><c:if test="${not empty q.note}">${q.note}</c:if></textarea>
+                    <table class="totals-table">
+                        <tr>
+                            <td class="tot-label">
+                                <c:choose>
+                                    <c:when test="${isCustomRequest}">ราคาตามรายการ:</c:when>
+                                    <c:otherwise>ราคาแพ็กเกจ:</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td class="tot-value">฿ <fmt:formatNumber value="${isCustomRequest ? (sumPackage + sumExtra) : sumPackage}" minFractionDigits="2"/></td>
+                        </tr>
+                        <c:if test="${!isCustomRequest}">
+                            <tr>
+                                <td class="tot-label">รายการเพิ่มเติม:</td>
+                                <td class="tot-value">฿ <fmt:formatNumber value="${sumExtra}" minFractionDigits="2"/></td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${!isCustomRequest && isMonkSelfInvite}">
+                            <tr>
+                                <td class="tot-label">ส่วนลดนิมนต์เอง:</td>
+                                <td class="tot-value text-danger">- ฿ 1,500.00</td>
+                            </tr>
+                        </c:if>
+                        <tr class="grand-total-row">
+                            <td class="tot-label">ยอดรวมสุทธิ:</td>
+                            <td class="total-amount">฿ <fmt:formatNumber value="${q.totalAmount}" minFractionDigits="2"/></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </c:if>
-        <c:if test="${q.quotationStatus == 'Confirmed' && not empty q.note}">
-            <div class="member-note-section">
-                <label>หมายเหตุ</label>
-                <p style="margin:0;">${q.note}</p>
-            </div>
-        </c:if>
+
+        </div>
 
         <%-- ===== ปุ่มยืนยัน / แจ้งขอแก้ไข ===== --%>
         <div class="action-section no-print">

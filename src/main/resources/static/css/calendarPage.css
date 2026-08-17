@@ -4,32 +4,30 @@
    ========================================================================== */
 
 /* ==========================================================================
-   ปรับแก้ฟอนต์: 
-   ข้อความรายละเอียดทั่วไป ตาราง และแถบเมนูนำทาง (Navbar) = Sarabun
-   หัวข้อใหญ่ และ ชื่อระบบบน Navbar = Charmonman (ลายไทย)
+   ฟอนต์: ใช้ Sarabun ทั้งหน้า ยกเว้น "ชื่อระบบ/แบรนด์" บน Navbar และ Footer
+   ที่ยังคงใช้ Charmonman (ลายไทย) ตามเดิม
 ========================================================================== */
 
-/* 1. บังคับให้ข้อความเนื้อหาทั่วไป ตาราง และช่องกรอกข้อมูล ใช้ฟอนต์ Sarabun */
-body, input, textarea, select, button, table, th, td, p {
-    font-family: 'Sarabun', sans-serif !important;
-}
-
-/* 2. กำหนดให้ "หัวข้อใหญ่" และ "ชื่อระบบ/แบรนด์" ใช้ฟอนต์ลายไทย (Charmonman) */
+/* 1. บังคับทุกอย่างในหน้านี้ให้ใช้ Sarabun เป็นค่าเริ่มต้น
+      (รวมหัวข้อใหญ่ทุกระดับ, ชื่อหัวข้อการ์ด, ปฏิทินทั้ง 2 แบบ ฯลฯ) */
+body, input, textarea, select, button, table, th, td, p,
 h1, h2, h3, h4, h5, h6,
 .section-title,
 .hero-quote,
 .meaning-card-title,
+.meaning-block-title,
 .ceremony-type-name,
 .event-card h5,
 .ritual-step-title,
-.nav-brand-text,
-.footer-brand-text {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif !important;
-}
-
-/* 3. บังคับให้แถบเมนู (Navbar) ลิงก์ และ Footer ใช้ฟอนต์ Sarabun (ยกเว้นชื่อระบบถูกกำหนดในข้อ 2 แล้ว) */
+.cal-header h5,
+.lc-month-title,
+.lc-year-card h2,
+.lc-day-detail h4,
+.cal-explain-title,
+.lc-explain-title,
+.calendar-page-header h1,
+.yearly-summary-month,
 .navbar-custom,
-.navbar-custom *,
 .nav-link-item,
 .nav-dropdown-link,
 .dropdown-link,
@@ -39,6 +37,12 @@ h1, h2, h3, h4, h5, h6,
 .site-footer *,
 .footer-heading {
     font-family: 'Sarabun', sans-serif !important;
+}
+
+/* 2. ยกเว้นเฉพาะ "ชื่อระบบ/แบรนด์" บน Navbar และ Footer ให้ใช้ฟอนต์ลายไทย (Charmonman) */
+.navbar-custom .nav-brand-text,
+.footer-brand-text {
+    font-family: 'Charmonman', 'Noto Serif Thai', serif !important;
 }
 
 /* ===== สรุปฤกษ์ดีรายปี (ท้ายหน้า) ===== */
@@ -61,7 +65,6 @@ h1, h2, h3, h4, h5, h6,
     margin: 0 0 10px;
     font-size: 1.05rem;
     font-weight: 700;
-    font-family: 'Noto Serif Thai', serif;
     color: var(--brown-dark);
     border-bottom: 1px solid var(--gold-pale);
     padding-bottom: 8px;
@@ -141,23 +144,24 @@ h1, h2, h3, h4, h5, h6,
     margin: 6px 0;
 }
 
-/* ===== หัวหน้าปฏิทิน (banner สีชมพู ด้านบนสุดของหน้า) ===== */
+/* ===== หัวหน้าปฏิทิน (banner สีชมพู ด้านบนสุดของหน้า) =====
+   เดิมมีข้อความ (h1 + p) อยู่ในแถบสีชมพู เปลี่ยนมาใช้รูปภาพแทนตามที่ขอ
+   ตัวแท็บลิงก์ (ปฏิทิน ฤกษ์ดี / ล้านนา) ยังคงไว้เหมือนเดิม */
 .calendar-page-header {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
-    padding: 56px 20px 40px;
+    padding: 0 0 32px;
     text-align: center;
     color: #fff;
 }
-.calendar-page-header h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 2rem;
-    margin: 0 0 10px;
+
+/* รูปแทนหัวข้อ+คำอธิบายเดิมในแถบสีชมพู — ให้เต็มความกว้างแทนที่ช่องสีชมพูไปเลย
+   (ไม่มี max-width/margin จำกัดขนาดแล้ว) */
+.calendar-page-header-img {
+    display: block;
+    width: 100%;
+    height: 80;
 }
-.calendar-page-header p {
-    font-size: 1rem;
-    opacity: 0.9;
-    margin: 0;
-}
+
 .calendar-tabs {
     display: flex;
     justify-content: center;
@@ -227,6 +231,61 @@ h1, h2, h3, h4, h5, h6,
     pointer-events: none;
 }
 
+/* ==========================================================================
+   ย่อขนาดปฏิทิน (ฤกษ์ดี) ให้เล็กลง — สโคปเฉพาะในหน้านี้ด้วย #calendarSection
+   เพื่อไม่กระทบส่วนอื่นที่อาจใช้ .cal-cell ร่วมกับ home.css
+   ========================================================================== */
+#calendarSection .calendar-card {
+    max-width: 860px;
+    padding: 20px 22px 16px;
+}
+#calendarSection .cal-header h5 {
+    font-size: 1.25rem;
+}
+#calendarSection .cal-grid {
+    gap: 6px;
+}
+#calendarSection .cal-day-label {
+    padding: 6px 2px;
+    font-size: 0.74rem;
+    border-radius: 6px;
+}
+#calendarSection .cal-cell {
+    min-height: 54px;
+    padding: 5px 4px 4px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+}
+#calendarSection .cal-day-num {
+    font-size: 0.85rem;
+}
+#calendarSection .cal-remain-tag {
+    font-size: 0.58rem;
+    margin-top: 2px;
+}
+#calendarSection .cal-day-tag {
+    font-size: 0.56rem;
+    padding: 1px 4px;
+    margin-top: 2px;
+}
+#calendarSection .cal-day-tag-more {
+    font-size: 0.5rem;
+}
+#calendarSection .cal-legend {
+    font-size: 0.76rem;
+    gap: 12px;
+}
+
+@media (max-width: 480px) {
+    #calendarSection .cal-cell {
+        min-height: 46px;
+        font-size: 0.74rem;
+    }
+    #calendarSection .cal-day-num {
+        font-size: 0.78rem;
+    }
+}
+
 /* ===== กล่องอธิบาย "ฤกษ์ดี หมายถึงอะไร?" ===== */
 .cal-explain-box {
     background: var(--white);
@@ -237,7 +296,6 @@ h1, h2, h3, h4, h5, h6,
     box-shadow: 0 4px 16px var(--shadow-gold);
 }
 .cal-explain-title {
-    font-family: 'Noto Serif Thai', serif;
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--brown-dark);
@@ -318,7 +376,6 @@ h1, h2, h3, h4, h5, h6,
     box-shadow: 0 4px 16px var(--shadow-gold, rgba(212,160,23,0.15));
 }
 .lc-explain-title {
-    font-family: 'Noto Serif Thai', serif;
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--brown-dark, #3d2500);

@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>หน้าหลัก - บุญมี รับจัดงานบุญ</title>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/static/css/home.css?v=18">
+	href="${pageContext.request.contextPath}/static/css/home.css?v=23">
 <style>
 	.promotion-banner-wrap {
 		margin-top: 36px;
@@ -22,7 +22,7 @@
 		height: auto;
 		border-radius: 16px;
 		display: inline-block;
-		box-shadow: 0 6px 24px rgba(224, 87, 127, 0.15);
+		box-shadow: 0 6px 24px rgba(184, 134, 47, 0.18);
 	}
 
 	/* ===== navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) ===== */
@@ -50,9 +50,9 @@
 		left: 0;
 		min-width: 220px;
 		background: var(--white, #fff);
-		border: 1px solid var(--accent-gold-pale, #F7E3B0);
+		border: 1px solid var(--accent-gold-pale, #EFDBA8);
 		border-radius: 10px;
-		box-shadow: 0 8px 24px rgba(224, 87, 127, 0.18);
+		box-shadow: 0 8px 24px rgba(184, 134, 47, 0.2);
 		padding: 8px 0;
 		z-index: 100;
 	}
@@ -69,11 +69,11 @@
 		white-space: nowrap;
 	}
 	.nav-dropdown-link:hover {
-		background: var(--gold-pale, #FDEEF3);
+		background: var(--gold-pale, #F3D2DD);
 	}
 	.nav-dropdown-divider {
 		border: 0;
-		border-top: 1px solid var(--accent-gold-pale, #F7E3B0);
+		border-top: 1px solid var(--accent-gold-pale, #EFDBA8);
 		margin: 6px 0;
 	}
 	/* การ์ดเงื่อนไขเดี่ยวเต็มความกว้าง */
@@ -127,19 +127,53 @@
 	display: inline-block;
 	margin-top: 10px;
 	padding: 8px 22px;
-	background: linear-gradient(90deg, #E0577F, #EC6E96);
+	background: linear-gradient(90deg, #B85073, #CC7796);
 	color: #fff;
 	font-size: 0.9rem;
 	font-weight: 600;
 	border-radius: 30px;
 	text-decoration: none;
-	box-shadow: 0 4px 14px rgba(224, 87, 127, 0.25);
+	box-shadow: 0 4px 14px rgba(184, 80, 115, 0.25);
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .btn-review-all:hover {
 	transform: translateY(-2px);
-	box-shadow: 0 6px 18px rgba(224, 87, 127, 0.35);
+	box-shadow: 0 6px 18px rgba(184, 80, 115, 0.35);
 	color: #fff;
+}
+
+/* ===== ดอกบัวตกแต่งด้านบนหัวข้อ "ขั้นตอนและเงื่อนไขการให้บริการ" ===== */
+.section-lotus-deco {
+	text-align: center;
+	margin-bottom: 6px;
+}
+.section-lotus-img {
+	width: 72px;
+	height: 72px;
+	object-fit: contain;
+	opacity: 0.92;
+}
+
+/* ===== ขั้นตอนการให้บริการ: จัดเป็นแนวลูกศรเชื่อมขั้นตอน แถวเดียว 1-6 + ใช้ฟอนต์ Sarabun ทั้งหมด (ยกเว้นชื่อระบบ) ===== */
+#stepsConditionsSection .section-title,
+#stepsConditionsSection .subsection-title {
+	font-family: 'Sarabun', sans-serif;
+}
+
+.ritual-flow-wrap {
+	margin: 30px 0 8px;
+}
+.ritual-flow-row {
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	gap: 2px;
+}
+
+/* ให้กรอบของหัวข้อ "ขั้นตอนการให้บริการ" กว้างขึ้นกว่า container ปกติ
+   เพื่อให้ 6 ขั้นตอน (พร้อมคำอธิบาย) อยู่แถวเดียวกันได้แบบอ่านง่าย */
+#stepsConditionsSection .container {
+	max-width: 1320px;
 }
 </style>
 </head>
@@ -158,13 +192,7 @@
 			<a href="${pageContext.request.contextPath}/home"
 				class="nav-link-item active">หน้าหลัก</a>
 
-			<%-- ===== เมนู บริการ/แพ็กเกจ (dropdown)
-			     แพ็กเกจย้ายไปอยู่ในหน้ารายละเอียดของแต่ละงานบุญแล้ว ตัวเมนูหลักจึงไม่ลิงก์ไปที่ไหน
-			     เป็นแค่ตัวเปิด dropdown ให้เลือกงานบุญที่ต้องการดูแพ็กเกจแทน ===== --%>
-		
-
-        <%-- เมนูบริการ/แพ็กเกจ (dropdown) --%>
-        <div class="nav-dropdown-wrap">
+		<div class="nav-dropdown-wrap">
             <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
                 บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
             </a>
@@ -176,8 +204,6 @@
             </div>
         </div>
 
-
-			<%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) — ลิงก์ไปหน้า /calendar ===== --%>
 			<div class="nav-dropdown-wrap">
 				<a href="${pageContext.request.contextPath}/calendar"
 					class="nav-link-item nav-dropdown-toggle">
@@ -240,7 +266,7 @@
 		</div>
 	</c:if>
 
-	<%-- ========== HERO (รูปใหญ่เลื่อนได้ ใช้ชุดรูปเดียวกับ Bn1/Bn2/Bn3 ด้านล่าง ตามที่ขอ) ========== --%>
+	<%-- ========== HERO ========== --%>
 	<div class="hero-section">
 			<div class="hero-slider" id="heroSlider">
 			    <div class="hero-slide active">
@@ -257,6 +283,7 @@
 			    </div>
 			</div>
 		<div class="hero-overlay"></div>
+
 		<div class="hero-content">
 			<h1 class="hero-quote">"จัดงานบุญให้ง่ายขึ้น<br>มีทีมงานช่วยดูแล"</h1>
 			<p class="hero-desc">มีทีมงานคอยดูแลทุกขั้นตอนของพิธีสงฆ์<br>
@@ -276,25 +303,27 @@
 		style="display: block; background: #ffffff;">
     <path
 			d="M0,0 L1200,0 L1200,16 Q1100,40 1000,20 Q900,2 800,28 Q700,48 600,28 Q500,8 400,30 Q300,48 200,24 Q100,4 0,22 Z"
-			fill="#E0577F" opacity="0.07" />
+			fill="#B85073" opacity="0.07" />
     <path
 			d="M0,8 Q150,44 300,18 Q450,-6 600,22 Q750,48 900,20 Q1050,-6 1200,18 L1200,48 L0,48 Z"
-			fill="#FFF6F9" />
+			fill="#FCF2E4" />
     <path
 			d="M0,26 Q100,10 200,26 Q300,44 400,26 Q500,10 600,26 Q700,44 800,26 Q900,10 1000,26 Q1100,44 1200,26"
-			stroke="#D9A441" stroke-width="1.5" fill="none" opacity="0.5" />
-    <circle cx="200" cy="26" r="3" fill="#D9A441" opacity="0.5" />
-    <circle cx="400" cy="26" r="3" fill="#D9A441" opacity="0.5" />
-    <circle cx="600" cy="26" r="3" fill="#D9A441" opacity="0.5" />
-    <circle cx="800" cy="26" r="3" fill="#D9A441" opacity="0.5" />
-    <circle cx="1000" cy="26" r="3" fill="#D9A441" opacity="0.5" />
+			stroke="#B8862F" stroke-width="1.5" fill="none" opacity="0.5" />
+    <circle cx="200" cy="26" r="3" fill="#B8862F" opacity="0.5" />
+    <circle cx="400" cy="26" r="3" fill="#B8862F" opacity="0.5" />
+    <circle cx="600" cy="26" r="3" fill="#B8862F" opacity="0.5" />
+    <circle cx="800" cy="26" r="3" fill="#B8862F" opacity="0.5" />
+    <circle cx="1000" cy="26" r="3" fill="#B8862F" opacity="0.5" />
 </svg>
 
-    <%-- ========== ขั้นตอนและเงื่อนไขการให้บริการ (รวมเป็นหัวข้อใหญ่เดียวตามที่อาจารย์ให้ปรับ
-	     เดิมมี 2 หัวข้อใหญ่แยกกัน อาจารย์บอกว่าหัวข้อเยอะเกินไป และลำดับควรเป็น "ขั้นตอนก่อน แล้วค่อยเงื่อนไข"
-	     จึงยุบเหลือหัวข้อใหญ่เดียว "ขั้นตอนและเงื่อนไขการให้บริการ" แล้วแบ่งเป็น 2 หัวข้อย่อยด้านใน ========== --%>
+    <%-- ========== ขั้นตอนและเงื่อนไขการให้บริการ ========== --%>
 	<section class="section-pad section-conditions" id="stepsConditionsSection">
 	    <div class="container">
+	        <div class="section-lotus-deco">
+				<img src="${pageContext.request.contextPath}/static/images/img25.png"
+					alt="ดอกบัว" class="section-lotus-img">
+			</div>
 	        <div class="section-ornament">
 				<div class="ornament-line"></div>
 				<div class="ornament-diamond-sm"></div>
@@ -309,87 +338,117 @@
 				<div class="gold-line"></div>
 			</div>
 
-			<%-- ----- หัวข้อย่อยที่ 1: ขั้นตอนการให้บริการ (มาก่อนเงื่อนไข ตามที่อาจารย์ให้ปรับ) ----- --%>
+			<%-- ----- หัวข้อย่อยที่ 1: ขั้นตอนการให้บริการ (แถวเดียว 1-6) ----- --%>
 			<div class="subsection-block">
 				<h3 class="subsection-title"><span class="subsection-num">1</span>ขั้นตอนการให้บริการ</h3>
 				<div class="condition-card condition-card-full">
-					<div class="ritual-steps-grid">
-						<%-- ขั้นตอนที่ 1: เลือกวันและฤกษ์งาน --%>
-						<div class="ritual-step-item">
-							<div class="ritual-step-content-wrap">
-								 <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 1: <strong>เลือกวันและฤกษ์งาน</strong></p>
-								 <div class="ritual-step-img-wrap">
-									 <img src="${pageContext.request.contextPath}/static/images/img18.png"
-										  alt="เลือกวันและฤกษ์งาน" class="ritual-step-img">
-								 </div>
-								 <p class="ritual-step-desc">ตรวจสอบวันว่างและฤกษ์ดีผ่านปฏิทิน (ไทย/ล้านนา) โดยสัญลักษณ์สีเขียวคือวันว่างที่คุณสามารถจองได้ และกากบาทคือวันที่เต็มแล้ว</p>
-							</div>
-						</div>
+					<div class="ritual-flow-wrap">
 
-						<%-- ขั้นตอนที่ 2: เลือกแพ็กเกจหรือแจ้งรายละเอียด --%>
-						<div class="ritual-step-item">
-							<div class="ritual-step-content-wrap">
-								 <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 2: <strong>เลือกแพ็กเกจหรือแจ้งรายละเอียด</strong></p>
-								 <div class="ritual-step-img-wrap">
-									 <img src="${pageContext.request.contextPath}/static/images/img13.jpg"
-										  alt="เลือกแพ็กเกจหรือแจ้งรายละเอียด" class="ritual-step-img">
-								 </div>
-								 <p class="ritual-step-desc">เลือกใช้บริการผ่านแพ็กเกจที่ทางร้านจัดไว้ หรือกรอกแบบฟอร์มเพื่อระบุความต้องการเฉพาะตัว เช่น จำนวนพระสงฆ์ และรูปแบบชุดภัตตาหาร/สังฆทาน</p>
-							</div>
-						</div>
+						<%-- ===== แถวเดียว: ขั้นตอน 1 ถึง 6 เรียงต่อกันด้วยลูกศร ===== --%>
+						<div class="ritual-flow-row ritual-flow-row-single">
 
-						<%-- ขั้นตอนที่ 3: ทีมงานเข้าดูสถานที่จริง --%>
-						<div class="ritual-step-item">
-							<div class="ritual-step-content-wrap">
-								 <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 3: <strong>ทีมงานเข้าดูสถานที่จริง</strong></p>
-								 <div class="ritual-step-img-wrap">
-									 <img src="${pageContext.request.contextPath}/static/images/img19.jpeg"
-										  alt="ทีมงานเข้าดูสถานที่จริง" class="ritual-step-img">
-								 </div>
-								 <p class="ritual-step-desc">ทีมงานติดต่อเพื่อเข้าสำรวจพื้นที่ วางแผนจัดอุปกรณ์ และให้คำแนะนำในการเตรียมสถานที่เพื่อให้พิธีเป็นไปอย่างเหมาะสม</p>
-							</div>
-						</div>
-
-						<%-- ขั้นตอนที่ 4: ออกใบเสนอราคา --%>
-						<div class="ritual-step-item">
-							<div class="ritual-step-content-wrap">
-								 <p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 4: <strong>ออกใบเสนอราคา</strong></p>
-								 <div class="ritual-step-img-wrap">
-									 <img src="${pageContext.request.contextPath}/static/images/img20.png"
-										  alt="ออกใบเสนอราคา" class="ritual-step-img">
-								 </div>
-								 <p class="ritual-step-desc">ทางร้านสรุปรายละเอียดงานและจัดทำใบเสนอราคา ซึ่งสามารถยืดหยุ่นปรับเปลี่ยนได้ตามความต้องการจริงของลูกค้า</p>
-							</div>
-						</div>
-
-						<%-- ขั้นตอนที่ 5: ยืนยันการจอง --%>
-						<div class="ritual-step-item">
-							<div class="ritual-step-content-wrap">
-								<p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 5: <strong>ยืนยันการจอง</strong></p>
+							<div class="ritual-step-item">
+								<p class="ritual-step-title">เลือกวันและฤกษ์งาน</p>
 								<div class="ritual-step-img-wrap">
-									 <img src="${pageContext.request.contextPath}/static/images/img21.png"
-										  alt="ยืนยันการจอง" class="ritual-step-img">
+									<img src="${pageContext.request.contextPath}/static/images/img18.png"
+										 alt="เลือกวันและฤกษ์งาน" class="ritual-step-img">
+									<span class="ritual-step-num">1</span>
 								</div>
-								 <p class="ritual-step-desc">ลูกค้าทำการยืนยันใบเสนอราคา เพื่อเสร็จสิ้นการจอง</p>
+								<p class="ritual-step-desc">ตรวจสอบวันว่างและฤกษ์ดีผ่านปฏิทิน (ไทย/ล้านนา) โดยสัญลักษณ์สีเขียวคือวันว่างที่คุณสามารถจองได้ และกากบาทคือวันที่เต็มแล้ว</p>
 							</div>
+
+							<div class="ritual-flow-arrow" aria-hidden="true">
+								<svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M2 12 H30" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 6"/>
+									<path d="M23 4 L35 12 L23 20" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</div>
+
+							<div class="ritual-step-item">
+								<p class="ritual-step-title">เลือกแพ็กเกจหรือแจ้งรายละเอียด</p>
+								<div class="ritual-step-img-wrap">
+									<img src="${pageContext.request.contextPath}/static/images/img13.jpg"
+										 alt="เลือกแพ็กเกจหรือแจ้งรายละเอียด" class="ritual-step-img">
+									<span class="ritual-step-num">2</span>
+								</div>
+								<p class="ritual-step-desc">เลือกใช้บริการผ่านแพ็กเกจที่ทางร้านจัดไว้ หรือกรอกแบบฟอร์มเพื่อระบุความต้องการเฉพาะตัว เช่น จำนวนพระสงฆ์ และรูปแบบชุดภัตตาหาร/สังฆทาน</p>
+							</div>
+
+							<div class="ritual-flow-arrow" aria-hidden="true">
+								<svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M2 12 H30" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 6"/>
+									<path d="M23 4 L35 12 L23 20" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</div>
+
+							<div class="ritual-step-item">
+								<p class="ritual-step-title">ทีมงานเข้าดูสถานที่จริง</p>
+								<div class="ritual-step-img-wrap">
+									<img src="${pageContext.request.contextPath}/static/images/img19.jpeg"
+										 alt="ทีมงานเข้าดูสถานที่จริง" class="ritual-step-img">
+									<span class="ritual-step-num">3</span>
+								</div>
+								<p class="ritual-step-desc">ทีมงานติดต่อเพื่อเข้าสำรวจพื้นที่ วางแผนจัดอุปกรณ์ และให้คำแนะนำในการเตรียมสถานที่เพื่อให้พิธีเป็นไปอย่างเหมาะสม</p>
+							</div>
+
+							<div class="ritual-flow-arrow" aria-hidden="true">
+								<svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M2 12 H30" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 6"/>
+									<path d="M23 4 L35 12 L23 20" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</div>
+
+							<div class="ritual-step-item">
+								<p class="ritual-step-title">ออกใบเสนอราคา</p>
+								<div class="ritual-step-img-wrap">
+									<img src="${pageContext.request.contextPath}/static/images/img20.png"
+										 alt="ออกใบเสนอราคา" class="ritual-step-img">
+									<span class="ritual-step-num">4</span>
+								</div>
+								<p class="ritual-step-desc">ทางร้านสรุปรายละเอียดงานและจัดทำใบเสนอราคา ซึ่งสามารถยืดหยุ่นปรับเปลี่ยนได้ตามความต้องการจริงของลูกค้า</p>
+							</div>
+
+							<div class="ritual-flow-arrow" aria-hidden="true">
+								<svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M2 12 H30" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 6"/>
+									<path d="M23 4 L35 12 L23 20" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</div>
+
+							<div class="ritual-step-item">
+								<p class="ritual-step-title">ยืนยันการจอง</p>
+								<div class="ritual-step-img-wrap">
+									<img src="${pageContext.request.contextPath}/static/images/img21.png"
+										 alt="ยืนยันการจอง" class="ritual-step-img">
+									<span class="ritual-step-num">5</span>
+								</div>
+								<p class="ritual-step-desc">ลูกค้าทำการยืนยันใบเสนอราคา เพื่อเสร็จสิ้นการจอง</p>
+							</div>
+
+							<div class="ritual-flow-arrow" aria-hidden="true">
+								<svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M2 12 H30" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 6"/>
+									<path d="M23 4 L35 12 L23 20" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</div>
+
+							<div class="ritual-step-item">
+								<p class="ritual-step-title">เตรียมงานและประกอบพิธี</p>
+								<div class="ritual-step-img-wrap">
+									<img src="${pageContext.request.contextPath}/static/images/img15.jpg"
+										 alt="เตรียมงานและประกอบพิธี" class="ritual-step-img">
+									<span class="ritual-step-num">6</span>
+								</div>
+								<p class="ritual-step-desc">ทีมงานจัดเตรียมโต๊ะหมู่บูชา อาสนะสงฆ์ และเครื่องสักการะให้พร้อม ก่อนดำเนินการประกอบพิธีตามลำดับขั้นตอนทางศาสนา</p>
+							</div>
+
 						</div>
 
-						<%-- ขั้นตอนที่ 6: เตรียมงานและประกอบพิธี --%>
-						<div class="ritual-step-item">
-							<div class="ritual-step-content-wrap">
-								<p class="ritual-step-label" style="margin-bottom: 25px;">ขั้นตอนที่ 6: <strong>เตรียมงานและประกอบพิธี</strong></p>
-								<div class="ritual-step-img-wrap">
-									 <img src="${pageContext.request.contextPath}/static/images/img15.jpg"
-										  alt="เตรียมงานและประกอบพิธี" class="ritual-step-img">
-								</div>
-								 <p class="ritual-step-desc">ทีมงานจัดเตรียมโต๊ะหมู่บูชา อาสนะสงฆ์ และเครื่องสักการะให้พร้อม ก่อนดำเนินการประกอบพิธีตามลำดับขั้นตอนทางศาสนา</p>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
 
-			<%-- ----- หัวข้อย่อยที่ 2: เงื่อนไขการให้บริการ (มาหลังขั้นตอน ตามที่อาจารย์ให้ปรับ) ----- --%>
+			<%-- ----- หัวข้อย่อยที่ 2: เงื่อนไขการให้บริการ ----- --%>
 			<div class="subsection-block">
 				<h3 class="subsection-title"><span class="subsection-num">2</span>เงื่อนไขการให้บริการ</h3>
 				<div class="conditions-grid conditions-grid-single">
@@ -412,7 +471,7 @@
 	    </div>
 	</section>
 
-	<%-- ========== ทำไมต้องเลือกบุญมี (ย้ายขึ้นมาไว้ด้านบนของหน้า ตามที่อาจารย์ให้ปรับ) ========== --%>
+	<%-- ========== ทำไมต้องเลือกบุญมี ========== --%>
 	<section class="section-pad section-packages" id="whyChooseSection">
 		<div class="container">
 			<div class="section-ornament">
@@ -457,36 +516,36 @@
 	<%-- ========== THAI KANOK DIVIDER: WHY CHOOSE US → STEPS & CONDITIONS ========== --%>
 	<svg class="thai-divider" viewBox="0 0 1200 48"
 		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-		style="display: block; background: linear-gradient(#fff, #FFF6F9);">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F3C4D5"
+		style="display: block; background: linear-gradient(#fff, #FCF2E4);">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F1E1D4"
 			stroke-width="1" opacity="0.6" />
-    <g fill="#D9A441" opacity="0.55">
+    <g fill="#B8862F" opacity="0.55">
         <ellipse cx="600" cy="24" rx="18" ry="6"
 			transform="rotate(-30 600 24)" />
         <ellipse cx="600" cy="24" rx="18" ry="6"
 			transform="rotate(30 600 24)" />
         <ellipse cx="600" cy="24" rx="18" ry="6" />
-        <circle cx="600" cy="24" r="4" fill="#E8C878" />
+        <circle cx="600" cy="24" r="4" fill="#D4AD5F" />
         <ellipse cx="480" cy="24" rx="14" ry="5"
 			transform="rotate(-30 480 24)" />
         <ellipse cx="480" cy="24" rx="14" ry="5"
 			transform="rotate(30 480 24)" />
-        <circle cx="480" cy="24" r="3" fill="#E8C878" />
+        <circle cx="480" cy="24" r="3" fill="#D4AD5F" />
         <ellipse cx="720" cy="24" rx="14" ry="5"
 			transform="rotate(-30 720 24)" />
         <ellipse cx="720" cy="24" rx="14" ry="5"
 			transform="rotate(30 720 24)" />
-        <circle cx="720" cy="24" r="3" fill="#E8C878" />
+        <circle cx="720" cy="24" r="3" fill="#D4AD5F" />
         <ellipse cx="360" cy="24" rx="10" ry="4"
 			transform="rotate(-30 360 24)" />
         <ellipse cx="360" cy="24" rx="10" ry="4"
 			transform="rotate(30 360 24)" />
-        <circle cx="360" cy="24" r="2.5" fill="#E8C878" />
+        <circle cx="360" cy="24" r="2.5" fill="#D4AD5F" />
         <ellipse cx="840" cy="24" rx="10" ry="4"
 			transform="rotate(-30 840 24)" />
         <ellipse cx="840" cy="24" rx="10" ry="4"
 			transform="rotate(30 840 24)" />
-        <circle cx="840" cy="24" r="2.5" fill="#E8C878" />
+        <circle cx="840" cy="24" r="2.5" fill="#D4AD5F" />
         <ellipse cx="240" cy="24" rx="7" ry="3"
 			transform="rotate(-30 240 24)" />
         <ellipse cx="240" cy="24" rx="7" ry="3"
@@ -496,21 +555,19 @@
         <ellipse cx="960" cy="24" rx="7" ry="3"
 			transform="rotate(30 960 24)" />
     </g>
-    <line x1="0" y1="4" x2="1200" y2="4" stroke="#F3C4D5"
+    <line x1="0" y1="4" x2="1200" y2="4" stroke="#F1E1D4"
 			stroke-width="0.5" opacity="0.4" />
-    <line x1="0" y1="44" x2="1200" y2="44" stroke="#F3C4D5"
+    <line x1="0" y1="44" x2="1200" y2="44" stroke="#F1E1D4"
 			stroke-width="0.5" opacity="0.4" />
 </svg>
-
-	
 
 	<%-- ========== THAI KANOK DIVIDER: STEPS & CONDITIONS → GALLERY ========== --%>
 	<svg class="thai-divider" viewBox="0 0 1200 48"
 		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-		style="display: block; background: #FFF6F9;">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F3C4D5"
+		style="display: block; background: #FCF2E4;">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F1E1D4"
 			stroke-width="1" opacity="0.6" />
-    <circle cx="600" cy="24" r="4" fill="#E8C878" />
+    <circle cx="600" cy="24" r="4" fill="#D4AD5F" />
 </svg>
 
 	<%-- ========== GALLERY SECTION ========== --%>
@@ -544,9 +601,9 @@
             <defs>
                 <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%"
 					y2="0%">
-                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
-                    <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
-                    <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
+                    <stop offset="0%" stop-color="rgba(204,154,63,0.15)" />
+                    <stop offset="50%" stop-color="rgba(204,154,63,0.9)" />
+                    <stop offset="100%" stop-color="rgba(204,154,63,0.15)" />
                 </linearGradient>
             </defs>
         </svg>
@@ -556,7 +613,7 @@
 				<div class="footer-brand">
 					<img src="${pageContext.request.contextPath}/static/images/logoo.png"
 						alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-					<span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+					<span class="footer-brand-text">บุญมีนำพา รับจัดงานบุญ</span>
 				</div>
 				<p class="footer-tagline">รับจัดงานบุญ
 					ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
@@ -583,7 +640,6 @@
 	<script>
     window.contextPath = "${pageContext.request.contextPath}";
 
-    // ประเภทงานบุญหลัก 3 แบบ ยังใช้ในหน้านี้สำหรับเมนู dropdown
     window.ceremonyTypes = [
         <c:forEach var="t" items="${ceremonyTypes}" varStatus="st">
             {
@@ -595,7 +651,6 @@
         </c:forEach>
     ];
 
-    // ===== Hero slider — รูปใหญ่ด้านบนเลื่อนอัตโนมัติทุก 5 วินาที (ชุดรูปเดียวกับ Bn1/Bn2/Bn3) =====
     (function () {
         var heroSlides = document.querySelectorAll('#heroSlider .hero-slide');
         if (!heroSlides.length) return;
@@ -607,7 +662,6 @@
         }, 5000);
     })();
 
-    // ===== Banner slider — เลื่อนอัตโนมัติทุก 4 วินาที + จุดกดเลือกเองได้ =====
     (function () {
         var slides = document.querySelectorAll('#bannerSlider .banner-slide');
         var dotsWrap = document.getElementById('bannerDots');

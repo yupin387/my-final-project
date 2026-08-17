@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>รายการจองของฉัน - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=14">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=15">
 </head>
 <body>
 
@@ -23,8 +23,9 @@
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
+        <a href="${pageContext.request.contextPath}/services" class="nav-link-item">บริการ/แพ็กเกจ</a>
+        <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item">ปฏิทิน</a>
         <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">การจอง</a>
- 
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
     <div class="dropdown-wrap">
@@ -42,16 +43,21 @@
     </div>
 </nav>
 
-<%-- ===== HERO BANNER ===== --%>
-<div class="hero-banner hero-home">
-    <div class="hero-content">
-        <span class="hero-tag">รายการของฉัน</span>
-        <h1>รายการจองงานบุญ</h1>
-        <p>ดูสถานะ รายละเอียด และใบเสนอราคาของการจองแต่ละรายการ</p>
-    </div>
-</div>
-
+<%-- ===== SECTION HEADER (แบบหน้า Home: มีรูปดอกบัวและเส้นคั่นทอง) ===== --%>
 <div class="page-wrapper">
+    <div class="section-header-wrap" style="text-align: center; margin-top: 30px; margin-bottom: 30px;">
+        <div class="header-lotus-icon" style="margin-bottom: 8px;">
+            <img src="${pageContext.request.contextPath}/static/images/img25.png" alt="ดอกบัว" style="width: 48px; height: auto;">
+        </div>
+        <div class="section-ornament" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+            <span class="ornament-line" style="width: 100px; height: 1px; background: #D9A441;"></span>
+            <span class="ornament-diamond" style="width: 6px; height: 6px; background: #D9A441; transform: rotate(45deg);"></span>
+            <span class="ornament-line right" style="width: 100px; height: 1px; background: #D9A441;"></span>
+        </div>
+        <h1 style="font-family: 'Sarabun', sans-serif; font-size: 2rem; font-weight: 700; color: #1A1A1A; margin-bottom: 6px;">รายการจองงานบุญ</h1>
+        <p style="color: #777777; font-size: 0.95rem;">ดูสถานะ รายละเอียด และใบเสนอราคาของการจองแต่ละรายการ</p>
+    </div>
+
     <div class="mybooking-card">
         <div class="mybooking-card-header">
             <span>รายการจองทั้งหมดของฉัน</span>
@@ -94,9 +100,9 @@
 
                                 <c:choose>
                                     <c:when test="${not empty b.quotation}">
-    <a href="${pageContext.request.contextPath}/member/quotation/detail/${b.quotation.quotationId}"
-       class="btn-mybooking btn-mybooking-quote">ใบเสนอราคา</a>
-</c:when>
+                                        <a href="${pageContext.request.contextPath}/member/quotation/detail/${b.quotation.quotationId}"
+                                           class="btn-mybooking btn-mybooking-quote">ใบเสนอราคา</a>
+                                    </c:when>
                                     <c:otherwise>
                                         <span class="btn-mybooking btn-mybooking-disabled">รอใบเสนอราคา</span>
                                     </c:otherwise>

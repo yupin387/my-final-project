@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>รีวิวการจัดงานบุญ - ระบบรับจัดงานบุญ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/review.css">
 </head>
@@ -17,15 +17,17 @@
 <%-- ========== NAVBAR ========== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
-        <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-            alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
+        <div class="lotus-icon">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
+        </div>
         <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
+        <a href="${pageContext.request.contextPath}/services" class="nav-link-item">บริการ/แพ็กเกจ</a>
+        <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item">ปฏิทิน</a>
         <c:if test="${not empty sessionScope.user}">
             <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">การจอง</a>
-        
         </c:if>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item active">รีวิว</a>
         <c:if test="${empty sessionScope.user}">
@@ -132,8 +134,8 @@
         <defs>
             <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
-<stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
-<stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
+               <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+               <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
             </linearGradient>
         </defs>
         </svg>
@@ -141,9 +143,10 @@
     <div class="container footer-content footer-content-slim">
         <div class="footer-col footer-brand-col">
             <div class="footer-brand">
-                <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-    alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-                <span class="footer-brand-text">บุญมีนำพา รับจัดงานบุญ</span>
+                <div class="lotus-icon">
+                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
+                </div>
+                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
             </div>
             <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
             <div class="footer-social">
@@ -161,9 +164,20 @@
             <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
         </div>
     </div>
-   
 </footer>
 
+<script>
+function toggleDropdown() {
+    var m = document.getElementById('dropdownMenu');
+    if (m) m.classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.user-profile-pill')) {
+        var m = document.getElementById('dropdownMenu');
+        if (m) m.classList.remove('show');
+    }
+});
+</script>
 <script src="${pageContext.request.contextPath}/static/js/review.js"></script>
 </body>
 </html>

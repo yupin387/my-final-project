@@ -384,6 +384,10 @@ public class BookingFormController {
         if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
 
         List<BookingForm> bookings = bookingService.getBookingsByMember(loginUser.getMemberId());
+        
+        // เรียงตาม bookingId จากน้อยไปมาก
+        bookings.sort(Comparator.comparing(BookingForm::getBookingId));
+
         model.addAttribute("bookings", bookings);
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
 

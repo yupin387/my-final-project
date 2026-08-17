@@ -5,6 +5,8 @@
    ตอนนี้เปลี่ยนมาแสดงเป็นตารางปฏิทินรายเดือน (grid 7 คอลัมน์) แทน
    ใช้โทนสีชมพู-ทองเดียวกับธีมหลักของเว็บ (home.css) แต่ประกาศตัวแปรของ
    ตัวเองไว้ในไฟล์นี้ เพื่อให้ section นี้ independent ไม่ผูกกับ home.css
+   ฟอนต์ทั้งหมดใช้ Sarabun (ตามธีมฟอนต์ของหน้าปฏิทิน — ไม่มีจุดไหนในไฟล์นี้
+   เป็นชื่อระบบ/แบรนด์ จึงไม่มีจุดใดที่ต้องใช้ Charmonman)
    ============================================================ */
 
 :root {
@@ -39,7 +41,7 @@
 }
 
 .lc-calendar {
-    max-width: 1000px;
+    max-width: 820px;
     margin: 0 auto;
     font-family: 'Sarabun', sans-serif;
     color: var(--lc-text-body);
@@ -56,30 +58,30 @@
 .lc-year-card {
     background: linear-gradient(165deg, #FFFFFF 0%, var(--lc-card-bg-warm) 100%);
     border: 2px solid var(--lc-border);
-    border-radius: 18px;
-    padding: 22px 26px;
-    margin-bottom: 26px;
-    box-shadow: 0 10px 30px var(--lc-shadow);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 22px var(--lc-shadow);
 }
 
 .lc-year-card h2 {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     color: var(--lc-pink);
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    margin: 0 0 10px;
+    margin: 0 0 8px;
 }
 
 .lc-year-card p {
-    font-size: 0.88rem;
-    line-height: 1.8;
+    font-size: 0.85rem;
+    line-height: 1.75;
     color: var(--lc-text-body);
     margin: 0;
 }
 
 .lc-year-card .lc-source {
     margin-top: 8px;
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     color: var(--lc-text-muted);
 }
 
@@ -88,7 +90,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     gap: 12px;
 }
 
@@ -96,9 +98,9 @@
     background: var(--lc-card-bg-warm);
     border: 1.5px solid var(--lc-border-soft);
     border-radius: 10px;
-    width: 38px;
-    height: 38px;
-    font-size: 1.05rem;
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
     color: var(--lc-text-mid);
     cursor: pointer;
     display: flex;
@@ -110,10 +112,10 @@
 .lc-nav-btn:hover { background: var(--lc-pink-pale); border-color: var(--lc-pink-mid); }
 
 .lc-month-title {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     color: var(--lc-text-dark);
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     text-align: center;
     flex: 1;
 }
@@ -121,34 +123,34 @@
 /* ===== ตารางปฏิทิน (grid) ===== */
 .lc-card {
     background: linear-gradient(165deg, #FFFFFF 0%, var(--lc-card-bg-warm) 100%);
-    border: 2.5px solid var(--lc-border);
-    border-radius: 22px;
-    padding: 24px 24px 20px;
-    box-shadow: 0 14px 38px var(--lc-shadow);
+    border: 2px solid var(--lc-border);
+    border-radius: 18px;
+    padding: 18px 18px 16px;
+    box-shadow: 0 10px 28px var(--lc-shadow);
 }
 
 .lc-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
+    gap: 6px;
 }
 
 .lc-day-label {
     background: linear-gradient(135deg, var(--lc-pink), var(--lc-pink-mid));
     color: #FFFFFF;
     text-align: center;
-    padding: 8px 2px;
-    border-radius: 8px;
-    font-size: 0.82rem;
+    padding: 6px 2px;
+    border-radius: 6px;
+    font-size: 0.74rem;
     font-weight: 700;
 }
 
 .lc-cell {
     background: #FAFAFA;
     border: 1.5px solid var(--lc-border-soft);
-    border-radius: 10px;
-    min-height: 96px;
-    padding: 6px 6px 5px;
+    border-radius: 8px;
+    min-height: 64px;
+    padding: 4px 4px 3px;
     display: flex;
     flex-direction: column;
     cursor: pointer;
@@ -180,16 +182,16 @@
 
 .lc-daynum {
     font-weight: 700;
-    font-size: 0.98rem;
+    font-size: 0.85rem;
     color: var(--lc-text-dark);
 }
 
 .lc-cell-today .lc-daynum { color: var(--lc-today-text); }
 
 .lc-lunar {
-    font-size: 0.62rem;
+    font-size: 0.56rem;
     color: var(--lc-text-muted);
-    line-height: 1.3;
+    line-height: 1.25;
     margin-top: 1px;
 }
 
@@ -198,15 +200,15 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding-top: 4px;
+    padding-top: 3px;
 }
 
 .lc-tag {
-    font-size: 0.6rem;
+    font-size: 0.54rem;
     font-weight: 600;
-    line-height: 1.3;
-    padding: 1px 5px;
-    border-radius: 6px;
+    line-height: 1.25;
+    padding: 1px 4px;
+    border-radius: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -225,7 +227,7 @@
 }
 
 .lc-tag-more {
-    font-size: 0.58rem;
+    font-size: 0.52rem;
     color: var(--lc-text-muted);
     font-weight: 600;
 }
@@ -233,20 +235,20 @@
 /* ===== คำอธิบายสีย่อ (legend) ===== */
 .lc-legend {
     display: flex;
-    gap: 18px;
+    gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 16px;
-    padding-top: 14px;
+    margin-top: 14px;
+    padding-top: 12px;
     border-top: 1px solid var(--lc-border-soft);
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     color: var(--lc-text-muted);
     font-weight: 600;
 }
 
 .lc-legend-dot {
-    width: 12px;
-    height: 12px;
+    width: 11px;
+    height: 11px;
     border-radius: 4px;
     display: inline-block;
     margin-right: 6px;
@@ -255,24 +257,24 @@
 
 /* ===== การ์ดรายละเอียดวัน (แสดงเมื่อคลิกวันในตาราง) ===== */
 .lc-day-detail {
-    margin-top: 22px;
+    margin-top: 20px;
     background: var(--lc-card-bg);
     border: 1.5px solid var(--lc-border-soft);
-    border-radius: 16px;
-    padding: 20px 24px;
-    box-shadow: 0 6px 20px var(--lc-shadow);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 6px 18px var(--lc-shadow);
 }
 
 .lc-day-detail h4 {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     color: var(--lc-pink);
-    font-size: 1.05rem;
+    font-size: 0.98rem;
     font-weight: 700;
     margin: 0 0 10px;
 }
 
 .lc-day-detail p {
-    font-size: 0.87rem;
+    font-size: 0.85rem;
     line-height: 1.7;
     color: var(--lc-text-body);
     margin: 0 0 6px;
@@ -289,8 +291,8 @@
     display: flex;
     gap: 8px;
     align-items: flex-start;
-    font-size: 0.85rem;
-    line-height: 1.6;
+    font-size: 0.83rem;
+    line-height: 1.55;
     padding: 8px 12px;
     border-radius: 10px;
 }
@@ -311,16 +313,16 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-    .lc-cell { min-height: 80px; padding: 5px 4px 4px; }
-    .lc-daynum { font-size: 0.86rem; }
-    .lc-tag { font-size: 0.55rem; }
+    .lc-cell { min-height: 58px; padding: 4px 3px 3px; }
+    .lc-daynum { font-size: 0.78rem; }
+    .lc-tag { font-size: 0.5rem; }
     .lc-lunar { display: none; }
-    .lc-year-card { padding: 18px 18px; }
+    .lc-year-card { padding: 14px 14px; }
 }
 
 @media (max-width: 480px) {
-    .lc-grid { gap: 5px; }
-    .lc-cell { min-height: 66px; border-radius: 8px; }
-    .lc-day-label { font-size: 0.7rem; padding: 6px 1px; }
+    .lc-grid { gap: 4px; }
+    .lc-cell { min-height: 48px; border-radius: 7px; }
+    .lc-day-label { font-size: 0.66rem; padding: 5px 1px; }
     .lc-tags { display: none; }
 }

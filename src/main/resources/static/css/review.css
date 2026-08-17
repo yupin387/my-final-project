@@ -1,36 +1,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&display=swap');
 
-/* ===== ธีมชมพู-ขาว-ทอง ให้ตรงกับ home.css (นำโทนสีจริงของแบรนด์มาใช้ในหน้านี้) ===== */
+/* ===== ธีมชมพู-ทอง (ปรับให้ตรงกับตัวอย่างหน้าอื่น) ===== */
 :root {
-    /* ชมพูแบรนด์ — ใช้เฉพาะส่วนหัวการ์ด (ให้เข้าธีมเดียวกับ navbar/footer) */
-    --brand-pink-1: #C7405F;
-    --brand-pink-2: #D94F76;
-    --brand-pink-3: #E0577F;
-    --pink-pale:    #FBD0DE;
+    --gold:          #E0577F;
+    --gold-mid:      #EC6E96;
+    --gold-light:    #F49CB9;
+    --gold-pale:     #FBD0DE;
+    --gold-glow:     #FFE3EC;
 
-    /* ทองจริง — ใช้เป็นจุดเน้น (ดาว, ปุ่ม, เส้นขอบ) */
-    --gold:         #D9A441;
-    --gold-mid:     #E8C878;
-    --gold-light:   #F7E3B0;
-
-    /* ขาว/ครีม — โทนหลักของพื้นหลังและการ์ด ไม่ให้หน้าดูชมพูจัด */
-    --cream:        #FFFDF8;
-    --cream-mid:    #FFF9EF;
-    --cream-border: #F3C4D5;
-    --white:        #ffffff;
-
-    --text-dark:    #2a1a1a;
-    --text-mid:     #6b4a35;
-    --text-muted:   #8a8a8a;
-
-    /* เพิ่มสีสำหรับ Navbar/Footer */
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
-    --footer-grad-1:    #C7405F;
-    --footer-grad-2:    #D94F76;
-    --footer-grad-3:    #E0577F;
+
+    --pink-mid:      #F5C6D6;
+    --pink-light:    #F9DCE6;
+    --pink-pale:     #FCEDF2;
+    --pink-bg-1:     #FFF7F9;
+    --pink-bg-2:     #FDEEF2;
+
+    --pink-deep-1:   #C7405F;
+    --pink-deep-2:   #D94F76;
+    --pink-deep-3:   #E0577F;
+
+    --cream:         #FFFFFF;
+    --cream-warm:    #FFFBF6;
+    --cream-mid:     #FDEEF3;
+    --cream-border:  #F3C4D5;
+    --cream-border-soft: #F6D4E1;
+
+    --white:         #FFFFFF;
+    --off-white:     #FFFBFA;
+
+    --page-bg:       #FDF1F5;
+    --page-bg-deep:  #FDEBF0;
+
+    --card-border:   #F0D6DC;
+    --card-border-soft: #F0DCE0;
+
+    --text-dark:     #1A1A1A;
+    --text-mid:      #3A3A3A;
+    --text-body:     #555555;
+    --text-muted:    #8a8a8a;
+    --text-light:    #b8b8b8;
+
+    --brown-dark:    #7A2340;
+    --brown-mid:     #A83A5C;
+
+    --shadow-gold:   rgba(224, 87, 127, 0.16);
+    --shadow-warm:   rgba(224, 87, 127, 0.10);
+
+    /* Navbar / Footer gradient (โทนทองตามตัวอย่าง) */
+    --footer-grad-1: #F6E3B0;
+    --footer-grad-2: #ECC974;
+    --footer-grad-3: #D6A544;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -46,7 +69,7 @@ body {
 
 /* ========== NAVBAR ========== */
 .navbar-custom {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%) !important;
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -58,7 +81,7 @@ body {
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(199, 64, 95, 0.35);
+    box-shadow: 0 4px 20px rgba(184, 134, 47, 0.28);
 }
 
 .navbar-custom::before {
@@ -66,8 +89,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6),
-        rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(184, 134, 47, 0.5), rgba(184, 134, 47, 0.9), rgba(184, 134, 47, 0.5), transparent);
 }
 
 .navbar-brand-wrap {
@@ -79,7 +101,7 @@ body {
 
 .navbar-custom .lotus-icon,
 .navbar-brand-wrap .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: var(--white);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -89,11 +111,10 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 10px rgba(184, 134, 47, 0.22);
     flex-shrink: 0;
     overflow: hidden;
-    color: #FFFFFF;
 }
 
 .navbar-custom .lotus-icon img,
@@ -105,13 +126,13 @@ body {
 }
 
 .nav-brand-text {
-    color: #FFFFFF;
-    font-family: 'Charmonman', serif;
+    color: var(--brown-dark) !important;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif !important;
     font-size: 34px;
     font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: none;
 }
 
 .navbar-center {
@@ -124,86 +145,55 @@ body {
 
 .nav-link-item {
     font-family: 'Sarabun', sans-serif;
-    color: #FFFFFF;
+    color: var(--brown-dark);
     text-decoration: none;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    text-shadow: none;
 }
 
 .nav-link-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #FFFFFF;
+    background: rgba(184, 134, 47, 0.14);
+    color: var(--brown-dark);
 }
 
 .nav-link-item.active {
-    background: #FFFFFF;
-    color: var(--footer-grad-2);
+    background: var(--gold);
+    color: #FFFFFF;
     font-weight: 700;
 }
 
-/* ===== เมนู dropdown บนแถบเนวิเกชัน ===== */
-.nav-dropdown-wrap {
-    position: relative;
-    display: inline-block;
-}
-.nav-dropdown-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-}
-.nav-caret {
-    font-size: 0.7rem;
-    transition: transform 0.2s ease;
-}
-.nav-dropdown-wrap:hover .nav-caret {
-    transform: rotate(180deg);
-}
-.nav-dropdown-panel {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 220px;
-    background: var(--white);
-    border: 1px solid var(--accent-gold-pale);
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
-    padding: 8px 0;
-    z-index: 100;
-}
-.nav-dropdown-wrap:hover .nav-dropdown-panel,
-.nav-dropdown-wrap:focus-within .nav-dropdown-panel {
-    display: block;
-}
-.nav-dropdown-link {
-    display: block;
-    padding: 10px 18px;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 0.92rem;
-    color: var(--text-dark);
+/* ปุ่มสมัครสมาชิกบน Nav */
+.btn-register-nav {
+    background: var(--accent-gold);
+    color: #FFFFFF;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 700;
     text-decoration: none;
+    box-shadow: 0 2px 8px rgba(184, 134, 47, 0.2);
+    transition: all 0.2s;
     white-space: nowrap;
 }
-.nav-dropdown-link:hover {
-    background: var(--accent-gold-pale);
+.btn-register-nav:hover {
+    background: var(--pink-deep-1);
+    transform: translateY(-1px);
 }
 
-/* ===== User Profile Pill ===== */
+/* User Profile Pill */
 .user-profile-pill {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px solid var(--accent-gold-pale);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--brown-dark);
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
@@ -211,12 +201,12 @@ body {
 }
 
 .user-profile-pill:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.85);
 }
 
 .avatar-circle-nav {
-    background: #FFFFFF;
-    color: var(--brand-pink-3);
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    color: #FFFFFF;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -229,22 +219,22 @@ body {
 }
 
 .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
-.user-role-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
+.user-name-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--brown-dark); }
+.user-role-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.7rem; color: var(--brown-mid); }
 
-/* ===== Dropdown Profile Menu ===== */
-.dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
+/* Dropdown Profile Menu */
+.dropdown-wrap { position: relative; display: inline-block; }
 
 .dropdown-menu-custom {
     display: none;
     position: absolute;
-    top: calc(100% - 10px);
+    top: calc(100% + 8px);
     right: 0;
     background-color: var(--white);
-    border: 1px solid var(--cream-border);
+    border: 1px solid var(--card-border-soft);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(224, 87, 127, 0.16);
+    box-shadow: 0 8px 28px rgba(184, 134, 47, 0.22);
     z-index: 99999;
     padding: 0;
     overflow: hidden;
@@ -258,7 +248,7 @@ body {
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--text-mid);
     text-decoration: none;
     background: var(--white);
     border-bottom: 1px solid var(--cream-mid);
@@ -267,8 +257,8 @@ body {
 }
 
 .dropdown-link:last-child  { border-bottom: none; }
-.dropdown-link:hover       { background: var(--cream-mid); }
-.dropdown-link.active      { color: var(--brand-pink-3); font-weight: 700; }
+.dropdown-link:hover       { background: var(--pink-pale); }
+.dropdown-link.active      { color: var(--pink-deep-1); font-weight: 700; }
 .dropdown-link.danger      { color: #c0392b; }
 .dropdown-link.danger:hover{ background: #fff5f5; }
 
@@ -286,43 +276,36 @@ body {
     background: var(--white);
     border-radius: 20px;
     border: 1.5px solid var(--cream-border);
-    box-shadow: 0 8px 36px rgba(217, 164, 65, 0.16);
+    box-shadow: 0 8px 36px var(--shadow-gold);
     width: 100%;
     max-width: 560px;
     overflow: hidden;
 }
 
-/* ========== CARD HEADER (ชมพูแบรนด์ เดียวกับ navbar/footer) ========== */
 .review-card-header {
-    background: linear-gradient(135deg, var(--brand-pink-1) 0%, var(--brand-pink-2) 55%, var(--brand-pink-3) 100%);
+    background: linear-gradient(90deg, var(--gold-pale), var(--pink-light));
     padding: 24px 28px 20px;
     text-align: center;
-    border-bottom: 3px solid var(--gold);
+    border-bottom: 2px solid var(--gold-pale);
     position: relative;
 }
 
-.review-card-header::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
-}
+.review-card-header::before { display: none; }
 
 .review-card-header h2 {
-    font-family: 'Charmonman', serif;
-    color: #FFFFFF;
-    font-size: 1.4rem;
+    font-family: 'Sarabun', sans-serif;
+    color: var(--pink-deep-1);
+    font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 10px;
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+    text-shadow: none;
 }
 
 .booking-badge {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.18);
-    border: 1px solid rgba(255, 255, 255, 0.55);
-    color: #FFFFFF;
+    background: var(--white);
+    border: 1px solid var(--gold-pale);
+    color: var(--pink-deep-1);
     padding: 4px 14px;
     border-radius: 20px;
     font-size: 13px;
@@ -331,16 +314,14 @@ body {
 }
 
 .ceremony-name {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--text-body);
     font-size: 13px;
 }
 
-/* ========== CARD BODY ========== */
 .review-card-body {
     padding: 28px 28px 24px;
 }
 
-/* ========== SECTION LABEL ========== */
 .section-label {
     display: block;
     font-size: 13px;
@@ -349,7 +330,7 @@ body {
     margin-bottom: 10px;
 }
 
-/* ========== STAR RATING ========== */
+/* Star Rating */
 .star-section {
     text-align: center;
     margin-bottom: 24px;
@@ -376,30 +357,29 @@ body {
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-    color: var(--gold);
+    color: var(--accent-gold);
     transform: scale(1.15);
 }
 
-/* ========== FORM ELEMENTS ========== */
 .form-group { margin-bottom: 20px; }
 .form-group:last-child { margin-bottom: 0; }
 
 .form-control {
     width: 100%;
     padding: 10px 14px;
-    border: 1.5px solid var(--cream-border);
+    border: 1.5px solid var(--card-border-soft);
     border-radius: 10px;
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     color: var(--text-dark);
-    background: var(--cream);
+    background: var(--white);
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-control:focus {
     border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.15);
+    box-shadow: 0 0 0 3px var(--shadow-gold);
 }
 
 textarea.form-control {
@@ -407,19 +387,13 @@ textarea.form-control {
     min-height: 110px;
 }
 
-.form-hint {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 5px;
-}
-
-/* ========== UPLOAD AREA ========== */
+/* Upload Area */
 .upload-area {
-    border: 2px dashed var(--cream-border);
+    border: 2px dashed var(--card-border-soft);
     border-radius: 12px;
     padding: 20px 16px;
     text-align: center;
-    background: var(--cream);
+    background: var(--pink-bg-1);
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
     position: relative;
@@ -427,7 +401,7 @@ textarea.form-control {
 
 .upload-area:hover {
     border-color: var(--gold);
-    background: var(--cream-mid);
+    background: var(--pink-pale);
 }
 
 .upload-area input[type="file"] {
@@ -440,18 +414,17 @@ textarea.form-control {
 }
 
 .upload-icon { font-size: 1.8rem; margin-bottom: 6px; }
-.upload-text { font-size: 13px; font-weight: 600; color: var(--text-mid); }
+.upload-text { font-size: 13px; font-weight: 600; color: var(--pink-deep-1); }
 .upload-hint { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
 
-/* ========== DIVIDER ========== */
 .divider {
     border: 0;
-    border-top: 1px solid var(--cream-border);
+    border-top: 1.5px solid var(--card-border-soft);
     margin: 24px 0;
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
-/* ========== ACTIONS ========== */
+/* Form Actions */
 .form-actions {
     display: flex;
     gap: 12px;
@@ -460,8 +433,8 @@ textarea.form-control {
 
 .btn-submit {
     flex: 2;
-    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
-    color: #4A2E00;
+    background: var(--gold);
+    color: #FFFFFF;
     border: none;
     border-radius: 10px;
     padding: 13px 0;
@@ -471,20 +444,19 @@ textarea.form-control {
     cursor: pointer;
     transition: all 0.2s;
     letter-spacing: 0.5px;
-    box-shadow: 0 3px 10px rgba(217, 164, 65, 0.3);
+    box-shadow: 0 3px 10px var(--shadow-gold);
 }
 
 .btn-submit:hover {
-    background: linear-gradient(135deg, var(--gold-mid), var(--gold-light));
+    background: var(--pink-deep-2);
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(217, 164, 65, 0.4);
 }
 
 .btn-skip {
     flex: 1;
     background: var(--white);
     color: var(--text-muted);
-    border: 1.5px solid var(--cream-border);
+    border: 1.5px solid var(--card-border-soft);
     border-radius: 10px;
     padding: 13px 0;
     font-family: 'Sarabun', sans-serif;
@@ -498,16 +470,16 @@ textarea.form-control {
     transition: background 0.2s;
 }
 
-.btn-skip:hover { background: var(--cream-mid); }
+.btn-skip:hover { background: var(--pink-pale); }
 
 /* ========== FOOTER ========== */
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
-    color: rgba(255, 255, 255, 0.92);
+    background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%) !important;
+    color: var(--brown-dark);
     padding-top: 0;
     border-top: 3px solid;
     border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 -8px 24px rgba(184, 134, 47, 0.14);
     position: relative;
     z-index: 2;
     margin-top: auto;
@@ -530,9 +502,9 @@ textarea.form-control {
 }
 
 .footer-brand .lotus-icon {
-    background: rgba(255,255,255,0.18);
-    border: 1.5px solid rgba(255,255,255,0.5);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    background: var(--white);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 8px rgba(184, 134, 47, 0.18);
     width: 46px;
     height: 46px;
     max-width: 46px;
@@ -553,25 +525,25 @@ textarea.form-control {
 }
 
 .footer-brand-text {
-    font-family: 'Charmonman', serif;
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 1.6rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--brown-dark);
 }
 
 .footer-tagline {
     font-family: 'Sarabun', sans-serif;
     font-size: 0.88rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--brown-mid);
     max-width: 320px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-shadow: none;
 }
 
 .footer-heading {
-    font-family: 'Charmonman', serif;
-    color: #FFFFFF;
-    font-size: 1.35rem;
+    font-family: 'Sarabun', sans-serif;
+    color: var(--brown-dark);
+    font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 14px;
 }
@@ -579,15 +551,42 @@ textarea.form-control {
 .footer-contact-col p {
     font-family: 'Sarabun', sans-serif;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--brown-mid);
     margin: 0 0 10px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    text-shadow: none;
+}
+
+.footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--brown-dark);
+    padding: 7px 14px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: background 0.2s;
+    border: 1px solid var(--accent-gold-pale);
+}
+
+.footer-social-link:hover {
+    background: rgba(255, 255, 255, 0.95);
 }
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
     .navbar-custom { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
-    .navbar-center { display: none; }
+    .navbar-center { margin-left: 0; margin-right: 0; flex-wrap: wrap; justify-content: center; }
     .navbar-custom .lotus-icon,
     .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     .nav-brand-text { font-size: 20px; }
@@ -598,42 +597,4 @@ textarea.form-control {
     .page-wrapper  { padding: 24px 12px 48px; }
     .review-card-body { padding: 20px 18px; }
     .star-rating label { font-size: 2rem; }
-}
-
-/* ==========================================================================
-   ส่วนเสริม (การ์ดแสดงรีวิว)
-   ========================================================================== */
-.review-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--brand-pink-2);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-.review-header-text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-.review-header-text .reviewer-name {
-    margin: 0;
-}
-.review-event-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--pink-pale);
-    color: var(--brand-pink-2);
-    font-size: 0.78rem;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 20px;
-    width: fit-content;
-    margin: 2px 0 6px;
 }

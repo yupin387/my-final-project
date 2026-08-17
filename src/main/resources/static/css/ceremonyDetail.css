@@ -28,25 +28,23 @@
 
     --white:             #FFFFFF;
 
-    /* พื้นหลังหน้าเว็บ ไล่ชมพูอ่อนมากๆ เหมือน home (เดิมไฟล์นี้ใช้ขาวล้วน) */
-    --page-bg:           #FFF6F8;
+    /* พื้นหลังหน้าเว็บ ไล่ชมพูอ่อนพาสเทล (ปรับให้ตรงกับ home.css) */
+    --page-bg:           #FDF1F5;
 
     --text-dark:         #1A1A1A;
-    --text-mid:          #1A1A1A;   /* เดิม #3A3A3A → ปรับเป็นดำตามที่ขอ */
-    --text-body:         #1A1A1A;   /* เดิม #555555 → ปรับเป็นดำตามที่ขอ */
-    --text-muted:        #1A1A1A;   /* เดิม #8a8a8a → ปรับเป็นดำตามที่ขอ */
+    --text-mid:          #1A1A1A;
+    --text-body:         #1A1A1A;
+    --text-muted:        #1A1A1A;
 
-    /* หัวข้อหลัก — ชมพูเข้มแบบเบอร์กันดี ให้ตรงกับ home (เดิมไฟล์นี้ใช้ดำ #1A1A1A) */
     --brown-dark:        #7A2340;
     --brown-mid:         #A83A5C;
 
     --shadow-warm:       rgba(224, 87, 127, 0.10);
     --shadow-gold:       rgba(224, 87, 127, 0.16);
 
-    /* Footer gradient — ให้ตรงกับ home.css เป๊ะ */
-    --footer-dark-1: #C7405F;
-    --footer-dark-2: #D94F76;
-    --footer-dark-3: #E0577F;
+    --footer-dark-1: #F6E3B0;
+    --footer-dark-2: #ECC974;
+    --footer-dark-3: #D6A544;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -58,8 +56,6 @@ body {
     min-height: 100vh;
 }
 
-/* ========== NAVBAR เดิม (legacy, ไม่ได้ใช้ใน ceremonyDetail ทั้ง 3 หน้าแล้ว
-   เพราะ 3 หน้าเปลี่ยนไปใช้ .navbar-custom ด้านล่างแทน — เก็บไว้เผื่อหน้าอื่นยังอ้างอิงอยู่) ========== */
 .cd-navbar {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 0 40px;
@@ -144,7 +140,6 @@ body {
     color: #FFFFFF;
 }
 
-/* ========== HERO BANNER (เหลือแค่ชื่องาน + วันที่เลือก) ========== */
 .cd-hero {
     position: relative;
     height: 500px;
@@ -186,7 +181,7 @@ body {
 }
 
 .cd-hero-title {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     font-size: 2.8rem;
     font-weight: 700;
     line-height: 1.25;
@@ -214,7 +209,6 @@ body {
     border: 1.5px solid var(--accent-gold);
 }
 
-/* ========== INTRO BANNER: รู้จักงาน... ========== */
 .cd-intro-banner {
     display: flex;
     align-items: stretch;
@@ -247,7 +241,7 @@ body {
 }
 
 .cd-intro-banner-title {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     font-size: 2.1rem;
     font-weight: 700;
     color: var(--brown-dark);
@@ -276,7 +270,6 @@ body {
     }
 }
 
-/* ========== SECTION ORNAMENT (จุดทองจริง — ให้ตรงกับ home) ========== */
 .cd-section-ornament {
     display: flex;
     align-items: center;
@@ -316,7 +309,7 @@ body {
 }
 
 .cd-section-title {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     color: var(--brown-dark);
     font-size: 2.4rem;
     font-weight: 700;
@@ -331,20 +324,20 @@ body {
     margin: 10px auto 0;
 }
 
-/* ========== MAIN CONTENT ========== */
+/* ========== MAIN CONTENT — ลด max-width/padding ให้เนื้อหาไม่กว้างล้นจอ ========== */
 .cd-container {
-    max-width: 1520px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 48px 32px 120px;
+    padding: 32px 24px 100px;
 }
 
-/* ========== CARD (ปรับให้เป็นการ์ดขาวเรียบ ขอบบาง เหมือน home แทนกรอบชมพูหนาเรืองแสง) ========== */
+/* ========== CARD — ลด padding/margin ให้กระชับขึ้น ========== */
 .cd-card {
     background: var(--white);
-    border-radius: 16px;
+    border-radius: 14px;
     border: 1.5px solid var(--cream-border-soft);
-    padding: 26px 30px;
-    margin-bottom: 24px;
+    padding: 18px 22px;
+    margin-bottom: 18px;
     box-shadow: 0 4px 18px var(--shadow-gold);
     position: relative;
     overflow: hidden;
@@ -359,29 +352,28 @@ body {
 }
 
 .cd-card-title {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     color: var(--brown-dark);
     font-weight: 700;
-    font-size: 1.5rem;
-    padding-bottom: 12px;
-    margin-bottom: 18px;
+    font-size: 1.1rem;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
     border-bottom: 1.5px solid var(--cream-border-soft);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .cd-card-title::before {
     content: '';
     display: inline-block;
-    width: 4px;
-    height: 18px;
+    width: 3px;
+    height: 14px;
     background: linear-gradient(to bottom, var(--accent-gold), var(--accent-gold-mid));
     border-radius: 2px;
     flex-shrink: 0;
 }
 
-/* ========== ITEM LIST (รายการอุปกรณ์) ========== */
 .cd-item-list {
     list-style: none;
     padding: 0;
@@ -414,7 +406,6 @@ body {
     box-shadow: 0 1px 4px rgba(217, 164, 65, 0.35);
 }
 
-/* ========== PACKAGE CARDS (ปิ่นโต / สังฆทาน) ========== */
 .cd-pkg-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
@@ -468,7 +459,7 @@ body {
 }
 
 .cd-pkg-name {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     font-weight: 700;
     color: var(--brown-dark);
     font-size: 13.5px;
@@ -495,32 +486,31 @@ body {
     align-self: flex-start;
 }
 
-/* ========== PINTO SUB LABEL ========== */
 .cd-pinto-sub {
     font-size: 13px;
     color: var(--text-muted);
     margin-bottom: 14px;
 }
 
-/* ========== CONDITION CARD ========== */
 .cd-condition-card {
     margin-bottom: 28px;
 }
 
+/* ========== รายการ "สิ่งที่รวมในทุกแพ็กเกจ" — ลดขนาดตัวหนังสือ/ระยะห่าง ========== */
 .cd-condition-list {
     list-style: none;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
 }
 
 .cd-condition-list li {
     position: relative;
-    padding-left: 22px;
-    font-size: 14px;
+    padding-left: 20px;
+    font-size: 13px;
     color: var(--text-body);
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 .cd-condition-list li::before {
@@ -532,12 +522,10 @@ body {
     font-size: 0.7rem;
 }
 
-/* ปิดการ์ดเงื่อนไขแบบเดี่ยวเต็มความกว้าง (ใช้ในหน้าทำบุญบ้าน) */
 .conditions-grid-single {
     display: block;
 }
 
-/* ========== FOOTER BAR (แถบจองล่าง sticky) ========== */
 .cd-footer {
     background: var(--white);
     position: fixed;
@@ -587,8 +575,6 @@ body {
     white-space:nowrap;
 }
 
-/* ===== แก้: ปุ่ม "จองแบบระบุเอง" เปลี่ยนจากกราเดียนต์ชมพู-ทอง เป็น solid gold
-   ตาม rule ปุ่ม interactive/active ของโปรเจกต์ (ไม่ใช้กราเดียนต์) ===== */
 .cd-btn-book {
     background: var(--accent-gold);
     color: #FFFFFF;
@@ -612,14 +598,13 @@ body {
     color: #FFFFFF;
 }
 
-/* ========== SITE FOOTER (ตรงกับ home.css เป๊ะ) — ไม่แตะ ========== */
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
-    color: rgba(255, 255, 255, 0.92);
+    background: linear-gradient(120deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 50%, var(--footer-dark-3) 100%);
+    color: var(--brown-dark);
     padding-top: 0;
     border-top: 3px solid;
     border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 -8px 24px rgba(184, 134, 47, 0.14);
     position: relative;
     z-index: 2;
 }
@@ -647,15 +632,15 @@ body {
 }
 
 .footer-brand .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: var(--white);
     width: 46px;
     height: 46px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 8px rgba(184, 134, 47, 0.18);
     flex-shrink: 0;
     overflow: hidden;
 }
@@ -671,42 +656,42 @@ body {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 1.6rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--brown-dark);
 }
 
 .footer-tagline {
     font-size: 0.88rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--brown-mid);
     max-width: 280px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-shadow: none;
 }
 
 .footer-heading {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    color: #FFFFFF;
-    font-size: 1.35rem;
+    font-family: 'Sarabun', sans-serif;
+    color: var(--brown-dark);
+    font-size: 1.15rem;
     font-weight: 700;
     margin-bottom: 14px;
 }
 
 .footer-col a {
     display: block;
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--brown-mid);
     text-decoration: none;
     font-size: 0.9rem;
     margin-bottom: 10px;
     transition: color 0.2s ease;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-shadow: none;
 }
 
-.footer-col a:hover { color: #FFFFFF; }
+.footer-col a:hover { color: var(--brown-dark); }
 
 .footer-contact-col p {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--brown-mid);
     margin: 0 0 10px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    text-shadow: none;
 }
 
 .footer-social {
@@ -720,22 +705,21 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: #FFFFFF;
+    color: var(--brown-dark);
     text-decoration: none;
     font-size: 0.82rem;
     font-weight: 600;
-    background: rgba(255, 255, 255, 0.16);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--accent-gold-pale);
     padding: 7px 14px;
     border-radius: 20px;
     transition: background 0.2s;
 }
 
 .footer-social-link:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.95);
 }
 
-/* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
     .cd-pkg-grid {
         grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
@@ -749,6 +733,9 @@ body {
     .cd-pkg-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    .cd-package-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .cd-addon-title {
@@ -761,7 +748,7 @@ body {
 }
 
 .cd-addon-subtitle {
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     font-weight: 600;
     font-size: 1.05rem;
     color: var(--gold);
@@ -774,7 +761,6 @@ body {
     margin: 28px 0;
 }
 
-/* ===== ดูรายละเอียดแพ็กเกจ (collapse/expand) ===== */
 .cd-detail-collapsed {
     max-height: 60px;
     overflow: hidden;
@@ -792,12 +778,12 @@ body {
 .cd-btn-view-detail {
     display: block;
     width: 100%;
-    margin-top: 8px;
-    padding: 7px;
+    margin-top: 6px;
+    padding: 6px;
     background: transparent;
     border: 1.5px solid var(--accent-gold);
     border-radius: 6px;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     font-weight: 600;
     font-family: 'Sarabun', sans-serif;
     cursor: pointer;
@@ -810,13 +796,14 @@ body {
 .cd-btn-select-package {
     display: block;
     text-align: center;
-    margin-top: 10px;
-    padding: 12px;
+    margin-top: 8px;
+    padding: 9px;
     background: var(--accent-gold);
     color: #fff;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 700;
+    font-size: 0.9rem;
     font-family: 'Sarabun', sans-serif;
     letter-spacing: 0.3px;
     box-shadow: 0 4px 12px rgba(217, 164, 65, 0.35);
@@ -828,20 +815,24 @@ body {
     box-shadow: 0 6px 16px rgba(217, 164, 65, 0.45);
 }
 
-/* ===== PACKAGE SELECTOR การ์ดแพ็กเกจแบบ 3 คอลัมน์ (มาตรฐาน/อิ่มบุญ/พรีเมียม) ===== */
+/* ===== PACKAGE SELECTOR การ์ดแพ็กเกจแบบ 3 คอลัมน์ (มาตรฐาน/อิ่มบุญ/พรีเมียม)
+   FIX: รูป p1/p2/p3.png เป็นภาพกราฟิกสำเร็จรูป (มี badge, ชื่อ, ราคา,
+   ไอคอนรายการ ฝังอยู่ในรูปแล้ว) container เดิมสูงถึง 220px ทำให้ทั้งบล็อก
+   ดูใหญ่เต็มจอเกินไป ลดลงเหลือ 175px และลดตัวหนังสือ/ระยะห่างของชื่อ-ราคา
+   ใต้รูป (ซึ่งซ้ำกับข้อความในรูปอยู่แล้ว) ให้เล็กลงตามสัดส่วน ===== */
 .cd-package-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 20px;
-    padding: 0 10px;
+    gap: 14px;
+    margin-top: 14px;
+    padding: 0;
     align-items: start;
 }
 
 .cd-package-option {
     border: 1.5px solid var(--cream-border-soft);
     border-radius: 12px;
-    padding: 20px;
+    padding: 12px;
     background: #fff;
     display: flex;
     flex-direction: column;
@@ -856,11 +847,11 @@ body {
 
 .cd-package-img-container {
     width: 100%;
-    height: 220px;
+    height: 175px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 .cd-package-img-container img {
     max-width: 100%;
@@ -874,19 +865,18 @@ body {
 }
 
 .cd-package-option-name {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     color: #B0345A;
 }
 .cd-package-option-price {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: #B8811F;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
-/* ===== ชวนสงสัย (การ์ดคำถาม-คำตอบ ธีมไทย) ===== */
 .cd-curiosity-teaser {
     background: linear-gradient(180deg, #FFF8F3 0%, #FCE9EF 100%);
     padding: 50px 20px 60px;
@@ -947,8 +937,8 @@ body {
     justify-content: center;
 }
 .cd-curiosity-question {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 1.7rem;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--brown-dark);
     margin-bottom: 14px;
@@ -976,12 +966,9 @@ body {
     line-height: 1.95;
 }
 
-/* ============================================================
-   ===== NAVBAR (navbar-custom) — sync ให้ตรงกับ home.css/home.jsp
-   ============================================================ */
 .navbar-custom {
     font-family: 'Sarabun', sans-serif;
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: linear-gradient(120deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -993,14 +980,14 @@ body {
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 4px 20px rgba(184, 134, 47, 0.28);
 }
 .navbar-custom::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(184, 134, 47, 0.5), rgba(184, 134, 47, 0.9), rgba(184, 134, 47, 0.5), transparent);
 }
 .navbar-custom,
 .navbar-custom * {
@@ -1013,7 +1000,7 @@ body {
     gap: 12px;
 }
 .navbar-custom .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: var(--white);
     width: 76px;
     height: 76px;
     border-radius: 50%;
@@ -1021,8 +1008,8 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 10px rgba(184, 134, 47, 0.22);
     flex-shrink: 0;
     overflow: hidden;
 }
@@ -1033,14 +1020,14 @@ body {
     border-radius: 50%;
 }
 .navbar-custom .nav-brand-text {
-    color: #FFFFFF;
+    color: var(--brown-dark);
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-style: normal;
     font-size: 34px;
     font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: none;
 }
 .navbar-center {
     display: flex;
@@ -1050,65 +1037,65 @@ body {
     margin-right: 24px;
 }
 .nav-link-item {
-    color: #FFFFFF;
+    color: var(--brown-dark);
     text-decoration: none;
-    font-size: 14px; /* 👈 ปรับจาก 17px เป็น 14px */
+    font-size: 14px;
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    text-shadow: none;
 }
 .nav-link-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #FFFFFF;
+    background: rgba(184, 134, 47, 0.14);
+    color: var(--brown-dark);
 }
 .nav-link-item.active {
-    background: #FFFFFF;
-    color: var(--pink-deep-2);
+    background: var(--gold);
+    color: #FFFFFF;
     font-weight: 700;
 }
 .btn-register-nav {
-    background: #FFFFFF;
-    color: var(--pink-deep-2);
+    background: var(--footer-dark-2);
+    color: #FFFFFF;
     font-weight: 700;
     border: none;
     border-radius: 8px;
     padding: 9px 22px;
     text-decoration: none;
-    font-size: 14px; /* 👈 ปรับจาก 16px เป็น 14px ให้กลมกลืน */
+    font-size: 14px;
     transition: all 0.2s;
     white-space: nowrap;
     font-family: 'Sarabun', sans-serif;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(184, 134, 47, 0.3);
 }
 .btn-register-nav:hover {
-    background: var(--accent-gold-pale);
-    color: var(--pink-deep-1);
+    background: var(--footer-dark-1);
+    color: var(--brown-dark);
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 14px rgba(184, 134, 47, 0.35);
 }
 .user-profile-pill {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px solid var(--accent-gold-pale);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--brown-dark);
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
     text-decoration: none;
 }
 .user-profile-pill:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.85);
 }
 .avatar-circle-nav {
-    background: #FFFFFF;
-    color: var(--pink-deep-2);
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    color: #FFFFFF;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -1120,8 +1107,8 @@ body {
     flex-shrink: 0;
 }
 .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name-nav  { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
-.user-role-nav  { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
+.user-name-nav  { font-size: 0.88rem; font-weight: 700; color: var(--brown-dark); }
+.user-role-nav  { font-size: 0.7rem; color: var(--brown-mid); }
 
 .dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
 .dropdown-menu-custom {
@@ -1134,7 +1121,7 @@ body {
     border: 1px solid var(--cream-border-soft);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(199, 64, 95, 0.18);
+    box-shadow: 0 8px 28px rgba(184, 134, 47, 0.22);
     z-index: 99999;
     padding: 0;
     transform: translateY(-8px);
@@ -1148,7 +1135,7 @@ body {
 .dropdown-link {
     display: block;
     padding: 13px 20px;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-mid);
@@ -1164,7 +1151,6 @@ body {
 .dropdown-link.danger      { color: #c0392b; }
 .dropdown-link.danger:hover{ background: #fff5f5; }
 
-/* dropdown เมนู บริการ/แพ็กเกจ และ ปฏิทิน */
 .nav-dropdown-wrap { position: relative; display: inline-block; }
 .nav-dropdown-toggle { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
 .nav-caret { font-size: 0.7rem; transition: transform 0.2s ease; }
@@ -1178,7 +1164,7 @@ body {
     background: #FFFFFF;
     border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(224, 87, 127, 0.18);
+    box-shadow: 0 8px 24px rgba(184, 134, 47, 0.18);
     padding: 8px 0;
     z-index: 100;
 }
@@ -1189,7 +1175,7 @@ body {
 .nav-dropdown-link {
     display: block;
     padding: 10px 18px;
-    font-size: 14px; /* 👈 ปรับให้เป็น 14px ตรงกัน */
+    font-size: 14px;
     color: var(--brown-dark);
     text-decoration: none;
     white-space: nowrap;
@@ -1203,7 +1189,6 @@ body {
     margin: 6px 0;
 }
 
-/* login success toast */
 .login-alert-toast {
     position: fixed;
     top: 24px;
@@ -1234,21 +1219,19 @@ body {
     .navbar-custom .lotus-icon { width: 46px; height: 46px; font-size: 24px; }
 }
 
-/* ===== แบนเนอร์โปรโมชั่นท้ายเพจ ===== */
 .promotion-banner-wrap {
-    margin-top: 36px;
+    margin-top: 24px;
     text-align: center;
 }
 .promotion-banner-img {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1000px;
     height: auto;
     border-radius: 16px;
     display: inline-block;
     box-shadow: 0 6px 24px rgba(224, 87, 127, 0.15);
 }
 
-/* ===== reviews teaser section ===== */
 .reviews-teaser .reviews-grid {
     margin-bottom: 24px;
 }
@@ -1261,18 +1244,17 @@ body {
     margin-bottom: 12px;
 }
 
-/* ===== กล่องหมายเหตุสีแดง ===== */
 .cd-important-note {
     display: block;
-    margin-top: 8px;
-    padding: 10px 14px;
+    margin-top: 6px;
+    padding: 8px 12px;
     background: #FDECEA;
     border-left: 3px solid #C0392B;
     border-radius: 6px;
     color: #C0392B;
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     font-weight: 600;
-    line-height: 1.7;
+    line-height: 1.6;
 }
 .cd-important-note strong {
     color: #A6222F;

@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&display=swap');
 
 /* ===== CSS Variables (โทนชมพู-ขาว-ทอง) ===== */
 :root {
@@ -15,6 +16,9 @@
     --cream-border-soft: #EAEAEA;
 
     --white:             #FFFFFF;
+
+    /* พื้นหลังหน้าเว็บปกติ — ให้ตรงกับค่ามาตรฐานของโปรเจกต์ */
+    --page-bg:           #FDF1F5;
 
     --text-dark:         #1A1A1A;
     --text-mid:          #333333;
@@ -33,17 +37,17 @@
     --accent-gold-mid:   #E8C878;
     --accent-gold-pale:  #F7E3B0;
 
-    /* ===== Footer colors (สีชมพูเดียวกับ navbar) ===== */
-    --footer-dark-1: #C7405F;
-    --footer-dark-2: #D94F76;
-    --footer-dark-3: #E0577F;
+    /* ===== Navbar / Footer colors ===== */
+    --footer-dark-1: #F6E3B0;
+    --footer-dark-2: #ECC974;
+    --footer-dark-3: #D6A544;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: #FFF6F9;
+    background-color: var(--page-bg);
     color: var(--text-dark);
     min-height: 100vh;
     padding-bottom: 0;
@@ -51,7 +55,7 @@ body {
 
 /* ========== NAVBAR ========== */
 .navbar {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: linear-gradient(120deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 50%, var(--footer-dark-3) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -62,7 +66,7 @@ body {
     top: 0;
     z-index: 10000;
     min-height: 92px;
-    box-shadow: 0 4px 20px rgba(224, 87, 127, 0.35);
+    box-shadow: 0 4px 20px rgba(184, 134, 47, 0.28);
 }
 
 .navbar::before {
@@ -70,30 +74,29 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.55), rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.55), transparent);
+    background: linear-gradient(90deg, transparent, rgba(184, 134, 47, 0.5), rgba(184, 134, 47, 0.9), rgba(184, 134, 47, 0.5), transparent);
 }
 
 .navbar-title {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #FFFFFF;
-    font-family: 'Charmonman', 'Noto Serif Thai', serif; /* คงฟอนต์โลโก้แบรนด์เดิม */
-    font-size: 32px;
+    color: var(--brown-dark);
+    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-size: 34px;
     font-weight: 700;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-decoration: none;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .navbar-logo {
-    width: 58px;
-    height: 58px;
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.18);
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    background: var(--white);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 10px rgba(184, 134, 47, 0.22);
     flex-shrink: 0;
     overflow: hidden;
     display: flex;
@@ -121,8 +124,8 @@ body {
 }
 
 .nav-item {
-    font-family: 'Sarabun', sans-serif; /* ปรับเป็น Sarabun */
-    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Sarabun', sans-serif;
+    color: var(--brown-dark);
     text-decoration: none;
     font-size: 15px;
     font-weight: 600;
@@ -130,24 +133,26 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.nav-item:hover  { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
-.nav-item.active { background: #FFFFFF; color: var(--gold); font-weight: 700; text-shadow: none; }
+.nav-item:hover  { background: rgba(184, 134, 47, 0.14); color: var(--brown-dark); }
+.nav-item.active {
+    background: var(--gold);
+    color: #FFFFFF;
+    font-weight: 700;
+}
 
-/* nav-item as a <button> (dropdown toggles) needs to look identical to <a> */
 button.nav-item {
     background: none;
     border: none;
-    font-family: 'Sarabun', sans-serif; /* ปรับเป็น Sarabun */
+    font-family: 'Sarabun', sans-serif;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 4px;
 }
 
-/* ========== NAV DROPDOWNS (บริการ/แพ็กเกจ, ปฏิทิน) ========== */
+/* ========== NAV DROPDOWNS ========== */
 .nav-dropdown {
     position: relative;
 }
@@ -171,7 +176,7 @@ button.nav-item {
     border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
     min-width: 190px;
-    box-shadow: 0 8px 28px rgba(224, 87, 127, 0.18);
+    box-shadow: 0 8px 28px rgba(184, 134, 47, 0.18);
     z-index: 99999;
     overflow: hidden;
     padding: 6px 0;
@@ -198,47 +203,47 @@ button.nav-item {
     color: var(--gold);
 }
 
-/* ========== สมัครสมาชิก BUTTON ========== */
+/* ========== BUTTONS & USER ========== */
 .btn-register {
-    background: transparent;
-    border: 1.5px solid #FFFFFF;
+    background: var(--footer-dark-2);
     color: #FFFFFF;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
     padding: 9px 22px;
-    border-radius: 50px;
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
-    font-weight: 700;
     text-decoration: none;
     white-space: nowrap;
-    transition: background 0.2s, color 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(184, 134, 47, 0.3);
 }
 
 .btn-register:hover {
-    background: #FFFFFF;
-    color: var(--gold);
+    background: var(--footer-dark-1);
+    color: #FFFFFF;
 }
 
-/* User pill */
 .user-info {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px solid var(--accent-gold-pale);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--brown-dark);
     cursor: pointer;
     position: relative;
     white-space: nowrap;
     transition: background 0.2s;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
+.user-info:hover { background: rgba(255, 255, 255, 0.85); }
 
 .user-avatar-nav {
-    background: #FFFFFF;
-    color: var(--gold);
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    color: #FFFFFF;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -252,8 +257,9 @@ button.nav-item {
 }
 
 .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.88rem; font-weight: 700; color: #FFFFFF; } /* ปรับเป็น Sarabun */
-.user-role-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.72rem; color: rgba(255, 255, 255, 0.85); } /* ปรับเป็น Sarabun */
+.user-name-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--brown-dark); }
+.user-role-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.72rem; color: var(--brown-mid); }
+
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -263,7 +269,7 @@ button.nav-item {
     border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
     min-width: 175px;
-    box-shadow: 0 8px 28px rgba(224, 87, 127, 0.18);
+    box-shadow: 0 8px 28px rgba(184, 134, 47, 0.18);
     z-index: 99999;
     overflow: hidden;
 }
@@ -290,9 +296,9 @@ button.nav-item {
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     flex: 1;
-    padding: 44px 80px 56px;
+    padding: 44px 24px 56px;
     width: 100%;
-    max-width: 1400px;
+    max-width: 860px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -306,9 +312,9 @@ button.nav-item {
 }
 
 .section-title {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     color: var(--brown-dark);
-    font-size: 2.2rem;
+    font-size: 2rem;
     font-weight: 700;
     margin-bottom: 6px;
 }
@@ -356,24 +362,24 @@ button.nav-item {
     flex-shrink: 0;
 }
 
-/* ========== FILTER BUTTONS ========== */
+/* ========== FILTER BUTTONS (ประเภทงานด้านบน - ขยายใหญ่ขึ้น) ========== */
 .filter-wrapper {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 14px;
     margin-bottom: 32px;
     flex-wrap: wrap;
 }
 
 .btn-filter {
-    padding: 9px 26px;
+    padding: 12px 30px;
     border-radius: 50px;
     border: 1.5px solid var(--accent-gold);
     background: transparent;
     color: var(--brown-mid);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 1rem;
     font-family: 'Sarabun', sans-serif;
     transition: all 0.2s ease;
 }
@@ -383,26 +389,26 @@ button.nav-item {
     background: var(--accent-gold);
     color: #FFFFFF;
     border-color: var(--accent-gold);
-    box-shadow: 0 4px 12px rgba(217, 164, 65, 0.35);
+    box-shadow: 0 4px 14px rgba(217, 164, 65, 0.4);
     transform: translateY(-1px);
 }
 
 /* ========== SUMMARY CARD ========== */
 .summary-card {
     background: var(--white);
-    border-radius: 20px;
+    border-radius: 18px;
     border: 1.5px solid var(--accent-gold);
     box-shadow:
         0 0 0 2px var(--accent-gold-pale),
         0 0 15px rgba(217, 164, 65, 0.2),
         0 4px 24px var(--shadow-warm);
-    padding: 40px 60px;
+    padding: 30px 36px;
     display: flex;
     align-items: center;
-    gap: 80px;
-    margin-bottom: 32px;
+    gap: 36px;
+    margin-bottom: 28px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 860px;
     position: relative;
     overflow: hidden;
 }
@@ -425,23 +431,39 @@ button.nav-item {
 .rating-big {
     text-align: center;
     flex-shrink: 0;
-    min-width: 130px;
+    min-width: 108px;
 }
 
 .rating-big h1 {
-    font-family: 'Charmonman', 'Noto Serif Thai', serif;
-    font-size: 4.2rem;
-    font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
     color: var(--brown-dark);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.rating-label-sub {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: -2px;
+    margin-bottom: 6px;
+}
+
+/* --- ดาวสถิติ --- */
+.stars-big {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--accent-gold);
+    font-size: 1.25rem;
     line-height: 1;
     margin-bottom: 8px;
 }
 
-.stars-big {
-    color: var(--accent-gold);
-    font-size: 1.4rem;
-    letter-spacing: 3px;
-    margin-bottom: 8px;
+.stars-big span.stars-empty {
+    color: var(--cream-border);
 }
 
 .rating-count {
@@ -485,19 +507,81 @@ button.nav-item {
     transition: width 0.5s ease;
 }
 
+.bar-pct {
+    width: 38px;
+    font-size: 11px;
+    color: var(--text-light);
+    text-align: right;
+}
+
+/* ========== STAR FILTER ROW (ปุ่มกดกรองดาวด้านล่างสถิติ - ขยายใหญ่ขึ้น) ========== */
+.star-filter-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 860px;
+}
+
+.btn-star-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 30px;
+    border: 1.5px solid var(--accent-gold-pale);
+    background: var(--cream-warm);
+    color: var(--brown-mid);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.btn-star-filter-icon {
+    color: var(--accent-gold);
+    font-size: 13px;
+}
+
+.btn-star-filter:hover,
+.btn-star-filter.active-link {
+    background: var(--accent-gold);
+    color: #FFFFFF;
+    border-color: var(--accent-gold);
+    box-shadow: 0 4px 12px rgba(217, 164, 65, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn-star-filter.active-link .btn-star-filter-icon {
+    color: #FFFFFF;
+}
+
+.btn-star-filter-count {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.btn-star-filter.active-link .btn-star-filter-count {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 /* ========== REVIEW CARD ========== */
 .review-card {
     background: var(--white);
-    border-radius: 18px;
+    border-radius: 16px;
     border: 1.5px solid var(--accent-gold);
     box-shadow:
         0 0 0 2px var(--accent-gold-pale),
         0 0 15px rgba(217, 164, 65, 0.16),
         0 4px 24px var(--shadow-warm);
-    padding: 30px 40px;
-    margin-bottom: 20px;
+    padding: 24px 30px;
+    margin-bottom: 18px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 860px;
     position: relative;
     transition: box-shadow 0.25s, transform 0.25s;
 }
@@ -538,7 +622,7 @@ button.nav-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Noto Serif Thai', serif;
+    font-family: 'Sarabun', sans-serif;
     font-weight: 700;
     font-size: 1.1rem;
     flex-shrink: 0;
@@ -552,10 +636,14 @@ button.nav-item {
     margin-bottom: 3px;
 }
 
+/* --- ดาวในรายการรีวิว --- */
 .stars-review {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
     color: var(--accent-gold);
     font-size: 0.95rem;
-    letter-spacing: 2px;
+    line-height: 1;
 }
 
 .stars-empty { color: var(--cream-border); }
@@ -578,6 +666,17 @@ button.nav-item {
     margin-bottom: 12px;
 }
 
+.review-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+.review-content {
+    flex: 1;
+    min-width: 0;
+}
+
 .review-text {
     font-size: 14px;
     color: var(--text-body);
@@ -585,11 +684,12 @@ button.nav-item {
     font-style: italic;
 }
 
-.review-img-wrapper { margin-top: 14px; }
+.review-img-wrapper { flex-shrink: 0; }
 
 .review-img {
-    width: 100%;
-    max-width: 320px;
+    display: block;
+    width: 120px;
+    height: 120px;
     border-radius: 12px;
     border: 1.5px solid var(--cream-border-soft);
     object-fit: cover;
@@ -605,7 +705,7 @@ button.nav-item {
     color: var(--text-muted);
     font-size: 15px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 860px;
 }
 
 .empty-icon {
@@ -615,12 +715,13 @@ button.nav-item {
 
 /* ========== SITE FOOTER ========== */
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
-    color: rgba(255, 255, 255, 0.92);
+    background: linear-gradient(120deg, var(--footer-dark-1) 0%, var(--footer-dark-2) 55%, var(--footer-dark-3) 100%);
+    color: var(--brown-dark);
     padding-top: 0;
     padding-bottom: 24px;
-    border-top: 3px solid var(--accent-gold-pale);
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    border-top: 3px solid;
+    border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
+    box-shadow: 0 -8px 24px rgba(184, 134, 47, 0.14);
     position: relative;
     z-index: 2;
 }
@@ -636,11 +737,13 @@ button.nav-item {
     margin: 0 auto;
 }
 
-@media (max-width: 860px) {
-    .footer-content { grid-template-columns: 1fr 1fr; }
+.footer-content.footer-content-slim {
+    grid-template-columns: 1.3fr 1fr;
+    padding: 44px 20px 26px;
 }
-@media (max-width: 520px) {
-    .footer-content { grid-template-columns: 1fr; }
+
+@media (max-width: 860px) {
+    .footer-content.footer-content-slim { grid-template-columns: 1fr; }
 }
 
 .footer-brand {
@@ -651,11 +754,12 @@ button.nav-item {
 }
 
 .footer-brand .lotus-icon {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.18);
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    background: var(--white);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 8px rgba(184, 134, 47, 0.18);
     flex-shrink: 0;
     overflow: hidden;
     display: flex;
@@ -674,19 +778,20 @@ button.nav-item {
     font-family: 'Charmonman', 'Noto Serif Thai', serif;
     font-size: 1.3rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--brown-dark);
 }
 
 .footer-tagline {
+    font-family: 'Sarabun', sans-serif;
     font-size: 0.88rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--brown-mid);
     max-width: 280px;
 }
 
 .footer-heading {
-    font-family: 'Noto Serif Thai', serif;
-    color: #FFFFFF;
+    font-family: 'Sarabun', sans-serif;
+    color: var(--brown-dark);
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 14px;
@@ -694,19 +799,48 @@ button.nav-item {
 
 .footer-col a {
     display: block;
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--brown-mid);
     text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
     font-size: 0.9rem;
     margin-bottom: 10px;
     transition: color 0.2s ease;
 }
 
-.footer-col a:hover { color: #FFFFFF; }
+.footer-col a:hover { color: var(--brown-dark); }
 
 .footer-contact-col p {
+    font-family: 'Sarabun', sans-serif;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--brown-mid);
     margin: 0 0 10px;
+}
+
+.footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--brown-dark);
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--accent-gold-pale);
+    padding: 7px 14px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+.footer-social-link:hover {
+    background: rgba(255, 255, 255, 0.95);
 }
 
 /* ========== RESPONSIVE ========== */
@@ -720,57 +854,9 @@ button.nav-item {
     .rating-bars   { width: 100%; }
     .page-wrapper  { padding: 28px 20px 40px; }
     .filter-wrapper{ gap: 8px; }
-    .btn-filter    { padding: 7px 18px; font-size: 0.85rem; }
+    .btn-filter    { padding: 10px 22px; font-size: 0.95rem; }
     .review-card, .summary-card { padding: 22px; }
-}
-.footer-content.footer-content-slim {
-    grid-template-columns: 1.3fr 1fr;
-    padding: 44px 20px 26px;
-}
-@media (max-width: 860px) {
-    .footer-content.footer-content-slim { grid-template-columns: 1fr; }
-}
-
-.footer-brand .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-    flex-shrink: 0;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.footer-brand .lotus-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
-.footer-social {
-    display: flex;
-    gap: 10px;
-    margin-top: 16px;
-    flex-wrap: wrap;
-}
-.footer-social-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #FFFFFF;
-    text-decoration: none;
-    font-size: 0.82rem;
-    font-weight: 600;
-    background: rgba(255, 255, 255, 0.16);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    padding: 7px 14px;
-    border-radius: 20px;
-    transition: background 0.2s;
-}
-.footer-social-link:hover {
-    background: rgba(255, 255, 255, 0.3);
+    .bar-pct       { width: 32px; font-size: 10px; }
+    .review-body   { flex-direction: column; }
+    .review-img    { width: 100%; height: auto; max-width: 220px; }
 }

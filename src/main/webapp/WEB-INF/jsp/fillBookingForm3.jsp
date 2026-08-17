@@ -10,6 +10,9 @@
     <title>จองงานทำบุญบริษัท - ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=10">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""/>
 </head>
 <body>
 
@@ -98,93 +101,117 @@
              ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่ / รูปภาพ
              ========================================================= --%>
         <div class="form-grid">
-            <div>
-                <div class="form-card">
-                    <div class="card-header">วันที่กรอกแบบฟอร์ม</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <input type="text" class="form-control"
-                                   value="<fmt:formatDate value='<%=new java.util.Date()%>' pattern='dd/MM/yyyy'/>"
-                                   readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-card">
-                    <div class="card-header">วันและเวลาจัดงาน</div>
-                    <div class="card-body">
-                        <div class="row-grid">
-                            <div class="form-group">
-                                <label class="form-label">วันที่จัดงาน <span class="required" style="color:red;">*</span></label>
-
-                                <%-- ปฏิทินย่อ: เลือกวันได้ในฟอร์มเลย พร้อมเช็คว่าง/เหลือคิว/เต็มคิว/ฤกษ์ดี
-                                     วันที่ผ่านมาแล้วถูกซ่อนออกจากปฏิทินแล้ว (miniBookingCalendar.js
-                                     เรนเดอร์เป็นช่องว่างเฉยๆ ไม่โชว์เลขวันหรือสี) --%>
-                                <div class="mini-cal-wrap">
-                                    <div class="mini-cal-header">
-                                        <button type="button" class="mini-cal-nav-btn" onclick="miniCalPrevMonth()">&#8249;</button>
-                                        <span id="miniCalMonthTitle"></span>
-                                        <button type="button" class="mini-cal-nav-btn" onclick="miniCalNextMonth()">&#8250;</button>
-                                    </div>
-                                    <div class="mini-cal-grid" id="miniCalGrid">
-                                        <div class="mini-cal-day-label">อา</div>
-                                        <div class="mini-cal-day-label">จ</div>
-                                        <div class="mini-cal-day-label">อ</div>
-                                        <div class="mini-cal-day-label">พ</div>
-                                        <div class="mini-cal-day-label">พฤ</div>
-                                        <div class="mini-cal-day-label">ศ</div>
-                                        <div class="mini-cal-day-label">ส</div>
-                                    </div>
-                                    <div class="mini-cal-legend">
-                                        <span><i class="mini-cal-dot mini-cal-dot-free"></i>ว่าง</span>
-                                        <span><i class="mini-cal-dot mini-cal-dot-almost"></i>เหลือคิวสุดท้าย</span>
-                                        <span><i class="mini-cal-dot mini-cal-dot-full"></i>เต็มคิว</span>
-                                    </div>
-                                    <p id="miniCalSelectedText" class="mini-cal-selected-text">ยังไม่ได้เลือกวันที่</p>
-                                </div>
-
-                                <input type="hidden" name="eventDate" id="eventDateInput"
-                                       value="${not empty param.dates ? param.dates : selectedDates}">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">เวลาเริ่มพิธี <span class="required" style="color:red;">*</span></label>
-                                <input type="time" name="eventTime" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="form-card">
-                    <div class="card-header">สถานที่จัดพิธี</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <%-- เปลี่ยน label ให้ชัดเจนว่าเป็นที่อยู่ที่จะจัดงาน ไม่ใช่ที่อยู่ของผู้จอง
-                                 เพราะบางครั้งผู้จองไม่ได้พักอาศัยอยู่ที่บ้านที่จะจัดงาน --%>
-                            <label class="form-label">ที่อยู่ที่ต้องการจัดงาน <span class="required" style="color:red;">*</span></label>
-                            <textarea name="eventAddress" class="form-control" rows="3" required
-                                      placeholder="เช่น 123/45 หมู่บ้านบุญรักษา ตำบลสุทธิ อำเภอเมือง จังหวัดเชียงใหม่ 50000"></textarea>
-                        </div>
-                        <div class="form-group" style="margin-top:16px;">
-                            <label class="form-label">📸 รูปภาพสถานที่จัดงาน<span class="required" style="color:red;">*</span></label>
-                            <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
-                                อัปโหลดได้หลายรูป เพื่อให้ทีมงานเตรียมการได้ถูกต้อง
-                            </p>
-                            <div id="imagePreviewBox" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
-                            <button type="button" onclick="document.getElementById('imgPicker').click()"
-                                    style="cursor:pointer;background:#FBD0DE;border:1px dashed #E0577F;
-                                           padding:8px 16px;border-radius:8px;color:#B0345A;font-size:13px;">
-                                + เพิ่มรูป
-                            </button>
-                            <input type="file" id="imgPicker" accept="image/*" style="display:none">
-                            <div id="base64Container"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+		    <div>
+		        <div class="form-card">
+		            <div class="card-header">วันที่กรอกแบบฟอร์ม</div>
+		            <div class="card-body">
+		                <div class="form-group">
+		                    <input type="text" class="form-control"
+		                           value="<fmt:formatDate value='<%=new java.util.Date()%>' pattern='dd/MM/yyyy'/>"
+		                           readonly>
+		                </div>
+		            </div>
+		        </div>
+		
+		        <div class="form-card">
+		            <div class="card-header">วันและเวลาจัดงาน</div>
+		            <div class="card-body">
+		                <div class="row-grid">
+		                    <div class="form-group">
+		                        <label class="form-label">วันที่จัดงาน <span class="required" style="color:red;">*</span></label>
+		
+		                        <div class="mini-cal-wrap">
+		                            <div class="mini-cal-header">
+		                                <button type="button" class="mini-cal-nav-btn" onclick="miniCalPrevMonth()">&#8249;</button>
+		                                <span id="miniCalMonthTitle"></span>
+		                                <button type="button" class="mini-cal-nav-btn" onclick="miniCalNextMonth()">&#8250;</button>
+		                            </div>
+		                            <div class="mini-cal-grid" id="miniCalGrid">
+		                                <div class="mini-cal-day-label">อา</div>
+		                                <div class="mini-cal-day-label">จ</div>
+		                                <div class="mini-cal-day-label">อ</div>
+		                                <div class="mini-cal-day-label">พ</div>
+		                                <div class="mini-cal-day-label">พฤ</div>
+		                                <div class="mini-cal-day-label">ศ</div>
+		                                <div class="mini-cal-day-label">ส</div>
+		                            </div>
+		                            <div class="mini-cal-legend">
+		                                <span><i class="mini-cal-dot mini-cal-dot-free"></i>ว่าง</span>
+		                                <span><i class="mini-cal-dot mini-cal-dot-almost"></i>เหลือคิวสุดท้าย</span>
+		                                <span><i class="mini-cal-dot mini-cal-dot-full"></i>เต็มคิว</span>
+		                            </div>
+		                            <p id="miniCalSelectedText" class="mini-cal-selected-text">ยังไม่ได้เลือกวันที่</p>
+		                        </div>
+		
+		                        <input type="hidden" name="eventDate" id="eventDateInput"
+		                               value="${not empty param.dates ? param.dates : selectedDates}">
+		                    </div>
+		                    <div class="form-group">
+		                        <label class="form-label">เวลาเริ่มพิธี <span class="required" style="color:red;">*</span></label>
+		                        <input type="time" name="eventTime" class="form-control" required>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		
+		    <div class="form-card">
+		        <div class="card-header">สถานที่จัดพิธี</div>
+		        <div class="card-body">
+		            <!-- 1. ที่อยู่ -->
+		            <div class="form-group">
+		                <label class="form-label">ที่อยู่ที่ต้องการจัดงาน <span class="required" style="color:red;">*</span></label>
+		                <textarea name="eventAddress" id="eventAddressField" class="form-control" rows="3" required
+		                          placeholder="เช่น 123/45 หมู่บ้านบุญรักษา ตำบลสุทธิ อำเภอเมือง จังหวัดเชียงใหม่ 50000"></textarea>
+		            </div>
+		
+		            <!-- 2. ปักหมุดแผนที่ -->
+		            <div class="form-group" style="margin-top:16px;">
+		                <label class="form-label">📍 ปักหมุดตำแหน่งที่จัดงาน <span class="required" style="color:red;">*</span></label>
+		                <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
+		                    คลิกบนแผนที่ หรือลากหมุดเพื่อระบุตำแหน่งจริงของสถานที่จัดงาน (ช่วยให้ทีมงานเดินทางไปถูกจุด)
+		                </p>
+		
+		                <div class="map-picker-search-row">
+		                    <input type="text" id="mapSearchInput" class="form-control"
+		                           placeholder="พิมพ์ชื่อสถานที่ / ที่อยู่เพื่อค้นหาบนแผนที่...">
+		                    <button type="button" class="map-picker-btn" onclick="searchLocationOnMap()">ค้นหา</button>
+		                    <button type="button" class="map-picker-btn map-picker-btn-outline" onclick="useCurrentLocationOnMap()">
+		                        ใช้ตำแหน่งปัจจุบัน
+		                    </button>
+		                </div>
+		
+		                <div id="locationMap" class="location-map-box"></div>
+		
+		                <p id="mapSelectedText" class="map-picker-selected-text">ยังไม่ได้ปักหมุดตำแหน่ง</p>
+		                <a id="mapNavLink" href="#" target="_blank" rel="noopener" class="map-picker-nav-link" style="display:none;">
+		                    🧭 เปิดนำทางใน Google Maps
+		                </a>
+		
+		                <input type="hidden" name="eventLat" id="eventLat">
+		                <input type="hidden" name="eventLng" id="eventLng">
+		            </div>
+		
+		            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+		
+		            <!-- 3. รูปภาพสถานที่ -->
+		            <div class="form-group">
+		                <label class="form-label">📸 รูปภาพสถานที่จัดงาน <span class="required" style="color:red;">*</span></label>
+		                <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
+		                    อัปโหลดได้หลายรูป เพื่อให้ทีมงานเตรียมการได้ถูกต้อง
+		                </p>
+		                <div id="imagePreviewBox" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+		                <button type="button" onclick="document.getElementById('imgPicker').click()"
+		                        style="cursor:pointer;background:#FBD0DE;border:1px dashed #E0577F;
+		                               padding:8px 16px;border-radius:8px;color:#B0345A;font-size:13px;">
+		                    + เพิ่มรูป
+		                </button>
+		                <input type="file" id="imgPicker" accept="image/*" style="display:none">
+		                <div id="base64Container"></div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
         <%-- =========================================================
              1. รายละเอียดการจอง — ใช้ชุดคำถามเดียวกันทั้ง 2 โหมด
              ========================================================= --%>
@@ -1087,6 +1114,9 @@ window.dayQuality = {
 };
 </script>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
 <script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=8"></script>
 <script src="${pageContext.request.contextPath}/static/js/miniBookingCalendar.js?v=1"></script>
 

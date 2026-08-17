@@ -9,11 +9,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>จองงานขึ้นบ้านใหม่ - ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=11">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=13">
+    <%-- FIX: เพิ่ม Leaflet CSS ให้ตรงกับหน้าทำบุญบ้าน (fillBookingForm.jsp)
+         จำเป็นสำหรับกล่องแผนที่ #locationMap ด้านล่าง --%>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
 </head>
 <body>
 
-<%-- ========== NAVBAR (ให้ตรงกับหน้า home / fillBookingForm.jsp: มีเมนู บริการ/แพ็กเกจ และ ปฏิทิน แบบ dropdown) ========== --%>
+<%-- ========== NAVBAR ========== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <div class="lotus-icon">
@@ -24,7 +29,6 @@
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
 
-        <%-- ===== เมนู บริการ/แพ็กเกจ (dropdown) ===== --%>
         <div class="nav-dropdown-wrap">
             <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
                 บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
@@ -37,7 +41,6 @@
             </div>
         </div>
 
-        <%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) ===== --%>
         <div class="nav-dropdown-wrap">
             <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item nav-dropdown-toggle">
                 ปฏิทิน <span class="nav-caret">▾</span>
@@ -51,7 +54,6 @@
         </div>
 
         <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">การจอง</a>
-       
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
     <div class="dropdown-wrap">
@@ -84,18 +86,12 @@
     <form action="${pageContext.request.contextPath}/saveBooking" method="post" novalidate onsubmit="return handleFormSubmit(this);">
         <c:set var="detailIndex" value="0"/>
 
-        <%-- =========================================================
-             โหมดการจอง (แพ็กเกจ / กรอกเอง) มาจากหน้า ceremonyDetail แล้ว
-             (เลือก "เลือกจองแพ็กเกจนี้" หรือ "จองแบบระบุเอง" มาก่อนหน้านี้)
-             จึงไม่ต้องมีการ์ด "เลือกวิธีจอง" ซ้ำในฟอร์มนี้อีก — ใช้ค่าจาก
-             param.custom เพื่อกำหนดโหมดการแสดงผลของฟอร์มแทน (ให้ตรงกับแพทเทิร์น
-             เดียวกับฟอร์มจองงานทำบุญบ้าน เพื่อไม่ให้เกิดฟิลด์ name ซ้ำกัน 2 ชุด
-             แบบที่เคยเป็นปัญหา — ceremony.ceremonyId ถูกใช้ซ้ำใน 2 หมวดเดิม)
-             ========================================================= --%>
         <c:set var="startInCustomMode" value="${param.custom == 'true'}"/>
 
         <%-- =========================================================
-             ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่ / รูปภาพ
+             ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่
+             ปรับให้ตรงกับหน้าทำบุญบ้าน: ขวา = การ์ดเดียว "สถานที่จัดพิธี"
+             รวมที่อยู่ + ปักหมุดแผนที่ + รูปภาพ ไว้ด้วยกัน
              ========================================================= --%>
         <div class="form-grid">
             <div>
@@ -117,9 +113,6 @@
                             <div class="form-group">
                                 <label class="form-label">วันที่จัดงาน <span class="required" style="color:red;">*</span></label>
 
-                                <%-- ปฏิทินย่อ: เลือกวันได้ในฟอร์มเลย พร้อมเช็คว่าง/เหลือคิว/เต็มคิว/ฤกษ์ดี
-                                     วันที่ผ่านมาแล้วถูกซ่อนออกจากปฏิทินแล้ว (miniBookingCalendar.js
-                                     เรนเดอร์เป็นช่องว่างเฉยๆ ไม่โชว์เลขวันหรือสี) --%>
                                 <div class="mini-cal-wrap">
                                     <div class="mini-cal-header">
                                         <button type="button" class="mini-cal-nav-btn" onclick="miniCalPrevMonth()">&#8249;</button>
@@ -155,46 +148,68 @@
                 </div>
             </div>
 
-            <div>
-                <div class="form-card">
-                    <div class="card-header">สถานที่จัดพิธี</div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <%-- เปลี่ยน label ให้ชัดเจนว่าเป็นที่อยู่ที่จะจัดงาน ไม่ใช่ที่อยู่ของผู้จอง
-                                 เพราะบางครั้งผู้จองไม่ได้พักอาศัยอยู่ที่บ้านที่จะจัดงาน --%>
-                            <label class="form-label">ที่อยู่ที่ต้องการจัดงาน <span class="required" style="color:red;">*</span></label>
-                            <textarea name="eventAddress" class="form-control" rows="3" required
-                                      placeholder="เช่น 123/45 หมู่บ้านบุญรักษา ตำบลสุทธิ อำเภอเมือง จังหวัดเชียงใหม่ 50000"></textarea>
-                        </div>
-                        <div class="form-group" style="margin-top:16px;">
-                            <label class="form-label">📸 รูปภาพสถานที่จัดงาน<span class="required" style="color:red;">*</span></label>
-                            <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
-                                อัปโหลดได้หลายรูป เพื่อให้ทีมงานเตรียมการได้ถูกต้อง
-                            </p>
-                            <div id="imagePreviewBox" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
-                            <button type="button" onclick="document.getElementById('imgPicker').click()"
-                                    style="cursor:pointer;background:#FBD0DE;border:1px dashed #E0577F;
-                                           padding:8px 16px;border-radius:8px;color:#B0345A;font-size:13px;">
-                                + เพิ่มรูป
+            <div class="form-card">
+                <div class="card-header">สถานที่จัดพิธี</div>
+                <div class="card-body">
+                    <!-- 1. ที่อยู่ -->
+                    <div class="form-group">
+                        <label class="form-label">ที่อยู่ที่ต้องการจัดงาน <span class="required" style="color:red;">*</span></label>
+                        <textarea name="eventAddress" id="eventAddressField" class="form-control" rows="3" required
+                                  placeholder="เช่น 123/45 หมู่บ้านบุญรักษา ตำบลสุทธิ อำเภอเมือง จังหวัดเชียงใหม่ 50000"></textarea>
+                    </div>
+
+                    <!-- 2. ปักหมุดแผนที่ -->
+                    <div class="form-group" style="margin-top:16px;">
+                        <label class="form-label">📍 ปักหมุดตำแหน่งที่จัดงาน <span class="required" style="color:red;">*</span></label>
+                        <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
+                            คลิกบนแผนที่ หรือลากหมุดเพื่อระบุตำแหน่งจริงของสถานที่จัดงาน (ช่วยให้ทีมงานเดินทางไปถูกจุด)
+                        </p>
+
+                        <div class="map-picker-search-row">
+                            <input type="text" id="mapSearchInput" class="form-control"
+                                   placeholder="พิมพ์ชื่อสถานที่ / ที่อยู่เพื่อค้นหาบนแผนที่...">
+                            <button type="button" class="map-picker-btn" onclick="searchLocationOnMap()">ค้นหา</button>
+                            <button type="button" class="map-picker-btn map-picker-btn-outline" onclick="useCurrentLocationOnMap()">
+                                ใช้ตำแหน่งปัจจุบัน
                             </button>
-                            <input type="file" id="imgPicker" accept="image/*" style="display:none">
-                            <div id="base64Container"></div>
                         </div>
+
+                        <div id="locationMap" class="location-map-box"></div>
+
+                        <p id="mapSelectedText" class="map-picker-selected-text">ยังไม่ได้ปักหมุดตำแหน่ง</p>
+                        <a id="mapNavLink" href="#" target="_blank" rel="noopener" class="map-picker-nav-link" style="display:none;">
+                            🧭 เปิดนำทางใน Google Maps
+                        </a>
+
+                        <input type="hidden" name="eventLat" id="eventLat">
+                        <input type="hidden" name="eventLng" id="eventLng">
+                    </div>
+
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+                    <!-- 3. รูปภาพสถานที่ -->
+                    <div class="form-group">
+                        <label class="form-label">📸 รูปภาพสถานที่จัดงาน <span class="required" style="color:red;">*</span></label>
+                        <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
+                            อัปโหลดได้หลายรูป เพื่อให้ทีมงานเตรียมการได้ถูกต้อง
+                        </p>
+                        <div id="imagePreviewBox" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+                        <button type="button" onclick="document.getElementById('imgPicker').click()"
+                                style="cursor:pointer;background:#FBD0DE;border:1px dashed #E0577F;
+                                       padding:8px 16px;border-radius:8px;color:#B0345A;font-size:13px;">
+                            + เพิ่มรูป
+                        </button>
+                        <input type="file" id="imgPicker" accept="image/*" style="display:none">
+                        <div id="base64Container"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <%-- =========================================================
-             1. รายละเอียดการจอง — ใช้ชุดคำถามเดียวกันทั้ง 2 โหมด
-             ========================================================= --%>
-
-        <%-- 1.1 เลือกแพ็กเกจ — โชว์เฉพาะโหมดแพ็กเกจ --%>
+        <%-- 1.1 เลือกแพ็กเกจ --%>
         <div class="form-card" id="packageOnlyBlock" style="${startInCustomMode ? 'display:none;' : 'display:block;'}">
             <div class="card-header">แพ็กเกจที่เลือก</div>
             <div class="card-body">
-                <%-- หมายเหตุ: เครื่องเสียง/โต๊ะหมู่บูชา รวมอยู่ในทุกแพ็กเกจอยู่แล้ว
-                     ใส่ note บอกลูกค้าให้ชัดเจนแบบเดียวกับ note ของสังฆทาน --%>
                 <p style="font-size:12px;color:#B0345A;margin:-4px 0 14px;">
                     ℹ️ ทุกแพ็กเกจรวมชุดเครื่องเสียง โต๊ะหมู่บูชา และพระประธานไว้ให้แล้ว ทางร้านเป็นผู้จัดเตรียมให้ทั้งหมด
                 </p>
@@ -242,7 +257,7 @@
             <input type="hidden" name="ceremony.ceremonyId" id="customCeremonyId" value="${defaultCeremonyId}">
         </div>
 
-        <%-- 1.2 การนิมนต์พระสงฆ์ — ใช้ร่วมกันทั้ง 2 โหมด --%>
+        <%-- 1.2 การนิมนต์พระสงฆ์ --%>
 		<div class="form-card">
 		    <div class="card-header">การนิมนต์พระสงฆ์</div>
 		    <div class="card-body">
@@ -350,10 +365,6 @@
                                 ค่าเริ่มต้น = จำนวนพระสงฆ์ที่นิมนต์ไว้ด้านบน แก้ไขจำนวนเองได้หากต้องการ
                             </p>
                             <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                            <%-- FIX: เดิม value="5" ตายตัวไม่ว่าจะโหมดไหน ทำให้โหมด "จองแบบระบุเอง"
-                                 ก็ขึ้นเลข 5 มาให้ทั้งที่ยังไม่ได้เลือกจำนวนพระสงฆ์เลย
-                                 ค่า fix 5 ควรเกิดจากการเลือกแพ็กเกจมาตรฐานเท่านั้น (ผ่าน applyPackageMonkCount)
-                                 โหมดกรอกเองจึงให้เริ่มว่าง ให้ผู้ใช้กรอกเอง --%>
                             <input type="number" name="details[${detailIndex}].answer" id="sanghatanQtyInput"
                                    class="form-control" value="${startInCustomMode ? '' : 5}" min="1"
                                    placeholder="ระบุจำนวนชุด..."
@@ -468,14 +479,7 @@
             </div>
         </div>
 
-        <%-- 1.5 หมายเหตุเพิ่มเติม
-             คำถามนี้ต้องดึงมาจาก ${questions} เหมือนคำถามอื่นๆ ในฟอร์ม (ผูกกับ
-             details[].question.questionsId / details[].answer ตามแพทเทิร์นเดิม)
-             ไม่ใช่ field แยกต่างหากแบบ additionalNote — ต้องมีแถวคำถามในตาราง
-             Questionsdetail ที่มี questionsText = "มีความต้องการเพิ่มเติมหรือไม่?"
-             ผูกกับ ceremony ที่เกี่ยวข้องไว้ก่อน ฟอร์มถึงจะดึงมาแสดงได้
-             (เนื้อหาเป็นเรื่องอุปกรณ์/รายละเอียดอื่นๆ ไม่ใช่เรื่องอาหารแขก
-              เพราะเรื่องอาหารมีคำถามของตัวเองอยู่แล้วในส่วนปิ่นโตด้านบน) --%>
+        <%-- 1.5 หมายเหตุเพิ่มเติม --%>
         <c:forEach items="${questions}" var="q">
             <c:if test="${fn:contains(q.questionsText, 'ความต้องการเพิ่มเติม')}">
                 <div class="form-card">
@@ -503,7 +507,7 @@
     </div>
 </div>
 
-<%-- ========== FOOTER (ธีมเดียวกับหน้า home / fillBookingForm.jsp) ========== --%>
+<%-- ========== FOOTER ========== --%>
 <footer class="site-footer">
     <div class="footer-top">
         <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:8px;">
@@ -542,142 +546,11 @@
 		</div>
 	</footer>
 
-<%-- ========== IMAGE LIGHTBOX ========== --%>
-<div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
-    <span class="image-lightbox-close" onclick="closeLightbox()">&times;</span>
-    <img id="lightboxImg" src="" alt="">
-</div>
-
+<%-- =========================================================================
+     item-card / mini-cal / map-picker ฯลฯ อยู่ใน bookingForm.css (v13) แล้ว
+     เหลือ inline ไว้เฉพาะ lightbox + nav-dropdown ที่ยังไม่มีในไฟล์ css หลัก
+     ========================================================================= --%>
 <style>
-.item-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-}
-.item-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 1.5px solid var(--cream-border-soft);
-    border-radius: 10px;
-    padding: 10px;
-    cursor: pointer;
-    background: #FFFFFF;
-    transition: border-color .15s, box-shadow .15s;
-}
-.item-card:hover { border-color: var(--gold-mid); }
-.item-card:has(input:checked) {
-    border-color: var(--gold-mid);
-    box-shadow: 0 0 0 2px rgba(224,87,127,0.22);
-}
-.item-card-thumb {
-    width: 100%; height: 72px;
-    overflow: hidden;
-    border-radius: 8px; margin-bottom: 6px;
-    background: var(--cream-mid);
-}
-.item-card-thumb img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-    cursor: zoom-in;
-}
-.item-card-name {
-    font-weight: 700; font-size: 12.5px; color: var(--brown-dark); margin-bottom: 3px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.item-card-desc {
-    font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 4px;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.item-card-price { font-size: 12px; font-weight: 700; color: var(--gold); }
-/* ===== Mini Calendar (เลือกวันที่จัดงานในฟอร์ม) ===== */
-.mini-cal-wrap {
-    border: 1.5px solid var(--cream-border-soft);
-    border-radius: 10px;
-    padding: 12px;
-    background: #FFF9FB;
-}
-.mini-cal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--brown-dark, #5C3800);
-    margin-bottom: 8px;
-}
-.mini-cal-nav-btn {
-    background: #FBD0DE;
-    border: none;
-    border-radius: 6px;
-    width: 26px;
-    height: 26px;
-    cursor: pointer;
-    color: #B0345A;
-    font-size: 15px;
-}
-.mini-cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-}
-.mini-cal-day-label {
-    text-align: center;
-    font-size: 11px;
-    color: var(--text-muted);
-    padding: 2px 0;
-}
-.mini-cal-cell {
-    position: relative;
-    aspect-ratio: 1;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    cursor: pointer;
-    border: 1px solid transparent;
-}
-.mini-cal-cell-empty { cursor: default; }
-.mini-cal-cell-free { background: #E9F7EF; border-color: #B7E4C7; }
-.mini-cal-cell-almost { background: #FFF3D6; border-color: #F0CE7E; }
-.mini-cal-cell-booked { background: #FBE3E7; border-color: #E9A9B4; cursor: not-allowed; }
-.mini-cal-cell-past { background: #F0F0F0; border-color: #DADADA; cursor: not-allowed; color: #B0B0B0; }
-.mini-cal-cell-today { outline: 2px solid #E0577F; }
-.mini-cal-cell-selected { outline: 2px solid #B0345A; box-shadow: 0 0 0 2px rgba(224,87,127,0.25); }
-.mini-cal-full-mark {
-    position: absolute;
-    top: 1px;
-    right: 3px;
-    font-size: 9px;
-    color: #B0345A;
-}
-.mini-cal-legend {
-    display: flex;
-    gap: 12px;
-    margin-top: 8px;
-    font-size: 11px;
-    color: var(--text-muted);
-    flex-wrap: wrap;
-}
-.mini-cal-dot {
-    display: inline-block;
-    width: 9px;
-    height: 9px;
-    border-radius: 2px;
-    margin-right: 4px;
-}
-.mini-cal-dot-free { background: #B7E4C7; }
-.mini-cal-dot-almost { background: #F0CE7E; }
-.mini-cal-dot-full { background: #E9A9B4; }
-.mini-cal-selected-text {
-    font-size: 12px;
-    color: #B0345A;
-    margin: 8px 0 0;
-    font-weight: 600;
-}
-
-/* ===== Image lightbox (ขยายดูรูปสินค้า/แพ็กเกจ) ===== */
 .image-lightbox {
     display: none;
     position: fixed;
@@ -707,7 +580,6 @@
     cursor: pointer;
 }
 
-/* ===== Navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) — ให้ตรงกับหน้า home ===== */
 .nav-dropdown-wrap {
     position: relative;
     display: inline-block;
@@ -753,7 +625,25 @@
 .nav-dropdown-link:hover {
     background: var(--gold-pale, #fff8e1);
 }
+
+.item-card {
+    position: relative;
+}
+.item-card input[type="radio"] {
+    position: absolute !important;
+    top: auto !important;
+    bottom: 10px !important;
+    right: 10px !important;
+    left: auto !important;
+}
 </style>
+
+<%-- ========== IMAGE LIGHTBOX ========== --%>
+<div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
+    <span class="image-lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightboxImg" src="" alt="">
+</div>
+
 
 <script>
 (function() {
@@ -849,7 +739,7 @@ var watOptionList = [
     "วัดดับภัย",
     "วัดหมื่นล้าน",
     "วัดเจ็ดยอด (วัดโพธารามมหาวิหาร)",
-    "อื่นๆ (ระบุวัดเอง)" // 1. เพิ่มตัวเลือกอื่นๆ
+    "อื่นๆ (ระบุวัดเอง)"
 ];
 
 function renderWatDropdowns(containerId, textareaId, count) {
@@ -871,11 +761,11 @@ function renderWatDropdowns(containerId, textareaId, count) {
         var row = document.createElement('div');
         row.className = 'wat-picker-row';
         row.style.marginBottom = '8px';
-        
+
         var label = document.createElement('span');
         label.className = 'wat-picker-label';
         label.innerText = 'รูปที่ ' + i;
-        
+
         var select = document.createElement('select');
         select.className = 'form-select';
         watOptionList.forEach(function(w) {
@@ -884,30 +774,27 @@ function renderWatDropdowns(containerId, textareaId, count) {
             opt.innerText = '▼ ' + w;
             select.appendChild(opt);
         });
-        
-        // 2. สร้างกล่อง input สำหรับพิมพ์ชื่อวัด (ซ่อนไว้เป็นค่าเริ่มต้น)
+
         var customInputWrap = document.createElement('div');
         customInputWrap.className = 'custom-wat-wrap';
         customInputWrap.style.display = 'none';
         customInputWrap.style.marginTop = '6px';
-        
+
         var customInput = document.createElement('input');
         customInput.type = 'text';
         customInput.className = 'form-control custom-wat-input';
         customInput.placeholder = 'พิมพ์ชื่อวัดที่ต้องการ...';
         customInput.style.fontSize = '13px';
-        
-        // 3. สร้างข้อความแจ้งเตือนสีแดง
+
         var warningText = document.createElement('p');
         warningText.style.fontSize = '12px';
         warningText.style.color = '#c0392b';
         warningText.style.margin = '4px 0 0 0';
         warningText.innerText = '* วัดที่ระบุต้องอยู่บริเวณใกล้เคียงสถานที่จัดงานเท่านั้น และอาจมีการเปลี่ยนแปลงตามความสะดวกของพระสงฆ์';
-        
+
         customInputWrap.appendChild(customInput);
         customInputWrap.appendChild(warningText);
 
-        // 4. ผูก Event เปิด/ปิด กล่องพิมพ์ข้อความ
         select.addEventListener('change', (function(currentWrap) {
             return function() {
                 if (this.value === 'อื่นๆ (ระบุวัดเอง)') {
@@ -918,8 +805,7 @@ function renderWatDropdowns(containerId, textareaId, count) {
                 syncWatAnswer(containerId, textareaId);
             };
         })(customInputWrap));
-        
-        // 5. ผูก Event อัปเดตข้อมูลเมื่อมีการพิมพ์
+
         customInput.addEventListener('input', function() {
             syncWatAnswer(containerId, textareaId);
         });
@@ -937,29 +823,25 @@ function syncWatAnswer(containerId, textareaId) {
     var container = document.getElementById(containerId);
     var textarea = document.getElementById(textareaId);
     if (!container || !textarea) return;
-    
+
     var rows = container.querySelectorAll('.wat-picker-row');
     var lines = [];
-    
+
     rows.forEach(function(row, idx) {
         var select = row.querySelector('select');
         var customInput = row.querySelector('.custom-wat-input');
         var val = select.value;
-        
-        // 6. ถ้าเลือกอื่นๆ ให้ดึงค่าจากช่อง input ที่พิมพ์มาแทน
+
         if (val === 'อื่นๆ (ระบุวัดเอง)') {
             val = customInput.value.trim() ? ('(อื่นๆ) ' + customInput.value.trim()) : '(อื่นๆ) ยังไม่ระบุ';
         }
-        
+
         lines.push('รูปที่ ' + (idx + 1) + ' ' + val);
     });
-    
+
     textarea.value = lines.join('\n');
 }
 
-/* sync จาก dropdown เฉพาะตอนเลือก "ต่างวัด" เท่านั้น — ตอนเลือก "ให้ร้านเลือกให้"
-   ต้องปล่อยค่า "ให้ร้านเลือกให้" ที่ onchange ตั้งไว้ตอนเลือกวิทยุไว้เฉยๆ ไม่งั้น
-   syncWatAnswer จะวนลูป select ที่ไม่มีอยู่เลย (0 ตัว) แล้วเซ็ตค่าว่างทับไป */
 function syncAllWatAnswersBeforeSubmit() {
     var watTypeRadio = document.querySelector('input[name="watType"]:checked');
     if (watTypeRadio && watTypeRadio.value === 'ต่างวัด') {
@@ -1049,9 +931,6 @@ function handleFormSubmit(form) {
     return true;
 }
 
-/* ข้าม radio ที่ถูกซ่อนอยู่ (เช่น การ์ดเลือกแพ็กเกจในโหมด "จองแบบระบุเอง")
-   ไม่ให้ onchange ของมันทำงานตอนโหลดหน้า เพราะจะไปเซ็ตค่าฟิลด์อื่น
-   (เช่น จำนวนพระสงฆ์) ทั้งที่ผู้ใช้ยังไม่ได้เลือกอะไรเองเลย */
 function syncInitialToggleStates() {
     document.querySelectorAll('input[type="radio"]:checked').forEach(function(radio) {
         if (isInHiddenBranch(radio)) return;
@@ -1087,6 +966,10 @@ window.dayQuality = {
 };
 </script>
 
+<%-- FIX: เพิ่ม Leaflet JS ให้ตรงกับหน้าทำบุญบ้าน — ต้องโหลดก่อน bookingForm.js --%>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
 <script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=8"></script>
 <script src="${pageContext.request.contextPath}/static/js/miniBookingCalendar.js?v=1"></script>
 

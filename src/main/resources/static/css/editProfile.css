@@ -23,6 +23,9 @@
 
     --white:         #FFFFFF;
 
+    /* พื้นหลังหน้าเว็บปกติ — ให้ตรงกับค่ามาตรฐานของโปรเจกต์ */
+    --page-bg:       #FDF1F5;
+
     --text-dark:     #1A1A1A;
     --text-mid:      #333333;
     --text-body:     #444444;
@@ -35,26 +38,26 @@
     --shadow-warm:   rgba(224, 87, 127, 0.10);
     --shadow-accent-gold: rgba(217, 164, 65, 0.30);
 
-    /* ===== Footer colors (same gradient as navbar) ===== */
-    --footer-grad-1: #C7405F;
-    --footer-grad-2: #D94F76;
-    --footer-grad-3: #E0577F;
+    /* ===== Navbar / Footer colors — เปลี่ยนจากชมพูเข้มเป็นครีม-ทอง ให้ตรงกับหน้าอื่นในโปรเจกต์ ===== */
+    --footer-grad-1: #F6E3B0;
+    --footer-grad-2: #ECC974;
+    --footer-grad-3: #D6A544;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: var(--cream-warm);
+    background-color: var(--page-bg);
     color: var(--text-dark);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* ========== NAVBAR ========== */
+/* ========== NAVBAR (ครีม-ทอง ให้ตรงกับหน้าอื่น) ========== */
 .navbar-custom {
-    background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
+    background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -66,7 +69,7 @@ body {
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(199, 64, 95, 0.35);
+    box-shadow: 0 4px 20px rgba(184, 134, 47, 0.28);
 }
 
 .navbar-custom::before {
@@ -74,8 +77,8 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.6),
-        rgba(217, 164, 65, 0.95), rgba(217, 164, 65, 0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(184, 134, 47, 0.5),
+        rgba(184, 134, 47, 0.9), rgba(184, 134, 47, 0.5), transparent);
 }
 
 .navbar-brand-wrap {
@@ -87,7 +90,7 @@ body {
 
 .navbar-custom .lotus-icon,
 .navbar-brand-wrap .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: var(--white);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -97,11 +100,11 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 10px rgba(184, 134, 47, 0.22);
     flex-shrink: 0;
     overflow: hidden;
-    color: #FFFFFF;
+    color: var(--brown-dark);
 }
 
 .navbar-custom .lotus-icon img,
@@ -112,14 +115,15 @@ body {
     border-radius: 50%;
 }
 
+/* ชื่อระบบ — คงฟอนต์ Charmonman เดิมไว้ */
 .nav-brand-text {
-    color: #FFFFFF;
+    color: var(--brown-dark);
     font-family: 'Charmonman', serif;
     font-size: 34px;
     font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: none;
 }
 
 .navbar-center {
@@ -132,7 +136,7 @@ body {
 
 .nav-link-item {
     font-family: 'Sarabun', sans-serif;
-    color: #FFFFFF;
+    color: var(--brown-dark);
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -140,17 +144,17 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    text-shadow: none;
 }
 
 .nav-link-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #FFFFFF;
+    background: rgba(184, 134, 47, 0.14);
+    color: var(--brown-dark);
 }
 
 .nav-link-item.active {
-    background: #FFFFFF;
-    color: var(--footer-grad-2);
+    background: var(--gold);
+    color: #FFFFFF;
     font-weight: 700;
 }
 
@@ -181,7 +185,7 @@ body {
     background: var(--white);
     border: 1px solid var(--accent-gold-pale);
     border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(61, 37, 0, 0.15);
+    box-shadow: 0 8px 24px rgba(184, 134, 47, 0.18);
     padding: 8px 0;
     z-index: 100;
 }
@@ -204,14 +208,14 @@ body {
 
 /* ===== User Profile Pill ===== */
 .user-profile-pill {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px solid var(--accent-gold-pale);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--brown-dark);
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
@@ -219,12 +223,12 @@ body {
 }
 
 .user-profile-pill:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.85);
 }
 
 .avatar-circle-nav {
-    background: #FFFFFF;
-    color: var(--gold);
+    background: linear-gradient(135deg, var(--gold), var(--accent-gold));
+    color: #FFFFFF;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -237,8 +241,8 @@ body {
 }
 
 .user-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
-.user-role-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
+.user-name-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--brown-dark); }
+.user-role-nav  { font-family: 'Sarabun', sans-serif; font-size: 0.7rem; color: var(--brown-mid); }
 
 /* ===== Dropdown ===== */
 .dropdown-wrap { position: relative; display: inline-block; padding-bottom: 10px; }
@@ -287,7 +291,7 @@ body {
     overflow: hidden;
     line-height: 0;
     height: 36px;
-    background: #C7405F;
+    background: var(--footer-grad-3);
 }
 
 /* ========== PAGE WRAPPER ========== */
@@ -298,7 +302,7 @@ body {
     margin: 36px auto 0;
 }
 
-/* ========== PROFILE BANNER ========== */
+/* ========== PROFILE BANNER (คงกราเดียนต์ชมพูเข้มเดิมไว้ ไม่ปนกับสี nav/footer ที่เปลี่ยน) ========== */
 .profile-banner {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     border-radius: 18px;
@@ -418,6 +422,7 @@ body {
     z-index: 1;
 }
 
+/* หัวข้อการ์ดฟอร์ม — คงโทนชมพูเข้มเดิมไว้ (ไม่ใช่ nav/footer จึงไม่เปลี่ยน) */
 .form-card-header {
     background: linear-gradient(135deg, #C7405F 0%, #D94F76 50%, #E0577F 100%);
     padding: 16px 28px;
@@ -533,6 +538,7 @@ body {
 }
 
 .section-divider span {
+    font-family: 'Sarabun', sans-serif;
     font-size: 12px;
     color: var(--accent-brown);
     white-space: nowrap;
@@ -611,18 +617,18 @@ body {
 .flash-banner-error   { background: #ffebee; border-color: #ef9a9a; color: #b71c1c; }
 .flash-banner-hide    { opacity: 0; }
 
-/* ========== FOOTER ========== */
+/* ========== FOOTER (ครีม-ทอง ให้ตรงกับหน้าอื่น) ========== */
 .footer-top {
     display: block;
 }
 
 .site-footer {
-    background: linear-gradient(135deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
-    color: rgba(255, 255, 255, 0.92);
+    background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
+    color: var(--brown-dark);
     padding-top: 0;
     border-top: 3px solid;
     border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1;
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 -8px 24px rgba(184, 134, 47, 0.14);
     position: relative;
     z-index: 2;
     margin-top: auto;
@@ -645,9 +651,9 @@ body {
 }
 
 .footer-brand .lotus-icon {
-    background: rgba(255,255,255,0.18);
-    border: 1.5px solid rgba(255,255,255,0.5);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    background: var(--white);
+    border: 1.5px solid var(--accent-gold-pale);
+    box-shadow: 0 0 8px rgba(184, 134, 47, 0.18);
     width: 46px;
     height: 46px;
     max-width: 46px;
@@ -667,26 +673,27 @@ body {
     border-radius: 50%;
 }
 
+/* ชื่อระบบ — คงฟอนต์ Charmonman เดิมไว้ */
 .footer-brand-text {
     font-family: 'Charmonman', serif;
     font-size: 1.6rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--brown-dark);
 }
 
 .footer-tagline {
     font-family: 'Sarabun', sans-serif;
     font-size: 0.88rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--brown-mid);
     max-width: 320px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-shadow: none;
 }
 
 .footer-heading {
-    font-family: 'Charmonman', serif;
-    color: #FFFFFF;
-    font-size: 1.35rem;
+    font-family: 'Sarabun', sans-serif;
+    color: var(--brown-dark);
+    font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 14px;
 }
@@ -694,9 +701,9 @@ body {
 .footer-contact-col p {
     font-family: 'Sarabun', sans-serif;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--brown-mid);
     margin: 0 0 10px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    text-shadow: none;
 }
 
 /* ========== RESPONSIVE ========== */

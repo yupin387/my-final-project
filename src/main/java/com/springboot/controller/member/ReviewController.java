@@ -91,20 +91,25 @@ public class ReviewController {
                                          Model model) {
         List<Review> allReviews = reviewService.getAllReviews();
 
-        List<Review> reviews = allReviews.stream()
+        // ชุด "stats" กรองแค่ตาม ceremonyId เท่านั้น ใช้คำนวณคะแนนเฉลี่ยและ
+        // สัดส่วนดาว (avgRating / starCounts) โดยไม่เอาตัวกรอง rating มาปน
+        // เพื่อไม่ให้ตัวเลขสรุปเปลี่ยนไปตามดาวที่กำลังกดกรองอยู่
+        List<Review> reviewsForStats = allReviews.stream()
             .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == ceremonyId)
             .collect(Collectors.toList());
 
+        // ชุดที่ใช้แสดงการ์ดรีวิวจริง ๆ ค่อยกรองต่อด้วย rating (ถ้ามี)
         // FIX: เพิ่มกรองตามจำนวนดาว เหมือนกับใน viewAllReviews() เพื่อให้ rating-bars
         // ที่กดได้ในหน้านี้ทำงานสอดคล้องกัน (คำนวณจาก Math.round เหมือน starCounts ด้านล่าง)
+        List<Review> reviews = reviewsForStats;
         if (rating != null) {
             reviews = reviews.stream()
                 .filter(r -> Math.round(r.getRating()) == rating)
                 .collect(Collectors.toList());
         }
 
-        double avg = reviews.stream().mapToDouble(Review::getRating).average().orElse(0.0);
-        Map<Long, Long> starCounts = reviews.stream()
+        double avg = reviewsForStats.stream().mapToDouble(Review::getRating).average().orElse(0.0);
+        Map<Long, Long> starCounts = reviewsForStats.stream()
                 .collect(Collectors.groupingBy(r -> Math.round(r.getRating()), Collectors.counting()));
 
         model.addAttribute("reviews", reviews);
@@ -127,6 +132,11 @@ public class ReviewController {
     // และ ${selectedCeremonyType} ก็ไม่เคยมีค่า ปุ่ม active-link เลยไม่ทำงานด้วย)
     // FIX: เพิ่มพารามิเตอร์ "rating" เพื่อให้กดที่แถบสัดส่วนดาวใน summary-card แล้วกรอง
     // เฉพาะรีวิวที่ได้คะแนนตามดาวนั้น ๆ ได้ (ใช้ร่วมกับ type พร้อมกันได้)
+    // FIX: avgRating / starCounts เดิมคำนวณจาก list ที่กรองด้วย rating ไปแล้ว ทำให้พอกด
+    // กรองดาวไหน แถบสัดส่วนของดาวอื่นกลายเป็น 0 และคะแนนเฉลี่ยก็เปลี่ยนไปเท่ากับดาวที่กรอง
+    // อยู่ ซึ่งไม่ถูกต้อง — ตอนนี้แยกเป็น reviewsForStats (กรองแค่ type) ใช้คำนวณ avg/starCounts
+    // ให้คงที่ตามประเภทงานที่เลือก ไม่ขึ้นกับ rating ที่กด ส่วน reviews (การ์ดที่แสดงจริง)
+    // ค่อยกรองต่อด้วย rating จาก reviewsForStats อีกที
     @GetMapping("/reviews")
     public String viewAllReviews(
             @RequestParam(value = "type", required = false) String type,
@@ -135,10 +145,14 @@ public class ReviewController {
 
         List<Review> allReviews = reviewService.getAllReviews();
 
-        List<Review> reviews = allReviews;
+        // ชุด "stats" กรองแค่ตามประเภทงาน (type) เท่านั้น -> ใช้คำนวณคะแนนเฉลี่ยและ
+        // สัดส่วนดาว ถ้า type ว่าง (เลือก "ทั้งหมด") จะเฉลี่ยจากรีวิวทุกงาน
+        // ถ้าเลือก type ใดไว้ จะเฉลี่ยเฉพาะงานประเภทนั้น และค่านี้จะไม่เปลี่ยนตาม
+        // rating ที่กดกรองอีกต่อไป
+        List<Review> reviewsForStats = allReviews;
         if (type != null && !type.trim().isEmpty()) {
             String typeTrimmed = type.trim();
-            reviews = reviews.stream()
+            reviewsForStats = reviewsForStats.stream()
                 .filter(r -> r.getBookingForm() != null
                         && r.getBookingForm().getCeremony() != null
                         && typeTrimmed.equals(
@@ -148,20 +162,22 @@ public class ReviewController {
                 .collect(Collectors.toList());
         }
 
-        // FIX: กรองตามดาว — ปัดเศษด้วย Math.round เหมือนตอนสร้าง starCounts ด้านล่าง
-        // เพื่อให้ rating=4 ครอบคลุมรีวิวที่ให้คะแนน 3.5-4.4 ตามเกณฑ์เดียวกับที่แสดงในแถบสัดส่วน
+        // ชุดที่ใช้แสดงการ์ดรีวิวจริง ๆ กรองต่อจาก reviewsForStats ด้วย rating (ถ้ามี)
+        // ปัดเศษด้วย Math.round เหมือนตอนสร้าง starCounts ด้านล่าง เพื่อให้ rating=4
+        // ครอบคลุมรีวิวที่ให้คะแนน 3.5-4.4 ตามเกณฑ์เดียวกับที่แสดงในแถบสัดส่วน
+        List<Review> reviews = reviewsForStats;
         if (rating != null) {
             reviews = reviews.stream()
                 .filter(r -> Math.round(r.getRating()) == rating)
                 .collect(Collectors.toList());
         }
 
-        double avg = reviews.stream()
+        double avg = reviewsForStats.stream()
                             .mapToDouble(Review::getRating)
                             .average()
                             .orElse(0.0);
 
-        Map<Long, Long> starCounts = reviews.stream()
+        Map<Long, Long> starCounts = reviewsForStats.stream()
                 .collect(Collectors.groupingBy(r -> Math.round(r.getRating()), Collectors.counting()));
 
         model.addAttribute("reviews", reviews);
