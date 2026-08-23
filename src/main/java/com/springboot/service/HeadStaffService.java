@@ -13,6 +13,9 @@ public class HeadStaffService {
     @Autowired
     private HeadStaffRepository headStaffRepository;
 
+    @Autowired
+    private EmailService emailService;   // ⬅️ เพิ่มบรรทัดนี้
+
     // ตรวจสอบการเข้าสู่ระบบโดยเช็กอีเมล รหัสผ่าน และต้องมีสถานะบัญชีที่ยังใช้งานอยู่ (Active)
     public HeadStaff login(String email, String password) {
         return headStaffRepository.findByStaffEmailAndStaffPasswordAndIsActiveTrue(email, password)
@@ -20,6 +23,7 @@ public class HeadStaffService {
     }
 
     // ตรวจสอบอีเมลซ้ำและบันทึกข้อมูลหัวหน้างานใหม่ลงในฐานข้อมูล
+    // FIX: หลัง save สำเร็จแล้ว ส่งอีเมลแจ้ง Username/Password ให้หัวหน้างานทันที
     public void addHeadStaff(String firstName, String lastName, String email, String password, String phone) {
         if (headStaffRepository.existsByStaffEmail(email)) {
             throw new IllegalArgumentException("อีเมลนี้ถูกใช้งานแล้ว");
@@ -33,6 +37,10 @@ public class HeadStaffService {
         staff.setStaffPhone(phone);
 
         headStaffRepository.save(staff);
+
+        // ส่งอีเมลแจ้งข้อมูลเข้าสู่ระบบ (ถ้าส่งไม่สำเร็จ จะไม่ทำให้การเพิ่มหัวหน้างานล้มเหลว
+        // เพราะ EmailService ดักข้อผิดพลาดไว้ให้แล้ว)
+        emailService.sendHeadStaffWelcomeEmail(email, firstName, lastName, password);
     }
 
     // ดึงรายชื่อหัวหน้างานทั้งหมดที่มีอยู่ในระบบ (รวมทั้งที่ Active และ Inactive)

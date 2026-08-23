@@ -72,6 +72,17 @@
         color: var(--text-muted);
         font-style: normal;
     }
+
+    /* เพิ่มใหม่: บรรทัดแสดงรายชื่อของ "รายการเพิ่มเติม" อยู่ใต้ label ในเซลล์เดียวกัน */
+    .tot-extra-detail {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 400;
+        font-style: italic;
+        text-align: left;
+        margin-top: 4px;
+        line-height: 1.5;
+    }
 </style>
 </head>
 <body>
@@ -188,9 +199,7 @@
                             </td>
                         </tr>
                     </table>
-                    <div style="text-align: right; margin-top: 12px;" class="no-print">
-                        <a href="${pageContext.request.contextPath}/organizer/quotation/edit/${q.quotationId}" class="btn-blue-edit">✏️ แก้ไขใบเสนอราคา</a>
-                    </div>
+                   
                 </div>
             </div>
 
@@ -256,7 +265,7 @@
                     <c:set var="equipBlock">
                         <c:set var="printedEquip" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                                 <c:if test="${!printedEquip}">
                                     <tr class="group-row">
                                         <td></td>
@@ -283,7 +292,7 @@
                     <c:set var="sangBlock">
                         <c:set var="printedSang" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                                 <c:if test="${!printedSang}">
                                     <tr class="group-row">
                                         <td></td>
@@ -312,7 +321,7 @@
                     <c:set var="foodBlock">
                         <c:set var="printedFood" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                                 <c:if test="${!printedFood}">
                                     <tr class="group-row">
                                         <td></td>
@@ -339,7 +348,7 @@
                     <c:set var="servBlock">
                         <c:set var="printedServ" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('บริการ')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('บริการ')}">
                                 <c:if test="${!printedServ}">
                                     <tr class="group-row">
                                         <td></td>
@@ -366,7 +375,7 @@
                     <c:set var="extraBlock">
                         <c:set var="printedExtra" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
                                 <c:if test="${!printedExtra}">
                                     <tr class="group-row">
                                         <td></td>
@@ -425,18 +434,27 @@
 <div class="totals-box" style="width: 350px;">
                     <c:set var="sumExtra" value="0" />
                     <c:set var="sumPackage" value="${isCustomRequest ? 0 : b.ceremony.basePrice}" />
-                    
+                    <%-- เพิ่มใหม่: ตัวแปรเก็บรายชื่อของ "รายการเพิ่มเติม" ไว้โชว์ใต้ยอดรวม --%>
+                    <c:set var="extraItemsList" value="" />
+
                     <c:forEach var="d" items="${details}">
                         <c:choose>
                             <%-- ถ้าไม่ใช่เคสกรอกเอง ให้เช็คตัดชื่อแพ็กเกจออกปกติ --%>
-                            <c:when test="${!isCustomRequest && fn:trim(d.item.itemName) eq fn:trim(b.ceremony.ceremonyName)}">
+                            <c:when test="${!isCustomRequest && d.item != null && fn:trim(d.item.itemName) eq fn:trim(b.ceremony.ceremonyName)}">
                             </c:when>
                             <c:otherwise>
                                 <c:set var="itemVal" value="${d.subtotal}" />
-                                <c:if test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
+                                <c:set var="isFreeInTotal" value="false" />
+                                <c:if test="${!isCustomRequest && d.item != null && d.item.itemType != null && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
                                     <c:set var="itemVal" value="0" />
+                                    <c:set var="isFreeInTotal" value="true" />
                                 </c:if>
                                 <c:set var="sumExtra" value="${sumExtra + itemVal}" />
+
+                                <%-- เพิ่มใหม่: เก็บชื่อรายการเข้า list เฉพาะเคสไม่ใช่กรอกเอง และไม่ใช่ของฟรีในแพ็กเกจ --%>
+                                <c:if test="${!isCustomRequest && d.item != null && !isFreeInTotal}">
+                                    <c:set var="extraItemsList" value="${extraItemsList}${empty extraItemsList ? '' : ', '}${d.item.itemName}" />
+                                </c:if>
                             </c:otherwise>
                         </c:choose>
                     </c:forEach>
@@ -458,7 +476,13 @@
                         </tr>
                         <c:if test="${!isCustomRequest}">
                             <tr>
-                                <td class="tot-label">รายการเพิ่มเติม:</td>
+                                <td class="tot-label">
+                                    รายการเพิ่มเติม:
+                                    <%-- ย้ายมาไว้ในเซลล์เดียวกัน จะได้สีพื้นหลังเดียวกับแถวนี้ ไม่แยกเป็นแถบขาว --%>
+                                    <c:if test="${not empty extraItemsList}">
+                                        <div class="tot-extra-detail">(${extraItemsList})</div>
+                                    </c:if>
+                                </td>
                                 <td class="tot-value">฿ <fmt:formatNumber value="${sumExtra}" minFractionDigits="2"/></td>
                             </tr>
                         </c:if>
@@ -478,9 +502,10 @@
         </div>
     </div>
 
-    <div class="back-bottom-wrap no-print">
-        <a href="${pageContext.request.contextPath}/organizer/quotation" class="btn-back-bottom">← กลับไปรายการใบเสนอราคา</a>
-    </div>
+  <div class="back-bottom-wrap no-print" style="display:flex; gap:12px; justify-content:center; align-items:center;">
+    <a href="${pageContext.request.contextPath}/organizer/quotation" class="btn-back-bottom">← กลับไปรายการใบเสนอราคา</a>
+    <a href="${pageContext.request.contextPath}/organizer/quotation/edit/${q.quotationId}" class="btn-blue-edit">✏️ แก้ไขใบเสนอราคา</a>
+</div>
     
     <footer class="site-footer">
         <div class="footer-content">

@@ -11,7 +11,126 @@
 	href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/static/css/addItem.css?v=2">
+	href="${pageContext.request.contextPath}/static/css/addItem.css?v=5">
+<style>
+/* ===== เพิ่มเติมสำหรับ UI แบบใหม่ (dropdown ประเภท Item + progressive
+   disclosure ของประเภทงาน + ช่องกรอกจำนวนต่อแพ็กเกจ) ===== */
+.form-select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--card-border, #F0E2D3);
+    border-radius: 8px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    background: var(--bg-light, #FCF6F0);
+    color: var(--brown-text, #4A3728);
+    cursor: pointer;
+}
+.form-select:focus {
+    outline: none;
+    border-color: var(--gold-primary, #D9A441);
+    box-shadow: 0 0 0 3px rgba(201, 154, 61, 0.18);
+    background: #FFFFFF;
+}
+
+.ceremony-adder-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+.ceremony-adder-row .form-select { flex: 1; }
+
+#selectedCeremonyGroups .ceremony-type-group {
+    border: 1.5px solid var(--card-border, #F0E2D3);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    background: var(--bg-light, #FCF6F0);
+}
+
+.ceremony-type-heading-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.ceremony-quick-actions { display: flex; gap: 6px; }
+.btn-quick-select,
+.btn-remove-group {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    border: 1.5px solid var(--peach-primary, #E8703A);
+    background: #FFFFFF;
+    color: var(--peach-primary, #E8703A);
+}
+.btn-quick-select:hover { background: var(--peach-primary, #E8703A); color: #FFF; }
+.btn-remove-group {
+    border-color: var(--red-primary, #D9534F);
+    color: var(--red-primary, #D9534F);
+}
+.btn-remove-group:hover { background: var(--red-primary, #D9534F); color: #FFF; }
+
+/* ===== FIX: เปลี่ยนจาก wrap แบบ 2 คอลัมน์เบียดกัน เป็น 1 แพ็กเกจต่อ 1 แถวเต็มความกว้าง
+   เพื่อไม่ให้ "ใช้" กับ "หน่วย" ตกบรรทัดแยกจากช่องกรอกจำนวน ===== */
+.ceremony-type-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.ceremony-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    padding: 8px 10px;
+    background: #FFFFFF;
+    border: 1px solid var(--card-border, #F0E2D3);
+    border-radius: 8px;
+}
+.ceremony-check-label {
+    flex: 1;
+    white-space: nowrap;
+}
+.qty-inline-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--brown-muted, #8A7666);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.qty-mini-input {
+    width: 64px;
+    padding: 4px 8px;
+    border: 1.5px solid var(--card-border, #F0E2D3);
+    border-radius: 6px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    text-align: center;
+    background: #FFFFFF;
+}
+.qty-mini-input:disabled {
+    background: #F0EAE3;
+    color: #B0AFA8;
+    cursor: not-allowed;
+}
+.ceremony-empty-hint {
+    font-size: 13px;
+    color: var(--brown-muted, #8A7666);
+    padding: 14px 4px;
+    text-align: center;
+    border: 1.5px dashed var(--card-border, #F0E2D3);
+    border-radius: 10px;
+}
+</style>
 </head>
 <body>
 
@@ -62,60 +181,49 @@
 				<form action="${pageContext.request.contextPath}/staff/items/save"
 					method="post" class="form-section">
 
-					<%-- ประเภท Item
+					<%-- ===== ประเภท Item: dropdown
 					     FIX: ตัดตัวเลือก "แพ็กเกจ" ออกจากฟอร์มนี้ ห้ามเจ้าหน้าที่สร้าง item
-					     ประเภทแพ็กเกจเอง เพราะ item แพ็กเกจมีกฎพิเศษที่ฟอร์มทั่วไปนี้ไม่รองรับ:
-					       1) itemName ต้องตรงกับ ceremony.ceremonyName เป๊ะๆ (ดู QuotationService
-					          ที่ match ด้วย itemName == ceremonyName) ถ้าพิมพ์ผิด/เว้นวรรคต่าง
-					          จะทำให้แพ็กเกจไม่แสดงผลในหน้าใบเสนอราคา (บั๊กที่เจอมาก่อนหน้านี้)
-					       2) แพ็กเกจแต่ละตัวต้องผูกกับ ceremony ตายตัวตามระดับราคา (เช่น
-					          "แพ็กเกจอิ่มบุญ" ผูกกับทำบุญบ้าน/ขึ้นบ้านใหม่/ทำบุญออฟฟิศ ระดับอิ่มบุญ
-					          เท่านั้น) ไม่ใช่เลือกพิธีได้อิสระแบบ checkbox เหมือน item ทั่วไป
-					       3) ราคาที่ระบบใช้แสดงผลจริงคือ ceremony.basePrice ไม่ใช่ item.pricePerUnit
-					          ถ้าสร้าง item แพ็กเกจใหม่ผ่านฟอร์มนี้แล้วตั้งราคาเอง จะกลายเป็นราคา
-					          ไม่ตรงกับที่แสดงในหน้าจอง/ใบเสนอราคา
-					     แพ็กเกจทั้งหมดถูกกำหนดไว้แล้วจาก seed data (Run.java) การเพิ่ม/แก้ไขแพ็กเกจ
-					     ควรทำผ่านช่องทางที่ผูกกับ Ceremony โดยตรงแทน ไม่ใช่ผ่านฟอร์มสร้าง Item ทั่วไป --%>
+					     ประเภทแพ็กเกจเอง — backend มี validation กันซ้ำไว้ที่ ItemService --%>
 					<div class="form-group">
 						<div class="section-label">ประเภท Item</div>
-						<div class="type-options">
+						<select name="typeId" id="itemTypeSelect" class="form-select" required>
+							<option value="" disabled ${empty param.typeId ? 'selected' : ''}>-- เลือกประเภท Item --</option>
 							<c:forEach var="t" items="${itemTypes}">
 								<c:if test="${t.itemTypeName != 'แพ็กเกจ'}">
-									<input type="radio" name="typeId" value="${t.itemTypeId}"
-										id="type_${t.itemTypeId}" required>
-									<label for="type_${t.itemTypeId}" class="type-label">${t.itemTypeName}</label>
+									<option value="${t.itemTypeId}"
+										${param.typeId == t.itemTypeId ? 'selected' : ''}>${t.itemTypeName}</option>
 								</c:if>
 							</c:forEach>
-						</div>
-						<p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
-							* แพ็กเกจ (มาตรฐาน/อิ่มบุญ/พรีเมียม) เป็นรายการที่กำหนดไว้จากส่วนกลาง
-							ไม่สามารถสร้างหรือแก้ไขผ่านหน้านี้ได้
-						</p>
+						</select>
 					</div>
 
 					<hr class="divider">
 
-					<%-- ใช้กับพิธี
-					     ปรับปรุง: เพิ่มคำอธิบายให้ชัดว่า checkbox นี้ "เลือกได้มากกว่า 1 รายการ"
-					     และ item หนึ่งตัวสามารถอยู่ได้ทั้งในหลายแพ็กเกจ/หลายประเภทงานพร้อมกัน
-					     เช่น "ปิ่นโตชุดประหยัด" อาจอยู่ทั้งใน "แพ็กเกจมาตรฐาน" ของทุกประเภทงาน
-					     และอยู่ใน "กรอกความต้องการเบื้องต้น" ด้วยพร้อมกันก็ได้ ไม่ใช่เลือกได้ทางเดียว
-					     ถ้าไม่ติ๊กเลย = item จะไม่ผูกกับแพ็กเกจไหนเลย กลายเป็นรายการที่ให้ลูกค้า
-					     เลือกเพิ่มเองตอนทำใบเสนอราคา (เหมือน "อุปกรณ์เสริม" ในปัจจุบัน)
-					     เพิ่มปุ่ม "เลือกทั้งกลุ่ม / ล้างการเลือก" ต่อประเภทงาน เพื่อความสะดวก
-					     ไม่ต้องไล่ติ๊กทีละอันเวลาต้องการให้ item อยู่ครบทุกระดับของงานประเภทนั้น --%>
+					<%-- ===== ใช้กับพิธีไหนได้บ้าง: progressive disclosure
+					     แต่ละ checkbox มีช่องกรอก "ใช้ ... หน่วย" คู่กัน เพราะ item ตัวเดียวกัน
+					     ใช้จำนวนไม่เท่ากันได้ในแต่ละแพ็กเกจ ช่องนี้ disabled ไว้ก่อนถ้ายังไม่ติ๊ก
+					     checkbox — input ที่ disabled จะไม่ถูกส่งไปกับฟอร์มตอน submit ทำให้
+					     ceremonyIds[] กับ quantities[] ที่ backend รับมามีจำนวนสมาชิกและ
+					     ลำดับตรงกันเสมอ --%>
 					<div class="form-group">
 						<div class="section-label">ใช้กับพิธีไหนได้บ้าง</div>
-						<p style="font-size: 12px; color: var(--text-muted); margin: -4px 0 10px;">
-							เลือกได้มากกว่า 1 รายการ และเลือกข้ามประเภทงาน/ข้ามแพ็กเกจได้อิสระ
-							เช่น จะให้อุปกรณ์ชิ้นนี้อยู่ทั้งในแพ็กเกจมาตรฐานของทุกงาน
-							และอยู่ใน "กรอกความต้องการเบื้องต้น" ด้วยพร้อมกันก็ได้<br>
-							* ถ้าไม่เลือกเลย = ไม่ผูกกับแพ็กเกจใด ระบบจะถือว่าเป็นรายการ
-							ที่ให้ลูกค้าเลือกเพิ่มเองภายหลัง
+						<p style="font-size: 12px; color: var(--brown-muted); margin: -4px 0 10px;">
+							เลือกได้หลายประเภทงาน แต่ละแพ็กเกจกำหนดจำนวนอุปกรณ์ที่ใช้ได้ไม่เท่ากัน<br>
+							* ไม่เลือกเลย = เป็นรายการให้ลูกค้าเลือกเพิ่มเองภายหลัง
 						</p>
-						<div class="ceremony-box">
+
+						<div class="ceremony-adder-row">
+							<select id="ceremonyTypeAdder" class="form-select">
+								<option value="">-- เลือกประเภทงานเพื่อเพิ่ม --</option>
+								<c:forEach var="entry" items="${groupedCeremonies}">
+									<option value="grp_${entry.key}">${entry.key}</option>
+								</c:forEach>
+							</select>
+						</div>
+
+						<div id="selectedCeremonyGroups">
 							<c:forEach var="entry" items="${groupedCeremonies}">
-								<div class="ceremony-type-group">
+								<div class="ceremony-type-group" id="grp_${entry.key}" style="display:none;">
 									<div class="ceremony-type-heading-row">
 										<div class="ceremony-type-heading">${entry.key}</div>
 										<div class="ceremony-quick-actions">
@@ -123,20 +231,32 @@
 												onclick="setGroupChecked('grp_${entry.key}', true)">เลือกทั้งหมด</button>
 											<button type="button" class="btn-quick-select"
 												onclick="setGroupChecked('grp_${entry.key}', false)">ล้างการเลือก</button>
+											<button type="button" class="btn-remove-group"
+												onclick="removeGroup('grp_${entry.key}')">✕ นำออก</button>
 										</div>
 									</div>
 									<div class="ceremony-type-options" data-group="grp_${entry.key}">
 										<c:forEach var="c" items="${entry.value}">
 											<div class="ceremony-item">
 												<input type="checkbox" name="ceremonyIds"
-													value="${c.ceremonyId}" id="cer_${c.ceremonyId}">
+													value="${c.ceremonyId}" id="cer_${c.ceremonyId}"
+													onchange="toggleQtyInput(this, 'qty_${c.ceremonyId}')">
 												<label for="cer_${c.ceremonyId}"
 													class="ceremony-check-label">${c.ceremonyName}</label>
+												<span class="qty-inline-wrap">
+													ใช้
+													<input type="number" name="quantities" id="qty_${c.ceremonyId}"
+														class="qty-mini-input" min="1" value="1" disabled>
+													หน่วย
+												</span>
 											</div>
 										</c:forEach>
 									</div>
 								</div>
 							</c:forEach>
+							<div id="ceremonyEmptyHint" class="ceremony-empty-hint">
+								ยังไม่ได้เพิ่มประเภทงานไหนเลย — เลือกจากช่องด้านบนเพื่อเริ่มผูกแพ็กเกจ
+							</div>
 						</div>
 					</div>
 
@@ -171,7 +291,7 @@
 									value="${param.pricePerUnit}">
 							</div>
 							<div class="form-group">
-								<label>หน่วยนับ</label> <select name="unit" required>
+								<label>หน่วยนับ</label> <select name="unit" required class="form-select">
 									<option value="">-- เลือกหน่วย --</option>
 									<option value="ชุด"
 										${param.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
@@ -234,14 +354,58 @@
 
 </footer>
 
-	<%-- ปุ่ม "เลือกทั้งหมด / ล้างการเลือก" ต่อกลุ่มประเภทงาน --%>
 	<script>
+		function toggleQtyInput(checkbox, qtyInputId) {
+			var qtyInput = document.getElementById(qtyInputId);
+			if (!qtyInput) return;
+			qtyInput.disabled = !checkbox.checked;
+			if (checkbox.checked && !qtyInput.value) {
+				qtyInput.value = 1;
+			}
+		}
+
 		function setGroupChecked(groupKey, checked) {
 			var container = document.querySelector('.ceremony-type-options[data-group="' + groupKey + '"]');
 			if (!container) return;
 			var boxes = container.querySelectorAll('input[type="checkbox"]');
-			boxes.forEach(function (cb) { cb.checked = checked; });
+			boxes.forEach(function (cb) {
+				cb.checked = checked;
+				var qtyInput = document.getElementById('qty_' + cb.value);
+				if (qtyInput) {
+					qtyInput.disabled = !checked;
+					if (checked && !qtyInput.value) qtyInput.value = 1;
+				}
+			});
 		}
+
+		function updateEmptyHint() {
+			var hint = document.getElementById('ceremonyEmptyHint');
+			var groups = document.querySelectorAll('#selectedCeremonyGroups .ceremony-type-group');
+			var hasVisible = false;
+			groups.forEach(function (g) {
+				if (g.style.display !== 'none') hasVisible = true;
+			});
+			if (hint) hint.style.display = hasVisible ? 'none' : 'block';
+		}
+
+		document.getElementById('ceremonyTypeAdder').addEventListener('change', function () {
+			var groupKey = this.value;
+			if (!groupKey) return;
+			var group = document.getElementById(groupKey);
+			if (group) group.style.display = 'block';
+			this.value = '';
+			updateEmptyHint();
+		});
+
+		function removeGroup(groupKey) {
+			var group = document.getElementById(groupKey);
+			if (!group) return;
+			setGroupChecked(groupKey, false);
+			group.style.display = 'none';
+			updateEmptyHint();
+		}
+
+		document.addEventListener('DOMContentLoaded', updateEmptyHint);
 	</script>
 
 	<script src="${pageContext.request.contextPath}/static/js/itemList.js"></script>

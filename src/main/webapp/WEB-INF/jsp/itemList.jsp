@@ -63,14 +63,23 @@
             <a href="${pageContext.request.contextPath}/staff/items/add" class="btn-add">+ เพิ่ม Item</a>
         </div>
 
-        <%-- ========== TABS ========== --%>
+        <%-- ========== TABS — กรองตามประเภท Item พร้อมอิโมจิประจำประเภทนั้นๆ ========== --%>
         <div class="tabs-wrapper">
             <a href="?typeId=all"
-                class="tab-btn ${(empty selectedType or selectedType eq 'all') ? 'active' : ''}">ทั้งหมด</a>
+                class="tab-btn ${(empty selectedType or selectedType eq 'all') ? 'active' : ''}">🪷 ทั้งหมด</a>
             <c:forEach var="type" items="${itemTypes}">
+                <c:choose>
+                    <c:when test="${type.itemTypeName eq 'แพ็กเกจ'}"><c:set var="typeEmoji" value="📦"/></c:when>
+                    <c:when test="${type.itemTypeName eq 'สังฆทาน'}"><c:set var="typeEmoji" value="🎁"/></c:when>
+                    <c:when test="${type.itemTypeName eq 'ภัตตาหารปิ่นโต'}"><c:set var="typeEmoji" value="🍱"/></c:when>
+                    <c:when test="${type.itemTypeName eq 'อุปกรณ์พิธีกรรม'}"><c:set var="typeEmoji" value="🛐"/></c:when>
+                    <c:when test="${type.itemTypeName eq 'บริการ'}"><c:set var="typeEmoji" value="🛎️"/></c:when>
+                    <c:when test="${type.itemTypeName eq 'อุปกรณ์เสริม (เลือกเพิ่มเอง)'}"><c:set var="typeEmoji" value="➕"/></c:when>
+                    <c:otherwise><c:set var="typeEmoji" value="🔖"/></c:otherwise>
+                </c:choose>
                 <a href="?typeId=${type.itemTypeId}"
                     class="tab-btn ${selectedType.toString() eq type.itemTypeId.toString() ? 'active' : ''}">
-                    ${type.itemTypeName}
+                    ${typeEmoji} ${type.itemTypeName}
                 </a>
             </c:forEach>
         </div>
@@ -96,8 +105,22 @@
                             <td class="item-name">${item.itemName}</td>
                             <td><span class="type-badge">${item.itemType.itemTypeName}</span></td>
                             <td>
+                                <%-- ลดเหลือแค่อิโมจิประจำพิธี ไม่ต้องขึ้นชื่อเต็ม (hover ดูชื่อได้จาก title) --%>
                                 <c:forEach var="t" items="${itemCeremonyTypes[item.itemId]}">
-                                    <span class="ceremony-tag">${t}</span>
+                                    <c:choose>
+                                        <c:when test="${t eq 'ทำบุญบ้าน'}">
+                                            <span class="ceremony-tag" title="${t}">🏠</span>
+                                        </c:when>
+                                        <c:when test="${t eq 'ขึ้นบ้านใหม่'}">
+                                            <span class="ceremony-tag" title="${t}">🏡</span>
+                                        </c:when>
+                                        <c:when test="${t eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                            <span class="ceremony-tag" title="${t}">🏢</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="ceremony-tag" title="${t}">🪷</span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:forEach>
                                 <c:if test="${empty itemCeremonyTypes[item.itemId]}">
                                     <span class="ceremony-tag ceremony-tag-none">ยังไม่ผูกกับพิธี</span>

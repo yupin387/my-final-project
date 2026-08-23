@@ -1,4 +1,5 @@
 package com.springboot.model;
+import java.time.LocalDateTime;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
@@ -187,6 +188,8 @@ public class Run {
 			);
 
 
+		
+	
 			// =========================================================
 			// 2.1 HEAD STAFF
 			// =========================================================
@@ -198,7 +201,8 @@ public class Run {
 							"ใจดี",
 							"somchai@gmail.com",
 							"12344444",
-							"0811111111"
+							"0811111111",
+							LocalDateTime.of(2025, 1, 10, 9, 0)
 					),
 
 					new HeadStaff(
@@ -206,7 +210,8 @@ public class Run {
 							"ใจดี",
 							"somying@gmail.com",
 							"12345555",
-							"0812222222"
+							"0812222222",
+							LocalDateTime.of(2025, 2, 15, 9, 30)
 					),
 
 					new HeadStaff(
@@ -214,7 +219,8 @@ public class Run {
 							"รักงาน",
 							"wichai@gmail.com",
 							"12346666",
-							"0813333333"
+							"0813333333",
+							LocalDateTime.of(2025, 3, 20, 10, 0)
 					),
 
 					new HeadStaff(
@@ -222,7 +228,8 @@ public class Run {
 							"รักดี",
 							"manee@gmail.com",
 							"12347777",
-							"0814444444"
+							"0814444444",
+							LocalDateTime.of(2025, 4, 5, 8, 45)
 					),
 
 					new HeadStaff(
@@ -230,7 +237,8 @@ public class Run {
 							"สดใส",
 							"chujai@gmail.com",
 							"12348888",
-							"0815555555"
+							"0815555555",
+							LocalDateTime.of(2025, 5, 12, 13, 15)
 					),
 
 					new HeadStaff(
@@ -238,7 +246,8 @@ public class Run {
 							"ตั้งใจ",
 							"piti@gmail.com",
 							"12349999",
-							"0816666666"
+							"0816666666",
+							LocalDateTime.of(2025, 6, 18, 14, 0)
 					),
 
 					new HeadStaff(
@@ -246,7 +255,8 @@ public class Run {
 							"ขยันดี",
 							"amnat@gmail.com",
 							"12351111",
-							"0817777777"
+							"0817777777",
+							LocalDateTime.of(2025, 7, 22, 9, 20)
 					),
 
 					new HeadStaff(
@@ -254,7 +264,8 @@ public class Run {
 							"ศรัทธา",
 							"jintana@gmail.com",
 							"12352222",
-							"0818888888"
+							"0818888888",
+							LocalDateTime.of(2025, 8, 30, 11, 10)
 					))
 			);
 

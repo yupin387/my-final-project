@@ -252,7 +252,7 @@ public class BookingFormController {
         }
 
         BookingForm saved = bookingService.saveBooking(booking);
-        return "redirect:/myBookings";
+        return "redirect:/viewBooking/" + saved.getBookingId();
     }
 
     @GetMapping("/viewBooking/{id}")
