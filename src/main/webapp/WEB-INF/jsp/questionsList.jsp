@@ -9,7 +9,7 @@
     <title>รายการคำถามแต่ละพิธี - บุญมีนำพา จัดงานบุญ</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/questionList.css">
 </head>
 <body>
@@ -68,14 +68,20 @@
         <a href="${pageContext.request.contextPath}/organizer/questions/add" class="btn-add" style="text-decoration: none;">+ เพิ่มคำถาม</a>
     </div>
 
-    <%-- ========== TABS — กรองตามประเภทงานบุญ (3 ประเภท) ไม่ใช่รายแพ็กเกจ ========== --%>
+    <%-- ========== TABS — กรองตามประเภทงานบุญ (3 ประเภท) พร้อมอิโมจิประจำงานนั้นๆ ========== --%>
     <div class="tabs-wrapper">
         <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=all"
-           class="tab-btn ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'active' : ''}">ทั้งหมด</a>
+           class="tab-btn ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'active' : ''}">🪷 ทั้งหมด</a>
         <c:forEach var="t" items="${ceremonyTypes}">
+            <c:choose>
+                <c:when test="${t eq 'ทำบุญบ้าน'}"><c:set var="tEmoji" value="🏠"/></c:when>
+                <c:when test="${t eq 'ขึ้นบ้านใหม่'}"><c:set var="tEmoji" value="🏡"/></c:when>
+                <c:when test="${t eq 'ทำบุญบริษัทหรือออฟฟิศ'}"><c:set var="tEmoji" value="🏢"/></c:when>
+                <c:otherwise><c:set var="tEmoji" value="🪷"/></c:otherwise>
+            </c:choose>
             <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=${t}"
                class="tab-btn ${selectedCeremonyType eq t ? 'active' : ''}">
-                ${t}
+                ${tEmoji} ${t}
             </a>
         </c:forEach>
     </div>
@@ -110,16 +116,42 @@
                             <c:choose>
                                 <c:when test="${not empty q.ceremonies}">
                                     <c:choose>
-                                        <%-- กำลังกรองดูเฉพาะพิธีใดพิธีหนึ่งอยู่ -> โชว์แค่แท็กของพิธีนั้นพิธีเดียว --%>
+                                        <%-- กำลังกรองดูเฉพาะพิธีใดพิธีหนึ่งอยู่ -> โชว์แค่อิโมจิของพิธีนั้นพิธีเดียว --%>
                                         <c:when test="${not empty selectedCeremonyType and selectedCeremonyType ne 'all'}">
-                                            <span class="ceremony-tag">${selectedCeremonyType}</span>
+                                            <c:choose>
+                                                <c:when test="${selectedCeremonyType eq 'ทำบุญบ้าน'}">
+                                                    <span class="ceremony-tag" title="${selectedCeremonyType}">🏠</span>
+                                                </c:when>
+                                                <c:when test="${selectedCeremonyType eq 'ขึ้นบ้านใหม่'}">
+                                                    <span class="ceremony-tag" title="${selectedCeremonyType}">🏡</span>
+                                                </c:when>
+                                                <c:when test="${selectedCeremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                                    <span class="ceremony-tag" title="${selectedCeremonyType}">🏢</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="ceremony-tag" title="${selectedCeremonyType}">🪷</span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </c:when>
-                                        <%-- ดู "ทั้งหมด" -> โชว์ประเภทพิธีที่เกี่ยวข้องแบบไม่ซ้ำ (สูงสุดตามประเภทจริง) --%>
+                                        <%-- ดู "ทั้งหมด" -> โชว์อิโมจิของทุกประเภทพิธีที่เกี่ยวข้องแบบไม่ซ้ำ --%>
                                         <c:otherwise>
                                             <c:set var="shownTypes" value="|" />
                                             <c:forEach var="cm" items="${q.ceremonies}">
                                                 <c:if test="${not fn:contains(shownTypes, '|'.concat(cm.ceremonyType).concat('|'))}">
-                                                    <span class="ceremony-tag">${cm.ceremonyType}</span>
+                                                    <c:choose>
+                                                        <c:when test="${cm.ceremonyType eq 'ทำบุญบ้าน'}">
+                                                            <span class="ceremony-tag" title="${cm.ceremonyType}">🏠</span>
+                                                        </c:when>
+                                                        <c:when test="${cm.ceremonyType eq 'ขึ้นบ้านใหม่'}">
+                                                            <span class="ceremony-tag" title="${cm.ceremonyType}">🏡</span>
+                                                        </c:when>
+                                                        <c:when test="${cm.ceremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                                            <span class="ceremony-tag" title="${cm.ceremonyType}">🏢</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="ceremony-tag" title="${cm.ceremonyType}">🪷</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                     <c:set var="shownTypes" value="${shownTypes}${cm.ceremonyType}|" />
                                                 </c:if>
                                             </c:forEach>
@@ -127,7 +159,7 @@
                                     </c:choose>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="ceremony-tag all-tag">ใช้กับทุกประเภทพิธี</span>
+                                    <span class="ceremony-tag all-tag" title="ใช้กับทุกประเภทพิธี">🪷</span>
                                 </c:otherwise>
                             </c:choose>
                         </td>

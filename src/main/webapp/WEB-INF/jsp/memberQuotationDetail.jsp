@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ใบเสนอราคาของฉัน - #${q.quotationId}</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=11">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=12">
     <%-- FIX: ลบ inline <style> เดิมที่เคยอยู่ตรงนี้ออกทั้งหมด — มันมาทีหลัง external CSS
          ใน <head> เดียวกัน จึงชนะ specificity เท่ากันและไปทับสีพื้นหลัง/สีตัวอักษรของ
          .category-header-text และ .member-note-section ที่ตั้งไว้ใน memberQuotationDetail.css
@@ -215,9 +215,9 @@
 
 <%-- ===== 2. แสดงรายการประกอบ (Sub-items) ===== --%>
 <c:if test="${not empty packageIncludedItems}">
-    <tr class="package-included-header">
+    <tr class="package-included-row">
         <td class="text-center"></td>
-        <td style="padding-left: 8px; font-weight: bold;">ประกอบไปด้วยรายการดังนี้:</td>
+        <td class="package-includes-title">ประกอบไปด้วยรายการดังนี้:</td>
         <td class="text-center"></td>
         <td class="text-center"></td>
         <td class="text-right"></td>
@@ -228,11 +228,9 @@
         <c:if test="${(not empty subItem.itemDetail && fn:contains(subItem.itemDetail,'ต่อรูป')) || fn:contains(subItem.itemName,'ต่อรูป') || fn:contains(subItem.itemName,'พระสงฆ์')}">
             <c:set var="subItemQty" value="${not empty monkCount ? monkCount : 1}"/>
         </c:if>
-        <tr>
+        <tr class="package-included-row">
             <td class="text-center"></td>
-            <td style="padding-left: 20px;">
-                - ${subItem.itemName}
-            </td>
+            <td class="indented-item">- ${subItem.itemName}</td>
             <td class="text-center">${subItemQty}</td>
             <td class="text-center">${subItem.unit}</td>
             <td class="text-right text-muted">-</td>
@@ -253,6 +251,7 @@
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
                                 <td>
                                     ${d.item.itemName}
+                                    <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
                                 </td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
@@ -278,6 +277,7 @@
                                     ${d.item.itemName}
                                     <c:set var="isFreeSang" value="${!isCustomRequest && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}"/>
                                     <c:if test="${isFreeSang}"><span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / รวมในแพ็กเกจ)</span></c:if>
+                                    <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
                                 </td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
@@ -301,6 +301,7 @@
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
                                 <td>
                                     ${d.item.itemName}
+                                    <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
                                 </td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
@@ -324,6 +325,7 @@
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
                                 <td>
                                     ${d.item.itemName}
+                                    <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
                                 </td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
@@ -347,6 +349,7 @@
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
                                 <td>
                                     ${d.item.itemName}
+                                    <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
                                 </td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>

@@ -235,9 +235,10 @@ body {
     border: 1.5px solid var(--card-border);
     box-shadow: 0 8px 30px var(--shadow-soft);
     width: 100%;
-    max-width: 700px;
+    max-width: 960px;
     position: relative;
 }
+
 
 .content-card::before {
     content: '';

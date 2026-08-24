@@ -1,6 +1,7 @@
 package com.springboot.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "headstaff")
@@ -25,8 +26,11 @@ public class HeadStaff {
 	@Column(name = "staffphone", nullable = false, length = 10)
 	private String staffPhone;
 
-	@Column(name = "is_active", nullable = false)
-	private boolean isActive = true; // ค่าเริ่มต้นเป็น true (ยังทำงานอยู่)
+	@Column(name = "registerdate", nullable = false, updatable = false)
+	private LocalDateTime registerDate;
+	
+	@Column(name = "isactive", nullable = false)
+	private boolean isActive = true;
 
 	public HeadStaff() {
 
@@ -40,7 +44,17 @@ public class HeadStaff {
 		this.staffEmail = staffEmail;
 		this.staffPassword = staffPassword;
 		this.staffPhone = staffPhone;
+	}
+	
+	public HeadStaff(String staffFirstName, String staffLastName, String staffEmail, String staffPassword,
+	        String staffPhone, LocalDateTime registerDate) {
+	    this(staffFirstName, staffLastName, staffEmail, staffPassword, staffPhone);
+	    this.registerDate = registerDate;
+	}
 
+	@PrePersist
+	protected void onCreate() {
+		this.registerDate = LocalDateTime.now();
 	}
 
 	public int getStaffId() {
@@ -91,12 +105,26 @@ public class HeadStaff {
 		this.staffPhone = staffPhone;
 	}
 
+	public LocalDateTime getRegisteredDate() {
+		return registerDate;
+	}
+
+	public void setRegisteredDate(LocalDateTime registeredDate) {
+		this.registerDate = registeredDate;
+	}
+
+	
 	public boolean isActive() {
 		return isActive;
 	}
 
-	public void setActive(boolean active) {
-		isActive = active;
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public String getFormattedRegisteredDate() {
+		if (registerDate == null) return "-";
+		return registerDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 	}
 
 }

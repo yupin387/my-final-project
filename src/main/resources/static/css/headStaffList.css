@@ -257,19 +257,26 @@ body {
 
 /* ========== ALERT ========== */
 .alert {
-    padding: 14px 22px;
-    border-radius: 10px;
-    margin-bottom: 24px;
-    font-size: 14px;
+    padding: 12px 32px;
+    border-radius: 8px;
+    /* จัดกึ่งกลางด้วย margin: 0 auto และเว้นระยะด้านล่าง 24px */
+    margin: 0 auto 24px auto;
+    font-size: 16px;
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 8px;
+    /* ให้ความกว้างพอดีกับตัวอักษร ไม่ขยายเต็มจอ */
+    width: fit-content; 
+    box-shadow: 0 2px 8px rgba(45, 104, 211, 0.1); /* เพิ่มเงาบางๆ ให้ดูมีมิติ */
 }
+
 .alert.success {
-    background: var(--green-pale);
-    color: var(--green-deep);
-    border: 1px solid var(--green-banana);
+    /* ปรับเป็นโทนสีฟ้าตามรูปตัวอย่าง */
+    background: #E6F0FF; 
+    color: #2D68D3;      
+    border: 1px solid #B6D4FE; 
 }
 
 /* ========== LIST HEADER ========== */

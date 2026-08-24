@@ -90,7 +90,7 @@
                             <td><strong>${b.bookingId}</strong></td>
                             <td><fmt:formatDate value="${b.bookingDate}" pattern="dd/MM/yyyy"/></td>
                             <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
-                            <td>${b.ceremony.ceremonyName}</td>
+                            <td>${b.ceremony.ceremonyType}</td>
                             <td>
                                 <span class="mb-badge mb-badge-${b.bookingStatus}">${b.bookingStatus}</span>
                             </td>

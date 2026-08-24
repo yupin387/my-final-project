@@ -78,11 +78,12 @@
         <table>
             <thead>
                 <tr>
-                    <th width="7%">ลำดับ</th>
-                    <th width="32%">ชื่อ-นามสกุล</th>
-                    <th width="20%">เบอร์โทรศัพท์</th>
-                    <th width="28%">อีเมล</th>
-                    <th width="13%" style="text-align:center;">จัดการ</th>
+                    <th width="6%">ลำดับ</th>
+                    <th width="24%">ชื่อ-นามสกุล</th>
+                    <th width="15%">เบอร์โทรศัพท์</th>
+                    <th width="22%">อีเมล</th>
+                    <th width="15%">วันที่ลงทะเบียน</th>
+                    <th width="18%" style="text-align:center;">จัดการ</th>
                 </tr>
             </thead>
             <tbody>
@@ -99,6 +100,7 @@
                         </td>
                         <td>${staff.staffPhone}</td>
                         <td style="color:var(--text-muted);">${staff.staffEmail}</td>
+                        <td style="color:var(--text-muted);">${staff.formattedRegisteredDate}</td>
                         <td style="text-align:center;">
                             <form id="deleteForm-${staff.staffId}"
                                   action="${pageContext.request.contextPath}/organizer/head-staff/delete/${staff.staffId}"
@@ -114,7 +116,7 @@
 
                 <c:if test="${empty staffList}">
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="empty-state">
                                 <div style="font-size:3rem; margin-bottom:12px;">🪷</div>
                                 ยังไม่มีข้อมูลหัวหน้างานในระบบ

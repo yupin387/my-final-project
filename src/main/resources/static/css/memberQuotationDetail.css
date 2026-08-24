@@ -38,10 +38,14 @@
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
+    --accent-gold-light:#F3DA9E;
 
-    /* สีน้ำตาลสำหรับเอกสาร A4 */
+    /* สีน้ำตาลสำหรับเอกสาร A4 (คงไว้เผื่อใช้ที่อื่น ไม่ได้ใช้ในสไตล์กระดาษเอกสารแล้ว) */
     --doc-brown:     #9C6B3E;
     --doc-brown-dark:#8A5A2B;
+
+    /* เส้นขอบตารางในกระดาษ — ใช้แบบเดียวกับหน้า organizer */
+    --doc-border:    #000000;
 }
 
 body {
@@ -51,7 +55,7 @@ body {
     flex-direction: column;
 }
 
-/* ========== NAVBAR ========== */
+/* ========== NAVBAR (ไม่แก้ไข) ========== */
 .navbar-custom {
     background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
     padding: 0 40px;
@@ -116,27 +120,37 @@ body {
 .dropdown-link:hover { background: var(--cream-mid); }
 .dropdown-link.danger { color: #c0392b; }
 
-/* ========== A4 PAGE (จัดกึ่งกลาง) ========== */
+/* ========== A4 PAGE (จัดกึ่งกลาง) — ปรับขนาด/ระยะขอบให้เป็นกระดาษ A4 แบบเดียวกับ organizer ========== */
 .page-wrapper {
     flex: 1;
-    padding: 40px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     width: 100%;
+    margin: 24px auto;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
 
 .sheet {
-    width: 100%;
-    max-width: 950px;
+    width: 270mm;
+    max-width: 100%;
+    min-height: 297mm;
+    margin: 0 auto 20px auto;
     background: #fff;
-    padding: 28px 32px;
+    padding: 14mm 12mm;
     position: relative;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-    border: 1px solid #D1D1D1;
-    margin-bottom: 20px;
-    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    border: none;
+    border-radius: 0;
 }
+
+/* =========================================================
+   ตั้งแต่ตรงนี้ลงไป = เนื้อหา "ในกระดาษ" (.sheet) เท่านั้น
+   ปรับสี/ขนาดให้ตรงกับสไตล์หน้า organizer (เส้นขอบดำ + หัวตารางสีทอง)
+   ส่วนกล่อง "ความต้องการเพิ่มเติม" ตั้งใจไม่ใช้โทนเขียวแบบของ organizer
+   ========================================================= */
 
 /* ===== หัวเอกสารใบเสนอราคา ===== */
 .doc-header {
@@ -145,16 +159,16 @@ body {
     align-items: center;
     text-align: center;
     padding-bottom: 20px;
-    border-bottom: 2px solid var(--doc-brown);
+    border-bottom: 2px solid var(--doc-border);
     margin-bottom: 25px;
 }
 .company-info { display: flex; flex-direction: column; align-items: center; }
-.company-info h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--doc-brown); }
+.company-info h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); }
 .company-info p { font-size: 14px; color: #444; line-height: 1.5; }
 
 .doc-title-box {
     text-align: center;
-    color: var(--doc-brown);
+    color: var(--text-dark);
     margin-top: 14px;
 }
 .doc-title-box h1 { font-size: 26px; font-weight: 700; letter-spacing: 1px; }
@@ -172,46 +186,46 @@ body {
 .meta-box-right { min-width: 260px; }
 
 .layout-table { border-collapse: collapse; width: 100%; }
-.layout-table td { padding: 4px 10px 4px 0; font-size: 13.5px; vertical-align: top; color: #333; }
-.layout-table .label { font-weight: 700; color: #666; width: 100px; }
+.layout-table td { padding: 8px 12px; font-size: 14px; vertical-align: middle; color: var(--text-dark); border: none; }
+.layout-table .label { font-weight: 700; color: var(--text-dark); width: 120px; white-space: nowrap; }
 
-.layout-table.bordered { border-collapse: collapse; width: 100%; border: 1.5px solid var(--doc-brown); }
-.layout-table.bordered td { border: 1px solid var(--doc-brown); padding: 6px 10px; font-size: 13px; }
-.bordered .meta-label { color: var(--doc-brown); font-weight: 700; width: 80px; }
+.layout-table.bordered { border-collapse: collapse; width: 100%; border: 1px solid var(--doc-border); }
+.layout-table.bordered td { border: 1px solid var(--doc-border); padding: 8px 12px; font-size: 14px; }
+.bordered .meta-label { color: var(--text-dark); font-weight: 700; width: 90px; }
 .bordered .meta-value { text-align: left; }
 
-.status-pill { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; }
-.status-Pending { background: #FFF3CD; color: #8A6100; }
-.status-Confirmed { background: #DCF5E3; color: #146C2E; }
-.status-Revised { background: #FDE2E2; color: #A31212; }
+.status-pill { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.status-Pending   { background: var(--accent-gold-pale); color: #a5641f; border: 1px solid var(--accent-gold-mid); }
+.status-Confirmed { background: #DCF5E3; color: #146C2E; border: 1px solid #a8e0b8; }
+.status-Revised   { background: #FDE2E2; color: #A31212; border: 1px solid #ef9a9a; }
 
-/* ===== ตารางรายการ (กระชับ, มีเส้นแนวตั้ง, ไม่มีเส้นประแนวนอน) ===== */
+/* ===== ตารางรายการ (เส้นขอบดำ + หัวตารางสีทอง แบบ organizer) ===== */
 .items-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
     table-layout: fixed;
-    border: 1.5px solid var(--doc-brown);
+    border: 1px solid var(--doc-border);
 }
 .items-table th {
-    background-color: var(--doc-brown-dark);
+    background-color: var(--accent-gold);
     color: #FFFFFF;
-    padding: 6px 8px;
-    font-size: 13px;
+    padding: 8px;
+    font-size: 14px;
     font-weight: 700;
     text-align: center;
-    border: 1px solid var(--doc-brown);
+    border: 1px solid var(--doc-border);
 }
 .items-table td {
-    padding: 5px 10px;
-    border-left: 1px solid var(--doc-brown);
-    border-right: 1px solid var(--doc-brown);
+    padding: 8px;
+    border-left: 1px solid var(--doc-border);
+    border-right: 1px solid var(--doc-border);
     border-top: none;
     border-bottom: none;
-    font-size: 13px;
+    font-size: 14px;
     vertical-align: middle;
     word-wrap: break-word;
-    color: #333;
+    color: var(--text-dark);
 }
 
 .text-center { text-align: center; }
@@ -222,21 +236,43 @@ body {
 
 .item-name { font-weight: 700; color: #222; display: block; }
 
+/* แถว "ประกอบไปด้วยรายการดังนี้" — ให้ชิดกันแบบ organizer ไม่ใช่ padding 8px เต็มแบบแถวรายการปกติ */
+.items-table .package-includes-title {
+    font-weight: 700;
+    font-size: 13.5px;
+    border-top: none !important;
+    border-bottom: none !important;
+    padding-top: 15px !important;
+    padding-bottom: 4px !important;
+    color: var(--text-dark);
+}
+.items-table tr.package-included-row td {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: 1px solid var(--doc-border) !important;
+    border-right: 1px solid var(--doc-border) !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    color: var(--text-muted);
+}
+.items-table .indented-item { padding-left: 35px !important; }
+
 /* แถวหมวดหมู่ (Group Row) */
 .items-table tr.group-row td.category-header-text {
     text-align: left !important;
     padding-left: 10px !important;
-    color: var(--doc-brown);
-    font-weight: bold;
-    background-color: #FAF6EF;
+    color: var(--text-dark);
+    font-weight: 800;
+    font-size: 14.5px;
+    background-color: var(--accent-gold-pale);
 }
 .items-table tr.group-row td {
-    background-color: #FAF6EF;
-    padding: 6px 10px;
-    border-top: 2px solid var(--doc-brown);
-    border-bottom: 1.5px solid var(--doc-brown);
-    border-left: 1px solid var(--doc-brown);
-    border-right: 1px solid var(--doc-brown);
+    background-color: var(--accent-gold-pale);
+    padding: 8px;
+    border-top: 1px solid var(--doc-border);
+    border-bottom: 1px solid var(--doc-border);
+    border-left: 1px solid var(--doc-border);
+    border-right: 1px solid var(--doc-border);
 }
 
 /* ===== ส่วนความต้องการเพิ่มเติม และ ตารางสรุปยอด ให้อยู่แถวเดียวกัน ===== */
@@ -248,31 +284,34 @@ body {
     margin-top: 15px;
 }
 
-/* ฝั่งซ้าย: กล่องความต้องการเพิ่มเติม */
+/* ฝั่งซ้าย: กล่องความต้องการเพิ่มเติม — ตั้งใจให้เป็นกลาง (ขาว/เทา) ไม่ใช้โทนเขียว */
 .member-note-section {
     flex: 1;
     margin-top: 0;
     padding: 16px;
-    border: 1px solid #E5D3B3;
+    border: 1px solid var(--doc-border);
     border-radius: 8px;
-    background: #FFFBF5;
+    background: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .member-note-section label {
     display: block;
     font-weight: 700;
-    color: var(--doc-brown);
+    color: var(--text-dark);
     margin-bottom: 8px;
 }
 .member-note-section textarea {
     width: 100%;
     min-height: 90px;
     padding: 10px 12px;
-    border: 1px solid #D8C4A0;
+    border: 1px solid #ccc;
     border-radius: 6px;
     font-family: inherit;
     font-size: 14px;
     resize: vertical;
     box-sizing: border-box;
+    background: #fdfdfd;
+    color: var(--text-dark);
 }
 
 /* ฝั่งขวา: ตารางสรุปยอด (ตั้งให้ชิดขวาเสมอแม้ไม่มีกล่องฝั่งซ้าย) */
@@ -284,23 +323,26 @@ body {
     margin-left: auto; 
 }
 .totals-box { 
-    width: 350px; 
+    width: 350px;
+    border: 2px solid var(--doc-border);
+    border-radius: 4px;
+    overflow: hidden;
 }
 .totals-table { 
     width: 100%; 
     border-collapse: collapse; 
-    border: 1.5px solid var(--doc-brown); 
+    border: none;
 }
 .totals-table td { 
-    border: 1px solid var(--doc-brown); 
-    padding: 10px 15px; 
+    border: 1px solid var(--doc-border); 
+    padding: 12px 15px; 
     font-weight: 600; 
     font-size: 14px;
 }
-.tot-label { background: var(--cream-warm); width: 55%; text-align: left; color: var(--doc-brown); }
-.tot-value { text-align: right; width: 45%; }
-.grand-total-row td { font-weight: 700; font-size: 16px; }
-.total-amount { text-align: right; font-size: 20px !important; color: #B91C1C !important; font-weight: 700; }
+.tot-label { background: var(--accent-gold-pale); width: 55%; text-align: left; color: var(--text-dark); }
+.tot-value { text-align: right; width: 45%; color: var(--text-dark); }
+.grand-total-row td { font-weight: 700; font-size: 16px; background: var(--accent-gold-light); border-color: var(--doc-border); }
+.total-amount { text-align: right; font-size: 19px !important; color: #B91C1C !important; font-weight: 800; }
 
 /* ===== Action Buttons ===== */
 .action-section { margin-top: 30px; text-align: center; }
@@ -325,7 +367,7 @@ body {
 }
 .btn-back-bottom:hover { color: var(--gold-mid); }
 
-/* Flash Banner & Modal */
+/* Flash Banner & Modal (ไม่แก้ไข) */
 .flash-banner { padding: 14px 20px; margin-bottom: 20px; border-radius: 8px; font-weight: 600; font-size: 14px; width: 100%; max-width: 900px; margin: 0 auto 20px auto; text-align: center; }
 .flash-banner-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 .flash-banner-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
@@ -338,7 +380,7 @@ body {
 .btn-secondary { background: var(--cream-mid); color: var(--brown-mid); border: 1.5px solid var(--cream-border); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 .btn-confirm-final { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-/* ===== FOOTER ===== */
+/* ===== FOOTER (ไม่แก้ไข) ===== */
 .site-footer { background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%); color: var(--brown-dark); border-top: 3px solid; border-image: linear-gradient(90deg, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale)) 1; box-shadow: 0 -8px 24px rgba(184, 134, 47, 0.14); position: relative; z-index: 2; margin-top: auto; }
 .footer-content { display: grid; grid-template-columns: 1.3fr 1fr; padding: 44px 20px 26px; max-width: 1100px; margin: 0 auto; gap: 30px; }
 .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -353,8 +395,8 @@ body {
 
 @media print {
     body { background: #fff; }
-    .page-wrapper { padding: 0; display: block; }
-    .sheet { box-shadow: none; margin: 0; width: auto; min-height: auto; border: none; }
+    .page-wrapper { padding: 0; margin: 0; display: block; }
+    .sheet { box-shadow: none; margin: 0; width: auto; min-height: auto; border: none; border-radius: 0; }
     .no-print { display: none !important; }
     .site-footer { display: none !important; }
 }

@@ -56,13 +56,18 @@ public class QuotationController {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
 
         BookingForm booking = bookingService.getBookingById(bookingId);
+        if (booking == null) {
+            return "redirect:/organizer/bookings";
+        }
+
         List<BookingFormDetail> validDetails = buildValidDetails(booking);
 
         model.addAttribute("b", booking);
         model.addAttribute("validDetails", validDetails);
         model.addAttribute("additionalNote", extractAdditionalNote(booking));
 
-        boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
+        boolean isCustomRequest = booking.getCeremony() != null
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
         model.addAttribute("isCustomRequest", isCustomRequest);
 
         // 1. ดึงรายการสินค้าทั้งหมดในระบบ (เพื่อให้ JSP สามารถ Match ชื่อสังฆทานและปิ่นโตเจอ)
@@ -71,7 +76,7 @@ public class QuotationController {
 
         // 2. ดึงรายการสินค้าเฉพาะของพิธี เพื่อใช้คำนวณของที่รวมในแพ็กเกจ
         List<Item> ceremonyItems;
-        if (isCustomRequest) {
+        if (isCustomRequest || booking.getCeremony() == null) {
             ceremonyItems = allSystemItems;
         } else {
             int ceremonyId = booking.getCeremony().getCeremonyId();
@@ -82,9 +87,16 @@ public class QuotationController {
         List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems, isCustomRequest);
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
-        // 4. รายการที่สามารถเลือกเพิ่มใน Popup Modal (ดึงจากสินค้าทั้งหมด แล้วตัดรายการที่มีในแพ็กเกจออก)
+        // 4. รายการที่สามารถเลือกเพิ่มใน Popup Modal
+        // (ดึงจากสินค้าทั้งหมด แล้วตัดรายการที่มีในแพ็กเกจออก
+        //  จากนั้นกรองให้เหลือเฉพาะรายการที่เกี่ยวข้องกับ "ประเภทพิธี" ของ booking นี้เท่านั้น
+        //  เพื่อป้องกันไม่ให้ของเฉพาะพิธีอื่น เช่น "โต๊ะหมู่บูชาไม้สัก" ของขึ้นบ้านใหม่
+        //  หรือของระดับพรีเมียมเฉพาะพิธีอื่นหลุดเข้ามาให้เลือกผิดพิธี)
+        String ceremonyType = booking.getCeremony() != null ? booking.getCeremony().getCeremonyType() : null;
+
         List<Item> extraSelectableItems = new ArrayList<>(allSystemItems);
         extraSelectableItems.removeAll(packageIncludedItems);
+        extraSelectableItems = filterItemsByCeremonyType(extraSelectableItems, ceremonyType);
 
         if (isCustomRequest) {
             extraSelectableItems.removeIf(i -> MONK_INVITE_SERVICE_ITEM_NAME.equals(i.getItemName()));
@@ -106,40 +118,50 @@ public class QuotationController {
                                 @RequestParam(required = false) List<Double> bookingPrices,
                                 RedirectAttributes ra) {
         try {
-            quotationService.createQuotation(bookingId, extraItemIds, extraQtys, extraPrices, note,
-                                             bookingItemNames, bookingQtys, bookingPrices);
-            
-            // เปลี่ยนจาก Quotation_Created กลับมาเป็น Approved ตามเดิม
-            bookingService.updateJobStatus(bookingId, "Approved");
+        	Quotation created = quotationService.createQuotation(bookingId, extraItemIds, extraQtys, extraPrices, note,
+                    bookingItemNames, bookingQtys, bookingPrices);
 
-            ra.addFlashAttribute("success", "สร้างใบเสนอราคาสำเร็จ");
-            return "redirect:/organizer/quotation";
+bookingService.updateJobStatus(bookingId, "Approved");
+
+ra.addFlashAttribute("success", "สร้างใบเสนอราคาสำเร็จ");
+return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
         } catch (Exception e) {
             e.printStackTrace();
             ra.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
             return "redirect:/organizer/quotation/create/" + bookingId;
         }
     }
+
     @GetMapping("/detail/{id}")
     public String quotationDetail(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
 
         Quotation quotation = quotationService.getQuotationById(id);
+        if (quotation == null) {
+            return "redirect:/organizer/quotation";
+        }
+
         List<QuotationDetail> details = quotationService.getDetailsByQuotationId(id);
 
         model.addAttribute("q", quotation);
         model.addAttribute("details", details);
 
-        model.addAttribute("b", quotation.getBookingForm());
-        model.addAttribute("additionalNote", extractAdditionalNote(quotation.getBookingForm()));
+        BookingForm booking = quotation.getBookingForm();
+        if (booking == null) {
+            return "redirect:/organizer/quotation";
+        }
 
-        boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(quotation.getBookingForm().getCeremony().getCeremonyName());
+        model.addAttribute("b", booking);
+        model.addAttribute("additionalNote", extractAdditionalNote(booking));
+
+        boolean isCustomRequest = booking.getCeremony() != null
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
 
         List<Item> allItems;
-        if (isCustomRequest) {
+        if (isCustomRequest || booking.getCeremony() == null) {
             allItems = itemRepo.findAll();
         } else {
-            int ceremonyId = quotation.getBookingForm().getCeremony().getCeremonyId();
+            int ceremonyId = booking.getCeremony().getCeremonyId();
             allItems = quotationService.getItemsByCeremonyId(ceremonyId);
         }
 
@@ -154,14 +176,22 @@ public class QuotationController {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
 
         Quotation quotation = quotationService.getQuotationById(id);
+        if (quotation == null) {
+            return "redirect:/organizer/quotation";
+        }
+
         List<QuotationDetail> details = quotationService.getDetailsByQuotationId(id);
 
         model.addAttribute("q", quotation);
         model.addAttribute("details", details);
 
         BookingForm booking = quotation.getBookingForm();
+        if (booking == null) {
+            return "redirect:/organizer/quotation";
+        }
 
-        boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
+        boolean isCustomRequest = booking.getCeremony() != null
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
         model.addAttribute("isCustomRequest", isCustomRequest);
 
         // 1. ดึงรายการสินค้าทั้งหมดในระบบ
@@ -170,7 +200,7 @@ public class QuotationController {
 
         // 2. ดึงรายการสินค้าเฉพาะของพิธี
         List<Item> ceremonyItems;
-        if (isCustomRequest) {
+        if (isCustomRequest || booking.getCeremony() == null) {
             ceremonyItems = allSystemItems;
         } else {
             int ceremonyId = booking.getCeremony().getCeremonyId();
@@ -184,8 +214,12 @@ public class QuotationController {
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
         // 4. รายการสำหรับเลือกใน Modal
+        // (กรองตามประเภทพิธีเช่นเดียวกับหน้า create เพื่อไม่ให้ของพิธีอื่นหลุดเข้ามาตอนแก้ไขใบเสนอราคา)
+        String ceremonyType = booking.getCeremony() != null ? booking.getCeremony().getCeremonyType() : null;
+
         List<Item> extraSelectableItems = new ArrayList<>(allSystemItems);
         extraSelectableItems.removeAll(packageIncludedItems);
+        extraSelectableItems = filterItemsByCeremonyType(extraSelectableItems, ceremonyType);
 
         if (isCustomRequest) {
             extraSelectableItems.removeIf(i -> MONK_INVITE_SERVICE_ITEM_NAME.equals(i.getItemName()));
@@ -195,7 +229,7 @@ public class QuotationController {
 
         return "editQuotation";
     }
-    
+
     @PostMapping("/update")
     public String updateQuotation(@RequestParam String quotationId,
                                   @RequestParam(required = false) List<Integer> extraItemIds,
@@ -217,6 +251,7 @@ public class QuotationController {
             return "redirect:/organizer/quotation/edit/" + quotationId;
         }
     }
+
     @GetMapping("/api/get-items-by-ceremony/{ceremonyId}")
     @ResponseBody
     public List<Item> getItemsByCeremony(@PathVariable int ceremonyId) {
@@ -248,7 +283,7 @@ public class QuotationController {
                     boolean isPackage = "แพ็กเกจ".equals(typeName);
                     boolean isFoodOrSangkathan = "ภัตตาหารปิ่นโต".equals(typeName) || "สังฆทาน".equals(typeName);
                     boolean isOptionalExtra = "อุปกรณ์เสริม (เลือกเพิ่มเอง)".equals(typeName);
-                    
+
                     // ตัดเงื่อนไข size() >= 9 ออก และเช็คแค่ว่าไม่ใช่อาหาร สังฆทาน หรืออุปกรณ์เสริม ก็ให้ดึงมาโชว์ในแพ็กเกจเลย
                     if (!isPackage && !isFoodOrSangkathan && !isOptionalExtra) {
                         packageIncludedItems.add(it);
@@ -257,6 +292,37 @@ public class QuotationController {
             }
         }
         return packageIncludedItems;
+    }
+
+    // กรอง item ให้เหลือเฉพาะที่เกี่ยวข้องกับ "ประเภทพิธี" (ceremonyType) ของ booking นี้
+    // - ถ้า item ไม่เคยผูกกับ ceremony ใดเลย (เช่น ปิ่นโต, สังฆทาน, อุปกรณ์เสริม ที่เป็น Item กลาง)
+    //   ถือว่าเป็นของกลาง เลือกได้ทุกประเภทพิธี
+    // - ถ้า item เคยผูกกับ ceremony แล้ว (เช่น "โต๊ะหมู่บูชาไม้สัก" ผูกกับขึ้นบ้านใหม่เท่านั้น
+    //   หรือ "บริการถ่ายภาพบันทึกพิธี" ผูกกับแพ็กเกจพรีเมียมของออฟฟิศเท่านั้น)
+    //   ต้องมีอย่างน้อย 1 ceremony ที่ ceremonyType ตรงกับของ booking นี้ ถึงจะเลือกได้
+    private List<Item> filterItemsByCeremonyType(List<Item> allItems, String ceremonyType) {
+        List<Item> filtered = new ArrayList<>();
+        if (allItems == null) return filtered;
+
+        for (Item it : allItems) {
+            List<CeremonyItem> cis = it.getCeremonyItems();
+
+            if (cis == null || cis.isEmpty()) {
+                // item กลาง ไม่ผูกกับพิธีไหนเป็นการเฉพาะ -> เลือกได้ทุกพิธี
+                filtered.add(it);
+                continue;
+            }
+
+            boolean matchesType = cis.stream()
+                    .filter(ci -> ci.getCeremony() != null)
+                    .anyMatch(ci -> ceremonyType == null
+                            || ceremonyType.equals(ci.getCeremony().getCeremonyType()));
+
+            if (matchesType) {
+                filtered.add(it);
+            }
+        }
+        return filtered;
     }
 
     private String extractAdditionalNote(BookingForm booking) {
