@@ -120,7 +120,7 @@
 		                    <div class="form-group">
 		                        <label class="form-label">วันที่จัดงาน <span class="required" style="color:red;">*</span></label>
 		
-		                        <div class="mini-cal-wrap">
+		                        <div class="mini-cal-wrap" id="datePickerWrap">
 		                            <div class="mini-cal-header">
 		                                <button type="button" class="mini-cal-nav-btn" onclick="miniCalPrevMonth()">&#8249;</button>
 		                                <span id="miniCalMonthTitle"></span>
@@ -1058,21 +1058,106 @@ function cleanupAndRenumberDetailsBeforeSubmit() {
     return true;
 }
 
+// -------------------------------------------------------------
+// ระบบตรวจสอบแบบฟอร์ม (Validation)
+// -------------------------------------------------------------
+function showError(element, message) {
+    // ลบ Error เก่าที่จุดเดียวกันถ้ามี
+    if (element.nextElementSibling && element.nextElementSibling.classList.contains('custom-error-msg')) {
+        element.nextElementSibling.remove();
+    }
+
+    var err = document.createElement('div');
+    err.className = 'custom-error-msg';
+    err.style.color = 'red';
+    err.style.fontSize = '11px'; // ปรับขนาดให้เล็กลงกว่าตัวอื่นๆ
+    err.style.marginTop = '4px';
+    err.innerText = message; // เอาสัญลักษณ์ ❌ ออก
+
+    // แทรกข้อความแจ้งเตือนต่อท้าย
+    if(element.nextSibling) {
+        element.parentNode.insertBefore(err, element.nextSibling);
+    } else {
+        element.parentNode.appendChild(err);
+    }
+
+    // ไฮไลต์ขอบสีแดง
+    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
+        element.style.borderColor = 'red';
+        element.classList.add('validation-failed');
+
+        var removeError = function() {
+            element.style.borderColor = '';
+            element.classList.remove('validation-failed');
+            if (err.parentNode) err.parentNode.removeChild(err);
+        };
+        element.addEventListener('input', removeError, {once: true});
+        element.addEventListener('change', removeError, {once: true});
+    }
+}
+
 function handleFormSubmit(form) {
+    // ล้างแจ้งเตือน Error ทั้งหมดก่อน
+    document.querySelectorAll('.custom-error-msg').forEach(function(e) { e.remove(); });
+    form.querySelectorAll('.validation-failed').forEach(function(el) { el.style.borderColor = ''; el.classList.remove('validation-failed'); });
+
+    let isValid = true;
+    let firstErrorElement = null;
+
+    function markError(el, msg) {
+        showError(el, msg);
+        isValid = false;
+        if (!firstErrorElement) firstErrorElement = el;
+    }
+
+    // 1. ตรวจสอบปฏิทิน
+    var eventDateVal = document.getElementById('eventDateInput').value;
+    if (!eventDateVal) {
+        markError(document.getElementById('datePickerWrap'), 'กรุณาเลือกวันที่จัดงานจากปฏิทิน');
+    }
+
+    // 2. ตรวจสอบช่องที่จำเป็นทั้งหมด (required)
+    form.querySelectorAll('input[required], textarea[required], select[required]').forEach(function(el) {
+        if (!isInHiddenBranch(el)) {
+            if (!el.value.trim()) {
+                markError(el, 'กรุณากรอกข้อมูลในช่องนี้ให้ครบถ้วน');
+            }
+        }
+    });
+
+    // 3. ตรวจสอบช่องจำนวนตัวเลข (ต้องมากกว่า 0)
+    form.querySelectorAll('input[type="number"]').forEach(function(el) {
+        if (!isInHiddenBranch(el) && el.value !== '') {
+            if (parseFloat(el.value) <= 0) {
+                markError(el, 'จำนวนต้องมากกว่า 0 และห้ามติดลบ');
+            }
+        }
+    });
+
+    // 4. ตรวจสอบแผนที่
+    var lat = document.getElementById('eventLat').value;
+    if (!lat || lat === "") {
+        markError(document.getElementById('locationMap'), 'กรุณาปักหมุดตำแหน่งที่จัดงานบนแผนที่');
+    }
+
+    // 5. ตรวจสอบรูปภาพ
+    var imgCount = document.querySelectorAll('#base64Container input').length;
+    if (imgCount === 0) {
+        markError(document.getElementById('imagePreviewBox'), 'กรุณาอัปโหลดรูปภาพสถานที่จัดงานอย่างน้อย 1 รูป');
+    }
+
+    // หากไม่ผ่าน เลื่อนจอไปจุดแรกที่ Error
+    if (!isValid) {
+        if (firstErrorElement) {
+            firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return false; // ระงับการส่งฟอร์ม
+    }
+
     syncAllWatAnswersBeforeSubmit();
     cleanupAndRenumberDetailsBeforeSubmit();
 
-    var eventDateVal = document.getElementById('eventDateInput').value;
-    if (!eventDateVal) {
-        alert('กรุณาเลือกวันที่จัดงานจากปฏิทิน');
-        return false;
-    }
-
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return false;
-    }
-    return true;
+    return true; // ยืนยันการส่งข้อมูล
 }
 
 /* FIX: ต้องข้าม radio ที่อยู่ในกิ่งที่ถูกซ่อน (เช่น การ์ดเลือกแพ็กเกจตอนอยู่ในโหมด

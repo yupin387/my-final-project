@@ -74,6 +74,7 @@
 <div class="page-wrapper">
     <c:if test="${not empty success}"><div class="flash-banner flash-banner-success" id="flashBanner">✓ ${success}</div></c:if>
     <c:if test="${not empty error}"><div class="flash-banner flash-banner-error" id="flashBanner">⚠ ${error}</div></c:if>
+    <div class="flash-banner flash-banner-success no-print" id="ajaxConfirmBanner" style="display:none;">✓ ยืนยันข้อมูลใบเสนอราคาเรียบร้อยแล้ว</div>
 
     <div class="sheet">
 
@@ -508,7 +509,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn-secondary" onclick="closeConfirmModal()">ยกเลิก</button>
-            <form action="${pageContext.request.contextPath}/member/quotation/confirm" method="post" style="margin:0;">
+            <form id="confirmQuotationForm" action="${pageContext.request.contextPath}/member/quotation/confirm" method="post" style="margin:0;">
                 <input type="hidden" name="quotationId" value="${q.quotationId}">
                 <button type="submit" class="btn-confirm-final">ยืนยันรายการ</button>
             </form>
@@ -558,6 +559,59 @@
     function closeConfirmModal() { document.getElementById('confirmModal').style.display = 'none'; }
     setTimeout(function() { const banner = document.getElementById('flashBanner'); if(banner) { banner.style.display = 'none'; } }, 5000);
 
+    // ===== ยืนยันรายการแบบ AJAX: อยู่หน้าเดิม ไม่เด้งไปหน้า home =====
+    function showAjaxConfirmBanner() {
+        const banner = document.getElementById('ajaxConfirmBanner');
+        if (!banner) return;
+        banner.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(function () { banner.style.display = 'none'; }, 5000);
+    }
+
+    // แปลงหน้าใบเสนอราคาให้เป็นสถานะ "ยืนยันแล้ว" โดยไม่ต้องโหลดหน้าใหม่
+    function lockQuotationAsConfirmed() {
+        const statusPill = document.querySelector('.status-pill');
+        if (statusPill) {
+            statusPill.className = 'status-pill status-Confirmed';
+            statusPill.innerText = '✓ ยืนยันรายการแล้ว';
+        }
+
+        const actionSection = document.querySelector('.action-section');
+        if (actionSection) {
+            actionSection.innerHTML = '';
+            const lockMsg = document.createElement('div');
+            lockMsg.className = 'lock-message';
+            const title = document.createElement('div');
+            title.className = 'lock-title';
+            title.innerText = 'ขอบคุณสำหรับการยืนยันการจอง';
+            const desc = document.createElement('p');
+            desc.className = 'lock-desc';
+            desc.innerText = 'ทางเราได้รับข้อมูลของท่านแล้ว และกำลังจัดเตรียมอุปกรณ์พร้อมเจ้าหน้าที่เพื่อให้บริการท่านอย่างดีที่สุด';
+            lockMsg.appendChild(title);
+            lockMsg.appendChild(desc);
+            actionSection.appendChild(lockMsg);
+        }
+
+        const noteSection = document.querySelector('.member-note-section.no-print');
+        if (noteSection) {
+            const textarea = document.getElementById('memberNoteInput');
+            const noteVal = textarea ? textarea.value.trim() : '';
+            noteSection.classList.remove('no-print');
+            noteSection.innerHTML = '';
+            if (noteVal !== '') {
+                const label = document.createElement('label');
+                label.innerText = 'หมายเหตุ';
+                const p = document.createElement('p');
+                p.style.margin = '0';
+                p.innerText = noteVal;
+                noteSection.appendChild(label);
+                noteSection.appendChild(p);
+            } else {
+                noteSection.remove();
+            }
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         var toggle = document.getElementById('userProfileToggle');
         var menu = document.getElementById('dropdownMenu');
@@ -568,6 +622,40 @@
             });
             document.addEventListener('click', function () {
                 menu.classList.remove('show');
+            });
+        }
+
+        var confirmForm = document.getElementById('confirmQuotationForm');
+        if (confirmForm) {
+            confirmForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var submitBtn = confirmForm.querySelector('.btn-confirm-final');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'กำลังยืนยัน...';
+                }
+                fetch(confirmForm.action, {
+                    method: 'POST',
+                    body: new FormData(confirmForm)
+                }).then(function (res) {
+                    if (res.ok) {
+                        closeConfirmModal();
+                        lockQuotationAsConfirmed();
+                        showAjaxConfirmBanner();
+                    } else {
+                        alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = 'ยืนยันรายการ';
+                        }
+                    }
+                }).catch(function () {
+                    alert('เชื่อมต่อไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'ยืนยันรายการ';
+                    }
+                });
             });
         }
     });

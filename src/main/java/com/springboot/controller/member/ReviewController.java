@@ -61,23 +61,32 @@ public class ReviewController {
     @PostMapping("/review/save")
     public String save(@ModelAttribute Review review,
                        @RequestParam String bookingId,
-                       @RequestParam(value = "imageFile", required = false) MultipartFile file) throws IOException {
+                       @RequestParam(value = "imageFile", required = false) List<MultipartFile> imageFiles) throws IOException {
 
         BookingForm b = bookingService.getBookingById(bookingId);
         review.setBookingForm(b);
         review.setReviewDate(new Date());
 
-        if (file != null && !file.isEmpty()) {
-            String fileName = file.getOriginalFilename();
-
+        // จัดการอัปโหลดหลายรูป (คั่นด้วย comma หรือเลือกรูปลักษณะที่รองรับในฐานข้อมูลของคุณ)
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            List<String> savedFileNames = new ArrayList<>();
             String uploadDir = "uploads/review/";
             java.io.File dir = new java.io.File(uploadDir);
             if (!dir.exists()) dir.mkdirs();
 
-            java.nio.file.Path path = java.nio.file.Paths.get(uploadDir + fileName);
-            java.nio.file.Files.copy(file.getInputStream(), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-
-            review.setReviewImage(fileName);
+            for (MultipartFile file : imageFiles) {
+                if (file != null && !file.isEmpty()) {
+                    String fileName = file.getOriginalFilename();
+                    java.nio.file.Path path = java.nio.file.Paths.get(uploadDir + fileName);
+                    java.nio.file.Files.copy(file.getInputStream(), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    savedFileNames.add(fileName);
+                }
+            }
+            
+            // ถ้าฐานข้อมูลเก็บเป็น string เดียวรวมกัน ให้ใช้เครื่องหมายจุลภาคคั่น เช่น "img1.jpg,img2.jpg"
+            if (!savedFileNames.isEmpty()) {
+                review.setReviewImage(String.join(",", savedFileNames));
+            }
         }
 
         reviewService.saveReview(review);

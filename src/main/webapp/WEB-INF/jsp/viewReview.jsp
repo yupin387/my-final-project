@@ -10,6 +10,112 @@
     <title>รีวิว: ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewReview.css">
+    <%-- TODO: ย้าย style ชุดนี้ไปไว้ใน viewReview.css ทีหลัง (ใส่ inline ไว้ก่อนเพราะยังไม่มีไฟล์ viewReview.css ให้แก้) --%>
+    <style>
+        .review-img-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-width: 220px;
+        }
+        .review-img-grid .review-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid #C9944A;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+        .review-img-grid .review-img:hover {
+            transform: scale(1.04);
+        }
+        .review-img-lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 24px;
+        }
+        .review-img-lightbox-overlay.show {
+            display: flex;
+        }
+        .review-img-lightbox-overlay img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        .review-img-lightbox-close {
+            position: fixed;
+            top: 20px;
+            right: 28px;
+            font-size: 34px;
+            color: #fff;
+            cursor: pointer;
+            line-height: 1;
+            font-weight: 300;
+        }
+
+        /* .reviews-grid ตอนนี้อยู่ใน .reviews-section ซึ่งเป็น section แยกจาก .page-wrapper แล้ว
+           (ไม่ได้ถูกบีบด้วย max-width: 860px ของ .page-wrapper อีกต่อไป)
+           เลยกำหนดความกว้างตรงๆ ด้วย max-width + margin:auto ธรรมดา ไม่ต้องใช้ 100vw/translateX
+           จึงไม่มีปัญหาล้นขอบจอหรือ scrollbar แนวนอนอีก และไม่ชิดขอบซ้าย-ขวาเกินไป
+           ไม่กระจุกตรงกลางเท่า .page-wrapper (860px) เพราะกว้างกว่าอย่างชัดเจน */
+        .reviews-section {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 40px 56px;
+        }
+
+        .reviews-grid {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            align-items: stretch;
+        }
+        .reviews-grid .review-card {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        /* การ์ดแคบลง เลยให้เนื้อหารีวิวกับรูปเรียงต่อกันแนวตั้งแทนซ้าย-ขวา */
+        .reviews-grid .review-body {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .reviews-grid .review-img-grid {
+            max-width: 100%;
+        }
+        .reviews-grid .review-img-grid .review-img {
+            width: 72px;
+            height: 72px;
+        }
+        @media (max-width: 1100px) {
+            .reviews-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .reviews-section {
+                padding: 0 24px 48px;
+            }
+        }
+        @media (max-width: 640px) {
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+            .reviews-section {
+                padding: 0 16px 40px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -188,41 +294,58 @@
         <line x1="0" y1="27" x2="860" y2="27" stroke="#F3B6C8" stroke-width="0.5" opacity="0.3"/>
     </svg>
 
-    <%-- ========== REVIEW CARDS ========== --%>
-    <c:forEach items="${reviews}" var="r">
-        <div class="review-card">
-            <div class="review-top">
-                <div class="reviewer-left">
-                    <div class="avatar">${fn:substring(r.bookingForm.member.memberFirstName, 0, 1)}</div>
-                    <div>
-                        <div class="reviewer-name">
-                            ${r.bookingForm.member.memberFirstName} ${r.bookingForm.member.memberLastName}
-                        </div>
-                        <div class="stars-review">
-                            <c:forEach begin="1" end="${r.rating}">★</c:forEach>
-                            <c:forEach begin="${r.rating + 1}" end="5"><span class="stars-empty">☆</span></c:forEach>
-                        </div>
-                    </div>
-                </div>
-                <div class="review-date">
-                    <fmt:formatDate value="${r.reviewDate}" pattern="dd MMM yyyy"/>
-                </div>
-            </div>
-            <div class="ceremony-badge">🪷 ประเภทงาน: ${r.bookingForm.ceremony.ceremonyType}</div>
-            <div class="review-body">
-                <div class="review-content">
-                    <p class="review-text">"${r.comment}"</p>
-                </div>
-                <c:if test="${not empty r.reviewImage}">
-                    <div class="review-img-wrapper">
-                        <img src="${pageContext.request.contextPath}/uploads/review/${r.reviewImage}"
-                             class="review-img" alt="ภาพรีวิว">
-                    </div>
-                </c:if>
-            </div>
-        </div>
-    </c:forEach>
+    <%-- ========== REVIEW CARDS ==========
+         หมายเหตุ: ปิด .page-wrapper ไว้ตรงนี้ก่อน แล้วเปิด .reviews-section ใหม่แยกออกมา
+         เพราะ .page-wrapper ล็อก max-width: 860px ไว้ ถ้าใส่ .reviews-grid ไว้ข้างในจะขยายกว้างกว่านั้นไม่ได้เลย
+         (เทคนิค 100vw full-bleed ที่เคยลองก่อนหน้านี้ ทำให้ล้นขอบจอ/เกิด scrollbar แนวนอน)
+         การแยกเป็น section ของตัวเองแบบนี้ทำให้กำหนดความกว้างได้ตรงๆ ด้วย max-width + margin:auto
+         โดยไม่ต้องพึ่ง viewport unit เลย ปลอดภัยกว่า ไม่ล้นจอ --%>
+</div>
 
+<div class="reviews-section">
+    <div class="reviews-grid">
+        <c:forEach items="${reviews}" var="r">
+            <div class="review-card">
+                <div class="review-top">
+                    <div class="reviewer-left">
+                        <div class="avatar">${fn:substring(r.bookingForm.member.memberFirstName, 0, 1)}</div>
+                        <div>
+                            <div class="reviewer-name">
+                                ${r.bookingForm.member.memberFirstName} ${r.bookingForm.member.memberLastName}
+                            </div>
+                            <div class="stars-review">
+                                <c:forEach begin="1" end="${r.rating}">★</c:forEach>
+                                <c:forEach begin="${r.rating + 1}" end="5"><span class="stars-empty">☆</span></c:forEach>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-date">
+                        <fmt:formatDate value="${r.reviewDate}" pattern="dd MMM yyyy"/>
+                    </div>
+                </div>
+                <div class="ceremony-badge">🪷 ประเภทงาน: ${r.bookingForm.ceremony.ceremonyType}</div>
+                <div class="review-body">
+                    <div class="review-content">
+                        <p class="review-text">"${r.comment}"</p>
+                    </div>
+                    <c:if test="${not empty r.reviewImage}">
+                        <div class="review-img-grid">
+                            <c:forEach items="${fn:split(r.reviewImage, ',')}" var="imgName">
+                                <c:if test="${not empty imgName}">
+                                    <img src="${pageContext.request.contextPath}/uploads/review/${imgName}"
+                                         class="review-img" alt="ภาพรีวิว"
+                                         onclick="openReviewImageLightbox(this.src)">
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                    </c:if>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+</div>
+
+<div class="page-wrapper">
     <c:if test="${empty reviews}">
         <div class="empty-state">
             <div class="empty-icon">🪷</div>
@@ -230,6 +353,12 @@
         </div>
     </c:if>
 
+</div>
+
+<%-- ========== LIGHTBOX สำหรับคลิกขยายภาพรีวิว ========== --%>
+<div class="review-img-lightbox-overlay" id="reviewImageLightbox" onclick="closeReviewImageLightbox()">
+    <span class="review-img-lightbox-close" onclick="closeReviewImageLightbox()">&times;</span>
+    <img id="reviewImageLightboxImg" src="" alt="ภาพรีวิวขยาย">
 </div>
 
 <%-- ========== FOOTER ========== --%>
@@ -288,6 +417,29 @@ document.addEventListener('click', function () {
     document.querySelectorAll('.nav-dropdown.show').forEach(function (d) {
         d.classList.remove('show');
     });
+});
+
+// ===== Lightbox คลิกขยายภาพรีวิว =====
+function openReviewImageLightbox(src) {
+    const overlay = document.getElementById('reviewImageLightbox');
+    const img = document.getElementById('reviewImageLightboxImg');
+    if (!overlay || !img) return;
+    img.src = src;
+    overlay.classList.add('show');
+}
+
+function closeReviewImageLightbox() {
+    const overlay = document.getElementById('reviewImageLightbox');
+    if (overlay) overlay.classList.remove('show');
+}
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeReviewImageLightbox();
+});
+
+// กันไม่ให้คลิกบนรูปในกล่อง lightbox แล้วปิดตัวเอง (ต้องคลิกพื้นหลังหรือปุ่ม × เท่านั้น)
+document.getElementById('reviewImageLightboxImg')?.addEventListener('click', function (e) {
+    e.stopPropagation();
 });
 </script>
 </body>

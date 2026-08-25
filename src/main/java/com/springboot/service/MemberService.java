@@ -39,4 +39,9 @@ public class MemberService {
             memberRepository.save(existingMember);
         }
     }
+    
+    public boolean isEmailTaken(String email) {
+        // สมมติว่าใน Service มีการเรียก Repository เช็คอีเมล
+        return memberRepository.existsByMemberEmail(email);
+    }
 }
