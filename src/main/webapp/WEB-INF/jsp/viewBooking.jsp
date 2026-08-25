@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ใบสรุปรายละเอียดการจอง #${booking.bookingId} - บุญมีนำพา</title>
+    <title>ใบสรุปรายละเอียดการจอง ${booking.bookingId} - บุญมีนำพา</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -65,6 +65,35 @@
         @media (max-width: 868px) {
             .cost-summary-wrapper { justify-content: stretch; }
             .cost-summary-box { max-width: 100%; }
+        }
+
+        /* ===== กล่องแจ้งเตือน "ปฏิเสธการจอง" (ใช้โครงเดียวกับ .booking-notice เดิม แต่สลับเป็นโทนแดง) ===== */
+        .booking-notice.notice-rejected {
+            border-color: #f2b8b5;
+            background: #fff5f5;
+        }
+        .booking-notice.notice-rejected .notice-icon {
+            color: #ffffff;
+            background: #c62828;
+        }
+        .booking-notice.notice-rejected .notice-content strong {
+            color: #c62828;
+        }
+        .booking-notice.notice-rejected .notice-content p {
+            color: #7a3b3b;
+        }
+        .notice-reject-reason {
+            margin-top: 6px;
+            padding: 8px 12px;
+            background: #ffffff;
+            border: 1px solid #f2b8b5;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #5c2b2b;
+            line-height: 1.5;
+        }
+        .notice-reject-reason strong {
+            color: #c62828;
         }
     </style>
 </head>
@@ -143,6 +172,21 @@
         </div>	
     </c:if>
 
+    <%-- แจ้งเตือนกรณีถูกปฏิเสธ พร้อมเหตุผลที่ทีมงานระบุไว้ --%>
+    <c:if test="${booking.bookingStatus == 'Rejected'}">
+        <div class="booking-notice notice-rejected">
+            <div class="notice-icon"><i class="bi bi-x-circle-fill"></i></div>
+            <div class="notice-content">
+                <strong>รายการจองนี้ถูกปฏิเสธ</strong>
+                <p>ทีมงานได้พิจารณาและไม่สามารถรับงานนี้ได้ กรุณาดูเหตุผลด้านล่าง หากมีข้อสงสัยสามารถติดต่อทีมงานเพื่อสอบถามเพิ่มเติมได้</p>
+                <div class="notice-reject-reason">
+                    <strong>เหตุผลที่ปฏิเสธ:</strong>
+                    <c:out value="${booking.rejectDetail}" default="ไม่ได้ระบุเหตุผล"/>
+                </div>
+            </div>
+        </div>
+    </c:if>
+
     <%-- กระดาษเอกสารใบสรุปการจอง --%>
     <div class="booking-sheet-document">
         
@@ -160,7 +204,7 @@
             
             <div class="document-title-box">
                 <h2 class="doc-title">ใบสรุปรายละเอียดการจอง</h2>
-                <div class="doc-no">รหัสรายการจอง: <strong>#${booking.bookingId}</strong></div>
+                <div class="doc-no">รหัสรายการจอง: <strong>${booking.bookingId}</strong></div>
                 <div class="mt-2">
                     <span class="status-pill status-${fn:toLowerCase(booking.bookingStatus)}">
                         <c:choose>
@@ -206,10 +250,10 @@
                 <div class="col-md-6">
                     <div class="sheet-box">
                         <div class="section-title"><i class="bi bi-calendar-event-fill"></i> กำหนดการและสถานที่</div>
-                        <div class="info-row">
-                            <span class="info-label">วันที่จัดงาน</span>
-                            <span class="info-value"><fmt:formatDate value="${booking.eventDate}" pattern="dd MMMM yyyy"/></span>
-                        </div>
+                       <div class="info-row">
+    <span class="info-label">วันที่จัดงาน</span>
+    <span class="info-value"><fmt:formatDate value="${booking.eventDate}" pattern="dd/MM/yyyy"/></span>
+</div>
                         <div class="info-row">
                             <span class="info-label">เวลาเริ่มพิธี</span>
                             <span class="info-value">${booking.eventTime} น.</span>

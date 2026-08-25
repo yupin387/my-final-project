@@ -8,65 +8,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationDetail.css?v=1">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationDetail.css?v=2">
 <style>
     .standard-table tr.group-row td.category-header-text {
         text-align: left !important;
         padding-left: 8px !important;
         white-space: nowrap;
-        color: var(--brand-green-dark);
+        color: var(--text-dark);
         font-weight: bold;
     }
     .standard-table tr.group-row td {
-        background-color: var(--green-glow);
+        background-color: var(--gold-pale);
     }
 
-    .flash-banner {
-        padding: 12px 20px;
-        margin: 0 auto 20px;
-        max-width: 800px;
-        border-radius: 6px;
-        text-align: center;
-        font-weight: 600;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .flash-banner-success {
-        background-color: #DBEAFE;
-        color: #1D4ED8;
-        border: 1px solid #93C5FD;
-    }
-    
-    .flash-banner-error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-    }
+.flash-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    max-width: 90%;
+    margin: 0 auto 20px;
+    padding: 13px 28px;
+    border-radius: 4px;      /* เดิม 50px -> เปลี่ยนเป็นเหลี่ยม */
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    animation: alertFadeIn 0.3s ease;
+}
 
-    .remarks-box {
-        flex: 1;
-        margin-right: 20px;
-        border: 1px solid var(--green-banana-light);
-        border-radius: 8px;
-        padding: 16px;
-        background: var(--green-glow);
-        box-sizing: border-box;
-    }
+.flash-banner-success {
+    background-color: #DCFCE7;
+    color: #15803D;
+    border: 1.5px solid #86EFAC;
+}
+
+.flash-banner-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@keyframes alertFadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+    /* กล่อง "ความต้องการเพิ่มเติม" ไม่มีสีเน้น ใช้ขาว-ดำเรียบๆ ตามที่กำหนดใน quotationDetail.css */
     .remarks-box .remarks-header {
         margin-bottom: 8px;
     }
     .remarks-box .remarks-header strong {
-        color: var(--brand-green-dark);
-    }
-    .remarks-box .remarks-textarea {
-        white-space: pre-wrap;
-        min-height: 90px;
-        padding: 10px 12px;
-        border: 1px solid var(--green-banana-light);
-        border-radius: 6px;
-        background: #FFFFFF;
-        font-size: 14px;
-        line-height: 1.6;
+        color: var(--text-dark);
     }
     .remarks-box .note-empty {
         color: var(--text-muted);
@@ -228,9 +222,8 @@
     <tr class="static-row">
         <td class="text-center row-number"></td>
         <td>
-            <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
-            <c:if test="${isMonkSelfInvite}"><br><span class="text-muted">(ลูกค้านิมนต์เอง)</span></c:if>
-        </td>
+    <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
+</td>
         <td class="text-center">1</td>
         <td class="text-center">แพ็กเกจ</td>
         <td class="text-right">
@@ -361,7 +354,7 @@
                                     <td class="text-center row-number"></td>
                                     <td>
                                         ${d.item.itemName}
-                                        <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
+                                       
                                     </td>
                                     <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0" /></td>
                                     <td class="text-center">${d.item.unit}</td>
@@ -388,7 +381,7 @@
                                     <td class="text-center row-number"></td>
                                     <td>
                                         ${d.item.itemName}
-                                        <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
+                                        
                                     </td>
                                     <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0" /></td>
                                     <td class="text-center">${d.item.unit}</td>

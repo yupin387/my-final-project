@@ -63,25 +63,35 @@
             <a href="${pageContext.request.contextPath}/staff/items/add" class="btn-add">+ เพิ่ม Item</a>
         </div>
 
-        <%-- ========== TABS — กรองตามประเภท Item พร้อมอิโมจิประจำประเภทนั้นๆ ========== --%>
-        <div class="tabs-wrapper">
-            <a href="?typeId=all"
-                class="tab-btn ${(empty selectedType or selectedType eq 'all') ? 'active' : ''}">🪷 ทั้งหมด</a>
-            <c:forEach var="type" items="${itemTypes}">
-                <c:choose>
-                    <c:when test="${type.itemTypeName eq 'แพ็กเกจ'}"><c:set var="typeEmoji" value="📦"/></c:when>
-                    <c:when test="${type.itemTypeName eq 'สังฆทาน'}"><c:set var="typeEmoji" value="🎁"/></c:when>
-                    <c:when test="${type.itemTypeName eq 'ภัตตาหารปิ่นโต'}"><c:set var="typeEmoji" value="🍱"/></c:when>
-                    <c:when test="${type.itemTypeName eq 'อุปกรณ์พิธีกรรม'}"><c:set var="typeEmoji" value="🛐"/></c:when>
-                    <c:when test="${type.itemTypeName eq 'บริการ'}"><c:set var="typeEmoji" value="🛎️"/></c:when>
-                    <c:when test="${type.itemTypeName eq 'อุปกรณ์เสริม (เลือกเพิ่มเอง)'}"><c:set var="typeEmoji" value="➕"/></c:when>
-                    <c:otherwise><c:set var="typeEmoji" value="🔖"/></c:otherwise>
-                </c:choose>
-                <a href="?typeId=${type.itemTypeId}"
-                    class="tab-btn ${selectedType.toString() eq type.itemTypeId.toString() ? 'active' : ''}">
-                    ${typeEmoji} ${type.itemTypeName}
-                </a>
-            </c:forEach>
+        <%-- ========== FILTER — dropdown ประเภท Item + dropdown ประเภทงานพิธี (ทั้ง 3 ประเภท) ========== --%>
+        <%-- FIX: เอาอิโมจิออกจากทั้งสอง dropdown ตามที่ขอ เหลือแค่ข้อความล้วน --%>
+        <div class="filter-wrapper">
+            <label for="typeFilter" class="filter-label">กรองตามประเภท:</label>
+            <select id="typeFilter" class="filter-select" onchange="applyFilters()">
+                <option value="all" ${(empty selectedType or selectedType eq 'all') ? 'selected' : ''}>
+                    ทั้งหมด
+                </option>
+                <c:forEach var="type" items="${itemTypes}">
+                    <option value="${type.itemTypeId}"
+                        ${selectedType.toString() eq type.itemTypeId.toString() ? 'selected' : ''}>
+                        ${type.itemTypeName}
+                    </option>
+                </c:forEach>
+            </select>
+
+            <%-- FIX: เพิ่มตัวกรองประเภทงานพิธีทั้ง 3 ประเภท (ทำบุญบ้าน / ขึ้นบ้านใหม่ / ทำบุญบริษัทหรือออฟฟิศ)
+                 ใช้ ceremonyTypeOrder ที่ controller ส่งมา เพื่อให้ลำดับตรงกับที่ใช้ทั่วทั้งระบบ --%>
+            <label for="ceremonyTypeFilter" class="filter-label">กรองตามประเภทงาน:</label>
+            <select id="ceremonyTypeFilter" class="filter-select" onchange="applyFilters()">
+                <option value="all" ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'selected' : ''}>
+                    ทั้งหมด
+                </option>
+                <c:forEach var="cType" items="${ceremonyTypeOrder}">
+                    <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
+                        ${cType}
+                    </option>
+                </c:forEach>
+            </select>
         </div>
 
         <%-- ========== CONTENT CARD ========== --%>
@@ -105,20 +115,20 @@
                             <td class="item-name">${item.itemName}</td>
                             <td><span class="type-badge">${item.itemType.itemTypeName}</span></td>
                             <td>
-                                <%-- ลดเหลือแค่อิโมจิประจำพิธี ไม่ต้องขึ้นชื่อเต็ม (hover ดูชื่อได้จาก title) --%>
+                                <%-- FIX: เปลี่ยนจากอิโมจิเป็นจุดสี (เหมือนหน้าคำถาม) --%>
                                 <c:forEach var="t" items="${itemCeremonyTypes[item.itemId]}">
                                     <c:choose>
                                         <c:when test="${t eq 'ทำบุญบ้าน'}">
-                                            <span class="ceremony-tag" title="${t}">🏠</span>
+                                            <span class="ceremony-dot ceremony-dot-lg dot-home" title="${t}"></span>
                                         </c:when>
                                         <c:when test="${t eq 'ขึ้นบ้านใหม่'}">
-                                            <span class="ceremony-tag" title="${t}">🏡</span>
+                                            <span class="ceremony-dot ceremony-dot-lg dot-newhome" title="${t}"></span>
                                         </c:when>
                                         <c:when test="${t eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
-                                            <span class="ceremony-tag" title="${t}">🏢</span>
+                                            <span class="ceremony-dot ceremony-dot-lg dot-company" title="${t}"></span>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="ceremony-tag" title="${t}">🪷</span>
+                                            <span class="ceremony-dot ceremony-dot-lg dot-all" title="${t}"></span>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
@@ -142,7 +152,7 @@
                     </c:forEach>
                     <c:if test="${empty items}">
                         <tr>
-                            <td colspan="4" class="empty-state">🪷 ไม่พบรายการอุปกรณ์</td>
+                            <td colspan="4" class="empty-state">ไม่พบรายการอุปกรณ์</td>
                         </tr>
                     </c:if>
                 </tbody>
@@ -198,6 +208,16 @@
             document.getElementById('dropdownMenu').classList.remove('show');
         }
     });
+
+    // FIX: รวมค่าจาก dropdown ทั้งสองตัว (ประเภท Item + ประเภทงานพิธี)
+    // แล้ว navigate ไป URL เดียวที่มีทั้งสอง query param เพื่อให้กรองซ้อนกันได้
+    function applyFilters() {
+        var typeId = document.getElementById('typeFilter').value;
+        var ceremonyType = document.getElementById('ceremonyTypeFilter').value;
+        var base = '${pageContext.request.contextPath}/staff/items';
+        location = base + '?typeId=' + encodeURIComponent(typeId)
+                        + '&ceremonyType=' + encodeURIComponent(ceremonyType);
+    }
     </script>
 </body>
 </html>

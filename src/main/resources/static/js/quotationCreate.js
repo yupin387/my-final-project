@@ -16,6 +16,9 @@ const CATEGORY_TO_TBODY = {
     'อุปกรณ์เสริม':     'group-extra'
 };
 
+// หมวดที่อนุญาตให้โชว์รายละเอียด (itemDetail) ตอนเพิ่มรายการเข้าตาราง
+const CATEGORIES_WITH_DESC = ['สังฆทาน', 'ภัตตาหาร'];
+
 const selectedItemIds = new Set();
 let currentModalCategory = null;
 
@@ -245,8 +248,10 @@ function addSelectedItemsToTable() {
     if (!targetBody) return;
 
     const dataStore = document.getElementById('itemDataStore');
-    const isEquipment = currentModalCategory === 'อุปกรณ์พิธีกรรม';
-    
+
+    // โชว์รายละเอียด (itemDetail) เฉพาะหมวดสังฆทานกับภัตตาหาร (ปิ่นโต) เท่านั้น หมวดอื่นไม่ต้องโชว์
+    const allowDescForCategory = CATEGORIES_WITH_DESC.includes(currentModalCategory);
+
     // กำหนดให้ "ทุกรายการที่เพิ่มผ่านปุ่ม +" สามารถแก้ไขจำนวนได้เสมอ
     const canEditQty = true;
 
@@ -263,7 +268,7 @@ function addSelectedItemsToTable() {
         const monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
         const initialQty   = scalesByMonk ? monkCount : 1;
 
-        const showDesc = !!itemDesc && !isEquipment;
+        const showDesc = !!itemDesc && allowDescForCategory;
 
         const tr = document.createElement('tr');
         tr.className = 'dynamic-row';

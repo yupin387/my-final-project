@@ -24,9 +24,9 @@
         flex:0 0 auto;
         width:26px;
         height:26px;
-        border:1px solid var(--brand-green-dark);
+        border:1px solid var(--rose-deep);
         background:#FFFFFF;
-        color:var(--brand-green-dark);
+        color:var(--rose-deep);
         border-radius:4px;
         font-size:15px;
         line-height:1;
@@ -34,7 +34,7 @@
     }
     #mainQuotationTable .btn-qty-minus:hover,
     #mainQuotationTable .btn-qty-plus:hover{
-        background:var(--green-glow);
+        background:var(--rose-glow);
     }
     #mainQuotationTable .qty-wrapper .qty-input{
         flex:0 0 auto;
@@ -79,23 +79,23 @@
         padding-left: 8px !important;
         padding-right: 12px !important;
         white-space: nowrap;
-        color: var(--brand-green-dark);
+        color: var(--rose-deep);
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
     #mainQuotationTable tr.group-row td {
-        background-color: var(--green-glow); /* สีพื้นหลังอ่อนๆ โทนเขียวให้เข้ากับธีมหมวดหมู่ */
+        background-color: var(--rose-glow); /* สีพื้นหลังอ่อนๆ โทนกุหลาบให้เข้ากับธีมหมวดหมู่ */
     }
     #mainQuotationTable .btn-add-group-inline{
         flex: 0 0 auto;
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        border: 1px solid var(--brand-green-dark);
+        border: 1px solid var(--rose-deep);
         background: #FFFFFF;
-        color: var(--brand-green-dark);
+        color: var(--rose-deep);
         font-size: 14px;
         line-height: 1;
         cursor: pointer;
@@ -107,6 +107,17 @@
     #mainQuotationTable .btn-add-group-inline:hover{
         background: #FFFFFF;
         transform: scale(1.05);
+    }
+
+    /* ===== รายชื่อ "รายการเพิ่มเติม" แสดงในวงเล็บใต้ label เหมือนหน้ารายละเอียดใบเสนอราคา ===== */
+    .tot-extra-detail{
+        font-size: 12px;
+        color: #888;
+        font-weight: 400;
+        font-style: italic;
+        text-align: left;
+        margin-top: 4px;
+        line-height: 1.5;
     }
 </style>
 </head>
@@ -162,6 +173,16 @@
         <c:set var="monkSelfInviteDiscount" value="${1500}"/>
         <c:set var="isMonkSelfInvite" value="${fn:contains(monkInviteType,'นิมนต์เอง')}"/>
 
+        <%-- ดึง "ความต้องการเพิ่มเติม" ที่ลูกค้ากรอกไว้ตอนจอง เอาไว้เป็นค่าเริ่มต้นของช่องหมายเหตุในใบเสนอราคา --%>
+        <c:set var="customerAdditionalNote" value=""/>
+        <c:forEach var="bd" items="${q.bookingForm.details}">
+            <c:if test="${fn:contains(bd.question.questionsText,'เพิ่มเติม')}">
+                <c:set var="customerAdditionalNote" value="${bd.answer}"/>
+            </c:if>
+        </c:forEach>
+        <%-- ถ้าใบเสนอราคาถูกกรอก/แก้ไข note ไว้แล้ว (โดยแอดมิน) ให้ใช้ค่านั้นแทนของลูกค้า --%>
+        <c:set var="noteDisplayValue" value="${not empty q.note ? q.note : customerAdditionalNote}"/>
+
         <%-- ราคาแพ็กเกจแสดงเต็มจำนวนเสมอ ส่วนลด (ถ้ามี) ไปหักที่สรุปยอดด้านล่างเท่านั้น ไม่หักซ้ำตรงนี้ --%>
         <c:choose>
             <c:when test="${isCustomRequest}">
@@ -181,7 +202,7 @@
 						<p>โทร. 080-123-4567 | อีเมล: boonmee@gmail.com</p>
                 </div>
                 <div class="doc-title-box">
-                    <h1>แก้ไขใบเสนอราคา #${q.quotationId}</h1>
+                    <h1>แก้ไขใบเสนอราคา ${q.quotationId}</h1>
                     <p>(Quotation)</p>
                 </div>
             </div>
@@ -421,10 +442,10 @@
                             </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
-                                <td>
-                                    ${d.item.itemName} <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
-                                    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
-                                </td>
+                               <td>
+    ${d.item.itemName}
+    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
+</td>
                                 <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
                                 <!-- ใส่ readonly ที่นี่ -->
@@ -454,10 +475,10 @@
                             </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
-                                <td>
-                                    ${d.item.itemName} <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
-                                    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
-                                </td>
+                              <td>
+    ${d.item.itemName}
+    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
+</td>
                                 <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
                                 <!-- ใส่ readonly ที่นี่ -->
@@ -493,7 +514,7 @@
                     <div class="remarks-header">
                         <strong>ความต้องการเพิ่มเติม:</strong>
                     </div>
-                    <textarea name="note" class="remarks-textarea" placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${q.note}</textarea>
+                    <textarea name="note" class="remarks-textarea" placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${noteDisplayValue}</textarea>
                 </div>
                 
                 <div class="totals-box">
@@ -512,7 +533,10 @@
                         </tr>
                         <c:if test="${!isCustomRequest}">
                         <tr>
-                            <td class="tot-label">รายการเพิ่มเติม:</td>
+                            <td class="tot-label">
+                                รายการเพิ่มเติม:
+                                <div class="tot-extra-detail" id="extraItemsDetail"></div>
+                            </td>
                             <td class="tot-value">฿ <span id="summaryExtra">0.00</span></td>
                         </tr>
                         </c:if>
@@ -748,6 +772,7 @@
         var extraTotal = 0.0;
         var discount = parseFloat(document.getElementById('discountValue').value) || 0;
         var isCustomRequest = window.IS_CUSTOM_REQUEST === true;
+        var extraItemNames = [];
 
         document.querySelectorAll('.static-row, .dynamic-row').forEach(function(row) {
             if (row.classList.contains('package-included-row')) return;
@@ -773,6 +798,14 @@
                     packageTotal += subtotal;
                 } else {
                     extraTotal += subtotal;
+
+                    // เก็บชื่อรายการไว้แสดงในวงเล็บใต้ label "รายการเพิ่มเติม" (ข้ามรายการที่ฟรี/รวมในแพ็กเกจ)
+                    var isFreeItem = !!row.querySelector('.text-danger');
+                    if (!isFreeItem) {
+                        var nameCell = row.children[1];
+                        var nameText = (nameCell && nameCell.childNodes[0]) ? nameCell.childNodes[0].textContent.trim() : '';
+                        if (nameText) extraItemNames.push(nameText);
+                    }
                 }
             }
         });
@@ -782,6 +815,9 @@
 
         var summaryExtra = document.getElementById('summaryExtra');
         if (summaryExtra) summaryExtra.innerText = extraTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+
+        var extraDetailDiv = document.getElementById('extraItemsDetail');
+        if (extraDetailDiv) extraDetailDiv.innerText = extraItemNames.length ? ('(' + extraItemNames.join(', ') + ')') : '';
 
         var grandTotal = packageTotal + extraTotal - discount;
         if (grandTotal < 0) grandTotal = 0;

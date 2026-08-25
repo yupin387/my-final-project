@@ -66,17 +66,15 @@ public class OrganizerController {
         Organizer organizer = organizerService.login(email, password);
         if (organizer != null) {
             session.setAttribute("currentOrganizer", organizer);
+            ra.addFlashAttribute("success", "เข้าสู่ระบบสำเร็จ"); // FIX: เพิ่มบรรทัดนี้
             return new ModelAndView("redirect:/organizer/bookings");
         }
 
         // 2) ถ้าไม่ใช่ Organizer ให้เช็คว่าเป็นหัวหน้างาน (HeadStaff) หรือไม่
         HeadStaff headStaff = headStaffService.login(email, password);
         if (headStaff != null) {
-            // FIX: ต้องใช้ key "currentStaff" ให้ตรงกับที่ HeadStaffController เช็ค
-            // (session.getAttribute("currentStaff")) ไม่ใช่ "currentHeadStaff"
             session.setAttribute("currentStaff", headStaff);
-            // FIX: หน้า dashboard จริงของหัวหน้างานคือ /staff/assignments
-            // (ตรงกับ @GetMapping("/staff/assignments") ใน HeadStaffController)
+            ra.addFlashAttribute("success", "เข้าสู่ระบบสำเร็จ"); // FIX: เพิ่มบรรทัดนี้
             return new ModelAndView("redirect:/staff/assignments");
         }
 
@@ -84,7 +82,6 @@ public class OrganizerController {
         ra.addFlashAttribute("error", "อีเมลหรือรหัสผ่านไม่ถูกต้อง");
         return new ModelAndView("redirect:/loginorganizer");
     }
-
     // ล้างข้อมูลในเซสชันและออกจากระบบของฝ่ายจัดการ (ใช้ร่วมกันทั้ง 2 role)
     @GetMapping("/organizer/logout")
     public ModelAndView logout(HttpSession session) {
@@ -199,7 +196,6 @@ public class OrganizerController {
     }
 
     // แสดงรายละเอียดทั้งหมดของรายการจองที่ระบุตาม ID
- // แสดงรายละเอียดทั้งหมดของรายการจองที่ระบุตาม ID
     @GetMapping("/organizer/bookings/detail/{id}")
     public String bookingDetail(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
@@ -220,14 +216,22 @@ public class OrganizerController {
         // ===================================================================
         // ถ้าเป็นแพ็กเกจ "กรอกความต้องการเบื้องต้น" ให้เพิ่มอุปกรณ์ที่ผูกกับ
         // จำนวนพระสงฆ์แบบ dynamic ตามคำตอบที่ลูกค้ากรอกจริง (ไม่ใช่ค่าคงที่)
+        //
+        // FIX: ต้องเช็คด้วยว่าลูกค้าเลือก "นิมนต์เอง" หรือไม่ ถ้าเลือกนิมนต์เอง
+        // ต้อง "ไม่" เพิ่มค่า "บริการประสานงานนิมนต์พระ" (500 บาท/รูป) เข้าไป
+        // เพราะร้านไม่ได้เป็นคนนิมนต์พระให้ — ให้ตรงกับ logic ในหน้า
+        // quotationCreate.jsp (isMonkSelfInvite) ไม่งั้นราคาในหน้าใบสรุป
+        // จะยังคงคำนวณสูงเกินจริงสำหรับเคสนิมนต์เองอยู่ดี
         // ===================================================================
         if (booking.getCeremony() != null
                 && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName())) {
 
             int monkCount = extractMonkCount(booking);
+            boolean isSelfInvite = isMonkSelfInvite(booking);
 
             if (monkCount > 0) {
-                List<CeremonyItem> monkRelatedItems = buildMonkRelatedItems(booking.getCeremony(), monkCount);
+                List<CeremonyItem> monkRelatedItems =
+                        buildMonkRelatedItems(booking.getCeremony(), monkCount, isSelfInvite);
                 packageItems.addAll(monkRelatedItems);
             }
         }
@@ -263,17 +267,40 @@ public class OrganizerController {
     }
 
     /**
+     * อ่านคำตอบของคำถาม "รูปแบบการนิมนต์พระสงฆ์" แล้วเช็คว่าลูกค้าเลือก
+     * "นิมนต์เอง" หรือไม่ (ตรงกับ logic fn:contains(monkInviteType,'นิมนต์เอง')
+     * ที่ใช้ในหน้า quotationCreate.jsp / quotationDetail.jsp)
+     */
+    private boolean isMonkSelfInvite(BookingForm booking) {
+        if (booking.getDetails() == null) return false;
+
+        return booking.getDetails().stream()
+            .filter(d -> d.getQuestion() != null
+                    && "รูปแบบการนิมนต์พระสงฆ์".equals(d.getQuestion().getQuestionsText()))
+            .findFirst()
+            .map(d -> d.getAnswer() != null && d.getAnswer().contains("นิมนต์เอง"))
+            .orElse(false);
+    }
+
+    /**
      * สร้างรายการอุปกรณ์ที่ quantity ขึ้นกับจำนวนพระสงฆ์จริง
      * (ไม่ได้ save ลง DB แค่สร้างไว้แสดงผลชั่วคราวเท่านั้น)
+     *
+     * FIX: เพิ่มพารามิเตอร์ isSelfInvite — ถ้าลูกค้านิมนต์พระเอง จะไม่เพิ่ม
+     * "บริการประสานงานนิมนต์พระ" (ค่าบริการที่ร้านคิดเฉพาะตอนช่วยนิมนต์ให้)
+     * ส่วนอุปกรณ์พิธีอื่น (อาสนะ, ตาลปัตร, กรวยดอกไม้) ยังต้องเตรียมให้ตามจำนวน
+     * พระอยู่ดี ไม่ว่าใครจะเป็นคนนิมนต์
      */
-    private List<CeremonyItem> buildMonkRelatedItems(Ceremony ceremony, int monkCount) {
+    private List<CeremonyItem> buildMonkRelatedItems(Ceremony ceremony, int monkCount, boolean isSelfInvite) {
         List<CeremonyItem> result = new java.util.ArrayList<>();
 
         List<Item> serviceItems = itemService.getItemsByTypeName("บริการ");
         List<Item> ritualItems = itemService.getItemsByTypeName("อุปกรณ์พิธีกรรม");
 
-        findItemByName(serviceItems, "บริการประสานงานนิมนต์พระ")
-            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+        if (!isSelfInvite) {
+            findItemByName(serviceItems, "บริการประสานงานนิมนต์พระ")
+                .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+        }
 
         findItemByName(ritualItems, "อาสนะพระสงฆ์")
             .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));

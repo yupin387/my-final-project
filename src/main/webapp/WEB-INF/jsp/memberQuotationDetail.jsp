@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ใบเสนอราคาของฉัน - #${q.quotationId}</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=12">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=13">
     <%-- FIX: ลบ inline <style> เดิมที่เคยอยู่ตรงนี้ออกทั้งหมด — มันมาทีหลัง external CSS
          ใน <head> เดียวกัน จึงชนะ specificity เท่ากันและไปทับสีพื้นหลัง/สีตัวอักษรของ
          .category-header-text และ .member-note-section ที่ตั้งไว้ใน memberQuotationDetail.css
@@ -198,9 +198,8 @@
     <tr class="static-row">
         <td class="text-center row-number">1</td>
         <td>
-            <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
-            <c:if test="${isMonkSelfInvite}"><br><span class="text-muted">(ลูกค้านิมนต์เอง)</span></c:if>
-        </td>
+    <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
+</td>
         <td class="text-center">1</td>
         <td class="text-center">แพ็กเกจ</td>
         
@@ -250,10 +249,9 @@
                             </c:if>
                             <tr>
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
-                                <td>
-                                    ${d.item.itemName}
-                                    <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
-                                </td>
+                               <td>
+    ${d.item.itemName}
+</td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
@@ -326,7 +324,7 @@
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
                                 <td>
                                     ${d.item.itemName}
-                                    <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
+                                  
                                 </td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
@@ -350,7 +348,7 @@
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
                                 <td>
                                     ${d.item.itemName}
-                                    <c:if test="${not empty d.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${d.item.itemDetail}</span></c:if>
+                                    
                                 </td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
@@ -390,19 +388,13 @@
              ========================================================================= --%>
         <div class="summary-flex-row">
 
-            <%-- ===== หมายเหตุ / คอมเม้นรวมทั้งใบ (แสดงของเดิมถ้ามี + ให้กรอกใหม่) ===== --%>
-            <c:if test="${q.quotationStatus != 'Confirmed'}">
-                <div class="member-note-section no-print">
-                    <label for="memberNoteInput">ความต้องการเพิ่มเติม:</label>
-                    <textarea id="memberNoteInput" placeholder="ระบุความต้องการเพิ่มเติมที่นี่..."><c:if test="${not empty q.note}">${q.note}</c:if></textarea>
-                </div>
-            </c:if>
-            <c:if test="${q.quotationStatus == 'Confirmed' && not empty q.note}">
-                <div class="member-note-section">
-                    <label>หมายเหตุ</label>
-                    <p style="margin:0;">${q.note}</p>
-                </div>
-            </c:if>
+          
+           <c:if test="${q.quotationStatus != 'Confirmed'}">
+    <div class="member-note-section no-print">
+        <label for="memberNoteInput">ความต้องการเพิ่มเติม:</label>
+        <textarea id="memberNoteInput" placeholder="ระบุความต้องการเพิ่มเติมที่นี่..."></textarea>
+    </div>
+</c:if>
 
             <%-- ===== สรุปยอด ===== --%>
             <div class="totals-wrap">
@@ -410,6 +402,10 @@
                     <c:set var="sumExtra" value="0"/>
 <%-- ดึงราคา basePrice ของแพ็กเกจมาใส่ตัวแปร sumPackage โดยตรง --%>
 <c:set var="sumPackage" value="${isCustomRequest ? 0 : q.bookingForm.ceremony.basePrice}"/>
+<%-- FIX: เพิ่มตัวแปรเก็บรายชื่อ "รายการเพิ่มเติม" ไว้โชว์เป็นวงเล็บใต้ label
+     (เดิมมีแค่ sumExtra ตัวเลขอย่างเดียว ไม่มีรายชื่อ ผู้ใช้จึงไม่เห็นว่ารายการ
+     เพิ่มเติมคืออะไรบ้าง — เพิ่ม extraItemsList ให้เหมือนหน้า organizer แล้ว) --%>
+<c:set var="extraItemsList" value=""/>
 
 <c:forEach var="d" items="${details}">
     <c:if test="${d.item != null}">
@@ -419,10 +415,17 @@
             </c:when>
             <c:otherwise>
                 <c:set var="itemVal" value="${d.subtotal}"/>
+                <c:set var="isFreeInTotal" value="false"/>
                 <c:if test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
                     <c:set var="itemVal" value="0"/>
+                    <c:set var="isFreeInTotal" value="true"/>
                 </c:if>
                 <c:set var="sumExtra" value="${sumExtra + itemVal}"/>
+
+                <%-- เก็บชื่อรายการเข้า list เฉพาะเคสไม่ใช่กรอกเอง และไม่ใช่ของฟรีในแพ็กเกจ --%>
+                <c:if test="${!isCustomRequest && !isFreeInTotal}">
+                    <c:set var="extraItemsList" value="${extraItemsList}${empty extraItemsList ? '' : ', '}${d.item.itemName}"/>
+                </c:if>
             </c:otherwise>
         </c:choose>
     </c:if>
@@ -440,7 +443,13 @@
                         </tr>
                         <c:if test="${!isCustomRequest}">
                             <tr>
-                                <td class="tot-label">รายการเพิ่มเติม:</td>
+                                <td class="tot-label">
+                                    รายการเพิ่มเติม:
+                                    <%-- FIX: แสดงรายชื่อรายการเพิ่มเติมในวงเล็บใต้ label เหมือนหน้า organizer --%>
+                                    <c:if test="${not empty extraItemsList}">
+                                        <div class="tot-extra-detail">(${extraItemsList})</div>
+                                    </c:if>
+                                </td>
                                 <td class="tot-value">฿ <fmt:formatNumber value="${sumExtra}" minFractionDigits="2"/></td>
                             </tr>
                         </c:if>
