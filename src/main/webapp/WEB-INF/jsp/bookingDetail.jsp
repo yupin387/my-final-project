@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ใบสรุปรายละเอียดการจอง #${b.bookingId} - บุญมีนำพา</title>
+    <title>ใบสรุปรายละเอียดการจอง ${b.bookingId} - บุญมีนำพา</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -129,7 +129,7 @@
             
             <div class="document-title-box" style="padding-top: 0; text-align: right;">
                 <h2 class="doc-title">ใบสรุปรายละเอียดการจอง</h2>
-                <div class="doc-no">รหัสรายการจอง: <strong>#${b.bookingId}</strong></div>
+                <div class="doc-no">รหัสรายการจอง: <strong>${b.bookingId}</strong></div>
                 <div class="mt-2">
                     <span class="status-pill status-${fn:toLowerCase(b.bookingStatus)}">
                         <c:choose>
@@ -175,10 +175,10 @@
                 <div class="col-md-6">
                     <div class="sheet-box">
                         <div class="section-title"><i class="bi bi-calendar-event-fill"></i> กำหนดการและสถานที่</div>
-                        <div class="info-row">
-                            <span class="info-label">วันที่จัดงาน</span>
-                            <span class="info-value"><fmt:formatDate value="${b.eventDate}" pattern="dd MMMM yyyy"/></span>
-                        </div>
+                       <div class="info-row">
+    <span class="info-label">วันที่จัดงาน</span>
+    <span class="info-value"><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></span>
+</div>
                         <div class="info-row">
                             <span class="info-label">เวลาเริ่มพิธี</span>
                             <span class="info-value">${b.eventTime} น.</span>
@@ -474,10 +474,10 @@
         </div>
         
         <form id="rejectForm" method="POST" action="">
-            <div style="margin-top: 15px; text-align: left;">
-                <label for="rejectDetail" style="font-weight: 600; font-size: 14px; color: #333;">เหตุผลที่ปฏิเสธงาน <span style="color:red;">*</span></label>
-                <textarea id="rejectDetail" name="rejectDetail" rows="3" 
-                          style="width: 100%; margin-top: 5px; padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-family: 'Sarabun', sans-serif;" 
+            <div class="reject-reason-group">
+                <label for="rejectDetail" class="reject-reason-label">เหตุผลที่ปฏิเสธงาน<span class="required-mark">*</span></label>
+                <textarea id="rejectDetail" name="rejectDetail" rows="3"
+                          class="reject-reason-textarea"
                           required placeholder="โปรดระบุเหตุผลที่ปฏิเสธการจองนี้..."></textarea>
             </div>
 

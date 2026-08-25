@@ -17,21 +17,24 @@ html, body {
 	--gold-light: #F3DA9E;
 	--gold-pale: #FBF0D4;
 	--gold-glow: #FFFBEF;
-	--green-deep: #6FA84F;
-	--green-forest: #7DBB5E;
-	--green-mid: #9BCE72;
-	--green-banana: #A9D97A;
-	--green-banana-light: #C9E8A8;
-	--green-pale: #EEF7E1;
-	--green-glow: #F7FBF0;
-	--cream: #ECF2D2;
-	--cream-warm: #F7FBF0;
-	--cream-mid: #FBF4E2;
-	--cream-deep: #F2E6C4;
-	--cream-border: #E9DCB0;
-	--cream-border-soft: #E4EFC9;
+
+	/* กุหลาบ-ไวน์ (แทนที่โทนเขียวใบตองเดิม) */
+	--rose-deep: #C83568;
+	--rose-mid: #DF5A8D;
+	--rose-soft: #F08FB5;
+	--rose-line: #E3AFC3;
+	--rose-line-light: #F0D2DE;
+	--rose-pale: #FBEAF0;
+	--rose-glow: #FDF5F8;
+
+	--cream: #FBE6ED;
+	--cream-warm: #FFF7F9;
+	--cream-mid: #FBE6ED;
+	--cream-deep: #F5DCE4;
+	--cream-border: #EFD3DD;
+	--cream-border-soft: #F3E0E6;
 	--white: #FFFFFF;
-	/* สีตัวอักษรและเส้นกรอบ */
+	/* สีตัวอักษรและเส้นกรอบ (คงสีกลางสำหรับเอกสารพิมพ์) */
 	--text-dark: #333333;
 	--text-mid: #555555;
 	--text-muted: #777777;
@@ -41,8 +44,12 @@ html, body {
 	--accent-gold-mid: #E8C878;
 	--accent-gold-pale: #F7E3B0;
 	--accent-gold-dark: #B8860B;
-	--brand-green: #74B457;
-	--brand-green-dark: #5C9645;
+
+	/* ===== Navbar / Footer: สีทองทึบ โทนอ่อนละมุน ไม่ไล่สี ===== */
+	--brand-solid-gold: #F7EAB8;
+	--nav-title-color: #63263E;
+	--nav-menu-color: #63263E;
+
 	/* ตำแหน่งรูปดอกบัวตกแต่ง */
 	--lotus-img: url('../images/lotus-decor.png');
 }
@@ -54,19 +61,19 @@ body {
 	flex-direction: column;
 }
 
-/* ===== Navbar (เขียว-ทอง แบบเดียวกับหน้า List/Detail) ===== */
+/* ===== Navbar (กุหลาบ-ทอง แบบเดียวกับหน้า List/Detail) ===== */
 .navbar {
-	background: var(--brand-green);
+	background-color: var(--brand-solid-gold);
 	padding: 0 40px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	border-bottom: 3px solid var(--accent-gold);
+	border-bottom: 3px solid var(--gold);
 	position: sticky;
 	top: 0;
 	z-index: 10000;
 	min-height: 92px;
-	box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
+	box-shadow: 0 4px 20px rgba(148, 106, 28, 0.1);
     overflow: visible;
 }
 
@@ -77,7 +84,7 @@ body {
 	left: 0;
 	right: 0;
 	height: 2px;
-	background: var(--accent-gold-mid);
+	background: var(--gold);
 }
 
 .navbar-brand, .navbar-brand-wrap {
@@ -89,7 +96,7 @@ body {
 }
 
 .navbar .lotus-icon, .navbar-brand .lotus-icon, .navbar-brand-wrap .lotus-icon {
-	background: rgba(255, 255, 255, 0.18);
+	background: rgba(255, 255, 255, 0.7);
 	width: 76px;
 	height: 76px;
 	max-width: 76px;
@@ -99,20 +106,20 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-	border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+	border: 1.5px solid rgba(99, 38, 62, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 	object-fit: cover;
 	flex-shrink: 0;
 }
 
 .navbar-title {
-	color: #FFFFFF;
+	color: var(--nav-title-color);
 	font-family: 'Charmonman', cursive;
 	font-size: 34px;
 	font-weight: 800;
 	letter-spacing: 0.5px;
 	white-space: nowrap;
-	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+	text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .navbar-right {
@@ -128,7 +135,7 @@ body {
 }
 
 .nav-item {
-	color: rgba(255, 255, 255, 0.85);
+	color: var(--nav-menu-color);
 	text-decoration: none;
 	font-size: 15px;
 	font-weight: 700;
@@ -140,13 +147,13 @@ body {
 }
 
 .nav-item:hover {
-	background: rgba(255, 255, 255, 0.2);
-	color: #FFFFFF;
+	background: rgba(99, 38, 62, 0.1);
+	color: var(--nav-menu-color);
 }
 
 .nav-item.active {
-	background: #FFFFFF;
-	color: var(--green-forest);
+	background: var(--rose-deep);
+	color: #FFFFFF;
 	font-weight: 700;
 }
 
@@ -155,24 +162,24 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	background: rgba(255, 255, 255, 0.15);
+	background: rgba(255, 255, 255, 0.5);
 	padding: 6px 16px 6px 6px;
 	border-radius: 50px;
-	border: 1.5px solid rgba(255, 255, 255, 0.45);
+	border: 1.5px solid rgba(99, 38, 62, 0.3);
 	white-space: nowrap;
 	position: relative;
 	cursor: pointer;
 	transition: background 0.2s;
-	color: #FFFFFF;
+	color: var(--nav-menu-color);
 }
 
 .user-info:hover {
-	background: rgba(255, 255, 255, 0.25);
+	background: rgba(255, 255, 255, 0.8);
 }
 
 .user-avatar {
-	background: #FFFFFF;
-	color: var(--green-forest);
+	background: var(--rose-deep);
+	color: #FFFFFF;
 	width: 36px;
 	height: 36px;
 	border-radius: 50%;
@@ -191,21 +198,21 @@ body {
 }
 
 .user-name {
-	color: #FFFFFF;
+	color: var(--nav-menu-color);
 	font-size: 13px;
 	font-weight: 700;
 }
 
 .user-role {
-	color: rgba(255, 255, 255, 0.75);
+	color: rgba(99, 38, 62, 0.85);
 	font-size: 11px;
 }
 
 .arrow {
-	color: #FFFFFF;
+	color: var(--nav-menu-color);
 	font-size: 12px;
 	margin-left: 4px;
-	opacity: 0.8;
+	opacity: 0.85;
 }
 
 /* ===== Dropdown ===== */
@@ -218,7 +225,7 @@ body {
 	border: 1px solid var(--accent-gold-pale);
 	border-radius: 10px;
 	min-width: 160px;
-	box-shadow: 0 8px 28px var(--shadow-warm, rgba(217, 164, 65, 0.2));
+	box-shadow: 0 8px 28px var(--shadow-warm, rgba(184, 134, 47, 0.2));
 	z-index: 999;
 	overflow: hidden;
 }
@@ -393,9 +400,9 @@ body {
 }
 
 .status-Confirmed {
-	background: var(--green-pale);
-	color: var(--green-deep);
-	border: 1px solid var(--green-banana);
+	background: var(--gold-pale);
+	color: #8a6d1c;
+	border: 1px solid var(--accent-gold-mid);
 }
 
 .status-Revised {
@@ -512,7 +519,7 @@ tr.included-row td { color: #888; }
 
 .btn-back-bottom {
 	display: inline-block;
-	background: var(--brand-green);
+	background: var(--gold);
 	color: #fff;
 	text-decoration: none;
 	padding: 10px 24px;
@@ -520,21 +527,21 @@ tr.included-row td { color: #888; }
 	font-size: 14px;
 	font-weight: 600;
 	transition: 0.2s;
-	box-shadow: 0 3px 10px rgba(92, 150, 69, 0.3);
+	box-shadow: 0 3px 10px rgba(184, 134, 47, 0.3);
 }
 
 .btn-back-bottom:hover {
-	background: var(--brand-green-dark);
+	background: #A6763A;
 	transform: translateY(-1px);
 }
 
-/* ===== FOOTER (เขียว-ทอง แบบเดียวกับหน้า List/Detail) ===== */
+/* ===== FOOTER (กุหลาบ-ทอง แบบเดียวกับหน้า List/Detail) ===== */
 .site-footer {
-	background: var(--brand-green);
-	color: rgba(255, 255, 255, 0.95);
+	background-color: var(--brand-solid-gold);
+	color: var(--nav-title-color);
     margin-top: auto;
-	border-top: 3px solid var(--accent-gold);
-	box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
+	border-top: 3px solid var(--gold);
+	box-shadow: 0 -6px 18px rgba(148, 106, 28, 0.1);
 	position: relative;
 	z-index: 2;
 	overflow: hidden;
@@ -547,7 +554,7 @@ tr.included-row td { color: #888; }
 	left: 0;
 	right: 0;
 	height: 2px;
-	background: var(--accent-gold-mid);
+	background: var(--gold);
 }
 
 .site-footer::after {
@@ -562,6 +569,7 @@ tr.included-row td { color: #888; }
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
+	opacity: 0.35;
 	filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 	pointer-events: none;
 }
@@ -586,28 +594,28 @@ tr.included-row td { color: #888; }
 }
 
 .site-footer .lotus-icon, .footer-lotus-icon {
-	background: rgba(255, 255, 255, 0.18);
+	background: rgba(255, 255, 255, 0.7);
 	width: 40px;
 	height: 40px;
 	max-width: 40px;
 	max-height: 40px;
 	border-radius: 50%;
-	border: 1.5px solid rgba(255, 255, 255, 0.45);
+	border: 1.5px solid rgba(99, 38, 62, 0.3);
 	object-fit: cover;
 	flex-shrink: 0;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 .footer-brand-text {
 	font-family: 'Charmonman', cursive;
 	font-size: 1.2rem;
 	font-weight: 700;
-	color: #FFFFFF;
+	color: var(--nav-title-color);
 }
 
 .footer-tagline {
 	font-size: 0.85rem;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(99, 38, 62, 0.85);
 }
 
 @media print {
@@ -843,7 +851,7 @@ tr.included-row td { color: #888; }
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: rgba(0, 0, 0, 0.5);
+	background: rgba(58, 36, 48, 0.5);
 	z-index: 10000;
 	align-items: center;
 	justify-content: center;
@@ -864,7 +872,7 @@ tr.included-row td { color: #888; }
 
 .modal-header {
 	padding: 20px;
-	background: var(--brand-green);
+	background: var(--rose-mid);
 	color: #fff;
 	display: flex;
 	justify-content: space-between;
@@ -905,8 +913,8 @@ tr.included-row td { color: #888; }
 }
 
 .category-tab.active {
-	color: var(--brand-green-dark);
-	border-bottom-color: var(--brand-green-dark);
+	color: var(--rose-deep);
+	border-bottom-color: var(--rose-deep);
 }
 
 .modal-body {
@@ -932,7 +940,7 @@ tr.included-row td { color: #888; }
 }
 
 .selected-count-badge {
-	background: var(--brand-green-dark);
+	background: var(--rose-deep);
 	color: #fff;
 	padding: 4px 12px;
 	border-radius: 20px;
@@ -958,13 +966,13 @@ tr.included-row td { color: #888; }
 }
 
 .item-pick-card:hover {
-	border-color: var(--brand-green-dark);
+	border-color: var(--rose-deep);
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .item-pick-card.selected {
-	border-color: var(--brand-green-dark);
-	background: var(--green-pale);
+	border-color: var(--rose-deep);
+	background: var(--rose-pale);
 }
 
 .item-pick-card.disabled {
@@ -977,7 +985,7 @@ tr.included-row td { color: #888; }
 	margin-top: 4px;
 	width: 18px;
 	height: 18px;
-	accent-color: var(--brand-green-dark);
+	accent-color: var(--rose-deep);
 }
 
 .item-pick-info {
@@ -1014,7 +1022,7 @@ tr.included-row td { color: #888; }
 
 .item-pick-price {
 	font-weight: 700;
-	color: var(--brand-green-dark);
+	color: var(--rose-deep);
 }
 
 .item-already-added {
@@ -1053,12 +1061,12 @@ tr.included-row td { color: #888; }
 }
 
 .btn-submit-modal {
-	background: var(--brand-green-dark);
+	background: var(--rose-deep);
 	color: #fff;
 }
 
 .btn-submit-modal:hover {
-	background: #4d7f3a;
+	background: #A6284F;
 }
 
 /* =========================================
@@ -1124,10 +1132,10 @@ tr.included-row td { color: #888; }
 }
 
 /* =========================================
-   3. ปุ่มบันทึกการแก้ไข (เขียวเข้ม)
+   3. ปุ่มบันทึกการแก้ไข (ทองเข้ม)
    ========================================= */
 .btn-save-doc {
-	background: var(--brand-green-dark) !important;
+	background: var(--gold) !important;
 	color: #FFFFFF !important;
 	border: none;
 	padding: 12px 32px;
@@ -1136,13 +1144,13 @@ tr.included-row td { color: #888; }
 	font-weight: 700;
 	cursor: pointer;
 	transition: all 0.2s ease;
-	box-shadow: 0 4px 12px rgba(92, 150, 69, 0.35);
+	box-shadow: 0 4px 12px rgba(184, 134, 47, 0.35);
 }
 
 .btn-save-doc:hover {
-	background: #4d7f3a !important;
+	background: #A6763A !important;
 	transform: translateY(-2px);
-	box-shadow: 0 6px 15px rgba(92, 150, 69, 0.45);
+	box-shadow: 0 6px 15px rgba(184, 134, 47, 0.45);
 }
 
 /* =========================================
@@ -1235,7 +1243,7 @@ tr.included-row td { color: #888; }
 	width: 18px; height: 18px;
 	border: 1px solid #000;
 	background: #FFFFFF;
-	color: var(--brand-green-dark);
+	color: var(--rose-deep);
 	border-radius: 4px;
 	font-size: 13px;
 	line-height: 1;
@@ -1248,7 +1256,7 @@ tr.included-row td { color: #888; }
 
 #mainQuotationTable .btn-qty-minus:hover,
 #mainQuotationTable .btn-qty-plus:hover {
-	background: var(--green-glow);
+	background: var(--rose-glow);
 }
 
 #mainQuotationTable .qty-wrapper .qty-input {
@@ -1284,15 +1292,15 @@ tr.included-row td { color: #888; }
     justify-content: space-between;
 }
 
-/* ปุ่ม + สีเขียววงกลม */
+/* ปุ่ม + สีกุหลาบวงกลม */
 #mainQuotationTable .btn-add-group-inline {
     flex: 0 0 auto;
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    border: 1px solid #3E9C6A; /* ขอบสีเขียว */
+    border: 1px solid #C83568; /* ขอบสีกุหลาบ */
     background: #FFFFFF;
-    color: #3E9C6A; /* เครื่องหมาย + สีเขียว */
+    color: #C83568; /* เครื่องหมาย + สีกุหลาบ */
     font-size: 18px;
     font-weight: 400;
     line-height: 1;
@@ -1305,8 +1313,18 @@ tr.included-row td { color: #888; }
 }
 
 #mainQuotationTable .btn-add-group-inline:hover {
-    background: #3E9C6A;
+    background: #C83568;
     color: #FFFFFF;
     transform: scale(1.05);
 }
+#mainQuotationTable thead th:first-child {
+    white-space: nowrap;
+}
 
+/* FIX: บังคับให้ตารางใบเสนอราคาในหน้าสร้าง ชิดกันสนิทเหมือนหน้ารายละเอียด
+   (เดิมมีช่องว่างระหว่างเซลล์ เพราะ border-collapse ไม่ทำงานจริง
+   ทำให้หัวตารางแต่ละคอลัมน์ดูเหมือนแยกเป็นปุ่มๆ ไม่ต่อเนื่องกัน) */
+#mainQuotationTable {
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+}

@@ -9,6 +9,9 @@ const GROUP_LABELS = {
     'group-extra':      'หมวดอุปกรณ์เสริม' 
 };
 
+// หมวดที่อนุญาตให้โชว์รายละเอียด (itemDetail) ตอนเพิ่มรายการเข้าตาราง
+const CATEGORIES_WITH_DESC = ['สังฆทาน', 'ภัตตาหาร'];
+
 const selectedItemIds = new Set();
 
 // ===== ช่องจำนวน พร้อมปุ่ม +/- (เฉพาะหน้าแก้ไขเท่านั้น) =====
@@ -248,6 +251,10 @@ function addSelectedItemsToTable() {
 
         ensureGroupHeader(targetBody);
 
+        // โชว์รายละเอียด (itemDetail) เฉพาะหมวดสังฆทานกับภัตตาหาร (ปิ่นโต) เท่านั้น หมวดอื่นไม่ต้องโชว์
+        const allowDescForCategory = CATEGORIES_WITH_DESC.some(cat => itemType.includes(cat));
+        const showDesc = !!itemDesc && allowDescForCategory;
+
         const tr = document.createElement('tr');
         tr.className = 'dynamic-row';
         tr.setAttribute('data-item-id', itemId);
@@ -257,7 +264,7 @@ function addSelectedItemsToTable() {
                 <td class="row-number text-center"></td>
                 <td>
                     ${itemName}
-                    ${itemDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
+                    ${showDesc ? `<br><span class="text-muted" style="font-size:12px;">${itemDesc}</span>` : ''}
                     <input type="hidden" name="extraItemIds" value="${itemId}">
                 </td>
                 <td>${buildQtyCell(1, 'extraQtys')}</td>

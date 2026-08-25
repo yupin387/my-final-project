@@ -1,51 +1,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
-/* ===== CSS Variables (เขียวใบตองอ่อน-ทอง-ดาวเรือง theme, organizer) ===== */
+/* ===== CSS Variables (กุหลาบ-ทอง theme, ฝั่งผู้จัดงาน/organizer — เหมือนหน้า bookingList) ===== */
 :root {
-    --green-deep:      #6FA84F;
-    --green-forest:    #7DBB5E;
-    --green-mid:       #9BCE72;
+    /* กุหลาบ-ไวน์ (โทน "ชมพูเข้มสดใส" สำหรับปุ่ม/แถบหัวตาราง) */
+    --rose-deep:       #C83568;
+    --rose-mid:        #DF5A8D;
+    --rose-soft:       #F08FB5;
 
-    --green-banana:       #A9D97A;
-    --green-banana-light: #C9E8A8;
-    --green-pale:         #EEF7E1;
-    --green-glow:         #F7FBF0;
+    /* กุหลาบอ่อน (พาสเทล) */
+    --rose-line:        #E3AFC3;
+    --rose-line-light:  #F0D2DE;
+    --rose-pale:        #FBEAF0;
+    --rose-glow:        #FDF5F8;
 
-    --gold:          #D9A441;
-    --gold-mid:      #E8BE66;
-    --gold-light:    #F3DA9E;
-    --gold-pale:     #FBF0D4;
-    --gold-glow:     #FFFBEF;
+    /* ทอง / อำพัน */
+    --gold:          #C9944A;
+    --gold-mid:      #D9AC6C;
+    --gold-light:    #EBCB9C;
+    --gold-pale:     #FBEEDC;
+    --gold-glow:     #FFFBF3;
+    --marigold:      #E8A24A;
+    --marigold-pale: #FCE4C0;
 
-    --cream:             #ECF2D2;
-    --cream-warm:        #F7FBF0;
-    --cream-mid:         #FBF4E2;
-    --cream-deep:        #F2E6C4;
-    --cream-border:      #E9DCB0;
-    --cream-border-soft: #F0E6C8;
+    /* พลัม/ม่วงอมชมพู */
+    --plum:        #C83568;
+    --plum-pale:   #FDF5F8;
 
-    --white:             #FFFFFF;
+    --cream:         #FFFFFF;
+    --cream-warm:    #FFF7F9;
+    --cream-mid:     #FBE6ED;
+    --cream-deep:    #F5DCE4;
+    --cream-border:  #EFD3DD;
+    --cream-border-soft: #F3E0E6;
 
-    --text-dark:         #3A3020;
-    --text-mid:          #5C4E32;
-    --text-body:         #5A5240;
-    --text-muted:        #8C8168;
-    --text-light:        #ABA189;
+    --white:         #FFFFFF;
+    --off-white:     #FFFDFB;
 
-    --brown-dark:        #4A3D22;
-    --brown-mid:         #5C4E32;
+    --text-dark:     #3A2430;
+    --text-mid:      #5C3C4A;
+    --text-body:     #5A4650;
+    --text-muted:    #8C7480;
+    --text-light:    #ABA1A5;
 
-    --shadow-green:      rgba(111, 168, 79, 0.18);
-    --shadow-warm:       rgba(217, 164, 65, 0.20);
+    --brown-dark:    #5E2740;
+    --brown-mid:     #7A3B54;
 
-    --accent-gold:      #D9A441;
-    --accent-gold-mid:  #E8C878;
-    --accent-gold-pale: #F7E3B0;
+    --shadow-rose:   rgba(200, 53, 104, 0.2);
+    --shadow-warm:   rgba(184, 134, 47, 0.20);
 
-    --brand-green:      #74B457;
-    --brand-green-dark: #5C9645;
+    --accent-gold:      #B8862F;
+    --accent-gold-mid:  #D4AD5F;
+    --accent-gold-pale: #EFDBA8;
 
-    /* ตำแหน่งรูปดอกบัวตกแต่ง (วางไฟล์ที่ /static/images/lotus-decor.png) */
+    /* Navbar / Footer: สีทองทึบ โทนอ่อนละมุน */
+    --brand-solid-gold: #F7EAB8;
+    --nav-title-color:  #63263E;
+    --nav-menu-color:   #63263E;
+
+    /* ตำแหน่งรูปดอกบัวตกแต่ง */
     --lotus-img: url('../images/lotus-decor.png');
 }
 
@@ -53,7 +65,7 @@
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: var(--cream);
+    background-color: var(--cream-mid);
     color: var(--text-dark);
     min-height: 100vh;
     display: flex;
@@ -62,17 +74,18 @@ body {
 
 /* ========== NAVBAR ========== */
 .navbar {
-    background: var(--brand-green);
+    background-color: var(--brand-solid-gold);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--accent-gold);
+    border-bottom: 3px solid var(--gold);
     position: sticky;
     top: 0;
     z-index: 10000;
     min-height: 92px;
-    box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
+    overflow: visible;
+    box-shadow: 0 4px 20px rgba(148, 106, 28, 0.1);
 }
 
 .navbar::before {
@@ -80,7 +93,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--accent-gold-mid);
+    background: var(--gold);
 }
 
 .navbar-brand {
@@ -88,11 +101,12 @@ body {
     align-items: center;
     gap: 12px;
     text-decoration: none;
+    position: relative;
 }
 
 .navbar .lotus-icon,
 .navbar-brand .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.7);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -102,20 +116,20 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
     flex-shrink: 0;
     object-fit: cover;
 }
 
 .navbar-title {
-    color: #FFFFFF;
-    font-family: 'Charmonman', cursive; /* แก้ตรงนี้ */
-    font-size: 34px;                    /* แก้ขนาดตรงนี้ */
-    font-weight: 800;                   /* แก้ความหนาตรงนี้ */
+    color: var(--nav-title-color);
+    font-family: 'Charmonman', cursive;
+    font-size: 34px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .navbar-right {
@@ -131,7 +145,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--nav-menu-color);
     text-decoration: none;
     font-size: 15px;
     font-weight: 700;
@@ -139,33 +153,33 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    text-shadow: none;
     font-family: 'Sarabun', sans-serif;
 }
-.nav-item:hover { background: rgba(255, 255, 255, 0.2); color: #FFFFFF; }
-.nav-item.active { background: #FFFFFF; color: var(--green-forest); font-weight: 700; text-shadow: none; }
+.nav-item:hover { background: rgba(99, 38, 62, 0.1); color: var(--nav-menu-color); }
+.nav-item.active { background: var(--rose-deep); color: #FFFFFF; font-weight: 700; text-shadow: none; }
 
 /* ===== User Pill ===== */
 .user-info {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
-    padding: 6px 14px 6px 6px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
+    padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--nav-menu-color);
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
     white-space: nowrap;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
+.user-info:hover { background: rgba(255, 255, 255, 0.8); }
 
 .user-avatar {
-    background: #FFFFFF;
-    color: var(--green-forest);
+    background: var(--rose-deep);
+    color: #FFFFFF;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -178,9 +192,9 @@ body {
 }
 
 .user-detail { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name   { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; font-family: 'Sarabun', sans-serif; }
-.user-role   { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
-.arrow       { color: #FFFFFF; font-size: 11px; margin-left: 2px; opacity: 0.8; }
+.user-name   { font-size: 0.88rem; font-weight: 700; color: var(--nav-menu-color); font-family: 'Sarabun', sans-serif; }
+.user-role   { font-size: 0.7rem; color: rgba(99, 38, 62, 0.85); }
+.arrow       { color: var(--nav-menu-color); font-size: 11px; margin-left: 2px; opacity: 0.8; }
 
 /* ===== Dropdown ===== */
 .dropdown-menu {
@@ -230,9 +244,9 @@ body {
 }
 
 .flash-banner-success {
-    background: var(--green-pale);
-    border-color: var(--green-banana);
-    color: var(--green-deep);
+    background: var(--rose-pale);
+    border-color: var(--rose-line);
+    color: var(--rose-deep);
 }
 
 .flash-banner-error {
@@ -247,9 +261,9 @@ body {
 .page-wrapper {
     flex: 1;
     padding: 32px 24px 56px;
-    max-width: 1200px; /* ปรับลดลงมาเป็นระดับกลางเพื่อไม่ให้กว้างเกินไป */
+    max-width: 1200px;
     margin: 0 auto;
-    width: 92%; /* คืนค่าสัดส่วนขอบข้างให้สวยงามพอดี */
+    width: 92%;
 }
 
 /* ========== ORNAMENT ========== */
@@ -263,11 +277,11 @@ body {
 .ornament-line {
     flex: 1;
     height: 1px;
-    background: var(--green-banana);
+    background: var(--rose-line);
     max-width: 60px;
 }
 
-.ornament-line.right { background: var(--green-banana); }
+.ornament-line.right { background: var(--rose-line); }
 
 .ornament-diamond {
     width: 8px;
@@ -341,10 +355,10 @@ body {
 
 .tab-btn {
     padding: 8px 20px;
-    border: 1.5px solid var(--brand-green-dark);
+    border: 1.5px solid var(--rose-deep);
     border-radius: 20px;
     text-decoration: none;
-    color: var(--brand-green-dark);
+    color: var(--rose-deep);
     background: var(--white);
     white-space: nowrap;
     font-size: 13px;
@@ -355,16 +369,16 @@ body {
 }
 
 .tab-btn:hover {
-    background: var(--green-pale);
-    box-shadow: 0 2px 8px var(--shadow-green);
+    background: var(--rose-pale);
+    box-shadow: 0 2px 8px var(--shadow-rose);
 }
 
 .tab-btn.active {
-    background: var(--brand-green-dark);
+    background: var(--rose-deep);
     color: #FFFFFF;
-    border-color: var(--brand-green-dark);
+    border-color: var(--rose-deep);
     font-weight: 700;
-    box-shadow: 0 4px 14px rgba(92, 150, 69, 0.45);
+    box-shadow: 0 4px 14px var(--shadow-rose);
 }
 
 /* ========== CONTENT CARD ========== */
@@ -372,7 +386,7 @@ body {
     background: var(--white);
     border-radius: 18px;
     overflow: hidden;
-    border: 1.5px solid var(--green-banana);
+    border: 1.5px solid var(--rose-line);
     box-shadow: 0 6px 32px var(--shadow-warm);
     position: relative;
 }
@@ -388,7 +402,7 @@ body {
 
 /* ========== CARD HEADER BAR ========== */
 .card-header-bar {
-    background: var(--gold);
+    background: var(--rose-mid);
     padding: 15px 24px;
     display: flex;
     justify-content: space-between;
@@ -397,7 +411,7 @@ body {
     font-weight: 700;
     font-size: 16px;
     position: relative;
-    border-bottom: 2px solid var(--green-mid);
+    border-bottom: 2px solid var(--rose-soft);
     font-family: 'Sarabun', sans-serif;
 }
 
@@ -413,13 +427,13 @@ body {
 table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 
 th {
-    background: var(--green-glow);
+    background: var(--rose-glow);
     color: var(--text-dark);
     padding: 14px 18px;
     text-align: left;
     font-size: 12px;
     font-weight: 700;
-    border-bottom: 2px solid var(--green-banana-light);
+    border-bottom: 2px solid var(--rose-line-light);
     font-family: 'Sarabun', sans-serif;
 }
 
@@ -434,7 +448,7 @@ td {
 }
 
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--green-glow); }
+tr:hover td { background: var(--rose-glow); }
 
 .quotation-id {
     font-weight: 700;
@@ -482,17 +496,17 @@ tr:hover td { background: var(--green-glow); }
 }
 
 .status-confirmed {
-    background: var(--green-pale);
-    color: var(--green-deep);
-    border: 1px solid var(--green-banana);
+    background: var(--rose-pale);
+    color: var(--rose-deep);
+    border: 1px solid var(--rose-line);
 }
 
 /* ========== BTN VIEW ========== */
 .content-card table td a.btn-view {
     display: inline-block;
-    color: var(--brand-green-dark);
+    color: var(--rose-deep);
     background: var(--white);
-    border: 1.5px solid var(--brand-green-dark);
+    border: 1.5px solid var(--rose-deep);
     padding: 7px 16px;
     border-radius: 8px;
     text-decoration: none;
@@ -504,11 +518,11 @@ tr:hover td { background: var(--green-glow); }
 }
 
 .content-card table td a.btn-view:hover {
-    background: var(--brand-green-dark);
+    background: var(--rose-deep);
     color: #FFFFFF;
-    border-color: var(--brand-green-dark);
+    border-color: var(--rose-deep);
     transform: translateY(-1px);
-    box-shadow: 0 3px 10px rgba(92, 150, 69, 0.3);
+    box-shadow: 0 3px 10px var(--shadow-rose);
 }
 
 /* ========== EMPTY STATE ========== */
@@ -538,11 +552,11 @@ tr:hover td { background: var(--green-glow); }
 
 /* ========== FOOTER ========== */
 .site-footer {
-    background: var(--brand-green);
-    color: rgba(255, 255, 255, 0.95);
+    background-color: var(--brand-solid-gold);
+    color: var(--nav-title-color);
     margin-top: auto;
-    border-top: 3px solid var(--accent-gold);
-    box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
+    border-top: 3px solid var(--gold);
+    box-shadow: 0 -6px 18px rgba(148, 106, 28, 0.1);
     position: relative;
     z-index: 2;
     overflow: hidden;
@@ -553,7 +567,7 @@ tr:hover td { background: var(--green-glow); }
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--accent-gold-mid);
+    background: var(--gold);
 }
 
 /* ดอกบัวตกแต่งใน footer */
@@ -569,8 +583,13 @@ tr:hover td { background: var(--green-glow); }
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    opacity: 0.35;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
     pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .site-footer::after { display: none; }
 }
 
 .footer-content {
@@ -594,36 +613,36 @@ tr:hover td { background: var(--green-glow); }
 
 .site-footer .lotus-icon,
 .footer-lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.7);
     width: 40px;
     height: 40px;
     max-width: 40px;
     max-height: 40px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
     object-fit: cover;
     flex-shrink: 0;
 }
 
 .footer-brand-text {
-  font-family: 'Charmonman', cursive;
+    font-family: 'Charmonman', cursive;
     font-size: 1.2rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--nav-title-color);
 }
 
 .footer-tagline {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    color: rgba(99, 38, 62, 0.85);
+    text-shadow: none;
 }
 
 .footer-bottom {
     text-align: center;
     padding: 12px 20px 18px;
     font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(99, 38, 62, 0.75);
+    border-top: 1px solid rgba(99, 38, 62, 0.15);
 }
 
 /* ========== RESPONSIVE ========== */
@@ -732,8 +751,8 @@ tr:hover td { background: var(--green-glow); }
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: var(--green-pale);
-    color: var(--green-deep);
+    background: var(--rose-pale);
+    color: var(--rose-deep);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -744,9 +763,9 @@ tr:hover td { background: var(--green-glow); }
 /* ========== CEREMONY TAG ========== */
 .ceremony-tag {
     display: inline-block;
-    background: var(--green-glow);
-    color: var(--green-deep);
-    border: 1px solid var(--green-banana);
+    background: var(--rose-glow);
+    color: var(--rose-deep);
+    border: 1px solid var(--rose-line);
     padding: 4px 10px;
     border-radius: 14px;
     font-size: 11px;
@@ -766,14 +785,70 @@ tr:hover td { background: var(--green-glow); }
     font-weight: 500;
 }
 
-/* ========== ALERT SUCCESS ========== */
+/* ========== ALERT SUCCESS (แบบ pill ลอยกลางจอ) ========== */
 .alert-success {
-    background: var(--green-pale);
-    border: 1.5px solid var(--green-banana);
-    color: var(--green-deep);
-    padding: 13px 20px;
-    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    max-width: 90%;
+    margin: 0 auto 24px;
+    background: #E5F6EC;          /* เขียวอ่อน */
+    border: 1.5px solid #2E9E5B;  /* เขียวเข้ม */
+    color: #1E7A45;               /* ตัวหนังสือเขียวเข้ม */
+    padding: 13px 28px;
+    border-radius: 8px;           /* มุมเหลี่ยม (ปรับได้ตามชอบ) */
     font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 20px;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(46, 158, 91, 0.2);
+    animation: alertFadeIn 0.3s ease;
+}
+
+.alert-success .alert-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+@keyframes alertFadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+/* ========== CEREMONY DOT (จุดสีแทนอิโมจิประจำประเภทพิธี) ========== */
+.ceremony-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* ========== CEREMONY DOT (ในคอลัมน์ตาราง ใช้ตัวใหญ่กว่าปกติเพราะไม่มีข้อความกำกับ) ========== */
+.ceremony-dot-lg {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.dot-home     { background: #C83568; }  /* ชมพู-กุหลาบเข้ม */
+.dot-newhome  { background: #2E9E5B; }  /* เขียว */
+.dot-company  { background: #2E75C4; }  /* ฟ้า-น้ำเงิน */
+.dot-all      { background: transparent; border: 1.5px solid var(--accent-gold-mid); }
+
+.tab-btn.active .dot-all { border-color: #FFFFFF; }
+.ceremony-tag {
+    display: inline-flex;
+    align-items: center;
+}
+
+.empty-state .ceremony-dot {
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
 }

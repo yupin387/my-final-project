@@ -57,7 +57,8 @@ public class ItemController {
     }
 
     @GetMapping
-    public String listItem(@RequestParam(required = false) String typeId, 
+    public String listItem(@RequestParam(required = false) String typeId,
+                           @RequestParam(required = false) String ceremonyType,
                            Model model, 
                            HttpSession session) {
         if (session.getAttribute("currentStaff") == null) {
@@ -72,9 +73,24 @@ public class ItemController {
             items = itemService.getItemsByType(Integer.parseInt(typeId)); 
         }
 
+        // FIX: เพิ่มตัวกรองตามประเภทงานพิธี (ทำบุญบ้าน / ขึ้นบ้านใหม่ / ทำบุญบริษัทหรือออฟฟิศ)
+        // กรอง item ที่มี ceremonyItems ผูกกับ ceremony ที่ ceremonyType ตรงกับตัวที่เลือก
+        // ทำงานร่วมกับตัวกรองประเภท Item เดิมได้ (กรองซ้อนกันทั้งสองเงื่อนไข)
+        if (ceremonyType != null && !ceremonyType.equals("all") && !ceremonyType.isEmpty()) {
+            items = items.stream()
+                .filter(item -> item.getCeremonyItems() != null && item.getCeremonyItems().stream()
+                    .anyMatch(ci -> ci.getCeremony() != null
+                        && ceremonyType.equals(ci.getCeremony().getCeremonyType())))
+                .collect(Collectors.toList());
+        }
+
         model.addAttribute("items", items);
         model.addAttribute("itemTypes", itemService.getAllItemTypes());
         model.addAttribute("selectedType", typeId != null ? typeId : "all");
+
+        // FIX: ส่งค่าตัวกรองประเภทงานที่เลือกอยู่ และรายชื่อประเภทงานทั้ง 3 ให้ view ใช้สร้าง dropdown
+        model.addAttribute("selectedCeremonyType", ceremonyType != null ? ceremonyType : "all");
+        model.addAttribute("ceremonyTypeOrder", CEREMONY_TYPE_ORDER);
 
         Map<Integer, List<String>> itemCeremonyTypes = new LinkedHashMap<>();
         for (Item item : items) {

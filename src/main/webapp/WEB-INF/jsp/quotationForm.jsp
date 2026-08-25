@@ -9,6 +9,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>จัดทำใบเสนอราคา - บุญมีนำพา จัดงานบุญ</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=19">
+<style>
+    /* ===== รายชื่อ "รายการเพิ่มเติม" แสดงในวงเล็บใต้ label เหมือนหน้ารายละเอียดใบเสนอราคา ===== */
+    .tot-extra-detail{
+        font-size: 12px;
+        color: #888;
+        font-weight: 400;
+        font-style: italic;
+        text-align: left;
+        margin-top: 4px;
+        line-height: 1.5;
+    }
+
+    /* FIX: กันหัวคอลัมน์ "ลำดับ" ตัดคำขึ้นบรรทัดใหม่ (ให้ตรงกับหน้ารายละเอียดใบเสนอราคา) */
+    #mainQuotationTable thead th:first-child {
+        white-space: nowrap;
+    }
+</style>
 </head>
 <body>
 
@@ -107,7 +124,7 @@
 
 				<table id="mainQuotationTable" class="standard-table">
                     <colgroup>
-                        <col style="width: 50px;">  
+                        <col style="width: 60px;">  
                         <col style="width: auto;">  
                         <col style="width: 130px;">  
                         <col style="width: 80px;">  
@@ -158,16 +175,17 @@
 							</td>
 							<td class="text-center">1<input type="hidden" name="bookingQtys" value="1" class="qty-input"></td>
 							<td class="text-center">แพ็กเกจ</td>
-							<td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+							<td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${packageDisplayPrice}' pattern='0.00'/>" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
 							<td class="text-right"><span class="subtotal">0.00</span></td>
 						</tr>
 						</c:if>
 
 						<c:if test="${not empty packageIncludedItems && !isCustomRequest}">
-							<tr class="package-included-row no-qty-convert static-row">
-                                <td class="no-index"></td>
-                                <td colspan="5" class="package-includes-title text-left">ประกอบไปด้วยรายการดังนี้:</td>
-							</tr>
+    <tr class="package-included-row no-qty-convert static-row">
+        <td></td>
+        <td class="package-includes-title" style="padding-left: 20px !important;">ประกอบไปด้วยรายการดังนี้:</td>
+        <td></td><td></td><td></td><td></td>
+    </tr>
 							<c:forEach var="pkgItem" items="${packageIncludedItems}">
 								<tr class="package-included-row no-qty-convert static-row">
 									<td class="no-index"></td>
@@ -236,7 +254,7 @@
                                                     <td class="text-center">${item.unit}</td>
                                                     <td>
                                                         <c:set var="sangPrice" value="${isFreeSang ? '0.00' : item.pricePerUnit}" />
-                                                        <input type="number" name="bookingPrices" value="${sangPrice}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
+                                                        <input type="number" name="bookingPrices" value="<fmt:formatNumber value='${sangPrice}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
                                                     </td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>
                                                 </tr>
@@ -274,7 +292,7 @@
                                                     </td>
                                                     <td class="text-center">${foodQty}<input type="hidden" name="bookingQtys" value="${foodQty}" class="qty-input"></td>
                                                     <td class="text-center">${item.unit}</td>
-                                                    <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                                    <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${item.pricePerUnit}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>
                                                 </tr>
                                             </c:if>
@@ -298,12 +316,12 @@
                                             <tr class="static-row">
                                                 <td class="text-center row-number"></td>
                                                 <td>
-                                                    ${item.itemName} <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
-                                                    <input type="hidden" name="bookingItemNames" value="${item.itemName}">
-                                                </td>
+    ${item.itemName}
+    <input type="hidden" name="bookingItemNames" value="${item.itemName}">
+</td>
                                                 <td class="text-center">${monkCount}<input type="hidden" name="bookingQtys" value="${monkCount}" class="qty-input"></td>
                                                 <td class="text-center">${item.unit}</td>
-                                                <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                                <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${item.pricePerUnit}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                             </tr>
                                         </c:if>
@@ -362,7 +380,7 @@
                                                     <td class="text-center">${item.unit}</td>
                                                     <td>
                                                         <c:set var="sangPrice" value="${isFreeSang ? '0.00' : item.pricePerUnit}" />
-                                                        <input type="number" name="bookingPrices" value="${sangPrice}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
+                                                        <input type="number" name="bookingPrices" value="<fmt:formatNumber value='${sangPrice}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
                                                     </td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>
                                                 </tr>
@@ -400,7 +418,7 @@
                                                     </td>
                                                     <td class="text-center">${foodQty}<input type="hidden" name="bookingQtys" value="${foodQty}" class="qty-input"></td>
                                                     <td class="text-center">${item.unit}</td>
-                                                    <td><input type="number" name="bookingPrices" value="${item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                                    <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${item.pricePerUnit}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                                     <td class="text-right"><span class="subtotal">0.00</span></td>
                                                 </tr>
                                             </c:if>
@@ -448,7 +466,10 @@
                             </tr>
                             <c:if test="${!isCustomRequest}">
                             <tr>
-                                <td class="tot-label">รายการเพิ่มเติม:</td>
+                                <td class="tot-label">
+                                    รายการเพิ่มเติม:
+                                    <div class="tot-extra-detail" id="extraItemsDetail"></div>
+                                </td>
                                 <td class="tot-value">฿ <span id="summaryExtra">0.00</span></td>
                             </tr>
                             </c:if>
@@ -553,8 +574,67 @@
 <script src="${pageContext.request.contextPath}/static/js/quotationCreate.js"></script>
 
 <script>
+    // Override เพื่อเพิ่มวงเล็บรายชื่อ "รายการเพิ่มเติม" ให้เหมือนหน้ารายละเอียดใบเสนอราคา
+    window.calculateGrandTotal = function() {
+        var packageTotal = 0.0;
+        var extraTotal = 0.0;
+        var discount = parseFloat(document.getElementById('discountValue').value) || 0;
+        var isCustomRequest = window.IS_CUSTOM_REQUEST === true;
+        var extraItemNames = [];
+
+        document.querySelectorAll('#mainQuotationTable tbody tr').forEach(function(row) {
+            if (row.classList.contains('package-included-row') || row.classList.contains('group-row')) return;
+
+            var qInput = row.querySelector('input[name="extraQtys"], input[name="bookingQtys"]');
+            var pInput = row.querySelector('input[name="extraPrices"], input[name="bookingPrices"]');
+
+            if (qInput && pInput) {
+                var qty = parseFloat(qInput.value) || 0;
+                var price = parseFloat(pInput.value) || 0;
+                var subtotal = qty * price;
+
+                var subtotalSpan = row.querySelector('.subtotal');
+                if (subtotalSpan) subtotalSpan.innerText = subtotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+
+                var parentTbody = row.closest('tbody');
+                var isManuallyAddedExtra = parentTbody && parentTbody.id === 'group-extra';
+
+                if (row.classList.contains('package-main-row')) {
+                    packageTotal += subtotal;
+                } else if (isCustomRequest && !isManuallyAddedExtra) {
+                    packageTotal += subtotal;
+                } else {
+                    extraTotal += subtotal;
+
+                    // เก็บชื่อรายการไว้แสดงในวงเล็บใต้ label "รายการเพิ่มเติม" (ข้ามรายการที่ฟรี/รวมในแพ็กเกจ)
+                    var isFreeItem = !!row.querySelector('.text-danger');
+                    if (!isFreeItem) {
+                        var nameCell = row.children[1];
+                        var nameText = (nameCell && nameCell.childNodes[0]) ? nameCell.childNodes[0].textContent.trim() : '';
+                        if (nameText) extraItemNames.push(nameText);
+                    }
+                }
+            }
+        });
+
+        var summaryPackage = document.getElementById('summaryPackage');
+        if (summaryPackage) summaryPackage.innerText = packageTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+
+        var summaryExtra = document.getElementById('summaryExtra');
+        if (summaryExtra) summaryExtra.innerText = extraTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+
+        var extraDetailDiv = document.getElementById('extraItemsDetail');
+        if (extraDetailDiv) extraDetailDiv.innerText = extraItemNames.length ? ('(' + extraItemNames.join(', ') + ')') : '';
+
+        var grandTotal = packageTotal + extraTotal - discount;
+        if (grandTotal < 0) grandTotal = 0;
+
+        var grandTotalSpan = document.getElementById('grandTotal');
+        if (grandTotalSpan) grandTotalSpan.innerText = grandTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+    };
+
     document.addEventListener('DOMContentLoaded', function () {
-        if(typeof calculateGrandTotal === 'function') calculateGrandTotal();
+        if (typeof calculateGrandTotal === 'function') calculateGrandTotal();
     });
 </script>
 </body>

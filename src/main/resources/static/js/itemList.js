@@ -5,7 +5,11 @@ function showBanner(type, title) {
 
     const banner = document.createElement('div');
     banner.id = 'flash-banner';
-    banner.className = `flash-banner ${type}`;
+    // FIX: เดิม className = `flash-banner ${type}` สร้าง 2 class แยกกัน
+    // (flash-banner กับ success/error) ซึ่งไม่ตรงกับ CSS ที่ประกาศไว้เป็น
+    // .flash-banner-success / .flash-banner-error (ขีดกลาง รวมเป็น class เดียว)
+    // เลยไม่มีสไตล์ใดๆ ถูกดึงมาใช้ ตอนนี้แก้ให้ต่อชื่อ class ให้ตรงกัน
+    banner.className = `flash-banner flash-banner-${type}`;
     banner.innerHTML = `<span>${title}</span>`;
 
     const pageWrapper = document.querySelector('.page-wrapper');

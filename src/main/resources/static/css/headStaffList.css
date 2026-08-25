@@ -1,63 +1,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
-/* ===== CSS Variables (เขียวใบตองอ่อน-ทอง-ดาวเรือง theme, organizer) — matched to bookingList.css ===== */
+/* ===== CSS Variables (กุหลาบ-ทอง theme, organizer) — matched to bookingList.css ===== */
 :root {
-    /* เขียวใบตอง - ใช้เป็นสีรอง ไม่ใช่สีเข้มจัด */
-    --green-deep:      #6FA84F;
-    --green-forest:    #7DBB5E;
-    --green-mid:       #9BCE72;
+    /* กุหลาบ-ไวน์ (โทน "ชมพูเข้มสดใส" สำหรับปุ่ม/แถบหัวตาราง) */
+    --rose-deep:       #C83568;
+    --rose-mid:        #DF5A8D;
+    --rose-soft:       #F08FB5;
 
-    /* เขียวใบตองอ่อน (พาสเทล) */
-    --green-banana:       #A9D97A;
-    --green-banana-light: #C9E8A8;
-    --green-pale:         #EEF7E1;
-    --green-glow:         #F7FBF0;
+    /* กุหลาบอ่อน (พาสเทล) */
+    --rose-line:        #E3AFC3;
+    --rose-line-light:  #F0D2DE;
+    --rose-pale:        #FBEAF0;
+    --rose-glow:        #FDF5F8;
 
-    /* ทอง / เหลืองดาวเรือง (สีดอกไม้ที่ใช้ในงานบุญ) */
-    --gold:          #D9A441;
-    --gold-mid:      #E8BE66;
-    --gold-light:    #F3DA9E;
-    --gold-pale:     #FBF0D4;
-    --gold-glow:     #FFFBEF;
-    --marigold:      #F0A84E;
+    /* ทอง / อำพัน */
+    --gold:          #C9944A;
+    --gold-mid:      #D9AC6C;
+    --gold-light:    #EBCB9C;
+    --gold-pale:     #FBEEDC;
+    --gold-glow:     #FFFBF3;
+    --marigold:      #E8A24A;
     --marigold-pale: #FCE4C0;
 
-    /* ชมพูอ่อนกลีบบัว ใช้แต้มให้ดูมีชีวิตชีวา ไม่จมสีเขียว */
-    --lotus-pink:      #F0A9C4;
-    --lotus-pink-pale: #FBE3ED;
+    /* พลัม/ม่วงอมชมพู */
+    --plum:        #C83568;
+    --plum-pale:   #FDF5F8;
 
     --cream:         #FFFFFF;
-    --cream-warm:    #ECF2D2;
-    --cream-mid:     #FBF4E2;
-    --cream-deep:    #F2E6C4;
-    --cream-border:  #E9DCB0;
-    --cream-border-soft: #F0E6C8;
+    --cream-warm:    #FFF7F9;
+    --cream-mid:     #FBE6ED;
+    --cream-deep:    #F5DCE4;
+    --cream-border:  #EFD3DD;
+    --cream-border-soft: #F3E0E6;
 
     --white:         #FFFFFF;
-    --off-white:     #FFFEFA;
+    --off-white:     #FFFDFB;
 
-    --text-dark:     #3A3020;
-    --text-mid:      #5C4E32;
-    --text-body:     #5A5240;
-    --text-muted:    #8C8168;
-    --text-light:    #ABA189;
+    --text-dark:     #3A2430;
+    --text-mid:      #5C3C4A;
+    --text-body:     #5A4650;
+    --text-muted:    #8C7480;
+    --text-light:    #ABA1A5;
 
-    --brown-dark:    #4A3D22;
-    --brown-mid:     #5C4E32;
+    --brown-dark:    #5E2740;
+    --brown-mid:     #7A3B54;
 
-    --shadow-green:  rgba(111, 168, 79, 0.18);
-    --shadow-warm:   rgba(217, 164, 65, 0.20);
+    --shadow-rose:   rgba(200, 53, 104, 0.2);
+    --shadow-warm:   rgba(184, 134, 47, 0.20);
 
-    /* สีทองจริง ใช้คู่กับเขียวสำหรับธีม "เขียว-ทอง" ของฝั่งผู้จัดงาน */
-    --accent-gold:      #D9A441;
-    --accent-gold-mid:  #E8C878;
-    --accent-gold-pale: #F7E3B0;
+    --accent-gold:      #B8862F;
+    --accent-gold-mid:  #D4AD5F;
+    --accent-gold-pale: #EFDBA8;
 
-    /* ===== Navbar / Footer solid brand green (ไม่ไล่สี ใช้เขียวสวยๆ สีเดียว) ===== */
-    --brand-green: #74B457;
-    --brand-green-dark: #5C9645;
+    /* ===== Navbar / Footer: สีทองทึบ โทนอ่อนละมุน ไม่ไล่สี (เหมือน bookingList) ===== */
+    --brand-solid-gold: #F7EAB8;
+    --nav-title-color:  #63263E;
+    --nav-menu-color:   #63263E;
 
-    /* ตำแหน่งรูปดอกบัวตกแต่ง (วางไฟล์ที่ /static/images/lotus-decor.png) */
+    /* ตำแหน่งรูปดอกบัวตกแต่ง */
     --lotus-img: url('../images/lotus-decor.png');
 }
 
@@ -65,7 +65,7 @@
 
 body {
     font-family: 'Sarabun', sans-serif;
-    background-color: var(--cream-warm);
+    background-color: var(--cream-mid);
     color: var(--text-dark);
     min-height: 100vh;
     display: flex;
@@ -74,27 +74,26 @@ body {
 
 /* ========== NAVBAR (matches bookingList.css .navbar) ========== */
 .navbar {
-    background: var(--brand-green);
+    background-color: var(--brand-solid-gold);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--accent-gold);
+    border-bottom: 3px solid var(--gold);
     position: sticky;
     top: 0;
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
+    box-shadow: 0 4px 20px rgba(148, 106, 28, 0.1);
 }
 
-/* เส้นทองบางๆ ด้านบนแถบเมนู (สีทองล้วน ไม่ไล่เฉด) */
 .navbar::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--accent-gold-mid);
+    background: var(--gold);
 }
 
 .navbar-brand {
@@ -102,11 +101,12 @@ body {
     align-items: center;
     gap: 12px;
     text-decoration: none;
+    position: relative;
 }
 
 .navbar .lotus-icon,
 .navbar-brand .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.7);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -116,22 +116,22 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
     flex-shrink: 0;
     object-fit: cover;
-    color: #FFFFFF;
 }
 
 .navbar-title {
-    color: #FFFFFF;
-    font-family: 'Charmonman', cursive; /* แก้ตรงนี้ */
-    font-size: 34px;                    /* แก้ขนาดตรงนี้ */
-    font-weight: 800;                   /* แก้ความหนาตรงนี้ */
+    color: var(--nav-title-color);
+    font-family: 'Charmonman', cursive;
+    font-size: 34px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
+
 .navbar-right {
     display: flex;
     align-items: center;
@@ -147,7 +147,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--nav-menu-color);
     text-decoration: none;
     font-size: 15px;
     font-weight: 700;
@@ -155,42 +155,41 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     font-family: 'Sarabun', sans-serif;
+    text-shadow: none;
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #FFFFFF;
+    background: rgba(99, 38, 62, 0.1);
+    color: var(--nav-menu-color);
 }
 
 .nav-item.active {
-    background: #FFFFFF;
-    color: var(--green-forest);
-    font-weight: 700;
+    background: var(--rose-deep);
+    color: #FFFFFF;
     text-shadow: none;
 }
 
 /* User pill */
 .user-info {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--nav-menu-color);
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
+.user-info:hover { background: rgba(255, 255, 255, 0.8); }
 
 .user-avatar {
-    background: #FFFFFF;
-    color: var(--green-forest);
+    background: var(--rose-deep);
+    color: #FFFFFF;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -203,9 +202,9 @@ body {
 }
 
 .user-detail { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name   { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
-.user-role   { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
-.arrow       { color: #FFFFFF; font-size: 11px; opacity: 0.85; }
+.user-name   { font-size: 0.88rem; font-weight: 700; color: var(--nav-menu-color); }
+.user-role   { font-size: 0.7rem; color: rgba(99, 38, 62, 0.85); }
+.arrow       { color: var(--nav-menu-color); font-size: 11px; opacity: 0.85; }
 
 /* Dropdown */
 .dropdown-menu {
@@ -259,7 +258,6 @@ body {
 .alert {
     padding: 12px 32px;
     border-radius: 8px;
-    /* จัดกึ่งกลางด้วย margin: 0 auto และเว้นระยะด้านล่าง 24px */
     margin: 0 auto 24px auto;
     font-size: 16px;
     font-weight: 600;
@@ -267,16 +265,14 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    /* ให้ความกว้างพอดีกับตัวอักษร ไม่ขยายเต็มจอ */
-    width: fit-content; 
-    box-shadow: 0 2px 8px rgba(45, 104, 211, 0.1); /* เพิ่มเงาบางๆ ให้ดูมีมิติ */
+    width: fit-content;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.1);
 }
 
 .alert.success {
-    /* ปรับเป็นโทนสีฟ้าตามรูปตัวอย่าง */
-    background: #E6F0FF; 
-    color: #2D68D3;      
-    border: 1px solid #B6D4FE; 
+    background: #E8F5E9;
+    color: #2E7D32;
+    border: 1px solid #A5D6A7;
 }
 
 /* ========== LIST HEADER ========== */
@@ -292,7 +288,7 @@ body {
 
 .list-header-text { text-align: left; position: relative; z-index: 1; }
 
-/* ดอกบัวตกแต่ง - ภาพเด่น มองเห็นชัดเจน วางไว้เหนือหัวข้อฝั่งซ้าย */
+/* ดอกบัวตกแต่ง */
 .list-header::before {
     content: '';
     position: absolute;
@@ -312,7 +308,6 @@ body {
 
 .btn-add { position: relative; z-index: 1; }
 
-/* ornament เป็นสีเขียวใบตองอ่อนล้วน ไม่ไล่เฉด */
 .section-ornament {
     display: flex;
     align-items: center;
@@ -321,9 +316,9 @@ body {
 }
 .ornament-line {
     flex: 1; max-width: 80px; height: 1px;
-    background: var(--green-banana);
+    background: var(--rose-line);
 }
-.ornament-line.right { background: var(--green-banana); }
+.ornament-line.right { background: var(--rose-line); }
 .ornament-diamond    { width: 10px; height: 10px; background: var(--accent-gold); transform: rotate(45deg); flex-shrink: 0; }
 .ornament-diamond-sm { width: 5px;  height: 5px;  background: var(--accent-gold-pale); transform: rotate(45deg); flex-shrink: 0; }
 
@@ -337,7 +332,6 @@ body {
 
 .list-header p { font-size: 13px; color: var(--text-muted); }
 
-/* เส้นทองใต้หัวข้อ (สีทองล้วน) */
 .gold-line {
     width: 55px; height: 3px;
     background: var(--accent-gold);
@@ -345,7 +339,7 @@ body {
     margin: 8px 0 0;
 }
 
-/* ========== ADD BUTTON (สีทองล้วน ไม่ไล่เฉด) ========== */
+/* ========== ADD BUTTON ========== */
 .btn-add {
     display: inline-flex;
     align-items: center;
@@ -359,14 +353,14 @@ body {
     font-weight: 700;
     font-family: 'Sarabun', sans-serif;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px rgba(217, 164, 65, 0.35);
+    box-shadow: 0 4px 14px rgba(184, 134, 47, 0.35);
     white-space: nowrap;
     flex-shrink: 0;
 }
 .btn-add:hover {
-    background: #C4922F;
+    background: #A6763A;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(217, 164, 65, 0.45);
+    box-shadow: 0 6px 20px rgba(184, 134, 47, 0.45);
 }
 
 /* ========== CONTENT CARD ========== */
@@ -374,7 +368,7 @@ body {
     background: var(--white);
     border-radius: 20px;
     overflow: hidden;
-    border: 1.5px solid var(--green-banana);
+    border: 1.5px solid var(--rose-line);
     box-shadow: 0 6px 32px var(--shadow-warm);
     position: relative;
 }
@@ -386,9 +380,9 @@ body {
     background: var(--accent-gold);
 }
 
-/* ========== CARD HEADER BAR (สีทองล้วน สลับกับ navbar เขียว) ========== */
+/* ========== CARD HEADER BAR (matches bookingList .card-header-bar) ========== */
 .card-header-bar {
-    background: var(--gold);
+    background: var(--rose-mid);
     padding: 16px 28px;
     display: flex;
     justify-content: space-between;
@@ -397,22 +391,22 @@ body {
     font-family: 'Sarabun', sans-serif;
     font-weight: 700;
     font-size: 16px;
-    border-bottom: 2px solid var(--green-mid);
+    border-bottom: 2px solid var(--rose-soft);
 }
-.header-count { font-size: 13px; color: #FFFFFF; opacity: 0.85; font-family: 'Sarabun', sans-serif; }
+.header-count { font-size: 13px; color: #FFFFFF; opacity: 0.9; font-family: 'Sarabun', sans-serif; }
 
 /* ========== TABLE ========== */
 table { width: 100%; border-collapse: collapse; }
 
 thead th {
-    background: var(--green-glow);
+    background: var(--rose-glow);
     color: var(--text-dark);
     padding: 15px 18px;
     text-align: left;
     font-family: 'Sarabun', sans-serif;
     font-size: 14px;
     font-weight: 700;
-    border-bottom: 2px solid var(--green-banana-light);
+    border-bottom: 2px solid var(--rose-line-light);
 }
 
 tbody td {
@@ -424,10 +418,10 @@ tbody td {
 }
 
 tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: var(--green-glow); transition: background 0.15s; }
+tbody tr:hover td { background: var(--rose-glow); transition: background 0.15s; }
 tbody td strong { color: var(--text-dark); font-weight: 700; }
 
-/* ========== AVATAR CELL (สีทองล้วน ไม่ไล่เฉด) ========== */
+/* ========== AVATAR CELL ========== */
 .staff-avatar-cell {
     display: flex;
     align-items: center;
@@ -478,7 +472,7 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
     font-size: 15px;
 }
 
-/* ========== SWEETALERT CUSTOM (สีทองล้วน ไม่ไล่เฉด) ========== */
+/* ========== SWEETALERT CUSTOM ========== */
 .my-rounded-popup {
     border-radius: 20px !important;
     padding: 2.5em 3em !important;
@@ -499,12 +493,12 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
     margin-left: 8px;
     transition: all 0.2s;
 }
-.swal-btn-confirm:hover { background: #C4922F; transform: translateY(-1px); }
+.swal-btn-confirm:hover { background: #A6763A; transform: translateY(-1px); }
 
 .swal-btn-cancel {
     background: var(--white);
     color: var(--brown-mid);
-    border: 2px solid var(--green-mid);
+    border: 2px solid var(--rose-mid);
     padding: 10px 28px;
     border-radius: 8px;
     font-size: 15px; font-weight: 700;
@@ -512,7 +506,7 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
     cursor: pointer;
     transition: background 0.2s;
 }
-.swal-btn-cancel:hover { background: var(--green-pale); }
+.swal-btn-cancel:hover { background: var(--rose-pale); }
 
 /* ========== FOOTER (matches bookingList.css .site-footer) ========== */
 .footer-strip {
@@ -523,26 +517,24 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
 }
 
 .site-footer {
-    background: var(--brand-green);
-    color: rgba(255, 255, 255, 0.95);
+    background-color: var(--brand-solid-gold);
+    color: var(--nav-title-color);
     margin-top: auto;
-    border-top: 3px solid var(--accent-gold);
-    box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
+    border-top: 3px solid var(--gold);
+    box-shadow: 0 -6px 18px rgba(148, 106, 28, 0.1);
     position: relative;
     z-index: 2;
     overflow: hidden;
 }
 
-/* เส้นทองบางๆ ด้านบน footer (สีทองล้วน ไม่ไล่เฉด) */
 .site-footer::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--accent-gold-mid);
+    background: var(--gold);
 }
 
-/* ดอกบัวตกแต่งใน footer - วางข้างข้อความ ให้เห็นชัดสวยงาม */
 .site-footer::after {
     content: '';
     position: absolute;
@@ -555,9 +547,13 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 1;
+    opacity: 0.35;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
     pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .site-footer::after { display: none; }
 }
 
 .footer-content {
@@ -581,41 +577,41 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
 
 .site-footer .lotus-icon,
 .footer-lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.7);
     width: 40px;
     height: 40px;
     max-width: 40px;
     max-height: 40px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
     object-fit: cover;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    color: #FFFFFF;
+    color: var(--nav-title-color);
 }
 
 .footer-brand-text {
-   font-family: 'Charmonman', cursive;
+    font-family: 'Charmonman', cursive;
     font-size: 1.2rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--nav-title-color);
 }
 
 .footer-tagline {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    color: rgba(99, 38, 62, 0.85);
+    text-shadow: none;
 }
 
 .footer-bottom {
     text-align: center;
     padding: 12px 20px 18px;
     font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(99, 38, 62, 0.75);
+    border-top: 1px solid rgba(99, 38, 62, 0.15);
 }
 
 /* ========== RESPONSIVE ========== */

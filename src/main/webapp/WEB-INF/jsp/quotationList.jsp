@@ -41,13 +41,6 @@
     </div>
 </div>
 
-<%-- ========== FLASH BANNER ========== --%>
-<c:if test="${not empty success}">
-    <div class="flash-banner flash-banner-success" id="flashBanner">✓ ${success}</div>
-</c:if>
-<c:if test="${not empty error}">
-    <div class="flash-banner flash-banner-error" id="flashBanner">⚠ ${error}</div>
-</c:if>
 
 <%-- ========== PAGE WRAPPER ========== --%>
 <div class="page-wrapper">
@@ -95,7 +88,7 @@
             <tbody>
                 <c:forEach var="q" items="${quotations}">
                     <tr>
-                        <td><span class="quotation-id">#${q.quotationId}</span></td>
+                        <td><span class="quotation-id">${q.quotationId}</span></td>
                         <td>
                             <span class="customer-name">
                                 ${q.bookingForm.member.memberFirstName} ${q.bookingForm.member.memberLastName}

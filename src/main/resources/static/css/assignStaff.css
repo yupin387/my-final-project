@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
-/* ===== CSS Variables (เขียวใบตองอ่อน-ทอง-ดาวเรือง) ===== */
+/* ===== CSS Variables (กุหลาบ-ทอง-ดาวเรือง — ให้ตรงกับหน้า quotationDetail) ===== */
 :root {
-    --green-deep:         #6FA84F;
-    --green-forest:       #7DBB5E;
-    --green-mid:          #9BCE72;
-    --green-banana:       #A9D97A;
-    --green-banana-light: #C9E8A8;
-    --green-pale:         #EEF7E1;
-    --green-glow:         #F7FBF0;
+    --rose-deep:          #C83568;
+    --rose-mid:           #DF5A8D;
+    --rose-soft:          #F08FB5;
+    --rose-line:          #E3AFC3;
+    --rose-line-light:    #F0D2DE;
+    --rose-pale:          #FBEAF0;
+    --rose-glow:          #FDF5F8;
 
     --gold:              #D9A441;
     --gold-mid:          #E8BE66;
@@ -16,35 +16,37 @@
     --gold-pale:         #FBF0D4;
     --gold-glow:         #FFFBEF;
 
-    --cream:             #F7FBF0;
-    --cream-warm:        #F7FBF0;
-    --cream-mid:         #FBF4E2;
-    --cream-deep:        #F2E6C4;
-    --cream-border:      #E9DCB0;
-    --cream-border-soft: #F0E6C8;
+    --cream:             #FBE6ED;
+    --cream-warm:        #FFF7F9;
+    --cream-mid:         #FBE6ED;
+    --cream-deep:        #F5DCE4;
+    --cream-border:      #EFD3DD;
+    --cream-border-soft: #F3E0E6;
 
     --white:             #FFFFFF;
     --off-white:         #FFFEFA;
 
-    --text-dark:         #3A3020;
-    --text-mid:          #5C4E32;
+    --text-dark:         #333333;
+    --text-mid:          #555555;
     --text-body:         #5A5240;
-    --text-muted:        #8C8168;
+    --text-muted:        #777777;
     --text-light:        #ABA189;
 
-    --brown-dark:        #4A3D22;
-    --brown-mid:         #5C4E32;
+    --brown-dark:        #333333;
+    --brown-mid:         #555555;
 
-    --shadow-green: rgba(111, 168, 79, 0.18);
+    --shadow-rose:  rgba(200, 53, 104, 0.18);
     --shadow-warm:  rgba(217, 164, 65, 0.18);
 
     --accent-gold:      #D9A441;
     --accent-gold-mid:  #E8C878;
     --accent-gold-pale: #F7E3B0;
 
-    /* สีเขียวหลักสำหรับ Navbar / Header / Footer */
-    --brand-green:      #74B457;
-    --brand-green-dark: #5C9645;
+    /* ===== ธีม NAVBAR / FOOTER: กุหลาบ-ทอง (ให้ตรงกับหน้า quotationDetail) ===== */
+    --navfoot-bg:          #F7EAB8; /* สีทองทึบโทนอ่อนพาสเทล */
+    --navfoot-border-gold: #C9944A; /* เส้นขอบทอง */
+    --navfoot-text:        #63263E; /* สีเลือดหมูมารูน สำหรับข้อความ/โลโก้/เมนู */
+    --navfoot-rose-deep:   #C83568; /* สีชมพูเข้ม สำหรับปุ่ม active / avatar */
 
     /* รูปดอกบัวตกแต่ง */
     --lotus-img: url('../images/lotus-decor.png');
@@ -61,20 +63,20 @@ body {
     flex-direction: column;
 }
 
-/* ========== NAVBAR (เขียว-ทอง) ========== */
+/* ========== NAVBAR (กุหลาบ-ทอง ให้ตรงกับ quotationDetail) ========== */
 .navbar {
-    background: var(--brand-green);
+    background-color: var(--navfoot-bg);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--accent-gold);
+    border-bottom: 3px solid var(--navfoot-border-gold);
     position: sticky;
     top: 0;
     z-index: 10000;
     min-height: 84px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
+    box-shadow: 0 4px 20px rgba(148, 106, 28, 0.1);
 }
 
 .navbar::before {
@@ -82,7 +84,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--accent-gold-mid);
+    background: var(--navfoot-border-gold);
 }
 
 .navbar-brand {
@@ -94,7 +96,7 @@ body {
 
 .navbar .lotus-icon,
 .navbar-brand .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.7);
     width: 56px;
     height: 56px;
     max-width: 56px;
@@ -103,20 +105,20 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
     flex-shrink: 0;
     object-fit: cover;
 }
 
 .navbar-title {
-    color: #FFFFFF;
-    font-family: 'Charmonman', cursive; /* แก้ตรงนี้ */
-    font-size: 34px;                    /* แก้ขนาดตรงนี้ */
-    font-weight: 800;                   /* แก้ความหนาตรงนี้ */
+    color: var(--navfoot-text);
+    font-family: 'Charmonman', cursive;
+    font-size: 34px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 .navbar-right {
     display: flex;
@@ -133,7 +135,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--navfoot-text);
     text-decoration: none;
     font-size: 14.5px;
     font-weight: 700;
@@ -141,41 +143,41 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    text-shadow: none;
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #FFFFFF;
+    background: rgba(99, 38, 62, 0.1);
+    color: var(--navfoot-text);
 }
 
 .nav-item.active {
-    background: #FFFFFF;
-    color: var(--brand-green-dark);
+    background: var(--navfoot-rose-deep);
+    color: #FFFFFF;
     font-weight: 700;
     text-shadow: none;
 }
 
 /* User pill */
 .user-info {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
     padding: 6px 14px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--navfoot-text);
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
+.user-info:hover { background: rgba(255, 255, 255, 0.8); }
 
 .user-avatar {
-    background: #FFFFFF;
-    color: var(--brand-green-dark);
+    background: var(--navfoot-rose-deep);
+    color: #FFFFFF;
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -188,9 +190,9 @@ body {
 }
 
 .user-detail { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name   { font-size: 0.85rem; font-weight: 700; color: #FFFFFF; }
-.user-role   { font-size: 0.68rem; color: rgba(255, 255, 255, 0.75); }
-.arrow       { color: #FFFFFF; font-size: 11px; opacity: 0.8; }
+.user-name   { font-size: 0.85rem; font-weight: 700; color: var(--navfoot-text); }
+.user-role   { font-size: 0.68rem; color: rgba(99, 38, 62, 0.85); }
+.arrow       { color: var(--navfoot-text); font-size: 11px; opacity: 0.8; }
 
 /* Dropdown */
 .dropdown-menu {
@@ -242,7 +244,7 @@ body {
     max-width: 760px;
     background: var(--white);
     border-radius: 20px;
-    border: 1.5px solid var(--green-banana);
+    border: 1.5px solid var(--rose-line);
     box-shadow: 0 8px 34px var(--shadow-warm);
     overflow: hidden;
     position: relative;
@@ -256,9 +258,9 @@ body {
     z-index: 2;
 }
 
-/* ========== CARD HEADER (เขียว-ทอง + ดอกบัว) ========== */
+/* ========== CARD HEADER (ทอง + ดอกบัว) ========== */
 .assign-header {
-    background: var(--accent-gold); /* เปลี่ยนตรงนี้เป็นสีเหลือง */
+    background: var(--accent-gold);
     padding: 26px 30px 22px;
     text-align: center;
     border-bottom: 3px solid var(--accent-gold-pale);
@@ -324,13 +326,13 @@ body {
 .booking-info-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    background: var(--green-glow);
-    border-bottom: 2px solid var(--green-pale);
+    background: var(--rose-glow);
+    border-bottom: 2px solid var(--rose-pale);
 }
 
 .info-cell {
     padding: 16px 20px;
-    border-right: 1px solid var(--green-pale);
+    border-right: 1px solid var(--rose-pale);
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -341,7 +343,7 @@ body {
 .info-cell.full {
     grid-column: 1 / -1;
     border-right: none;
-    border-top: 1px solid var(--green-pale);
+    border-top: 1px solid var(--rose-pale);
 }
 
 .info-label {
@@ -375,7 +377,7 @@ body {
 
 .current-staff-avatar {
     width: 42px; height: 42px;
-    background: var(--brand-green-dark);
+    background: var(--navfoot-rose-deep);
     color: #FFFFFF;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -403,7 +405,7 @@ body {
 }
 
 .new-label {
-    font-size: 12.5px; color: var(--brand-green-dark); font-weight: 700;
+    font-size: 12.5px; color: var(--navfoot-rose-deep); font-weight: 700;
     background: var(--white);
     border: 1.5px dashed var(--accent-gold);
     padding: 7px 16px; border-radius: 8px;
@@ -421,7 +423,7 @@ body {
 }
 
 .form-section-title span {
-    font-size: 0.95rem; font-weight: 700; color: var(--brand-green-dark);
+    font-size: 0.95rem; font-weight: 700; color: var(--navfoot-rose-deep);
 }
 
 .form-title-line {
@@ -491,11 +493,11 @@ body {
     outline: none;
 }
 
-/* ===== Submit Button (เขียวทึบ) ===== */
+/* ===== Submit Button (ทองทึบ) ===== */
 /* สีปุ่มปกติ */
 .btn-submit {
-    background: var(--accent-gold); /* เปลี่ยนสีพื้นหลังปุ่มเป็นสีเหลือง */
-    color: #FFFFFF; /* หากสีเหลืองสว่างไป สามารถเปลี่ยนตัวหนังสือเป็นสีดำหรือ var(--text-dark) ได้ครับ */
+    background: var(--accent-gold);
+    color: #FFFFFF;
     border: none;
     padding: 14px;
     border-radius: 11px;
@@ -505,14 +507,14 @@ body {
     cursor: pointer;
     letter-spacing: 0.3px;
     transition: all 0.25s;
-    box-shadow: 0 4px 14px var(--shadow-warm); /* เปลี่ยนสีเงาให้เข้ากับสีเหลือง */
+    box-shadow: 0 4px 14px var(--shadow-warm);
     position: relative;
     overflow: hidden;
 }
 
 /* สีปุ่มเวลาเอาเมาส์ชี้ (Hover) */
 .btn-submit:hover {
-    background: #C49132; /* สีเหลืองที่เข้มขึ้นเวลาเอาเมาส์ชี้ */
+    background: #C49132;
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(217, 164, 65, 0.4);
 }
@@ -527,15 +529,15 @@ body {
     font-size: 13.5px; font-weight: 600;
     transition: color 0.2s;
 }
-.back-link:hover { color: var(--brand-green-dark); }
+.back-link:hover { color: var(--navfoot-rose-deep); }
 
-/* ========== FOOTER (เขียว-ทอง พร้อมดอกบัว) ========== */
+/* ========== FOOTER (กุหลาบ-ทอง พร้อมดอกบัว ให้ตรงกับ quotationDetail) ========== */
 .site-footer {
-    background: var(--brand-green);
-    color: rgba(255, 255, 255, 0.95);
+    background-color: var(--navfoot-bg);
+    color: var(--navfoot-text);
     margin-top: auto;
-    border-top: 3px solid var(--accent-gold);
-    box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
+    border-top: 3px solid var(--navfoot-border-gold);
+    box-shadow: 0 -6px 18px rgba(148, 106, 28, 0.1);
     position: relative;
     z-index: 2;
     overflow: hidden;
@@ -546,7 +548,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--accent-gold-mid);
+    background: var(--navfoot-border-gold);
 }
 
 .site-footer::after {
@@ -561,6 +563,7 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    opacity: 0.35;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
     pointer-events: none;
 }
@@ -587,36 +590,36 @@ body {
 
 .site-footer .lotus-icon,
 .footer-lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.7);
     width: 38px;
     height: 38px;
     max-width: 38px;
     max-height: 38px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
     object-fit: cover;
     flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 .footer-brand-text {
 	font-family: 'Charmonman', cursive;
     font-size: 1.05rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--navfoot-text);
 }
 
 .footer-tagline {
     font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    color: rgba(99, 38, 62, 0.85);
 }
 
 .footer-bottom {
     text-align: center;
     padding: 12px 20px 18px;
     font-size: 0.76rem;
-    color: rgba(255, 255, 255, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(99, 38, 62, 0.75);
+    border-top: 1px solid rgba(99, 38, 62, 0.15);
 }
 
 /* ========== RESPONSIVE ========== */

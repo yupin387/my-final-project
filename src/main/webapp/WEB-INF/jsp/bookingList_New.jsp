@@ -42,6 +42,15 @@
 <!-- ===== PAGE WRAPPER ===== -->
 <div class="page-wrapper">
 
+    <!-- ===== Flash Message ===== -->
+    <c:if test="${not empty success}">
+        <div class="flash-banner flash-banner-success">${success}</div>
+    </c:if>
+    <c:if test="${not empty error}">
+        <div class="flash-banner flash-banner-error">${error}</div>
+    </c:if>
+
+
     <!-- Page header with ornament -->
     <div class="list-header">
         <div class="section-ornament">

@@ -2,29 +2,45 @@
 
 /* =========================================================
    COLOR SYSTEM
-   ธีมงานบุญ: ส้ม (Navbar/Footer) + ส้มอ่อน/ครีม (ตาราง/การ์ด) + น้ำตาลอ่อน (ตัวหนังสือ)
+   ธีมงานบุญ (ฝั่งหัวหน้างาน/staff): เหลืองทองน้ำผึ้ง (honey-gold) สำหรับ navbar/footer
+   + ส้มอ่อน/ครีม (ตาราง) + ชมพู-กุหลาบเข้ม (accent-pink) ใช้กับปุ่ม active, แถบหัวการ์ด, avatar
+
+   หมายเหตุระบบสี 3 ฝั่ง (ให้ต่างกันชัดเจน แต่ยังอยู่ตระกูลอบอุ่นเดียวกัน):
+     - สมาชิก (home)      -> ทองอำพันอ่อน ไล่เฉด #F8E7BE -> #E0B76A (พาสเทลสว่างสุด)
+     - ผู้จัดงาน (organizer) -> ทองอำพันกลาง ไล่เฉด #F3D48A -> #D1A24A + ตัวอักษรมารูน + ปุ่ม/แถบชมพู-กุหลาบ
+     - หัวหน้างาน (staff, ไฟล์นี้) -> ตัวแถบ navbar/footer เป็นทองไล่เฉดเข้มสุด #EFC16B -> #B8872F
+       เส้นกรอบบน-ล่างเป็นทองตันเส้นเดียว (ไม่ไล่สี) โทนอ่อนลงจากเดิมเพื่อไม่ให้ดูเป็นสีน้ำตาล
+       + ปุ่ม active, แถบหัวการ์ด, avatar ใช้ชมพู-กุหลาบเข้มให้เป็นชุดเดียวกันทั้ง 3 ฝั่ง
    ========================================================= */
 :root {
     /* พื้นหลังสีครีมสว่างๆ */
     --bg-light:       #FFFBF5;
 
-    /* สีหลัก — ส้มสด ใช้กับ navbar/footer */
-    --peach-primary:  #E8703A;
-    --peach-hover:    #D45F2A;
-    --peach-pale:     #FDEEE4;
-    --peach-deep:     #B84B1F;
+    /* สีหลัก — เหลืองทองน้ำผึ้ง ใช้กับ navbar/footer แบบไล่เฉด (เอกลักษณ์ฝั่งหัวหน้างาน — เข้มสุดในลำดับชั้น 3 ฝั่ง) */
+    --peach-primary:  #EFC16B;
+    --peach-hover:    #B8872F;
+    --peach-pale:     #FDF5E6;
+    --peach-deep:     #CC9A44;
 
-    /* สีส้มอ่อน/ครีม — ใช้กับแถบหัวการ์ดและตาราง */
-    --orange-light:   #F3BA8B;
+    /* สีส้มอ่อน/ครีม — ใช้กับปุ่มแท็บ (สถานะ inactive) และตาราง */
+    --orange-light:   #F3C98B;
     --orange-pale:    #FCF5E3;
 
-    /* สีทอง — ใช้เป็น accent/ตกแต่ง */
-    --gold-primary:   #D9A441;
+    /* สีทอง — ใช้เป็นเส้นกรอบบน-ล่างของ navbar/footer แบบตันเส้นเดียว (ปรับให้อ่อนลง ไม่ให้ดูเป็นสีน้ำตาล) */
+    --gold-primary:   #C89238;
     --gold-hover:     #B8872F;
     --gold-pale:      #FBF1DC;
     --gold-light:     #F3DA9E;
 
-    /* สีน้ำตาล (ตัวหนังสือหลัก) */
+    /* สีชมพู-กุหลาบเข้ม — ใช้กับปุ่ม active (nav-item, tab-btn), แถบหัวการ์ด, และ avatar */
+    --accent-pink:      #C83568;
+    --accent-pink-mid:  #DF5A8D;
+    --accent-pink-pale: #FBEAF0;
+
+    /* สีตัวอักษรบน navbar/footer — แดงเลือดหมู/มารูน อ่านง่ายบนพื้นทองอ่อน */
+    --nav-text-color: #63263E;
+
+    /* สีน้ำตาล (ตัวหนังสือหลักของเนื้อหาในหน้า) */
     --brown-text:     #4A3728; 
     --brown-muted:    #8A7666;
 
@@ -38,8 +54,9 @@
 
     /* สีขอบและเงา */
     --white:          #FFFFFF;
-    --card-border:    #F0E2D3;
-    --shadow-soft:    rgba(232, 112, 58, 0.15);
+    --card-border:    #F3E4CB;
+    --shadow-soft:    rgba(201, 125, 28, 0.18);
+    --shadow-pink:    rgba(200, 53, 104, 0.25);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,26 +71,29 @@ body {
 }
 
 /* ========== NAVBAR ========== */
+/* ตัวแถบ navbar เป็นทองไล่เฉด */
 .navbar {
     background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--gold-primary);
     position: sticky;
     top: 0;
     z-index: 10000;
     height: 92px;
-    box-shadow: 0 4px 15px rgba(184, 75, 31, 0.25);
+    /* เส้นกรอบล่าง — ทองตันเส้นเดียว (ไม่ไล่สี) โทนอ่อนลง */
+    border-bottom: 3px solid var(--gold-primary);
+    box-shadow: 0 4px 15px rgba(207, 168, 100, 0.25);
 }
 
+/* เส้นกรอบบน — ทองตันเส้นเดียว (ไม่ไล่สี) โทนอ่อนลง */
 .navbar::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--gold-light);
+    background: var(--gold-primary);
 }
 
 .navbar-brand-wrap {
@@ -94,18 +114,18 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.5px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
     flex-shrink: 0;
     object-fit: cover;
 }
 
 .navbar-title {
-    color: var(--white);
+    color: var(--nav-text-color);
     font-family: 'Charmonman', cursive;
     font-size: 34px;
     font-weight: 800;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .navbar-right {
@@ -122,7 +142,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--nav-text-color);
     text-decoration: none;
     font-size: 16px;
     font-weight: 700;
@@ -132,34 +152,37 @@ body {
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.25);
-    color: var(--white);
+    background: rgba(99, 38, 62, 0.1);
+    color: var(--nav-text-color);
 }
 
+/* ปุ่มเมนู active — ชมพู-กุหลาบเข้ม ตัวอักษรขาว */
 .nav-item.active {
-    background: var(--white);
-    color: var(--peach-deep);
+    background: var(--accent-pink);
+    color: var(--white);
 }
 
 /* User pill */
 .user-info {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: var(--white);
+    color: var(--nav-text-color);
     cursor: pointer;
+    transition: background 0.2s;
     position: relative;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.3); }
+.user-info:hover { background: rgba(255, 255, 255, 0.8); }
 
+/* Avatar "ส" — ชมพู-กุหลาบเข้ม ให้เข้าชุดกับปุ่ม active และแถบหัวการ์ด */
 .user-avatar {
-    background: var(--white);
-    color: var(--peach-deep);
+    background: var(--accent-pink);
+    color: var(--white);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -170,8 +193,8 @@ body {
     font-size: 16px;
 }
 
-.user-name { font-size: 15px; font-weight: 700; color: var(--white); }
-.arrow { color: var(--white); font-size: 11px; opacity: 0.9; }
+.user-name { font-size: 15px; font-weight: 700; color: var(--nav-text-color); }
+.arrow { color: var(--nav-text-color); font-size: 11px; opacity: 0.85; }
 
 /* Dropdown */
 .dropdown-menu {
@@ -220,15 +243,23 @@ body {
 }
 
 /* ========== FLASH BANNER ========== */
+/* ========== FLASH BANNER ========== */
 .flash-banner {
     padding: 14px 20px;
-    margin-bottom: 20px;
+    margin: 0 auto 20px;
     border-radius: 8px;
     font-weight: 600;
     font-size: 15px;
+    text-align: center;
+    width: fit-content;
+    max-width: 100%;
 }
-.flash-banner-success { background: var(--yellow-pale); color: var(--yellow-deep); border: 1.5px solid var(--yellow-status); }
-.flash-banner-error { background: #FDF1F0; color: #D9534F; border: 1.5px solid #F5C6CB; }
+.flash-banner-success { 
+    background: var(--green-pale); 
+    color: var(--green-primary);
+    border: 1.5px solid var(--green-primary);
+}
+.flash-banner-error { background: #FDF1F0; color: #D9534F; border: 1.5px solid #F5C6CB; }sh-banner-error { background: #FDF1F0; color: #D9534F; border: 1.5px solid #F5C6CB; }
 
 /* ========== LIST HEADER ========== */
 .list-header {
@@ -303,15 +334,16 @@ body {
 }
 
 .tab-btn:hover {
-    background: var(--peach-pale);
-    box-shadow: 0 2px 8px var(--shadow-soft);
+    background: var(--accent-pink-pale);
+    box-shadow: 0 2px 8px var(--shadow-pink);
 }
 
+/* ปุ่มแท็บ active (เช่น "งานใหม่") — ชมพู-กุหลาบเข้ม ตัวอักษรขาว */
 .tab-btn.active {
-    background: var(--orange-light);
-    color: var(--brown-text);
-    border-color: var(--orange-light);
-    box-shadow: 0 4px 14px rgba(243, 186, 139, 0.45);
+    background: var(--accent-pink);
+    color: var(--white);
+    border-color: var(--accent-pink);
+    box-shadow: 0 4px 14px var(--shadow-pink);
 }
 
 /* ========== CONTENT CARD ========== */
@@ -324,17 +356,14 @@ body {
     position: relative;
 }
 
+/* เส้นขอบบนสุดของการ์ดถูกเอาออกแล้ว (เดิมใช้ gold-primary เข้มจนดูเป็นเส้นสีน้ำตาลทับหัวการ์ดสีชมพู) */
 .content-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: var(--peach-primary);
+    display: none;
 }
 
-/* แถบหัวการ์ด "รายการงานทั้งหมด" — สีส้มอ่อน/ครีม */
-/* แถบหัวการ์ด "รายการงานทั้งหมด" — เปลี่ยนเป็นสีเหลืองเข้ม */
+/* แถบหัวการ์ด "รายการงานทั้งหมด" — ชมพู-กุหลาบเข้ม ตัวอักษรขาว */
 .card-header-bar {
-    background: #D49A00; /* สีเหลืองเข้ม หรือสามารถใช้ var(--gold-primary) แทนได้ */
+    background: var(--accent-pink-mid);
     padding: 14px 24px;
     display: flex;
     justify-content: space-between;
@@ -342,9 +371,10 @@ body {
     color: var(--white);
     font-weight: 700;
     font-size: 15px;
+    border-bottom: 2px solid var(--accent-pink);
 }
 
-.header-count { font-size: 13px; opacity: 0.95; font-weight: 600; }
+.header-count { font-size: 13px; opacity: 0.95; font-weight: 600; color: var(--white); }
 
 /* ========== TABLE ========== */
 table { width: 100%; border-collapse: collapse; }
@@ -436,21 +466,23 @@ tr:hover td { background: var(--peach-pale); }
     .lotus-decoration { width: 100px; bottom: 16px; right: 16px; }
 }
 
-/* ========== FOOTER — ส้มเหมือน navbar ========== */
+/* ========== FOOTER — ตัวแถบเป็นทองไล่เฉด, ตัวอักษรมารูน, เส้นกรอบบน-ล่างทองตันเส้นเดียว ========== */
 .site-footer {
     background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
-    color: rgba(255, 255, 255, 0.95);
+    color: var(--nav-text-color);
     margin-top: auto;
+    /* เส้นกรอบบนสุดของ footer — ทองตันเส้นเดียว (ไม่ไล่สี) โทนอ่อนลง */
     border-top: 3px solid var(--gold-primary);
     position: relative;
 }
 
+/* เส้นกรอบบาง ๆ ด้านในสุด — ทองตันเส้นเดียว (ไม่ไล่สี) โทนอ่อนลง */
 .site-footer::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--gold-light);
+    background: var(--gold-primary);
 }
 
 .footer-content {
@@ -466,16 +498,16 @@ tr:hover td { background: var(--peach-pale); }
 .site-footer .lotus-icon {
     width: 36px; height: 36px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
     object-fit: cover;
 }
 .footer-brand-text {
    font-family: 'Charmonman', cursive;
     font-size: 1.2rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--nav-text-color);
 }
-.footer-tagline { font-size: 0.9rem; color: rgba(255, 255, 255, 0.9); }
+.footer-tagline { font-size: 0.9rem; color: rgba(99, 38, 62, 0.85); }
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {

@@ -1,6 +1,6 @@
 /* ==========================================================================
-   GLOBAL & COLOR VARIABLES (ธีมเขียวใบตองอ่อน - ทอง - ดาวเรือง)
-   ให้เข้าชุดกับ bookinglist / quotation ทั้งระบบ
+   GLOBAL & COLOR VARIABLES (ธีมกุหลาบ-ทอง)
+   ให้เข้าชุดกับ bookingList / headStaffList / addHeadStaff ทั้งระบบ
    ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
@@ -12,85 +12,91 @@
 }
 
 :root {
-    /* เขียวใบตอง */
-    --green-deep:         #6FA84F;
-    --green-forest:       #7DBB5E;
-    --green-mid:          #9BCE72;
-    --green-banana:       #A9D97A;
-    --green-banana-light: #C9E8A8;
-    --green-pale:         #EEF7E1;
-    --green-glow:         #F7FBF0;
+    /* กุหลาบ-ไวน์ */
+    --rose-deep:         #C83568;
+    --rose-mid:          #DF5A8D;
+    --rose-soft:         #F08FB5;
+    --rose-line:         #E3AFC3;
+    --rose-line-light:   #F0D2DE;
+    --rose-pale:         #FBEAF0;
+    --rose-glow:         #FDF5F8;
 
-    /* ทอง / ดาวเรือง */
-    --gold:          #D9A441;
-    --gold-mid:      #E8BE66;
-    --gold-light:    #F3DA9E;
-    --gold-pale:     #FBF0D4;
-    --gold-glow:     #FFFBEF;
-    --marigold:      #F0A84E;
+    /* ทอง / อำพัน */
+    --gold:          #C9944A;
+    --gold-mid:      #D9AC6C;
+    --gold-light:    #EBCB9C;
+    --gold-pale:     #FBEEDC;
+    --gold-glow:     #FFFBF3;
+    --marigold:      #E8A24A;
     --marigold-pale: #FCE4C0;
 
     /* ชมพูกลีบบัว ใช้แต้มจุดเล็กๆ */
     --lotus-pink:      #F0A9C4;
     --lotus-pink-pale: #FBE3ED;
 
+    /* พลัม/ม่วงอมชมพู */
+    --plum:        #C83568;
+    --plum-pale:   #FDF5F8;
+
     --cream:             #FFFFFF;
-    --cream-warm:        #F7FBF0;
-    --cream-mid:         #FBF4E2;
-    --cream-border:      #E9DCB0;
-    --cream-border-soft: #F0E6C8;
+    --cream-warm:        #FFF7F9;
+    --cream-mid:         #FBE6ED;
+    --cream-border:      #EFD3DD;
+    --cream-border-soft: #F3E0E6;
 
     --white:             #FFFFFF;
-    --off-white:         #FFFEFA;
+    --off-white:         #FFFDFB;
 
-    --text-dark:  #3A3020;
-    --text-mid:   #5C4E32;
-    --text-body:  #5A5240;
-    --text-muted: #8C8168;
-    --brown-dark: #4A3D22;
-    --brown-mid:  #5C4E32;
+    --text-dark:  #3A2430;
+    --text-mid:   #5C3C4A;
+    --text-body:  #5A4650;
+    --text-muted: #8C7480;
+    --brown-dark: #5E2740;
+    --brown-mid:  #7A3B54;
 
-    --shadow-green: rgba(111, 168, 79, 0.18);
-    --shadow-warm:  rgba(217, 164, 65, 0.20);
+    --shadow-rose: rgba(200, 53, 104, 0.18);
+    --shadow-warm: rgba(184, 134, 47, 0.20);
 
-    --accent-gold:      #D9A441;
-    --accent-gold-mid:  #E8C878;
-    --accent-gold-pale: #F7E3B0;
+    --accent-gold:      #B8862F;
+    --accent-gold-mid:  #D4AD5F;
+    --accent-gold-pale: #EFDBA8;
 
     /* ทองเข้มขึ้น สำหรับ "ตัวหนังสือ" บนพื้นอ่อน ให้อ่านง่าย */
     --gold-text:      #A9781E;
     --gold-text-deep: #8A6D1C;
 
-    --brand-green:      #74B457;
-    --brand-green-dark: #5C9645;
+    /* ===== Navbar / Footer: สีทองทึบ โทนอ่อนละมุน ไม่ไล่สี ===== */
+    --brand-solid-gold: #F7EAB8;
+    --nav-title-color:  #63263E;
+    --nav-menu-color:   #63263E;
 
     /* รูปดอกบัวตกแต่ง ใช้ร่วมกับทุกหน้า */
     --lotus-img: url('../images/lotus-decor.png');
 }
 
 body {
-    background-color: var(--cream-warm);
+    background-color: var(--cream-mid);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 /* ==========================================================================
-   NAVBAR (ปรับสไตล์ให้ตรงกับ List: โลโก้ 76px, ฟอนต์ Charmonman 34px)
+   NAVBAR (matches bookingList.css / headStaffList.css / addHeadStaff.css)
    ========================================================================== */
 .navbar {
-    background: var(--brand-green);
+    background-color: var(--brand-solid-gold);
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 3px solid var(--accent-gold);
+    border-bottom: 3px solid var(--gold);
     position: sticky;
     top: 0;
     z-index: 10000;
     min-height: 92px;
     overflow: visible;
-    box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
+    box-shadow: 0 4px 20px rgba(148, 106, 28, 0.1);
 }
 
 .navbar::before {
@@ -98,7 +104,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--accent-gold-mid);
+    background: var(--gold);
 }
 
 .navbar-brand-wrap {
@@ -111,7 +117,7 @@ body {
 
 .navbar .lotus-icon,
 .navbar-brand-wrap .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.7);
     width: 76px;
     height: 76px;
     max-width: 76px;
@@ -121,20 +127,20 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
     flex-shrink: 0;
     object-fit: cover;
 }
 
 .nav-brand-text {
-    color: #FFFFFF;
+    color: var(--nav-title-color);
     font-family: 'Charmonman', cursive;
     font-size: 34px;
     font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .navbar-right {
@@ -152,7 +158,7 @@ body {
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--nav-menu-color);
     text-decoration: none;
     font-size: 15px;
     font-weight: 700;
@@ -160,18 +166,18 @@ body {
     border-radius: 6px;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    text-shadow: none;
     font-family: 'Sarabun', sans-serif;
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #FFFFFF;
+    background: rgba(99, 38, 62, 0.1);
+    color: var(--nav-menu-color);
 }
 
 .nav-item.active {
-    background: #FFFFFF;
-    color: var(--green-forest);
+    background: var(--rose-deep);
+    color: #FFFFFF;
     font-weight: 700;
     text-shadow: none;
 }
@@ -179,24 +185,24 @@ body {
 .dropdown-wrap { position: relative; }
 
 .user-info {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
     padding: 6px 16px 6px 6px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF;
+    color: var(--nav-menu-color);
     cursor: pointer;
     transition: background 0.2s;
     position: relative;
 }
 
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
+.user-info:hover { background: rgba(255, 255, 255, 0.8); }
 
 .user-avatar {
-    background: #FFFFFF;
-    color: var(--green-forest);
+    background: var(--rose-deep);
+    color: #FFFFFF;
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -209,9 +215,9 @@ body {
 }
 
 .user-detail { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name   { font-size: 0.88rem; font-weight: 700; color: #FFFFFF; }
-.user-role   { font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); }
-.arrow { color: #FFFFFF; font-size: 11px; opacity: 0.8; }
+.user-name   { font-size: 0.88rem; font-weight: 700; color: var(--nav-menu-color); }
+.user-role   { font-size: 0.7rem; color: rgba(99, 38, 62, 0.85); }
+.arrow { color: var(--nav-menu-color); font-size: 11px; opacity: 0.85; }
 
 .dropdown-menu {
     display: none;
@@ -274,7 +280,7 @@ body {
     gap: 6px;
     transition: color 0.2s;
 }
-.back-link:hover { color: var(--brand-green-dark); }
+.back-link:hover { color: var(--rose-deep); }
 
 /* ==========================================================================
    BOOKING SHEET DOCUMENT
@@ -282,7 +288,7 @@ body {
 .booking-sheet-document {
     background: #FFFFFF;
     border-radius: 18px;
-    border: 1.5px solid var(--green-banana);
+    border: 1.5px solid var(--rose-line);
     box-shadow: 0 8px 32px var(--shadow-warm);
     width: 100%;
     max-width: 1000px;
@@ -360,7 +366,7 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    filter: drop-shadow(0 6px 10px rgba(217, 164, 65, 0.25));
+    filter: drop-shadow(0 6px 10px rgba(184, 134, 47, 0.25));
     pointer-events: none;
 }
 
@@ -393,8 +399,8 @@ body {
 }
 
 .sheet-box {
-    background: var(--green-glow);
-    border: 1px solid var(--green-banana-light);
+    background: var(--rose-glow);
+    border: 1px solid var(--rose-line-light);
     border-radius: 10px;
     padding: 15px 18px;
     height: 100%;
@@ -408,13 +414,13 @@ body {
 .section-title {
     font-size: 14.5px;
     font-weight: 700;
-    color: var(--brand-green-dark);
+    color: var(--rose-deep);
     margin-bottom: 12px;
     display: flex;
     align-items: center;
     gap: 7px;
     padding-bottom: 6px;
-    border-bottom: 2px solid var(--green-pale);
+    border-bottom: 2px solid var(--rose-pale);
 }
 .section-title i { color: var(--accent-gold); font-size: 15px; }
 
@@ -457,8 +463,8 @@ body {
    PACKAGE INCLUSIONS BOX
    ========================================================================== */
 .package-inclusions-box {
-    background-color: var(--green-glow);
-    border: 1px solid var(--green-banana-light);
+    background-color: var(--rose-glow);
+    border: 1px solid var(--rose-line-light);
     border-radius: 10px;
     padding: 16px 18px;
     margin-top: 12px;
@@ -466,7 +472,7 @@ body {
 
 .package-inclusions-title {
     font-weight: 700;
-    color: var(--brand-green-dark);
+    color: var(--rose-deep);
     margin-bottom: 10px;
     font-size: 0.86rem;
     display: flex;
@@ -475,11 +481,6 @@ body {
 }
 .package-inclusions-title i { color: var(--accent-gold); font-size: 15px; }
 
-/* FIX: เดิมใช้ repeat(auto-fill, minmax(168px, 1fr)) ทำให้จำนวนคอลัมน์
-   ขึ้นอยู่กับความกว้างจริงของกล่อง พอกล่องกว้างพอ (จอใหญ่) เบราว์เซอร์จะ
-   ยัดได้ถึง 4-5 คอลัมน์ ไม่ตรงกับดีไซน์ต้นแบบที่ต้องการ 3 คอลัมน์คงที่
-   เปลี่ยนมา fix เป็น 3 คอลัมน์ตรงๆ แล้วค่อยลดคอลัมน์ผ่าน media query
-   ตอนจอเล็กแทน */
 .package-items-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -498,7 +499,7 @@ body {
     gap: 6px;
     line-height: 1.3;
 }
-.package-item-chip i { color: var(--brand-green-dark); font-weight: bold; font-size: 0.78rem; flex-shrink: 0; }
+.package-item-chip i { color: var(--rose-deep); font-weight: bold; font-size: 0.78rem; flex-shrink: 0; }
 
 .chip-title {
     flex-grow: 1;
@@ -513,7 +514,8 @@ body {
 /* ==========================================================================
    สรุปค่าใช้จ่ายโดยประมาณ
    ========================================================================== */
-.cost-summary-wrap {
+.cost-summary-wrap,
+.cost-summary-wrapper {
     display: flex;
     justify-content: flex-end;
     margin-top: 18px;
@@ -552,10 +554,10 @@ body {
 .cost-row .cost-value { font-weight: 700; color: var(--text-dark); }
 .cost-row.cost-discount .cost-value { color: #c62828; }
 .cost-row.cost-total {
-    background: var(--green-glow);
+    background: var(--rose-glow);
     padding: 10px 14px;
 }
-.cost-row.cost-total .cost-label { font-weight: 700; color: var(--brand-green-dark); font-size: 0.82rem; }
+.cost-row.cost-total .cost-label { font-weight: 700; color: var(--rose-deep); font-size: 0.82rem; }
 .cost-row.cost-total .cost-value { font-size: 1.02rem; font-weight: 800; color: var(--gold-text-deep); }
 .cost-summary-note {
     padding: 6px 14px 10px;
@@ -580,11 +582,11 @@ body {
 }
 
 .status-pending   { background: var(--marigold-pale); color: #a5641f; border-color: var(--marigold); }
-.status-approved  { background: var(--green-pale);     color: var(--green-forest); border-color: var(--green-banana); }
-.status-quoted    { background: #e8f4fd;               color: #1565c0; border-color: #90caf9; }
-.status-confirmed { background: var(--gold-pale);      color: #8a6d1c; border-color: var(--accent-gold-mid); }
-.status-completed { background: var(--green-pale);     color: var(--green-deep); border-color: var(--green-banana); }
-.status-rejected  { background: #fdecea;               color: #c62828; border-color: #ef9a9a; }
+.status-approved  { background: #cce5ff;             color: #004085; border-color: #90caf9; }
+.status-quoted    { background: #e8f4fd;             color: #1565c0; border-color: #90caf9; }
+.status-confirmed { background: var(--gold-pale);    color: #8a6d1c; border-color: var(--accent-gold-mid); }
+.status-completed { background: var(--gold-pale);    color: #8B5E1F; border-color: var(--accent-gold-mid); }
+.status-rejected  { background: #fdecea;             color: #c62828; border-color: #ef9a9a; }
 
 /* ==========================================================================
    MAPS & GALLERY
@@ -594,7 +596,7 @@ body {
     height: 180px;
     border-radius: 10px;
     overflow: hidden;
-    border: 1px solid var(--green-banana-light);
+    border: 1px solid var(--rose-line-light);
 }
 .map-iframe { width: 100%; height: 100%; border: 0; }
 
@@ -604,7 +606,7 @@ body {
     gap: 6px;
     margin-top: 8px;
     font-size: 0.82rem;
-    color: var(--brand-green-dark);
+    color: var(--rose-deep);
     text-decoration: none;
     font-weight: 700;
 }
@@ -617,12 +619,12 @@ body {
     height: 88px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid var(--green-banana-light);
+    border: 1px solid var(--rose-line-light);
 }
 
 .no-img-box {
-    background: var(--green-glow);
-    border: 1px dashed var(--green-banana-light);
+    background: var(--rose-glow);
+    border: 1px dashed var(--rose-line-light);
     padding: 26px;
     text-align: center;
     color: var(--text-muted);
@@ -659,12 +661,12 @@ body {
 }
 
 .btn-approve {
-    background: var(--brand-green-dark);
+    background: var(--rose-deep);
     color: #FFFFFF;
-    box-shadow: 0 3px 10px rgba(92, 150, 69, 0.3);
+    box-shadow: 0 3px 10px rgba(200, 53, 104, 0.3);
 }
 .btn-approve:hover {
-    background: #4d7f3a;
+    background: #A6284F;
     transform: translateY(-1px);
     color: #FFFFFF;
 }
@@ -682,7 +684,7 @@ body {
     text-decoration: none;
     font-size: 0.9rem;
 }
-.btn-back:hover { color: var(--brand-green-dark); }
+.btn-back:hover { color: var(--rose-deep); }
 
 /* ==========================================================================
    MODALS
@@ -690,7 +692,7 @@ body {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(40, 60, 20, 0.45);
+    background: rgba(58, 36, 48, 0.45);
     z-index: 99999;
     display: flex;
     align-items: center;
@@ -723,8 +725,8 @@ body {
 }
 
 .modal-id-container {
-    background: var(--green-glow);
-    border: 1px solid var(--green-banana-light);
+    background: var(--rose-glow);
+    border: 1px solid var(--rose-line-light);
     border-radius: 10px;
     padding: 9px 18px;
     margin-bottom: 12px;
@@ -732,7 +734,7 @@ body {
 }
 .modal-id-reject { border-color: #ef9a9a; background: #fdecea; }
 
-.modal-id-text { font-size: 14px; font-weight: 700; color: var(--brand-green-dark); }
+.modal-id-text { font-size: 14px; font-weight: 700; color: var(--rose-deep); }
 .modal-id-text-reject { color: #c62828; }
 
 .modal-footer-note { font-size: 11.5px; color: var(--text-muted); margin-bottom: 20px; }
@@ -752,7 +754,7 @@ body {
 .btn-modal-approve {
     padding: 9px 22px;
     border-radius: 8px;
-    background: var(--brand-green-dark);
+    background: var(--rose-deep);
     color: #FFFFFF;
     font-weight: 700;
     text-decoration: none;
@@ -768,14 +770,60 @@ body {
 }
 
 /* ==========================================================================
+   REJECT MODAL - ช่องกรอกเหตุผลที่ปฏิเสธ (เข้าธีมกุหลาบ-ทอง)
+   ========================================================================== */
+.reject-reason-group {
+    margin-top: 16px;
+    text-align: left;
+}
+
+.reject-reason-label {
+    display: block;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.reject-reason-label .required-mark {
+    color: #c62828;
+    margin-left: 2px;
+}
+
+.reject-reason-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--cream-border);
+    background: var(--cream-warm);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13.5px;
+    color: var(--text-dark);
+    resize: vertical;
+    min-height: 84px;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.reject-reason-textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.reject-reason-textarea:focus {
+    outline: none;
+    border-color: #c62828;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.12);
+}
+
+/* ==========================================================================
    FOOTER (ปรับโครงสร้างให้เหมือนหน้า List ทุกประการ)
    ========================================================================== */
 .site-footer {
-    background: var(--brand-green);
-    color: rgba(255, 255, 255, 0.95);
+    background-color: var(--brand-solid-gold);
+    color: var(--nav-title-color);
     margin-top: auto;
-    border-top: 3px solid var(--accent-gold);
-    box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
+    border-top: 3px solid var(--gold);
+    box-shadow: 0 -6px 18px rgba(148, 106, 28, 0.1);
     position: relative;
     z-index: 2;
     overflow: hidden;
@@ -786,7 +834,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: var(--accent-gold-mid);
+    background: var(--gold);
 }
 
 .site-footer::after {
@@ -801,7 +849,7 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 1;
+    opacity: 0.35;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
     pointer-events: none;
 }
@@ -827,13 +875,13 @@ body {
 
 .site-footer .lotus-icon,
 .footer-lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.7);
     width: 40px;
     height: 40px;
     max-width: 40px;
     max-height: 40px;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border: 1.5px solid rgba(99, 38, 62, 0.3);
     object-fit: cover;
     flex-shrink: 0;
 }
@@ -842,21 +890,21 @@ body {
     font-family: 'Charmonman', cursive;
     font-size: 1.2rem;
     font-weight: 700;
-    color: #FFFFFF;
+    color: var(--nav-title-color);
 }
 
 .footer-tagline {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    color: rgba(99, 38, 62, 0.85);
+    text-shadow: none;
 }
 
 .footer-bottom {
     text-align: center;
     padding: 12px 20px 18px;
     font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(99, 38, 62, 0.75);
+    border-top: 1px solid rgba(99, 38, 62, 0.15);
 }
 
 /* ==========================================================================
@@ -873,7 +921,7 @@ body {
     .nav-brand-text { font-size: 22px; }
     .navbar .lotus-icon,
     .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
-    
+
     /* Document Component Mobile Styles */
     .booking-sheet-document { padding: 24px 18px; }
     .company-brand { align-self: center; }
@@ -884,7 +932,7 @@ body {
     .info-label { width: auto; }
     .action-bar { flex-direction: column; gap: 14px; align-items: flex-start; }
 
-    /* FIX: จอแท็บเล็ต/มือถือแนวนอน ลดจาก 3 เหลือ 2 คอลัมน์ ไม่ให้การ์ดแคบเกินไป */
+    /* จอแท็บเล็ต/มือถือแนวนอน ลดจาก 3 เหลือ 2 คอลัมน์ ไม่ให้การ์ดแคบเกินไป */
     .package-items-grid { grid-template-columns: repeat(2, 1fr); }
 
     /* Footer Mobile Styles */
@@ -893,6 +941,6 @@ body {
 }
 
 @media (max-width: 480px) {
-    /* FIX: จอมือถือแคบ ลดเหลือ 1 คอลัมน์ */
+    /* จอมือถือแคบ ลดเหลือ 1 คอลัมน์ */
     .package-items-grid { grid-template-columns: 1fr; }
 }

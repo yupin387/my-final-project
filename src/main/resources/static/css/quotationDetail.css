@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap');
+@import
+	url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Charmonman:wght@400;700&display=swap')
+	;
 
 * {
 	margin: 0;
@@ -7,53 +9,54 @@
 	font-family: 'Sarabun', sans-serif;
 }
 
-html, body { width: 100%; }
+html, body {
+	width: 100%;
+}
 
 :root {
-    /* ทอง / ดาวเรือง */
-    --gold:              #D9A441;
-    --gold-mid:          #E8BE66;
-    --gold-light:        #F3DA9E;
-    --gold-pale:         #FBF0D4;
-    --gold-glow:         #FFFBEF;
-
-    /* เขียวใบตอง */
-    --green-deep:         #6FA84F;
-    --green-forest:       #7DBB5E;
-    --green-mid:          #9BCE72;
-    --green-banana:       #A9D97A;
-    --green-banana-light: #C9E8A8;
-    --green-pale:         #EEF7E1;
-    --green-glow:         #F7FBF0;
-
-    --cream:             #ECF2D2;
-    --cream-warm:        #F7FBF0;
-    --cream-mid:         #FBF4E2;
-    --cream-deep:        #F2E6C4;
-    --cream-border:      #E9DCB0;
-    --cream-border-soft: #E4EFC9;
-
-    --white:             #FFFFFF;
-
-    --text-dark:         #333333; /* สีดำเข้ม */
-    --text-mid:          #555555;
-    --text-muted:        #777777;
-    --brown-dark:        #333333;
-    --brown-mid:         #8c6239; /* สีน้ำตาลสำหรับเส้นขอบตาราง */
-
-    --accent-gold:      #D9A441;
-    --accent-gold-mid:  #E8C878;
-    --accent-gold-pale: #F7E3B0;
-    --accent-gold-dark: #B8860B;
-
-    --shadow-green: rgba(111, 168, 79, 0.18);
-    --shadow-warm:  rgba(217, 164, 65, 0.20);
-
-    --brand-green:       #74B457;
-    --brand-green-dark:  #5C9645;
-
-    /* รูปดอกบัวตกแต่ง */
-    --lotus-img: url('../images/lotus-decor.png');
+	/* ทอง / ดาวเรือง (คงไว้สำหรับตารางเนื้อหาใบเสนอราคา) */
+	--gold: #D9A441;
+	--gold-mid: #E8BE66;
+	--gold-light: #F3DA9E;
+	--gold-pale: #FBF0D4;
+	--gold-glow: #FFFBEF;
+	/* กุหลาบ-ชมพู (แทนที่โทนเขียวใบตองเดิม ให้ตรงกับหน้าแก้ไข) */
+	--rose-deep: #C83568;
+	--rose-mid: #DF5A8D;
+	--rose-soft: #F08FB5;
+	--rose-line: #E3AFC3;
+	--rose-line-light: #F0D2DE;
+	--rose-pale: #FBEAF0;
+	--rose-glow: #FDF5F8;
+	--cream: #FBE6ED;
+	--cream-warm: #FFF7F9;
+	--cream-mid: #FBE6ED;
+	--cream-deep: #F5DCE4;
+	--cream-border: #EFD3DD;
+	--cream-border-soft: #F3E0E6;
+	--white: #FFFFFF;
+	--text-dark: #333333; /* สีดำเข้ม */
+	--text-mid: #555555;
+	--text-muted: #777777;
+	--brown-dark: #333333;
+	--brown-mid: #8c6239; /* สีน้ำตาลสำหรับเส้นขอบตาราง */
+	--accent-gold: #D9A441;
+	--accent-gold-mid: #E8C878;
+	--accent-gold-pale: #F7E3B0;
+	--accent-gold-dark: #B8860B;
+	--shadow-rose: rgba(200, 53, 104, 0.18);
+	--shadow-warm: rgba(217, 164, 65, 0.20);
+	--brand-rose: #DF5A8D;
+	--brand-rose-dark: #C83568;
+	/* รูปดอกบัวตกแต่ง */
+	--lotus-img: url('../images/lotus-decor.png');
+	/* ===== ธีม NAVBAR / FOOTER: กุหลาบ-ทอง (ให้ตรงกับหน้า bookingList) ===== */
+	--navfoot-bg: #F7EAB8;
+	/* สีทองทึบโทนอ่อนพาสเทล เหมือนหน้า bookingList */
+	--navfoot-border-gold: #C9944A; /* เส้นขอบทอง */
+	--navfoot-text: #63263E; /* สีเลือดหมูมารูน สำหรับข้อความ/โลโก้/เมนู */
+	--navfoot-rose-deep: #C83568;
+	/* สีชมพูเข้ม สำหรับปุ่ม active / avatar */
 }
 
 body {
@@ -63,66 +66,66 @@ body {
 	flex-direction: column;
 }
 
-/* ===== Navbar (เขียว-ทอง) ===== */
+/* ===== Navbar (กุหลาบ-ทอง ให้ตรงกับ bookingList) ===== */
 .navbar {
-	background: var(--brand-green);
+	background-color: var(--navfoot-bg);
 	padding: 0 40px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	border-bottom: 3px solid var(--accent-gold);
+	border-bottom: 3px solid var(--navfoot-border-gold);
 	position: sticky;
 	top: 0;
 	z-index: 10000;
 	min-height: 92px;
-	box-shadow: 0 4px 20px rgba(31, 78, 44, 0.25);
-    overflow: visible;
+	box-shadow: 0 4px 20px rgba(148, 106, 28, 0.1);
+	overflow: visible;
 }
 
 .navbar::before {
 	content: '';
 	position: absolute;
-	top: 0; left: 0; right: 0;
+	top: 0;
+	left: 0;
+	right: 0;
 	height: 2px;
-	background: var(--accent-gold-mid);
+	background: var(--navfoot-border-gold);
 }
 
-.navbar-brand,
-.navbar-brand-wrap {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    position: relative;
+.navbar-brand, .navbar-brand-wrap {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	text-decoration: none;
+	position: relative;
 }
 
-.navbar .lotus-icon,
-.navbar-brand .lotus-icon,
-.navbar-brand-wrap .lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
-    width: 76px;
-    height: 76px;
-    max-width: 76px;
-    max-height: 76px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.55);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
-    object-fit: cover;
-    flex-shrink: 0;
+.navbar .lotus-icon, .navbar-brand .lotus-icon, .navbar-brand-wrap .lotus-icon
+	{
+	background: rgba(255, 255, 255, 0.7);
+	width: 76px;
+	height: 76px;
+	max-width: 76px;
+	max-height: 76px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 32px;
+	border: 1.5px solid rgba(99, 38, 62, 0.3);
+	box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+	object-fit: cover;
+	flex-shrink: 0;
 }
 
 .navbar-title {
-    color: #FFFFFF;
-    font-family: 'Charmonman', cursive;
-    font-size: 34px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+	color: var(--navfoot-text);
+	font-family: 'Charmonman', cursive;
+	font-size: 34px;
+	font-weight: 800;
+	letter-spacing: 0.5px;
+	white-space: nowrap;
+	text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .navbar-right {
@@ -138,25 +141,28 @@ body {
 }
 
 .nav-item {
-    color: rgba(255, 255, 255, 0.85);
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 8px 16px;
-    border-radius: 6px;
-    transition: background 0.2s, color 0.2s;
-    white-space: nowrap;
-    font-family: 'Sarabun', sans-serif;
+	color: var(--navfoot-text);
+	text-decoration: none;
+	font-size: 15px;
+	font-weight: 700;
+	padding: 8px 16px;
+	border-radius: 6px;
+	transition: background 0.2s, color 0.2s;
+	white-space: nowrap;
+	font-family: 'Sarabun', sans-serif;
+	text-shadow: none;
 }
+
 .nav-item:hover {
-	background: rgba(255, 255, 255, 0.2);
-	color: #FFFFFF;
+	background: rgba(99, 38, 62, 0.1);
+	color: var(--navfoot-text);
 }
 
 .nav-item.active {
-	background: #FFFFFF;
-	color: var(--green-forest);
+	background: var(--navfoot-rose-deep);
+	color: #FFFFFF;
 	font-weight: 700;
+	text-shadow: none;
 }
 
 /* ===== User Info ===== */
@@ -164,21 +170,24 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	background: rgba(255, 255, 255, 0.15);
+	background: rgba(255, 255, 255, 0.5);
 	padding: 6px 16px 6px 6px;
 	border-radius: 50px;
-	border: 1.5px solid rgba(255, 255, 255, 0.45);
+	border: 1.5px solid rgba(99, 38, 62, 0.3);
 	white-space: nowrap;
 	position: relative;
 	cursor: pointer;
 	transition: background 0.2s;
-	color: #FFFFFF;
+	color: var(--navfoot-text);
 }
-.user-info:hover { background: rgba(255, 255, 255, 0.25); }
+
+.user-info:hover {
+	background: rgba(255, 255, 255, 0.8);
+}
 
 .user-avatar {
-	background: #FFFFFF;
-	color: var(--green-forest);
+	background: var(--navfoot-rose-deep);
+	color: #FFFFFF;
 	width: 36px;
 	height: 36px;
 	border-radius: 50%;
@@ -190,10 +199,29 @@ body {
 	flex-shrink: 0;
 }
 
-.user-detail { display: flex; flex-direction: column; line-height: 1.2; }
-.user-name { color: #FFFFFF; font-size: 13px; font-weight: 700; }
-.user-role { color: rgba(255, 255, 255, 0.75); font-size: 11px; }
-.arrow { color: #FFFFFF; font-size: 12px; margin-left: 4px; opacity: 0.8; }
+.user-detail {
+	display: flex;
+	flex-direction: column;
+	line-height: 1.2;
+}
+
+.user-name {
+	color: var(--navfoot-text);
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.user-role {
+	color: rgba(99, 38, 62, 0.85);
+	font-size: 11px;
+}
+
+.arrow {
+	color: var(--navfoot-text);
+	font-size: 12px;
+	margin-left: 4px;
+	opacity: 0.8;
+}
 
 /* ===== Dropdown ===== */
 .dropdown-menu {
@@ -209,7 +237,10 @@ body {
 	z-index: 999;
 	overflow: hidden;
 }
-.dropdown-menu.show { display: block; }
+
+.dropdown-menu.show {
+	display: block;
+}
 
 .dropdown-item {
 	display: block;
@@ -221,300 +252,575 @@ body {
 	transition: background 0.2s;
 	text-align: center;
 }
-.dropdown-item:hover { background: var(--cream-warm); color: var(--brown-dark); }
-.dropdown-item.danger { color: #c62828; }
-.dropdown-item.danger:hover { background: #fdecea; }
+
+.dropdown-item:hover {
+	background: var(--cream-warm);
+	color: var(--brown-dark);
+}
+
+.dropdown-item.danger {
+	color: #c62828;
+}
+
+.dropdown-item.danger:hover {
+	background: #fdecea;
+}
 
 /* ===== ปุ่มแก้ไขใบเสนอราคา (ฟ้าอ่อน) ===== */
 .btn-blue-edit {
-    background: #DBEAFE !important;
-    color: #1D4ED8 !important;
-    border: 1.5px solid #93C5FD;
-    padding: 9px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    text-decoration: none !important;
-    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
-    transition: 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+	background: #DBEAFE !important;
+	color: #1D4ED8 !important;
+	border: 1.5px solid #93C5FD;
+	padding: 9px 20px;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	text-decoration: none !important;
+	box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
+	transition: 0.2s;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
 }
+
 .btn-blue-edit:hover {
-    background: #BFDBFE !important;
-    border-color: #60A5FA;
-    transform: translateY(-1px);
+	background: #BFDBFE !important;
+	border-color: #60A5FA;
+	transform: translateY(-1px);
 }
 
 /* ===== Page wrapper / A4 document ===== */
 .page-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    margin: 24px auto;
-    padding: 0 15px;
-    box-sizing: border-box;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	margin: 24px auto;
+	padding: 0 15px;
+	box-sizing: border-box;
 }
 
-.a4-document,
-.sheet {
-    width: 270mm;
-    max-width: 100%;
-    min-height: 297mm;
-    margin: 0 auto 20px auto;
-    background: #fff;
-    padding: 14mm 12mm;
-    position: relative;
-    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+.a4-document, .sheet {
+	width: 270mm;
+	max-width: 100%;
+	min-height: 297mm;
+	margin: 0 auto 20px auto;
+	background: #fff;
+	padding: 14mm 12mm;
+	position: relative;
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }
 
-.page-no { position: absolute; top: 8mm; right: 12mm; font-size: 12px; color: var(--text-muted); }
+.page-no {
+	position: absolute;
+	top: 8mm;
+	right: 12mm;
+	font-size: 12px;
+	color: var(--text-muted);
+}
 
 /* ===== สถานะ ===== */
 .status-pill {
-    display: inline-block;
-    padding: 3px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
+	display: inline-block;
+	padding: 3px 12px;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 700;
 }
-.status-Pending    { background: #FBF0D4; color: #a5641f; border: 1px solid var(--gold-mid); }
-.status-Sent       { background: #e8f4fd; color: #1565c0; border: 1px solid #90caf9; }
-.status-Confirmed  { background: var(--green-pale); color: var(--green-forest); border: 1px solid var(--green-banana); }
-.status-Approved   { background: var(--green-pale); color: var(--green-forest); border: 1px solid var(--green-banana); }
-.status-Completed  { background: var(--green-pale); color: var(--green-deep, var(--brand-green-dark)); border: 1px solid var(--green-banana); }
-.status-Revised    { background: #fdecea; color: #a31212; border: 1px solid #ef9a9a; }
-.status-Rejected   { background: #fdecea; color: #c62828; border: 1px solid #ef9a9a; }
+
+.status-Pending {
+	background: #FBF0D4;
+	color: #a5641f;
+	border: 1px solid var(--gold-mid);
+}
+
+.status-Sent {
+	background: #e8f4fd;
+	color: #1565c0;
+	border: 1px solid #90caf9;
+}
+
+.status-Confirmed {
+	background: var(--rose-pale);
+	color: var(--rose-mid);
+	border: 1px solid var(--rose-line);
+}
+
+.status-Approved {
+	background: var(--rose-pale);
+	color: var(--rose-mid);
+	border: 1px solid var(--rose-line);
+}
+
+.status-Completed {
+	background: var(--rose-pale);
+	color: var(--rose-deep);
+	border: 1px solid var(--rose-line);
+}
+
+.status-Revised {
+	background: #fdecea;
+	color: #a31212;
+	border: 1px solid #ef9a9a;
+}
+
+.status-Rejected {
+	background: #fdecea;
+	color: #c62828;
+	border: 1px solid #ef9a9a;
+}
 
 /* ===== ปุ่มกลับหน้ารายการ ===== */
 .back-bottom-wrap {
-    width: 100%;
-    text-align: center;
-    padding: 24px 15px 32px;
-    background: var(--cream);
-}
-.btn-back-bottom {
-    display: inline-block;
-    background: var(--brand-green);
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: 0.2s;
-    box-shadow: 0 3px 10px rgba(92, 150, 69, 0.3);
-}
-.btn-back-bottom:hover {
-    background: var(--brand-green-dark);
-    transform: translateY(-1px);
+	width: 100%;
+	text-align: center;
+	padding: 24px 15px 32px;
+	background: var(--cream);
 }
 
-/* ===== FOOTER ===== */
+.btn-back-bottom {
+	display: inline-block;
+	background: var(--navfoot-rose-deep);
+	color: #fff;
+	text-decoration: none;
+	padding: 10px 24px;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	transition: 0.2s;
+	box-shadow: 0 3px 10px rgba(200, 53, 104, 0.3);
+}
+
+.btn-back-bottom:hover {
+	background: #A6285A;
+	transform: translateY(-1px);
+}
+
+/* ===== FOOTER (กุหลาบ-ทอง ให้ตรงกับ bookingList) ===== */
 .site-footer {
-    background: var(--brand-green);
-    color: rgba(255, 255, 255, 0.95);
-    border-top: 3px solid var(--accent-gold);
-    box-shadow: 0 -6px 18px rgba(31, 78, 44, 0.2);
-    position: relative;
-    z-index: 2;
-    overflow: hidden;
+	background-color: var(--navfoot-bg);
+	color: var(--navfoot-text);
+	border-top: 3px solid var(--navfoot-border-gold);
+	box-shadow: 0 -6px 18px rgba(148, 106, 28, 0.1);
+	position: relative;
+	z-index: 2;
+	overflow: hidden;
 }
 
 .site-footer::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--accent-gold-mid);
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: var(--navfoot-border-gold);
 }
 
 .site-footer::after {
-    content: '';
-    position: absolute;
-    right: 24px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 76px;
-    height: 76px;
-    background-image: var(--lotus-img);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-    pointer-events: none;
+	content: '';
+	position: absolute;
+	right: 24px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 76px;
+	height: 76px;
+	background-image: var(--lotus-img);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	opacity: 0.35;
+	filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+	pointer-events: none;
 }
 
 .footer-content {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px 24px;
-    position: relative;
-    z-index: 1;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 30px 24px;
+	position: relative;
+	z-index: 1;
 }
 
 .footer-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
-.site-footer .lotus-icon,
-.footer-lotus-icon {
-    background: rgba(255, 255, 255, 0.18);
-    width: 40px;
-    height: 40px;
-    max-width: 40px;
-    max-height: 40px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
-    object-fit: cover;
-    flex-shrink: 0;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+.site-footer .lotus-icon, .footer-lotus-icon {
+	background: rgba(255, 255, 255, 0.7);
+	width: 40px;
+	height: 40px;
+	max-width: 40px;
+	max-height: 40px;
+	border-radius: 50%;
+	border: 1.5px solid rgba(99, 38, 62, 0.3);
+	object-fit: cover;
+	flex-shrink: 0;
 }
 
 .footer-brand-text {
-    font-family: 'Charmonman', cursive;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #FFFFFF;
+	font-family: 'Charmonman', cursive;
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: var(--navfoot-text);
 }
 
 .footer-tagline {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
+	font-size: 0.85rem;
+	color: rgba(99, 38, 62, 0.85);
+}
+
+.footer-bottom {
+	text-align: center;
+	padding: 12px 20px 18px;
+	font-size: 0.78rem;
+	color: rgba(99, 38, 62, 0.75);
+	border-top: 1px solid rgba(99, 38, 62, 0.15);
 }
 
 @media print {
-    body { background: #fff; }
-    .sheet, .a4-document { box-shadow: none; margin: 0; width: auto; min-height: auto; border-radius: 0; border: none; }
-    .no-print { display: none !important; }
-    .site-footer { display: none !important; }
-    .back-bottom-wrap { display: none !important; }
+	body {
+		background: #fff;
+	}
+	.sheet, .a4-document {
+		box-shadow: none;
+		margin: 0;
+		width: auto;
+		min-height: auto;
+		border-radius: 0;
+		border: none;
+	}
+	.no-print {
+		display: none !important;
+	}
+	.site-footer {
+		display: none !important;
+	}
+	.back-bottom-wrap {
+		display: none !important;
+	}
 }
 
-@media (max-width: 768px) {
-    .navbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; min-height: auto; }
-    .navbar-menu { flex-wrap: wrap; gap: 4px; display: none; }
-    .navbar-title { font-size: 22px; }
-    .navbar .lotus-icon,
-    .navbar-brand-wrap .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
-    .footer-content { flex-direction: column; align-items: flex-start; }
-    .site-footer::after { display: none; }
-    .doc-meta-row { flex-direction: column; }
-    .meta-box-right { width: 100% !important; }
-    .doc-footer { flex-direction: column; }
-    .remarks-box { margin-right: 0 !important; margin-bottom: 16px; }
+@media ( max-width : 768px) {
+	.navbar {
+		flex-wrap: wrap;
+		gap: 10px;
+		padding: 12px 16px;
+		min-height: auto;
+	}
+	.navbar-menu {
+		flex-wrap: wrap;
+		gap: 4px;
+		display: none;
+	}
+	.navbar-title {
+		font-size: 22px;
+	}
+	.navbar .lotus-icon, .navbar-brand-wrap .lotus-icon {
+		width: 46px;
+		height: 46px;
+		max-width: 46px;
+		max-height: 46px;
+		font-size: 24px;
+	}
+	.footer-content {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.site-footer::after {
+		display: none;
+	}
+	.doc-meta-row {
+		flex-direction: column;
+	}
+	.meta-box-right {
+		width: 100% !important;
+	}
+	.doc-footer {
+		flex-direction: column;
+	}
+	.remarks-box {
+		margin-right: 0 !important;
+		margin-bottom: 16px;
+	}
 }
 
 /* =========================================
-   เนื้อหาใบเสนอราคา (Detail)
+   เนื้อหาใบเสนอราคา (Detail) — คงธีมเดิม ไม่เปลี่ยน
    ========================================= */
+.text-center {
+	text-align: center;
+}
 
-.text-center { text-align: center; }
-.text-left   { text-align: left; }
-.text-right  { text-align: right; }
-.text-danger { color: #c62828 !important; }
-.text-muted  { color: var(--text-muted); font-size: 13px; }
+.text-left {
+	text-align: left;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.text-danger {
+	color: #c62828 !important;
+}
+
+.text-muted {
+	color: var(--text-muted);
+	font-size: 13px;
+}
 
 /* หัวกระดาษ */
 .doc-header {
-    text-align: center;
-    border-bottom: 2px solid #000;
-    padding-bottom: 20px;
-    margin-bottom: 25px;
+	text-align: center;
+	border-bottom: 2px solid #000;
+	padding-bottom: 20px;
+	margin-bottom: 25px;
 }
-.company-info h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); }
-.company-info p { font-size: 14px; color: #444; line-height: 1.5; }
 
-.doc-title-box { position: relative; margin-top: 25px; }
-.doc-title-box h1 { font-size: 26px; font-weight: 700; color: var(--text-dark); letter-spacing: 1px; }
-.doc-title-box p { text-align: center; color: #555; font-size: 14px; margin-top: 2px; }
+.company-info h2 {
+	font-size: 22px;
+	font-weight: 700;
+	margin-bottom: 6px;
+	color: var(--text-dark);
+}
+
+.company-info p {
+	font-size: 14px;
+	color: #444;
+	line-height: 1.5;
+}
+
+.doc-title-box {
+	position: relative;
+	margin-top: 25px;
+}
+
+.doc-title-box h1 {
+	font-size: 26px;
+	font-weight: 700;
+	color: var(--text-dark);
+	letter-spacing: 1px;
+}
+
+.doc-title-box p {
+	text-align: center;
+	color: #555;
+	font-size: 14px;
+	margin-top: 2px;
+}
 
 /* แถวข้อมูลลูกค้า/เอกสาร */
-.doc-meta-row { display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 14px; gap: 20px; }
-.meta-box-left { flex: 1; }
-.meta-box-right { width: 280px; }
+.doc-meta-row {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 25px;
+	font-size: 14px;
+	gap: 20px;
+}
+
+.meta-box-left {
+	flex: 1;
+}
+
+.meta-box-right {
+	width: 280px;
+}
 
 /* Layout Table: ตารางข้อมูลมุมขวาที่มีกรอบ */
-.layout-table { width: 100%; border-collapse: collapse; }
-.layout-table td { padding: 8px 12px; vertical-align: middle; border: none; }
-.layout-table .label { font-weight: 700; width: 120px; color: var(--text-dark); white-space: nowrap; font-size: 14px; }
-.layout-table .value { font-size: 14px; color: var(--text-dark); }
+.layout-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.layout-table td {
+	padding: 8px 12px;
+	vertical-align: middle;
+	border: none;
+}
+
+.layout-table .label {
+	font-weight: 700;
+	width: 120px;
+	color: var(--text-dark);
+	white-space: nowrap;
+	font-size: 14px;
+}
+
+.layout-table .value {
+	font-size: 14px;
+	color: var(--text-dark);
+}
 
 /* ใส่ขอบสีดำรอบนอก และเส้นคั่นตรงกลาง */
 .layout-table.bordered {
-    border: 1px solid #000;
-    border-radius: 0;
+	border: 1px solid #000;
+	border-radius: 0;
 }
+
 .layout-table.bordered td {
-    border: 1px solid #000;
+	border: 1px solid #000;
 }
 
 /* ตารางรายการ */
-.standard-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; table-layout: fixed; }
-.standard-table th, .standard-table td { border: 1px solid #000; padding: 8px; font-size: 14px; vertical-align: middle; overflow: hidden; word-wrap: break-word; }
+.standard-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 25px;
+	table-layout: fixed;
+}
 
-/* แถบคอลัมน์หัวตาราง: เขียว -> เหลือง/ทอง */
-.standard-table th { background-color: var(--gold); color: #FFF; font-weight: 700; text-align: center; border-color: #000; }
+.standard-table th, .standard-table td {
+	border: 1px solid #000;
+	padding: 8px;
+	font-size: 14px;
+	vertical-align: middle;
+	overflow: hidden;
+	word-wrap: break-word;
+}
 
-/* แถบหมวด (group-row): เขียว -> เหลืองอ่อน */
-.group-row td { background: var(--gold-pale) !important; }
-.category-header-text { font-weight: 800 !important; color: var(--text-dark) !important; font-size: 14.5px !important; text-align: center !important; }
+/* แถบคอลัมน์หัวตาราง: ทอง/ดาวเรือง */
+.standard-table th {
+	background-color: var(--gold);
+	color: #FFF;
+	font-weight: 700;
+	text-align: center;
+	border-color: #000;
+}
 
-.package-includes-title { font-weight: 700; font-size: 13.5px; border-top: none !important; border-bottom: none !important; padding-top: 15px !important; color: var(--text-dark); }
+/* แถบหมวด (group-row): เหลืองอ่อน */
+.group-row td {
+	background: var(--gold-pale) !important;
+}
+
+.category-header-text {
+	font-weight: 800 !important;
+	color: var(--text-dark) !important;
+	font-size: 14.5px !important;
+	text-align: center !important;
+}
+
+.package-includes-title {
+	font-weight: 700;
+	font-size: 13.5px;
+	border-top: none !important;
+	border-bottom: none !important;
+	padding-top: 15px !important;
+	color: var(--text-dark);
+}
+
 .package-included-row td {
-    border-top: none !important;
-    border-bottom: none !important;
-    border-left: 1px solid #000 !important;
-    border-right: 1px solid #000 !important;
-    padding-top: 2px !important;
-    padding-bottom: 2px !important;
-    color: var(--text-muted);
+	border-top: none !important;
+	border-bottom: none !important;
+	border-left: 1px solid #000 !important;
+	border-right: 1px solid #000 !important;
+	padding-top: 2px !important;
+	padding-bottom: 2px !important;
+	color: var(--text-muted);
 }
-.indented-item { padding-left: 35px !important; }
 
-/* สรุปยอด: แถบสรุปราคา เขียว -> เหลืองอ่อน (โทนอ่อนตามที่ปรับ) */
-.doc-footer { display: flex; justify-content: space-between; gap: 30px; align-items: stretch; }
-.totals-box { border: 2px solid #000; border-radius: 4px; overflow: hidden; width: 360px; }
-.totals-table { width: 100%; border-collapse: collapse; height: 100%; }
-.totals-table td { border: 1px solid #000; padding: 12px 15px; font-weight: 600; font-size: 14px; }
-.tot-label { background: var(--gold-pale); width: 55%; text-align: left; color: var(--text-dark); }
-.tot-value { text-align: right; width: 45%; white-space: nowrap; color: var(--text-dark); }
-.grand-total-row td { font-weight: 700; font-size: 16px; border-color: #000; background: var(--gold-light); }
-.total-amount { text-align: right; font-size: 19px !important; color: #B91C1C !important; font-weight: 800; }
+.indented-item {
+	padding-left: 35px !important;
+}
 
-/* ===== ความต้องการเพิ่มเติม ===== */
+/* สรุปยอด: แถบสรุปราคา เหลืองอ่อน */
+.doc-footer {
+	display: flex;
+	justify-content: space-between;
+	gap: 30px;
+	align-items: stretch;
+}
+
+.totals-box {
+	border: 2px solid #000;
+	border-radius: 4px;
+	overflow: hidden;
+	width: 360px;
+}
+
+.totals-table {
+	width: 100%;
+	border-collapse: collapse;
+	height: 100%;
+}
+
+.totals-table td {
+	border: 1px solid #000;
+	padding: 12px 15px;
+	font-weight: 600;
+	font-size: 14px;
+}
+
+.tot-label {
+	background: var(--gold-pale);
+	width: 55%;
+	text-align: left;
+	color: var(--text-dark);
+}
+
+.tot-value {
+	text-align: right;
+	width: 45%;
+	white-space: nowrap;
+	color: var(--text-dark);
+}
+
+.grand-total-row td {
+	font-weight: 700;
+	font-size: 16px;
+	border-color: #000;
+	background: var(--gold-light);
+}
+
+.total-amount {
+	text-align: right;
+	font-size: 19px !important;
+	color: #B91C1C !important;
+	font-weight: 800;
+}
+
+/* ===== ความต้องการเพิ่มเติม: ไม่มีสี ใช้ขาว-ดำเรียบๆ ===== */
 .remarks-box {
-    flex: 1;
-    margin-right: 20px;
-    border: 1px solid #000;
-    border-radius: 8px;
-    padding: 16px;
-    background: #FFFFFF;
-    box-sizing: border-box;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+	flex: 1;
+	margin-right: 20px;
+	border: 1px solid #000;
+	border-radius: 8px;
+	padding: 16px;
+	background: #FFFFFF;
+	box-sizing: border-box;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
-.remarks-box .remarks-header { margin-bottom: 8px; }
-.remarks-box .remarks-header strong { color: var(--text-dark); font-size: 14px; }
+
+.remarks-box .remarks-header {
+	margin-bottom: 8px;
+}
+
+.remarks-box .remarks-header strong {
+	color: var(--text-dark);
+	font-size: 14px;
+}
+
 .remarks-box .remarks-textarea {
-    white-space: pre-wrap;
-    min-height: 120px;
-    padding: 12px;
-    border: 1px solid #000;
-    border-radius: 6px;
-    background: #fdfdfd;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-dark);
+	white-space: pre-wrap;
+	min-height: 120px;
+	padding: 12px;
+	border: 1px solid #000;
+	border-radius: 6px;
+	background: #fdfdfd;
+	font-size: 14px;
+	line-height: 1.6;
+	color: var(--text-dark);
 }
-.remarks-box .note-empty { color: var(--text-muted); font-style: normal; }
+
+.remarks-box .note-empty {
+	color: var(--text-muted);
+	font-style: normal;
+}

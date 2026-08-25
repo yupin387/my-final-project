@@ -2,27 +2,37 @@
 
 /* =========================================================
    COLOR SYSTEM
-   ดึงชุดสีมาจากหน้า staffAssignmentList.css เพื่อให้เหมือนกัน 100%
+   ซิงก์ตัวแปร navbar/footer ให้เหมือนกับ staffAssignmentList.css 100%
+   (เดิมไฟล์นี้ใช้โทนส้ม #E8703A + ตัวอักษรขาว — แก้ให้เป็นโทนทองน้ำผึ้งเข้ม
+   + ตัวอักษรมารูน + accent-pink เหมือนกันทุกหน้าของหัวหน้างาน)
    ========================================================= */
 :root {
 	/* พื้นหลังสีครีมสว่างๆ */
 	--bg-light:       #FFFBF5;
 
-	/* สีหลัก — ส้ม (Navbar/Footer) */
-	--peach-primary:  #E8703A;
-	--peach-hover:    #D45F2A;
-	--peach-pale:     #FDEEE4;
-	--peach-deep:     #B84B1F;
+	/* สีหลัก — ทองน้ำผึ้งเข้ม (navbar/footer) เหมือนหน้า staffAssignmentList */
+	--peach-primary:  #EFC16B;
+	--peach-hover:    #B8872F;
+	--peach-pale:     #FDF5E6;
+	--peach-deep:     #CC9A44;
 
 	/* สีส้มอ่อน/ครีม */
-	--orange-light:   #F3BA8B;
+	--orange-light:   #F3C98B;
 	--orange-pale:    #FCF5E3;
 
-	/* สีทอง/เหลืองเข้ม */
-	--gold-primary:   #D9A441;
+	/* สีทอง — เส้นกรอบบน-ล่าง navbar/footer แบบตันเส้นเดียว (โทนอ่อน ไม่เป็นน้ำตาล) */
+	--gold-primary:   #C89238;
 	--gold-hover:     #B8872F;
 	--gold-pale:      #FBF1DC;
 	--gold-light:     #F3DA9E;
+
+	/* สีชมพู-กุหลาบเข้ม — ใช้กับปุ่ม active, avatar (ให้เป็นชุดเดียวกันทุกหน้าของหัวหน้างาน) */
+	--accent-pink:      #C83568;
+	--accent-pink-mid:  #DF5A8D;
+	--accent-pink-pale: #FBEAF0;
+
+	/* สีตัวอักษรบน navbar/footer — มารูน อ่านง่ายบนพื้นทองอ่อน */
+	--nav-text-color: #63263E;
 
 	/* สีน้ำตาล (ตัวหนังสือ) */
 	--brown-text:     #4A3728; 
@@ -37,7 +47,7 @@
 	/* สีขอบและเงา */
 	--white:          #FFFFFF;
 	--card-border:    #F0E2D3;
-	--shadow-soft:    rgba(232, 112, 58, 0.15);
+	--shadow-soft:    rgba(201, 125, 28, 0.18);
 }
 
 * {
@@ -67,7 +77,7 @@ body {
 	top: 0;
 	z-index: 10000;
 	height: 92px;
-	box-shadow: 0 4px 15px rgba(184, 75, 31, 0.25);
+	box-shadow: 0 4px 15px rgba(207, 168, 100, 0.25);
 }
 
 .navbar::before {
@@ -77,7 +87,7 @@ body {
 	left: 0;
 	right: 0;
 	height: 2px;
-	background: var(--gold-light);
+	background: var(--gold-primary);
 }
 
 .navbar-brand {
@@ -97,18 +107,18 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border: 1.5px solid rgba(255, 255, 255, 0.6);
-	box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+	border: 1.5px solid rgba(99, 38, 62, 0.3);
+	box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
 	flex-shrink: 0;
 	object-fit: cover;
 }
 
 .navbar-title {
-	color: var(--white);
+	color: var(--nav-text-color);
 	font-family: 'Charmonman', cursive;
 	font-size: 34px;
 	font-weight: 800;
-	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .navbar-right {
@@ -125,7 +135,7 @@ body {
 }
 
 .nav-item {
-	color: rgba(255, 255, 255, 0.9);
+	color: var(--nav-text-color);
 	text-decoration: none;
 	font-size: 16px;
 	font-weight: 700;
@@ -135,36 +145,37 @@ body {
 }
 
 .nav-item:hover {
-	background: rgba(255, 255, 255, 0.25);
-	color: var(--white);
+	background: rgba(99, 38, 62, 0.1);
+	color: var(--nav-text-color);
 }
 
 .nav-item.active {
-	background: var(--white);
-	color: var(--peach-deep);
+	background: var(--accent-pink);
+	color: var(--white);
 }
 
 /* User pill */
 .user-info {
-	background: rgba(255, 255, 255, 0.2);
-	border: 1.5px solid rgba(255, 255, 255, 0.5);
+	background: rgba(255, 255, 255, 0.5);
+	border: 1.5px solid rgba(99, 38, 62, 0.3);
 	padding: 6px 16px 6px 6px;
 	border-radius: 50px;
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	color: var(--white);
+	color: var(--nav-text-color);
 	cursor: pointer;
 	position: relative;
+	transition: background 0.2s;
 }
 
 .user-info:hover {
-	background: rgba(255, 255, 255, 0.3);
+	background: rgba(255, 255, 255, 0.8);
 }
 
 .user-avatar {
-	background: var(--white);
-	color: var(--peach-deep);
+	background: var(--accent-pink);
+	color: var(--white);
 	width: 34px;
 	height: 34px;
 	border-radius: 50%;
@@ -178,11 +189,11 @@ body {
 .user-name {
 	font-size: 15px;
 	font-weight: 700;
-	color: var(--white);
+	color: var(--nav-text-color);
 }
 
 .arrow {
-	color: var(--white);
+	color: var(--nav-text-color);
 	font-size: 11px;
 	opacity: 0.9;
 }
@@ -234,6 +245,48 @@ body {
 
 .dropdown-item.danger:hover {
 	background: #FDF1F0;
+}
+
+/* ========== FLASH TOAST (กล่องแจ้งเตือนลอยกลางจอ) ==========
+   สำเร็จ -> เขียว, ผิดพลาด -> แดง, จัดกึ่งกลางด้านบนของหน้าจอ
+   ถ้าไฟล์ itemList.js ใช้ชื่อ class ต่างจากนี้ ส่ง itemList.js มาด้วย
+   เดี๋ยวจะปรับ selector ให้ตรงกันเป๊ะ
+   ================================================================= */
+.flash-toast {
+	position: fixed;
+	top: 24px;
+	left: 50%;
+	transform: translateX(-50%) translateY(-10px);
+	z-index: 999999;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 24px;
+	border-radius: 4px;   /* เดิม 50px -> เปลี่ยนเป็นเหลี่ยม */
+	font-size: 14px;
+	font-weight: 700;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	white-space: nowrap;
+}
+
+.flash-toast.show {
+	opacity: 1;
+	transform: translateX(-50%) translateY(0);
+}
+
+.flash-toast-success {
+	background: var(--green-pale);
+	color: var(--green-primary);
+	border: 1.5px solid var(--green-primary);
+}
+
+.flash-toast-error {
+	background: var(--red-pale);
+	color: var(--red-primary);
+	border: 1.5px solid var(--red-primary);
 }
 
 /* ========== PAGE WRAPPER ========== */
@@ -310,8 +363,9 @@ body {
 }
 
 /* ===== ปุ่มเพิ่ม Item เป็น "สีฟ้าทึบ" (ไม่มีไล่สี) ===== */
+/* ===== ปุ่มเพิ่ม Item เป็น "สีทองน้ำผึ้ง" (โทนเดียวกับ navbar/footer) ===== */
 .btn-add {
-	background: #3b82f6; 
+	background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
 	color: var(--white);
 	padding: 11px 22px;
 	text-decoration: none;
@@ -321,17 +375,16 @@ body {
 	border: none;
 	cursor: pointer;
 	white-space: nowrap;
-	box-shadow: 0 3px 12px rgba(59, 130, 246, 0.25);
+	box-shadow: 0 3px 12px var(--shadow-soft);
 	transition: all 0.2s;
 	display: inline-block;
 }
 
 .btn-add:hover {
-	background: #2563eb;
+	background: linear-gradient(120deg, var(--peach-hover) 0%, var(--peach-deep) 100%);
 	transform: translateY(-1px);
-	box-shadow: 0 5px 16px rgba(59, 130, 246, 0.35);
+	box-shadow: 0 5px 16px rgba(184, 135, 47, 0.35);
 }
-
 /* ========== TABS ========== */
 .tabs-wrapper {
 	display: flex;
@@ -355,15 +408,15 @@ body {
 }
 
 .tab-btn:hover {
-	background: var(--peach-pale);
+	background: var(--accent-pink-pale);
 	box-shadow: 0 2px 8px var(--shadow-soft);
 }
 
 .tab-btn.active {
-	background: var(--orange-light);
-	color: var(--brown-text);
-	border-color: var(--orange-light);
-	box-shadow: 0 4px 14px rgba(243, 186, 139, 0.45);
+	background: var(--accent-pink);
+	color: var(--white);
+	border-color: var(--accent-pink);
+	box-shadow: 0 4px 14px rgba(200, 53, 104, 0.35);
 }
 
 /* ========== CONTENT CARD ========== */
@@ -377,18 +430,12 @@ body {
 }
 
 .content-card::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	height: 3px;
-	background: var(--peach-primary);
+	display: none;
 }
 
-/* ===== แถบหัวการ์ด "สีเหลืองเข้มทึบ" (ไม่มีไล่สี) ===== */
+/* ===== แถบหัวการ์ด "ชมพู-กุหลาบเข้ม" ให้เป็นชุดเดียวกับปุ่ม active/avatar ===== */
 .card-header-bar {
-	background: #D49A00;
+	background: var(--accent-pink-mid);
 	padding: 14px 24px;
 	display: flex;
 	justify-content: space-between;
@@ -396,7 +443,7 @@ body {
 	color: var(--white);
 	font-weight: 700;
 	font-size: 15px;
-	border-bottom: 2px solid #B8872F;
+	border-bottom: 2px solid var(--accent-pink);
 }
 
 .header-count {
@@ -685,7 +732,7 @@ tr:hover td {
 /* ========== FOOTER (สีเดียวกับ staffAssignmentList) ========== */
 .site-footer {
 	background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
-	color: rgba(255, 255, 255, 0.95);
+	color: var(--nav-text-color);
 	margin-top: auto;
 	border-top: 3px solid var(--gold-primary);
 	position: relative;
@@ -698,7 +745,7 @@ tr:hover td {
 	left: 0;
 	right: 0;
 	height: 2px;
-	background: var(--gold-light);
+	background: var(--gold-primary);
 }
 
 .footer-content {
@@ -724,8 +771,8 @@ tr:hover td {
 	max-width: 36px;
 	max-height: 36px;
 	border-radius: 50%;
-	background: rgba(255, 255, 255, 0.2);
-	border: 1.5px solid rgba(255, 255, 255, 0.6);
+	background: rgba(255, 255, 255, 0.25);
+	border: 1.5px solid rgba(99, 38, 62, 0.3);
 	object-fit: cover;
 	flex-shrink: 0;
 }
@@ -734,12 +781,12 @@ tr:hover td {
 	font-family: 'Charmonman', cursive;
 	font-size: 1.2rem;
 	font-weight: 700;
-	color: var(--white);
+	color: var(--nav-text-color);
 }
 
 .footer-tagline {
 	font-size: 0.9rem;
-	color: rgba(255, 255, 255, 0.9);
+	color: rgba(99, 38, 62, 0.85);
 }
 
 /* ========== RESPONSIVE ========== */
@@ -760,3 +807,61 @@ tr:hover td {
 	th, td { padding: 10px 12px; }
 	.footer-content { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
+/* ========== FILTER DROPDOWN (แทน tabs — รองรับประเภท Item ที่เพิ่มไม่จำกัด) ========== */
+.filter-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 24px;
+}
+
+.filter-label {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--brown-text);
+	white-space: nowrap;
+}
+
+.filter-select {
+	padding: 10px 16px;
+	border: 1.5px solid var(--card-border);
+	border-radius: 10px;
+	font-family: 'Sarabun', sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--brown-text);
+	background: var(--white);
+	cursor: pointer;
+	min-width: 220px;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-select:hover {
+	border-color: var(--gold-primary);
+}
+
+.filter-select:focus {
+	outline: none;
+	border-color: var(--accent-pink);
+	box-shadow: 0 0 0 3px rgba(200, 53, 104, 0.15);
+}
+
+@media (max-width: 768px) {
+	.filter-wrapper { flex-direction: column; align-items: flex-start; gap: 6px; }
+	.filter-select { width: 100%; }
+}
+
+/* ========== CEREMONY DOT (จุดสีแทนอิโมจิประจำประเภทพิธี) ========== */
+.ceremony-dot-lg {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	vertical-align: middle;
+	margin-right: 4px;
+}
+
+.dot-home     { background: #C83568; }  /* ชมพู-กุหลาบเข้ม */
+.dot-newhome  { background: #2E9E5B; }  /* เขียว */
+.dot-company  { background: #2E75C4; }  /* ฟ้า-น้ำเงิน */
+.dot-all      { background: transparent; border: 1.5px solid var(--gold-primary); }

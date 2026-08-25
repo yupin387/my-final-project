@@ -46,7 +46,20 @@
         <%-- Top Actions --%>
         <div class="top-actions">
             <a href="${pageContext.request.contextPath}/staff/assignments" class="btn-back">← กลับหน้ารายการ</a>
-            <button type="button" class="btn-damage" onclick="openDamageModal()">⚠️ รายงานความเสียหาย</button>
+
+            <%-- FIX: รายงานความเสียหายได้แค่ครั้งเดียวเท่านั้น
+                 ถ้ามี a.reportNote อยู่แล้ว (ส่งไปแล้ว) ให้แสดงสถานะแทนปุ่ม
+                 แทนที่จะให้กดเปิด modal ส่งซ้ำได้อีก --%>
+            <c:choose>
+                <c:when test="${not empty a.reportNote}">
+                    <span class="btn-damage-sent" title="ส่งรายงานความเสียหายไปแล้ว ไม่สามารถส่งซ้ำได้">
+                        ✅ ส่งรายงานความเสียหายแล้ว
+                    </span>
+                </c:when>
+                <c:otherwise>
+                    <button type="button" class="btn-damage" onclick="openDamageModal()">⚠️ รายงานความเสียหาย</button>
+                </c:otherwise>
+            </c:choose>
         </div>
 
         <div class="card">
@@ -88,10 +101,10 @@
                         <span class="label">รหัสมอบหมาย</span>
                         <span class="value">${a.assignId}</span>
                     </div>
-                    <div class="info-group">
-                        <span class="label">วันที่ได้รับมอบหมาย</span>
-                        <span class="value"><fmt:formatDate value="${a.assignDate}" pattern="dd MMMM yyyy"/></span>
-                    </div>
+                   <div class="info-group">
+    <span class="label">วันที่ได้รับมอบหมาย</span>
+    <span class="value"><fmt:formatDate value="${a.assignDate}" pattern="dd/MM/yyyy"/></span>
+</div>
                 </div>
 
                 <hr class="divider">
@@ -101,7 +114,7 @@
                 <div class="info-grid">
                     <div class="info-group">
                         <span class="label">รหัสการจอง</span>
-                        <span class="value">#${a.bookingForm.bookingId}</span>
+                        <span class="value">${a.bookingForm.bookingId}</span>
                     </div>
                     <div class="info-group">
                         <span class="label">ประเภทงาน</span>

@@ -91,9 +91,16 @@ public class StaffAssignmentService {
     }
 
     // บันทึกรายงานความเสียหายหลังจบงาน พร้อมจัดการอัปโหลดรูปภาพหลักฐาน
+    // FIX: อนุญาตให้ส่งรายงานความเสียหายได้แค่ครั้งเดียวต่องานมอบหมายหนึ่งชิ้น
+    // ถ้าเคยมี reportNote อยู่แล้ว (ส่งไปแล้ว) จะโยน exception ทันที ไม่ทับข้อมูลเดิม
     @Transactional
     public void updateDamageReport(String assignId, String reportNote, MultipartFile[] files) throws IOException {
         StaffAssignment sa = staffAssignmentRepo.findById(assignId).orElseThrow();
+
+        if (sa.getReportNote() != null && !sa.getReportNote().trim().isEmpty()) {
+            throw new RuntimeException("งานนี้ถูกส่งรายงานความเสียหายไปแล้ว ไม่สามารถส่งซ้ำได้");
+        }
+
         sa.setReportNote(reportNote);
 
         if (files != null && files.length > 0) {
@@ -116,5 +123,7 @@ public class StaffAssignmentService {
 
             sa.setReportImage(reportImages.toString());
         }
+
+        staffAssignmentRepo.save(sa);
     }
 }
