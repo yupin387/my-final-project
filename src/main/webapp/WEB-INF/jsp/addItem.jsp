@@ -254,9 +254,7 @@
 									</div>
 								</div>
 							</c:forEach>
-							<div id="ceremonyEmptyHint" class="ceremony-empty-hint">
-								ยังไม่ได้เพิ่มประเภทงานไหนเลย — เลือกจากช่องด้านบนเพื่อเริ่มผูกแพ็กเกจ
-							</div>
+							
 						</div>
 					</div>
 
