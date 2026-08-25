@@ -102,7 +102,7 @@
         <a href="${pageContext.request.contextPath}/services" class="nav-link-item">บริการ/แพ็กเกจ</a>
         <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item">ปฏิทิน</a>
         <c:if test="${not empty sessionScope.user}">
-            <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">การจอง</a>
+            <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">รายการจอง</a>
         </c:if>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item active">รีวิว</a>
         <c:if test="${empty sessionScope.user}">

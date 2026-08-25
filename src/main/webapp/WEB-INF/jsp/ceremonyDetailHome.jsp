@@ -47,7 +47,7 @@
         </div>
 
         <c:if test="${not empty sessionScope.user}">
-            <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">การจอง</a>
+            <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">รายการจอง</a>
             
         </c:if>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>

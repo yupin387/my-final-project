@@ -9,14 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>จองงานทำบุญบริษัท - ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=10">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingForm.css?v=13">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""/>
 </head>
 <body>
 
-<%-- ========== NAVBAR (ให้ตรงกับหน้า home: มีเมนู บริการ/แพ็กเกจ และ ปฏิทิน แบบ dropdown) ========== --%>
+<%-- ========== NAVBAR ========== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <div class="lotus-icon">
@@ -27,7 +27,6 @@
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
 
-        <%-- ===== เมนู บริการ/แพ็กเกจ (dropdown) ===== --%>
         <div class="nav-dropdown-wrap">
             <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
                 บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
@@ -40,7 +39,6 @@
             </div>
         </div>
 
-        <%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) ===== --%>
         <div class="nav-dropdown-wrap">
             <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item nav-dropdown-toggle">
                 ปฏิทิน <span class="nav-caret">▾</span>
@@ -53,8 +51,7 @@
             </div>
         </div>
 
-        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">การจอง</a>
-
+        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">รายการจอง</a>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
     <div class="dropdown-wrap">
@@ -86,20 +83,8 @@
     <div class="form-container">
     <form action="${pageContext.request.contextPath}/saveBooking" method="post" novalidate onsubmit="return handleFormSubmit(this);">
         <c:set var="detailIndex" value="0"/>
-
-        <%-- =========================================================
-             โหมดการจอง (แพ็กเกจ / กรอกเอง) มาจากหน้า ceremonyDetail แล้ว
-             (เลือก "เลือกจองแพ็กเกจนี้" หรือ "จองแบบระบุเอง" มาก่อนหน้านี้)
-             ฉะนั้นไม่ต้องมีการ์ด "เลือกวิธีจอง" ซ้ำในฟอร์มนี้อีก — ใช้ค่าจาก
-             param.custom เพื่อกำหนดโหมดการแสดงผลของฟอร์มแทน (ตัดการ์ดเลือกวิธีจอง
-             และ bookingMode radio ที่เคยซ้อนอยู่ก่อนหน้านี้ทิ้ง เพื่อให้ทำงานแบบเดียว
-             กับฟอร์มทำบุญบ้าน/ขึ้นบ้านใหม่ ไม่ต้องพึ่ง JS มา force โหมดซ้ำอีกชั้น)
-             ========================================================= --%>
         <c:set var="startInCustomMode" value="${param.custom == 'true'}"/>
 
-        <%-- =========================================================
-             ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่ / รูปภาพ
-             ========================================================= --%>
         <div class="form-grid">
 		    <div>
 		        <div class="form-card">
@@ -158,14 +143,12 @@
 		    <div class="form-card">
 		        <div class="card-header">สถานที่จัดพิธี</div>
 		        <div class="card-body">
-		            <!-- 1. ที่อยู่ -->
 		            <div class="form-group">
 		                <label class="form-label">ที่อยู่ที่ต้องการจัดงาน <span class="required" style="color:red;">*</span></label>
 		                <textarea name="eventAddress" id="eventAddressField" class="form-control" rows="3" required
 		                          placeholder="เช่น 123/45 หมู่บ้านบุญรักษา ตำบลสุทธิ อำเภอเมือง จังหวัดเชียงใหม่ 50000"></textarea>
 		            </div>
 		
-		            <!-- 2. ปักหมุดแผนที่ -->
 		            <div class="form-group" style="margin-top:16px;">
 		                <label class="form-label">📍 ปักหมุดตำแหน่งที่จัดงาน <span class="required" style="color:red;">*</span></label>
 		                <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
@@ -194,7 +177,6 @@
 		
 		            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
 		
-		            <!-- 3. รูปภาพสถานที่ -->
 		            <div class="form-group">
 		                <label class="form-label">📸 รูปภาพสถานที่จัดงาน <span class="required" style="color:red;">*</span></label>
 		                <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">
@@ -212,16 +194,10 @@
 		        </div>
 		    </div>
 		</div>
-        <%-- =========================================================
-             1. รายละเอียดการจอง — ใช้ชุดคำถามเดียวกันทั้ง 2 โหมด
-             ========================================================= --%>
 
-        <%-- 1.1 เลือกแพ็กเกจ — โชว์เฉพาะโหมดแพ็กเกจ --%>
         <div class="form-card" id="packageOnlyBlock" style="${startInCustomMode ? 'display:none;' : 'display:block;'}">
             <div class="card-header">แพ็กเกจที่เลือก</div>
             <div class="card-body">
-                <%-- หมายเหตุ: เครื่องเสียง/โต๊ะหมู่บูชา รวมอยู่ในทุกแพ็กเกจอยู่แล้ว
-                     ใส่ note บอกลูกค้าให้ชัดเจนแบบเดียวกับ note ของสังฆทาน --%>
                 <p style="font-size:12px;color:#B0345A;margin:-4px 0 14px;">
                     ℹ️ ทุกแพ็กเกจรวมชุดเครื่องเสียง โต๊ะหมู่บูชา และพระประธานไว้ให้แล้ว ทางร้านเป็นผู้จัดเตรียมให้ทั้งหมด
                 </p>
@@ -247,10 +223,10 @@
                                    data-monkcount="${pkgMonkCount}"
                                    onchange="applyPackageMonkCount(this)"
                                    ${isPkgSelected ? 'checked' : ''}>
-                        <div class="item-card-thumb">
-    <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}"
-         onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
-</div>
+                            <div class="item-card-thumb">
+                                <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}"
+                                     onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
+                            </div>
                             <div class="item-card-body">
                                 <div class="item-card-name">${pkg.ceremonyName}</div>
                                 <div class="item-card-desc">${pkg.ceremonyDetail}</div>
@@ -269,53 +245,76 @@
             <input type="hidden" name="ceremony.ceremonyId" id="customCeremonyId" value="${defaultCeremonyId}">
         </div>
 
-        <%-- 1.2 การนิมนต์พระสงฆ์ — ใช้ร่วมกันทั้ง 2 โหมด --%>
+        <%-- การนิมนต์พระสงฆ์ (ปรับให้ตรงกับ fillBookingForm2) --%>
 		<div class="form-card">
 		    <div class="card-header">การนิมนต์พระสงฆ์</div>
 		    <div class="card-body">
 		
 		        <c:forEach items="${questions}" var="q">
-		            <c:if test="${fn:contains(q.questionsText, 'รูปแบบการนิมนต์')}">
-		                <div class="form-group">
-		                    <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
-		                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-		                    <div class="checkbox-group">
-		                        <label class="checkbox-label">
-		                            <input type="radio" name="details[${detailIndex}].answer" value="ให้ทางร้านนิมนต์"
-		                                   onchange="toggleWatDetailBlock('watDetail', true)" checked>
-		                            <span>ให้ทางร้านนิมนต์</span>
-		                        </label>
-		                        <label class="checkbox-label">
-		                            <input type="radio" name="details[${detailIndex}].answer" id="selfInviteRadio"
-		                                   value="${startInCustomMode ? 'นิมนต์เอง' : 'นิมนต์เอง (ลด ฿1,500)'}"
-		                                   onchange="toggleWatDetailBlock('watDetail', false)">
-		                            <span>นิมนต์เอง <small id="selfInviteDiscountNote"
-		                                  style="color:#2e7d32;${startInCustomMode ? 'display:none;' : ''}">(รับส่วนลด ฿1,500)</small></span>
-		                        </label>
-		                    </div>
-		                    <p style="font-size:12px;color:red;margin-top:6px;">
-		                        ⚠️ กรณีนิมนต์เอง วัดที่นิมนต์ต้องอยู่ในรัศมีพื้นที่ให้บริการที่ทางร้านกำหนดเท่านั้น
-		                    </p>
-		                </div>
-		                <c:set var="detailIndex" value="${detailIndex + 1}"/>
-		            </c:if>
-		        </c:forEach>
+				    <c:if test="${fn:contains(q.questionsText, 'รูปแบบการนิมนต์')}">
+				        <div class="form-group">
+				            <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
+				            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+				            <div class="checkbox-group">
+				                <label class="checkbox-label">
+				                    <input type="radio" name="details[${detailIndex}].answer" value="ให้ทางร้านนิมนต์"
+				                           onchange="toggleWatDetailBlock('watDetail', true)" checked>
+				                    <span>ให้ทางร้านนิมนต์</span>
+				                </label>
+				                <label class="checkbox-label">
+				                    <input type="radio" name="details[${detailIndex}].answer" id="selfInviteRadio"
+				                           value="${startInCustomMode ? 'นิมนต์เอง' : 'นิมนต์เอง (ลด ฿1,500)'}"
+				                           onchange="toggleWatDetailBlock('watDetail', false)">
+				                    <span>
+				                        นิมนต์เอง 
+				                        <c:if test="${!startInCustomMode}">
+				                            <small style="color:#2e7d32;"></small>
+				                        </c:if>
+				                    </span>
+				                </label>
+				            </div>
+				            
+				            <p id="shopInviteWarning" style="font-size:12px;color:red;margin-top:6px;display:block;">
+				                ⚠️ กรณีให้ทางร้านนิมนต์ให้ วัดที่นิมนต์ต้องอยู่ในรัศมีพื้นที่ให้บริการที่ทางร้านกำหนดเท่านั้น
+				            </p>
+				
+				            <c:if test="${!startInCustomMode}">
+				                <p id="pkgSelfInviteWarning" style="font-size:12px;color:red;margin-top:6px;display:none;">
+				                    ⚠️ กรณีนิมนต์เอง จะมีส่วนลดให้ 1,500 บาท
+				                </p>
+				            </c:if>
+				        </div>
+				        <c:set var="detailIndex" value="${detailIndex + 1}"/>
+				    </c:if>
+				</c:forEach>
 		
-		        <c:forEach items="${questions}" var="q">
-		            <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
-		                <div class="form-group" id="monkCountGroup" style="margin-top:14px; ${startInCustomMode ? 'display:block;' : 'display:none;'}">
-		                    <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
-		                    <p style="font-size:12px;color:#B0345A;margin-top:2px;">
-		                        ระบุจำนวนพระสงฆ์ที่ต้องการก่อน เพื่อให้ระบบแสดงช่องเลือกวัดให้ครบตามจำนวน
-		                    </p>
-		                    <input type="hidden" name="details[${detailIndex}].question.questionsId" id="monkCountQuestionIdField" value="${q.questionsId}">
-		                    <input type="number" name="details[${detailIndex}].answer" id="monkCountField"
-		                           class="form-control" placeholder="เช่น 5" min="1" required
-		                           oninput="onMonkCountInputChange(this.value)">
-		                </div>
-		                <c:set var="detailIndex" value="${detailIndex + 1}"/>
-		            </c:if>
-		        </c:forEach>
+                <c:if test="${startInCustomMode}">
+                    <c:forEach items="${questions}" var="q">
+                        <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
+                            <div class="form-group" id="monkCountGroup" style="margin-top:14px; display:none;">
+                                <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
+                                <p style="font-size:12px;color:#B0345A;margin-top:2px;">
+                                    ระบุจำนวนพระสงฆ์ที่ต้องการก่อน เพื่อให้ระบบแสดงช่องเลือกวัดให้ครบตามจำนวน
+                                </p>
+                                <input type="hidden" name="details[${detailIndex}].question.questionsId" id="monkCountQuestionIdField" value="${q.questionsId}">
+                                <input type="number" name="details[${detailIndex}].answer" id="monkCountField"
+                                       class="form-control" placeholder="เช่น 5" min="1" required
+                                       oninput="onMonkCountInputChange(this.value)">
+                            </div>
+                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                        </c:if>
+                    </c:forEach>
+                </c:if>
+
+                <c:if test="${!startInCustomMode}">
+                    <c:forEach items="${questions}" var="q">
+                        <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
+                            <input type="hidden" name="details[${detailIndex}].question.questionsId" id="monkCountQuestionIdField" value="${q.questionsId}">
+                            <input type="hidden" name="details[${detailIndex}].answer" id="monkCountField" value="${pkgMonkCount}">
+                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                        </c:if>
+                    </c:forEach>
+                </c:if>
 		
 		        <div id="watDetail" style="display:block; margin-bottom:14px;">
 		            <c:forEach items="${questions}" var="q">
@@ -364,11 +363,9 @@
 		    </div>
 		</div>
 
-        <%-- 1.3 เลือกชุดสังฆทาน --%>
         <div class="form-card">
             <div class="card-header">เลือกชุดสังฆทาน</div>
             <div class="card-body">
-
                 <c:forEach items="${questions}" var="q">
                     <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดสังฆทาน')}">
                         <div class="form-group" style="margin-bottom:14px;">
@@ -377,10 +374,6 @@
                                 ค่าเริ่มต้น = จำนวนพระสงฆ์ที่นิมนต์ไว้ด้านบน แก้ไขจำนวนเองได้หากต้องการ
                             </p>
                             <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                            <%-- FIX: เดิม value="5" ตายตัวไม่ว่าจะโหมดไหน ทำให้โหมด "จองแบบระบุเอง"
-                                 ก็ขึ้นเลข 5 มาให้ทั้งที่ยังไม่ได้เลือกจำนวนพระสงฆ์เลย
-                                 ค่า fix 5 ควรเกิดจากการเลือกแพ็กเกจมาตรฐานเท่านั้น (ผ่าน applyPackageMonkCount)
-                                 โหมดกรอกเองจึงให้เริ่มว่าง ให้ผู้ใช้กรอกเอง --%>
                             <input type="number" name="details[${detailIndex}].answer" id="sanghatanQtyInput"
                                    class="form-control" value="${startInCustomMode ? '' : 5}" min="1"
                                    placeholder="ระบุจำนวนชุด..."
@@ -415,15 +408,12 @@
                         <c:set var="detailIndex" value="${detailIndex + 1}"/>
                     </c:if>
                 </c:forEach>
-
             </div>
         </div>
 
-        <%-- 1.4 ชุดภัตตาหารปิ่นโต --%>
         <div class="form-card">
             <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
             <div class="card-body">
-
                 <c:forEach items="${questions}" var="q">
                     <c:if test="${fn:contains(q.questionsText, 'ต้องการชุดภัตตาหาร')}">
                         <c:set var="pintoWantIndex" value="${detailIndex}"/>
@@ -449,7 +439,6 @@
                 </div>
 
                 <div id="pintoDetail" style="display:block; margin-top:14px;">
-
                     <c:forEach items="${questions}" var="q">
                         <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดภัตตาหาร')}">
                             <div class="form-group" style="margin-bottom:14px;">
@@ -489,20 +478,10 @@
                             <c:set var="detailIndex" value="${detailIndex + 1}"/>
                         </c:if>
                     </c:forEach>
-
                 </div>
-
             </div>
         </div>
 
-        <%-- 1.5 หมายเหตุเพิ่มเติม
-             คำถามนี้ต้องดึงมาจาก ${questions} เหมือนคำถามอื่นๆ ในฟอร์ม (ผูกกับ
-             details[].question.questionsId / details[].answer ตามแพทเทิร์นเดิม)
-             ไม่ใช่ field แยกต่างหากแบบ additionalNote — ต้องมีแถวคำถามในตาราง
-             Questionsdetail ที่มี questionsText = "มีความต้องการเพิ่มเติมหรือไม่?"
-             ผูกกับ ceremony ที่เกี่ยวข้องไว้ก่อน ฟอร์มถึงจะดึงมาแสดงได้
-             (เนื้อหาเป็นเรื่องอุปกรณ์/รายละเอียดอื่นๆ ไม่ใช่เรื่องอาหารแขก
-              เพราะเรื่องอาหารมีคำถามของตัวเองอยู่แล้วในส่วนปิ่นโตด้านบน) --%>
         <c:forEach items="${questions}" var="q">
             <c:if test="${fn:contains(q.questionsText, 'ความต้องการเพิ่มเติม')}">
                 <div class="form-card">
@@ -538,80 +517,38 @@
             <defs>
                 <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
-<stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
-<stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
+                   <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+                   <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
                 </linearGradient>
             </defs>
         </svg>
     </div>
-<div class="container footer-content footer-content-slim">
-    <div class="footer-col footer-brand-col">
-        <div class="footer-brand">
-            <div class="lotus-icon">
-                <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
+    <div class="container footer-content footer-content-slim">
+        <div class="footer-col footer-brand-col">
+            <div class="footer-brand">
+                <div class="lotus-icon">
+                    <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมี รับจัดงานบุญ">
+                </div>
+                <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
             </div>
-            <span class="footer-brand-text">บุญมี รับจัดงานบุญ</span>
+            <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+            <div class="footer-social">
+                <a href="#" class="footer-social-link">📘 Facebook</a>
+                <a href="#" class="footer-social-link">▶️ YouTube</a>
+                <a href="#" class="footer-social-link">💬 LINE OA</a>
+            </div>
         </div>
-        <p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
-        <div class="footer-social">
-            <a href="#" class="footer-social-link">📘 Facebook</a>
-            <a href="#" class="footer-social-link">▶️ YouTube</a>
-            <a href="#" class="footer-social-link">💬 LINE OA</a>
+        <div class="footer-col footer-contact-col">
+            <h4 class="footer-heading">ติดต่อเรา</h4>
+            <p>📞 โทร. 08X-XXX-XXXX</p>
+            <p>💬 LINE OA: @boonmee</p>
+            <p>✉️ boonmee@gmail.com</p>
+            <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
         </div>
     </div>
-		<div class="footer-col footer-contact-col">
-			<h4 class="footer-heading">ติดต่อเรา</h4>
-			<p>📞 โทร. 08X-XXX-XXXX</p>
-			<p>💬 LINE OA: @boonmee</p>
-			<p>✉️ boonmee@gmail.com</p>
-			<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
-		</div>
-	</div>
-	</footer>
+</footer>
 
 <style>
-.item-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-}
-.item-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 1.5px solid var(--cream-border-soft);
-    border-radius: 10px;
-    padding: 10px;
-    cursor: pointer;
-    background: #FFFFFF;
-    transition: border-color .15s, box-shadow .15s;
-}
-.item-card:hover { border-color: var(--gold-mid); }
-.item-card:has(input:checked) {
-    border-color: var(--gold-mid);
-    box-shadow: 0 0 0 2px rgba(224,87,127,0.22);
-}
-.item-card-thumb {
-    width: 100%; height: 72px;
-    overflow: hidden;
-    border-radius: 8px; margin-bottom: 6px;
-    background: var(--cream-mid);
-}
-.item-card-thumb img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-    cursor: zoom-in;
-}
-.item-card-name {
-    font-weight: 700; font-size: 12.5px; color: var(--brown-dark); margin-bottom: 3px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.item-card-desc {
-    font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 4px;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.item-card-price { font-size: 12px; font-weight: 700; color: var(--gold); }
-
 .image-lightbox {
     display: none;
     position: fixed;
@@ -640,95 +577,6 @@
     font-weight: 400;
     cursor: pointer;
 }
-
-/* ===== Mini Calendar (เลือกวันที่จัดงานในฟอร์ม) ===== */
-.mini-cal-wrap {
-    border: 1.5px solid var(--cream-border-soft);
-    border-radius: 10px;
-    padding: 12px;
-    background: #FFF9FB;
-}
-.mini-cal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--brown-dark, #5C3800);
-    margin-bottom: 8px;
-}
-.mini-cal-nav-btn {
-    background: #FBD0DE;
-    border: none;
-    border-radius: 6px;
-    width: 26px;
-    height: 26px;
-    cursor: pointer;
-    color: #B0345A;
-    font-size: 15px;
-}
-.mini-cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-}
-.mini-cal-day-label {
-    text-align: center;
-    font-size: 11px;
-    color: var(--text-muted);
-    padding: 2px 0;
-}
-.mini-cal-cell {
-    position: relative;
-    aspect-ratio: 1;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    cursor: pointer;
-    border: 1px solid transparent;
-}
-.mini-cal-cell-empty { cursor: default; }
-.mini-cal-cell-free { background: #E9F7EF; border-color: #B7E4C7; }
-.mini-cal-cell-almost { background: #FFF3D6; border-color: #F0CE7E; }
-.mini-cal-cell-booked { background: #FBE3E7; border-color: #E9A9B4; cursor: not-allowed; }
-.mini-cal-cell-past { background: #F0F0F0; border-color: #DADADA; cursor: not-allowed; color: #B0B0B0; }
-.mini-cal-cell-today { outline: 2px solid #E0577F; }
-.mini-cal-cell-selected { outline: 2px solid #B0345A; box-shadow: 0 0 0 2px rgba(224,87,127,0.25); }
-.mini-cal-full-mark {
-    position: absolute;
-    top: 1px;
-    right: 3px;
-    font-size: 9px;
-    color: #B0345A;
-}
-.mini-cal-legend {
-    display: flex;
-    gap: 12px;
-    margin-top: 8px;
-    font-size: 11px;
-    color: var(--text-muted);
-    flex-wrap: wrap;
-}
-.mini-cal-dot {
-    display: inline-block;
-    width: 9px;
-    height: 9px;
-    border-radius: 2px;
-    margin-right: 4px;
-}
-.mini-cal-dot-free { background: #B7E4C7; }
-.mini-cal-dot-almost { background: #F0CE7E; }
-.mini-cal-dot-full { background: #E9A9B4; }
-.mini-cal-selected-text {
-    font-size: 12px;
-    color: #B0345A;
-    margin: 8px 0 0;
-    font-weight: 600;
-}
-
-/* ===== Navbar dropdown (บริการ/แพ็กเกจ, ปฏิทิน) — ให้ตรงกับหน้า home ===== */
 .nav-dropdown-wrap {
     position: relative;
     display: inline-block;
@@ -774,14 +622,22 @@
 .nav-dropdown-link:hover {
     background: var(--gold-pale, #fff8e1);
 }
+.item-card {
+    position: relative;
+}
+.item-card input[type="radio"] {
+    position: absolute !important;
+    top: auto !important;
+    bottom: 10px !important;
+    right: 10px !important;
+    left: auto !important;
+}
 </style>
 
-<%-- ========== IMAGE LIGHTBOX ========== --%>
 <div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
     <span class="image-lightbox-close" onclick="closeLightbox()">&times;</span>
     <img id="lightboxImg" src="" alt="">
 </div>
-
 
 <script>
 (function() {
@@ -856,6 +712,31 @@ document.addEventListener('keydown', function(e) {
 function toggleWatDetailBlock(id, show) {
     var el = document.getElementById(id);
     if (el) el.style.display = show ? 'block' : 'none';
+    
+    var monkCountGroup = document.getElementById('monkCountGroup');
+    if (monkCountGroup) {
+        monkCountGroup.style.display = show ? 'none' : 'block';
+        if (show) {
+            var checkedPkg = document.querySelector('input[name="ceremony.ceremonyId"]:checked');
+            if (checkedPkg && checkedPkg.dataset.monkcount) {
+                onMonkCountInputChange(checkedPkg.dataset.monkcount);
+            }
+        }
+    }
+
+    var shopWarning = document.getElementById('shopInviteWarning');
+    var pkgSelfWarning = document.getElementById('pkgSelfInviteWarning');
+    var isCustom = ${startInCustomMode};
+
+    if (show) {
+        if (shopWarning) shopWarning.style.display = 'block';
+        if (pkgSelfWarning) pkgSelfWarning.style.display = 'none';
+    } else {
+        if (shopWarning) shopWarning.style.display = 'none';
+        if (!isCustom && pkgSelfWarning) {
+            pkgSelfWarning.style.display = 'block';
+        }
+    }
 }
 
 function toggleSection(id, show) {
@@ -877,7 +758,7 @@ var watOptionList = [
     "วัดดับภัย",
     "วัดหมื่นล้าน",
     "วัดเจ็ดยอด (วัดโพธารามมหาวิหาร)",
-    "อื่นๆ (ระบุวัดเอง)" // 1. เพิ่มตัวเลือกอื่นๆ
+    "อื่นๆ (ระบุวัดเอง)"
 ];
 
 function renderWatDropdowns(containerId, textareaId, count) {
@@ -899,11 +780,11 @@ function renderWatDropdowns(containerId, textareaId, count) {
         var row = document.createElement('div');
         row.className = 'wat-picker-row';
         row.style.marginBottom = '8px';
-        
+
         var label = document.createElement('span');
         label.className = 'wat-picker-label';
         label.innerText = 'รูปที่ ' + i;
-        
+
         var select = document.createElement('select');
         select.className = 'form-select';
         watOptionList.forEach(function(w) {
@@ -912,30 +793,27 @@ function renderWatDropdowns(containerId, textareaId, count) {
             opt.innerText = '▼ ' + w;
             select.appendChild(opt);
         });
-        
-        // 2. สร้างกล่อง input สำหรับพิมพ์ชื่อวัด (ซ่อนไว้เป็นค่าเริ่มต้น)
+
         var customInputWrap = document.createElement('div');
         customInputWrap.className = 'custom-wat-wrap';
         customInputWrap.style.display = 'none';
         customInputWrap.style.marginTop = '6px';
-        
+
         var customInput = document.createElement('input');
         customInput.type = 'text';
         customInput.className = 'form-control custom-wat-input';
         customInput.placeholder = 'พิมพ์ชื่อวัดที่ต้องการ...';
         customInput.style.fontSize = '13px';
-        
-        // 3. สร้างข้อความแจ้งเตือนสีแดง
+
         var warningText = document.createElement('p');
         warningText.style.fontSize = '12px';
         warningText.style.color = '#c0392b';
         warningText.style.margin = '4px 0 0 0';
         warningText.innerText = '* วัดที่ระบุต้องอยู่บริเวณใกล้เคียงสถานที่จัดงานเท่านั้น และอาจมีการเปลี่ยนแปลงตามความสะดวกของพระสงฆ์';
-        
+
         customInputWrap.appendChild(customInput);
         customInputWrap.appendChild(warningText);
 
-        // 4. ผูก Event เปิด/ปิด กล่องพิมพ์ข้อความ
         select.addEventListener('change', (function(currentWrap) {
             return function() {
                 if (this.value === 'อื่นๆ (ระบุวัดเอง)') {
@@ -946,8 +824,7 @@ function renderWatDropdowns(containerId, textareaId, count) {
                 syncWatAnswer(containerId, textareaId);
             };
         })(customInputWrap));
-        
-        // 5. ผูก Event อัปเดตข้อมูลเมื่อมีการพิมพ์
+
         customInput.addEventListener('input', function() {
             syncWatAnswer(containerId, textareaId);
         });
@@ -965,27 +842,25 @@ function syncWatAnswer(containerId, textareaId) {
     var container = document.getElementById(containerId);
     var textarea = document.getElementById(textareaId);
     if (!container || !textarea) return;
-    
+
     var rows = container.querySelectorAll('.wat-picker-row');
     var lines = [];
-    
+
     rows.forEach(function(row, idx) {
         var select = row.querySelector('select');
         var customInput = row.querySelector('.custom-wat-input');
         var val = select.value;
-        
-        // 6. ถ้าเลือกอื่นๆ ให้ดึงค่าจากช่อง input ที่พิมพ์มาแทน
+
         if (val === 'อื่นๆ (ระบุวัดเอง)') {
             val = customInput.value.trim() ? ('(อื่นๆ) ' + customInput.value.trim()) : '(อื่นๆ) ยังไม่ระบุ';
         }
-        
+
         lines.push('รูปที่ ' + (idx + 1) + ' ' + val);
     });
-    
+
     textarea.value = lines.join('\n');
 }
 
-/* sync จาก dropdown เฉพาะตอนเลือก "ต่างวัด" เท่านั้น */
 function syncAllWatAnswersBeforeSubmit() {
     var watTypeRadio = document.querySelector('input[name="watType"]:checked');
     if (watTypeRadio && watTypeRadio.value === 'ต่างวัด') {
@@ -1058,11 +933,7 @@ function cleanupAndRenumberDetailsBeforeSubmit() {
     return true;
 }
 
-// -------------------------------------------------------------
-// ระบบตรวจสอบแบบฟอร์ม (Validation)
-// -------------------------------------------------------------
 function showError(element, message) {
-    // ลบ Error เก่าที่จุดเดียวกันถ้ามี
     if (element.nextElementSibling && element.nextElementSibling.classList.contains('custom-error-msg')) {
         element.nextElementSibling.remove();
     }
@@ -1070,18 +941,16 @@ function showError(element, message) {
     var err = document.createElement('div');
     err.className = 'custom-error-msg';
     err.style.color = 'red';
-    err.style.fontSize = '11px'; // ปรับขนาดให้เล็กลงกว่าตัวอื่นๆ
+    err.style.fontSize = '11px';
     err.style.marginTop = '4px';
-    err.innerText = message; // เอาสัญลักษณ์ ❌ ออก
+    err.innerText = message;
 
-    // แทรกข้อความแจ้งเตือนต่อท้าย
     if(element.nextSibling) {
         element.parentNode.insertBefore(err, element.nextSibling);
     } else {
         element.parentNode.appendChild(err);
     }
 
-    // ไฮไลต์ขอบสีแดง
     if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
         element.style.borderColor = 'red';
         element.classList.add('validation-failed');
@@ -1097,7 +966,6 @@ function showError(element, message) {
 }
 
 function handleFormSubmit(form) {
-    // ล้างแจ้งเตือน Error ทั้งหมดก่อน
     document.querySelectorAll('.custom-error-msg').forEach(function(e) { e.remove(); });
     form.querySelectorAll('.validation-failed').forEach(function(el) { el.style.borderColor = ''; el.classList.remove('validation-failed'); });
 
@@ -1110,13 +978,11 @@ function handleFormSubmit(form) {
         if (!firstErrorElement) firstErrorElement = el;
     }
 
-    // 1. ตรวจสอบปฏิทิน
     var eventDateVal = document.getElementById('eventDateInput').value;
     if (!eventDateVal) {
         markError(document.getElementById('datePickerWrap'), 'กรุณาเลือกวันที่จัดงานจากปฏิทิน');
     }
 
-    // 2. ตรวจสอบช่องที่จำเป็นทั้งหมด (required)
     form.querySelectorAll('input[required], textarea[required], select[required]').forEach(function(el) {
         if (!isInHiddenBranch(el)) {
             if (!el.value.trim()) {
@@ -1125,7 +991,6 @@ function handleFormSubmit(form) {
         }
     });
 
-    // 3. ตรวจสอบช่องจำนวนตัวเลข (ต้องมากกว่า 0)
     form.querySelectorAll('input[type="number"]').forEach(function(el) {
         if (!isInHiddenBranch(el) && el.value !== '') {
             if (parseFloat(el.value) <= 0) {
@@ -1134,36 +999,29 @@ function handleFormSubmit(form) {
         }
     });
 
-    // 4. ตรวจสอบแผนที่
     var lat = document.getElementById('eventLat').value;
     if (!lat || lat === "") {
         markError(document.getElementById('locationMap'), 'กรุณาปักหมุดตำแหน่งที่จัดงานบนแผนที่');
     }
 
-    // 5. ตรวจสอบรูปภาพ
     var imgCount = document.querySelectorAll('#base64Container input').length;
     if (imgCount === 0) {
         markError(document.getElementById('imagePreviewBox'), 'กรุณาอัปโหลดรูปภาพสถานที่จัดงานอย่างน้อย 1 รูป');
     }
 
-    // หากไม่ผ่าน เลื่อนจอไปจุดแรกที่ Error
     if (!isValid) {
         if (firstErrorElement) {
             firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-        return false; // ระงับการส่งฟอร์ม
+        return false;
     }
 
     syncAllWatAnswersBeforeSubmit();
     cleanupAndRenumberDetailsBeforeSubmit();
 
-    return true; // ยืนยันการส่งข้อมูล
+    return true;
 }
 
-/* FIX: ต้องข้าม radio ที่อยู่ในกิ่งที่ถูกซ่อน (เช่น การ์ดเลือกแพ็กเกจตอนอยู่ในโหมด
-   "จองแบบระบุเอง") เหมือนกับฟอร์มทำบุญบ้าน/ขึ้นบ้านใหม่ ไม่งั้น radio แพ็กเกจที่ถูก
-   checked ไว้เป็นค่าเริ่มต้นแต่ถูกซ่อนอยู่ จะยังยิง onchange ตอนโหลดหน้าอยู่ดี
-   ทำให้ช่อง "จำนวนพระสงฆ์" ถูกเซ็ตค่าทั้งที่ควรว่างให้ผู้ใช้กรอกเอง */
 function syncInitialToggleStates() {
     document.querySelectorAll('input[type="radio"]:checked').forEach(function(radio) {
         if (isInHiddenBranch(radio)) return;
@@ -1176,7 +1034,6 @@ function syncInitialToggleStates() {
 document.addEventListener('DOMContentLoaded', syncInitialToggleStates);
 window.addEventListener('pageshow', syncInitialToggleStates);
 
-/* ===== ปฏิทินย่อสำหรับเลือกวันที่จัดงาน ===== */
 window.bookedDates = [
     <c:forEach var="d" items="${bookedDates}" varStatus="st">
         "${d}"<c:if test="${!st.last}">,</c:if>

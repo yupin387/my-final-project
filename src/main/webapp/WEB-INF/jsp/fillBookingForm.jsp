@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">การจอง</a>
+        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">รายการจอง</a>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
     <div class="dropdown-wrap">
@@ -259,10 +259,10 @@
 		                        </label>
 		                        <label class="checkbox-label">
 		                            <input type="radio" name="details[${detailIndex}].answer" id="selfInviteRadio"
-		                                   value="${startInCustomMode ? 'นิมนต์เอง' : 'นิมนต์เอง (ลด ฿1,500)'}"
+		                                   value="${startInCustomMode ? 'นิมนต์เอง' : 'นิมนต์เอง'}"
 		                                   onchange="toggleWatDetailBlock('watDetail', false)">
 		                            <span>นิมนต์เอง <small id="selfInviteDiscountNote"
-		                                  style="color:#2e7d32;${startInCustomMode ? 'display:none;' : ''}">(รับส่วนลด ฿1,500)</small></span>
+		                                  style="color:#2e7d32;${startInCustomMode ? 'display:none;' : ''}"></small></span>
 		                        </label>
 		                    </div>
 		                    <p id="shopInviteNote" style="font-size:12px;color:red;margin-top:6px; display:block;">
@@ -692,7 +692,7 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeLightbox();
 });
 
-// ฟังก์ชันสลับแสดงบล็อกนิมนต์พระ และจัดการสลับแสดงแจ้งเตือนหมายเหตุนิมนต์
+//ฟังก์ชันสลับแสดงบล็อกนิมนต์พระ และจัดการสลับแสดงแจ้งเตือนหมายเหตุนิมนต์
 function toggleWatDetailBlock(id, show) {
     var el = document.getElementById(id);
     if (el) el.style.display = show ? 'block' : 'none';
@@ -700,10 +700,16 @@ function toggleWatDetailBlock(id, show) {
     var shopNote = document.getElementById('shopInviteNote');
     var selfNote = document.getElementById('selfInviteNoteWarning');
     
-    // ถ้า show=true คือ เลือกร้านนิมนต์ให้ -> โชว์เงื่อนไขร้าน / ซ่อนส่วนลดนิมนต์เอง
-    // ถ้า show=false คือ เลือกร้านนิมนต์เอง -> ซ่อนเงื่อนไขร้าน / โชว์ส่วนลดนิมนต์เอง
     if (shopNote) shopNote.style.display = show ? 'block' : 'none';
-    if (selfNote) selfNote.style.display = show ? 'none' : 'block';
+    
+    // เพิ่มเงื่อนไขตรวจสอบ หากเป็นการจองแบบกรอกเอง (startInCustomMode) จะไม่แสดงข้อความสีแดงเตือนส่วนลด
+    if (selfNote) {
+        if (${startInCustomMode}) {
+            selfNote.style.display = 'none';
+        } else {
+            selfNote.style.display = show ? 'none' : 'block';
+        }
+    }
 }
 
 function toggleSection(id, show) {

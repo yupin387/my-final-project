@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">การจอง</a>
+        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">รายการจอง</a>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
     <div class="dropdown-wrap">
@@ -258,52 +258,80 @@
         </div>
 
         <%-- 1.2 การนิมนต์พระสงฆ์ --%>
+		<%-- 1.2 การนิมนต์พระสงฆ์ — ใช้ร่วมกันทั้ง 2 โหมด --%>
 		<div class="form-card">
 		    <div class="card-header">การนิมนต์พระสงฆ์</div>
 		    <div class="card-body">
 		
 		        <c:forEach items="${questions}" var="q">
-		            <c:if test="${fn:contains(q.questionsText, 'รูปแบบการนิมนต์')}">
-		                <div class="form-group">
-		                    <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
-		                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-		                    <div class="checkbox-group">
-		                        <label class="checkbox-label">
-		                            <input type="radio" name="details[${detailIndex}].answer" value="ให้ทางร้านนิมนต์"
-		                                   onchange="toggleWatDetailBlock('watDetail', true)" checked>
-		                            <span>ให้ทางร้านนิมนต์</span>
-		                        </label>
-		                        <label class="checkbox-label">
-		                            <input type="radio" name="details[${detailIndex}].answer" id="selfInviteRadio"
-		                                   value="${startInCustomMode ? 'นิมนต์เอง' : 'นิมนต์เอง (ลด ฿1,500)'}"
-		                                   onchange="toggleWatDetailBlock('watDetail', false)">
-		                            <span>นิมนต์เอง <small id="selfInviteDiscountNote"
-		                                  style="color:#2e7d32;${startInCustomMode ? 'display:none;' : ''}">(รับส่วนลด ฿1,500)</small></span>
-		                        </label>
-		                    </div>
-		                    <p style="font-size:12px;color:red;margin-top:6px;">
-		                        ⚠️ กรณีนิมนต์เอง วัดที่นิมนต์ต้องอยู่ในรัศมีพื้นที่ให้บริการที่ทางร้านกำหนดเท่านั้น
-		                    </p>
-		                </div>
-		                <c:set var="detailIndex" value="${detailIndex + 1}"/>
-		            </c:if>
-		        </c:forEach>
+				    <c:if test="${fn:contains(q.questionsText, 'รูปแบบการนิมนต์')}">
+				        <div class="form-group">
+				            <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
+				            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+				            <div class="checkbox-group">
+				                <label class="checkbox-label">
+				                    <input type="radio" name="details[${detailIndex}].answer" value="ให้ทางร้านนิมนต์"
+				                           onchange="toggleWatDetailBlock('watDetail', true)" checked>
+				                    <span>ให้ทางร้านนิมนต์</span>
+				                </label>
+				                <label class="checkbox-label">
+				                    <input type="radio" name="details[${detailIndex}].answer" id="selfInviteRadio"
+				                           value="${startInCustomMode ? 'นิมนต์เอง' : 'นิมนต์เอง (ลด ฿1,500)'}"
+				                           onchange="toggleWatDetailBlock('watDetail', false)">
+				                    <span>
+				                        นิมนต์เอง 
+				                        <c:if test="${!startInCustomMode}">
+				                            <small style="color:#2e7d32;"></small>
+				                        </c:if>
+				                    </span>
+				                </label>
+				            </div>
+				            
+				            <%-- 1. ข้อความเตือนรัศมี: จะแสดงเฉพาะตอนเริ่มต้นหรือตอนเลือก "ให้ทางร้านนิมนต์" เท่านั้น --%>
+				            <p id="shopInviteWarning" style="font-size:12px;color:red;margin-top:6px;display:block;">
+				                ⚠️ กรณีให้ทางร้านนิมนต์ให้ วัดที่นิมนต์ต้องอยู่ในรัศมีพื้นที่ให้บริการที่ทางร้านกำหนดเท่านั้น
+				            </p>
+				
+				            <%-- 2. ข้อความเตือนส่วนลด: จะแสดงเฉพาะ "แพ็กเกจ" + "นิมนต์เอง" เท่านั้น (ถ้ากรอกเองจะไม่สร้างบรรทัดนี้ขึ้นมาเลย) --%>
+				            <c:if test="${!startInCustomMode}">
+				                <p id="pkgSelfInviteWarning" style="font-size:12px;color:red;margin-top:6px;display:none;">
+				                    ⚠️ กรณีนิมนต์เอง จะมีส่วนลดให้ 1,500 บาท
+				                </p>
+				            </c:if>
+				        </div>
+				        <c:set var="detailIndex" value="${detailIndex + 1}"/>
+				    </c:if>
+				</c:forEach>
 		
-		        <c:forEach items="${questions}" var="q">
-		            <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
-		                <div class="form-group" id="monkCountGroup" style="margin-top:14px; ${startInCustomMode ? 'display:block;' : 'display:none;'}">
-		                    <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
-		                    <p style="font-size:12px;color:#B0345A;margin-top:2px;">
-		                        ระบุจำนวนพระสงฆ์ที่ต้องการก่อน เพื่อให้ระบบแสดงช่องเลือกวัดให้ครบตามจำนวน
-		                    </p>
-		                    <input type="hidden" name="details[${detailIndex}].question.questionsId" id="monkCountQuestionIdField" value="${q.questionsId}">
-		                    <input type="number" name="details[${detailIndex}].answer" id="monkCountField"
-		                           class="form-control" placeholder="เช่น 5" min="1" required
-		                           oninput="onMonkCountInputChange(this.value)">
-		                </div>
-		                <c:set var="detailIndex" value="${detailIndex + 1}"/>
-		            </c:if>
-		        </c:forEach>
+                <%-- ช่องจำนวนพระสงฆ์: จะแสดงเฉพาะกรณีจองแบบกรอกเอง (startInCustomMode) เท่านั้น แบบแพ็กเกจจะไม่เรนเดอร์ขึ้นมาเลย --%>
+                <c:if test="${startInCustomMode}">
+                    <c:forEach items="${questions}" var="q">
+                        <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
+                            <div class="form-group" id="monkCountGroup" style="margin-top:14px; display:none;">
+                                <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
+                                <p style="font-size:12px;color:#B0345A;margin-top:2px;">
+                                    ระบุจำนวนพระสงฆ์ที่ต้องการก่อน เพื่อให้ระบบแสดงช่องเลือกวัดให้ครบตามจำนวน
+                                </p>
+                                <input type="hidden" name="details[${detailIndex}].question.questionsId" id="monkCountQuestionIdField" value="${q.questionsId}">
+                                <input type="number" name="details[${detailIndex}].answer" id="monkCountField"
+                                       class="form-control" placeholder="เช่น 5" min="1" required
+                                       oninput="onMonkCountInputChange(this.value)">
+                            </div>
+                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                        </c:if>
+                    </c:forEach>
+                </c:if>
+
+                <%-- สำหรับแพ็กเกจ ซ่อน input จำนวนพระไว้เบื้องหลังเพื่อให้ระบบเลือกวัดทำงานได้โดยไม่ต้องแสดง UI ช่องกรอก --%>
+                <c:if test="${!startInCustomMode}">
+                    <c:forEach items="${questions}" var="q">
+                        <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
+                            <input type="hidden" name="details[${detailIndex}].question.questionsId" id="monkCountQuestionIdField" value="${q.questionsId}">
+                            <input type="hidden" name="details[${detailIndex}].answer" id="monkCountField" value="${pkgMonkCount}">
+                            <c:set var="detailIndex" value="${detailIndex + 1}"/>
+                        </c:if>
+                    </c:forEach>
+                </c:if>
 		
 		        <div id="watDetail" style="display:block; margin-bottom:14px;">
 		            <c:forEach items="${questions}" var="q">
@@ -718,8 +746,37 @@ document.addEventListener('keydown', function(e) {
 function toggleWatDetailBlock(id, show) {
     var el = document.getElementById(id);
     if (el) el.style.display = show ? 'block' : 'none';
-}
+    
+    var monkCountGroup = document.getElementById('monkCountGroup');
+    if (monkCountGroup) {
+        monkCountGroup.style.display = show ? 'none' : 'block';
+        if (show) {
+            var checkedPkg = document.querySelector('input[name="ceremony.ceremonyId"]:checked');
+            if (checkedPkg && checkedPkg.dataset.monkcount) {
+                onMonkCountInputChange(checkedPkg.dataset.monkcount);
+            }
+        }
+    }
 
+    // จัดการการแสดงผลข้อความสีแดงแบบตรงจุด
+    var shopWarning = document.getElementById('shopInviteWarning');
+    var pkgSelfWarning = document.getElementById('pkgSelfInviteWarning');
+    var isCustom = ${startInCustomMode};
+
+    if (show) {
+        // กรณีเลือก "ให้ทางร้านนิมนต์" -> แสดงเตือนรัศมี, ซ่อนเตือนส่วนลด
+        if (shopWarning) shopWarning.style.display = 'block';
+        if (pkgSelfWarning) pkgSelfWarning.style.display = 'none';
+    } else {
+        // กรณีเลือก "นิมนต์เอง" -> ซ่อนเตือนรัศมีทันทีในทุกกรณี
+        if (shopWarning) shopWarning.style.display = 'none';
+        
+        // ถ้าเป็นแบบแพ็กเกจ ถึงจะแสดงข้อความเตือนส่วนลด 1,500 บาท / ถ้าเป็นกรอกเองจะไม่แสดงอะไรเลย
+        if (!isCustom && pkgSelfWarning) {
+            pkgSelfWarning.style.display = 'block';
+        }
+    }
+}
 function toggleSection(id, show) {
     var el = document.getElementById(id);
     if (el) el.style.display = show ? 'block' : 'none';

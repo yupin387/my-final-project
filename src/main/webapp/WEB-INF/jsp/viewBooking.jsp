@@ -129,7 +129,7 @@
             </div>
         </div>
 
-        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">การจอง</a>
+        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">รายการจอง</a>
 
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>

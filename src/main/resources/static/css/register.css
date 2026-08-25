@@ -22,12 +22,12 @@
     --cream-border:  #F3D9DC;
     --cream-border-soft: #F6E2D9;
 
-    --text-dark:     #3A1526;
+    --text-dark:     #7A2340; /* สีน้ำตาล-ชมพูเข้มอมแดง สำหรับชื่อระบบ */
     --text-mid:      #6B2C46;
     --brown-dark:    #B8823A;
     --brown-mid:     #C79552;
 
-    /* Navbar — เปลี่ยนจากชมพูเข้มเป็นครีม-ทอง ให้ตรงกับหน้าอื่นในโปรเจกต์ */
+    /* Navbar — โทนสีครีม-ทอง ให้ตรงกับหน้าอื่นในโปรเจกต์ */
     --footer-grad-1: #F6E3B0;
     --footer-grad-2: #ECC974;
     --footer-grad-3: #D6A544;
@@ -95,7 +95,7 @@ body {
     padding: 0;
 }
 
-/* ชื่อระบบ — คงฟอนต์ Charmonman เดิมไว้ */
+/* ชื่อระบบ — ใช้ตัวแปรสี --text-dark ที่ปรับแล้ว พร้อมคงฟอนต์เดิม */
 .nav-brand-text {
     color: var(--text-dark);
     font-family: 'Charmonman', 'Noto Serif Thai', serif;

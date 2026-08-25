@@ -2,12 +2,13 @@
    GLOBAL STYLES & BODY  (ธีมชมพู-ทอง-ขาว เหมือนโลโก้ บุญมี รับจัดงานบุญ)
    ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Charmonman:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
 
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-family: 'Sarabun', sans-serif;
+	font-family: 'Sarabun', sans-serif !important;
 }
 
 :root {
@@ -28,7 +29,7 @@
 	--cream-border: #F3C4D5;
 	--cream-border-soft: #F6D4E1;
 
-	/* พื้นหลังหน้าเว็บ ไล่ชมพูอ่อนพาสเทล (ปรับให้ตรงกับ home.css) */
+	/* พื้นหลังหน้าเว็บ ไล่ชมพูอ่อนพาสเทล */
 	--page-bg: #FDF1F5;
 
 	--text-dark: #1A1A1A;
@@ -38,7 +39,7 @@
 	--brown-dark: #7A2340;
 	--brown-mid: #A83A5C;
 
-	/* ===== Footer / Navbar gradient — ปรับให้เป็นครีม-ทอง ให้ตรงกับหน้า home เป๊ะ ===== */
+	/* ===== Footer / Navbar gradient ===== */
 	--footer-grad-1: #F6E3B0;
 	--footer-grad-2: #ECC974;
 	--footer-grad-3: #D6A544;
@@ -49,13 +50,13 @@ body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
+	font-family: 'Sarabun', sans-serif;
 }
 
 /* ==========================================================================
-   NAVBAR (ให้ตรงกับหน้า home — 92px / โลโก้ 76px / ตัวอักษร 34px)
+   NAVBAR (คงฟอนต์ Charmonman เฉพาะชื่อแบรนด์ นอกนั้น Sarabun)
    ========================================================================== */
 .navbar-custom {
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
 	background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 55%, var(--footer-grad-3) 100%);
 	padding: 0 40px;
 	display: flex;
@@ -71,32 +72,19 @@ body {
 	box-shadow: 0 4px 20px rgba(184, 134, 47, 0.28);
 }
 
-.navbar-custom,
-.navbar-custom * {
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
+/* ชื่อแบรนด์และโลโก้ระบบเท่านั้นที่ใช้ Charmonman */
+.nav-brand-text, 
+.footer-brand-text {
+	font-family: 'Charmonman', serif !important;
+	color: var(--brown-dark);
+	font-size: 34px;
+	font-weight: 800;
+	letter-spacing: 0.5px;
+	white-space: nowrap;
 }
 
-/* ==========================================================================
-   FIX: ลิงก์เมนู/ข้อมูลผู้ใช้ใน navbar ใช้ Sarabun แทน Charmonman
-   (เดิมโดน .navbar-custom * บังคับเป็น Charmonman ไปหมดทุก element ลูก
-   ซึ่งฟอนต์สคริปต์แบบนี้เหมาะกับ "ชื่อแบรนด์" ตัวเดียวเท่านั้น เอาไปใช้กับ
-   เมนูนำทาง/ชื่อผู้ใช้แล้วอ่านยาก จึง override เฉพาะกลุ่มนี้กลับเป็น Sarabun
-   ต้องใช้ !important เพราะ specificity ของ .navbar-custom * สูงกว่า
-   selector ปกติของ .nav-link-item เป็นต้น) — ชื่อแบรนด์ (.nav-brand-text,
-   .footer-brand-text) ไม่ได้ถูกแตะ ยังเป็น Charmonman เหมือนเดิม
-   ========================================================================== */
-.nav-link-item,
-.nav-dropdown-toggle,
-.nav-dropdown-link,
-.user-name-nav,
-.user-role-nav,
-.dropdown-link {
-	font-family: 'Sarabun', sans-serif !important;
-}
-
-.nav-link-item,
-.nav-dropdown-toggle {
-	font-weight: 600;
+.footer-brand-text {
+	font-size: 1.6rem;
 }
 
 .navbar-custom::before {
@@ -117,7 +105,6 @@ body {
 	gap: 12px;
 }
 
-/* โลโก้ใช้รูปจริง ขนาดให้เท่า home เป๊ะ (76px) */
 .lotus-icon {
 	background: #FFFFFF;
 	width: 76px;
@@ -139,16 +126,6 @@ body {
 	border-radius: 50%;
 }
 
-.nav-brand-text {
-	color: var(--brown-dark);
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
-	font-size: 34px;
-	font-weight: 800;
-	letter-spacing: 0.5px;
-	white-space: nowrap;
-	text-shadow: none;
-}
-
 .navbar-center {
 	display: flex;
 	gap: 2px;
@@ -166,7 +143,6 @@ body {
 	border-radius: 6px;
 	transition: background 0.2s, color 0.2s;
 	white-space: nowrap;
-	text-shadow: none;
 }
 
 .nav-link-item:hover {
@@ -180,7 +156,6 @@ body {
 	font-weight: 700;
 }
 
-/* ===== User Profile Pill ===== */
 .user-profile-pill {
 	background: rgba(255, 255, 255, 0.55);
 	border: 1.5px solid var(--accent-gold-pale);
@@ -263,7 +238,6 @@ body {
 .dropdown-link {
 	display: block;
 	padding: 13px 20px;
-	font-family: 'Sarabun', sans-serif;
 	font-size: 14px;
 	font-weight: 600;
 	color: var(--text-mid);
@@ -309,39 +283,23 @@ body {
 	overflow: hidden;
 }
 
-/* รูปสำหรับหน้าทำบุญบ้าน */
-.hero-home {
-    background-image: url('/static/images/Hero-banner/cover1.png') !important;
-}
-
-/* รูปสำหรับหน้าขึ้นบ้านใหม่ */
-.hero-house {
-    background-image: url('/static/images/Hero-banner/cover6.png') !important;
-}
-
-/* รูปสำหรับหน้าทำบุญบริษัท */
-.hero-company {
-    background-image: url('/static/images/Hero-banner/cover7.png') !important;
-}
+.hero-home { background-image: url('/static/images/Hero-banner/cover1.png') !important; }
+.hero-house { background-image: url('/static/images/Hero-banner/cover6.png') !important; }
+.hero-company { background-image: url('/static/images/Hero-banner/cover7.png') !important; }
 
 .hero-banner::before {
 	content: '';
 	position: absolute;
 	inset: 0;
-	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%,
-		rgba(0, 0, 0, 0.32) 50%, rgba(0, 0, 0, 0.68) 100%);
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.32) 50%, rgba(0, 0, 0, 0.68) 100%);
 }
 
 .hero-banner::after {
 	content: '';
 	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
+	bottom: 0; left: 0; right: 0;
 	height: 4px;
-	background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 15%,
-		rgba(255,255,255,0.85) 35%, #FFFFFF 50%, rgba(255,255,255,0.85) 65%,
-		rgba(255,255,255,0.35) 85%, transparent 100%);
+	background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 15%, rgba(255,255,255,0.85) 35%, #FFFFFF 50%, rgba(255,255,255,0.85) 65%, rgba(255,255,255,0.35) 85%, transparent 100%);
 }
 
 .hero-content {
@@ -367,7 +325,6 @@ body {
 }
 
 .hero-content h1 {
-	font-family: 'sarabun', serif;
 	color: #FFFDF5;
 	font-size: 34px;
 	font-weight: 700;
@@ -391,14 +348,11 @@ body {
 	margin: 0 auto;
 }
 
-/* กรอบใหญ่ — ขอบสีทองให้ตัดกับพื้นหลังชัดเจน แบบกรอบทองของโลโก้ */
 .form-container {
 	background: #FFFFFF;
 	border-radius: 20px;
 	border: 3px solid var(--accent-gold);
-	box-shadow:
-		0 0 14px rgba(217, 164, 65, 0.28),
-		0 10px 34px rgba(224, 87, 127, 0.14);
+	box-shadow: 0 0 14px rgba(217, 164, 65, 0.28), 0 10px 34px rgba(224, 87, 127, 0.14);
 	padding: 36px 36px 28px;
 	position: relative;
 	overflow: hidden;
@@ -412,18 +366,6 @@ body {
 	background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
 }
 
-/* ==========================================================================
-   FORM GRID & FORM CARDS
-   ========================================================================== */
-/* ==========================================================================
-   FIX (รอบ 2): เดิมตั้ง 0.92fr/1.08fr ไว้ตอนที่คอลัมน์ซ้ายมีการ์ดรูปภาพ
-   แถมเข้าไปด้วย ทำให้ซ้ายสูงกว่าขวามาก — ตอนนี้ย้ายการ์ดรูปภาพออกไปเป็น
-   การ์ดเต็มความกว้างแยกต่างหากแล้ว (ดู bookingForm.jsp) เหลือแค่ "วันที่
-   กรอกฟอร์ม + ปฏิทินย่อ" ฝั่งซ้าย คู่กับ "ที่อยู่ + แผนที่" ฝั่งขวา ซึ่งสูง
-   ใกล้เคียงกันเองอยู่แล้ว จึงกลับมาใช้สัดส่วนใกล้เคียง 1:1 (ให้ขวากว้างกว่า
-   นิดเดียวเพราะแผนที่ต้องการพื้นที่แนวนอนมากกว่า) align-items: start กันไว้
-   เพื่อไม่ให้การ์ดถูกยืดสูงเท่ากันแบบ stretch หากยังมีส่วนต่างเล็กน้อย
-   ========================================================================== */
 .form-grid {
 	display: grid;
 	grid-template-columns: 1fr 1.05fr;
@@ -450,7 +392,6 @@ body {
 	color: #FFFFFF;
 	padding: 13px 22px;
 	font-size: 16px;
-	font-family: 'sarabun', serif;
 	font-weight: 700;
 	letter-spacing: 0.3px;
 	border-bottom: 2px solid;
@@ -462,9 +403,6 @@ body {
 	padding: 20px 22px;
 }
 
-/* ==========================================================================
-   FORM ELEMENTS (INPUT, SELECT, TEXTAREA)
-   ========================================================================== */
 .form-group {
 	margin-bottom: 16px;
 }
@@ -485,55 +423,31 @@ body {
 	color: #c62828;
 }
 
-.form-control {
+.form-control, .form-select {
 	width: 100%;
 	padding: 10px 14px;
 	border: 1.5px solid var(--cream-border-soft);
 	border-radius: 8px;
-	font-family: 'Sarabun', sans-serif;
 	font-size: 14px;
 	color: #333;
 	background: var(--cream-warm);
 	transition: border 0.2s, box-shadow 0.2s;
 }
 
-.form-control:focus {
+.form-control:focus, .form-select:focus {
 	outline: none;
 	border-color: var(--accent-gold);
 	box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
 	background: #FFFFFF;
 }
 
-.form-control[readonly] {
-	background: var(--cream-mid);
-	color: #999;
-	cursor: default;
-}
-
 .form-select {
-	width: 100%;
-	padding: 10px 14px;
-	border: 1.5px solid var(--cream-border-soft);
-	border-radius: 8px;
-	font-family: 'Sarabun', sans-serif;
-	font-size: 14px;
-	color: #333;
-	background-color: var(--cream-warm);
-	cursor: pointer;
-	transition: border 0.2s, box-shadow 0.2s;
 	appearance: none;
-	background-image:
-		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23D9A441' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23D9A441' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
 	background-repeat: no-repeat;
 	background-position: right 14px center;
 	padding-right: 36px;
-}
-
-.form-select:focus {
-	outline: none;
-	border-color: var(--accent-gold);
-	box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
-	background-color: #FFFFFF;
+	cursor: pointer;
 }
 
 textarea.form-control {
@@ -548,25 +462,6 @@ textarea.form-control {
 	gap: 14px;
 }
 
-/* ==========================================================================
-   FIELD LOCKED STATE
-   ========================================================================== */
-.form-control.field-locked, .form-select.field-locked {
-	background-color: var(--cream-mid);
-	color: #aaa;
-	cursor: not-allowed;
-	border-color: var(--cream-border-soft);
-	opacity: 0.7;
-}
-
-.form-select.field-locked {
-	background-image:
-		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23cccccc' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-}
-
-/* ==========================================================================
-   BUTTON SUBMIT ROW
-   ========================================================================== */
 .submit-row {
 	display: flex;
 	justify-content: center;
@@ -574,7 +469,6 @@ textarea.form-control {
 	grid-column: 1/-1;
 }
 
-/* ปุ่มจอง — สีเหลืองทองล้วน ไม่ไล่สี ตามที่ขอ */
 .btn-submit {
 	background: var(--accent-gold);
 	color: #FFFFFF;
@@ -583,7 +477,6 @@ textarea.form-control {
 	border-radius: 10px;
 	font-size: 16px;
 	font-weight: 700;
-	font-family: 'Sarabun', sans-serif;
 	cursor: pointer;
 	transition: all 0.2s;
 	box-shadow: 0 4px 16px rgba(217, 164, 65, 0.3);
@@ -591,61 +484,8 @@ textarea.form-control {
 
 .btn-submit:hover {
 	background: #C68F2E;
-	color: #FFFFFF;
 	transform: translateY(-2px);
 	box-shadow: 0 6px 20px rgba(217, 164, 65, 0.45);
-}
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-@media ( max-width : 900px) {
-	.form-grid {
-		grid-template-columns: 1fr;
-	}
-	.row-grid {
-		grid-template-columns: 1fr 1fr;
-	}
-}
-
-@media ( max-width : 768px) {
-	.navbar-custom {
-		flex-wrap: wrap;
-		gap: 10px;
-		padding: 12px 16px;
-		min-height: 76px;
-	}
-	.nav-brand-text {
-		font-size: 20px;
-	}
-	.lotus-icon {
-		width: 46px;
-		height: 46px;
-	}
-	.hero-banner {
-		height: 220px;
-	}
-	.hero-content h1 {
-		font-size: 22px;
-	}
-	.page-wrapper {
-		padding: 24px 16px 40px;
-	}
-	.form-container {
-		padding: 24px 18px 20px;
-	}
-	.footer-content {
-		grid-template-columns: 1fr 1fr;
-	}
-	.footer-content.footer-content-slim {
-		grid-template-columns: 1fr;
-	}
-}
-
-@media (max-width: 520px) {
-	.footer-content {
-		grid-template-columns: 1fr;
-	}
 }
 
 .checkbox-group {
@@ -665,8 +505,7 @@ textarea.form-control {
 	font-weight: 600;
 }
 
-.checkbox-label input[type="checkbox"], .checkbox-label input[type="radio"]
-	{
+.checkbox-label input[type="checkbox"], .checkbox-label input[type="radio"] {
 	width: 18px;
 	height: 18px;
 	accent-color: var(--accent-gold);
@@ -674,10 +513,7 @@ textarea.form-control {
 	flex-shrink: 0;
 }
 
-/* ==========================================================================
-   FOOTER (ธีมเดียวกับหน้า home — ครีม-ทอง gradient, layout 2 คอลัมน์แบบ slim,
-   โลโก้/ฟอนต์ ให้เท่า home เป๊ะ)
-   ========================================================================== */
+/* FOOTER */
 .site-footer {
 	background: linear-gradient(120deg, var(--footer-grad-1) 0%, var(--footer-grad-2) 50%, var(--footer-grad-3) 100%);
 	color: var(--brown-dark);
@@ -688,15 +524,8 @@ textarea.form-control {
 	margin-top: auto;
 }
 
-.footer-top {
-	display: block;
-}
-
-.container {
-	width: 92%;
-	max-width: 1100px;
-	margin: 0 auto;
-}
+.footer-top { display: block; }
+.container { width: 92%; max-width: 1100px; margin: 0 auto; }
 
 .footer-content {
 	display: grid;
@@ -705,16 +534,9 @@ textarea.form-control {
 	padding: 48px 20px 30px;
 }
 
-/* เวอร์ชันย่อ ไม่มีคอลัมน์เมนู เหลือ 2 คอลัมน์: แบรนด์ / ติดต่อ — ให้ตรงกับหน้า home */
 .footer-content.footer-content-slim {
 	grid-template-columns: 1.3fr 1fr;
 	padding: 44px 20px 26px;
-}
-
-@media (max-width: 860px) {
-	.footer-content.footer-content-slim {
-		grid-template-columns: 1fr;
-	}
 }
 
 .footer-brand {
@@ -724,7 +546,6 @@ textarea.form-control {
 	margin-bottom: 10px;
 }
 
-/* โลโก้ในฟุตเตอร์ ให้เท่า home เป๊ะ (46px) */
 .footer-brand .lotus-icon {
 	background: #FFFFFF;
 	width: 46px;
@@ -736,28 +557,20 @@ textarea.form-control {
 	object-fit: cover;
 }
 
-.footer-brand-text {
-	font-family: 'Charmonman', 'Noto Serif Thai', serif;
-	font-size: 1.6rem;
-	font-weight: 700;
-	color: var(--brown-dark);
-}
-
 .footer-tagline {
 	font-size: 0.88rem;
 	line-height: 1.7;
 	color: var(--brown-mid);
 	max-width: 320px;
-	text-shadow: none;
 }
 
-/* โซเชียลมีเดีย ใต้แท็กไลน์แบรนด์ (ให้ตรงกับหน้า home) */
 .footer-social {
 	display: flex;
 	gap: 10px;
 	margin-top: 16px;
 	flex-wrap: wrap;
 }
+
 .footer-social-link {
 	display: inline-flex;
 	align-items: center;
@@ -772,12 +585,8 @@ textarea.form-control {
 	border-radius: 20px;
 	transition: background 0.2s;
 }
-.footer-social-link:hover {
-	background: rgba(255, 255, 255, 0.95);
-}
 
 .footer-heading {
-	font-family: 'sarabun', serif;
 	color: var(--brown-dark);
 	font-size: 1.35rem;
 	font-weight: 700;
@@ -791,7 +600,6 @@ textarea.form-control {
 	font-size: 0.9rem;
 	margin-bottom: 10px;
 	transition: color 0.2s ease;
-	text-shadow: none;
 }
 
 .footer-col a:hover {
@@ -803,7 +611,6 @@ textarea.form-control {
 	font-size: 0.9rem;
 	color: var(--brown-mid);
 	margin: 0 0 10px;
-	text-shadow: none;
 }
 
 .footer-bottom {
@@ -814,237 +621,38 @@ textarea.form-control {
 	color: var(--brown-mid);
 }
 
-/* ==========================================================================
-   TEMPLE (WAT) PICKER — dropdown ต่อรูปพระ
-   ========================================================================== */
-.wat-picker-row {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin-bottom: 8px;
-}
+/* COMPONENTS */
+.wat-picker-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.wat-picker-label { font-size: 13px; color: var(--text-mid); min-width: 62px; flex-shrink: 0; font-weight: 600; }
+.wat-picker-empty { font-size: 12.5px; color: var(--text-muted); }
 
-.wat-picker-label {
-	font-size: 13px;
-	color: var(--text-mid);
-	min-width: 62px;
-	flex-shrink: 0;
-	font-weight: 600;
-}
-
-.wat-picker-empty {
-	font-size: 12.5px;
-	color: var(--text-muted);
-}
-
-/* ==========================================================================
-   จำนวนชุดสังฆทาน (ผูกกับจำนวนพระ)
-   ========================================================================== */
-.sanghatan-qty-note {
-	font-size: 12.5px;
-	color: #B0345A;
-	background: var(--gold-glow);
-	border: 1px dashed var(--accent-gold-mid);
-	border-radius: 8px;
-	padding: 8px 12px;
-	margin-bottom: 12px;
-	display: inline-block;
-}
-
-/* ==========================================================================
-   MINI CALENDAR (เลือกวันที่จัดงานในฟอร์ม) — โทนชมพูทอง
-   ========================================================================== */
-.mini-cal-wrap {
-	border: 1.5px solid var(--accent-gold-pale);
-	border-radius: 10px;
-	padding: 12px;
-	background: #FFFAF0;
-}
-.mini-cal-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	font-size: 14px;
-	font-weight: 700;
-	color: var(--brown-dark);
-	margin-bottom: 8px;
-}
-.mini-cal-nav-btn {
-	background: var(--accent-gold-pale);
-	border: none;
-	border-radius: 6px;
-	width: 26px;
-	height: 26px;
-	cursor: pointer;
-	color: #B0345A;
-	font-size: 15px;
-}
-.mini-cal-grid {
-	display: grid;
-	grid-template-columns: repeat(7, 1fr);
-	gap: 3px;
-}
-.mini-cal-day-label {
-	text-align: center;
-	font-size: 11px;
-	color: var(--text-muted);
-	padding: 2px 0;
-}
-.mini-cal-cell {
-	position: relative;
-	aspect-ratio: 1;
-	border-radius: 6px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 12px;
-	cursor: pointer;
-	border: 1px solid transparent;
-}
-.mini-cal-cell-empty { cursor: default; }
+.mini-cal-wrap { border: 1.5px solid var(--accent-gold-pale); border-radius: 10px; padding: 12px; background: #FFFAF0; }
+.mini-cal-header { display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 700; color: var(--brown-dark); margin-bottom: 8px; }
+.mini-cal-nav-btn { background: var(--accent-gold-pale); border: none; border-radius: 6px; width: 26px; height: 26px; cursor: pointer; color: #B0345A; font-size: 15px; }
+.mini-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.mini-cal-day-label { text-align: center; font-size: 11px; color: var(--text-muted); padding: 2px 0; }
+.mini-cal-cell { position: relative; aspect-ratio: 1; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; border: 1px solid transparent; }
 .mini-cal-cell-free { background: #E9F7EF; border-color: #B7E4C7; }
 .mini-cal-cell-almost { background: #FFF3D6; border-color: var(--accent-gold-mid); }
 .mini-cal-cell-booked { background: #FBE3E7; border-color: #E9A9B4; cursor: not-allowed; }
 .mini-cal-cell-past { background: #F0F0F0; border-color: #DADADA; cursor: not-allowed; color: #B0B0B0; }
 .mini-cal-cell-today { outline: 2px solid var(--accent-gold); }
 .mini-cal-cell-selected { outline: 2px solid #B0345A; box-shadow: 0 0 0 2px rgba(224,87,127,0.25); }
-.mini-cal-full-mark {
-	position: absolute;
-	top: 1px;
-	right: 3px;
-	font-size: 9px;
-	color: #B0345A;
-}
-.mini-cal-legend {
-	display: flex;
-	gap: 12px;
-	margin-top: 8px;
-	font-size: 11px;
-	color: var(--text-muted);
-	flex-wrap: wrap;
-}
-.mini-cal-dot {
-	display: inline-block;
-	width: 9px;
-	height: 9px;
-	border-radius: 2px;
-	margin-right: 4px;
-}
-.mini-cal-dot-free { background: #B7E4C7; }
-.mini-cal-dot-almost { background: var(--accent-gold-mid); }
-.mini-cal-dot-full { background: #E9A9B4; }
-.mini-cal-selected-text {
-	font-size: 12px;
-	color: #B0345A;
-	margin: 8px 0 0;
-	font-weight: 600;
-}
 
-/* ==========================================================================
-   ITEM CARDS (แพ็กเกจ / สังฆทาน / ปิ่นโต) — accent เป็นสีทองแทนชมพูล้วน
-   ========================================================================== */
-.item-card-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-	gap: 10px;
-}
-.item-card {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	border: 1.5px solid var(--cream-border-soft);
-	border-radius: 10px;
-	padding: 10px;
-	cursor: pointer;
-	background: #FFFFFF;
-	transition: border-color .15s, box-shadow .15s;
-}
+.item-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.item-card { position: relative; display: flex; flex-direction: column; border: 1.5px solid var(--cream-border-soft); border-radius: 10px; padding: 10px; cursor: pointer; background: #FFFFFF; transition: border-color .15s, box-shadow .15s; }
 .item-card:hover { border-color: var(--accent-gold); }
 .item-card input[type="radio"] { position: absolute; top: auto; bottom: 8px; right: 8px; }
-.item-card:has(input:checked) {
-	border-color: var(--accent-gold);
-	box-shadow: 0 0 0 2px rgba(217,164,65,0.3);
-}
-.item-card-thumb {
-	width: 100%; height: 72px;
-	overflow: hidden;
-	border-radius: 8px; margin-bottom: 6px;
-	background: var(--cream-mid);
-}
-.item-card-thumb img {
-	width: 100%; height: 100%;
-	object-fit: cover; display: block;
-	cursor: zoom-in;
-}
-.item-card-name {
-	font-weight: 700; font-size: 12.5px; color: var(--brown-dark); margin-bottom: 3px;
-	overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.item-card-desc {
-	font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 4px;
-	display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
+.item-card-thumb { width: 100%; height: 72px; overflow: hidden; border-radius: 8px; margin-bottom: 6px; background: var(--cream-mid); }
+.item-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+.item-card-name { font-weight: 700; font-size: 12.5px; color: var(--brown-dark); margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .item-card-price { font-size: 12px; font-weight: 700; color: var(--accent-gold); }
-/* ==========================================================================
-   MAP PICKER — ปักหมุดตำแหน่งที่จัดงาน
-   ========================================================================== */
-.location-map-box {
-	width: 100%;
-	height: 260px;
-	border-radius: 10px;
-	border: 1.5px solid var(--accent-gold-pale);
-	overflow: hidden;
-	background: var(--cream-mid);
-}
 
-.map-picker-search-row {
-	display: flex;
-	gap: 8px;
-	margin-bottom: 10px;
-	flex-wrap: wrap;
-}
-.map-picker-search-row .form-control {
-	flex: 1;
-	min-width: 160px;
-}
-
-.map-picker-btn {
-	background: var(--accent-gold);
-	color: #FFFFFF;
-	border: none;
-	padding: 0 16px;
-	border-radius: 8px;
-	font-size: 13px;
-	font-weight: 700;
-	cursor: pointer;
-	white-space: nowrap;
-	transition: background 0.2s;
-}
+.location-map-box { width: 100%; height: 260px; border-radius: 10px; border: 1.5px solid var(--accent-gold-pale); overflow: hidden; background: var(--cream-mid); }
+.map-picker-search-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.map-picker-search-row .form-control { flex: 1; min-width: 160px; }
+.map-picker-btn { background: var(--accent-gold); color: #FFFFFF; border: none; padding: 0 16px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
 .map-picker-btn:hover { background: #C68F2E; }
-
-.map-picker-btn-outline {
-	background: #FFFFFF;
-	color: var(--accent-gold);
-	border: 1.5px solid var(--accent-gold);
-}
-.map-picker-btn-outline:hover { background: var(--accent-gold-pale); }
-
-.map-picker-selected-text {
-	font-size: 12px;
-	color: #B0345A;
-	margin: 8px 0 0;
-	font-weight: 600;
-}
-
-.map-picker-nav-link {
-	display: inline-block;
-	margin-top: 6px;
-	font-size: 12.5px;
-	color: var(--accent-gold);
-	font-weight: 700;
-	text-decoration: none;
-}
-.map-picker-nav-link:hover { text-decoration: underline; }
-
-/* กัน z-index ของ Leaflet control ชนกับ navbar sticky */
+.map-picker-btn-outline { background: #FFFFFF; color: var(--accent-gold); border: 1.5px solid var(--accent-gold); }
 .leaflet-pane, .leaflet-top, .leaflet-bottom { z-index: 400 !important; }
