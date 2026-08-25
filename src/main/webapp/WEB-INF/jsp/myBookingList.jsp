@@ -10,6 +10,7 @@
     <title>รายการจองของฉัน - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=15">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=16">
 </head>
 <body>
 
@@ -23,9 +24,19 @@
     </a>
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
-        <a href="${pageContext.request.contextPath}/services" class="nav-link-item">บริการ/แพ็กเกจ</a>
+        <div class="dropdown-wrap nav-dropdown">
+            <a href="javascript:void(0);" class="nav-link-item" onclick="toggleServiceDropdown(event)">
+                บริการ/แพ็กเกจ ▾
+            </a>
+            <div class="dropdown-menu-custom" id="serviceDropdownMenu">
+                <c:forEach var="ct" items="${ceremonyTypes}">
+                    <a href="${pageContext.request.contextPath}/ceremony/detail/${ct.representativeId}"
+                       class="dropdown-link">${ct.mainName}</a>
+                </c:forEach>
+            </div>
+        </div>
         <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item">ปฏิทิน</a>
-        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">การจอง</a>
+        <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">รายการจอง</a>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
     <div class="dropdown-wrap">
@@ -162,10 +173,18 @@
 function toggleDropdown() {
     document.getElementById('dropdownMenu').classList.toggle('show');
 }
+function toggleServiceDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('serviceDropdownMenu').classList.toggle('show');
+}
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.user-profile-pill')) {
         var m = document.getElementById('dropdownMenu');
         if (m) m.classList.remove('show');
+    }
+    if (!e.target.closest('.nav-dropdown')) {
+        var s = document.getElementById('serviceDropdownMenu');
+        if (s) s.classList.remove('show');
     }
 });
 </script>
