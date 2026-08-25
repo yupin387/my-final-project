@@ -103,8 +103,6 @@ public class MemberController {
         return "redirect:/home";
     }
 
-    // เดิม: ดึงใบเสนอราคา "ล่าสุด" ของสมาชิกเสมอ ไม่ว่าจะกดจาก booking ไหน
-    // ยังคงไว้เผื่อมีที่อื่นเรียกใช้อยู่ (เช่นเมนู/แดชบอร์ดที่อยากโชว์ใบล่าสุด)
     @GetMapping("/member/quotation/list")
     public String showLatestQuotation(HttpSession session, Model model) {
         Member user = (Member) session.getAttribute("user");
@@ -120,9 +118,6 @@ public class MemberController {
         return "memberQuotationDetail";
     }
 
-    // FIX: ใหม่ — endpoint สำหรับดูใบเสนอราคาของ "booking รายการที่เลือกจริงๆ" ตาม quotationId
-    // แก้ปัญหาที่ปุ่ม "ใบเสนอราคา" ใน myBookingList.jsp เดิมลิงก์ไปหน้า /viewBooking/{id}#quotationSection
-    // ซึ่งเป็นหน้ารายละเอียดการจอง ไม่ใช่หน้าใบเสนอราคา ทำให้กดแล้วไม่เจอใบเสนอราคาจริง
     @GetMapping("/member/quotation/detail/{quotationId}")
     public String showQuotationDetail(@PathVariable String quotationId, HttpSession session, Model model) {
         Member user = (Member) session.getAttribute("user");
@@ -133,7 +128,6 @@ public class MemberController {
             return "redirect:/myBookings?error=quotationNotFound";
         }
 
-        // FIX: กันไม่ให้สมาชิกคนอื่นเดา quotationId แล้วดูใบเสนอราคาของคนอื่นได้
         boolean isOwner = q.getBookingForm() != null
                 && q.getBookingForm().getMember() != null
                 && q.getBookingForm().getMember().getMemberId() == user.getMemberId();
@@ -145,8 +139,6 @@ public class MemberController {
         return "memberQuotationDetail";
     }
 
-    // FIX: ดึง logic ที่ซ้ำกันระหว่าง showLatestQuotation และ showQuotationDetail
-    // มารวมไว้ที่เดียว เพื่อไม่ให้ต้องแก้ 2 จุดทุกครั้งที่ปรับ model attribute
     private void populateQuotationDetailModel(Quotation q, Model model) {
         model.addAttribute("ceremonyTypes", buildCeremonyTypes());
 
@@ -195,7 +187,7 @@ public class MemberController {
             return "redirect:/member/quotation/detail/" + quotationId;
         }
     }
-    // อัปเดตฟังก์ชันนี้เพื่อให้ดึงไอเท็มในแพ็กเกจได้ครบถ้วน เหมือนฝั่ง Organizer
+
     private List<Item> computePackageIncludedItems(List<Item> allItems, boolean isCustomRequest) {
         List<Item> packageIncludedItems = new ArrayList<>();
         if (!isCustomRequest && allItems != null) {
@@ -243,5 +235,34 @@ public class MemberController {
             ceremonyTypes.add(typeMap);
         }
         return ceremonyTypes;
+    }
+    
+    @PostMapping("/saveMember")
+    public String saveMember(@RequestParam("memberFirstName") String firstName,
+                             @RequestParam("memberLastName") String lastName,
+                             @RequestParam("phoneNumber") String phone,
+                             @RequestParam("memberEmail") String email,
+                             @RequestParam("memberPassword") String password,
+                             Model model) {
+        
+        // 1. เช็คว่ามีอีเมลนี้ในระบบหรือยัง โดยเรียกผ่าน memberService
+        boolean isEmailExists = memberService.isEmailTaken(email); // สมมติว่ามีเมธอดนี้ใน MemberService
+        
+        if (isEmailExists) {
+            model.addAttribute("errorMsg", "อีเมลนี้ถูกใช้งานในระบบแล้ว กรุณาใช้อีเมลอื่น");
+            return "register"; // ส่งกลับไปหน้าสมัครสมาชิกพร้อมแสดง error
+        }
+        
+        // 2. ถ้าไม่ซ้ำ สร้าง Object สมาชิกใหม่แล้วทำการบันทึกผ่าน Service
+        Member member = new Member();
+        member.setMemberFirstName(firstName);
+        member.setMemberLastName(lastName);
+        member.setPhoneNumber(phone);
+        member.setMemberEmail(email);
+        member.setMemberPassword(password);
+        
+        memberService.saveMember(member); // บันทึกลงฐานข้อมูลจริง
+        
+        return "redirect:/loginMember";
     }
 }

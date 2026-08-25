@@ -182,7 +182,7 @@ public class Run {
 
 			organizerRepo.saveAndFlush(
 					new Organizer(
-							"admin@gmail.com",
+							"admin17@gmail.com",
 							"12345678"
 					)
 			);
@@ -199,7 +199,7 @@ public class Run {
 					new HeadStaff(
 							"สมชาย",
 							"ใจดี",
-							"somchai@gmail.com",
+							"somchai87@gmail.com",
 							"12344444",
 							"0811111111",
 							LocalDateTime.of(2025, 1, 10, 9, 0)
@@ -208,7 +208,7 @@ public class Run {
 					new HeadStaff(
 							"สมหญิง",
 							"ใจดี",
-							"somying@gmail.com",
+							"somying75@gmail.com",
 							"12345555",
 							"0812222222",
 							LocalDateTime.of(2025, 2, 15, 9, 30)
@@ -217,7 +217,7 @@ public class Run {
 					new HeadStaff(
 							"วิชัย",
 							"รักงาน",
-							"wichai@gmail.com",
+							"wichai7@gmail.com",
 							"12346666",
 							"0813333333",
 							LocalDateTime.of(2025, 3, 20, 10, 0)
@@ -226,7 +226,7 @@ public class Run {
 					new HeadStaff(
 							"มานี",
 							"รักดี",
-							"manee@gmail.com",
+							"manee41@gmail.com",
 							"12347777",
 							"0814444444",
 							LocalDateTime.of(2025, 4, 5, 8, 45)
@@ -235,7 +235,7 @@ public class Run {
 					new HeadStaff(
 							"ชูใจ",
 							"สดใส",
-							"chujai@gmail.com",
+							"chujai78@gmail.com",
 							"12348888",
 							"0815555555",
 							LocalDateTime.of(2025, 5, 12, 13, 15)
@@ -244,7 +244,7 @@ public class Run {
 					new HeadStaff(
 							"ปิติ",
 							"ตั้งใจ",
-							"piti@gmail.com",
+							"piti824@gmail.com",
 							"12349999",
 							"0816666666",
 							LocalDateTime.of(2025, 6, 18, 14, 0)
@@ -253,7 +253,7 @@ public class Run {
 					new HeadStaff(
 							"อำนาจ",
 							"ขยันดี",
-							"amnat@gmail.com",
+							"amnat895@gmail.com",
 							"12351111",
 							"0817777777",
 							LocalDateTime.of(2025, 7, 22, 9, 20)
@@ -262,7 +262,7 @@ public class Run {
 					new HeadStaff(
 							"จินตนา",
 							"ศรัทธา",
-							"jintana@gmail.com",
+							"jintana32@gmail.com",
 							"12352222",
 							"0818888888",
 							LocalDateTime.of(2025, 8, 30, 11, 10)
@@ -1716,7 +1716,7 @@ public class Run {
 							new Member(
 									"บุญมี",
 									"ลุงหลู่",
-									"boonmee@gmail.com",
+									"boonmee61@gmail.com",
 									"12345678",
 									"0812345678"
 							),
@@ -1724,7 +1724,7 @@ public class Run {
 							new Member(
 									"สุนีย์",
 									"คำดี",
-									"sunee@gmail.com",
+									"sunee85@gmail.com",
 									"12345679",
 									"0812345679"
 							),
@@ -1732,7 +1732,7 @@ public class Run {
 							new Member(
 									"ประเสริฐ",
 									"สุขใจ",
-									"prasert@gmail.com",
+									"prasert87@gmail.com",
 									"12345680",
 									"0812345680"
 							),
@@ -1740,7 +1740,7 @@ public class Run {
 							new Member(
 									"อารีย์",
 									"บุญส่ง",
-									"aree@gmail.com",
+									"aree23@gmail.com",
 									"12345681",
 									"0812345681"
 							),
@@ -1748,7 +1748,7 @@ public class Run {
 							new Member(
 									"ธนพล",
 									"ศรีสุข",
-									"thanapon@gmail.com",
+									"thanapon8@gmail.com",
 									"12345682",
 									"0812345682"
 							)

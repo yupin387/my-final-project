@@ -399,15 +399,20 @@
                         <div class="info-row" data-qtext="${fn:trim(d.question.questionsText)}" data-answer="${fn:trim(d.answer)}">
 						    <span class="info-label" style="width: 300px;"><c:out value="${d.question.questionsText}" default="รายการ"/></span>
 						    <span class="info-value">
-						        <c:out value="${d.answer}" default="-"/>
-						        <c:if test="${d.question.questionsText eq 'เลือกชุดภัตตาหารปิ่นโต' or d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
-						            <c:choose>
-						                <c:when test="${d.answer eq 'ปิ่นโตชุดประหยัด' or d.answer eq 'ชุดสังฆทานมาตรฐาน'}">(299 บาท)</c:when>
-						                <c:when test="${d.answer eq 'ปิ่นโตชุดมาตรฐาน' or d.answer eq 'ชุดสังฆทานพรีเมียม'}">(399 บาท)</c:when>
-						                <c:when test="${d.answer eq 'ปิ่นโตชุดพรีเมียม' or d.answer eq 'ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน'}">(499 บาท)</c:when>
-						                <c:when test="${d.answer eq 'ปิ่นโตชุดพิเศษ'}">(599 บาท)</c:when>
-						            </c:choose>
-						        </c:if>
+						        <c:choose>
+						            <c:when test="${not empty d.answer and fn:trim(d.answer) ne ''}">
+						                <c:out value="${d.answer}"/>
+						                <c:if test="${d.question.questionsText eq 'เลือกชุดภัตตาหารปิ่นโต' or d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
+						                    <c:choose>
+						                        <c:when test="${d.answer eq 'ปิ่นโตชุดประหยัด' or d.answer eq 'ชุดสังฆทานมาตรฐาน'}">(299 บาท)</c:when>
+						                        <c:when test="${d.answer eq 'ปิ่นโตชุดมาตรฐาน' or d.answer eq 'ชุดสังฆทานพรีเมียม'}">(399 บาท)</c:when>
+						                        <c:when test="${d.answer eq 'ปิ่นโตชุดพรีเมียม' or d.answer eq 'ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน'}">(499 บาท)</c:when>
+						                        <c:when test="${d.answer eq 'ปิ่นโตชุดพิเศษ'}">(599 บาท)</c:when>
+						                    </c:choose>
+						                </c:if>
+						            </c:when>
+						            <c:otherwise>-</c:otherwise>
+						        </c:choose>
 						    </span>
 						</div>
                     </c:if>

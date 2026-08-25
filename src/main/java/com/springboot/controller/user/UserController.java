@@ -45,11 +45,11 @@ public class UserController {
     private static final int TEAM_COUNT = 2;
 
     private static final List<String> MAIN_GOOD_LABELS = List.of(
-    	    "วันราชาโชค", "วันมหาสิทธิโชค", "วันชัยโชค",
-    	    "วันอัมฤตโชค", "วันอำมฤตโชค", 
-    	    "วันอธิบดี", "วันธงชัย", "วันสิทธิโชค",
-    	    "วันอัมฤตโชค", "วันอำมฤตโชค"
-    	);
+        "วันราชาโชค", "วันมหาสิทธิโชค", "วันชัยโชค",
+        "วันอัมฤตโชค", "วันอำมฤตโชค", 
+        "วันอธิบดี", "วันธงชัย", "วันสิทธิโชค",
+        "วันอัมฤตโชค", "วันอำมฤตโชค"
+    );
 
     private static final String[] MONTH_NAMES_TH = {
         "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
@@ -119,12 +119,6 @@ public class UserController {
     public String registerPage(Model model) {
         model.addAttribute("member", new Member());
         return "register";
-    }
-
-    @PostMapping("/saveMember")
-    public String saveMember(@ModelAttribute Member member) {
-        memberService.saveMember(member);
-        return "redirect:/loginMember?successRegister";
     }
 
     @GetMapping("/home")

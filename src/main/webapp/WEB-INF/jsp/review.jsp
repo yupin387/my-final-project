@@ -11,6 +11,81 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/review.css">
+    <%-- TODO: ย้าย style ชุดนี้ไปไว้ใน review.css ทีหลัง (ใส่ inline ไว้ก่อนเพราะยังไม่มีไฟล์ review.css ให้แก้) --%>
+    <style>
+        #imagePreviewContainer.image-preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .preview-thumb-wrap {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #C9944A;
+            flex-shrink: 0;
+        }
+        .preview-thumb-wrap .preview-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .preview-remove-btn {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 20px;
+            height: 20px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E0577F, #EC6E96);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        .preview-remove-btn:hover {
+            filter: brightness(1.05);
+        }
+        .add-more-tile {
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            border: 2px dashed #C9944A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            color: #C83568;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .add-more-tile:hover {
+            background: #FDF1F5;
+        }
+        .image-count-label {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #63263E;
+            display: none;
+        }
+        #submitReviewBtn:disabled {
+            background: #d9a4b4;
+            cursor: not-allowed;
+            opacity: 1;
+        }
+        #submitReviewBtn:disabled:hover {
+            background: #d9a4b4;
+        }
+    </style>
 </head>
 <body>
 
@@ -69,7 +144,8 @@
 
         <%-- Body --%>
         <div class="review-card-body">
-            <form action="${pageContext.request.contextPath}/review/save"
+            <form id="reviewForm"
+                  action="${pageContext.request.contextPath}/review/save"
                   method="post"
                   enctype="multipart/form-data">
 
@@ -77,9 +153,11 @@
 
                 <%-- ดาว --%>
                 <div class="form-group star-section">
-                    <span class="section-label">ระดับความพึงพอใจ</span>
+                    <span class="section-label">
+                        ระดับความพึงพอใจ <span style="color:#c62828;">*</span>
+                    </span>
                     <div class="star-rating">
-                        <input type="radio" id="s5" name="rating" value="5" required>
+                        <input type="radio" id="s5" name="rating" value="5">
                         <label for="s5">&#9733;</label>
                         <input type="radio" id="s4" name="rating" value="4">
                         <label for="s4">&#9733;</label>
@@ -94,29 +172,36 @@
 
                 <hr class="divider">
 
-                <%-- อัปโหลดรูป --%>
-                <div class="form-group">
-                    <span class="section-label">แนบรูปภาพบรรยากาศงาน</span>
-                    <div class="upload-area">
-                        <input type="file" name="imageFile" id="imageFile" accept="image/*">
-                        <div class="upload-icon">&#128247;</div>
-                        <div class="upload-text">คลิกเพื่อเลือกรูปภาพ</div>
-                        <div class="upload-hint">รองรับ JPG, PNG (ไม่บังคับ)</div>
-                    </div>
-                </div>
+                <%-- อัปโหลดรูป (รองรับหลายรูป) --%>
+				<div class="form-group">
+				    <span class="section-label">แนบรูปภาพบรรยากาศงาน</span>
+				    <div class="upload-area">
+				        <input type="file" name="imageFile" id="imageFile" accept="image/*" multiple style="display: none;" onchange="handleFileSelect(event)">
+				        
+				        <div id="uploadPlaceholder" onclick="triggerFileSelect()">
+				            <div class="upload-icon">&#128247;</div>
+				            <div class="upload-text">คลิกเพื่อเลือกรูปภาพ</div>
+				            <div class="upload-hint">รองรับ JPG, PNG (แนบได้สูงสุด 5 รูป)</div>
+				        </div>
+				
+				        <%-- พื้นที่แสดงรูปพรีวิวหลายรูป พร้อมปุ่มลบรายรูปและปุ่มเพิ่มรูป --%>
+				        <div id="imagePreviewContainer" class="image-preview-grid" style="display: none;"></div>
+				    </div>
+				    <div id="imageCountLabel" class="image-count-label"></div>
+				</div>
 
                 <%-- ความคิดเห็น --%>
                 <div class="form-group">
                     <span class="section-label">
                         ความคิดเห็นเพิ่มเติม <span style="color:#c62828;">*</span>
                     </span>
-                    <textarea name="comment" class="form-control" rows="4"
+                    <textarea name="comment" id="commentInput" class="form-control" rows="4"
                         placeholder="เล่าความประทับใจจากการใช้บริการ..." required></textarea>
                 </div>
 
                 <%-- ปุ่ม --%>
                 <div class="form-actions">
-                    <button type="submit" class="btn-submit">ส่งรีวิว</button>
+                    <button type="submit" id="submitReviewBtn" class="btn-submit" disabled>ส่งรีวิว</button>
                     <a href="${pageContext.request.contextPath}/home" class="btn-skip">ไว้คราวหลัง</a>
                 </div>
 

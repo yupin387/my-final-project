@@ -598,3 +598,23 @@ textarea.form-control {
     .review-card-body { padding: 20px 18px; }
     .star-rating label { font-size: 2rem; }
 }
+
+/* ===== Multiple Image Preview Styles ===== */
+.image-preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.preview-thumb {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1.5px solid var(--gold-mid);
+    box-shadow: 0 2px 6px var(--shadow-warm);
+    background-color: #fff;
+}
