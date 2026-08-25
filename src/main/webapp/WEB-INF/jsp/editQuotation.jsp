@@ -277,25 +277,22 @@
                     </tr>
                 </thead>
 
-  <tbody>
-    <c:if test="${!isCustomRequest}">
-    <tr class="static-row package-main-row no-qty-convert">
-        <td class="text-center row-number">1</td>
-        <td>
-            <strong>แพ็กเกจ: ${packageName}</strong>
-            <input type="hidden" name="bookingItemNames" value="${packageName}">
-        </td>
-        <!-- แก้ไขส่วนแสดงจำนวนตรงนี้ -->
-        <td class="text-center">1<input type="hidden" name="bookingQtys" value="1" class="qty-input"></td>
-        <td class="text-center">แพ็กเกจ</td>
-        <!-- ใส่ readonly ที่นี่ -->
-        <td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
-        <td class="text-right"><span class="subtotal">0.00</span></td>
-        <td class="text-center delete-col">-</td>
-    </tr>
-    </c:if>
+                <tbody>
+                    <c:if test="${!isCustomRequest}">
+                    <tr class="static-row package-main-row no-qty-convert">
+                        <td class="text-center row-number">1</td>
+                        <td>
+                            <strong>แพ็กเกจ: ${packageName}</strong>
+                            <input type="hidden" name="bookingItemNames" value="${packageName}">
+                        </td>
+                        <td class="text-center">1<input type="hidden" name="bookingQtys" value="1" class="qty-input"></td>
+                        <td class="text-center">แพ็กเกจ</td>
+                        <td><input type="number" name="bookingPrices" value="${packageDisplayPrice}" step="0.01" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                        <td class="text-right"><span class="subtotal">0.00</span></td>
+                        <td class="text-center delete-col">-</td>
+                    </tr>
+                    </c:if>
 
-                    <%-- นำส่วนแสดงรายละเอียดแพ็กเกจกลับมา --%>
                     <c:if test="${not empty packageIncludedItems && !isCustomRequest}">
                         <tr class="package-included-row no-qty-convert static-row">
                             <td></td>
@@ -320,31 +317,26 @@
                     </c:if>
                 </tbody>
 
+                <!-- บล็อกสำหรับหมวดอุปกรณ์พิธีกรรม -->
                 <c:set var="equipmentBlockEdit">
-                    <c:set var="printedEquipHeaderEdit" value="false" />
+                    <tr class="group-row">
+                        <td class="no-index"></td>
+                        <td class="category-header-text">
+                            หมวดอุปกรณ์พิธีกรรม
+                            <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์พิธีกรรม')" title="เพิ่มรายการหมวดนี้">+</button>
+                        </td>
+                        <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                    </tr>
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemType != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
-                            <c:if test="${!printedEquipHeaderEdit}">
-                                <tr class="group-row">
-                                    <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดอุปกรณ์พิธีกรรม
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์พิธีกรรม')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
-                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
-                                </tr>
-                                <c:set var="printedEquipHeaderEdit" value="true" />
-                            </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
                                 <td>
                                     ${d.item.itemName} 
-                                    <%-- ซ่อนรายละเอียดของหมวดอุปกรณ์พิธีกรรม ไม่ให้แสดง --%>
                                     <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
                                 </td>
                                 <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
-                                <!-- ใส่ readonly ที่นี่ -->
                                 <td><input type="number" name="extraPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
@@ -353,21 +345,18 @@
                     </c:forEach>
                 </c:set>
 
+                <!-- บล็อกสำหรับหมวดสังฆทาน -->
                 <c:set var="sangkathanBlockEdit">
-                    <c:set var="printedSangHeaderEdit" value="false" />
+                    <tr class="group-row">
+                        <td class="no-index"></td>
+                        <td class="category-header-text">
+                            หมวดสังฆทาน
+                            <button type="button" class="btn-add-group-inline" onclick="openItemModal('สังฆทาน')" title="เพิ่มรายการหมวดนี้">+</button>
+                        </td>
+                        <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                    </tr>
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemType != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
-                            <c:if test="${!printedSangHeaderEdit}">
-                                <tr class="group-row">
-                                    <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดสังฆทาน
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('สังฆทาน')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
-                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
-                                </tr>
-                                <c:set var="printedSangHeaderEdit" value="true" />
-                            </c:if>
                             <tr class="static-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
                                 <td>
@@ -383,7 +372,6 @@
                                 <td class="text-center">${d.item.unit}</td>
                                 <td>
                                     <c:set var="sangPriceEdit" value="${isFreeSangEdit ? '0.00' : d.item.pricePerUnit}" />
-                                    <!-- ใส่ readonly ที่นี่ -->
                                     <input type="number" name="bookingPrices" value="${sangPriceEdit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
                                 </td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
@@ -393,21 +381,18 @@
                     </c:forEach>
                 </c:set>
 
+                <!-- บล็อกสำหรับหมวดภัตตาหารปิ่นโต -->
                 <c:set var="foodBlockEdit">
-                    <c:set var="printedFoodHeaderEdit" value="false" />
+                    <tr class="group-row">
+                        <td class="no-index"></td>
+                        <td class="category-header-text">
+                            หมวดภัตตาหารปิ่นโต
+                            <button type="button" class="btn-add-group-inline" onclick="openItemModal('ภัตตาหาร')" title="เพิ่มรายการหมวดนี้">+</button>
+                        </td>
+                        <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                    </tr>
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemType != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
-                            <c:if test="${!printedFoodHeaderEdit}">
-                                <tr class="group-row">
-                                    <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดภัตตาหารปิ่นโต
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('ภัตตาหาร')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
-                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
-                                </tr>
-                                <c:set var="printedFoodHeaderEdit" value="true" />
-                            </c:if>
                             <tr class="static-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
                                 <td>
@@ -416,7 +401,6 @@
                                 </td>
                                 <td><input type="number" name="bookingQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
-                                <!-- ใส่ readonly ที่นี่ -->
                                 <td><input type="number" name="bookingPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
@@ -425,30 +409,26 @@
                     </c:forEach>
                 </c:set>
 
+                <!-- บล็อกสำหรับหมวดบริการและการดำเนินการ -->
                 <c:set var="serviceBlockEdit">
-                    <c:set var="printedServiceHeaderEdit" value="false" />
+                    <tr class="group-row">
+                        <td class="no-index"></td>
+                        <td class="category-header-text">
+                            หมวดบริการและการดำเนินการ
+                            <button type="button" class="btn-add-group-inline" onclick="openItemModal('บริการ')" title="เพิ่มรายการหมวดนี้">+</button>
+                        </td>
+                        <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                    </tr>
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemType != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
-                            <c:if test="${!printedServiceHeaderEdit}">
-                                <tr class="group-row">
-                                    <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดบริการและการดำเนินการ
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('บริการ')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
-                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
-                                </tr>
-                                <c:set var="printedServiceHeaderEdit" value="true" />
-                            </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
                                <td>
-    ${d.item.itemName}
-    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
-</td>
+                                    ${d.item.itemName}
+                                    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
+                                </td>
                                 <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
-                                <!-- ใส่ readonly ที่นี่ -->
                                 <td><input type="number" name="extraPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
@@ -459,29 +439,24 @@
 
                 <!-- บล็อกสำหรับหมวดอุปกรณ์เสริม -->
                 <c:set var="extraEquipmentBlockEdit">
-                    <c:set var="printedExtraHeaderEdit" value="false" />
+                    <tr class="group-row">
+                        <td class="no-index"></td>
+                        <td class="category-header-text">
+                            หมวดอุปกรณ์เสริม
+                            <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์เสริม')" title="เพิ่มรายการหมวดนี้">+</button>
+                        </td>
+                        <td></td><td></td><td></td><td></td><td class="delete-col"></td>
+                    </tr>
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemType != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
-                            <c:if test="${!printedExtraHeaderEdit}">
-                                <tr class="group-row">
-                                    <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดอุปกรณ์เสริม
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์เสริม')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
-                                    <td></td><td></td><td></td><td></td><td class="delete-col"></td>
-                                </tr>
-                                <c:set var="printedExtraHeaderEdit" value="true" />
-                            </c:if>
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
                               <td>
-    ${d.item.itemName}
-    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
-</td>
+                                    ${d.item.itemName}
+                                    <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
+                                </td>
                                 <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
-                                <!-- ใส่ readonly ที่นี่ -->
                                 <td><input type="number" name="extraPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
@@ -490,8 +465,7 @@
                     </c:forEach>
                 </c:set>
 
-                <%-- แพ็กเกจ: ไม่ต้องมีหมวดอุปกรณ์พิธีกรรม และหมวดบริการ (รวมอยู่ในแพ็กเกจแล้ว) เหมือนหน้าสร้าง --%>
-                <%-- กรอกความต้องการเอง: ไม่ต้องมีหมวดแพ็กเกจ (จัดการแยกไว้ด้านบนแล้วด้วย c:if !isCustomRequest) --%>
+                <%-- แสดงผลตามโหมด --%>
                 <c:choose>
                     <c:when test="${isCustomRequest}">
                         <tbody id="group-equipment">${equipmentBlockEdit}</tbody>
@@ -531,7 +505,7 @@
                             </td>
                             <td class="tot-value">฿ <span id="summaryPackage">0.00</span></td>
                         </tr>
-                        <c:if test="${!isCustomRequest}">
+                        <%-- เอาบรรทัดนี้แสดงเสมอ ไม่ต้องดักด้วย c:if --%>
                         <tr>
                             <td class="tot-label">
                                 รายการเพิ่มเติม:
@@ -539,7 +513,6 @@
                             </td>
                             <td class="tot-value">฿ <span id="summaryExtra">0.00</span></td>
                         </tr>
-                        </c:if>
                         <c:if test="${!isCustomRequest && isMonkSelfInvite}">
                             <tr>
                                 <td class="tot-label">ส่วนลดนิมนต์เอง:</td>
@@ -741,8 +714,9 @@
             tr.className = 'dynamic-row';
             tr.setAttribute('data-item-id', itemId);
 
-            // ซ่อนรายละเอียด (itemDesc) สำหรับหมวดอุปกรณ์พิธีกรรม
-            var descHtml = (itemDesc && !isEquipment) ? '<br><span class="text-muted" style="font-size:12px;">' + itemDesc + '</span>' : '';
+            // ซ่อนรายละเอียด (itemDesc) สำหรับหมวดอุปกรณ์พิธีกรรม บริการ และอุปกรณ์เสริม
+            var showDesc = itemType.includes('ภัตตาหาร') || itemType.includes('สังฆทาน');
+            var descHtml = (itemDesc && showDesc) ? '<br><span class="text-muted" style="font-size:12px;">' + itemDesc + '</span>' : '';
 
             // ใช้ buildQtyCell (มีปุ่ม +/-) จาก quotationEdit.js เพื่อให้แถวที่เพิ่มใหม่หน้าตาเหมือนแถวเดิมทุกประการ
             var qtyCellHtml = (typeof buildQtyCell === 'function')

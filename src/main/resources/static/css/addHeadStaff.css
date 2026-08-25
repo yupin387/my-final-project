@@ -688,3 +688,11 @@ body {
     .footer-content { flex-direction: column; align-items: flex-start; }
     .site-footer::after { display: none; }
 }
+
+.error-message {
+    color: #dc3545;
+    font-size: 11px;
+    margin-top: 4px;
+    display: none;
+    font-weight: normal;
+}

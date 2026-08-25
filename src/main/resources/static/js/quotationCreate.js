@@ -122,6 +122,9 @@ function renderItemPicker(category) {
     const items = dataStore.querySelectorAll('.item-data');
     let count = 0;
 
+    // เช็คว่าหมวดนี้อนุญาตให้โชว์รายละเอียดหรือไม่ (โชว์แค่ สังฆทาน และ ภัตตาหาร)
+    const allowDescForCategory = CATEGORIES_WITH_DESC.includes(category);
+
     items.forEach(dataEl => {
         const itemId   = String(dataEl.getAttribute('data-id'));
         const itemName = dataEl.getAttribute('data-name');
@@ -135,6 +138,9 @@ function renderItemPicker(category) {
         count++;
         const isExist   = existingIds.has(itemId);
         const isChecked = selectedItemIds.has(itemId);
+        
+        // กำหนดให้โชว์รายละเอียดเฉพาะหมวดที่กำหนดไว้เท่านั้น
+        const showDesc  = !!itemDesc && allowDescForCategory;
 
         const card = document.createElement('label');
         card.className = 'item-pick-card' + (isExist ? ' disabled' : '') + (isChecked ? ' selected' : '');
@@ -153,7 +159,8 @@ function renderItemPicker(category) {
                 <div class="item-pick-header">
                     <span class="item-pick-name">${itemName}</span>
                 </div>
-                ${itemDesc ? `<span class="item-pick-desc">${itemDesc}</span>` : ''}
+                <!-- แสดง Detail เฉพาะหมวดที่ผ่านเงื่อนไข showDesc -->
+                ${showDesc ? `<span class="item-pick-desc">${itemDesc}</span>` : ''}
                 <div class="item-pick-meta">
                     <span class="item-pick-unit">หน่วย: ${unit}</span>
                     <span class="item-pick-price">฿${price.toLocaleString('th-TH', {minimumFractionDigits: 2})}</span>

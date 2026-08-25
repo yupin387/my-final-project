@@ -10,11 +10,18 @@
     <title>ใบเสนอราคาของฉัน - #${q.quotationId}</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=13">
-    <%-- FIX: ลบ inline <style> เดิมที่เคยอยู่ตรงนี้ออกทั้งหมด — มันมาทีหลัง external CSS
-         ใน <head> เดียวกัน จึงชนะ specificity เท่ากันและไปทับสีพื้นหลัง/สีตัวอักษรของ
-         .category-header-text และ .member-note-section ที่ตั้งไว้ใน memberQuotationDetail.css
-         (นี่คือสาเหตุที่แก้ CSS ไปแล้วแต่หน้าเว็บไม่เปลี่ยนตามที่ขอ) ตอนนี้ทุกสไตล์ของ
-         2 ส่วนนี้ย้ายไปอยู่ใน memberQuotationDetail.css แหล่งเดียวแล้ว --%>
+    <style>
+        /* ===== รายชื่อ "รายการเพิ่มเติม" แสดงในวงเล็บใต้ label ให้ตรงกับฝั่ง Organizer ===== */
+        .tot-extra-detail {
+            font-size: 12px;
+            color: #888;
+            font-weight: 400;
+            font-style: italic;
+            text-align: left;
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body>
 
@@ -171,7 +178,7 @@
             </div>
         </div>
 
-        <%-- ===== ตารางรายการ (ไม่มีคอลัมน์หมายเหตุต่อแถวแล้ว) ===== --%>
+        <%-- ===== ตารางรายการ ===== --%>
         <table class="items-table">
             <colgroup>
                 <col style="width: 70px;">
@@ -193,51 +200,44 @@
             </thead>
             <tbody>
                 <c:set var="count" value="1"/>
-<%-- ===== 1. แสดงชื่อแพ็กเกจหลัก (พร้อมราคาและลำดับ) ===== --%>
-<c:if test="${!isCustomRequest}">
-    <tr class="static-row">
-        <td class="text-center row-number">1</td>
-        <td>
-    <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
-</td>
-        <td class="text-center">1</td>
-        <td class="text-center">แพ็กเกจ</td>
-        
-        <%-- ใช้ basePrice ตามโมเดล Ceremony --%>
-        <td class="text-right">
-            <fmt:formatNumber value="${b.ceremony.basePrice}" minFractionDigits="2" />
-        </td>
-        <td class="text-right">
-            <fmt:formatNumber value="${b.ceremony.basePrice}" minFractionDigits="2" />
-        </td>
-    </tr>
-</c:if>
 
-<%-- ===== 2. แสดงรายการประกอบ (Sub-items) ===== --%>
-<c:if test="${not empty packageIncludedItems}">
-    <tr class="package-included-row">
-        <td class="text-center"></td>
-        <td class="package-includes-title">ประกอบไปด้วยรายการดังนี้:</td>
-        <td class="text-center"></td>
-        <td class="text-center"></td>
-        <td class="text-right"></td>
-        <td class="text-right"></td>
-    </tr>
-    <c:forEach var="subItem" items="${packageIncludedItems}">
-        <c:set var="subItemQty" value="1"/>
-        <c:if test="${(not empty subItem.itemDetail && fn:contains(subItem.itemDetail,'ต่อรูป')) || fn:contains(subItem.itemName,'ต่อรูป') || fn:contains(subItem.itemName,'พระสงฆ์')}">
-            <c:set var="subItemQty" value="${not empty monkCount ? monkCount : 1}"/>
-        </c:if>
-        <tr class="package-included-row">
-            <td class="text-center"></td>
-            <td class="indented-item">- ${subItem.itemName}</td>
-            <td class="text-center">${subItemQty}</td>
-            <td class="text-center">${subItem.unit}</td>
-            <td class="text-right text-muted">-</td>
-            <td class="text-right text-muted">-</td>
-        </tr>
-    </c:forEach>
-</c:if>
+                <%-- ===== 1. แสดงชื่อแพ็กเกจหลัก (พร้อมราคาและลำดับ) ===== --%>
+                <c:if test="${!isCustomRequest}">
+                    <tr class="static-row">
+                        <td class="text-center row-number">1</td>
+                        <td>
+                            <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
+                        </td>
+                        <td class="text-center">1</td>
+                        <td class="text-center">แพ็กเกจ</td>
+                        <td class="text-right"><fmt:formatNumber value="${b.ceremony.basePrice}" minFractionDigits="2" /></td>
+                        <td class="text-right"><fmt:formatNumber value="${b.ceremony.basePrice}" minFractionDigits="2" /></td>
+                    </tr>
+                </c:if>
+
+                <%-- ===== 2. แสดงรายการประกอบ (Sub-items) ===== --%>
+                <c:if test="${not empty packageIncludedItems}">
+                    <tr class="package-included-row">
+                        <td class="text-center"></td>
+                        <td class="package-includes-title">ประกอบไปด้วยรายการดังนี้:</td>
+                        <td class="text-center"></td><td class="text-center"></td><td class="text-right"></td><td class="text-right"></td>
+                    </tr>
+                    <c:forEach var="subItem" items="${packageIncludedItems}">
+                        <c:set var="subItemQty" value="1"/>
+                        <c:if test="${(not empty subItem.itemDetail && fn:contains(subItem.itemDetail,'ต่อรูป')) || fn:contains(subItem.itemName,'ต่อรูป') || fn:contains(subItem.itemName,'พระสงฆ์')}">
+                            <c:set var="subItemQty" value="${not empty monkCount ? monkCount : 1}"/>
+                        </c:if>
+                        <tr class="package-included-row">
+                            <td class="text-center"></td>
+                            <td class="indented-item">- ${subItem.itemName}</td>
+                            <td class="text-center">${subItemQty}</td>
+                            <td class="text-center">${subItem.unit}</td>
+                            <td class="text-right text-muted">-</td>
+                            <td class="text-right text-muted">-</td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+
                 <%-- ===== หมวดอุปกรณ์พิธีกรรม ===== --%>
                 <c:set var="equipBlock">
                     <c:set var="printedEquip" value="false"/>
@@ -249,9 +249,7 @@
                             </c:if>
                             <tr>
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
-                               <td>
-    ${d.item.itemName}
-</td>
+                                <td>${d.item.itemName}</td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
@@ -322,10 +320,7 @@
                             </c:if>
                             <tr>
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
-                                <td>
-                                    ${d.item.itemName}
-                                  
-                                </td>
+                                <td>${d.item.itemName}</td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
@@ -346,10 +341,7 @@
                             </c:if>
                             <tr>
                                 <td class="text-center">${count}</td> <c:set var="count" value="${count + 1}"/>
-                                <td>
-                                    ${d.item.itemName}
-                                    
-                                </td>
+                                <td>${d.item.itemName}</td>
                                 <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0"/></td>
                                 <td class="text-center">${d.item.unit}</td>
                                 <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2"/></c:if></td>
@@ -379,57 +371,63 @@
             </tbody>
         </table>
 
-        <%-- =========================================================================
-             FIX: ย้าย "ความต้องการเพิ่มเติม" (member-note-section) มาอยู่คู่กับ
-             ตารางสรุปยอด (totals-wrap) ในแถวเดียวกัน โดยครอบทั้งสองด้วย
-             <div class="summary-flex-row"> ตามภาพตัวอย่างที่ขอ (โน้ตอยู่ซ้าย,
-             สรุปราคาอยู่ขวา) — เดิมสองบล็อกนี้แยกกันคนละก้อน วางซ้อนกันแนวตั้ง
-             ตัวแปร sumExtra/sumPackage ที่ใช้คำนวณยอดยังคงประกาศอยู่ในนี้เหมือนเดิม
-             ========================================================================= --%>
         <div class="summary-flex-row">
+            <c:if test="${q.quotationStatus != 'Confirmed'}">
+                <div class="member-note-section no-print">
+                    <label for="memberNoteInput">ความต้องการเพิ่มเติม:</label>
+                    <textarea id="memberNoteInput" placeholder="ระบุความต้องการเพิ่มเติมที่นี่..."></textarea>
+                </div>
+            </c:if>
 
-          
-           <c:if test="${q.quotationStatus != 'Confirmed'}">
-    <div class="member-note-section no-print">
-        <label for="memberNoteInput">ความต้องการเพิ่มเติม:</label>
-        <textarea id="memberNoteInput" placeholder="ระบุความต้องการเพิ่มเติมที่นี่..."></textarea>
-    </div>
-</c:if>
-
-            <%-- ===== สรุปยอด ===== --%>
+            <%-- ===== สรุปยอด (แก้ไขการคำนวณ) ===== --%>
             <div class="totals-wrap">
                 <div class="totals-box">
                     <c:set var="sumExtra" value="0"/>
-<%-- ดึงราคา basePrice ของแพ็กเกจมาใส่ตัวแปร sumPackage โดยตรง --%>
-<c:set var="sumPackage" value="${isCustomRequest ? 0 : q.bookingForm.ceremony.basePrice}"/>
-<%-- FIX: เพิ่มตัวแปรเก็บรายชื่อ "รายการเพิ่มเติม" ไว้โชว์เป็นวงเล็บใต้ label
-     (เดิมมีแค่ sumExtra ตัวเลขอย่างเดียว ไม่มีรายชื่อ ผู้ใช้จึงไม่เห็นว่ารายการ
-     เพิ่มเติมคืออะไรบ้าง — เพิ่ม extraItemsList ให้เหมือนหน้า organizer แล้ว) --%>
-<c:set var="extraItemsList" value=""/>
+                    <c:set var="sumPackage" value="${isCustomRequest ? 0 : q.bookingForm.ceremony.basePrice}"/>
+                    <c:set var="extraItemsList" value=""/>
 
-<c:forEach var="d" items="${details}">
-    <c:if test="${d.item != null}">
-        <c:choose>
-            <c:when test="${d.item.itemName == packageName}">
-                <%-- ปล่อยผ่านหรือจัดการตามเดิม --%>
-            </c:when>
-            <c:otherwise>
-                <c:set var="itemVal" value="${d.subtotal}"/>
-                <c:set var="isFreeInTotal" value="false"/>
-                <c:if test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
-                    <c:set var="itemVal" value="0"/>
-                    <c:set var="isFreeInTotal" value="true"/>
-                </c:if>
-                <c:set var="sumExtra" value="${sumExtra + itemVal}"/>
-
-                <%-- เก็บชื่อรายการเข้า list เฉพาะเคสไม่ใช่กรอกเอง และไม่ใช่ของฟรีในแพ็กเกจ --%>
-                <c:if test="${!isCustomRequest && !isFreeInTotal}">
-                    <c:set var="extraItemsList" value="${extraItemsList}${empty extraItemsList ? '' : ', '}${d.item.itemName}"/>
-                </c:if>
-            </c:otherwise>
-        </c:choose>
-    </c:if>
-</c:forEach>
+                    <c:forEach var="d" items="${details}">
+                        <c:if test="${d.item != null}">
+                            <c:choose>
+                                <%-- ข้ามชื่อแพ็กเกจ (กรณีโหมดแพ็กเกจ) --%>
+                                <c:when test="${!isCustomRequest && d.item.itemName == packageName}">
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="itemVal" value="${d.subtotal}"/>
+                                    <c:set var="isFreeInTotal" value="false"/>
+                                    
+                                    <%-- หักลบของแถม (สังฆทานฟรี) สำหรับแพ็กเกจ --%>
+                                    <c:if test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
+                                        <c:set var="itemVal" value="0"/>
+                                        <c:set var="isFreeInTotal" value="true"/>
+                                    </c:if>
+                                    
+                                    <%-- ===== ลอจิกแยกราคาตามโหมด ===== --%>
+                                    <c:choose>
+                                        <c:when test="${isCustomRequest}">
+                                            <%-- ถ้าโหมดกรอกเอง ให้เฉพาะของในหมวด "อุปกรณ์เสริม" ไปเป็นราคาเพิ่มเติม นอกนั้นรวมในราคาตั้งต้น --%>
+                                            <c:choose>
+                                                <c:when test="${d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+                                                    <c:set var="sumExtra" value="${sumExtra + itemVal}"/>
+                                                    <c:set var="extraItemsList" value="${extraItemsList}${empty extraItemsList ? '' : ', '}${d.item.itemName}"/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:set var="sumPackage" value="${sumPackage + itemVal}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <%-- ถ้าโหมดแพ็กเกจ ทุกอย่างที่โผล่มา (และไม่ฟรี) คือราคาเพิ่มเติมทั้งหมด --%>
+                                            <c:set var="sumExtra" value="${sumExtra + itemVal}"/>
+                                            <c:if test="${!isFreeInTotal}">
+                                                <c:set var="extraItemsList" value="${extraItemsList}${empty extraItemsList ? '' : ', '}${d.item.itemName}"/>
+                                            </c:if>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
+                    </c:forEach>
 
                     <table class="totals-table">
                         <tr>
@@ -439,33 +437,33 @@
                                     <c:otherwise>ราคาแพ็กเกจ:</c:otherwise>
                                 </c:choose>
                             </td>
-                            <td class="tot-value">฿ <fmt:formatNumber value="${isCustomRequest ? (sumPackage + sumExtra) : sumPackage}" minFractionDigits="2"/></td>
+                            <td class="tot-value">฿ <fmt:formatNumber value="${sumPackage}" minFractionDigits="2"/></td>
                         </tr>
-                        <c:if test="${!isCustomRequest}">
-                            <tr>
-                                <td class="tot-label">
-                                    รายการเพิ่มเติม:
-                                    <%-- FIX: แสดงรายชื่อรายการเพิ่มเติมในวงเล็บใต้ label เหมือนหน้า organizer --%>
-                                    <c:if test="${not empty extraItemsList}">
-                                        <div class="tot-extra-detail">(${extraItemsList})</div>
-                                    </c:if>
-                                </td>
-                                <td class="tot-value">฿ <fmt:formatNumber value="${sumExtra}" minFractionDigits="2"/></td>
-                            </tr>
-                        </c:if>
+                        
+                        <%-- นำเงื่อนไขดักออก เพื่อให้ช่อง "รายการเพิ่มเติม" แสดงเสมอแม้เป็นงานกรอกเอง --%>
+                        <tr>
+                            <td class="tot-label">
+                                รายการเพิ่มเติม:
+                                <c:if test="${not empty extraItemsList}">
+                                    <div class="tot-extra-detail">(${extraItemsList})</div>
+                                </c:if>
+                            </td>
+                            <td class="tot-value">฿ <fmt:formatNumber value="${sumExtra}" minFractionDigits="2"/></td>
+                        </tr>
+
                         <c:if test="${!isCustomRequest && isMonkSelfInvite}">
                             <tr>
                                 <td class="tot-label">ส่วนลดนิมนต์เอง:</td>
                                 <td class="tot-value text-danger">- ฿ 1,500.00</td>
                             </tr>
                         </c:if>
-<tr class="grand-total-row">
+                        <tr class="grand-total-row">
                             <td class="tot-label">ยอดรวมสุทธิ:</td>
-                            <%-- แก้บรรทัดนี้: คำนวณยอดรวมสุทธิสดๆ ตรงนี้เลย --%>
                             <td class="total-amount">
-                                ฿ <fmt:formatNumber value="${isCustomRequest ? (sumPackage + sumExtra) : (sumPackage + sumExtra - (isMonkSelfInvite ? 1500 : 0))}" minFractionDigits="2"/>
+                                ฿ <fmt:formatNumber value="${sumPackage + sumExtra - (isMonkSelfInvite && !isCustomRequest ? 1500 : 0)}" minFractionDigits="2"/>
                             </td>
-                        </tr>                    </table>
+                        </tr>                    
+                    </table>
                 </div>
             </div>
 
@@ -559,7 +557,6 @@
     function closeConfirmModal() { document.getElementById('confirmModal').style.display = 'none'; }
     setTimeout(function() { const banner = document.getElementById('flashBanner'); if(banner) { banner.style.display = 'none'; } }, 5000);
 
-    // ===== ยืนยันรายการแบบ AJAX: อยู่หน้าเดิม ไม่เด้งไปหน้า home =====
     function showAjaxConfirmBanner() {
         const banner = document.getElementById('ajaxConfirmBanner');
         if (!banner) return;
@@ -568,7 +565,6 @@
         setTimeout(function () { banner.style.display = 'none'; }, 5000);
     }
 
-    // แปลงหน้าใบเสนอราคาให้เป็นสถานะ "ยืนยันแล้ว" โดยไม่ต้องโหลดหน้าใหม่
     function lockQuotationAsConfirmed() {
         const statusPill = document.querySelector('.status-pill');
         if (statusPill) {

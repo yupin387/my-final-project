@@ -8,6 +8,18 @@
     <title>แก้ไขข้อมูลส่วนตัว - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editStaffProfile.css?v=4">
+    <style>
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        .input-error {
+            border-color: #dc3545 !important;
+            background-color: #fff8f8 !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -58,7 +70,7 @@
                     <div class="alert-error">⚠ ${error}</div>
                 </c:if>
 
-                <form action="${pageContext.request.contextPath}/staff/profile/update" method="post">
+                <form id="editProfileForm" action="${pageContext.request.contextPath}/staff/profile/update" method="post" onsubmit="return validateForm(event)">
                     <input type="hidden" name="staffId" value="${staff.staffId}">
 
                     <div class="form-row">
@@ -82,16 +94,18 @@
 
                     <div class="form-group">
                         <label class="form-label">เบอร์โทรศัพท์</label>
-                        <input type="text" name="staffPhone" class="form-control"
+                        <input type="text" id="staffPhone" name="staffPhone" class="form-control"
                                value="${staff.staffPhone}" maxlength="10" required>
+                        <div id="phoneError" class="error-message">เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก และขึ้นต้นด้วย 0 เท่านั้น</div>
                     </div>
 
                     <hr class="divider">
 
                     <div class="form-group">
                         <label class="form-label">รหัสผ่านใหม่ (ปล่อยว่างถ้าไม่ต้องการเปลี่ยน)</label>
-                        <input type="password" name="staffPassword" class="form-control"
+                        <input type="password" id="staffPassword" name="staffPassword" class="form-control"
                                placeholder="ระบุรหัสผ่านใหม่ 8 ตัวขึ้นไป">
+                        <div id="passwordError" class="error-message">รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรภาษาอังกฤษหรือตัวเลขเท่านั้น</div>
                     </div>
 
                     <div class="form-actions">
@@ -123,6 +137,63 @@
 </footer>
 
     <script src="${pageContext.request.contextPath}/static/js/updateStatus.js"></script>
+
+    <script>
+        // ฟังก์ชันตรวจสอบข้อมูลตอนกดปุ่ม submit
+        function validateForm(event) {
+            let isValid = true;
+
+            // 1. ตรวจสอบเบอร์โทรศัพท์
+            const phoneInput = document.getElementById('staffPhone');
+            const phoneError = document.getElementById('phoneError');
+            const phoneRegex = /^0[0-9]{9}$/; // ต้องขึ้นต้นด้วย 0 และตามด้วยตัวเลขอีก 9 ตัว
+
+            if (!phoneRegex.test(phoneInput.value.trim())) {
+                phoneError.style.display = "block";
+                phoneInput.classList.add("input-error");
+                isValid = false;
+            } else {
+                phoneError.style.display = "none";
+                phoneInput.classList.remove("input-error");
+            }
+
+            // 2. ตรวจสอบรหัสผ่าน
+            const passwordInput = document.getElementById('staffPassword');
+            const passwordError = document.getElementById('passwordError');
+            const passwordVal = passwordInput.value;
+            // ต้องเป็น a-z, A-Z, 0-9 เท่านั้น และมีความยาวอย่างน้อย 8 ตัว
+            const passwordRegex = /^[a-zA-Z0-9]{8,}$/;
+
+            // ถ้ารหัสผ่านไม่ว่างเปล่า แสดงว่าต้องการเปลี่ยน ต้องตรวจสอบเงื่อนไข
+            if (passwordVal !== "" && !passwordRegex.test(passwordVal)) {
+                passwordError.style.display = "block";
+                passwordInput.classList.add("input-error");
+                isValid = false;
+            } else {
+                passwordError.style.display = "none";
+                passwordInput.classList.remove("input-error");
+            }
+
+            // ถ้ายกเลิกการส่งฟอร์มถ้าข้อมูลไม่ถูกต้อง
+            if (!isValid) {
+                event.preventDefault();
+            }
+            return isValid;
+        }
+
+        // ซ่อน Error ทันทีที่ผู้ใช้เริ่มพิมพ์แก้ไข
+        document.getElementById('staffPhone').addEventListener('input', function() {
+            this.classList.remove("input-error");
+            document.getElementById('phoneError').style.display = "none";
+            // บังคับให้กรอกได้เฉพาะตัวเลขเท่านั้น
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        document.getElementById('staffPassword').addEventListener('input', function() {
+            this.classList.remove("input-error");
+            document.getElementById('passwordError').style.display = "none";
+        });
+    </script>
 
 </body>
 </html>

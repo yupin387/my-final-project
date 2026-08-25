@@ -584,7 +584,6 @@
 <script>
     const contextPath = "${pageContext.request.contextPath}";
 </script>
-
 <script>
 (function () {
     var PRICE_MAP = {
@@ -597,7 +596,6 @@
         "ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน": 499
     };
 
-    var MONK_COST_PER_RUP = 500 + 250 + 350 + 200; // 1,300 บาท/รูป
     var SELF_INVITE_DISCOUNT = 1500;
 
     function fmtMoney(n) {
@@ -678,14 +676,8 @@
                 fixedItemsTotal += price * qty;
             });
 
-            var monkTotal = 0;
-            if (!isSelfInvite) {
-                var monkQty = parseInt(answers['จำนวนพระสงฆ์'], 10) || 0;
-                monkTotal = monkQty * MONK_COST_PER_RUP;
-            }
-
             packageLabel = 'ค่าบริการพื้นฐาน (ตามรายการที่จัดให้):';
-            packageValue = fixedItemsTotal + monkTotal;
+            packageValue = fixedItemsTotal;
             discount = 0;
         } else {
             packageLabel = 'ราคาแพ็กเกจ:';
@@ -721,7 +713,6 @@
     document.addEventListener('DOMContentLoaded', calcCostSummary);
 })();
 </script>
-
 <script src="${pageContext.request.contextPath}/static/js/viewBooking.js?v=28"></script>
 </body>
 </html>

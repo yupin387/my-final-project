@@ -217,6 +217,26 @@
                                     </td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
+                                <%-- ดึงรายการพื้นฐานมาแสดงอัตโนมัติ --%>
+                                <c:forEach var="item" items="${packageIncludedItems}">
+                                    <c:if test="${item.itemType.itemTypeName == 'อุปกรณ์พิธีกรรม'}">
+                                        <tr class="static-row">
+                                            <td class="text-center row-number"></td>
+                                            <td>
+                                                ${item.itemName} 
+                                                <input type="hidden" name="bookingItemNames" value="${item.itemName}">
+                                            </td>
+                                            <c:set var="qty" value="1" />
+                                            <c:if test="${fn:contains(item.itemName, 'ต่อรูป') || fn:contains(item.itemDetail, 'ต่อรูป') || item.itemName == 'อาสนะพระสงฆ์' || item.itemName == 'ตาลปัตรพร้อมขาตั้ง' || item.itemName == 'กรวยดอกไม้ถวายพระสงฆ์'}">
+                                                <c:set var="qty" value="${monkCount > 0 ? monkCount : 1}" />
+                                            </c:if>
+                                            <td class="text-center">${qty}<input type="hidden" name="bookingQtys" value="${qty}" class="qty-input"></td>
+                                            <td class="text-center">${item.unit}</td>
+                                            <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${item.pricePerUnit}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                            <td class="text-right"><span class="subtotal">0.00</span></td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
                             </tbody>
 
                             <c:set var="sangQty" value="1" />
@@ -310,23 +330,26 @@
                                     </td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
-                                <c:if test="${not isMonkSelfInvite && not empty monkCount}">
-                                    <c:forEach var="item" items="${items}">
-                                        <c:if test="${fn:trim(item.itemName) eq 'บริการประสานงานนิมนต์พระ'}">
-                                            <tr class="static-row">
-                                                <td class="text-center row-number"></td>
-                                                <td>
-    ${item.itemName}
-    <input type="hidden" name="bookingItemNames" value="${item.itemName}">
-</td>
-                                                <td class="text-center">${monkCount}<input type="hidden" name="bookingQtys" value="${monkCount}" class="qty-input"></td>
-                                                <td class="text-center">${item.unit}</td>
-                                                <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${item.pricePerUnit}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
-                                                <td class="text-right"><span class="subtotal">0.00</span></td>
-                                            </tr>
-                                        </c:if>
-                                    </c:forEach>
-                                </c:if>
+                                <%-- ดึงรายการบริการพื้นฐานมาแสดงอัตโนมัติ --%>
+                                <c:forEach var="item" items="${packageIncludedItems}">
+                                    <c:if test="${item.itemType.itemTypeName == 'บริการ'}">
+                                        <tr class="static-row">
+                                            <td class="text-center row-number"></td>
+                                            <td>
+                                                ${item.itemName}
+                                                <input type="hidden" name="bookingItemNames" value="${item.itemName}">
+                                            </td>
+                                            <c:set var="qty" value="1" />
+                                            <c:if test="${fn:contains(item.itemName, 'นิมนต์พระ') || fn:contains(item.itemDetail, 'ต่อรูป')}">
+                                                <c:set var="qty" value="${monkCount > 0 ? monkCount : 1}" />
+                                            </c:if>
+                                            <td class="text-center">${qty}<input type="hidden" name="bookingQtys" value="${qty}" class="qty-input"></td>
+                                            <td class="text-center">${item.unit}</td>
+                                            <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${item.pricePerUnit}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                            <td class="text-right"><span class="subtotal">0.00</span></td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
                             </tbody>
 
                             <tbody id="group-extra" data-category="อุปกรณ์เสริม">
@@ -448,7 +471,7 @@
                         <div class="remarks-header">
 						    <strong>ความต้องการเพิ่มเติม:</strong>
                         </div>
-						<textarea name="detailNotes" class="remarks-textarea" placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${additionalNote}</textarea>
+						<textarea name="note" class="remarks-textarea" placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${additionalNote}</textarea>
 					</div>
 					
                     <div class="totals-box">
@@ -464,7 +487,7 @@
                                 </td>
                                 <td class="tot-value">฿ <span id="summaryPackage">0.00</span></td>
                             </tr>
-                            <c:if test="${!isCustomRequest}">
+                            <%-- นำ c:if ออก เพื่อให้บรรทัดนี้แสดงผลในโหมดกรอกเองด้วย --%>
                             <tr>
                                 <td class="tot-label">
                                     รายการเพิ่มเติม:
@@ -472,7 +495,6 @@
                                 </td>
                                 <td class="tot-value">฿ <span id="summaryExtra">0.00</span></td>
                             </tr>
-                            </c:if>
                             <c:if test="${!isCustomRequest && isMonkSelfInvite}">
                                 <tr>
                                     <td class="tot-label">ส่วนลดนิมนต์เอง:</td>
@@ -602,6 +624,7 @@
                 if (row.classList.contains('package-main-row')) {
                     packageTotal += subtotal;
                 } else if (isCustomRequest && !isManuallyAddedExtra) {
+                    /* กรอกความต้องการเอง: รายการอุปกรณ์/สังฆทาน/อาหาร/บริการที่มาจากคำตอบ ถือเป็น "รายการหลัก" ไม่ใช่ของเพิ่มเติม */
                     packageTotal += subtotal;
                 } else {
                     extraTotal += subtotal;

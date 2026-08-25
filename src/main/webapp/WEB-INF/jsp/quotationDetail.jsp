@@ -30,7 +30,7 @@
     max-width: 90%;
     margin: 0 auto 20px;
     padding: 13px 28px;
-    border-radius: 4px;      /* เดิม 50px -> เปลี่ยนเป็นเหลี่ยม */
+    border-radius: 4px;      
     text-align: center;
     font-weight: 700;
     font-size: 14px;
@@ -55,7 +55,6 @@
     to   { opacity: 1; transform: translateY(0); }
 }
 
-    /* กล่อง "ความต้องการเพิ่มเติม" ไม่มีสีเน้น ใช้ขาว-ดำเรียบๆ ตามที่กำหนดใน quotationDetail.css */
     .remarks-box .remarks-header {
         margin-bottom: 8px;
     }
@@ -67,7 +66,6 @@
         font-style: normal;
     }
 
-    /* เพิ่มใหม่: บรรทัดแสดงรายชื่อของ "รายการเพิ่มเติม" อยู่ใต้ label ในเซลล์เดียวกัน */
     .tot-extra-detail {
         font-size: 12px;
         color: var(--text-muted);
@@ -424,37 +422,53 @@
                     </div>
                 </div>
 
-<div class="totals-box" style="width: 350px;">
+                <div class="totals-box" style="width: 350px;">
                     <c:set var="sumExtra" value="0" />
+                    <%-- สำหรับโหมดกรอกเอง ให้หาราคาของรายการพื้นฐาน (ที่ไม่ได้มาจากหมวดอุปกรณ์เสริม) เอาไว้เป็นราคาตามรายการ --%>
                     <c:set var="sumPackage" value="${isCustomRequest ? 0 : b.ceremony.basePrice}" />
-                    <%-- เพิ่มใหม่: ตัวแปรเก็บรายชื่อของ "รายการเพิ่มเติม" ไว้โชว์ใต้ยอดรวม --%>
                     <c:set var="extraItemsList" value="" />
 
                     <c:forEach var="d" items="${details}">
                         <c:choose>
-                            <%-- ถ้าไม่ใช่เคสกรอกเอง ให้เช็คตัดชื่อแพ็กเกจออกปกติ --%>
+                            <%-- ข้ามชื่อแพ็กเกจ (ถ้ามี) --%>
                             <c:when test="${!isCustomRequest && d.item != null && fn:trim(d.item.itemName) eq fn:trim(b.ceremony.ceremonyName)}">
                             </c:when>
                             <c:otherwise>
                                 <c:set var="itemVal" value="${d.subtotal}" />
                                 <c:set var="isFreeInTotal" value="false" />
+                                
+                                <%-- หักของฟรีในโหมดแพ็กเกจ --%>
                                 <c:if test="${!isCustomRequest && d.item != null && d.item.itemType != null && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
                                     <c:set var="itemVal" value="0" />
                                     <c:set var="isFreeInTotal" value="true" />
                                 </c:if>
-                                <c:set var="sumExtra" value="${sumExtra + itemVal}" />
 
-                                <%-- เพิ่มใหม่: เก็บชื่อรายการเข้า list เฉพาะเคสไม่ใช่กรอกเอง และไม่ใช่ของฟรีในแพ็กเกจ --%>
-                                <c:if test="${!isCustomRequest && d.item != null && !isFreeInTotal}">
-                                    <c:set var="extraItemsList" value="${extraItemsList}${empty extraItemsList ? '' : ', '}${d.item.itemName}" />
-                                </c:if>
+                                <%-- ถ้าเป็นโหมดกรอกเอง ให้จับเฉพาะ "อุปกรณ์เสริม" ไปเป็นราคาเพิ่มเติม ส่วนหมวดอื่นยัดเข้า "ราคาตามรายการ" --%>
+                                <c:choose>
+                                    <c:when test="${isCustomRequest}">
+                                        <c:choose>
+                                            <c:when test="${d.item != null && d.item.itemType != null && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+                                                <c:set var="sumExtra" value="${sumExtra + itemVal}" />
+                                                <c:set var="extraItemsList" value="${extraItemsList}${empty extraItemsList ? '' : ', '}${d.item.itemName}" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:set var="sumPackage" value="${sumPackage + itemVal}" />
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:when>
+                                    <%-- ถ้าเป็นโหมดแพ็กเกจ ของทุกอย่างที่ไม่ใช่แพ็กเกจและไม่ใช่ของฟรี ถือเป็นราคาเพิ่มเติมหมด --%>
+                                    <c:otherwise>
+                                        <c:set var="sumExtra" value="${sumExtra + itemVal}" />
+                                        <c:if test="${d.item != null && !isFreeInTotal}">
+                                            <c:set var="extraItemsList" value="${extraItemsList}${empty extraItemsList ? '' : ', '}${d.item.itemName}" />
+                                        </c:if>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:otherwise>
                         </c:choose>
                     </c:forEach>
 
-                    <%-- หากเป็นกรอกเอง ให้เอายอดรวมทั้งหมดจาก sumExtra มาเป็นราคาตามรายการ --%>
-                    <c:set var="displayPackagePrice" value="${isCustomRequest ? sumExtra : sumPackage}" />
-                    <c:set var="calculatedGrandTotal" value="${isCustomRequest ? sumExtra : (sumPackage + sumExtra - (isMonkSelfInvite ? 1500 : 0))}" />
+                    <c:set var="calculatedGrandTotal" value="${sumPackage + sumExtra - (isMonkSelfInvite ? 1500 : 0)}" />
 
                     <table class="totals-table">
                         <tr>
@@ -464,21 +478,18 @@
                                     <c:otherwise>ราคาแพ็กเกจ:</c:otherwise>
                                 </c:choose>
                             </td>
-                            <%-- เปลี่ยนมาแสดงผลด้วยตัวแปร displayPackagePrice --%>
-                            <td class="tot-value">฿ <fmt:formatNumber value="${displayPackagePrice}" minFractionDigits="2"/></td>
+                            <td class="tot-value">฿ <fmt:formatNumber value="${sumPackage}" minFractionDigits="2"/></td>
                         </tr>
-                        <c:if test="${!isCustomRequest}">
-                            <tr>
-                                <td class="tot-label">
-                                    รายการเพิ่มเติม:
-                                    <%-- ย้ายมาไว้ในเซลล์เดียวกัน จะได้สีพื้นหลังเดียวกับแถวนี้ ไม่แยกเป็นแถบขาว --%>
-                                    <c:if test="${not empty extraItemsList}">
-                                        <div class="tot-extra-detail">(${extraItemsList})</div>
-                                    </c:if>
-                                </td>
-                                <td class="tot-value">฿ <fmt:formatNumber value="${sumExtra}" minFractionDigits="2"/></td>
-                            </tr>
-                        </c:if>
+                        <%-- เอาบรรทัดราคาเพิ่มเติมมาแสดงเสมอ (ลบเงื่อนไข if !isCustomRequest ออกแล้ว) --%>
+                        <tr>
+                            <td class="tot-label">
+                                รายการเพิ่มเติม:
+                                <c:if test="${not empty extraItemsList}">
+                                    <div class="tot-extra-detail">(${extraItemsList})</div>
+                                </c:if>
+                            </td>
+                            <td class="tot-value">฿ <fmt:formatNumber value="${sumExtra}" minFractionDigits="2"/></td>
+                        </tr>
                         <c:if test="${!isCustomRequest && isMonkSelfInvite}">
                             <tr>
                                 <td class="tot-label">ส่วนลดนิมนต์เอง:</td>

@@ -70,30 +70,19 @@ public class QuotationController {
                 && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
         model.addAttribute("isCustomRequest", isCustomRequest);
 
-        // 1. ดึงรายการสินค้าทั้งหมดในระบบ (เพื่อให้ JSP สามารถ Match ชื่อสังฆทานและปิ่นโตเจอ)
+        // 1. ดึงรายการสินค้าทั้งหมดในระบบ
         List<Item> allSystemItems = itemRepo.findAll();
         model.addAttribute("items", allSystemItems);
 
-        // 2. ดึงรายการสินค้าเฉพาะของพิธี เพื่อใช้คำนวณของที่รวมในแพ็กเกจ
-        List<Item> ceremonyItems;
-        if (isCustomRequest || booking.getCeremony() == null) {
-            ceremonyItems = allSystemItems;
-        } else {
-            int ceremonyId = booking.getCeremony().getCeremonyId();
-            ceremonyItems = quotationService.getItemsByCeremonyId(ceremonyId);
-        }
+        // 2. ดึงรายการสินค้าเฉพาะของพิธี (และเพิ่มอุปกรณ์พระสงฆ์อัตโนมัติหากเป็นเคสกรอกเอง)
+        List<Item> ceremonyItems = getBaseCeremonyItemsWithMonkAdditions(booking, isCustomRequest);
 
         // 3. คำนวณรายการที่รวมในแพ็กเกจ
-        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems, isCustomRequest);
+        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems);
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
         // 4. รายการที่สามารถเลือกเพิ่มใน Popup Modal
-        // (ดึงจากสินค้าทั้งหมด แล้วตัดรายการที่มีในแพ็กเกจออก
-        //  จากนั้นกรองให้เหลือเฉพาะรายการที่เกี่ยวข้องกับ "ประเภทพิธี" ของ booking นี้เท่านั้น
-        //  เพื่อป้องกันไม่ให้ของเฉพาะพิธีอื่น เช่น "โต๊ะหมู่บูชาไม้สัก" ของขึ้นบ้านใหม่
-        //  หรือของระดับพรีเมียมเฉพาะพิธีอื่นหลุดเข้ามาให้เลือกผิดพิธี)
         String ceremonyType = booking.getCeremony() != null ? booking.getCeremony().getCeremonyType() : null;
-
         List<Item> extraSelectableItems = new ArrayList<>(allSystemItems);
         extraSelectableItems.removeAll(packageIncludedItems);
         extraSelectableItems = filterItemsByCeremonyType(extraSelectableItems, ceremonyType);
@@ -118,13 +107,13 @@ public class QuotationController {
                                 @RequestParam(required = false) List<Double> bookingPrices,
                                 RedirectAttributes ra) {
         try {
-        	Quotation created = quotationService.createQuotation(bookingId, extraItemIds, extraQtys, extraPrices, note,
+            Quotation created = quotationService.createQuotation(bookingId, extraItemIds, extraQtys, extraPrices, note,
                     bookingItemNames, bookingQtys, bookingPrices);
 
-bookingService.updateJobStatus(bookingId, "Approved");
+            bookingService.updateJobStatus(bookingId, "Approved");
 
-ra.addFlashAttribute("success", "สร้างใบเสนอราคาสำเร็จ");
-return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
+            ra.addFlashAttribute("success", "สร้างใบเสนอราคาสำเร็จ");
+            return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
         } catch (Exception e) {
             e.printStackTrace();
             ra.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
@@ -157,15 +146,10 @@ return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
         boolean isCustomRequest = booking.getCeremony() != null
                 && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
 
-        List<Item> allItems;
-        if (isCustomRequest || booking.getCeremony() == null) {
-            allItems = itemRepo.findAll();
-        } else {
-            int ceremonyId = booking.getCeremony().getCeremonyId();
-            allItems = quotationService.getItemsByCeremonyId(ceremonyId);
-        }
-
-        List<Item> packageIncludedItems = computePackageIncludedItems(allItems, isCustomRequest);
+        // ดึงรายการไอเทมในพิธี พร้อมของพระสงฆ์ (เพื่อให้ในใบสรุปแสดงของที่ให้อัตโนมัติด้วย)
+        List<Item> ceremonyItems = getBaseCeremonyItemsWithMonkAdditions(booking, isCustomRequest);
+        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems);
+        
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
         return "quotationDetail";
@@ -198,25 +182,17 @@ return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
         List<Item> allSystemItems = itemRepo.findAll();
         model.addAttribute("items", allSystemItems);
 
-        // 2. ดึงรายการสินค้าเฉพาะของพิธี
-        List<Item> ceremonyItems;
-        if (isCustomRequest || booking.getCeremony() == null) {
-            ceremonyItems = allSystemItems;
-        } else {
-            int ceremonyId = booking.getCeremony().getCeremonyId();
-            ceremonyItems = quotationService.getItemsByCeremonyId(ceremonyId);
-        }
+        // 2. ดึงรายการสินค้าเฉพาะของพิธี พร้อมอุปกรณ์ที่ให้ตามจำนวนพระสงฆ์
+        List<Item> ceremonyItems = getBaseCeremonyItemsWithMonkAdditions(booking, isCustomRequest);
 
         model.addAttribute("additionalNote", extractAdditionalNote(booking));
 
         // 3. คำนวณรายการในแพ็กเกจ
-        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems, isCustomRequest);
+        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems);
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
         // 4. รายการสำหรับเลือกใน Modal
-        // (กรองตามประเภทพิธีเช่นเดียวกับหน้า create เพื่อไม่ให้ของพิธีอื่นหลุดเข้ามาตอนแก้ไขใบเสนอราคา)
         String ceremonyType = booking.getCeremony() != null ? booking.getCeremony().getCeremonyType() : null;
-
         List<Item> extraSelectableItems = new ArrayList<>(allSystemItems);
         extraSelectableItems.removeAll(packageIncludedItems);
         extraSelectableItems = filterItemsByCeremonyType(extraSelectableItems, ceremonyType);
@@ -258,11 +234,18 @@ return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
         return quotationService.getItemsByCeremonyId(ceremonyId);
     }
 
+    // ==========================================
+    // Helper Methods
+    // ==========================================
+
     private List<BookingFormDetail> buildValidDetails(BookingForm booking) {
         List<BookingFormDetail> validDetails = new ArrayList<>();
+        if (booking.getDetails() == null) return validDetails;
+        
         for (BookingFormDetail d : booking.getDetails()) {
             String ans = d.getAnswer();
-            if ((d.getQuestion().getQuestionsText().contains("ภัตตาหาร") ||
+            if (d.getQuestion() != null && 
+                (d.getQuestion().getQuestionsText().contains("ภัตตาหาร") ||
                  d.getQuestion().getQuestionsText().contains("สังฆทาน") ||
                  d.getQuestion().getQuestionsText().contains("อุปกรณ์") ||
                  d.getQuestion().getQuestionsText().contains("พระ"))
@@ -273,10 +256,61 @@ return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
         return validDetails;
     }
 
-    // ฟังก์ชันถูกแก้ไขเพื่อให้ดึงของที่อยู่ในแพ็กเกจได้ครบถ้วน
-    private List<Item> computePackageIncludedItems(List<Item> allItems, boolean isCustomRequest) {
+ // ดึงไอเทมของพิธี และบวกไอเทมพิเศษตามจำนวนพระสงฆ์ (สำหรับกรณี Custom Request)
+    private List<Item> getBaseCeremonyItemsWithMonkAdditions(BookingForm booking, boolean isCustomRequest) {
+        
+        // แก้ไขให้ตัวแปรคงที่ (Effectively Final) โดยใช้ .addAll() แทนการเขียนทับค่า
+        List<Item> ceremonyItems = new ArrayList<>();
+        if (booking.getCeremony() != null) {
+            List<Item> itemsFromDb = quotationService.getItemsByCeremonyId(booking.getCeremony().getCeremonyId());
+            if (itemsFromDb != null) {
+                ceremonyItems.addAll(itemsFromDb);
+            }
+        }
+
+        if (isCustomRequest) {
+            int monkCount = 0;
+            boolean isSelfInvite = false;
+            
+            if (booking.getDetails() != null) {
+                for (BookingFormDetail d : booking.getDetails()) {
+                    if (d.getQuestion() != null) {
+                        if ("จำนวนพระสงฆ์".equals(d.getQuestion().getQuestionsText())) {
+                            try {
+                                monkCount = Integer.parseInt(d.getAnswer().replaceAll("[^0-9]", ""));
+                            } catch (Exception e) {}
+                        }
+                        if ("รูปแบบการนิมนต์พระสงฆ์".equals(d.getQuestion().getQuestionsText()) 
+                                && d.getAnswer() != null && d.getAnswer().contains("นิมนต์เอง")) {
+                            isSelfInvite = true;
+                        }
+                    }
+                }
+            }
+
+            if (monkCount > 0) {
+                String[] monkItemNames = {"อาสนะพระสงฆ์", "ตาลปัตรพร้อมขาตั้ง", "กรวยดอกไม้ถวายพระสงฆ์"};
+                for (String name : monkItemNames) {
+                    itemRepo.findByItemName(name).ifPresent(item -> {
+                        if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
+                    });
+                }
+                
+                // ถ้านิมนต์เอง ไม่ต้องใส่บริการประสานงานนิมนต์พระ
+                if (!isSelfInvite) {
+                    itemRepo.findByItemName(MONK_INVITE_SERVICE_ITEM_NAME).ifPresent(item -> {
+                        if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
+                    });
+                }
+            }
+        }
+        return ceremonyItems;
+    }
+
+    // คำนวณหา Item ที่จัดว่าเป็น "ของพื้นฐาน" เพื่อนำไปโชว์ให้ Organizer ดู (ตัดพวกปิ่นโต/สังฆทานออก)
+    private List<Item> computePackageIncludedItems(List<Item> allItems) {
         List<Item> packageIncludedItems = new ArrayList<>();
-        if (!isCustomRequest && allItems != null) {
+        if (allItems != null) {
             for (Item it : allItems) {
                 if (it.getItemType() != null) {
                     String typeName = it.getItemType().getItemTypeName();
@@ -284,7 +318,6 @@ return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
                     boolean isFoodOrSangkathan = "ภัตตาหารปิ่นโต".equals(typeName) || "สังฆทาน".equals(typeName);
                     boolean isOptionalExtra = "อุปกรณ์เสริม (เลือกเพิ่มเอง)".equals(typeName);
 
-                    // ตัดเงื่อนไข size() >= 9 ออก และเช็คแค่ว่าไม่ใช่อาหาร สังฆทาน หรืออุปกรณ์เสริม ก็ให้ดึงมาโชว์ในแพ็กเกจเลย
                     if (!isPackage && !isFoodOrSangkathan && !isOptionalExtra) {
                         packageIncludedItems.add(it);
                     }
@@ -295,11 +328,6 @@ return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
     }
 
     // กรอง item ให้เหลือเฉพาะที่เกี่ยวข้องกับ "ประเภทพิธี" (ceremonyType) ของ booking นี้
-    // - ถ้า item ไม่เคยผูกกับ ceremony ใดเลย (เช่น ปิ่นโต, สังฆทาน, อุปกรณ์เสริม ที่เป็น Item กลาง)
-    //   ถือว่าเป็นของกลาง เลือกได้ทุกประเภทพิธี
-    // - ถ้า item เคยผูกกับ ceremony แล้ว (เช่น "โต๊ะหมู่บูชาไม้สัก" ผูกกับขึ้นบ้านใหม่เท่านั้น
-    //   หรือ "บริการถ่ายภาพบันทึกพิธี" ผูกกับแพ็กเกจพรีเมียมของออฟฟิศเท่านั้น)
-    //   ต้องมีอย่างน้อย 1 ceremony ที่ ceremonyType ตรงกับของ booking นี้ ถึงจะเลือกได้
     private List<Item> filterItemsByCeremonyType(List<Item> allItems, String ceremonyType) {
         List<Item> filtered = new ArrayList<>();
         if (allItems == null) return filtered;
@@ -308,7 +336,6 @@ return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
             List<CeremonyItem> cis = it.getCeremonyItems();
 
             if (cis == null || cis.isEmpty()) {
-                // item กลาง ไม่ผูกกับพิธีไหนเป็นการเฉพาะ -> เลือกได้ทุกพิธี
                 filtered.add(it);
                 continue;
             }
@@ -326,8 +353,9 @@ return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
     }
 
     private String extractAdditionalNote(BookingForm booking) {
+        if (booking.getDetails() == null) return null;
         for (BookingFormDetail d : booking.getDetails()) {
-            if (d.getQuestion().getQuestionsText().contains("ความต้องการเพิ่มเติม")) {
+            if (d.getQuestion() != null && d.getQuestion().getQuestionsText().contains("ความต้องการเพิ่มเติม")) {
                 String ans = d.getAnswer();
                 if (ans != null && !ans.trim().isEmpty()) {
                     return ans.trim();

@@ -7,7 +7,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>เพิ่มหัวหน้างาน - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons สำหรับไอคอนรูปตา -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addHeadStaff.css?v=2">
+    <style>
+        .error-message {
+            color: #dc3545;
+            font-size: 11px;
+            margin-top: 4px;
+            display: none;
+            font-weight: normal;
+        }
+        .field-error {
+            color: #c62828;
+            font-size: 11px;
+            display: block;
+            margin-top: 4px;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper input {
+            width: 100%;
+            padding-right: 45px;
+        }
+        .toggle-visibility {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #888;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        .toggle-visibility:hover {
+            color: #333;
+        }
+    </style>
 </head>
 <body>
 
@@ -68,7 +110,7 @@
             </c:if>
 
             <form action="${pageContext.request.contextPath}/organizer/head-staff/add"
-                  method="post" class="form-section">
+                  method="post" class="form-section" novalidate>
 
                 <div class="section-label">ข้อมูลส่วนตัว</div>
 
@@ -77,11 +119,13 @@
                         <label for="firstName">ชื่อ</label>
                         <input type="text" id="firstName" name="firstName"
                                placeholder="ชื่อจริง" required value="${param.firstName}"/>
+                        <div id="firstNameError" class="error-message"></div>
                     </div>
                     <div class="form-group">
                         <label for="lastName">นามสกุล</label>
                         <input type="text" id="lastName" name="lastName"
                                placeholder="นามสกุล" required value="${param.lastName}"/>
+                        <div id="lastNameError" class="error-message"></div>
                     </div>
                 </div>
 
@@ -89,6 +133,7 @@
                     <label for="email">อีเมล</label>
                     <input type="email" id="email" name="email"
                            placeholder="staff@mail.com" required value="${param.email}"/>
+                    <div id="emailError" class="error-message"></div>
                 </div>
 
                 <div class="form-row">
@@ -99,8 +144,12 @@
                                    placeholder="รหัสผ่าน 8-16 ตัวอักษร"
                                    minlength="8" maxlength="16" required/>
                             <button type="button" class="toggle-visibility"
-                                    onclick="togglePassword('password', this)">👁</button>
+                                    onclick="togglePassword('password', 'eyeIcon')">
+                                <i class="bi bi-eye-slash" id="eyeIcon"></i>
+                            </button>
                         </div>
+                        <!-- ย้าย Error มาไว้ใน .form-group ใต้ .input-wrapper โดยตรง -->
+                        <div id="passwordError" class="error-message"></div>
                     </div>
                     <div class="form-group">
                         <label for="phone">เบอร์โทรศัพท์</label>
@@ -108,6 +157,7 @@
                                placeholder="0XXXXXXXXX"
                                pattern="0[0-9]{9}" maxlength="10" required
                                value="${param.phone}"/>
+                        <div id="phoneError" class="error-message"></div>
                     </div>
                 </div>
 
@@ -137,7 +187,6 @@
         </div>
         <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>
-   
 </footer>
 
 <script src="${pageContext.request.contextPath}/static/js/addHeadStaff.js"></script>
