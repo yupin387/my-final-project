@@ -670,9 +670,20 @@ tbody tr:hover td { background: var(--rose-glow); transition: background 0.15s; 
 }
 
 /* ========== FLASH BANNER ========== */
+/* ========== FLASH BANNER ========== */
 .flash-banner {
     padding: 14px 20px;
-    margin-bottom: 20px;
+    
+    /* ปรับ margin ซ้าย-ขวา ให้เป็น auto เพื่อจัดกล่องให้อยู่กึ่งกลาง */
+    margin: 0 auto 20px auto; 
+    
+    /* กำหนดขนาดกล่องให้พอดีกับข้อความ (หรือใส่ max-width แทนก็ได้) */
+    width: fit-content; 
+    min-width: 300px; /* กำหนดความกว้างขั้นต่ำไม่ให้กล่องดูหดเล็กเกินไป */
+    
+    /* จัดตัวหนังสือให้อยู่กึ่งกลาง */
+    text-align: center; 
+    
     border-radius: 8px;
     font-weight: 600;
     font-size: 15px;

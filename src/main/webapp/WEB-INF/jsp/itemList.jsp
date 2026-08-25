@@ -81,15 +81,34 @@
 
             <%-- FIX: เพิ่มตัวกรองประเภทงานพิธีทั้ง 3 ประเภท (ทำบุญบ้าน / ขึ้นบ้านใหม่ / ทำบุญบริษัทหรือออฟฟิศ)
                  ใช้ ceremonyTypeOrder ที่ controller ส่งมา เพื่อให้ลำดับตรงกับที่ใช้ทั่วทั้งระบบ --%>
-            <label for="ceremonyTypeFilter" class="filter-label">กรองตามประเภทงาน:</label>
+           <label for="ceremonyTypeFilter" class="filter-label">กรองตามประเภทงาน:</label>
             <select id="ceremonyTypeFilter" class="filter-select" onchange="applyFilters()">
                 <option value="all" ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'selected' : ''}>
-                    ทั้งหมด
+                    ⚪ ทั้งหมด
                 </option>
                 <c:forEach var="cType" items="${ceremonyTypeOrder}">
-                    <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
-                        ${cType}
-                    </option>
+                    <c:choose>
+                        <c:when test="${cType eq 'ทำบุญบ้าน'}">
+                            <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
+                                🔴 ${cType}
+                            </option>
+                        </c:when>
+                        <c:when test="${cType eq 'ขึ้นบ้านใหม่'}">
+                            <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
+                                🟢 ${cType}
+                            </option>
+                        </c:when>
+                        <c:when test="${cType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                            <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
+                                🔵 ${cType}
+                            </option>
+                        </c:when>
+                        <c:otherwise>
+                            <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
+                                ⚪ ${cType}
+                            </option>
+                        </c:otherwise>
+                    </c:choose>
                 </c:forEach>
             </select>
         </div>
