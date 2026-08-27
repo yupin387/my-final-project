@@ -819,4 +819,70 @@ body {
 		padding: 0 20px;
 	}
 }
+
+/* ==========================================================================
+   CUSTOM MODAL STYLES (ธีมมาตรฐานอ้างอิงรูปที่ 1)
+   ========================================================================== */
+.modal-custom-card {
+    border-radius: 20px !important;
+    border: none !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.modal-title-custom {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #333333;
+    margin: 0;
+}
+
+/* Badge แสดงรหัสการจองตรงกลาง */
+.booking-code-badge {
+    display: inline-block;
+    background-color: #FDF0F3;
+    color: #C62828;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 8px 24px;
+    border-radius: 12px;
+    border: 1px solid #F8BBD0; /* เปลี่ยนจาก 1px dashed เป็น 1px solid */
+}
+
+/* ปุ่มยกเลิก/ปิดหน้าต่าง (อยู่ซ้าย) */
+.btn-modal-cancel {
+    background-color: #FFFFFF;
+    color: #666666;
+    border: 1.5px solid #E0E0E0;
+    border-radius: 10px;
+    padding: 9px 28px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.btn-modal-cancel:hover {
+    background-color: #F5F5F5;
+    color: #333333;
+    border-color: #CCCCCC;
+}
+
+/* ปุ่มยืนยันแอ็กชันอันตราย/ยกเลิก (สีแดง อยู่ขวา) */
+.btn-modal-danger {
+    background-color: #C62828;
+    color: #FFFFFF !important;
+    border: none;
+    border-radius: 10px;
+    padding: 9px 28px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.25);
+}
+
+.btn-modal-danger:hover {
+    background-color: #B71C1C;
+    box-shadow: 0 6px 16px rgba(198, 40, 40, 0.35);
+}
 /*ของหน้าviewBooking*/

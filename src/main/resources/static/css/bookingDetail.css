@@ -725,8 +725,8 @@ body {
 }
 
 .modal-id-container {
-    background: var(--rose-glow);
-    border: 1px solid var(--rose-line-light);
+    background: #e8f5e9;
+    border: 1.5px solid #a5d6a7;
     border-radius: 10px;
     padding: 9px 18px;
     margin-bottom: 12px;
@@ -734,7 +734,12 @@ body {
 }
 .modal-id-reject { border-color: #ef9a9a; background: #fdecea; }
 
-.modal-id-text { font-size: 14px; font-weight: 700; color: var(--rose-deep); }
+.modal-id-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2e7d32;
+}
+
 .modal-id-text-reject { color: #c62828; }
 
 .modal-footer-note { font-size: 11.5px; color: var(--text-muted); margin-bottom: 20px; }
@@ -754,10 +759,18 @@ body {
 .btn-modal-approve {
     padding: 9px 22px;
     border-radius: 8px;
-    background: var(--rose-deep);
+    background: #2e7d32;
     color: #FFFFFF;
     font-weight: 700;
     text-decoration: none;
+    border: none;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-modal-approve:hover {
+    background: #1b5e20;
+    color: #FFFFFF;
+    transform: translateY(-1px);
 }
 
 .btn-modal-reject {
@@ -767,6 +780,25 @@ body {
     color: #FFFFFF;
     font-weight: 700;
     text-decoration: none;
+    border: none;                  /* เอาเส้นขอบเทาออก */
+    outline: none;                 /* เอาเส้นเอาต์ไลน์ออก */
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-modal-reject:hover {
+    background: #b71c1c;           /* สีแดงเข้มขึ้นเมื่อเอาเมาส์ชี้ */
+    color: #FFFFFF;
+    transform: translateY(-1px);  /* ลอยขึ้นเล็กน้อยเหมือนปุ่มยืนยัน */
+}
+
+.btn-modal-reject:active {
+    transform: translateY(0);
 }
 
 /* ==========================================================================

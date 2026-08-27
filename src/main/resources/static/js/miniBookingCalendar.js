@@ -90,13 +90,6 @@ function renderMiniCal() {
 
         cell.textContent = d;
 
-        if (isFull && !isPast) {
-            const mark = document.createElement("span");
-            mark.className = "mini-cal-full-mark";
-            mark.textContent = "✕";
-            cell.appendChild(mark);
-        }
-
         if (Array.isArray(quality) && quality.length > 0) {
             cell.setAttribute("title", quality.map(function(q) { return q.label; }).join(", "));
         }

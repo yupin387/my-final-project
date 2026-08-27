@@ -364,37 +364,6 @@ button.nav-item {
     flex-shrink: 0;
 }
 
-/* ========== FILTER BUTTONS (ประเภทงานด้านบน - ขยายใหญ่ขึ้น) ========== */
-.filter-wrapper {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-}
-
-.btn-filter {
-    padding: 12px 30px;
-    border-radius: 50px;
-    border: 1.5px solid var(--accent-gold);
-    background: transparent;
-    color: var(--brown-mid);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1rem;
-    font-family: 'Sarabun', sans-serif;
-    transition: all 0.2s ease;
-}
-
-.btn-filter:hover,
-.btn-filter.active-link {
-    background: var(--accent-gold);
-    color: #FFFFFF;
-    border-color: var(--accent-gold);
-    box-shadow: 0 4px 14px rgba(217, 164, 65, 0.4);
-    transform: translateY(-1px);
-}
-
 /* ========== SUMMARY CARD ========== */
 .summary-card {
     background: var(--white);
@@ -428,6 +397,16 @@ button.nav-item {
     width: 1.5px;
     align-self: stretch;
     background: linear-gradient(to bottom, transparent, var(--cream-border), transparent);
+}
+
+/* กล่องคะแนนเฉลี่ยรวมเดี่ยว (ไม่มีสัดส่วนการให้คะแนนแล้ว) ให้มีขนาดพอดีเนื้อหาและอยู่กึ่งกลาง */
+.summary-card-solo {
+    justify-content: center;
+    width: fit-content;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 26px 48px;
 }
 
 .rating-big {
@@ -471,49 +450,6 @@ button.nav-item {
 .rating-count {
     font-size: 12px;
     color: var(--text-muted);
-}
-
-/* ========== RATING BARS ========== */
-.rating-bars { flex: 1; }
-
-.rating-bars-title {
-    font-weight: 700;
-    font-size: 13px;
-    color: var(--brown-dark);
-    margin-bottom: 12px;
-}
-
-.bar-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-    font-size: 13px;
-    color: var(--text-body);
-}
-
-.bar-label { width: 48px; text-align: right; flex-shrink: 0; }
-
-.bar-track {
-    flex: 1;
-    height: 8px;
-    background: var(--cream-mid);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.bar-fill {
-    height: 100%;
-    background: var(--accent-gold);
-    border-radius: 10px;
-    transition: width 0.5s ease;
-}
-
-.bar-pct {
-    width: 38px;
-    font-size: 11px;
-    color: var(--text-light);
-    text-align: right;
 }
 
 /* ========== STAR FILTER ROW (ปุ่มกดกรองดาวด้านล่างสถิติ - ขยายใหญ่ขึ้น) ========== */
@@ -569,6 +505,100 @@ button.nav-item {
 
 .btn-star-filter.active-link .btn-star-filter-count {
     color: rgba(255, 255, 255, 0.9);
+}
+
+/* ดรอปดาวน์เลือกประเภทงาน (custom dropdown - คุมสไตล์กรอบ/รายการเองได้เต็มที่) */
+.ceremony-dropdown {
+    position: relative;
+}
+
+.ceremony-dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 30px;
+    border: 1.5px solid var(--accent-gold-pale);
+    background: var(--cream-warm);
+    color: var(--brown-mid);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.ceremony-dropdown-arrow {
+    font-size: 11px;
+    line-height: 1;
+    transition: transform 0.2s;
+}
+
+.ceremony-dropdown-toggle.menu-open .ceremony-dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.ceremony-dropdown-toggle:hover {
+    border-color: var(--accent-gold);
+}
+
+.ceremony-dropdown-toggle:focus,
+.ceremony-dropdown-toggle:focus-visible {
+    outline: none;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.25);
+}
+
+.ceremony-dropdown-toggle.active-link {
+    background: var(--accent-gold);
+    color: #FFFFFF;
+    border-color: var(--accent-gold);
+    box-shadow: 0 4px 12px rgba(217, 164, 65, 0.35);
+}
+
+/* กล่องรายการที่เด้งลงมา - ขอบมนสวยงาม ไม่ใช่สี่เหลี่ยมทื่อ ๆ */
+.ceremony-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 200px;
+    background: #FFFFFF;
+    border: 1.5px solid var(--accent-gold-pale);
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(122, 35, 64, 0.15);
+    padding: 8px;
+    z-index: 20;
+}
+
+.ceremony-dropdown-menu.show {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.ceremony-dropdown-item {
+    display: block;
+    padding: 9px 14px;
+    border-radius: 10px;
+    color: var(--brown-mid);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+}
+
+.ceremony-dropdown-item:hover {
+    background: var(--gold-pale);
+    color: var(--brown-dark);
+}
+
+/* รายการที่กำลังเลือกอยู่ - สีชมพูอ่อน แทนสีฟ้า default ของเบราว์เซอร์ */
+.ceremony-dropdown-item.is-selected {
+    background: var(--gold-glow);
+    color: var(--brown-dark);
+    font-weight: 700;
 }
 
 /* ========== REVIEW CARD ========== */
@@ -852,13 +882,8 @@ button.nav-item {
     .navbar-title  { font-size: 20px; }
     .navbar-menu   { display: none; }
     .summary-card  { flex-direction: column; gap: 24px; padding: 24px; }
-    .summary-divider-v { display: none; }
-    .rating-bars   { width: 100%; }
     .page-wrapper  { padding: 28px 20px 40px; }
-    .filter-wrapper{ gap: 8px; }
-    .btn-filter    { padding: 10px 22px; font-size: 0.95rem; }
     .review-card, .summary-card { padding: 22px; }
-    .bar-pct       { width: 32px; font-size: 10px; }
     .review-body   { flex-direction: column; }
     .review-img    { width: 100%; height: auto; max-width: 220px; }
 }

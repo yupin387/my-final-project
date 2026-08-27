@@ -509,7 +509,7 @@
             <button type="button" class="btn-secondary" onclick="closeConfirmModal()">ยกเลิก</button>
             <form id="confirmQuotationForm" action="${pageContext.request.contextPath}/member/quotation/confirm" method="post" style="margin:0;">
                 <input type="hidden" name="quotationId" value="${q.quotationId}">
-                <button type="submit" class="btn-confirm-final">ยืนยันรายการ</button>
+                <button type="submit" class="btn-confirm-final" style="background-color: #28a745; color: #ffffff;">ยืนยันอนุมัติ</button>
             </form>
         </div>
     </div>

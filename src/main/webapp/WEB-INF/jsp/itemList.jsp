@@ -63,8 +63,7 @@
             <a href="${pageContext.request.contextPath}/staff/items/add" class="btn-add">+ เพิ่ม Item</a>
         </div>
 
-        <%-- ========== FILTER — dropdown ประเภท Item + dropdown ประเภทงานพิธี (ทั้ง 3 ประเภท) ========== --%>
-        <%-- FIX: เอาอิโมจิออกจากทั้งสอง dropdown ตามที่ขอ เหลือแค่ข้อความล้วน --%>
+        <%-- ========== FILTER ========== --%>
         <div class="filter-wrapper">
             <label for="typeFilter" class="filter-label">กรองตามประเภท:</label>
             <select id="typeFilter" class="filter-select" onchange="applyFilters()">
@@ -79,8 +78,6 @@
                 </c:forEach>
             </select>
 
-            <%-- FIX: เพิ่มตัวกรองประเภทงานพิธีทั้ง 3 ประเภท (ทำบุญบ้าน / ขึ้นบ้านใหม่ / ทำบุญบริษัทหรือออฟฟิศ)
-                 ใช้ ceremonyTypeOrder ที่ controller ส่งมา เพื่อให้ลำดับตรงกับที่ใช้ทั่วทั้งระบบ --%>
            <label for="ceremonyTypeFilter" class="filter-label">กรองตามประเภทงาน:</label>
             <select id="ceremonyTypeFilter" class="filter-select" onchange="applyFilters()">
                 <option value="all" ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'selected' : ''}>
@@ -134,7 +131,6 @@
                             <td class="item-name">${item.itemName}</td>
                             <td><span class="type-badge">${item.itemType.itemTypeName}</span></td>
                             <td>
-                                <%-- FIX: เปลี่ยนจากอิโมจิเป็นจุดสี (เหมือนหน้าคำถาม) --%>
                                 <c:forEach var="t" items="${itemCeremonyTypes[item.itemId]}">
                                     <c:choose>
                                         <c:when test="${t eq 'ทำบุญบ้าน'}">
@@ -180,10 +176,9 @@
 
     </div>
     
-<%-- ===== Footer (สำหรับหัวหน้างาน) ===== --%>
+<%-- ===== FOOTER ===== --%>
 <footer class="site-footer">
 
-    <%-- ===== ลายดอกบัวมุมล่างขวา (เกาะติด footer) ===== --%>
     <img src="${pageContext.request.contextPath}/static/images/lotus-corner.png"
          alt="" class="lotus-decoration" aria-hidden="true">
 
@@ -201,15 +196,8 @@
     <%-- ========== CONFIRM DELETE MODAL ========== --%>
     <div class="modal-overlay" id="confirmModal">
         <div class="modal-box">
-            <div class="modal-ornament">
-                <div class="orn-line"></div>
-                <div class="orn-diamond-sm"></div>
-                <div class="orn-diamond"></div>
-                <div class="orn-diamond-sm"></div>
-                <div class="orn-line right"></div>
-            </div>
             <div class="modal-title">ยืนยันการลบ</div>
-            <div class="modal-desc">คุณต้องการลบรายการนี้ใช่หรือไม่?<br>การกระทำนี้ไม่สามารถย้อนกลับได้</div>
+            <div class="modal-desc">คุณต้องการลบรายการนี้ใช่หรือไม่?<br>เมื่อทำการลบแล้วไม่สามารถย้อนกลับได้</div>
             <div class="modal-actions">
                 <button class="modal-btn-cancel" onclick="closeModal()">ยกเลิก</button>
                 <button class="modal-btn-confirm" onclick="confirmDelete()">ยืนยันลบ</button>
@@ -228,8 +216,6 @@
         }
     });
 
-    // FIX: รวมค่าจาก dropdown ทั้งสองตัว (ประเภท Item + ประเภทงานพิธี)
-    // แล้ว navigate ไป URL เดียวที่มีทั้งสอง query param เพื่อให้กรองซ้อนกันได้
     function applyFilters() {
         var typeId = document.getElementById('typeFilter').value;
         var ceremonyType = document.getElementById('ceremonyTypeFilter').value;

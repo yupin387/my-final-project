@@ -17,16 +17,23 @@ document.addEventListener('click', function (e) {
 function confirmDelete(staffId, staffName) {
     Swal.fire({
         title: 'ยืนยันการลบข้อมูล',
-        html: `ต้องการลบ <strong>${staffName}</strong> ออกจากระบบ?<br><span style="font-size:13px;color:#999;">การลบนี้ไม่สามารถย้อนกลับได้</span>`,
+        html: `
+            <div style="font-size: 13.5px; color: #8C7480; margin-bottom: 12px;">คุณต้องการลบข้อมูลนี้ใช่หรือไม่?</div>
+            <div class="swal-name-box">
+                ${staffName}
+            </div>
+            <div style="font-size: 12px; color: #A08C95; margin-top: 10px;">การลบนี้ไม่สามารถย้อนกลับได้</div>
+        `,
         icon: false,
         showCancelButton: true,
         confirmButtonText: 'ลบข้อมูล',
         cancelButtonText: 'ยกเลิก',
-        width: '520px',
+        reverseButtons: true, // <--- สลับเอาปุ่ม Cancel (ยกเลิก) มาไว้ฝั่งซ้าย
+        width: '420px',
         customClass: {
             popup: 'my-rounded-popup',
-            confirmButton: 'swal-btn-confirm',
-            cancelButton: 'swal-btn-cancel'
+            confirmButton: 'swal-btn-confirm-delete',
+            cancelButton: 'swal-btn-cancel-custom'
         },
         buttonsStyling: false
     }).then((result) => {

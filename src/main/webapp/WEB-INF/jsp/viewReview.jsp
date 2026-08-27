@@ -190,33 +190,8 @@
         <div class="gold-line"></div>
     </div>
 
-    <div class="filter-wrapper">
-        <c:url var="urlAll" value="/reviews">
-            <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
-        </c:url>
-        <a href="${urlAll}" class="btn-filter ${empty selectedCeremonyType ? 'active-link' : ''}">ทั้งหมด</a>
-
-        <c:url var="urlHome" value="/reviews">
-            <c:param name="type" value="ทำบุญบ้าน"/>
-            <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
-        </c:url>
-        <a href="${urlHome}" class="btn-filter ${selectedCeremonyType == 'ทำบุญบ้าน' ? 'active-link' : ''}">งานทำบุญบ้าน</a>
-
-        <c:url var="urlNewHouse" value="/reviews">
-            <c:param name="type" value="ขึ้นบ้านใหม่"/>
-            <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
-        </c:url>
-        <a href="${urlNewHouse}" class="btn-filter ${selectedCeremonyType == 'ขึ้นบ้านใหม่' ? 'active-link' : ''}">งานขึ้นบ้านใหม่</a>
-
-        <c:url var="urlCompany" value="/reviews">
-            <c:param name="type" value="ทำบุญบริษัทหรือออฟฟิศ"/>
-            <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
-        </c:url>
-        <a href="${urlCompany}" class="btn-filter ${selectedCeremonyType == 'ทำบุญบริษัทหรือออฟฟิศ' ? 'active-link' : ''}">งานทำบุญออฟฟิศ</a>
-    </div>
-
-    <%-- ========== SUMMARY CARD ========== --%>
-    <div class="summary-card">
+    <%-- ========== SUMMARY CARD (เหลือแค่กล่องคะแนนเฉลี่ยรวม) ========== --%>
+    <div class="summary-card summary-card-solo">
         <div class="rating-big">
             <h1><fmt:formatNumber value="${avgRating}" pattern="0.00"/></h1>
             <div class="rating-label-sub">คะแนนเฉลี่ยรวม</div>
@@ -230,33 +205,50 @@
             </div>
             <div class="rating-count">จากผู้ใช้บริการทั้งหมด ${reviews.size()} ท่าน</div>
         </div>
-        <div class="summary-divider-v"></div>
-
-        <div class="rating-bars">
-            <div class="rating-bars-title">สัดส่วนการให้คะแนน</div>
-            <c:forEach begin="1" end="5" var="i">
-                <c:set var="star"  value="${6 - i}"/>
-                <c:set var="count" value="${starCounts[star] != null ? starCounts[star] : 0}"/>
-                <c:set var="total" value="${reviews.size() > 0 ? reviews.size() : 1}"/>
-                <c:set var="pct"   value="${count * 100 / total}"/>
-
-                <%-- เปลี่ยนจาก tag <a> เป็น div เพื่อไม่ให้กดคลิกกรองในกล่องสถิติ --%>
-                <div class="bar-row ${selectedRating == star ? 'bar-row-active' : ''}">
-                    <span class="bar-label">${star} ดาว</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="width:${pct}%"></div>
-                    </div>
-                    <span style="width:24px; font-size:12px; color:var(--text-muted);">${count}</span>
-                    <span class="bar-pct">(<fmt:formatNumber value="${pct}" pattern="0"/>%)</span>
-                </div>
-            </c:forEach>
-        </div>
     </div>
 
-    <%-- ===== แถวปุ่มกรองดาวด้านล่าง (ขนาดใหญ่ขึ้น)
+    <%-- ===== แถวตัวกรองด้านล่าง: [ดรอปดาวน์เลือกประเภทงาน รวม "ดูรีวิวทั้งหมด"] [กรองดาว 5-1]
      FIX: กดปุ่มดาวที่กำลังกรองอยู่ซ้ำ (toggle) จะเอาตัวกรอง rating ออก
      กลับไปแสดงทั้งหมด หรือทั้งหมดของประเภทงานที่เลือกอยู่ (ถ้ามีการกรอง type ค้างอยู่) ===== --%>
 	<div class="star-filter-row">
+	    <c:url var="urlAll" value="/reviews">
+	        <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+	    </c:url>
+	    <c:url var="urlHome" value="/reviews">
+	        <c:param name="type" value="ทำบุญบ้าน"/>
+	        <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+	    </c:url>
+	    <c:url var="urlNewHouse" value="/reviews">
+	        <c:param name="type" value="ขึ้นบ้านใหม่"/>
+	        <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+	    </c:url>
+	    <c:url var="urlCompany" value="/reviews">
+	        <c:param name="type" value="ทำบุญบริษัทหรือออฟฟิศ"/>
+	        <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+	    </c:url>
+
+	    <c:choose>
+	        <c:when test="${empty selectedCeremonyType}"><c:set var="ceremonyLabel" value="ดูรีวิวทั้งหมด"/></c:when>
+	        <c:when test="${selectedCeremonyType == 'ทำบุญบ้าน'}"><c:set var="ceremonyLabel" value="งานทำบุญบ้าน"/></c:when>
+	        <c:when test="${selectedCeremonyType == 'ขึ้นบ้านใหม่'}"><c:set var="ceremonyLabel" value="งานขึ้นบ้านใหม่"/></c:when>
+	        <c:otherwise><c:set var="ceremonyLabel" value="งานทำบุญออฟฟิศ"/></c:otherwise>
+	    </c:choose>
+
+	    <div class="ceremony-dropdown">
+	        <button type="button"
+	                class="ceremony-dropdown-toggle ${not empty selectedCeremonyType ? 'active-link' : ''}"
+	                onclick="toggleCeremonyDropdown(event)">
+	            <span>${ceremonyLabel}</span>
+	            <span class="ceremony-dropdown-arrow">▾</span>
+	        </button>
+	        <div class="ceremony-dropdown-menu" id="ceremonyDropdownMenu">
+	            <a href="${urlAll}" class="ceremony-dropdown-item ${empty selectedCeremonyType ? 'is-selected' : ''}">ดูรีวิวทั้งหมด</a>
+	            <a href="${urlHome}" class="ceremony-dropdown-item ${selectedCeremonyType == 'ทำบุญบ้าน' ? 'is-selected' : ''}">งานทำบุญบ้าน</a>
+	            <a href="${urlNewHouse}" class="ceremony-dropdown-item ${selectedCeremonyType == 'ขึ้นบ้านใหม่' ? 'is-selected' : ''}">งานขึ้นบ้านใหม่</a>
+	            <a href="${urlCompany}" class="ceremony-dropdown-item ${selectedCeremonyType == 'ทำบุญบริษัทหรือออฟฟิศ' ? 'is-selected' : ''}">งานทำบุญออฟฟิศ</a>
+	        </div>
+	    </div>
+
 	    <c:forEach begin="1" end="5" var="i">
 	        <c:set var="star"  value="${6 - i}"/>
 	        <c:set var="count" value="${starCounts[star] != null ? starCounts[star] : 0}"/>
@@ -440,6 +432,23 @@ document.addEventListener('keydown', function (e) {
 // กันไม่ให้คลิกบนรูปในกล่อง lightbox แล้วปิดตัวเอง (ต้องคลิกพื้นหลังหรือปุ่ม × เท่านั้น)
 document.getElementById('reviewImageLightboxImg')?.addEventListener('click', function (e) {
     e.stopPropagation();
+});
+
+// ===== Dropdown ตัวกรองประเภทงาน (หน้ารีวิว) =====
+function toggleCeremonyDropdown(event) {
+    if (event) event.stopPropagation();
+    document.getElementById('ceremonyDropdownMenu')?.classList.toggle('show');
+    event.currentTarget.classList.toggle('menu-open');
+}
+
+document.addEventListener('click', function (e) {
+    const wrap = document.querySelector('.ceremony-dropdown');
+    const menu = document.getElementById('ceremonyDropdownMenu');
+    const toggleBtn = document.querySelector('.ceremony-dropdown-toggle');
+    if (menu && wrap && !wrap.contains(e.target)) {
+        menu.classList.remove('show');
+        toggleBtn?.classList.remove('menu-open');
+    }
 });
 </script>
 </body>

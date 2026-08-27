@@ -2,49 +2,29 @@
 
 /* =========================================================
    COLOR SYSTEM
-   ซิงก์ตัวแปร navbar/footer ให้เหมือนกับ staffAssignmentList.css 100%
-   (เดิมไฟล์นี้ใช้โทนส้ม #E8703A + ตัวอักษรขาว — แก้ให้เป็นโทนทองน้ำผึ้งเข้ม
-   + ตัวอักษรมารูน + accent-pink เหมือนกันทุกหน้าของหัวหน้างาน)
    ========================================================= */
 :root {
-	/* พื้นหลังสีครีมสว่างๆ */
 	--bg-light:       #FFFBF5;
-
-	/* สีหลัก — ทองน้ำผึ้งเข้ม (navbar/footer) เหมือนหน้า staffAssignmentList */
 	--peach-primary:  #EFC16B;
 	--peach-hover:    #B8872F;
 	--peach-pale:     #FDF5E6;
 	--peach-deep:     #CC9A44;
-
-	/* สีส้มอ่อน/ครีม */
 	--orange-light:   #F3C98B;
 	--orange-pale:    #FCF5E3;
-
-	/* สีทอง — เส้นกรอบบน-ล่าง navbar/footer แบบตันเส้นเดียว (โทนอ่อน ไม่เป็นน้ำตาล) */
 	--gold-primary:   #C89238;
 	--gold-hover:     #B8872F;
 	--gold-pale:      #FBF1DC;
 	--gold-light:     #F3DA9E;
-
-	/* สีชมพู-กุหลาบเข้ม — ใช้กับปุ่ม active, avatar (ให้เป็นชุดเดียวกันทุกหน้าของหัวหน้างาน) */
 	--accent-pink:      #C83568;
 	--accent-pink-mid:  #DF5A8D;
 	--accent-pink-pale: #FBEAF0;
-
-	/* สีตัวอักษรบน navbar/footer — มารูน อ่านง่ายบนพื้นทองอ่อน */
 	--nav-text-color: #63263E;
-
-	/* สีน้ำตาล (ตัวหนังสือ) */
 	--brown-text:     #4A3728; 
 	--brown-muted:    #8A7666;
-
-	/* สีสถานะ / เตือน สำหรับ Item */
 	--green-primary:  #2E9E5B;
 	--green-pale:     #E5F6EC;
 	--red-primary:    #D9534F;
 	--red-pale:       #FDF1F0;
-
-	/* สีขอบและเงา */
 	--white:          #FFFFFF;
 	--card-border:    #F0E2D3;
 	--shadow-soft:    rgba(201, 125, 28, 0.18);
@@ -65,7 +45,7 @@ body {
 	flex-direction: column;
 }
 
-/* ========== NAVBAR (สีเดียวกับ staffAssignmentList) ========== */
+/* ========== NAVBAR ========== */
 .navbar {
 	background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
 	padding: 0 40px;
@@ -247,11 +227,7 @@ body {
 	background: #FDF1F0;
 }
 
-/* ========== FLASH TOAST (กล่องแจ้งเตือนลอยกลางจอ) ==========
-   สำเร็จ -> เขียว, ผิดพลาด -> แดง, จัดกึ่งกลางด้านบนของหน้าจอ
-   ถ้าไฟล์ itemList.js ใช้ชื่อ class ต่างจากนี้ ส่ง itemList.js มาด้วย
-   เดี๋ยวจะปรับ selector ให้ตรงกันเป๊ะ
-   ================================================================= */
+/* ========== FLASH TOAST ========== */
 .flash-toast {
 	position: fixed;
 	top: 24px;
@@ -262,7 +238,7 @@ body {
 	align-items: center;
 	gap: 8px;
 	padding: 12px 24px;
-	border-radius: 4px;   /* เดิม 50px -> เปลี่ยนเป็นเหลี่ยม */
+	border-radius: 4px;
 	font-size: 14px;
 	font-weight: 700;
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -362,8 +338,6 @@ body {
 	margin-top: 8px;
 }
 
-/* ===== ปุ่มเพิ่ม Item เป็น "สีฟ้าทึบ" (ไม่มีไล่สี) ===== */
-/* ===== ปุ่มเพิ่ม Item เป็น "สีทองน้ำผึ้ง" (โทนเดียวกับ navbar/footer) ===== */
 .btn-add {
 	background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
 	color: var(--white);
@@ -385,6 +359,7 @@ body {
 	transform: translateY(-1px);
 	box-shadow: 0 5px 16px rgba(184, 135, 47, 0.35);
 }
+
 /* ========== TABS ========== */
 .tabs-wrapper {
 	display: flex;
@@ -433,7 +408,6 @@ body {
 	display: none;
 }
 
-/* ===== แถบหัวการ์ด "ชมพู-กุหลาบเข้ม" ให้เป็นชุดเดียวกับปุ่ม active/avatar ===== */
 .card-header-bar {
 	background: var(--accent-pink-mid);
 	padding: 14px 24px;
@@ -489,7 +463,6 @@ tr:hover td {
 	color: var(--brown-text);
 }
 
-/* ---- Type Badge ---- */
 .type-badge {
 	background: var(--gold-pale);
 	color: var(--gold-hover);
@@ -500,7 +473,6 @@ tr:hover td {
 	border: 1px solid var(--gold-primary);
 }
 
-/* ---- Ceremony Tag ---- */
 .ceremony-tag {
 	display: inline-block;
 	color: var(--brown-text);
@@ -519,14 +491,12 @@ tr:hover td {
 	background: var(--bg-light);
 }
 
-/* ---- Action Buttons ---- */
 .action-links {
 	display: flex;
 	gap: 8px;
 	align-items: center;
 }
 
-/* ===== ปุ่มแก้ไขในตาราง โทนสีฟ้าทึบ (ไม่มีไล่สี) ===== */
 .btn-edit {
 	color: #2563eb; 
 	text-decoration: none;
@@ -562,7 +532,6 @@ tr:hover td {
 	color: var(--white);
 }
 
-/* ---- Empty State ---- */
 .empty-state {
 	text-align: center;
 	padding: 50px;
@@ -570,7 +539,7 @@ tr:hover td {
 	font-size: 15px;
 }
 
-/* ========== CONFIRM DELETE MODAL ========== */
+/* ========== CONFIRM DELETE MODAL (ปรับให้เรียบมาตรฐาน) ========== */
 .modal-overlay {
 	display: none;
 	position: fixed;
@@ -578,7 +547,7 @@ tr:hover td {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: rgba(90, 74, 66, 0.55);
+	background: rgba(0, 0, 0, 0.5);
 	z-index: 8888;
 }
 
@@ -591,61 +560,24 @@ tr:hover td {
 
 .modal-box {
 	background: var(--white);
-	border-radius: 18px;
-	padding: 32px 36px 28px;
+	border-radius: 14px;
+	padding: 28px 32px 24px;
 	max-width: 380px;
 	width: 90%;
 	text-align: center;
-	border: 2px solid var(--gold-primary);
-	box-shadow: 0 12px 48px rgba(226, 143, 102, 0.3);
+	border: none;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 	animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 	position: relative;
 	overflow: hidden;
 }
 
 .modal-box::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	height: 3px;
-	background: var(--peach-primary);
+	display: none;
 }
 
 .modal-ornament {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
-	margin-bottom: 10px;
-}
-
-.modal-ornament .orn-line {
-	flex: 1;
-	max-width: 50px;
-	height: 1px;
-	background: var(--gold-primary);
-}
-
-.modal-ornament .orn-line.right {
-	background: var(--gold-primary);
-}
-
-.modal-ornament .orn-diamond {
-	width: 9px;
-	height: 9px;
-	background: var(--peach-primary);
-	transform: rotate(45deg);
-	flex-shrink: 0;
-}
-
-.modal-ornament .orn-diamond-sm {
-	width: 5px;
-	height: 5px;
-	background: var(--gold-primary);
-	transform: rotate(45deg);
-	flex-shrink: 0;
+	display: none;
 }
 
 .modal-title {
@@ -658,8 +590,8 @@ tr:hover td {
 .modal-desc {
 	font-size: 14px;
 	color: var(--brown-muted);
-	margin-bottom: 28px;
-	line-height: 1.7;
+	margin-bottom: 24px;
+	line-height: 1.6;
 }
 
 .modal-actions {
@@ -671,10 +603,10 @@ tr:hover td {
 .modal-btn-cancel {
 	flex: 1;
 	padding: 11px 0;
-	border: 1.5px solid var(--gold-primary);
+	border: 1px solid #D1D5DB;
 	background: var(--white);
 	color: var(--brown-text);
-	border-radius: 10px;
+	border-radius: 8px;
 	font-size: 14px;
 	font-weight: 700;
 	cursor: pointer;
@@ -682,16 +614,16 @@ tr:hover td {
 }
 
 .modal-btn-cancel:hover {
-	background: var(--peach-pale);
+	background: #F3F4F6;
 }
 
 .modal-btn-confirm {
 	flex: 1;
 	padding: 11px 0;
 	border: none;
-	background: #D9534F; /* สีแดงทึบ ไม่ไล่สี */
+	background: #D9534F;
 	color: var(--white);
-	border-radius: 10px;
+	border-radius: 8px;
 	font-size: 14px;
 	font-weight: 700;
 	cursor: pointer;
@@ -729,7 +661,7 @@ tr:hover td {
 	.lotus-decoration { width: 100px; right: 16px; }
 }
 
-/* ========== FOOTER (สีเดียวกับ staffAssignmentList) ========== */
+/* ========== FOOTER ========== */
 .site-footer {
 	background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
 	color: var(--nav-text-color);
@@ -807,7 +739,8 @@ tr:hover td {
 	th, td { padding: 10px 12px; }
 	.footer-content { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
-/* ========== FILTER DROPDOWN (แทน tabs — รองรับประเภท Item ที่เพิ่มไม่จำกัด) ========== */
+
+/* ========== FILTER DROPDOWN ========== */
 .filter-wrapper {
 	display: flex;
 	align-items: center;
@@ -851,7 +784,7 @@ tr:hover td {
 	.filter-select { width: 100%; }
 }
 
-/* ========== CEREMONY DOT (จุดสีแทนอิโมจิประจำประเภทพิธี) ========== */
+/* ========== CEREMONY DOT ========== */
 .ceremony-dot-lg {
 	display: inline-block;
 	width: 16px;
@@ -861,7 +794,7 @@ tr:hover td {
 	margin-right: 4px;
 }
 
-.dot-home     { background: #C83568; }  /* ชมพู-กุหลาบเข้ม */
-.dot-newhome  { background: #2E9E5B; }  /* เขียว */
-.dot-company  { background: #2E75C4; }  /* ฟ้า-น้ำเงิน */
+.dot-home     { background: #C83568; }
+.dot-newhome  { background: #2E9E5B; }
+.dot-company  { background: #2E75C4; }
 .dot-all      { background: transparent; border: 1.5px solid var(--gold-primary); }

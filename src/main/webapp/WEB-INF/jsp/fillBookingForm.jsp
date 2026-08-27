@@ -49,7 +49,7 @@
                 <a href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
                     class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
             </div>
-        </div>
+        </div>	
 
         <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item active">รายการจอง</a>
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
@@ -122,7 +122,7 @@
                                     <div class="mini-cal-legend">
                                         <span><i class="mini-cal-dot mini-cal-dot-free"></i>ว่าง</span>
                                         <span><i class="mini-cal-dot mini-cal-dot-almost"></i>เหลือคิวสุดท้าย</span>
-                                        <span><i class="mini-cal-dot mini-cal-dot-full"></i>เต็มคิว</span>
+                                        <span><i class="mini-cal-dot mini-cal-dot-full"></i>คิวเต็ม</span>
                                     </div>
                                     <p id="miniCalSelectedText" class="mini-cal-selected-text">ยังไม่ได้เลือกวันที่</p>
                                 </div>

@@ -490,7 +490,7 @@
             <p class="modal-footer-note" style="margin-top: 10px;">การปฏิเสธไม่สามารถย้อนกลับได้</p>
             <div class="modal-btn-group">
                 <button type="button" class="btn-modal-cancel" onclick="closeRejectModal()">ยกเลิก</button>
-                <button type="submit" class="btn-modal-reject">ยืนยันปฏิเสธ</button>
+                <button type="submit" class="btn-modal-reject">ยืนยันการปฏิเสธ</button>
             </div>
         </form>
     </div>

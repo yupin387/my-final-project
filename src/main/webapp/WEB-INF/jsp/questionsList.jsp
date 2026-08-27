@@ -9,8 +9,9 @@
     <title>รายการคำถามแต่ละพิธี - บุญมีนำพา จัดงานบุญ</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/questionList.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/questionList.css?v=2">
 </head>
 <body>
 
@@ -41,8 +42,6 @@
     </div>
 </nav>
 
-
-
 <%-- ========== PAGE WRAPPER ========== --%>
 <div class="page-wrapper">
 
@@ -71,7 +70,7 @@
         <a href="${pageContext.request.contextPath}/organizer/questions/add" class="btn-add" style="text-decoration: none;">+ เพิ่มคำถาม</a>
     </div>
 
-    <%-- ========== TABS — กรองตามประเภทงานบุญ (3 ประเภท) พร้อมจุดสีประจำงานนั้นๆ ========== --%>
+    <%-- ========== TABS ========== --%>
     <div class="tabs-wrapper">
         <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=all"
            class="tab-btn ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'active' : ''}">
@@ -117,61 +116,59 @@
                     <tr>
                         <td><div class="circle-num">${status.index + 1}</div></td>
                         <td class="question-text">${q.questionsText}</td>
-                   <td>
-    <c:choose>
-        <c:when test="${not empty q.ceremonies}">
-            <c:choose>
-                <%-- กำลังกรองดูเฉพาะพิธีใดพิธีหนึ่งอยู่ -> โชว์แค่จุดสีของพิธีนั้น --%>
-                <c:when test="${not empty selectedCeremonyType and selectedCeremonyType ne 'all'}">
-                    <c:choose>
-                        <c:when test="${selectedCeremonyType eq 'ทำบุญบ้าน'}">
-                            <span class="ceremony-dot ceremony-dot-lg dot-home" title="${selectedCeremonyType}"></span>
-                        </c:when>
-                        <c:when test="${selectedCeremonyType eq 'ขึ้นบ้านใหม่'}">
-                            <span class="ceremony-dot ceremony-dot-lg dot-newhome" title="${selectedCeremonyType}"></span>
-                        </c:when>
-                        <c:when test="${selectedCeremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
-                            <span class="ceremony-dot ceremony-dot-lg dot-company" title="${selectedCeremonyType}"></span>
-                        </c:when>
-                        <c:otherwise>
-                            <span class="ceremony-dot ceremony-dot-lg dot-all" title="${selectedCeremonyType}"></span>
-                        </c:otherwise>
-                    </c:choose>
-                </c:when>
-                <%-- ดู "ทั้งหมด" -> โชว์จุดสีของทุกประเภทพิธีที่เกี่ยวข้องแบบไม่ซ้ำ เรียงติดกัน --%>
-                <c:otherwise>
-                    <c:set var="shownTypes" value="|" />
-                    <c:forEach var="cm" items="${q.ceremonies}">
-                        <c:if test="${not fn:contains(shownTypes, '|'.concat(cm.ceremonyType).concat('|'))}">
+                        <td>
                             <c:choose>
-                                <c:when test="${cm.ceremonyType eq 'ทำบุญบ้าน'}">
-                                    <span class="ceremony-dot ceremony-dot-lg dot-home" title="${cm.ceremonyType}"></span>
-                                </c:when>
-                                <c:when test="${cm.ceremonyType eq 'ขึ้นบ้านใหม่'}">
-                                    <span class="ceremony-dot ceremony-dot-lg dot-newhome" title="${cm.ceremonyType}"></span>
-                                </c:when>
-                                <c:when test="${cm.ceremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
-                                    <span class="ceremony-dot ceremony-dot-lg dot-company" title="${cm.ceremonyType}"></span>
+                                <c:when test="${not empty q.ceremonies}">
+                                    <c:choose>
+                                        <c:when test="${not empty selectedCeremonyType and selectedCeremonyType ne 'all'}">
+                                            <c:choose>
+                                                <c:when test="${selectedCeremonyType eq 'ทำบุญบ้าน'}">
+                                                    <span class="ceremony-dot ceremony-dot-lg dot-home" title="${selectedCeremonyType}"></span>
+                                                </c:when>
+                                                <c:when test="${selectedCeremonyType eq 'ขึ้นบ้านใหม่'}">
+                                                    <span class="ceremony-dot ceremony-dot-lg dot-newhome" title="${selectedCeremonyType}"></span>
+                                                </c:when>
+                                                <c:when test="${selectedCeremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                                    <span class="ceremony-dot ceremony-dot-lg dot-company" title="${selectedCeremonyType}"></span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="ceremony-dot ceremony-dot-lg dot-all" title="${selectedCeremonyType}"></span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:set var="shownTypes" value="|" />
+                                            <c:forEach var="cm" items="${q.ceremonies}">
+                                                <c:if test="${not fn:contains(shownTypes, '|'.concat(cm.ceremonyType).concat('|'))}">
+                                                    <c:choose>
+                                                        <c:when test="${cm.ceremonyType eq 'ทำบุญบ้าน'}">
+                                                            <span class="ceremony-dot ceremony-dot-lg dot-home" title="${cm.ceremonyType}"></span>
+                                                        </c:when>
+                                                        <c:when test="${cm.ceremonyType eq 'ขึ้นบ้านใหม่'}">
+                                                            <span class="ceremony-dot ceremony-dot-lg dot-newhome" title="${cm.ceremonyType}"></span>
+                                                        </c:when>
+                                                        <c:when test="${cm.ceremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                                            <span class="ceremony-dot ceremony-dot-lg dot-company" title="${cm.ceremonyType}"></span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="ceremony-dot ceremony-dot-lg dot-all" title="${cm.ceremonyType}"></span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <c:set var="shownTypes" value="${shownTypes}${cm.ceremonyType}|" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="ceremony-dot ceremony-dot-lg dot-all" title="${cm.ceremonyType}"></span>
+                                    <span class="ceremony-dot ceremony-dot-lg dot-all" title="ใช้กับทุกประเภทพิธี"></span>
                                 </c:otherwise>
                             </c:choose>
-                            <c:set var="shownTypes" value="${shownTypes}${cm.ceremonyType}|" />
-                        </c:if>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
-        </c:when>
-        <c:otherwise>
-            <span class="ceremony-dot ceremony-dot-lg dot-all" title="ใช้กับทุกประเภทพิธี"></span>
-        </c:otherwise>
-    </c:choose>
-</td>
+                        </td>
                         <td>
                             <div class="action-links">
                                 <a href="${pageContext.request.contextPath}/organizer/questions/edit/${q.questionsId}" class="btn-edit" style="text-decoration: none;">แก้ไข</a>
-                                <button type="button" class="btn-del" onclick="prepareDelete('${q.questionsId}')">ลบ</button>
+                                <button type="button" class="btn-del" onclick="confirmDelete('${q.questionsId}', '${fn:escapeXml(q.questionsText)}')">ลบ</button>
                             </div>
                         </td>
                     </tr>
@@ -185,42 +182,6 @@
         </table>
     </div>
 
-
-
-</div><%-- /page-wrapper --%>
-
-<%-- ========== DELETE MODAL ========== --%>
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <div class="w-100">
-                   <div class="section-ornament">
-    <div class="ornament-line"></div>
-    <div class="ornament-diamond-sm"></div>
-    <div class="ornament-diamond"></div>
-    <div class="ornament-diamond-sm"></div>
-    <div class="ornament-line right"></div>
-</div>
-                    <h5 class="modal-title">ยืนยันการลบข้อมูล</h5>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                คุณแน่ใจหรือไม่ว่าต้องการลบคำถามนี้ออกจากระบบ?
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">ยกเลิก</button>
-                <form id="confirmDeleteForm" method="post">
-                    <button type="submit" class="btn-del" style="border: none; padding: 9px 26px; border-radius: 10px; font-size: 14px;">ตกลง</button>
-                </form>
-            </div>
-
-        </div>
-    </div>
 </div>
 
 <!-- ===== FOOTER ===== -->
@@ -233,26 +194,14 @@
         </div>
         <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>
-  
 </footer>
 
 <%-- ========== SCRIPTS ========== --%>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // กำหนด global variable ไว้ให้ไฟล์ js ใช้งาน
     const contextPath = "${pageContext.request.contextPath}";
 </script>
-<script src="${pageContext.request.contextPath}/static/js/questionList.js"></script>
-<script>
-    function toggleDropdown() {
-        document.getElementById('dropdownMenu').classList.toggle('show');
-    }
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.user-info')) {
-            document.getElementById('dropdownMenu').classList.remove('show');
-        }
-    });
-</script>
-
+<!-- เติม ?v=1 ต่อท้ายเพื่อบังคับอัปเดต cache -->
+<script src="${pageContext.request.contextPath}/static/js/questionList.js?v=1"></script>
 </body>
 </html>

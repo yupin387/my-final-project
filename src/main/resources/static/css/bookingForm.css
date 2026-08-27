@@ -639,6 +639,48 @@ textarea.form-control {
 .mini-cal-cell-today { outline: 2px solid var(--accent-gold); }
 .mini-cal-cell-selected { outline: 2px solid #B0345A; box-shadow: 0 0 0 2px rgba(224,87,127,0.25); }
 
+.mini-cal-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 16px;
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px dashed var(--accent-gold-pale);
+}
+.mini-cal-legend span {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 11.5px;
+	color: var(--text-mid);
+	font-weight: 600;
+}
+.mini-cal-dot {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+.mini-cal-dot-free { background: #6FCF97; box-shadow: 0 0 0 2px #E9F7EF; }
+.mini-cal-dot-almost { background: var(--accent-gold); box-shadow: 0 0 0 2px #FFF3D6; }
+.mini-cal-dot-full { background: #E0577F; box-shadow: 0 0 0 2px #FBE3E7; }
+
+.mini-cal-selected-text {
+	margin-top: 10px;
+	padding: 8px 12px;
+	border-radius: 8px;
+	background: var(--cream-mid);
+	color: var(--brown-mid);
+	font-size: 12.5px;
+	font-weight: 600;
+	text-align: center;
+}
+.mini-cal-selected-text::before {
+	content: "📅";
+	margin-right: 6px;
+}
+
 .item-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 .item-card { position: relative; display: flex; flex-direction: column; border: 1.5px solid var(--cream-border-soft); border-radius: 10px; padding: 10px; cursor: pointer; background: #FFFFFF; transition: border-color .15s, box-shadow .15s; }
 .item-card:hover { border-color: var(--accent-gold); }
@@ -656,3 +698,29 @@ textarea.form-control {
 .map-picker-btn:hover { background: #C68F2E; }
 .map-picker-btn-outline { background: #FFFFFF; color: var(--accent-gold); border: 1.5px solid var(--accent-gold); }
 .leaflet-pane, .leaflet-top, .leaflet-bottom { z-index: 400 !important; }
+
+.map-picker-selected-text {
+	margin-top: 10px;
+	padding: 8px 12px;
+	border-radius: 8px;
+	background: var(--cream-mid);
+	color: var(--brown-mid);
+	font-size: 12.5px;
+	font-weight: 600;
+	text-align: center;
+}
+.map-picker-selected-text::before {
+	content: "📍";
+	margin-right: 6px;
+}
+.map-picker-nav-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 8px;
+	font-size: 12.5px;
+	font-weight: 700;
+	color: var(--accent-gold);
+	text-decoration: none;
+}
+.map-picker-nav-link:hover { text-decoration: underline; }

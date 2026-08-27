@@ -20,7 +20,7 @@
     <span id="flash-error" data-msg="${error}" style="display:none;"></span>
 </c:if>
 
-<%-- ========== NAVBAR (ให้ตรงกับหน้า home / viewBooking) ========== --%>
+<%-- ========== NAVBAR ========== --%>
 <nav class="navbar-custom">
     <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/home" style="text-decoration: none;">
         <div class="lotus-icon">
@@ -31,7 +31,6 @@
     <div class="navbar-center">
         <a href="${pageContext.request.contextPath}/home" class="nav-link-item">หน้าหลัก</a>
 
-        <%-- ===== เมนู บริการ/แพ็กเกจ (dropdown) ===== --%>
         <div class="nav-dropdown-wrap">
             <a href="javascript:void(0);" class="nav-link-item nav-dropdown-toggle">
                 บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
@@ -44,7 +43,6 @@
             </div>
         </div>
 
-        <%-- ===== เมนู ปฏิทิน (dropdown แยกฤกษ์ดี / ล้านนา) ===== --%>
         <div class="nav-dropdown-wrap">
             <a href="${pageContext.request.contextPath}/calendar" class="nav-link-item nav-dropdown-toggle">
                 ปฏิทิน <span class="nav-caret">▾</span>
@@ -58,10 +56,9 @@
         </div>
 
         <a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">รายการจอง</a>
-       
         <a href="${pageContext.request.contextPath}/reviews" class="nav-link-item">รีวิว</a>
     </div>
-    <div class="dropdown-wrap">
+    <div class="dropdown-wrap" id="profileDropdown">
         <div class="user-profile-pill" onclick="toggleDropdown()">
             <div class="avatar-circle-nav">${fn:substring(sessionScope.user.memberFirstName, 0, 1)}</div>
             <div class="user-info-text">
@@ -75,7 +72,6 @@
         </div>
     </div>
 </nav>
-
 
 <%-- Flash Banner --%>
 <div id="flash-banner-container"></div>
@@ -100,7 +96,6 @@
                 <div class="profile-name">${member.memberFirstName} ${member.memberLastName}</div>
                 <div class="profile-email">${member.memberEmail}</div>
             </div>
-           
         </div>
     </div>
 
@@ -111,20 +106,23 @@
             <span class="form-card-subtitle">จัดการข้อมูลให้เป็นปัจจุบัน</span>
         </div>
         <div class="form-card-body">
-            <form action="${pageContext.request.contextPath}/updateProfile" method="post">
+            <!-- แก้ไขบรรทัดนี้ -->
+            <form action="${pageContext.request.contextPath}/updateProfile" method="post" id="editProfileForm" onsubmit="return validateEditProfileForm();">
                 <input type="hidden" name="memberId" value="${member.memberId}">
 
                 <%-- ชื่อ + นามสกุล --%>
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">ชื่อ <span class="required">*</span></label>
-                        <input type="text" name="memberFirstName" class="form-control"
-                               value="${member.memberFirstName}" required>
+                        <input type="text" id="memberFirstName" name="memberFirstName" class="form-control"
+                               value="${member.memberFirstName}">
+                        <div id="firstNameError" class="error-message"></div>
                     </div>
-                    <div class="form-group">
+          	          <div class="form-group">
                         <label class="form-label">นามสกุล <span class="required">*</span></label>
-                        <input type="text" name="memberLastName" class="form-control"
-                               value="${member.memberLastName}" required>
+                        <input type="text" id="memberLastName" name="memberLastName" class="form-control"
+                               value="${member.memberLastName}">
+                        <div id="lastNameError" class="error-message"></div>
                     </div>
                 </div>
 
@@ -132,12 +130,13 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">เบอร์โทรศัพท์ <span class="required">*</span></label>
-                        <input type="text" name="phoneNumber" class="form-control"
-                               value="${member.phoneNumber}" required>
+                        <input type="text" id="phoneNumber" name="phoneNumber" class="form-control"
+                               value="${member.phoneNumber}" maxlength="10">
+                        <div id="phoneError" class="error-message"></div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">อีเมล</label>
-                        <input type="email" name="memberEmail" class="form-control"
+                        <input type="email" id="memberEmail" name="memberEmail" class="form-control"
                                value="${member.memberEmail}" readonly>
                         <span class="form-hint">ไม่สามารถเปลี่ยนแปลงอีเมลได้</span>
                     </div>
@@ -155,11 +154,13 @@
                         <input type="password" name="newPassword" id="newPassword" class="form-control"
                                placeholder="8-16 ตัวอักษร">
                         <span class="form-hint">เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน</span>
+                        <div id="passwordError" class="error-message"></div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
                         <input type="password" id="confirmPassword" class="form-control"
                                placeholder="กรอกรหัสผ่านอีกครั้ง">
+                        <div id="confirmError" class="error-message"></div>
                     </div>
                 </div>
 
@@ -167,6 +168,7 @@
                 <div class="form-actions">
                     <button type="button" class="btn-cancel"
                             onclick="location.href='${pageContext.request.contextPath}/home'">ยกเลิก</button>
+                    <!-- แก้ไขปุ่มบันทึก -->
                     <button type="submit" class="btn-save">✓ &nbsp;บันทึกการเปลี่ยนแปลง</button>
                 </div>
             </form>
@@ -175,7 +177,7 @@
     
 </div>
 
-<%-- ========== FOOTER (ธีมเดียวกับหน้า home / viewBooking) ========== --%>
+<%-- ========== FOOTER ========== --%>
 <footer class="site-footer">
     <div class="footer-top">
         <svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:8px;">
@@ -201,7 +203,6 @@
         </div>
         <div class="footer-col footer-contact-col">
             <h4 class="footer-heading">ติดต่อเรา</h4>
-            <%-- TODO: ใส่เบอร์โทร / LINE OA / อีเมลจริงของร้านแทนที่ตรงนี้ --%>
             <p>📞 โทร. 08X-XXX-XXXX</p>
             <p>💬 LINE OA: @boonmee</p>
             <p>✉️ boonmee.booking@gmail.com</p>
@@ -210,16 +211,6 @@
     </div>
 </footer>
 
-<script src="${pageContext.request.contextPath}/static/js/editProfile.js"></script>
-<script>
-    function toggleDropdown() {
-        document.getElementById('dropdownMenu').classList.toggle('show');
-    }
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.dropdown-wrap')) {
-            document.getElementById('dropdownMenu').classList.remove('show');
-        }
-    });
-</script>
+<script src="${pageContext.request.contextPath}/static/js/editProfile.js?v=999"></script>
 </body>
 </html>

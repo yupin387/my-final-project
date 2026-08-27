@@ -560,21 +560,38 @@
 		</div>
 </footer>
 
-<%-- Modal ยกเลิก --%>
+<%-- Modal ยกเลิกการจอง (โครงสร้างตามแบบรูปที่ 1 + ปุ่มยืนยันสีแดง) --%>
 <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius:16px; border:2px solid var(--accent-gold); overflow:hidden;">
-            <div class="modal-header" style="background:var(--cream-warm); border-bottom:1px solid var(--accent-gold-pale);">
-                <h5 class="modal-title w-100 text-center fw-bold" style="color:var(--accent-brown); font-family:'Charmonman', sans-serif;">ยืนยันการยกเลิกการจอง</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body text-center" style="padding:24px 15px; color:var(--text-mid);">
-                คุณต้องการยกเลิกรายการจอง <strong>#${booking.bookingId}</strong> ใช่หรือไม่? <br>
-                <small class="text-muted">(หากยกเลิกแล้วจะไม่สามารถย้อนกลับได้)</small>
-            </div>
-            <div class="modal-footer" style="justify-content:center; gap:15px; border-top:1px solid var(--cream-border-soft); background:#fafafa;">
-                <button type="button" class="btn" style="background:#e0e0e0; color:#333; font-weight:600;" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
-                <a id="confirmCancelUrl" href="#" class="btn btn-cancel" style="padding:10px 20px;">ยืนยันยกเลิก</a>
+        <div class="modal-content modal-custom-card">
+            <div class="modal-body text-center p-4">
+                
+                <%-- หัวข้อหลัก --%>
+                <h4 class="modal-title-custom mb-2">ยืนยันการยกเลิกการจอง</h4>
+                
+                <p class="text-muted small mb-3">
+                    การดำเนินการนี้จะเปลี่ยนสถานะเป็น "ยกเลิกแล้ว"
+                </p>
+
+                <%-- Badge แสดงรหัสการจอง (สไตล์รูปที่ 1) --%>
+                <div class="booking-code-badge mb-3">
+                    รหัส: <span id="cancelBookingId">${booking.bookingId}</span>
+                </div>
+
+                <p class="text-muted small mb-4">
+                    หากยกเลิกแล้วจะไม่สามารถย้อนกลับได้
+                </p>
+
+                <%-- กลุ่มปุ่มกด (ยกเลิกอยู่ซ้าย / ยืนยันสีแดงอยู่ขวา) --%>
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">
+                        ยกเลิก
+                    </button>
+                    <a id="confirmCancelUrl" href="#" class="btn btn-modal-danger">
+                        ยืนยันยกเลิก
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>

@@ -475,11 +475,73 @@ tbody td strong { color: var(--text-dark); font-weight: 700; }
 /* ========== SWEETALERT CUSTOM ========== */
 .my-rounded-popup {
     border-radius: 20px !important;
-    padding: 2.5em 3em !important;
+    padding: 28px 24px 24px !important;
     font-family: 'Sarabun', sans-serif !important;
-    border: 1.5px solid var(--cream-border-soft) !important;
+    border: 1.5px solid #C9944A !important; /* ขอบทองเรียบหรู */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
 }
 .swal2-icon { display: none !important; }
+
+.swal2-title {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #3A2430 !important;
+    padding: 0 !important;
+    margin-bottom: 8px !important;
+}
+
+.swal-name-box {
+    background: #FDF2F2;
+    border: 1px solid #F8D7DA;
+    border-radius: 12px;
+    padding: 10px 18px;
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #DC3545;
+    margin: 4px 0;
+}
+
+.swal2-actions {
+    margin-top: 20px !important;
+    gap: 12px !important;
+}
+
+.swal-btn-confirm-delete {
+    background: #D32F2F !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    padding: 9px 24px !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    font-family: 'Sarabun', sans-serif !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 8px rgba(211, 47, 47, 0.25) !important;
+    transition: all 0.2s ease !important;
+}
+
+.swal-btn-confirm-delete:hover {
+    background: #B71C1C !important;
+    transform: translateY(-1px) !important;
+}
+
+.swal-btn-cancel-custom {
+    background: #FFFBFD !important;
+    color: #5C3C4A !important;
+    border: 1.5px solid #F08FB5 !important;
+    padding: 9px 24px !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    font-family: 'Sarabun', sans-serif !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.swal-btn-cancel-custom:hover {
+    background: #FBEAF0 !important;
+}
 
 .swal-btn-confirm {
     background: var(--gold);
