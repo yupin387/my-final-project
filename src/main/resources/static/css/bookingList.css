@@ -60,6 +60,27 @@
     --error-text:     #c62828;
     --error-border:   #ef9a9a;
 
+    /* ===== สถานะ (งานใหม่=เหลือง / ยืนยันแล้ว=ฟ้า / เสร็จสิ้น=เขียว / ปฏิเสธ=แดง) ===== */
+    --status-new-bg:      #FCE4C0;
+    --status-new-text:    #a5641f;
+    --status-new-border:  #E8A24A;
+    --status-new-dot:     #E8A24A;
+
+    --status-confirm-bg:      #e8f4fd;
+    --status-confirm-text:    #1565c0;
+    --status-confirm-border:  #90caf9;
+    --status-confirm-dot:     #1976d2;
+
+    --status-done-bg:      #e6f4ea;
+    --status-done-text:    #2e7d32;
+    --status-done-border:  #a5d6a7;
+    --status-done-dot:     #2e7d32;
+
+    --status-reject-bg:      #fdecea;
+    --status-reject-text:    #c62828;
+    --status-reject-border:  #ef9a9a;
+    --status-reject-dot:     #c62828;
+
     /* ===== ปรับสี Navbar / Footer: สีทองทึบ โทนอ่อนละมุน ไม่ไล่สี ===== */
     --brand-solid-gold: #F7EAB8; /* สีทองทึบโทนอ่อนพาสเทล ละมุนตา ไม่เข้มและไม่ขาวเกินไป */
     --nav-title-color:  #63263E; /* สีเลือดหมูมารูน สำหรับชื่อโลโก้และข้อความ */
@@ -335,7 +356,7 @@ body {
     margin: 10px auto 0;
 }
 
-/* ========== TABS ========== */
+/* ========== TABS (เดิม เก็บไว้เผื่อใช้ที่อื่น) ========== */
 .tabs-wrapper {
     display: flex;
     gap: 10px;
@@ -382,6 +403,124 @@ body {
     border-color: #b71c1c;
     color: #fff;
 }
+
+/* ========== STATUS FILTER DROPDOWN ========== */
+.status-filter-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+    width: fit-content;
+    background: var(--white);
+    border: 1.5px solid var(--rose-line);
+    border-radius: 30px;
+    padding: 10px 20px;
+    box-shadow: 0 4px 16px var(--shadow-warm);
+}
+
+.status-filter-label {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--rose-deep);
+    white-space: nowrap;
+}
+
+.status-filter-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    min-width: 210px;
+    padding: 9px 18px;
+    background: var(--rose-glow);
+    border: 1.5px solid var(--rose-deep);
+    border-radius: 24px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-dark);
+    box-shadow: 0 2px 6px var(--shadow-rose);
+    transition: box-shadow 0.2s;
+    user-select: none;
+}
+
+.status-filter-box:hover { box-shadow: 0 4px 14px var(--shadow-rose); }
+
+.status-filter-current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-filter-arrow {
+    font-size: 11px;
+    color: var(--rose-deep);
+}
+
+.status-filter-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 20px;
+    width: 250px;
+    background: var(--white);
+    border: 1.5px solid var(--rose-line);
+    border-radius: 16px;
+    box-shadow: 0 10px 32px var(--shadow-warm);
+    z-index: 500;
+    overflow: hidden;
+}
+
+.status-filter-dropdown.show { display: block; }
+
+.status-filter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--cream-mid);
+    transition: background 0.15s;
+}
+
+.status-filter-item:last-child { border-bottom: none; }
+.status-filter-item:hover { background: var(--rose-glow); }
+.status-filter-item.selected { background: var(--rose-pale); color: var(--rose-deep); font-weight: 700; }
+.status-filter-item .count-badge { margin-left: auto; }
+
+.count-badge {
+    background: var(--rose-pale);
+    color: var(--rose-deep);
+    border: 1px solid var(--rose-line);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 1px 9px;
+    border-radius: 10px;
+    margin-left: 4px;
+}
+
+.dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* จุดสีตามสถานะ: งานใหม่=เหลือง / ยืนยันแล้ว=ฟ้า / เสร็จสิ้น=เขียว / ปฏิเสธ=แดง */
+.dot-all       { background: var(--rose-deep); }
+.dot-pending   { background: var(--status-new-dot); }
+.dot-confirmed { background: var(--status-confirm-dot); }
+.dot-completed { background: var(--status-done-dot); }
+.dot-rejected  { background: var(--status-reject-dot); }
 
 /* ========== CONTENT CARD ========== */
 .content-card {
@@ -490,7 +629,12 @@ tbody tr:hover td { background: var(--rose-glow); transition: background 0.15s; 
     font-size: 13px;
 }
 
-/* ========== STATUS BADGES ========== */
+/* ========== STATUS BADGES ==========
+   งานใหม่ (Pending / Quoted / Approved)  -> เหลือง
+   ยืนยันแล้ว (Confirmed / Assigned / Preparing / In_Progress) -> ฟ้า
+   เสร็จสิ้น (Completed) -> เขียว
+   ปฏิเสธ (Rejected) -> แดง
+================================== */
 .badge {
     display: inline-block;
     padding: 5px 14px;
@@ -500,15 +644,18 @@ tbody tr:hover td { background: var(--rose-glow); transition: background 0.15s; 
     white-space: nowrap;
 }
 
-.badge-Pending    { background: var(--marigold-pale); color: #a5641f; border: 1.5px solid var(--marigold); }
-.badge-Quoted     { background: #e8f4fd; color: #1565c0; border: 1.5px solid #90caf9; }
-.badge-Approved   { background: #cce5ff; color: #004085; border: 1.5px solid #90caf9; }
-.badge-Rejected   { background: #fdecea; color: #c62828; border: 1.5px solid #ef9a9a; }
-.badge-Confirmed  { background: var(--gold-pale); color: #8a6d1c; border: 1.5px solid var(--accent-gold-mid); }
-.badge-Assigned   { background: #cce5ff; color: #004085; border: 1.5px solid #90caf9; }
-.badge-Preparing  { background: #e2d9f3; color: #6f42c1; border: 1.5px solid #ce93d8; }
-.badge-In_Progress{ background: var(--rose-pale); color: var(--rose-deep); border: 1.5px solid var(--rose-line); }
-.badge-Completed  { background: var(--gold-pale); color: #8B5E1F; border: 1.5px solid var(--accent-gold-mid); }
+.badge-Pending     { background: var(--status-new-bg);     color: var(--status-new-text);     border: 1.5px solid var(--status-new-border); }
+.badge-Quoted      { background: var(--status-new-bg);     color: var(--status-new-text);     border: 1.5px solid var(--status-new-border); }
+.badge-Approved    { background: var(--status-new-bg);     color: var(--status-new-text);     border: 1.5px solid var(--status-new-border); }
+
+.badge-Confirmed   { background: var(--status-confirm-bg); color: var(--status-confirm-text); border: 1.5px solid var(--status-confirm-border); }
+.badge-Assigned    { background: var(--status-confirm-bg); color: var(--status-confirm-text); border: 1.5px solid var(--status-confirm-border); }
+.badge-Preparing   { background: var(--status-confirm-bg); color: var(--status-confirm-text); border: 1.5px solid var(--status-confirm-border); }
+.badge-In_Progress { background: var(--status-confirm-bg); color: var(--status-confirm-text); border: 1.5px solid var(--status-confirm-border); }
+
+.badge-Completed   { background: var(--status-done-bg);    color: var(--status-done-text);    border: 1.5px solid var(--status-done-border); }
+
+.badge-Rejected    { background: var(--status-reject-bg);  color: var(--status-reject-text);  border: 1.5px solid var(--status-reject-border); }
 
 /* ========== ACTION BUTTONS ========== */
 .btn-action {
@@ -662,6 +809,8 @@ tbody tr:hover td { background: var(--rose-glow); transition: background 0.15s; 
     .navbar-brand .lotus-icon { width: 46px; height: 46px; max-width: 46px; max-height: 46px; font-size: 24px; }
     .list-header h1 { font-size: 1.5rem; }
     .tabs-wrapper { justify-content: flex-start; }
+    .status-filter-wrapper { justify-content: flex-start; }
+    .status-filter-dropdown { left: 0; transform: none; }
     table { font-size: 12px; }
     .btn-action { padding: 6px 10px; font-size: 12px; }
     .footer-content { flex-direction: column; align-items: flex-start; }
@@ -670,20 +819,12 @@ tbody tr:hover td { background: var(--rose-glow); transition: background 0.15s; 
 }
 
 /* ========== FLASH BANNER ========== */
-/* ========== FLASH BANNER ========== */
 .flash-banner {
     padding: 14px 20px;
-    
-    /* ปรับ margin ซ้าย-ขวา ให้เป็น auto เพื่อจัดกล่องให้อยู่กึ่งกลาง */
     margin: 0 auto 20px auto; 
-    
-    /* กำหนดขนาดกล่องให้พอดีกับข้อความ (หรือใส่ max-width แทนก็ได้) */
     width: fit-content; 
-    min-width: 300px; /* กำหนดความกว้างขั้นต่ำไม่ให้กล่องดูหดเล็กเกินไป */
-    
-    /* จัดตัวหนังสือให้อยู่กึ่งกลาง */
+    min-width: 300px;
     text-align: center; 
-    
     border-radius: 8px;
     font-weight: 600;
     font-size: 15px;

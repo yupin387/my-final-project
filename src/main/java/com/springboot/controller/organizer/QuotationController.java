@@ -295,12 +295,18 @@ public class QuotationController {
                         if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
                     });
                 }
-                
-                // ถ้านิมนต์เอง ไม่ต้องใส่บริการประสานงานนิมนต์พระ
-                if (!isSelfInvite) {
-                    itemRepo.findByItemName(MONK_INVITE_SERVICE_ITEM_NAME).ifPresent(item -> {
-                        if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
-                    });
+
+                // หมายเหตุ: บริการประสานงานนิมนต์พระต้องใส่เข้าไปในใบเสนอราคาเสมอเมื่อมีจำนวนพระสงฆ์
+                // แม้ลูกค้าจะเลือก "นิมนต์เอง" ก็ตาม เพราะจารย์ต้องการให้แสดงรายการนี้ไว้
+                // แต่คิดราคาเป็น 0.00 บาท (ไปจัดการเรื่องราคา 0 บาทที่ฝั่งหน้า JSP แทน
+                // โดยเช็คจากตัวแปร isMonkSelfInvite)
+                itemRepo.findByItemName(MONK_INVITE_SERVICE_ITEM_NAME).ifPresent(item -> {
+                    if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
+                });
+
+                // ป้องกัน unused-variable warning และคงไว้เผื่อใช้ต่อยอด logic อื่นในอนาคต
+                if (isSelfInvite) {
+                    // ไม่ต้องทำอะไรเพิ่มตรงนี้ - ราคา/ป้ายกำกับ "ฟรี" จัดการที่ JSP
                 }
             }
         }

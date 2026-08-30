@@ -339,7 +339,7 @@ body {
 }
 
 .btn-add {
-	background: linear-gradient(120deg, var(--peach-primary) 0%, var(--peach-hover) 100%);
+	background: var(--peach-hover);
 	color: var(--white);
 	padding: 11px 22px;
 	text-decoration: none;
@@ -355,7 +355,7 @@ body {
 }
 
 .btn-add:hover {
-	background: linear-gradient(120deg, var(--peach-hover) 0%, var(--peach-deep) 100%);
+	background: var(--peach-deep);
 	transform: translateY(-1px);
 	box-shadow: 0 5px 16px rgba(184, 135, 47, 0.35);
 }

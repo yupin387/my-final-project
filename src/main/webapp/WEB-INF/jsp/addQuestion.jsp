@@ -9,6 +9,48 @@
     <!-- เพิ่มฟอนต์ Charmonman ตรงนี้ครับ -->
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addQuestion.css">
+    <style>
+    /* ===== FIX: เปลี่ยนจาก dropdown เลือกประเภทงานได้ทีละอัน เป็น checkbox
+       เลือกได้พร้อมกันหลายประเภท เพราะ 1 คำถามผูกได้กับหลายประเภทงานพร้อมกัน ===== */
+    .ceremony-checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .ceremony-checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        border: 1.5px solid var(--card-border, #F3C4D5);
+        border-radius: 10px;
+        background: #FFFFFF;
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+    }
+    .ceremony-checkbox-item:hover {
+        border-color: #EC6E96;
+        background: #FEF6F9;
+    }
+    .ceremony-checkbox-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: #EC6E96;
+        flex-shrink: 0;
+    }
+    .ceremony-checkbox-item label {
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        flex: 1;
+    }
+    .checkbox-group-hint {
+        font-size: 12px;
+        color: #8A7666;
+        margin: -4px 0 4px;
+    }
+    </style>
 </head>
 <body>
 
@@ -77,15 +119,18 @@
                         required value="${param.questionText}" />
                 </div>
 
+                <%-- ===== FIX: checkbox หลายอัน แทน dropdown เดี่ยว
+                     ติ๊กได้พร้อมกันหลายประเภทงาน — ไม่ติ๊กเลย = คำถามกลาง ไม่ผูกกับประเภทงานไหน ===== --%>
                 <div class="form-group">
-                    <label for="ceremonyType">ประเภทงาน</label>
-                    <div class="select-wrapper">
-                        <select id="ceremonyType" name="ceremonyType" required>
-                            <option value="">-- เลือกประเภทงาน --</option>
-                            <c:forEach var="type" items="${ceremonyTypes}">
-                                <option value="${type}" ${param.ceremonyType == type ? 'selected' : ''}>${type}</option>
-                            </c:forEach>
-                        </select>
+                    <label>ประเภทงาน</label>
+                    <p class="checkbox-group-hint">เลือกได้มากกว่า 1 ประเภท — คำถามข้อนี้จะถูกใช้กับทุกประเภทงานที่ติ๊กไว้</p>
+                    <div class="ceremony-checkbox-group">
+                        <c:forEach var="type" items="${ceremonyTypes}">
+                            <div class="ceremony-checkbox-item">
+                                <input type="checkbox" name="ceremonyTypes" value="${type}" id="ct_${type}">
+                                <label for="ct_${type}">${type}</label>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>แก้ไขรายการอุปกรณ์ - บุญมีนำพา จัดงานบุญ</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editItem.css?v=5">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/editItem.css?v=6">
 <style>
 .form-select {
     width: 100%;
@@ -27,6 +27,12 @@
     background: #FFFFFF;
 }
 
+.field-hint {
+    font-size: 12px;
+    color: var(--brown-muted, #8A7666);
+    margin: 4px 0 0;
+}
+
 .ceremony-adder-row {
     display: flex;
     gap: 10px;
@@ -43,6 +49,8 @@
     background: var(--bg-light, #FCF6F0);
 }
 
+/* ===== หัวกลุ่มใช้ checkbox "เลือกทั้งหมด" แทนปุ่ม 3 ปุ่มเดิม
+   (เลือกทั้งหมด / ล้างการเลือก / นำออก) + ปุ่ม ✕ แยกไว้ปิดกลุ่มที่เผลอเปิด ===== */
 .ceremony-type-heading-row {
     display: flex;
     justify-content: space-between;
@@ -50,34 +58,80 @@
     margin-bottom: 10px;
     flex-wrap: wrap;
     gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--card-border, #F0E2D3);
 }
-.ceremony-quick-actions { display: flex; gap: 6px; }
-.btn-quick-select,
-.btn-remove-group {
-    font-size: 12px;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 16px;
+.ceremony-type-heading {
+    font-weight: 700;
+    color: var(--brown-text, #4A3728);
+}
+.ceremony-heading-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.ceremony-select-all-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--brown-muted, #8A7666);
     cursor: pointer;
-    font-family: 'Sarabun', sans-serif;
-    border: 1.5px solid var(--peach-primary, #E8703A);
-    background: #FFFFFF;
-    color: var(--peach-primary, #E8703A);
+    user-select: none;
 }
-.btn-quick-select:hover { background: var(--peach-primary, #E8703A); color: #FFF; }
-.btn-remove-group {
-    border-color: var(--red-primary, #D9534F);
+.ceremony-select-all-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+.btn-close-group {
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: transparent;
+    color: var(--brown-muted, #8A7666);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.btn-close-group:hover {
+    background: var(--card-border, #F0E2D3);
     color: var(--red-primary, #D9534F);
 }
-.btn-remove-group:hover { background: var(--red-primary, #D9534F); color: #FFF; }
 
+/* ===== 1 แพ็กเกจต่อ 1 แถวเต็มความกว้าง ชื่อยาวให้ตัดขึ้นบรรทัดใหม่ "ในกรอบของตัวเอง"
+   แทนที่จะดันช่อง "ใช้...หน่วย" ให้หลุดไปอยู่คนละบรรทัด ===== */
+.ceremony-type-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.ceremony-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    padding: 8px 10px;
+    background: #FFFFFF;
+    border: 1px solid var(--card-border, #F0E2D3);
+    border-radius: 8px;
+}
+.ceremony-check-label {
+    flex: 1;
+    min-width: 0;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.35;
+}
 .qty-inline-wrap {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 13px;
     color: var(--brown-muted, #8A7666);
-    margin-left: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 .qty-mini-input {
     width: 64px;
@@ -102,34 +156,6 @@
     border: 1.5px dashed var(--card-border, #F0E2D3);
     border-radius: 10px;
 }
-.ceremony-type-options {
-    display: flex;
-    flex-direction: column;   /* เปลี่ยนจาก wrap เป็นคอลัมน์เดียว 1 แพ็กเกจต่อแถว */
-    gap: 10px;
-}
-.ceremony-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: nowrap;         /* ห้ามตกบรรทัดอีก เพราะมีพื้นที่เต็มความกว้างแล้ว */
-    padding: 8px 10px;
-    background: #FFFFFF;
-    border: 1px solid var(--card-border, #F0E2D3);
-    border-radius: 8px;
-}
-.ceremony-check-label {
-    flex: 1;                   /* ดันช่องจำนวนไปชิดขวา */
-    white-space: nowrap;
-}
-.qty-inline-wrap {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: var(--brown-muted, #8A7666);
-    white-space: nowrap;       /* กัน "ใช้"/"หน่วย" ตกบรรทัด */
-    flex-shrink: 0;
-}
 </style>
 </head>
 <body>
@@ -150,8 +176,8 @@
         </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
-                <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">รายการงานที่ได้รับมอบหมาย</a>
-                <a href="${pageContext.request.contextPath}/staff/items"       class="nav-item active">จัดการ Item</a>
+                <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">งานที่ได้รับมอบหมาย</a>
+                <a href="${pageContext.request.contextPath}/staff/items"       class="nav-item active">จัดการรายการอุปกรณ์</a>
             </nav>
             <div class="user-info" onclick="toggleDropdown()">
                 <div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
@@ -190,13 +216,13 @@
 
                     <div class="form-section">
 
-                        <%-- ===== ประเภท Item: dropdown
-                             FIX: ตัดตัวเลือก "แพ็กเกจ" ออก เหมือนหน้า addItem.jsp
+                        <%-- ===== ประเภทอุปกรณ์: dropdown
+                             ตัดตัวเลือก "แพ็กเกจ" ออก เหมือนหน้าเพิ่มอุปกรณ์
                              backend มี validation กันไว้ที่ ItemService.saveItem() อยู่แล้ว --%>
                         <div class="form-group">
-                            <div class="section-label">ประเภท Item</div>
+                            <div class="section-label">ประเภทอุปกรณ์</div>
                             <select name="typeId" id="itemTypeSelect" class="form-select" required>
-                                <option value="" disabled>-- เลือกประเภท Item --</option>
+                                <option value="" disabled>-- เลือกประเภทอุปกรณ์ --</option>
                                 <c:forEach var="t" items="${itemTypes}">
                                     <c:if test="${t.itemTypeName != 'แพ็กเกจ'}">
                                         <option value="${t.itemTypeId}"
@@ -206,17 +232,18 @@
                             </select>
                         </div>
 
-                        <hr class="divider">
-
                         <%-- ===== ใช้กับพิธีไหนได้บ้าง: progressive disclosure
                              กลุ่มที่มีพิธีถูกติ๊กไว้อยู่แล้ว (ของเดิม) โชว์ค้างไว้ตั้งแต่เปิดหน้า
                              แต่ละ checkbox มีช่องกรอก "ใช้ ... หน่วย" คู่กัน pre-fill ด้วยค่าจาก
-                             selectedCeremonyQuantities (Map<ceremonyId, quantity>) จาก controller --%>
+                             selectedCeremonyQuantities (Map<ceremonyId, quantity>) จาก controller
+
+                             หัวแต่ละกลุ่มใช้ checkbox "เลือกทั้งหมด" แบบ select-all มาตรฐาน
+                             + ปุ่ม ✕ แยกไว้สำหรับปิดกลุ่มที่เผลอเปิด/ไม่ต้องการแล้ว --%>
                         <div class="form-group">
                             <div class="section-label">ใช้กับพิธีไหนได้บ้าง</div>
-                            <p style="font-size: 12px; color: var(--brown-muted); margin: -4px 0 10px;">
+                            <p class="field-hint">
                                 กลุ่มที่ผูกไว้แล้วแสดงอยู่ด้านล่าง พร้อมจำนวนเดิมที่เคยบันทึกไว้<br>
-                                * ไม่ติ๊กเลย = เป็นรายการให้ลูกค้าเลือกเพิ่มเองภายหลัง
+                                * ไม่ติ๊กเลย = เป็นรายการให้สมาชิกเลือกเพิ่มเองภายหลัง
                             </p>
 
                             <div class="ceremony-adder-row">
@@ -243,13 +270,16 @@
                                         style="${groupHasSelected ? 'display:block;' : 'display:none;'}">
                                         <div class="ceremony-type-heading-row">
                                             <div class="ceremony-type-heading">${entry.key}</div>
-                                            <div class="ceremony-quick-actions">
-                                                <button type="button" class="btn-quick-select"
-                                                    onclick="setGroupChecked('grp_${entry.key}', true)">เลือกทั้งหมด</button>
-                                                <button type="button" class="btn-quick-select"
-                                                    onclick="setGroupChecked('grp_${entry.key}', false)">ล้างการเลือก</button>
-                                                <button type="button" class="btn-remove-group"
-                                                    onclick="removeGroup('grp_${entry.key}')">✕ นำออก</button>
+                                            <div class="ceremony-heading-right">
+                                                <label class="ceremony-select-all-label">
+                                                    <input type="checkbox" class="select-all-checkbox"
+                                                        data-group="grp_${entry.key}"
+                                                        onchange="onSelectAllChange(this)">
+                                                    เลือกทั้งหมด
+                                                </label>
+                                                <button type="button" class="btn-close-group"
+                                                    title="ปิดกลุ่มนี้ (ยกเลิกการเลือกทั้งหมด)"
+                                                    onclick="closeGroup('grp_${entry.key}')">✕</button>
                                             </div>
                                         </div>
                                         <div class="ceremony-type-options" data-group="grp_${entry.key}">
@@ -265,6 +295,7 @@
                                                 <div class="ceremony-item">
                                                     <input type="checkbox" name="ceremonyIds"
                                                         value="${c.ceremonyId}" id="cer_${c.ceremonyId}"
+                                                        data-group="grp_${entry.key}"
                                                         ${isChecked ? 'checked' : ''}
                                                         onchange="toggleQtyInput(this, 'qty_${c.ceremonyId}')">
                                                     <label for="cer_${c.ceremonyId}" class="ceremony-check-label">${c.ceremonyName}</label>
@@ -287,11 +318,9 @@
                             </div>
                         </div>
 
-                        <hr class="divider">
-
                         <%-- ชื่อ & รายละเอียด --%>
                         <div class="form-group">
-                            <div class="section-label">ข้อมูล Item</div>
+                            <div class="section-label">ข้อมูลอุปกรณ์</div>
                             <div style="display:flex; flex-direction:column; gap:12px;">
                                 <div class="form-group">
                                     <label>ชื่ออุปกรณ์ / บริการ</label>
@@ -304,15 +333,14 @@
                             </div>
                         </div>
 
-                        <hr class="divider">
-
                         <%-- ราคา & หน่วย --%>
                         <div class="form-group">
                             <div class="section-label">ราคาและหน่วยนับ</div>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>ราคาต่อหน่วย (บาท)</label>
-                                    <input type="number" name="pricePerUnit" value="${item.pricePerUnit}" step="0.01" required placeholder="0.00">
+                                    <input type="number" name="pricePerUnit" value="${item.pricePerUnit}" step="0.01" min="0" required placeholder="0.00">
+                                    <p class="field-hint">กรอกเป็นตัวเลข ทศนิยมได้ไม่เกิน 2 ตำแหน่ง เช่น 250.00</p>
                                 </div>
                                 <div class="form-group">
                                     <label>หน่วยนับ</label>
@@ -335,8 +363,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <hr class="divider">
 
                         <div class="form-actions">
                             <button type="submit" class="btn-submit">บันทึกการแก้ไข</button>
@@ -375,11 +401,15 @@
             if (checkbox.checked && !qtyInput.value) {
                 qtyInput.value = 1;
             }
+            syncSelectAllState(checkbox.getAttribute('data-group'));
         }
 
-        function setGroupChecked(groupKey, checked) {
+        /* ===== select-all checkbox ต่อกลุ่ม ===== */
+        function onSelectAllChange(selectAllBox) {
+            var groupKey = selectAllBox.getAttribute('data-group');
             var container = document.querySelector('.ceremony-type-options[data-group="' + groupKey + '"]');
             if (!container) return;
+            var checked = selectAllBox.checked;
             var boxes = container.querySelectorAll('input[type="checkbox"]');
             boxes.forEach(function (cb) {
                 cb.checked = checked;
@@ -389,6 +419,54 @@
                     if (checked && !qtyInput.value) qtyInput.value = 1;
                 }
             });
+            selectAllBox.indeterminate = false;
+        }
+
+        function syncSelectAllState(groupKey) {
+            var container = document.querySelector('.ceremony-type-options[data-group="' + groupKey + '"]');
+            var selectAllBox = document.querySelector('.select-all-checkbox[data-group="' + groupKey + '"]');
+            if (!container || !selectAllBox) return;
+            var boxes = container.querySelectorAll('input[type="checkbox"]');
+            var total = boxes.length;
+            var checkedCount = 0;
+            boxes.forEach(function (cb) { if (cb.checked) checkedCount++; });
+            if (checkedCount === 0) {
+                selectAllBox.checked = false;
+                selectAllBox.indeterminate = false;
+            } else if (checkedCount === total) {
+                selectAllBox.checked = true;
+                selectAllBox.indeterminate = false;
+            } else {
+                selectAllBox.checked = false;
+                selectAllBox.indeterminate = true;
+            }
+        }
+
+        /* ===== ปิดกลุ่ม: ยกเลิกการติ๊กทั้งหมดในกลุ่ม แล้วซ่อนกลุ่มนั้นกลับไป
+           ใช้กับกลุ่มที่เผลอเปิด หรือกลุ่มเดิมที่ผูกไว้แต่ไม่ต้องการแล้ว
+           (ถ้าเป็นกลุ่มเดิมที่มีข้อมูลอยู่ก่อน การกดปิดจะล้างการติ๊กทั้งหมด — ต้องกดบันทึก
+           การแก้ไขอีกครั้งเพื่อให้มีผลจริงกับฐานข้อมูล) ===== */
+        function closeGroup(groupKey) {
+            var group = document.getElementById(groupKey);
+            if (!group) return;
+            var container = document.querySelector('.ceremony-type-options[data-group="' + groupKey + '"]');
+            if (container) {
+                var boxes = container.querySelectorAll('input[type="checkbox"]');
+                boxes.forEach(function (cb) {
+                    cb.checked = false;
+                    var qtyInput = document.getElementById('qty_' + cb.value);
+                    if (qtyInput) {
+                        qtyInput.disabled = true;
+                    }
+                });
+            }
+            var selectAllBox = document.querySelector('.select-all-checkbox[data-group="' + groupKey + '"]');
+            if (selectAllBox) {
+                selectAllBox.checked = false;
+                selectAllBox.indeterminate = false;
+            }
+            group.style.display = 'none';
+            updateEmptyHint();
         }
 
         function updateEmptyHint() {
@@ -410,15 +488,13 @@
             updateEmptyHint();
         });
 
-        function removeGroup(groupKey) {
-            var group = document.getElementById(groupKey);
-            if (!group) return;
-            setGroupChecked(groupKey, false);
-            group.style.display = 'none';
+        /* ===== ตอนโหลดหน้า: sync สถานะ select-all ของทุกกลุ่มที่มีข้อมูลเดิมติ๊กไว้อยู่แล้ว ===== */
+        document.addEventListener('DOMContentLoaded', function () {
             updateEmptyHint();
-        }
-
-        document.addEventListener('DOMContentLoaded', updateEmptyHint);
+            document.querySelectorAll('.select-all-checkbox').forEach(function (box) {
+                syncSelectAllState(box.getAttribute('data-group'));
+            });
+        });
     </script>
 
     <script src="${pageContext.request.contextPath}/static/js/editItem.js"></script>

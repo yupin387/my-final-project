@@ -265,10 +265,10 @@ body {
    CARD HEADER (หัวข้อหลัก) — ชมพู-กุหลาบเข้ม ให้เป็นชุดเดียวกับ nav-item.active/avatar
    ========================================================================== */
 .card-header-bar {
-    background: var(--accent-pink-mid);
+    background: var(--accent-pink);
     padding: 28px 32px 22px;
     text-align: center;
-    border-bottom: 2px solid var(--accent-pink);
+    border-bottom: 2px solid var(--accent-pink-mid);
     position: relative;
 }
 
@@ -479,7 +479,7 @@ body {
 
 /* ===== ปุ่มบันทึก สีทองทึบ (ไม่ไล่สี) ===== */
 .btn-submit {
-    background: var(--peach-primary);
+    background: var(--accent-pink);
     color: #FFFFFF;
     border: none;
     border-radius: 10px;
@@ -488,15 +488,14 @@ body {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px var(--shadow-soft);
+    box-shadow: 0 4px 14px rgba(200, 53, 104, 0.3);
 }
 
 .btn-submit:hover {
-    background: var(--peach-hover);
+    background: #A6284F;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(184, 135, 47, 0.35);
+    box-shadow: 0 6px 20px rgba(200, 53, 104, 0.4);
 }
-
 .btn-cancel {
     background: #FFFFFF;
     color: var(--brown-text);

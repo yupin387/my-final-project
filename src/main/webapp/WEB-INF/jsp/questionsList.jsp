@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/questionList.css?v=2">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/questionList.css?v=3">
 </head>
 <body>
 
@@ -70,24 +70,46 @@
         <a href="${pageContext.request.contextPath}/organizer/questions/add" class="btn-add" style="text-decoration: none;">+ เพิ่มคำถาม</a>
     </div>
 
-    <%-- ========== TABS ========== --%>
-    <div class="tabs-wrapper">
-        <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=all"
-           class="tab-btn ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'active' : ''}">
-            <span class="ceremony-dot dot-all"></span>ทั้งหมด
-        </a>
-        <c:forEach var="t" items="${ceremonyTypes}">
-            <c:choose>
-                <c:when test="${t eq 'ทำบุญบ้าน'}"><c:set var="tDotClass" value="dot-home"/></c:when>
-                <c:when test="${t eq 'ขึ้นบ้านใหม่'}"><c:set var="tDotClass" value="dot-newhome"/></c:when>
-                <c:when test="${t eq 'ทำบุญบริษัทหรือออฟฟิศ'}"><c:set var="tDotClass" value="dot-company"/></c:when>
-                <c:otherwise><c:set var="tDotClass" value="dot-all"/></c:otherwise>
-            </c:choose>
-            <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=${t}"
-               class="tab-btn ${selectedCeremonyType eq t ? 'active' : ''}">
-                <span class="ceremony-dot ${tDotClass}"></span>${t}
+    <%-- ========== CEREMONY FILTER DROPDOWN ========== --%>
+    <c:choose>
+        <c:when test="${selectedCeremonyType eq 'ทำบุญบ้าน'}"><c:set var="currentDotClass" value="dot-home"/></c:when>
+        <c:when test="${selectedCeremonyType eq 'ขึ้นบ้านใหม่'}"><c:set var="currentDotClass" value="dot-newhome"/></c:when>
+        <c:when test="${selectedCeremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}"><c:set var="currentDotClass" value="dot-company"/></c:when>
+        <c:otherwise><c:set var="currentDotClass" value="dot-all"/></c:otherwise>
+    </c:choose>
+
+    <div class="ceremony-filter-wrapper">
+        <span class="ceremony-filter-label">▼ ประเภทพิธี :</span>
+
+        <div class="ceremony-filter-box" onclick="toggleCeremonyFilter()">
+            <span class="ceremony-filter-current">
+                <span class="ceremony-dot ${currentDotClass}"></span>
+                <c:choose>
+                    <c:when test="${empty selectedCeremonyType or selectedCeremonyType eq 'all'}">ทั้งหมด</c:when>
+                    <c:otherwise>${selectedCeremonyType}</c:otherwise>
+                </c:choose>
+            </span>
+            <span class="ceremony-filter-arrow" id="ceremonyFilterArrow">▾</span>
+        </div>
+
+        <div class="ceremony-filter-dropdown" id="ceremonyFilterDropdown">
+            <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=all"
+               class="ceremony-filter-item ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'selected' : ''}">
+                <span class="ceremony-dot dot-all"></span> ทั้งหมด
             </a>
-        </c:forEach>
+            <c:forEach var="t" items="${ceremonyTypes}">
+                <c:choose>
+                    <c:when test="${t eq 'ทำบุญบ้าน'}"><c:set var="tDotClass" value="dot-home"/></c:when>
+                    <c:when test="${t eq 'ขึ้นบ้านใหม่'}"><c:set var="tDotClass" value="dot-newhome"/></c:when>
+                    <c:when test="${t eq 'ทำบุญบริษัทหรือออฟฟิศ'}"><c:set var="tDotClass" value="dot-company"/></c:when>
+                    <c:otherwise><c:set var="tDotClass" value="dot-all"/></c:otherwise>
+                </c:choose>
+                <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=${t}"
+                   class="ceremony-filter-item ${selectedCeremonyType eq t ? 'selected' : ''}">
+                    <span class="ceremony-dot ${tDotClass}"></span> ${t}
+                </a>
+            </c:forEach>
+        </div>
     </div>
 
     <%-- ========== CONTENT CARD ========== --%>
@@ -200,6 +222,19 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const contextPath = "${pageContext.request.contextPath}";
+
+    function toggleCeremonyFilter() {
+        var dropdown = document.getElementById('ceremonyFilterDropdown');
+        var arrow = document.getElementById('ceremonyFilterArrow');
+        dropdown.classList.toggle('show');
+        arrow.textContent = dropdown.classList.contains('show') ? '▴' : '▾';
+    }
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.ceremony-filter-wrapper')) {
+            document.getElementById('ceremonyFilterDropdown').classList.remove('show');
+            document.getElementById('ceremonyFilterArrow').textContent = '▾';
+        }
+    });
 </script>
 <!-- เติม ?v=1 ต่อท้ายเพื่อบังคับอัปเดต cache -->
 <script src="${pageContext.request.contextPath}/static/js/questionList.js?v=1"></script>

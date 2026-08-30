@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,7 @@ public class QuestionsController {
         if ("all".equals(ceremonyType)) {
             questions = allQuestions;
         } else {
-            // แก้ไข: เช็คจาก list ของ ceremonies แทนที่จะเช็คตัวเดียว
+            // เช็คจาก list ของ ceremonies แทนที่จะเช็คตัวเดียว
             questions = allQuestions.stream()
                     .filter(q -> q.getCeremonies() != null
                             && q.getCeremonies().stream()
@@ -74,12 +75,15 @@ public class QuestionsController {
         return "addQuestion";
     }
 
+    // แก้ไข: รับ "หลายประเภทงาน" พร้อมกันจาก checkbox (name="ceremonyTypes" ซ้ำกันได้หลายค่า)
+    // required = false เพราะเลือกได้ 0 อัน (= คำถามกลาง ไม่ผูกกับประเภทงานไหนเลย)
     @PostMapping("/add")
     public String processAdd(@RequestParam String questionText,
-                             @RequestParam String ceremonyType,
+                             @RequestParam(required = false) List<String> ceremonyTypes,
                              RedirectAttributes redirectAttrs) {
         try {
-            questionsService.addQuestion(questionText, ceremonyType);
+            questionsService.addQuestion(questionText,
+                    ceremonyTypes != null ? ceremonyTypes : new ArrayList<>());
             redirectAttrs.addFlashAttribute("success", "เพิ่มคำถามเรียบร้อยแล้ว");
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
@@ -102,25 +106,33 @@ public class QuestionsController {
             return "redirect:/organizer/questions";
         }
 
-        // แก้ไข: เดิมอ่านจาก question.getCeremony().getCeremonyType() ตัวเดียว
-        // ตอนนี้เป็น list -> ใช้ตัวแรกเป็นตัวแทนแสดงใน dropdown ของฟอร์มแก้ไข
-        String currentCeremonyType = (question.getCeremonies() != null && !question.getCeremonies().isEmpty())
-                ? question.getCeremonies().get(0).getCeremonyType()
-                : "ALL";
+        // แก้ไข: เดิมอ่านจาก question.getCeremony().getCeremonyType() ตัวเดียว หรือ
+        // เอาแค่ "ตัวแรก" จาก list — ตอนนี้เก็บ "ทุกประเภทงาน" ที่ผูกอยู่จริง (distinct)
+        // เพื่อเอาไปติ๊ก checkbox ในฟอร์มแก้ไขให้ตรงกับข้อมูลเดิมทั้งหมด
+        List<String> selectedCeremonyTypes = new ArrayList<>();
+        if (question.getCeremonies() != null) {
+            selectedCeremonyTypes = question.getCeremonies().stream()
+                    .map(Ceremony::getCeremonyType)
+                    .filter(t -> t != null && !t.isBlank())
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
 
         model.addAttribute("question", question);
-        model.addAttribute("currentCeremonyType", currentCeremonyType);
+        model.addAttribute("selectedCeremonyTypes", selectedCeremonyTypes);
         model.addAttribute("ceremonyTypes", CEREMONY_TYPE_ORDER);
         return "editQuestion";
     }
 
+    // แก้ไข: รับ "หลายประเภทงาน" พร้อมกันจาก checkbox เหมือนหน้า add
     @PostMapping("/update")
     public String updateQuestion(@RequestParam int questionsId,
                                  @RequestParam String questionsText,
-                                 @RequestParam String ceremonyType,
+                                 @RequestParam(required = false) List<String> ceremonyTypes,
                                  RedirectAttributes redirectAttrs) {
         try {
-            questionsService.updateQuestion(questionsId, questionsText, ceremonyType);
+            questionsService.updateQuestion(questionsId, questionsText,
+                    ceremonyTypes != null ? ceremonyTypes : new ArrayList<>());
             redirectAttrs.addFlashAttribute("success", "แก้ไขข้อมูลเรียบร้อยแล้ว");
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());

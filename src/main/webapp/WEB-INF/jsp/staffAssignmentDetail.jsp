@@ -24,8 +24,8 @@
         </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
-                <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item active">รายการงานที่ได้รับมอบหมาย</a>
-                <a href="${pageContext.request.contextPath}/staff/items"       class="nav-item">จัดการ Item</a>
+                <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item active">งานที่ได้รับมอบหมาย</a>
+                <a href="${pageContext.request.contextPath}/staff/items"       class="nav-item">จัดการรายการอุปกรณ์</a>
             </nav>
             <div class="user-info" onclick="toggleDropdown()">
                 <div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>

@@ -421,15 +421,23 @@
                     </tr>
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemType != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
+                            <%-- บริการประสานงานนิมนต์พระ: ถ้าลูกค้าเลือก "นิมนต์เอง" ให้แสดงรายการนี้ไว้เหมือนเดิม
+                                 แต่บังคับราคาที่แสดง (และค่าที่จะถูกส่งกลับไปบันทึก) เป็น 0.00 พร้อมป้ายกำกับ
+                                 (เหมือนแพทเทิร์นที่ใช้กับสังฆทานฟรีในหมวดสังฆทานด้านบน) --%>
+                            <c:set var="isFreeMonkServiceEdit" value="${d.item.itemName == 'บริการประสานงานนิมนต์พระ' && isMonkSelfInvite}" />
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
                                <td>
                                     ${d.item.itemName}
+                                    <c:if test="${isFreeMonkServiceEdit}">
+                                        <span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / นิมนต์เอง)</span>
+                                    </c:if>
                                     <input type="hidden" name="extraItemIds" value="${d.item.itemId}">
                                 </td>
                                 <td><input type="number" name="extraQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
-                                <td><input type="number" name="extraPrices" value="${d.item.pricePerUnit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                <c:set var="svcPriceEdit" value="${isFreeMonkServiceEdit ? '0.00' : d.item.pricePerUnit}" />
+                                <td><input type="number" name="extraPrices" value="${svcPriceEdit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>
                             </tr>

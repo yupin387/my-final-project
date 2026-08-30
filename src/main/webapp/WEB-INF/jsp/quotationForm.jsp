@@ -333,10 +333,17 @@
                                 <%-- ดึงรายการบริการพื้นฐานมาแสดงอัตโนมัติ --%>
                                 <c:forEach var="item" items="${packageIncludedItems}">
                                     <c:if test="${item.itemType.itemTypeName == 'บริการ'}">
+                                        <%-- เช็คว่าเป็นบริการประสานงานนิมนต์พระหรือไม่ ถ้าลูกค้าเลือก "นิมนต์เอง"
+                                             ให้ยังคงแสดงรายการนี้ไว้ในใบเสนอราคา แต่คิดราคาเป็น 0.00 บาท
+                                             พร้อมขึ้นป้ายกำกับให้ทราบ --%>
+                                        <c:set var="isMonkInviteService" value="${item.itemName == 'บริการประสานงานนิมนต์พระ'}" />
                                         <tr class="static-row">
                                             <td class="text-center row-number"></td>
                                             <td>
                                                 ${item.itemName}
+                                                <c:if test="${isMonkInviteService && isMonkSelfInvite}">
+                                                    <span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / นิมนต์เอง)</span>
+                                                </c:if>
                                                 <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                             </td>
                                             <c:set var="qty" value="1" />
@@ -345,7 +352,8 @@
                                             </c:if>
                                             <td class="text-center">${qty}<input type="hidden" name="bookingQtys" value="${qty}" class="qty-input"></td>
                                             <td class="text-center">${item.unit}</td>
-                                            <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${item.pricePerUnit}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                            <c:set var="svcPrice" value="${(isMonkInviteService && isMonkSelfInvite) ? '0.00' : item.pricePerUnit}" />
+                                            <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${svcPrice}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
                                             <td class="text-right"><span class="subtotal">0.00</span></td>
                                         </tr>
                                     </c:if>

@@ -264,14 +264,13 @@ body {
 
 /* ========== CARD HEADER ========== */
 .card-header-bar {
-    background: var(--rose-mid);
+    background: var(--rose-deep);
     padding: 34px 32px 28px;
     text-align: center;
     position: relative;
     overflow: hidden;
     border-bottom: 2px solid var(--rose-soft);
 }
-
 .card-header-bar::after {
     content: '';
     position: absolute;
@@ -508,7 +507,7 @@ body {
 }
 
 .btn-submit:hover {
-    background: #A6763A;
+    background: var(--gold-text-deep, #8A6D1C);
     transform: translateY(-1px);
     box-shadow: 0 5px 18px var(--shadow-warm);
 }

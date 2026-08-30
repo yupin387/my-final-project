@@ -258,16 +258,15 @@ body {
     z-index: 2;
 }
 
-/* ========== CARD HEADER (ทอง + ดอกบัว) ========== */
+/* ========== CARD HEADER (ชมพูกุหลาบ + ดอกบัว) ========== */
 .assign-header {
-    background: var(--accent-gold);
+    background: var(--rose-deep);
     padding: 26px 30px 22px;
     text-align: center;
-    border-bottom: 3px solid var(--accent-gold-pale);
+    border-bottom: 3px solid var(--rose-line-light);
     position: relative;
     overflow: hidden;
 }
-
 .assign-header::after {
     content: '';
     position: absolute;
@@ -295,12 +294,12 @@ body {
 .h-orn-line.r { background: linear-gradient(90deg, rgba(255, 255, 255, 0.65), transparent); }
 .h-orn-dot {
     width: 5px; height: 5px;
-    background: var(--accent-gold-pale);
+    background: var(--rose-line-light);
     border-radius: 50%;
 }
 .h-orn-diamond {
     width: 8px; height: 8px;
-    background: var(--accent-gold);
+    background: var(--rose-deep);
     transform: rotate(45deg);
 }
 
@@ -361,7 +360,7 @@ body {
 }
 
 .info-value.highlight {
-    color: var(--accent-gold);
+    color: var(--rose-deep);
     font-size: 15.5px;
 }
 
@@ -371,8 +370,8 @@ body {
     align-items: center;
     gap: 14px;
     padding: 15px 26px;
-    background: var(--gold-pale);
-    border-bottom: 1.5px dashed var(--accent-gold-mid);
+    background: var(--rose-pale);
+    border-bottom: 1.5px dashed var(--rose-line);
 }
 
 .current-staff-avatar {
@@ -382,7 +381,7 @@ body {
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-weight: 800; font-size: 16px;
-    border: 2px solid var(--accent-gold-mid);
+    border: 2px solid var(--rose-line);
     flex-shrink: 0;
 }
 
@@ -401,13 +400,13 @@ body {
 }
 
 .change-arrow {
-    font-size: 20px; color: var(--accent-gold); margin: 0 4px; font-weight: 700;
+    font-size: 20px; color: var(--rose-deep); margin: 0 4px; font-weight: 700;
 }
 
 .new-label {
     font-size: 12.5px; color: var(--navfoot-rose-deep); font-weight: 700;
     background: var(--white);
-    border: 1.5px dashed var(--accent-gold);
+    border: 1.5px dashed var(--rose-deep);
     padding: 7px 16px; border-radius: 8px;
 }
 
@@ -428,7 +427,7 @@ body {
 
 .form-title-line {
     flex: 1; height: 1px;
-    background: linear-gradient(90deg, var(--accent-gold-pale), transparent);
+    background: linear-gradient(90deg, var(--rose-line-light), transparent);
 }
 
 .form-row-2 {
@@ -460,8 +459,8 @@ body {
 
 .form-input:focus {
     outline: none;
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.16);
+    border-color: var(--rose-deep);
+    box-shadow: 0 0 0 3px rgba(200, 53, 104, 0.16);
     background: var(--white);
 }
 
@@ -488,12 +487,12 @@ body {
 }
 
 .select2-container--default.select2-container--focus .select2-selection--single {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.16);
+    border-color: var(--rose-deep);
+    box-shadow: 0 0 0 3px rgba(200, 53, 104, 0.16);
     outline: none;
 }
 
-/* ===== Submit Button (ทองทึบ) ===== */
+/* ===== Submit Button (ชมพูกุหลาบทึบ) ===== */
 /* สีปุ่มปกติ */
 .btn-submit {
     background: var(--accent-gold);
@@ -512,11 +511,10 @@ body {
     overflow: hidden;
 }
 
-/* สีปุ่มเวลาเอาเมาส์ชี้ (Hover) */
 .btn-submit:hover {
-    background: #C49132;
+    background: #B8862F;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(217, 164, 65, 0.4);
+    box-shadow: 0 8px 20px var(--shadow-warm);
 }
 
 /* ===== Back Link ===== */

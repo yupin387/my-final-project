@@ -148,31 +148,46 @@ public class OrganizerController {
     // 3. จัดการรายการจอง
     // ==========================================
     
-    // แสดงรายการจองทั้งหมดโดยกรองตามสถานะที่เลือก (เช่น งานใหม่ หรือ งานที่ยืนยันแล้ว)
+ // แสดงรายการจองทั้งหมดโดยกรองตามสถานะที่เลือก (เช่น งานใหม่ หรือ งานที่ยืนยันแล้ว)
     @GetMapping("/organizer/bookings")
     public String listBookings(@RequestParam(name = "status", defaultValue = "Pending") String status,
                                Model model, HttpSession session) {
         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
 
         // ==========================================================
-        //  แท็บ "งานใหม่" (Pending): รวม Approved เข้าไปด้วย
-        //  เพราะ "รับงานแล้ว" (Approved) ยังถือเป็นงานที่ organizer
-        //  ต้องดำเนินการต่อ (ทำใบเสนอราคา) — ยังไม่ใช่ขั้น "ยืนยันแล้ว"
-        //  ซึ่งเป็นสถานะที่ "ลูกค้า" เป็นคนกดยืนยันเอง
+        // นับจำนวนของแต่ละสถานะ เพื่อไปแสดงในตัว filter dropdown
         // ==========================================================
-     // ให้แก้ไขเงื่อนไขตรงส่วนนี้
-        if ("Pending".equals(status)) {
-            // เปลี่ยนให้ดึงเฉพาะสถานะ "Pending" (หรือสถานะเริ่มต้นที่ยังไม่ทำใบเสนอราคา) เท่านั้น
-            List<BookingForm> bookings = bookingService.findByStatus("Pending");
-            
+        int countPending   = bookingService.findByStatus("Pending").size();
+        int countConfirmed = bookingService.getBookingsByStatuses(
+                                Arrays.asList("Confirmed", "Assigned", "Preparing", "In_Progress")).size();
+        int countCompleted = bookingService.findByStatus("Completed").size();
+        int countRejected  = bookingService.findByStatus("Rejected").size();
+        int countAll       = countPending + countConfirmed + countCompleted + countRejected;
+
+        model.addAttribute("countPending", countPending);
+        model.addAttribute("countConfirmed", countConfirmed);
+        model.addAttribute("countCompleted", countCompleted);
+        model.addAttribute("countRejected", countRejected);
+        model.addAttribute("countAll", countAll);
+
+        // ==========================================================
+        // รองรับ "ทั้งหมด" (All) — รวมทุกสถานะเข้าด้วยกัน
+        // ==========================================================
+        if ("All".equals(status)) {
+            List<BookingForm> bookings = bookingService.getBookingsByStatuses(
+                Arrays.asList("Pending", "Confirmed", "Assigned", "Preparing", "In_Progress", "Completed", "Rejected"));
             model.addAttribute("bookings", bookings);
             model.addAttribute("currentStatus", status);
             return "bookingList_New";
         }
 
-        // ==========================================================
-        //  ดูแลงานที่ยืนยันแล้ว (ลูกค้ายืนยันเอง) และงานที่เสร็จสิ้น
-        // ==========================================================
+        if ("Pending".equals(status)) {
+            List<BookingForm> bookings = bookingService.findByStatus("Pending");
+            model.addAttribute("bookings", bookings);
+            model.addAttribute("currentStatus", status);
+            return "bookingList_New";
+        }
+
         if ("Confirmed".equals(status) || "Completed".equals(status)) {
             List<BookingForm> bookings;
             if ("Confirmed".equals(status)) {
@@ -186,9 +201,6 @@ public class OrganizerController {
             return "bookingList_Confirmed";
         }
 
-        // ==========================================================
-        // งานยกเลิก (Rejected)
-        // ==========================================================
         List<BookingForm> bookings = bookingService.findByStatus(status);
         model.addAttribute("bookings", bookings);
         model.addAttribute("currentStatus", status);

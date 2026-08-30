@@ -298,9 +298,9 @@ body {
     z-index: 1;
 }
 
-/* ========== CARD HEADER (สีทองล้วน ไม่ไล่เฉด พร้อมดอกบัวเด่นเหนือหัวข้อ) ========== */
+/* ========== CARD HEADER (สีชมพูกุหลาบล้วน แทนสีทอง พร้อมดอกบัวเด่นเหนือหัวข้อ) ========== */
 .card-header-bar {
-    background: var(--gold);
+    background: var(--rose-deep);
     padding: 108px 36px 26px;
     text-align: center;
     position: relative;
@@ -313,7 +313,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: var(--accent-gold-pale);
+    background: var(--rose-line-light);
 }
 
 .card-header-bar::after {
@@ -351,7 +351,7 @@ body {
     z-index: 1;
 }
 
-/* ---- ornament in header (สีขาวอมทองล้วน ไม่ไล่เฉด) ---- */
+/* ---- ornament in header (สีขาวอมชมพูล้วน ไม่ไล่เฉด) ---- */
 .card-header-orn {
     display: flex;
     align-items: center;
@@ -364,10 +364,10 @@ body {
 
 .orn-line {
     flex: 1; max-width: 80px; height: 1px;
-    background: var(--accent-gold-pale);
+    background: var(--rose-line-light);
 }
 
-.orn-line.r { background: var(--accent-gold-pale); }
+.orn-line.r { background: var(--rose-line-light); }
 .orn-d  { width: 8px; height: 8px; background: var(--white); transform: rotate(45deg); }
 .orn-ds { width: 4px; height: 4px; background: rgba(255, 255, 255, 0.85); transform: rotate(45deg); }
 
@@ -403,7 +403,7 @@ body {
 .section-label {
     font-size: 12px;
     font-weight: 700;
-    color: var(--gold);
+    color: var(--rose-deep);
     margin-bottom: 22px;
     display: flex;
     align-items: center;
@@ -517,7 +517,7 @@ body {
     margin: 4px 0;
 }
 
-/* ========== FORM ACTIONS (ปุ่มทองล้วน ไม่ไล่เฉด) ========== */
+/* ========== FORM ACTIONS (ปุ่มชมพูกุหลาบล้วน ไม่ไล่เฉด) ========== */
 .form-actions {
     display: flex;
     gap: 12px;
@@ -526,7 +526,7 @@ body {
 }
 
 .btn-submit {
-    background: var(--gold);
+    background: var(--accent-gold);
     color: #FFFFFF;
     border: none;
     border-radius: 10px;
@@ -536,13 +536,13 @@ body {
     cursor: pointer;
     font-family: 'Sarabun', sans-serif;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px var(--shadow-gold);
+    box-shadow: 0 4px 14px var(--shadow-warm);
 }
 
 .btn-submit:hover {
-    background: #A6763A;
+    background: var(--gold-text-deep);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(184, 134, 47, 0.35);
+    box-shadow: 0 6px 20px var(--shadow-warm);
 }
 
 .btn-cancel {

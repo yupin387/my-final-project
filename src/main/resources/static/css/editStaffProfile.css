@@ -255,10 +255,10 @@ body {
 
 /* ===== Card Header — ชมพู-กุหลาบเข้ม ให้เป็นชุดเดียวกับ nav-item.active/avatar ===== */
 .card-header {
-    background: var(--accent-pink-mid);
+    background: var(--accent-pink);
     padding: 30px 36px;
     text-align: center;
-    border-bottom: 2px solid var(--accent-pink);
+    border-bottom: 2px solid var(--accent-pink-mid);
     position: relative;
 }
 
@@ -412,23 +412,22 @@ form {
 /* ===== ปุ่มบันทึก สีฟ้าทึบ (ไม่ไล่สี) ===== */
 /* ===== ปุ่มบันทึก สีทองทึบ (ไม่ไล่สี) ===== */
 .btn-submit {
-    flex: 1;
-    background: var(--peach-primary); 
+    background: var(--accent-pink);
     color: #FFFFFF;
     border: none;
-    border-radius: 12px;
-    padding: 13px 28px;
+    border-radius: 10px;
+    padding: 13px 32px;
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 14px var(--shadow-soft);
+    box-shadow: 0 4px 14px rgba(200, 53, 104, 0.3);
 }
 
 .btn-submit:hover {
-    background: var(--peach-hover);
+    background: #A6284F;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(184, 135, 47, 0.35);
+    box-shadow: 0 6px 20px rgba(200, 53, 104, 0.4);
 }
 .btn-back {
     background: var(--white);

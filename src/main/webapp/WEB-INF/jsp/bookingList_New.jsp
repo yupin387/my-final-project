@@ -6,6 +6,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>รายการจองใหม่ - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bookingList.css">
@@ -64,18 +65,55 @@
         <div class="gold-line"></div>
     </div>
 
-        <!-- TABS -->
-<div class="tabs-wrapper">
-    <a href="?status=Pending"   class="tab-btn ${currentStatus == 'Pending'   ? 'active' : ''}">งานใหม่</a>
-    <a href="?status=Confirmed" class="tab-btn ${currentStatus == 'Confirmed' ? 'active' : ''}">ยืนยันแล้ว</a>
-    <a href="?status=Completed" class="tab-btn tab-completed ${currentStatus == 'Completed' ? 'active' : ''}">เสร็จสิ้นแล้ว</a>
-    <a href="?status=Rejected"  class="tab-btn tab-rejected ${currentStatus == 'Rejected' ? 'active' : ''}">ปฏิเสธ</a>
-</div>
+    <!-- ===== STATUS FILTER DROPDOWN ===== -->
+    <div class="status-filter-wrapper">
+        <span class="status-filter-label">▼ สถานะการจอง :</span>
+
+        <div class="status-filter-box" onclick="toggleStatusFilter()">
+            <span class="status-filter-current">
+                <c:choose>
+                    <c:when test="${currentStatus == 'All'}">
+                        <span class="dot dot-all"></span> ทั้งหมด <span class="count-badge">${countAll}</span>
+                    </c:when>
+                    <c:when test="${currentStatus == 'Pending'}">
+                        <span class="dot dot-pending"></span> งานใหม่ <span class="count-badge">${countPending}</span>
+                    </c:when>
+                    <c:when test="${currentStatus == 'Confirmed'}">
+                        <span class="dot dot-confirmed"></span> ยืนยันแล้ว <span class="count-badge">${countConfirmed}</span>
+                    </c:when>
+                    <c:when test="${currentStatus == 'Completed'}">
+                        <span class="dot dot-completed"></span> เสร็จสิ้นแล้ว <span class="count-badge">${countCompleted}</span>
+                    </c:when>
+                    <c:when test="${currentStatus == 'Rejected'}">
+                        <span class="dot dot-rejected"></span> ปฏิเสธ <span class="count-badge">${countRejected}</span>
+                    </c:when>
+                </c:choose>
+            </span>
+            <span class="status-filter-arrow" id="statusFilterArrow">▾</span>
+        </div>
+
+        <div class="status-filter-dropdown" id="statusFilterDropdown">
+            <a href="${pageContext.request.contextPath}/organizer/bookings?status=All" class="status-filter-item ${currentStatus == 'All' ? 'selected' : ''}">
+                <span class="dot dot-all"></span> ทั้งหมด <span class="count-badge">${countAll}</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/organizer/bookings?status=Pending" class="status-filter-item ${currentStatus == 'Pending' ? 'selected' : ''}">
+                <span class="dot dot-pending"></span> งานใหม่ <span class="count-badge">${countPending}</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/organizer/bookings?status=Confirmed" class="status-filter-item ${currentStatus == 'Confirmed' ? 'selected' : ''}">
+                <span class="dot dot-confirmed"></span> ยืนยันแล้ว <span class="count-badge">${countConfirmed}</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/organizer/bookings?status=Completed" class="status-filter-item ${currentStatus == 'Completed' ? 'selected' : ''}">
+                <span class="dot dot-completed"></span> เสร็จสิ้นแล้ว <span class="count-badge">${countCompleted}</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/organizer/bookings?status=Rejected" class="status-filter-item ${currentStatus == 'Rejected' ? 'selected' : ''}">
+                <span class="dot dot-rejected"></span> ปฏิเสธ <span class="count-badge">${countRejected}</span>
+            </a>
+        </div>
+    </div>
 
         <!-- TABLE CARD -->
         <div class="content-card">
             <div class="card-header-bar">
-                <span>รายการ: ${currentStatus}</span>
                 <span class="header-count">พบทั้งหมด ${fn:length(bookings)} รายการ</span>
             </div>
 
@@ -110,12 +148,25 @@
                                     </td>
                                     <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
                                     <td>
-                                        <span class="badge badge-${b.bookingStatus}">${b.bookingStatus}</span>
+                                        <span class="badge badge-${b.bookingStatus}">
+                                            <c:choose>
+                                                <c:when test="${b.bookingStatus == 'Pending'}">รอดำเนินการ</c:when>
+                                                <c:when test="${b.bookingStatus == 'Quoted'}">เสนอราคาแล้ว</c:when>
+                                                <c:when test="${b.bookingStatus == 'Approved'}">อนุมัติแล้ว</c:when>
+                                                <c:when test="${b.bookingStatus == 'Confirmed'}">ยืนยันแล้ว</c:when>
+                                                <c:when test="${b.bookingStatus == 'Assigned'}">มอบหมายงานแล้ว</c:when>
+                                                <c:when test="${b.bookingStatus == 'Preparing'}">กำลังเตรียมงาน</c:when>
+                                                <c:when test="${b.bookingStatus == 'In_Progress'}">กำลังดำเนินงาน</c:when>
+                                                <c:when test="${b.bookingStatus == 'Completed'}">เสร็จสิ้นแล้ว</c:when>
+                                                <c:when test="${b.bookingStatus == 'Rejected'}">ปฏิเสธแล้ว</c:when>
+                                                <c:otherwise>${b.bookingStatus}</c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </td>
                                     <td>
                                         <a href="${pageContext.request.contextPath}/organizer/bookings/detail/${b.bookingId}"
                                            class="btn-action btn-view"> ดูรายละเอียด</a>
-                                      
+
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -138,9 +189,32 @@
             </div>
             <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
         </div>
-       
+
     </footer>
 
     <script src="${pageContext.request.contextPath}/static/js/bookingList.js"></script>
+    <script>
+        function toggleStatusFilter() {
+            var dropdown = document.getElementById('statusFilterDropdown');
+            var arrow = document.getElementById('statusFilterArrow');
+            dropdown.classList.toggle('show');
+            arrow.textContent = dropdown.classList.contains('show') ? '▴' : '▾';
+        }
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.status-filter-wrapper')) {
+                document.getElementById('statusFilterDropdown').classList.remove('show');
+                document.getElementById('statusFilterArrow').textContent = '▾';
+            }
+        });
+
+        function toggleDropdown() {
+            document.getElementById('dropdownMenu').classList.toggle('show');
+        }
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-info')) {
+                document.getElementById('dropdownMenu').classList.remove('show');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -348,16 +348,20 @@
                                     </tr>
                                     <c:set var="printedServ" value="true"/>
                                 </c:if>
+                                <%-- บริการประสานงานนิมนต์พระ: ถ้าลูกค้าเลือก "นิมนต์เอง" ให้แสดงรายการนี้ไว้เหมือนเดิม
+                                     แต่บังคับราคาที่แสดงเป็น 0.00 พร้อมป้ายกำกับ เพื่อรองรับทั้งข้อมูลใหม่และข้อมูลใบเสนอราคาเก่า
+                                     ที่อาจเคยถูกบันทึกราคาไว้ก่อนแก้ไข logic --%>
+                                <c:set var="isFreeMonkService" value="${d.item.itemName == 'บริการประสานงานนิมนต์พระ' && isMonkSelfInvite}" />
                                 <tr>
                                     <td class="text-center row-number"></td>
                                     <td>
                                         ${d.item.itemName}
-                                       
+                                        <c:if test="${isFreeMonkService}"><span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / นิมนต์เอง)</span></c:if>
                                     </td>
                                     <td class="text-center"><fmt:formatNumber value="${d.quantity}" minFractionDigits="0" /></td>
                                     <td class="text-center">${d.item.unit}</td>
-                                    <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
-                                    <td class="text-right"><fmt:formatNumber value="${d.subtotal}" minFractionDigits="2" /></td>
+                                    <td class="text-right"><c:if test="${d.quantity > 0}"><fmt:formatNumber value="${isFreeMonkService ? 0.00 : d.subtotal / d.quantity}" minFractionDigits="2" /></c:if></td>
+                                    <td class="text-right"><fmt:formatNumber value="${isFreeMonkService ? 0.00 : d.subtotal}" minFractionDigits="2" /></td>
                                 </tr>
                             </c:if>
                         </c:forEach>
@@ -437,8 +441,14 @@
                                 <c:set var="itemVal" value="${d.subtotal}" />
                                 <c:set var="isFreeInTotal" value="false" />
                                 
-                                <%-- หักของฟรีในโหมดแพ็กเกจ --%>
+                                <%-- หักของฟรีในโหมดแพ็กเกจ (สังฆทานมาตรฐาน 299) --%>
                                 <c:if test="${!isCustomRequest && d.item != null && d.item.itemType != null && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
+                                    <c:set var="itemVal" value="0" />
+                                    <c:set var="isFreeInTotal" value="true" />
+                                </c:if>
+
+                                <%-- หักบริการประสานงานนิมนต์พระ เมื่อลูกค้าเลือก "นิมนต์เอง" (ใช้ได้ทั้งโหมดกรอกเองและโหมดแพ็กเกจ) --%>
+                                <c:if test="${d.item != null && d.item.itemName == 'บริการประสานงานนิมนต์พระ' && isMonkSelfInvite}">
                                     <c:set var="itemVal" value="0" />
                                     <c:set var="isFreeInTotal" value="true" />
                                 </c:if>

@@ -8,6 +8,49 @@
     <title>แก้ไขคำถาม - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addQuestion.css">
+    <style>
+    /* ===== FIX: เปลี่ยนจาก dropdown เลือกประเภทงานได้ทีละอัน เป็น checkbox
+       เลือกได้พร้อมกันหลายประเภท เพราะ 1 คำถามผูกได้กับหลายประเภทงานพร้อมกัน
+       (เหมือนหน้าเพิ่มคำถาม) — ค่าที่ติ๊กไว้มาจาก selectedCeremonyTypes ของ controller ===== */
+    .ceremony-checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .ceremony-checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        border: 1.5px solid var(--card-border, #F3C4D5);
+        border-radius: 10px;
+        background: #FFFFFF;
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+    }
+    .ceremony-checkbox-item:hover {
+        border-color: #EC6E96;
+        background: #FEF6F9;
+    }
+    .ceremony-checkbox-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: #EC6E96;
+        flex-shrink: 0;
+    }
+    .ceremony-checkbox-item label {
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        flex: 1;
+    }
+    .checkbox-group-hint {
+        font-size: 12px;
+        color: #8A7666;
+        margin: -4px 0 4px;
+    }
+    </style>
 </head>
 <body>
  
@@ -80,21 +123,28 @@
                            value="${question.questionsText}" required/>
                 </div>
 
+                <%-- ===== FIX: checkbox หลายอัน แทน dropdown เดี่ยว
+                     ติ๊กตาม selectedCeremonyTypes ที่ controller ส่งมา (ทุกประเภทที่ผูกอยู่จริง
+                     ไม่ใช่แค่ตัวแรกเหมือนเดิม) ===== --%>
                 <div class="form-group">
-                    <label for="ceremonyType">ประเภทงาน</label>
-                    <div class="select-wrapper">
-                        <select id="ceremonyType" name="ceremonyType" required>
-                            <option value="">-- เลือกประเภทงาน --</option>
-                            <!-- แก้ไขจุดนี้โดยใช้ currentCeremonyType ที่ส่งมาจาก Controller -->
-                            <c:forEach var="type" items="${ceremonyTypes}">
-                                <option value="${type}"
-                                    ${currentCeremonyType != null && type == currentCeremonyType ? 'selected' : ''}>${type}</option>
+                    <label>ประเภทงาน</label>
+                    <p class="checkbox-group-hint">เลือกได้มากกว่า 1 ประเภท — คำถามข้อนี้จะถูกใช้กับทุกประเภทงานที่ติ๊กไว้</p>
+                    <div class="ceremony-checkbox-group">
+                        <c:forEach var="type" items="${ceremonyTypes}">
+                            <c:set var="isChecked" value="false" />
+                            <c:forEach var="selType" items="${selectedCeremonyTypes}">
+                                <c:if test="${selType == type}">
+                                    <c:set var="isChecked" value="true" />
+                                </c:if>
                             </c:forEach>
-                        </select>
+                            <div class="ceremony-checkbox-item">
+                                <input type="checkbox" name="ceremonyTypes" value="${type}" id="ct_${type}"
+                                    ${isChecked ? 'checked' : ''}>
+                                <label for="ct_${type}">${type}</label>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
- 
-                <hr class="divider">
  
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">บันทึกการแก้ไข</button>

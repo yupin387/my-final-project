@@ -5,9 +5,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>รายการ Item - บุญมีนำพา จัดงานบุญ</title>
+<title>รายการอุปกรณ์ - บุญมีนำพา จัดงานบุญ</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/itemList.css?v=3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/itemList.css?v=4">
+<style>
+/* =====================================================================
+   FIX: ตัวกรอง (ประเภทอุปกรณ์ / ประเภทงาน) เปลี่ยนจาก <select> ธรรมดา
+   เป็น dropdown แบบเดียวกับหน้ารายการจอง (bookingList) — กล่องคลิกเปิด/ปิด
+   พร้อมจุดสีบอกหมวด, ใช้ <a href="..."> ต่อรายการเพื่อคง state ของ
+   ตัวกรองอีกตัวไว้ (ไม่ล้างค่ากันเอง) ตรงตาม pattern เดิมของ bookingList
+   ===================================================================== */
+.filter-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.status-filter-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--white);
+    border: 1.5px solid var(--card-border);
+    border-radius: 30px;
+    padding: 8px 18px;
+    box-shadow: 0 3px 10px var(--shadow-soft);
+}
+
+.status-filter-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brown-muted);
+    white-space: nowrap;
+}
+
+.status-filter-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 190px;
+    padding: 8px 16px;
+    background: var(--peach-pale);
+    border: 1.5px solid var(--accent-pink);
+    border-radius: 22px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--brown-text);
+    user-select: none;
+    transition: box-shadow 0.2s;
+}
+.status-filter-box:hover { box-shadow: 0 3px 10px var(--shadow-soft); }
+
+.status-filter-current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-filter-arrow {
+    font-size: 10px;
+    color: var(--accent-pink);
+    flex-shrink: 0;
+}
+
+.status-filter-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 240px;
+    background: var(--white);
+    border: 1.5px solid var(--card-border);
+    border-radius: 14px;
+    box-shadow: 0 10px 28px var(--shadow-soft);
+    z-index: 500;
+    overflow: hidden;
+}
+.status-filter-dropdown.show { display: block; }
+
+.status-filter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    text-decoration: none;
+    color: var(--brown-text);
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--bg-light);
+    transition: background 0.15s;
+}
+.status-filter-item:last-child { border-bottom: none; }
+.status-filter-item:hover { background: var(--peach-pale); }
+.status-filter-item.selected {
+    background: var(--accent-pink-pale);
+    color: var(--accent-pink);
+    font-weight: 700;
+}
+
+.dot-sm {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.dot-type-all { background: var(--accent-pink); }
+.dot-type     { background: var(--gold-primary); }
+</style>
 </head>
 <body>
 
@@ -28,8 +137,8 @@
         </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
-                <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">รายการงานที่ได้รับมอบหมาย</a>
-                <a href="${pageContext.request.contextPath}/staff/items" class="nav-item active">จัดการ Item</a>
+                <a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">งานที่ได้รับมอบหมาย</a>
+                <a href="${pageContext.request.contextPath}/staff/items" class="nav-item active">จัดการรายการอุปกรณ์</a>
             </nav>
             <div class="user-info" onclick="toggleDropdown()">
                 <div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
@@ -56,58 +165,106 @@
                     <div class="ornament-diamond-sm"></div>
                     <div class="ornament-line right"></div>
                 </div>
-                <h1>รายการ Item</h1>
+                <h1>รายการอุปกรณ์</h1>
                 <p>จัดการอุปกรณ์และบริการทั้งหมดในระบบ</p>
                 <div class="gold-line"></div>
             </div>
-            <a href="${pageContext.request.contextPath}/staff/items/add" class="btn-add">+ เพิ่ม Item</a>
+            <a href="${pageContext.request.contextPath}/staff/items/add" class="btn-add">+ เพิ่มอุปกรณ์</a>
         </div>
 
-        <%-- ========== FILTER ========== --%>
-        <div class="filter-wrapper">
-            <label for="typeFilter" class="filter-label">กรองตามประเภท:</label>
-            <select id="typeFilter" class="filter-select" onchange="applyFilters()">
-                <option value="all" ${(empty selectedType or selectedType eq 'all') ? 'selected' : ''}>
-                    ทั้งหมด
-                </option>
-                <c:forEach var="type" items="${itemTypes}">
-                    <option value="${type.itemTypeId}"
-                        ${selectedType.toString() eq type.itemTypeId.toString() ? 'selected' : ''}>
-                        ${type.itemTypeName}
-                    </option>
-                </c:forEach>
-            </select>
+        <%-- ========== FILTER (แบบเดียวกับหน้ารายการจอง) ========== --%>
+        <c:set var="curType" value="${empty selectedType ? 'all' : selectedType}" />
+        <c:set var="curCeremony" value="${empty selectedCeremonyType ? 'all' : selectedCeremonyType}" />
 
-           <label for="ceremonyTypeFilter" class="filter-label">กรองตามประเภทงาน:</label>
-            <select id="ceremonyTypeFilter" class="filter-select" onchange="applyFilters()">
-                <option value="all" ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'selected' : ''}>
-                    ⚪ ทั้งหมด
-                </option>
-                <c:forEach var="cType" items="${ceremonyTypeOrder}">
-                    <c:choose>
-                        <c:when test="${cType eq 'ทำบุญบ้าน'}">
-                            <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
-                                🔴 ${cType}
-                            </option>
-                        </c:when>
-                        <c:when test="${cType eq 'ขึ้นบ้านใหม่'}">
-                            <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
-                                🟢 ${cType}
-                            </option>
-                        </c:when>
-                        <c:when test="${cType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
-                            <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
-                                🔵 ${cType}
-                            </option>
-                        </c:when>
-                        <c:otherwise>
-                            <option value="${cType}" ${selectedCeremonyType eq cType ? 'selected' : ''}>
-                                ⚪ ${cType}
-                            </option>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </select>
+        <div class="filter-wrapper">
+
+            <%-- ----- กรองตามประเภทอุปกรณ์ ----- --%>
+            <div class="status-filter-group">
+                <span class="status-filter-label">▼ ประเภทอุปกรณ์ :</span>
+                <div class="status-filter-box" onclick="toggleFilter('typeDropdown', 'typeArrow')">
+                    <span class="status-filter-current">
+                        <c:choose>
+                            <c:when test="${curType == 'all'}">
+                                <span class="dot-sm dot-type-all"></span> ทั้งหมด
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach var="t" items="${itemTypes}">
+                                    <c:if test="${t.itemTypeId.toString() == curType.toString()}">
+                                        <span class="dot-sm dot-type"></span> ${t.itemTypeName}
+                                    </c:if>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
+                    </span>
+                    <span class="status-filter-arrow" id="typeArrow">▾</span>
+                </div>
+                <div class="status-filter-dropdown" id="typeDropdown">
+                    <a href="${pageContext.request.contextPath}/staff/items?typeId=all&ceremonyType=${curCeremony}"
+                       class="status-filter-item ${curType == 'all' ? 'selected' : ''}">
+                        <span class="dot-sm dot-type-all"></span> ทั้งหมด
+                    </a>
+                    <c:forEach var="t" items="${itemTypes}">
+                        <a href="${pageContext.request.contextPath}/staff/items?typeId=${t.itemTypeId}&ceremonyType=${curCeremony}"
+                           class="status-filter-item ${curType.toString() == t.itemTypeId.toString() ? 'selected' : ''}">
+                            <span class="dot-sm dot-type"></span> ${t.itemTypeName}
+                        </a>
+                    </c:forEach>
+                </div>
+            </div>
+
+            <%-- ----- กรองตามประเภทงาน ----- --%>
+            <div class="status-filter-group">
+                <span class="status-filter-label">▼ ประเภทงาน :</span>
+                <div class="status-filter-box" onclick="toggleFilter('ceremonyDropdown', 'ceremonyArrow')">
+                    <span class="status-filter-current">
+                        <c:choose>
+                            <c:when test="${curCeremony == 'all'}">
+                                <span class="dot-sm dot-type-all"></span> ทั้งหมด
+                            </c:when>
+                            <c:when test="${curCeremony == 'ทำบุญบ้าน'}">
+                                <span class="dot-sm dot-home"></span> ${curCeremony}
+                            </c:when>
+                            <c:when test="${curCeremony == 'ขึ้นบ้านใหม่'}">
+                                <span class="dot-sm dot-newhome"></span> ${curCeremony}
+                            </c:when>
+                            <c:when test="${curCeremony == 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                <span class="dot-sm dot-company"></span> ${curCeremony}
+                            </c:when>
+                            <c:otherwise>
+                                <span class="dot-sm dot-type"></span> ${curCeremony}
+                            </c:otherwise>
+                        </c:choose>
+                    </span>
+                    <span class="status-filter-arrow" id="ceremonyArrow">▾</span>
+                </div>
+                <div class="status-filter-dropdown" id="ceremonyDropdown">
+                    <a href="${pageContext.request.contextPath}/staff/items?typeId=${curType}&ceremonyType=all"
+                       class="status-filter-item ${curCeremony == 'all' ? 'selected' : ''}">
+                        <span class="dot-sm dot-type-all"></span> ทั้งหมด
+                    </a>
+                    <c:forEach var="cType" items="${ceremonyTypeOrder}">
+                        <a href="${pageContext.request.contextPath}/staff/items?typeId=${curType}&ceremonyType=${cType}"
+                           class="status-filter-item ${curCeremony == cType ? 'selected' : ''}">
+                            <c:choose>
+                                <c:when test="${cType == 'ทำบุญบ้าน'}">
+                                    <span class="dot-sm dot-home"></span>
+                                </c:when>
+                                <c:when test="${cType == 'ขึ้นบ้านใหม่'}">
+                                    <span class="dot-sm dot-newhome"></span>
+                                </c:when>
+                                <c:when test="${cType == 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                    <span class="dot-sm dot-company"></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="dot-sm dot-type"></span>
+                                </c:otherwise>
+                            </c:choose>
+                            ${cType}
+                        </a>
+                    </c:forEach>
+                </div>
+            </div>
+
         </div>
 
         <%-- ========== CONTENT CARD ========== --%>
@@ -119,7 +276,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th width="35%">ชื่อ Item</th>
+                        <th width="35%">ชื่ออุปกรณ์</th>
                         <th width="20%">ประเภท</th>
                         <th width="25%">ใช้กับพิธี</th>
                         <th width="20%">จัดการ</th>
@@ -216,13 +373,35 @@
         }
     });
 
-    function applyFilters() {
-        var typeId = document.getElementById('typeFilter').value;
-        var ceremonyType = document.getElementById('ceremonyTypeFilter').value;
-        var base = '${pageContext.request.contextPath}/staff/items';
-        location = base + '?typeId=' + encodeURIComponent(typeId)
-                        + '&ceremonyType=' + encodeURIComponent(ceremonyType);
+    /* ===== ตัวกรอง: เปิด/ปิด dropdown แบบเดียวกับหน้ารายการจอง ===== */
+    function toggleFilter(dropdownId, arrowId) {
+        var dropdown = document.getElementById(dropdownId);
+        var arrow = document.getElementById(arrowId);
+        var isOpen = dropdown.classList.contains('show');
+
+        // ปิด dropdown ตัวกรองอื่นก่อนเสมอ กันเปิดซ้อนกันสองอัน
+        document.querySelectorAll('.status-filter-dropdown.show').forEach(function (el) {
+            el.classList.remove('show');
+        });
+        document.querySelectorAll('.status-filter-arrow').forEach(function (el) {
+            el.textContent = '▾';
+        });
+
+        if (!isOpen) {
+            dropdown.classList.add('show');
+            arrow.textContent = '▴';
+        }
     }
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.status-filter-group')) {
+            document.querySelectorAll('.status-filter-dropdown.show').forEach(function (el) {
+                el.classList.remove('show');
+            });
+            document.querySelectorAll('.status-filter-arrow').forEach(function (el) {
+                el.textContent = '▾';
+            });
+        }
+    });
     </script>
 </body>
 </html>

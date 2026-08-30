@@ -661,12 +661,12 @@ body {
 }
 
 .btn-approve {
-    background: var(--rose-deep);
+    background: var(--accent-gold);
     color: #FFFFFF;
-    box-shadow: 0 3px 10px rgba(200, 53, 104, 0.3);
+    box-shadow: 0 3px 10px var(--shadow-warm);
 }
 .btn-approve:hover {
-    background: #A6284F;
+    background: var(--gold-text-deep);
     transform: translateY(-1px);
     color: #FFFFFF;
 }
