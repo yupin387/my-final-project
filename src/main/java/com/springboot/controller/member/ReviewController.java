@@ -97,19 +97,14 @@ public class ReviewController {
     @GetMapping("/reviews/{ceremonyId}")
     public String viewReviewsByCeremony(@PathVariable int ceremonyId,
                                          @RequestParam(value = "rating", required = false) Integer rating,
+                                         @RequestParam(value = "page", defaultValue = "1") int page,
                                          Model model) {
         List<Review> allReviews = reviewService.getAllReviews();
 
-        // ชุด "stats" กรองแค่ตาม ceremonyId เท่านั้น ใช้คำนวณคะแนนเฉลี่ยและ
-        // สัดส่วนดาว (avgRating / starCounts) โดยไม่เอาตัวกรอง rating มาปน
-        // เพื่อไม่ให้ตัวเลขสรุปเปลี่ยนไปตามดาวที่กำลังกดกรองอยู่
         List<Review> reviewsForStats = allReviews.stream()
             .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == ceremonyId)
             .collect(Collectors.toList());
 
-        // ชุดที่ใช้แสดงการ์ดรีวิวจริง ๆ ค่อยกรองต่อด้วย rating (ถ้ามี)
-        // FIX: เพิ่มกรองตามจำนวนดาว เหมือนกับใน viewAllReviews() เพื่อให้ rating-bars
-        // ที่กดได้ในหน้านี้ทำงานสอดคล้องกัน (คำนวณจาก Math.round เหมือน starCounts ด้านล่าง)
         List<Review> reviews = reviewsForStats;
         if (rating != null) {
             reviews = reviews.stream()
@@ -117,18 +112,29 @@ public class ReviewController {
                 .collect(Collectors.toList());
         }
 
+        // --- ระบบ Pagination (หน้าละ 9 รีวิว) ---
+        int pageSize = 9;
+        int totalReviews = reviews.size();
+        int totalPages = (int) Math.ceil((double) totalReviews / pageSize);
+        if (page > totalPages && totalPages > 0) page = totalPages;
+        if (page < 1) page = 1;
+
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, totalReviews);
+        List<Review> pagedReviews = (start <= end) ? reviews.subList(start, end) : new ArrayList<>();
+        // ----------------------------------------
+
         double avg = reviewsForStats.stream().mapToDouble(Review::getRating).average().orElse(0.0);
         Map<Long, Long> starCounts = reviewsForStats.stream()
                 .collect(Collectors.groupingBy(r -> Math.round(r.getRating()), Collectors.counting()));
 
-        model.addAttribute("reviews", reviews);
+        model.addAttribute("reviews", pagedReviews); // ใช้ list ที่ตัดแล้วแสดงผล
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("avgRating", avg);
         model.addAttribute("starCounts", starCounts);
         model.addAttribute("selectedCeremonyId", ceremonyId);
-        model.addAttribute("selectedRating", rating); // FIX: ส่งกลับไปให้ JSP ไฮไลต์แถบดาวที่เลือกอยู่
-
-        // FIX: เดิมหน้านี้ไม่ได้ set ceremonyTypes ทำให้เมนู dropdown "บริการ/แพ็กเกจ"
-        // ใน navbar ของ viewReview.jsp ว่างเปล่า
+        model.addAttribute("selectedRating", rating);
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
 
         return "viewReview";
@@ -150,14 +156,11 @@ public class ReviewController {
     public String viewAllReviews(
             @RequestParam(value = "type", required = false) String type,
             @RequestParam(value = "rating", required = false) Integer rating,
+            @RequestParam(value = "page", defaultValue = "1") int page,
             Model model) {
 
         List<Review> allReviews = reviewService.getAllReviews();
 
-        // ชุด "stats" กรองแค่ตามประเภทงาน (type) เท่านั้น -> ใช้คำนวณคะแนนเฉลี่ยและ
-        // สัดส่วนดาว ถ้า type ว่าง (เลือก "ทั้งหมด") จะเฉลี่ยจากรีวิวทุกงาน
-        // ถ้าเลือก type ใดไว้ จะเฉลี่ยเฉพาะงานประเภทนั้น และค่านี้จะไม่เปลี่ยนตาม
-        // rating ที่กดกรองอีกต่อไป
         List<Review> reviewsForStats = allReviews;
         if (type != null && !type.trim().isEmpty()) {
             String typeTrimmed = type.trim();
@@ -171,15 +174,24 @@ public class ReviewController {
                 .collect(Collectors.toList());
         }
 
-        // ชุดที่ใช้แสดงการ์ดรีวิวจริง ๆ กรองต่อจาก reviewsForStats ด้วย rating (ถ้ามี)
-        // ปัดเศษด้วย Math.round เหมือนตอนสร้าง starCounts ด้านล่าง เพื่อให้ rating=4
-        // ครอบคลุมรีวิวที่ให้คะแนน 3.5-4.4 ตามเกณฑ์เดียวกับที่แสดงในแถบสัดส่วน
         List<Review> reviews = reviewsForStats;
         if (rating != null) {
             reviews = reviews.stream()
                 .filter(r -> Math.round(r.getRating()) == rating)
                 .collect(Collectors.toList());
         }
+
+        // --- ระบบ Pagination (หน้าละ 9 รีวิว) ---
+        int pageSize = 9;
+        int totalReviews = reviews.size();
+        int totalPages = (int) Math.ceil((double) totalReviews / pageSize);
+        if (page > totalPages && totalPages > 0) page = totalPages;
+        if (page < 1) page = 1;
+
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, totalReviews);
+        List<Review> pagedReviews = (start <= end) ? reviews.subList(start, end) : new ArrayList<>();
+        // ----------------------------------------
 
         double avg = reviewsForStats.stream()
                             .mapToDouble(Review::getRating)
@@ -189,13 +201,13 @@ public class ReviewController {
         Map<Long, Long> starCounts = reviewsForStats.stream()
                 .collect(Collectors.groupingBy(r -> Math.round(r.getRating()), Collectors.counting()));
 
-        model.addAttribute("reviews", reviews);
+        model.addAttribute("reviews", pagedReviews); // ใช้ list ที่ตัดแล้วแสดงผล
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("avgRating", avg);
         model.addAttribute("starCounts", starCounts);
         model.addAttribute("selectedCeremonyType", type);
-        model.addAttribute("selectedRating", rating); // FIX: ส่งกลับไปให้ JSP ไฮไลต์ปุ่ม/แถบดาวที่เลือกอยู่
-
-        // FIX: เพิ่ม ceremonyTypes ให้ dropdown "บริการ/แพ็กเกจ" ใน navbar ของ viewReview.jsp
+        model.addAttribute("selectedRating", rating);
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
 
         return "viewReview";

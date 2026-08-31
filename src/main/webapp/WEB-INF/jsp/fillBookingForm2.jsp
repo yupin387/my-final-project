@@ -749,11 +749,16 @@ function toggleWatDetailBlock(id, show) {
     
     var monkCountGroup = document.getElementById('monkCountGroup');
     if (monkCountGroup) {
-        monkCountGroup.style.display = show ? 'none' : 'block';
-        if (show) {
-            var checkedPkg = document.querySelector('input[name="ceremony.ceremonyId"]:checked');
-            if (checkedPkg && checkedPkg.dataset.monkcount) {
-                onMonkCountInputChange(checkedPkg.dataset.monkcount);
+        // ในกรณีจองแบบกรอกเอง (startInCustomMode = true) ให้โชว์ช่องจำนวนพระตลอดเวลา
+        if (${startInCustomMode}) {
+            monkCountGroup.style.display = 'block';
+        } else {
+            monkCountGroup.style.display = show ? 'none' : 'block';
+            if (show) {
+                var checkedPkg = document.querySelector('input[name="ceremony.ceremonyId"]:checked');
+                if (checkedPkg && checkedPkg.dataset.monkcount) {
+                    onMonkCountInputChange(checkedPkg.dataset.monkcount);
+                }
             }
         }
     }
@@ -764,19 +769,16 @@ function toggleWatDetailBlock(id, show) {
     var isCustom = ${startInCustomMode};
 
     if (show) {
-        // กรณีเลือก "ให้ทางร้านนิมนต์" -> แสดงเตือนรัศมี, ซ่อนเตือนส่วนลด
         if (shopWarning) shopWarning.style.display = 'block';
         if (pkgSelfWarning) pkgSelfWarning.style.display = 'none';
     } else {
-        // กรณีเลือก "นิมนต์เอง" -> ซ่อนเตือนรัศมีทันทีในทุกกรณี
         if (shopWarning) shopWarning.style.display = 'none';
-        
-        // ถ้าเป็นแบบแพ็กเกจ ถึงจะแสดงข้อความเตือนส่วนลด 1,500 บาท / ถ้าเป็นกรอกเองจะไม่แสดงอะไรเลย
         if (!isCustom && pkgSelfWarning) {
             pkgSelfWarning.style.display = 'block';
         }
     }
 }
+
 function toggleSection(id, show) {
     var el = document.getElementById(id);
     if (el) el.style.display = show ? 'block' : 'none';

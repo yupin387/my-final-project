@@ -337,6 +337,46 @@
     </div>
 </div>
 
+<%-- ========== PAGINATION (ปุ่มเปลี่ยนหน้า รีวิวหน้าละ 9 รายการ) ========== --%>
+    <c:if test="${totalPages > 1}">
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; gap: 8px; margin: 40px 0 10px;">
+            
+            <%-- ปุ่มย้อนกลับ (Previous) --%>
+            <c:url var="prevUrl" value="${selectedCeremonyId != null ? '/reviews/'.concat(selectedCeremonyId) : '/reviews'}">
+                <c:param name="page" value="${currentPage - 1}"/>
+                <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+                <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+            </c:url>
+            <a href="${prevUrl}" class="page-btn ${currentPage == 1 ? 'disabled' : ''}" style="padding: 8px 14px; border: 1px solid #C9944A; border-radius: 8px; text-decoration: none; color: ${currentPage == 1 ? '#ccc' : '#C9944A'}; pointer-events: ${currentPage == 1 ? 'none' : 'auto'}; background-color: #fff;">
+                &laquo; ก่อนหน้า
+            </a>
+
+            <%-- วนลูปแสดงเลขหน้า --%>
+            <c:forEach begin="1" end="${totalPages}" var="i">
+                <c:url var="pageUrl" value="${selectedCeremonyId != null ? '/reviews/'.concat(selectedCeremonyId) : '/reviews'}">
+                    <c:param name="page" value="${i}"/>
+                    <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+                    <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+                </c:url>
+                <a href="${pageUrl}" class="page-btn ${i == currentPage ? 'active' : ''}" style="padding: 8px 14px; border: 1px solid #C9944A; border-radius: 8px; text-decoration: none; background-color: ${i == currentPage ? '#C9944A' : '#fff'}; color: ${i == currentPage ? '#fff' : '#C9944A'}; font-weight: ${i == currentPage ? 'bold' : 'normal'};">
+                    ${i}
+                </a>
+            </c:forEach>
+
+            <%-- ปุ่มถัดไป (Next) --%>
+            <c:url var="nextUrl" value="${selectedCeremonyId != null ? '/reviews/'.concat(selectedCeremonyId) : '/reviews'}">
+                <c:param name="page" value="${currentPage + 1}"/>
+                <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+                <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
+            </c:url>
+            <a href="${nextUrl}" class="page-btn ${currentPage == totalPages ? 'disabled' : ''}" style="padding: 8px 14px; border: 1px solid #C9944A; border-radius: 8px; text-decoration: none; color: ${currentPage == totalPages ? '#ccc' : '#C9944A'}; pointer-events: ${currentPage == totalPages ? 'none' : 'auto'}; background-color: #fff;">
+                ถัดไป &raquo;
+            </a>
+
+        </div>
+    </c:if>
+</div>
+
 <div class="page-wrapper">
     <c:if test="${empty reviews}">
         <div class="empty-state">
@@ -344,7 +384,6 @@
             <p>ยังไม่มีข้อมูลการรีวิวในขณะนี้</p>
         </div>
     </c:if>
-
 </div>
 
 <%-- ========== LIGHTBOX สำหรับคลิกขยายภาพรีวิว ========== --%>
