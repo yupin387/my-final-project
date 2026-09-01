@@ -152,27 +152,148 @@ function updatePinInfo(lat, lng) {
         link.href = 'https://www.google.com/maps?q=' + lat + ',' + lng;
         link.style.display = 'inline-block';
     }
+
+    // ===== เพิ่มใหม่: Reverse geocode เพื่อเติมชื่อสถานที่กลับเข้าช่องค้นหา =====
+    var searchInput = document.getElementById('mapSearchInput');
+    if (searchInput) {
+        searchInput.value = 'กำลังค้นหาชื่อสถานที่...';
+        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1')
+            .then(function(res) { return res.json(); })
+            .then(function(result) {
+                if (result && result.display_name) {
+                    searchInput.value = result.display_name;
+                } else {
+                    searchInput.value = '';
+                }
+            })
+            .catch(function() {
+                searchInput.value = '';
+            });
+    }
+}
+
+// ===== ค้นหาที่อยู่แบบไล่ระดับ (Nominatim ไม่รู้จักฟอร์แมตที่อยู่ไทยแบบ "เลขที่/หมู่" =====
+// ดังนั้นถ้าค้นแบบเต็มไม่เจอ จะค่อยๆ ตัดรายละเอียดออกจนกว่าจะเจอจุดอ้างอิงที่ใกล้เคียงที่สุด
+
+function extractAddressLevels(raw) {
+    var tambon   = raw.match(/(?:ตำบล|ต\.)\s*([^\s]+)/);
+    var amphoe   = raw.match(/(?:อำเภอ|อ\.)\s*([^\s]+)/);
+    var changwat = raw.match(/(?:จังหวัด|จ\.)\s*([^\s]+)/);
+    return {
+        tambon: tambon ? tambon[1] : null,
+        amphoe: amphoe ? amphoe[1] : null,
+        changwat: changwat ? changwat[1] : null
+    };
+}
+
+function buildSearchCandidates(raw) {
+    var candidates = [raw]; // 1. ข้อความเต็มตามที่พิมพ์
+
+    var cleaned = raw
+        .replace(/เลขที่\s*[\d\/\-]+/g, '')
+        .replace(/หมู่ที่?\s*\d+/g, '')
+        .replace(/^\s*[\d\/\-]+\s+/, '')
+        .trim();
+    if (cleaned && cleaned !== raw) candidates.push(cleaned); // 2. ตัดเลขที่บ้าน/หมู่ออก
+
+    var levels = extractAddressLevels(raw);
+    if (levels.tambon && levels.amphoe && levels.changwat) {
+        candidates.push('ตำบล' + levels.tambon + ' อำเภอ' + levels.amphoe + ' จังหวัด' + levels.changwat); // 3.
+    }
+    if (levels.amphoe && levels.changwat) {
+        candidates.push('อำเภอ' + levels.amphoe + ' จังหวัด' + levels.changwat); // 4.
+    }
+    if (levels.changwat) {
+        candidates.push('จังหวัด' + levels.changwat); // 5.
+    }
+
+    return candidates.filter(function(v, i) { return v && candidates.indexOf(v) === i; });
+}
+
+function nominatimSearch(q, center) {
+    var delta = 0.5; // ~50 กม. รอบจุดกึ่งกลางแผนที่ปัจจุบัน (bias ไม่ใช่ hard filter)
+    var viewbox = (center.lng - delta) + ',' + (center.lat + delta) + ',' + (center.lng + delta) + ',' + (center.lat - delta);
+    var url = 'https://nominatim.openstreetmap.org/search'
+        + '?format=jsonv2&addressdetails=1&limit=6'
+        + '&countrycodes=th&accept-language=th'
+        + '&viewbox=' + viewbox + '&bounded=0'
+        + '&q=' + encodeURIComponent(q);
+    return fetch(url).then(function(res) { return res.json(); });
+}
+
+function renderSearchResults(resultsBox, results, levelIndex, levelLabels) {
+    resultsBox.innerHTML = '';
+    if (levelIndex > 0) {
+        var note = document.createElement('div');
+        note.className = 'map-search-note';
+        note.innerText = 'ไม่พบที่อยู่แบบเต็ม แสดงผลลัพธ์ระดับ "' + levelLabels[levelIndex] + '" แทน — เลือกจุดที่ใกล้เคียงแล้วลากหมุดปรับต่อ';
+        resultsBox.appendChild(note);
+    }
+    results.forEach(function(r) {
+        var item = document.createElement('div');
+        item.className = 'map-search-item';
+        item.textContent = r.display_name;
+        item.addEventListener('click', function() {
+            setMapPin(parseFloat(r.lat), parseFloat(r.lon));
+            resultsBox.style.display = 'none';
+        });
+        resultsBox.appendChild(item);
+    });
+    resultsBox.style.display = 'block';
 }
 
 function searchLocationOnMap() {
-    var q = document.getElementById('mapSearchInput').value.trim();
-    if (!q) return;
+    var rawQ = document.getElementById('mapSearchInput').value.trim();
+    if (!rawQ) return;
 
-    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q))
-        .then(function(res) { return res.json(); })
-        .then(function(results) {
-            if (results && results.length > 0) {
-                var lat = parseFloat(results[0].lat);
-                var lng = parseFloat(results[0].lon);
-                setMapPin(lat, lng);
+    var resultsBox = document.getElementById('mapSearchResults');
+    if (resultsBox) {
+        resultsBox.innerHTML = '<div class="map-search-loading">กำลังค้นหา...</div>';
+        resultsBox.style.display = 'block';
+    }
+
+    var center = locationMap ? locationMap.getCenter() : { lat: DEFAULT_MAP_CENTER[0], lng: DEFAULT_MAP_CENTER[1] };
+    var candidates = buildSearchCandidates(rawQ);
+    var levelLabels = ['ที่อยู่แบบเต็ม', 'ตัดเลขที่บ้าน/หมู่', 'ระดับตำบล', 'ระดับอำเภอ', 'ระดับจังหวัด'];
+
+    function tryNext(index) {
+        if (index >= candidates.length) {
+            var msg = 'ไม่พบตำแหน่งนี้ในทุกระดับที่ลองแล้ว<br>กรุณาปักหมุดเองบนแผนที่ หรือกด "ใช้ตำแหน่งปัจจุบัน"';
+            if (resultsBox) {
+                resultsBox.innerHTML = '<div class="map-search-empty">' + msg + '</div>';
             } else {
-                alert('ไม่พบตำแหน่งที่ค้นหา ลองระบุที่อยู่ให้ละเอียดขึ้น');
+                alert('ไม่พบตำแหน่งนี้ กรุณาปักหมุดเองบนแผนที่');
             }
-        })
-        .catch(function() {
-            alert('ค้นหาตำแหน่งไม่สำเร็จ กรุณาลองใหม่');
-        });
+            return;
+        }
+
+        nominatimSearch(candidates[index], center)
+            .then(function(results) {
+                if (results && results.length > 0) {
+                    if (!resultsBox) {
+                        setMapPin(parseFloat(results[0].lat), parseFloat(results[0].lon));
+                        return;
+                    }
+                    renderSearchResults(resultsBox, results, index, levelLabels);
+                } else {
+                    setTimeout(function() { tryNext(index + 1); }, 1000); // เว้น 1 วิ กัน rate limit ของ Nominatim
+                }
+            })
+            .catch(function() {
+                setTimeout(function() { tryNext(index + 1); }, 1000);
+            });
+    }
+
+    tryNext(0);
 }
+
+document.addEventListener('click', function(e) {
+    var resultsBox = document.getElementById('mapSearchResults');
+    var searchInput = document.getElementById('mapSearchInput');
+    if (resultsBox && !resultsBox.contains(e.target) && e.target !== searchInput) {
+        resultsBox.style.display = 'none';
+    }
+});
 
 function useCurrentLocationOnMap() {
     if (!navigator.geolocation) {

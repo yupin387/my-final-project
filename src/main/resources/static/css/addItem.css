@@ -628,3 +628,182 @@ body {
 .btn-quick-select:hover {
     background: #f5f5f5;
 }
+
+/* ==========================================================================
+   UI แบบใหม่ (dropdown ประเภทอุปกรณ์ + progressive disclosure ของประเภทงาน
+   + ช่องกรอกจำนวนต่อแพ็กเกจ + checkbox เลือกทั้งหมดต่อกลุ่ม)
+   ย้ายมาจาก <style> inline ใน addItem.jsp เพื่อรวม CSS ไว้ที่เดียว
+   ========================================================================== */
+.form-select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--card-border, #F0E2D3);
+    border-radius: 8px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    background: var(--bg-light, #FCF6F0);
+    color: var(--brown-text, #4A3728);
+    cursor: pointer;
+}
+.form-select:focus {
+    outline: none;
+    border-color: var(--gold-primary, #D9A441);
+    box-shadow: 0 0 0 3px rgba(201, 154, 61, 0.18);
+    background: #FFFFFF;
+}
+
+.field-hint {
+    font-size: 12px;
+    color: var(--brown-muted, #8A7666);
+    margin: 4px 0 0;
+}
+
+.ceremony-adder-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+.ceremony-adder-row .form-select {
+    flex: 0 0 auto;
+    width: 320px;
+    max-width: 100%;
+}
+#itemTypeSelect {
+    width: 320px;
+    max-width: 100%;
+}
+
+#selectedCeremonyGroups .ceremony-type-group {
+    border: 1.5px solid var(--card-border, #F0E2D3);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    background: var(--bg-light, #FCF6F0);
+    max-width: 620px;
+}
+
+/* หัวกลุ่มใช้ checkbox "เลือกทั้งหมด" แทนปุ่ม 3 ปุ่มเดิม
+   (เลือกทั้งหมด / ล้างการเลือก / นำออก) — ไม่เลือกทั้งหมด = ติ๊กออกทั้งหมดในกลุ่มนั้น */
+.ceremony-type-heading-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--card-border, #F0E2D3);
+}
+.ceremony-type-heading {
+    font-weight: 700;
+    color: var(--brown-text, #4A3728);
+}
+.ceremony-select-all-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--brown-muted, #8A7666);
+    cursor: pointer;
+    user-select: none;
+}
+.ceremony-select-all-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+.ceremony-heading-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.btn-close-group {
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: transparent;
+    color: var(--brown-muted, #8A7666);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.btn-close-group:hover {
+    background: var(--card-border, #F0E2D3);
+    color: var(--red-primary, #D9534F);
+}
+
+/* 1 แพ็กเกจต่อ 1 แถว ชื่อยาวให้ตัดขึ้นบรรทัดใหม่ "ในกรอบของตัวเอง"
+   แทนที่จะดันช่อง "ใช้...หน่วย" ให้หลุดไปอยู่คนละบรรทัด
+   ทุกกรอบกว้างเท่ากันเสมอ (เต็มความกว้าง container) เพื่อให้แถวเรียงตรงกัน
+   ไม่ขึ้นอยู่กับความยาวชื่อแพ็กเกจแต่ละอัน */
+.ceremony-type-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.ceremony-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    padding: 6px 10px;
+    background: #FFFFFF;
+    border: 1px solid var(--card-border, #F0E2D3);
+    border-radius: 8px;
+    width: 100%;
+}
+.ceremony-check-label {
+    flex: 1;
+    min-width: 0;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.35;
+}
+.qty-inline-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--brown-muted, #8A7666);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+/* ช่องกรอกจำนวน: บังคับด้วย !important เพราะมีกฎ .form-group input[type="number"]
+   { width:100% } อยู่ในไฟล์นี้ (ด้านบน) ที่ specificity ใกล้เคียงกัน — กันเหนียวไม่ให้ช่องนี้
+   ถูกยืดเต็มแถวได้อีกไม่ว่ากรณีใด ความกว้าง 32px พอดีสำหรับตัวเลข 1-2 หลักเท่านั้น */
+.qty-inline-wrap .qty-mini-input {
+    width: 32px !important;
+    max-width: 32px !important;
+    flex: none !important;
+    padding: 4px 2px !important;
+    border: 1.5px solid var(--card-border, #F0E2D3);
+    border-radius: 6px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    text-align: center;
+    background: #FFFFFF;
+}
+/* ซ่อนปุ่มลูกศรขึ้น-ลงเริ่มต้นของ input number เพื่อให้กล่องแคบพอดีตัวเลขจริงๆ */
+.qty-inline-wrap .qty-mini-input::-webkit-inner-spin-button,
+.qty-inline-wrap .qty-mini-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.qty-inline-wrap .qty-mini-input {
+    -moz-appearance: textfield;
+}
+.qty-mini-input:disabled {
+    background: #F0EAE3;
+    color: #B0AFA8;
+    cursor: not-allowed;
+}
+.ceremony-empty-hint {
+    font-size: 13px;
+    color: var(--brown-muted, #8A7666);
+    padding: 14px 4px;
+    text-align: center;
+    border: 1.5px dashed var(--card-border, #F0E2D3);
+    border-radius: 10px;
+}

@@ -10,112 +10,6 @@
     <title>รีวิว: ระบบรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/viewReview.css">
-    <%-- TODO: ย้าย style ชุดนี้ไปไว้ใน viewReview.css ทีหลัง (ใส่ inline ไว้ก่อนเพราะยังไม่มีไฟล์ viewReview.css ให้แก้) --%>
-    <style>
-        .review-img-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            max-width: 220px;
-        }
-        .review-img-grid .review-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 10px;
-            object-fit: cover;
-            border: 1px solid #C9944A;
-            cursor: pointer;
-            transition: transform 0.15s ease;
-        }
-        .review-img-grid .review-img:hover {
-            transform: scale(1.04);
-        }
-        .review-img-lightbox-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 24px;
-        }
-        .review-img-lightbox-overlay.show {
-            display: flex;
-        }
-        .review-img-lightbox-overlay img {
-            max-width: 90vw;
-            max-height: 85vh;
-            border-radius: 10px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        }
-        .review-img-lightbox-close {
-            position: fixed;
-            top: 20px;
-            right: 28px;
-            font-size: 34px;
-            color: #fff;
-            cursor: pointer;
-            line-height: 1;
-            font-weight: 300;
-        }
-
-        /* .reviews-grid ตอนนี้อยู่ใน .reviews-section ซึ่งเป็น section แยกจาก .page-wrapper แล้ว
-           (ไม่ได้ถูกบีบด้วย max-width: 860px ของ .page-wrapper อีกต่อไป)
-           เลยกำหนดความกว้างตรงๆ ด้วย max-width + margin:auto ธรรมดา ไม่ต้องใช้ 100vw/translateX
-           จึงไม่มีปัญหาล้นขอบจอหรือ scrollbar แนวนอนอีก และไม่ชิดขอบซ้าย-ขวาเกินไป
-           ไม่กระจุกตรงกลางเท่า .page-wrapper (860px) เพราะกว้างกว่าอย่างชัดเจน */
-        .reviews-section {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 0 40px 56px;
-        }
-
-        .reviews-grid {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            box-sizing: border-box;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-            align-items: stretch;
-        }
-        .reviews-grid .review-card {
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        /* การ์ดแคบลง เลยให้เนื้อหารีวิวกับรูปเรียงต่อกันแนวตั้งแทนซ้าย-ขวา */
-        .reviews-grid .review-body {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .reviews-grid .review-img-grid {
-            max-width: 100%;
-        }
-        .reviews-grid .review-img-grid .review-img {
-            width: 72px;
-            height: 72px;
-        }
-        @media (max-width: 1100px) {
-            .reviews-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .reviews-section {
-                padding: 0 24px 48px;
-            }
-        }
-        @media (max-width: 640px) {
-            .reviews-grid {
-                grid-template-columns: 1fr;
-            }
-            .reviews-section {
-                padding: 0 16px 40px;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -184,14 +78,12 @@
         <div class="ornament-diamond-sm"></div>
         <div class="ornament-line right"></div>
     </div>
-    <div class="section-header">
-        <h2 class="section-title">รีวิวจากผู้ใช้บริการ</h2>
-        <p class="section-subtitle">เสียงตอบรับจากเจ้าภาพที่เคยใช้บริการระบบรับจัดงานบุญของเรา</p>
-        <div class="gold-line"></div>
-    </div>
-
-    <%-- ========== SUMMARY CARD (เหลือแค่กล่องคะแนนเฉลี่ยรวม) ========== --%>
-    <div class="summary-card summary-card-solo">
+    <%-- ========== HEADER BAR (หัวข้อ + คะแนนเฉลี่ยรวม ในกรอบเดียวกัน หัวข้อชิดซ้าย คะแนนชิดขวา) ========== --%>
+    <div class="reviews-header-card">
+        <div class="reviews-header-text">
+            <h2 class="section-title">รีวิวจากผู้ใช้บริการ</h2>
+            <p class="section-subtitle">เสียงตอบรับจากเจ้าภาพที่เคยใช้บริการระบบรับจัดงานบุญของเรา</p>
+        </div>
         <div class="rating-big">
             <h1><fmt:formatNumber value="${avgRating}" pattern="0.00"/></h1>
             <div class="rating-label-sub">คะแนนเฉลี่ยรวม</div>
@@ -295,6 +187,7 @@
 </div>
 
 <div class="reviews-section">
+    <div class="reviews-frame">
     <div class="reviews-grid">
         <c:forEach items="${reviews}" var="r">
             <div class="review-card">
@@ -334,6 +227,7 @@
                 </div>
             </div>
         </c:forEach>
+    </div>
     </div>
 </div>
 

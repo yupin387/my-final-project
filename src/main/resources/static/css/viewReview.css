@@ -298,7 +298,7 @@ button.nav-item {
 /* ========== PAGE WRAPPER ========== */
 .page-wrapper {
     flex: 1;
-    padding: 44px 24px 56px;
+    padding: 44px 24px 16px;
     width: 100%;
     max-width: 860px;
     margin: 0 auto;
@@ -315,7 +315,7 @@ button.nav-item {
 
 .section-title {
     font-family: 'Sarabun', sans-serif;
-    color: var(--brown-dark);
+    color: #2F5597;
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 6px;
@@ -886,4 +886,226 @@ button.nav-item {
     .review-card, .summary-card { padding: 22px; }
     .review-body   { flex-direction: column; }
     .review-img    { width: 100%; height: auto; max-width: 220px; }
+}
+
+/* ========== รูปภาพในรีวิว + Lightbox ========== */
+.review-img-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 220px;
+}
+.review-img-grid .review-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #C9944A;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+.review-img-grid .review-img:hover {
+    transform: scale(1.04);
+}
+.review-img-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 24px;
+}
+.review-img-lightbox-overlay.show {
+    display: flex;
+}
+.review-img-lightbox-overlay img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+.review-img-lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 28px;
+    font-size: 34px;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+    font-weight: 300;
+}
+
+/* ========== HEADER BAR: หัวข้อรีวิว + คะแนนเฉลี่ยรวม อยู่ในกรอบเดียวกัน แนวนอน
+   หัวข้อ/คำบรรยายชิดซ้าย (ตัวเล็กลงกว่าเดิม) ส่วนคะแนนเฉลี่ย/ดาว ชิดขวา ตามรูปตัวอย่าง ========== */
+.reviews-header-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 28px;
+    background: var(--white);
+    border-radius: 18px;
+    border: 1.5px solid var(--accent-gold);
+    box-shadow:
+        0 0 0 2px var(--accent-gold-pale),
+        0 0 15px rgba(217, 164, 65, 0.2),
+        0 4px 24px var(--shadow-warm);
+    padding: 20px 36px;
+    position: relative;
+    overflow: hidden;
+}
+.reviews-header-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20px; right: 20px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold-pale), var(--accent-gold), var(--accent-gold-pale), transparent);
+}
+.reviews-header-text {
+    text-align: left;
+    min-width: 0;
+}
+.reviews-header-text .section-title {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+}
+.reviews-header-text .section-subtitle {
+    font-size: 0.82rem;
+}
+.reviews-header-card .rating-big {
+    text-align: right;
+    flex-shrink: 0;
+    min-width: auto;
+}
+.reviews-header-card .stars-big {
+    justify-content: flex-end;
+}
+@media (max-width: 640px) {
+    .reviews-header-card {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        padding: 20px 24px;
+    }
+    .reviews-header-text,
+    .reviews-header-card .rating-big {
+        text-align: center;
+    }
+    .reviews-header-card .stars-big {
+        justify-content: center;
+    }
+}
+
+/* ========== กรอบรวมด้านนอกครอบการ์ดรีวิวย่อยทั้งหมด (ตามรูปตัวอย่าง) ========== */
+.reviews-frame {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, var(--gold-glow), var(--white) 40%);
+    border: 1.5px solid var(--accent-gold-pale);
+    border-radius: 22px;
+    padding: 20px 32px 32px;
+    box-sizing: border-box;
+}
+@media (max-width: 640px) {
+    .reviews-frame {
+        padding: 20px 16px;
+    }
+}
+
+/* .reviews-grid อยู่ใน .reviews-section ซึ่งเป็น section แยกจาก .page-wrapper
+   (ไม่ได้ถูกบีบด้วย max-width: 860px ของ .page-wrapper อีกต่อไป)
+   เลยกำหนดความกว้างตรงๆ ด้วย max-width + margin:auto ธรรมดา ไม่ต้องใช้ 100vw/translateX
+   จึงไม่มีปัญหาล้นขอบจอหรือ scrollbar แนวนอน และไม่ชิดขอบซ้าย-ขวาเกินไป
+   ไม่กระจุกตรงกลางเท่า .page-wrapper (860px) เพราะกว้างกว่าอย่างชัดเจน */
+.reviews-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 40px 56px;
+}
+
+.reviews-grid {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: stretch;
+}
+.reviews-grid .review-card {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px;
+    border-radius: 12px;
+}
+.reviews-grid .review-card::after {
+    top: 14px;
+    bottom: 14px;
+}
+.reviews-grid .review-top {
+    margin-bottom: 8px;
+}
+.reviews-grid .reviewer-left {
+    gap: 10px;
+}
+.reviews-grid .avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 0.85rem;
+}
+.reviews-grid .reviewer-name {
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+}
+.reviews-grid .stars-review {
+    font-size: 0.8rem;
+}
+.reviews-grid .review-date {
+    font-size: 10.5px;
+}
+.reviews-grid .ceremony-badge {
+    font-size: 10.5px;
+    padding: 3px 10px;
+    margin-bottom: 8px;
+}
+.reviews-grid .review-text {
+    font-size: 12.5px;
+    line-height: 1.6;
+}
+/* การ์ดแคบลง เลยให้เนื้อหารีวิวกับรูปเรียงต่อกันแนวตั้งแทนซ้าย-ขวา */
+.reviews-grid .review-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.reviews-grid .review-img-grid {
+    max-width: 100%;
+    gap: 6px;
+}
+.reviews-grid .review-img-grid .review-img {
+    width: 64px;
+    height: 64px;
+}
+@media (max-width: 1100px) {
+    .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .reviews-section {
+        padding: 0 24px 48px;
+    }
+}
+@media (max-width: 640px) {
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+    .reviews-section {
+        padding: 0 16px 40px;
+    }
 }

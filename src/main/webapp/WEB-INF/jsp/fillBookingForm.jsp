@@ -170,26 +170,27 @@
             <div class="card-body">
                 <p style="font-size:12px;color:#B0345A;margin:-4px 0 14px;">ℹ️ ทุกแพ็กเกจรวมชุดเครื่องเสียง โต๊ะหมู่บูชา และพระประธานไว้ให้แล้ว</p>
                 <div class="item-card-grid">
+                    <%-- ถ้า ceremonyId ที่ส่งมาตรงกับแพ็กเกจไหน ให้แสดงเฉพาะแพ็กเกจนั้นแพ็กเกจเดียวและติ๊ก checked ให้เลย
+                         ถ้าไม่มี ceremonyId หรือไม่ตรงกับแพ็กเกจไหนเลย จะไม่แสดงการ์ดแพ็กเกจใด ๆ (การ์ดว่างเปล่า) --%>
                     <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
-                        <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
-                        <c:choose>
-                            <c:when test="${fn:contains(pkgNameSafe, 'พรีเมียม')}"><c:set var="pkgMonkCount" value="9"/></c:when>
-                            <c:when test="${fn:contains(pkgNameSafe, 'อิ่มบุญ')}"><c:set var="pkgMonkCount" value="7"/></c:when>
-                            <c:otherwise><c:set var="pkgMonkCount" value="5"/></c:otherwise>
-                        </c:choose>
-                        <c:set var="isPkgSelected" value="${(not empty param.ceremonyId and param.ceremonyId == pkg.ceremonyId) or (empty param.ceremonyId and loop.first)}"/>
-                        <c:if test="${empty param.ceremonyId or param.ceremonyId == pkg.ceremonyId}">
-                        <label class="item-card">
-                            <input type="radio" name="ceremony.ceremonyId" value="${pkg.ceremonyId}" data-monkcount="${pkgMonkCount}" onchange="applyPackageMonkCount(this)" ${isPkgSelected ? 'checked' : ''}>
-                            <div class="item-card-thumb">
-                                <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}" onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
-                            </div>
-                            <div class="item-card-body">
-                                <div class="item-card-name">${pkg.ceremonyName}</div>
-                                <div class="item-card-desc">${pkg.ceremonyDetail}</div>
-                                <div class="item-card-price">฿<fmt:formatNumber value="${pkg.basePrice}" pattern="#,###"/></div>
-                            </div>
-                        </label>
+                        <c:if test="${not empty param.ceremonyId and param.ceremonyId == pkg.ceremonyId}">
+                            <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
+                            <c:choose>
+                                <c:when test="${fn:contains(pkgNameSafe, 'พรีเมียม')}"><c:set var="pkgMonkCount" value="9"/></c:when>
+                                <c:when test="${fn:contains(pkgNameSafe, 'อิ่มบุญ')}"><c:set var="pkgMonkCount" value="7"/></c:when>
+                                <c:otherwise><c:set var="pkgMonkCount" value="5"/></c:otherwise>
+                            </c:choose>
+                            <label class="item-card">
+                                <input type="radio" name="ceremony.ceremonyId" value="${pkg.ceremonyId}" data-monkcount="${pkgMonkCount}" onchange="applyPackageMonkCount(this)" checked>
+                                <div class="item-card-thumb">
+                                    <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}" onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
+                                </div>
+                                <div class="item-card-body">
+                                    <div class="item-card-name">${pkg.ceremonyName}</div>
+                                    <div class="item-card-desc">${pkg.ceremonyDetail}</div>
+                                    <div class="item-card-price">฿<fmt:formatNumber value="${pkg.basePrice}" pattern="#,###"/></div>
+                                </div>
+                            </label>
                         </c:if>
                     </c:forEach>
                 </div>
@@ -246,7 +247,7 @@
                     <c:forEach items="${questions}" var="q">
                         <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
                             <input type="hidden" name="details[${detailIndex}].question.questionsId" id="monkCountQuestionIdField" value="${q.questionsId}">
-                            <input type="hidden" name="details[${detailIndex}].answer" id="monkCountField" value="${pkgMonkCount}">
+                            <input type="hidden" name="details[${detailIndex}].answer" id="monkCountField" value="${empty pkgMonkCount ? 5 : pkgMonkCount}">
                             <c:set var="detailIndex" value="${detailIndex + 1}"/>
                         </c:if>
                     </c:forEach>
@@ -285,45 +286,56 @@
         </div>
 
         <div class="form-card">
-            <div class="card-header">เลือกชุดสังฆทาน</div>
-            <div class="card-body">
-                <c:forEach items="${questions}" var="q">
-                    <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดสังฆทาน')}">
-                        <div class="form-group" style="margin-bottom:14px;">
-                            <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
-                            <p style="font-size:12px;color:#B0345A;margin-top:2px;">ค่าเริ่มต้น = จำนวนพระสงฆ์ที่นิมนต์ไว้</p>
-                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                            <input type="number" name="details[${detailIndex}].answer" id="sanghatanQtyInput" class="form-control" value="${startInCustomMode ? '' : (empty pkgMonkCount ? 5 : pkgMonkCount)}" min="1" placeholder="ระบุจำนวนชุด..." required oninput="this.dataset.userEdited = 'true';">
-                        </div>
-                        <c:set var="detailIndex" value="${detailIndex + 1}"/>
-                    </c:if>
-                </c:forEach>
-
-                <c:set var="sanghatharnQId" value="" />
-                <c:forEach items="${questions}" var="q">
-                    <c:if test="${fn:contains(q.questionsText, 'เลือกชุดสังฆทาน')}">
-                        <c:set var="sanghatharnQId" value="${q.questionsId}" />
-                    </c:if>
-                </c:forEach>
-                <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${sanghatharnQId}">
-                <div class="item-card-grid">
-                    <c:forEach items="${sanghatharnItems}" var="item" varStatus="loop">
-                        <label class="item-card">
-                            <input type="radio" name="details[${detailIndex}].answer" value="${item.itemName}" ${loop.first ? 'checked' : ''}>
-                            <div class="item-card-thumb">
-                                <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/F${(loop.index % 3) + 1}.png" alt="${item.itemName}" onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
-                            </div>
-                            <div class="item-card-body">
-                                <div class="item-card-name">${item.itemName}</div>
-                                <div class="item-card-desc">${item.itemDetail}</div>
-                                <div class="item-card-price">฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}</div>
-                            </div>
-                        </label>
-                    </c:forEach>
+    <div class="card-header">เลือกชุดสังฆทาน</div>
+    <div class="card-body">
+        <%-- 1. จำนวนชุดสังฆทาน --%>
+        <c:forEach items="${questions}" var="q">
+            <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดสังฆทาน')}">
+                <div class="form-group" style="margin-bottom:14px;">
+                    <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
+                    <p style="font-size:12px;color:#B0345A;margin-top:2px;">ค่าเริ่มต้น = จำนวนพระสงฆ์ที่นิมนต์ไว้</p>
+                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                    <input type="number" name="details[${detailIndex}].answer" id="sanghatanQtyInput" 
+                           class="form-control" value="${startInCustomMode ? '' : (empty pkgMonkCount ? 5 : pkgMonkCount)}" 
+                           min="1" placeholder="ระบุจำนวนชุด..." required oninput="this.dataset.userEdited = 'true';">
                 </div>
                 <c:set var="detailIndex" value="${detailIndex + 1}"/>
-            </div>
-        </div>
+            </c:if>
+        </c:forEach>
+
+        <%-- 2. เลือกรายการชุดสังฆทาน --%>
+        <c:forEach items="${questions}" var="q">
+            <c:if test="${fn:contains(q.questionsText, 'เลือกชุดสังฆทาน')}">
+                <div class="form-group">
+                    <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
+                    <!-- ส่ง Question ID สำหรับการเลือกชุดสังฆทาน -->
+                    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+                    
+                    <div class="item-card-grid">
+                        <c:forEach items="${sanghatharnItems}" var="item" varStatus="loop">
+                            <label class="item-card">
+                                <!-- ส่ง Answer เป็นชื่อชุดสังฆทาน ผูกกับ details[${detailIndex}] เดียวกัน -->
+                                <input type="radio" name="details[${detailIndex}].answer" value="${item.itemName}" ${loop.first ? 'checked' : ''}>
+                                <div class="item-card-thumb">
+                                    <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/F${(loop.index % 3) + 1}.png" 
+                                         alt="${item.itemName}" 
+                                         onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
+                                </div>
+                                <div class="item-card-body">
+                                    <div class="item-card-name">${item.itemName}</div>
+                                    <div class="item-card-desc">${item.itemDetail}</div>
+                                    <div class="item-card-price">฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}</div>
+                                </div>
+                            </label>
+                        </c:forEach>
+                    </div>
+                </div>
+                <!-- เพิ่มค่า detailIndex หลังจากแมปทั้ง Question ID และ Radio Answer เรียบร้อยแล้ว -->
+                <c:set var="detailIndex" value="${detailIndex + 1}"/>
+            </c:if>
+        </c:forEach>
+    </div>
+</div>
 
         <div class="form-card">
             <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
