@@ -331,6 +331,148 @@
 		});
 
 		document.addEventListener('DOMContentLoaded', updateEmptyHint);
+
+		/* ===== แจ้งเตือนเลขติดลบแบบเรียลไทม์ (ไม่บล็อกการพิมพ์ - ทั้งคู่)
+
+		   หมายเหตุสำคัญ: input type="number" ของเบราว์เซอร์ ถ้าพิมพ์ "-" เดี่ยวๆ
+		   (ยังไม่ตามด้วยตัวเลข) ค่า .value จะเป็นค่าว่างเสมอ (เพราะยังไม่ใช่ตัวเลขที่สมบูรณ์)
+		   ต้องเช็ค this.validity.badInput ร่วมด้วยถึงจะจับได้ว่าเขาพิมพ์ - อยู่จริง
+
+		   1) ช่อง "ใช้...หน่วย" (qty-mini-input) -> ข้อความขึ้นท้ายกรอบใหญ่ของกลุ่มพิธีนั้น
+		   2) ช่อง "ราคาต่อหน่วย" (pricePerUnit)   -> ข้อความขึ้นใต้ช่องนั้นเลย
+
+		   ทั้งคู่: โชว์ทันทีตอนพิมพ์ - (keydown) และคงอยู่ตราบใดที่ค่ายังติดลบ/พิมพ์ค้าง (input)
+		   หายไปทันทีเมื่อแก้ไขจนถูกต้อง หรือออกจากช่อง (blur) ===== */
+
+		function isMinusKey(e) {
+			return e.key === '-' || e.key === 'Subtract' || e.keyCode === 189 || e.keyCode === 109;
+		}
+
+		function hasNegativeInput(inp) {
+			return inp.value.indexOf('-') !== -1 || inp.validity.badInput;
+		}
+
+		/* ---- (1) กลุ่ม qty: ข้อความอยู่ท้ายกรอบใหญ่ของกลุ่มพิธีนั้น ---- */
+		function getGroupErrorEl(groupEl) {
+			var id = 'negerr_' + groupEl.id;
+			var el = document.getElementById(id);
+			if (!el) {
+				el = document.createElement('div');
+				el.id = id;
+				el.className = 'no-negative-error-group';
+				el.style.color = '#d32f2f';
+				el.style.fontSize = '12px';
+				el.style.margin = '4px 0 8px';
+				el.style.display = 'none';
+				groupEl.insertAdjacentElement('afterend', el);
+			}
+			return el;
+		}
+
+		function showGroupError(qtyInput) {
+			var groupEl = qtyInput.closest('.ceremony-type-group');
+			if (!groupEl) return;
+			var el = getGroupErrorEl(groupEl);
+			el.textContent = 'ห้ามใส่เลขติดลบ';
+			el.style.display = 'block';
+		}
+
+		function hideGroupError(qtyInput) {
+			var groupEl = qtyInput.closest('.ceremony-type-group');
+			if (!groupEl) return;
+			var el = document.getElementById('negerr_' + groupEl.id);
+			if (el) el.style.display = 'none';
+		}
+
+		/* ---- (2) ช่องราคาต่อหน่วย: ข้อความอยู่ใต้ช่องนั้นเลย ---- */
+		function getFieldErrorEl(inp) {
+			var id = 'negerr_' + (inp.id || inp.name);
+			var el = document.getElementById(id);
+			if (!el) {
+				el = document.createElement('div');
+				el.id = id;
+				el.className = 'no-negative-error';
+				el.style.color = '#d32f2f';
+				el.style.fontSize = '12px';
+				el.style.marginTop = '2px';
+				el.style.display = 'none';
+				inp.insertAdjacentElement('afterend', el);
+			}
+			return el;
+		}
+
+		function showFieldError(inp) {
+			var el = getFieldErrorEl(inp);
+			el.textContent = 'ห้ามใส่เลขติดลบ';
+			el.style.display = 'block';
+		}
+
+		function hideFieldError(inp) {
+			var el = document.getElementById('negerr_' + (inp.id || inp.name));
+			if (el) el.style.display = 'none';
+		}
+
+		function applyNoNegative() {
+			document.querySelectorAll('input[type="number"]').forEach(function (inp) {
+				if (inp.dataset.noNegativeBound) return; // กันผูก event ซ้ำ
+				inp.dataset.noNegativeBound = '1';
+
+				var isQty = inp.classList.contains('qty-mini-input');
+				var showFn = isQty ? showGroupError : showFieldError;
+				var hideFn = isQty ? hideGroupError : hideFieldError;
+
+				/* พิมพ์ - ปุ๊บ โชว์ทันที (ไม่ preventDefault แล้ว ปล่อยให้พิมพ์ได้) */
+				inp.addEventListener('keydown', function (e) {
+					if (isMinusKey(e)) {
+						showFn(this);
+					}
+				});
+
+				/* หลังค่าเปลี่ยน (พิมพ์เพิ่ม/ลบ/วาง) เช็คซ้ำว่ายังติดลบอยู่ไหม
+				   ถ้าแก้จนถูกต้องแล้ว -> ซ่อนทันที
+				   ถ้ายังไม่ถูก -> ค้างไว้ที่เดิม ไม่ซ่อนแม้ออกจากช่องไปแล้ว (ไม่มี blur-hide อีกต่อไป) */
+				inp.addEventListener('input', function () {
+					if (hasNegativeInput(this)) {
+						showFn(this);
+					} else {
+						hideFn(this);
+					}
+				});
+
+				/* ปิดกล่องแจ้งเตือนสีส้ม/เหลืองของเบราว์เซอร์เอง (เช่น "Value must be
+				   greater than or equal to 1.") ไม่ต้องการให้ขึ้นซ้อนกับข้อความแดงของเรา
+				   ตัวช่องจะยัง invalid ตามปกติ (กันส่ง submit ได้เหมือนเดิม) แค่ไม่โชว์ popup */
+				inp.addEventListener('invalid', function (e) {
+					e.preventDefault();
+				});
+			});
+		}
+
+		/* ===== กันกดบันทึกทั้งที่ยังมีค่าติดลบ/พิมพ์ค้างอยู่ในฟอร์ม
+		   ถ้าเจอ -> ไม่ให้ submit ไปไหน อยู่หน้าเดิม พร้อมโชว์ข้อความแจ้งเตือนทุกช่องที่ยังผิดค้างไว้ ===== */
+		function guardFormSubmit() {
+			var formEl = document.querySelector('form.form-section');
+			if (!formEl) return;
+			formEl.addEventListener('submit', function (e) {
+				var hasInvalid = false;
+				var firstInvalid = null;
+				document.querySelectorAll('input[type="number"]').forEach(function (inp) {
+					if (hasNegativeInput(inp)) {
+						hasInvalid = true;
+						if (!firstInvalid) firstInvalid = inp;
+						var isQty = inp.classList.contains('qty-mini-input');
+						(isQty ? showGroupError : showFieldError)(inp);
+					}
+				});
+				if (hasInvalid) {
+					e.preventDefault();
+					if (firstInvalid) firstInvalid.focus();
+				}
+			});
+		}
+
+		document.addEventListener('DOMContentLoaded', applyNoNegative);
+		document.addEventListener('DOMContentLoaded', guardFormSubmit);
 	</script>
 
 	<script src="${pageContext.request.contextPath}/static/js/itemList.js"></script>
