@@ -144,6 +144,7 @@
                             <button type="button" class="map-picker-btn" onclick="searchLocationOnMap()">ค้นหา</button>
                             <button type="button" class="map-picker-btn map-picker-btn-outline" onclick="useCurrentLocationOnMap()">ใช้ตำแหน่งปัจจุบัน</button>
                         </div>
+                        <div id="mapSearchResults" class="map-search-results" style="display:none;"></div>
                         <div id="locationMap" class="location-map-box"></div>
                         <p id="mapSelectedText" class="map-picker-selected-text">ยังไม่ได้ปักหมุดตำแหน่ง</p>
                         <a id="mapNavLink" href="#" target="_blank" rel="noopener" class="map-picker-nav-link" style="display:none;">🧭 เปิดนำทางใน Google Maps</a>
@@ -929,7 +930,7 @@ window.dayQuality = {
 </script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=8"></script>
+<script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=9"></script>
 <script src="${pageContext.request.contextPath}/static/js/miniBookingCalendar.js?v=1"></script>
 
 </body>

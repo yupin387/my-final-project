@@ -144,6 +144,7 @@
                             <button type="button" class="map-picker-btn" onclick="searchLocationOnMap()">ค้นหา</button>
                             <button type="button" class="map-picker-btn map-picker-btn-outline" onclick="useCurrentLocationOnMap()">ใช้ตำแหน่งปัจจุบัน</button>
                         </div>
+                        <div id="mapSearchResults" class="map-search-results" style="display:none;"></div>
                         <div id="locationMap" class="location-map-box"></div>
                         <p id="mapSelectedText" class="map-picker-selected-text">ยังไม่ได้ปักหมุดตำแหน่ง</p>
                         <a id="mapNavLink" href="#" target="_blank" rel="noopener" class="map-picker-nav-link" style="display:none;">🧭 เปิดนำทางใน Google Maps</a>
@@ -475,6 +476,35 @@
 .nav-dropdown-link:hover { background: var(--gold-pale, #fff8e1); }
 .item-card { position: relative; }
 .item-card input[type="radio"] { position: absolute !important; top: auto !important; bottom: 10px !important; right: 10px !important; left: auto !important; }
+
+/* ===== ผลลัพธ์การค้นหาตำแหน่งบนแผนที่ (mapSearchResults) ===== */
+.map-search-results {
+    position: relative;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid #E0577F;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(176, 52, 90, 0.12);
+}
+.map-search-item {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #3d2500;
+    cursor: pointer;
+    border-bottom: 1px solid #f5e0e6;
+}
+.map-search-item:last-child { border-bottom: none; }
+.map-search-item:hover { background: #FBD0DE; }
+.map-search-note,
+.map-search-loading,
+.map-search-empty {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #B0345A;
+}
 </style>
 
 <div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
@@ -928,7 +958,7 @@ window.dayQuality = {
 </script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=8"></script>
+<script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=9"></script>
 <script src="${pageContext.request.contextPath}/static/js/miniBookingCalendar.js?v=1"></script>
 
 </body>

@@ -173,6 +173,7 @@
                                 ใช้ตำแหน่งปัจจุบัน
                             </button>
                         </div>
+                        <div id="mapSearchResults" class="map-search-results" style="display:none;"></div>
 
                         <div id="locationMap" class="location-map-box"></div>
 
@@ -1114,7 +1115,7 @@ window.dayQuality = {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
-<script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=8"></script>
+<script src="${pageContext.request.contextPath}/static/js/bookingForm.js?v=9"></script>
 <script src="${pageContext.request.contextPath}/static/js/miniBookingCalendar.js?v=1"></script>
 
 </body>
