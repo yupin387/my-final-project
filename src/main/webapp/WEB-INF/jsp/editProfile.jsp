@@ -205,7 +205,7 @@
             <h4 class="footer-heading">ติดต่อเรา</h4>
             <p>📞 โทร. 08X-XXX-XXXX</p>
             <p>💬 LINE OA: @boonmee</p>
-            <p>✉️ boonmee.booking@gmail.com</p>
+            <p>✉️ boonmee@gmail.com</p>
             <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
         </div>
     </div>

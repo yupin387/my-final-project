@@ -60,12 +60,65 @@
         </div>
     </div>
 
-    <%-- ========== TABS ========== --%>
-    <div class="tabs-wrapper">
-        <a href="?status=All"       class="tab-btn ${(param.status == 'All' || empty param.status) ? 'active' : ''}">ทั้งหมด</a>
-        <a href="?status=Pending"   class="tab-btn ${param.status == 'Pending'   ? 'active' : ''}">รอยืนยัน</a>
-        <a href="?status=Revised"   class="tab-btn ${param.status == 'Revised'   ? 'active' : ''}">ต้องการแก้ไข</a>
-        <a href="?status=Confirmed" class="tab-btn ${param.status == 'Confirmed' ? 'active' : ''}">ยืนยันแล้ว</a>
+    <%-- ========== STATUS FILTER (dropdown) ========== --%>
+    <c:set var="currentStatus" value="${empty param.status ? 'All' : param.status}" />
+    <c:choose>
+        <c:when test="${currentStatus == 'Pending'}">
+            <c:set var="dotClass" value="dot-pending" />
+            <c:set var="selectedText" value="รอยืนยัน" />
+            <c:set var="selectedCount" value="${statusCounts.Pending}" />
+        </c:when>
+        <c:when test="${currentStatus == 'Revised'}">
+            <c:set var="dotClass" value="dot-revised" />
+            <c:set var="selectedText" value="ต้องการแก้ไข" />
+            <c:set var="selectedCount" value="${statusCounts.Revised}" />
+        </c:when>
+        <c:when test="${currentStatus == 'Confirmed'}">
+            <c:set var="dotClass" value="dot-confirmed" />
+            <c:set var="selectedText" value="ยืนยันแล้ว" />
+            <c:set var="selectedCount" value="${statusCounts.Confirmed}" />
+        </c:when>
+        <c:otherwise>
+            <c:set var="dotClass" value="dot-all" />
+            <c:set var="selectedText" value="ทั้งหมด" />
+            <c:set var="selectedCount" value="${statusCounts.All}" />
+        </c:otherwise>
+    </c:choose>
+
+    <div class="status-filter-wrapper" id="statusFilterWrapper">
+        <button type="button" class="status-filter-btn" id="statusFilterBtn" onclick="toggleStatusFilter()">
+            <span class="filter-caret-label">▾</span>
+            <span class="filter-label-text">สถานะใบเสนอราคา :</span>
+            <span class="filter-selected-pill">
+                <span class="status-dot ${dotClass}"></span>
+                <span class="filter-selected-text">${selectedText}</span>
+                <span class="filter-count-badge">${selectedCount}</span>
+            </span>
+            <span class="filter-caret" id="filterCaret">▴</span>
+        </button>
+
+        <div class="status-filter-dropdown" id="statusFilterDropdown">
+            <a href="?status=All" class="status-filter-item ${currentStatus == 'All' ? 'active' : ''}">
+                <span class="status-dot dot-all"></span>
+                <span class="status-filter-text">ทั้งหมด</span>
+                <span class="status-filter-count">${statusCounts.All}</span>
+            </a>
+            <a href="?status=Pending" class="status-filter-item ${currentStatus == 'Pending' ? 'active' : ''}">
+                <span class="status-dot dot-pending"></span>
+                <span class="status-filter-text">รอยืนยัน</span>
+                <span class="status-filter-count">${statusCounts.Pending}</span>
+            </a>
+            <a href="?status=Revised" class="status-filter-item ${currentStatus == 'Revised' ? 'active' : ''}">
+                <span class="status-dot dot-revised"></span>
+                <span class="status-filter-text">ต้องการแก้ไข</span>
+                <span class="status-filter-count">${statusCounts.Revised}</span>
+            </a>
+            <a href="?status=Confirmed" class="status-filter-item ${currentStatus == 'Confirmed' ? 'active' : ''}">
+                <span class="status-dot dot-confirmed"></span>
+                <span class="status-filter-text">ยืนยันแล้ว</span>
+                <span class="status-filter-count">${statusCounts.Confirmed}</span>
+            </a>
+        </div>
     </div>
 
     <%-- ========== TABLE CARD ========== --%>

@@ -29,10 +29,7 @@ import com.springboot.service.ReviewService;
 @Controller
 public class UserController {
 
-    @Autowired
-    private MemberService memberService;
-    @Autowired
-    private ReviewService reviewService;
+
     @Autowired
     private BookingService bookingService;
 

@@ -116,6 +116,32 @@
 }
 .dot-type-all { background: var(--accent-pink); }
 .dot-type     { background: var(--gold-primary); }
+
+/* =====================================================================
+   FIX: Modal ยืนยันการลบ — เพิ่มกล่อง pill โชว์ชื่ออุปกรณ์ที่กำลังจะลบ
+   เพื่อกันผู้ใช้ลบผิดรายการ (ดึงชื่อมาจาก data-item-name ของฟอร์มที่กด)
+   ===================================================================== */
+.modal-box {
+    text-align: center;
+}
+
+.modal-item-pill {
+    display: inline-block;
+    margin: 4px auto 10px;
+    padding: 8px 20px;
+    background: var(--peach-pale);
+    border: 1.5px solid var(--accent-pink);
+    border-radius: 30px;
+    color: var(--accent-pink);
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.modal-desc-sub {
+    font-size: 13px;
+    color: var(--brown-muted, #999);
+    margin-bottom: 16px;
+}
 </style>
 </head>
 <body>
@@ -313,8 +339,11 @@
                                     <a href="${pageContext.request.contextPath}/staff/items/edit/${item.itemId}"
                                         class="btn-edit">แก้ไข</a>
 
+                                    <%-- FIX: เพิ่ม data-item-name เพื่อส่งชื่ออุปกรณ์ไปให้ modal
+                                         ยืนยันการลบ แสดงชื่อรายการที่กำลังจะลบให้ผู้ใช้เห็นชัดเจน --%>
                                     <form action="${pageContext.request.contextPath}/staff/items/delete/${item.itemId}"
                                           method="post" style="display:inline;"
+                                          data-item-name="${item.itemName}"
                                           onsubmit="event.preventDefault(); showDeleteModal(this);">
                                         <button type="submit" class="btn-del">ลบ</button>
                                     </form>
@@ -350,18 +379,23 @@
 
 </footer>
 
-    <%-- ========== CONFIRM DELETE MODAL ========== --%>
+    <%-- ========== CONFIRM DELETE MODAL ==========
+         FIX: เพิ่ม modal-item-pill ไว้โชว์ชื่ออุปกรณ์ที่กำลังจะลบ
+         (JS จะเติมข้อความเข้า #modalItemName ตอนเปิด modal) --%>
     <div class="modal-overlay" id="confirmModal">
         <div class="modal-box">
-            <div class="modal-title">ยืนยันการลบ</div>
-            <div class="modal-desc">คุณต้องการลบรายการนี้ใช่หรือไม่?<br>เมื่อทำการลบแล้วไม่สามารถย้อนกลับได้</div>
+            <div class="modal-title">ยืนยันการลบข้อมูล</div>
+            <div class="modal-desc">คุณต้องการลบข้อมูลนี้ใช่หรือไม่?</div>
+            <div class="modal-item-pill" id="modalItemName"></div>
+            <div class="modal-desc-sub">การลบนี้ไม่สามารถย้อนกลับได้</div>
             <div class="modal-actions">
                 <button class="modal-btn-cancel" onclick="closeModal()">ยกเลิก</button>
-                <button class="modal-btn-confirm" onclick="confirmDelete()">ยืนยันลบ</button>
+                <button class="modal-btn-confirm" onclick="confirmDelete()">ลบข้อมูล</button>
             </div>
         </div>
     </div>
 
+ 
     <script src="${pageContext.request.contextPath}/static/js/itemList.js"></script>
     <script>
     function toggleDropdown() {

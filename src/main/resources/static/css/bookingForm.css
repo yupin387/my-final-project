@@ -419,6 +419,8 @@ body {
 	border-image: linear-gradient(90deg, transparent, rgba(224, 87, 127, 0.5),
 		transparent) 1;
 	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+	display: flex;
+	align-items: center;
 }
 
 .card-body {
@@ -461,6 +463,11 @@ body {
 	border-color: var(--accent-gold);
 	box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.18);
 	background: #FFFFFF;
+}
+
+.form-control-sm {
+	padding: 7px 12px;
+	font-size: 13px;
 }
 
 .form-select {
@@ -1034,4 +1041,135 @@ textarea.form-control {
 	padding: 8px 12px;
 	font-size: 12px;
 	color: #B0345A;
+}
+
+/* ==========================================================================
+   COMPACT DASHBOARD-STYLE GRID (numbered cards, matches the reference mockup)
+   ========================================================================== */
+
+.hero-banner-compact {
+	height: 190px;
+}
+
+.hero-banner-compact .hero-content h1 {
+	font-size: 26px;
+}
+
+.page-wrapper-compact {
+	padding: 24px 40px 44px;
+}
+
+.compact-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 18px;
+	align-items: start;
+	margin-bottom: 22px;
+}
+
+.compact-grid > .form-card {
+	margin-bottom: 0;
+	height: 100%;
+}
+
+.compact-grid .form-card {
+	margin-bottom: 0;
+}
+
+.compact-grid > .compact-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	height: 100%;
+}
+
+.compact-stack .compact-card-auto {
+	height: auto;
+	flex: 0 0 auto;
+}
+
+.compact-stack .compact-card-fill {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
+.compact-stack .compact-card-fill .card-body {
+	flex: 1;
+	overflow: auto;
+}
+
+.compact-grid .card-header {
+	padding: 11px 18px;
+	font-size: 14.5px;
+}
+
+.compact-grid .card-body {
+	padding: 16px 18px;
+}
+
+.compact-grid .form-group {
+	margin-bottom: 12px;
+}
+
+.card-num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	min-width: 22px;
+	border-radius: 50%;
+	background: #FFFFFF;
+	color: var(--gold);
+	font-size: 12px;
+	font-weight: 800;
+	margin-right: 9px;
+}
+
+.compact-grid .item-card-grid {
+	grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+	gap: 8px;
+}
+
+.compact-grid .item-card {
+	padding: 8px;
+}
+
+.compact-grid .item-card-thumb {
+	height: 54px;
+	margin-bottom: 4px;
+}
+
+.compact-grid .item-card-name {
+	font-size: 11.5px;
+}
+
+.compact-grid .item-card-desc {
+	font-size: 10px;
+	-webkit-line-clamp: 1;
+}
+
+.compact-grid .location-map-box {
+	height: 170px;
+}
+
+.compact-grid .mini-cal-wrap {
+	padding: 10px;
+}
+
+@media (max-width: 1080px) {
+	.compact-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 640px) {
+	.page-wrapper-compact {
+		padding: 16px 16px 32px;
+	}
+	.compact-grid {
+		grid-template-columns: 1fr;
+	}
 }

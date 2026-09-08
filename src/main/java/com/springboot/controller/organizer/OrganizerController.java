@@ -373,15 +373,25 @@ public class OrganizerController {
 
  // แสดงหน้าฟอร์มสำหรับมอบหมายงานให้พนักงาน โดยดึงข้อมูลการจองและรายชื่อพนักงานที่ว่างในวันนั้นๆ มาแสดง
     @GetMapping("/organizer/assignments/assign/{bookingId}")
-     public String showAssignForm(@PathVariable String bookingId, Model model, HttpSession session) {
-         if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
-         
-         BookingForm booking = bookingService.getBookingById(bookingId);
-         model.addAttribute("b", booking);
-         // ค้นหาพนักงานที่ว่างในวันที่จัดงานจาก quotationService
-         model.addAttribute("staffList", quotationService.findAvailableStaff(booking.getEventDate()));
-         return "assignTask";
-     }
+    public String showAssignForm(@PathVariable String bookingId, Model model, HttpSession session) {
+
+        if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
+
+        BookingForm booking = bookingService.getBookingById(bookingId);
+        model.addAttribute("b", booking);
+
+        // ค้นหาพนักงานที่ว่างในวันที่จัดงานจาก quotationService
+        model.addAttribute("staffList", quotationService.findAvailableStaff(booking.getEventDate()));
+
+        // FIX: เช็คว่า booking นี้มีหัวหน้างานอยู่แล้วหรือยัง
+        // ถ้ามีแล้ว (quotation.staff != null) แปลว่าเป็นการ "เปลี่ยน" หัวหน้างาน
+        // ถ้ายังไม่มี แปลว่าเป็นการ "มอบหมาย" ครั้งแรก
+        boolean isChangeMode = booking.getQuotation() != null
+                && booking.getQuotation().getStaff() != null;
+        model.addAttribute("isChangeMode", isChangeMode);
+
+        return "assignTask";
+    }
 
      // บันทึกข้อมูลการมอบหมายงาน โดยเชื่อมโยงพนักงานเข้ากับงานที่เลือก และอัปเดตสถานะการจองในระบบ
      @PostMapping("/organizer/assignments/save")

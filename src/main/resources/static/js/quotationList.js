@@ -11,3 +11,18 @@ document.addEventListener('click', function (e) {
         menu.classList.remove('show');
     }
 });
+
+function toggleStatusFilter() {
+    const dropdown = document.getElementById('statusFilterDropdown');
+    const wrapper = document.getElementById('statusFilterWrapper');
+    dropdown.classList.toggle('show');
+    wrapper.classList.toggle('open');
+}
+
+document.addEventListener('click', function (e) {
+    const wrapper = document.getElementById('statusFilterWrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+        document.getElementById('statusFilterDropdown').classList.remove('show');
+        wrapper.classList.remove('open');
+    }
+});

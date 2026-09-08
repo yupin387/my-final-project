@@ -25,9 +25,15 @@ let _pendingForm = null;
 
 function showDeleteModal(formEl) {
     _pendingForm = formEl;
+
+    const itemName = formEl.dataset.itemName || '';
+    const nameEl = document.getElementById('modalItemName');
+    if (nameEl) {
+        nameEl.textContent = itemName;
+    }
+
     document.getElementById('confirmModal').classList.add('show');
 }
-
 function closeModal() {
     document.getElementById('confirmModal').classList.remove('show');
     _pendingForm = null;
