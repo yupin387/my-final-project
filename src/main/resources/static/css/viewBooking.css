@@ -228,6 +228,16 @@ body {
 	overflow: hidden;
 }
 
+/* ===== FIX: เดิมมีแค่ .nav-dropdown-wrap:hover .nav-dropdown-panel
+   สำหรับเมนู hover (บริการ/ปฏิทิน) แต่เมนูโปรไฟล์ที่ควบคุมด้วย JS
+   (toggleDropdown เติม class "show") ไม่มี rule นี้มารองรับเลย
+   ทำให้กด class เปลี่ยนแล้วแต่เมนูไม่โผล่ ===== */
+.dropdown-menu-custom.show {
+	visibility: visible;
+	opacity: 1;
+	transform: translateY(0);
+}
+
 .nav-dropdown-panel {
 	left: 0;
 	right: auto;
