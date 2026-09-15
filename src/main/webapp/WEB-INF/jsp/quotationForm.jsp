@@ -31,33 +31,33 @@
 
 	<%-- ===== NAVBAR ===== --%>
 	<nav class="navbar">
-		<a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings"> 
+		<a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings"> 
             <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon"> 
             <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
 		</a>
 		<div class="navbar-right">
 			<nav class="navbar-menu">
-				<a href="${pageContext.request.contextPath}/organizer/bookings" class="nav-item">รายการจอง</a> 
-                <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a> 
-                <a href="${pageContext.request.contextPath}/organizer/questions" class="nav-item">จัดการพิธี</a> 
-                <a href="${pageContext.request.contextPath}/organizer/quotation" class="nav-item active">จัดการใบเสนอราคา</a>
+				<a href="${pageContext.request.contextPath}/manager/bookings" class="nav-item">รายการจอง</a> 
+                <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a> 
+                <a href="${pageContext.request.contextPath}/manager/questions" class="nav-item">จัดการพิธี</a> 
+                <a href="${pageContext.request.contextPath}/manager/quotation" class="nav-item active">จัดการใบเสนอราคา</a>
 			</nav>
-			<div class="user-info" onclick="toggleDropdown()">
-				<div class="user-avatar">A</div>
-				<div class="user-detail">
-					<span class="user-name">Admin Organizer</span> 
-                    <span class="user-role">ผู้จัดการ</span>
-				</div>
+			   <div class="user-info" onclick="toggleDropdown()">
+            <div class="user-avatar">M</div>
+            <div class="user-detail">
+                <span class="user-name">Manager</span>
+                <span class="user-role">ผู้จัดการ</span>
+            </div>
 				<span class="arrow">▾</span>
 				<div class="dropdown-menu" id="dropdownMenu">
-					<a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item">ออกจากระบบ</a>
+					<a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item">ออกจากระบบ</a>
 				</div>
 			</div>
 		</div>
 	</nav>
 
 	<div class="page-wrapper">
-		<form id="quotationForm" action="${pageContext.request.contextPath}/organizer/quotation/save" method="post" onsubmit="return validateForm()">
+		<form id="quotationForm" action="${pageContext.request.contextPath}/manager/quotation/save" method="post" onsubmit="return validateForm()">
 			<input type="hidden" name="bookingId" value="${b.bookingId}">
 
 			<div class="a4-document">
@@ -98,7 +98,7 @@
                             <td class="value">
                                 <c:choose>
                                     <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
-                                    <c:otherwise>${b.ceremony.ceremonyName}</c:otherwise>
+                                    <c:otherwise>${b.ceremony.optionType}</c:otherwise>
                                 </c:choose>
                             </td>
                         </tr>
@@ -152,7 +152,7 @@
                     <c:set var="isMonkSelfInvite" value="${fn:contains(monkInviteType,'นิมนต์เอง')}" />
                     <c:set var="discountValue" value="0" />
                     
-                    <c:set var="isCustomRequest" value="${fn:contains(b.ceremony.ceremonyName, 'ความต้องการเบื้องต้น')}" />
+                    <c:set var="isCustomRequest" value="${fn:contains(b.ceremony.optionType, 'ความต้องการเบื้องต้น')}" />
                     <c:choose>
                         <c:when test="${isCustomRequest}">
                             <c:set var="packageDisplayPrice" value="0.00" />
@@ -170,8 +170,8 @@
 						<tr class="static-row package-main-row no-qty-convert">
 							<td class="text-center row-number">1</td>
 							<td>
-								<strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
-								<input type="hidden" name="bookingItemNames" value="${b.ceremony.ceremonyName}">
+								<strong>แพ็กเกจ: ${b.ceremony.optionType}</strong>
+								<input type="hidden" name="bookingItemNames" value="${b.ceremony.optionType}">
 							</td>
 							<td class="text-center">1<input type="hidden" name="bookingQtys" value="1" class="qty-input"></td>
 							<td class="text-center">แพ็กเกจ</td>

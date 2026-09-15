@@ -124,27 +124,27 @@
 <body>
 
 <nav class="navbar">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
              alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
         <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item">รายการจอง</a>
-            <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/organizer/questions"  class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item active">จัดการใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/manager/bookings"   class="nav-item">รายการจอง</a>
+            <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a>
+            <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/manager/quotation"  class="nav-item active">จัดการใบเสนอราคา</a>
         </nav>
-        <div class="user-info" onclick="toggleDropdown()">
-            <div class="user-avatar">A</div>
+          <div class="user-info" onclick="toggleDropdown()">
+            <div class="user-avatar">M</div>
             <div class="user-detail">
-                <span class="user-name">Admin Organizer</span>
+                <span class="user-name">Manager</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
             <span class="arrow">▾</span>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item">ออกจากระบบ</a>
+                <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item">ออกจากระบบ</a>
             </div>
         </div>
     </div>
@@ -152,11 +152,11 @@
 
 <div class="page-wrapper">
     <form id="quotationForm"
-          action="${pageContext.request.contextPath}/organizer/quotation/update"
+          action="${pageContext.request.contextPath}/manager/quotation/update"
           method="post" onsubmit="return validateForm()">
         <input type="hidden" name="quotationId" value="${q.quotationId}">
 
-        <c:set var="packageName" value="${q.bookingForm.ceremony.ceremonyName}"/>
+        <c:set var="packageName" value="${q.bookingForm.ceremony.optionType}"/>
         <c:set var="isCustomRequest" value="${packageName == 'กรอกความต้องการเบื้องต้น'}" />
 
         <c:set var="monkInviteType" value=""/>

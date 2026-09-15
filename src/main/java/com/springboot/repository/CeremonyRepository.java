@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface CeremonyRepository extends JpaRepository<Ceremony, Integer> {
 
-    // ค้นหาพิธีตามชื่อ
-    List<Ceremony> findByCeremonyNameContaining(String name);
+    // ✅ แก้ไข: เปลี่ยนจาก findByCeremonyNameContaining เป็น findByOptionTypeContaining
+    List<Ceremony> findByOptionTypeContaining(String name);
 
     // แก้ไข: เปลี่ยน c.items เป็น c.ceremonyItems และ Join ไปยัง item 
     @Query("SELECT DISTINCT c FROM Ceremony c LEFT JOIN FETCH c.ceremonyItems ci LEFT JOIN FETCH ci.item")

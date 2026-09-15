@@ -2,10 +2,10 @@ package com.springboot.controller.headstaff;
 
 import com.springboot.model.BookingForm;
 import com.springboot.model.HeadStaff;
-import com.springboot.model.StaffAssignment;
+import com.springboot.model.JobAssignment;
 import com.springboot.service.BookingService;
 import com.springboot.service.HeadStaffService;
-import com.springboot.service.StaffAssignmentService;
+import com.springboot.service.JobAssignmentService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-
-
 @Controller
 public class HeadStaffController {
 
@@ -26,7 +24,7 @@ public class HeadStaffController {
     private HeadStaffService headStaffService;
 
     @Autowired
-    private StaffAssignmentService staffAssignmentService;
+    private JobAssignmentService staffAssignmentService;
     
     @Autowired
     private BookingService bookingService;
@@ -42,7 +40,8 @@ public class HeadStaffController {
 
         if (staff == null) {
             redirectAttrs.addFlashAttribute("error", "อีเมล รหัสผ่านไม่ถูกต้อง หรือบัญชีถูกระงับ");
-            return new ModelAndView("redirect:/loginorganizer");
+            // ✅ แก้เป็น loginmanager
+            return new ModelAndView("redirect:/loginmanager");
         }
 
         session.setAttribute("currentStaff", staff);
@@ -55,16 +54,18 @@ public class HeadStaffController {
     public ModelAndView logoutStaff(HttpSession session, RedirectAttributes redirectAttrs) {
         session.invalidate();
         redirectAttrs.addFlashAttribute("success", "ออกจากระบบเรียบร้อยแล้ว");
-        return new ModelAndView("redirect:/loginorganizer");
+        // ✅ แก้เป็น loginmanager
+        return new ModelAndView("redirect:/loginmanager");
     }
 
     // แสดงรายการงานที่ได้รับมอบหมายทั้งหมดของหัวหน้างานที่ล็อกอินอยู่
     @GetMapping("/staff/assignments")
     public String listAssignments(Model model, HttpSession session) {
         HeadStaff currentStaff = (HeadStaff) session.getAttribute("currentStaff");
-        if (currentStaff == null) return "redirect:/loginorganizer"; 
+        // ✅ แก้เป็น loginmanager
+        if (currentStaff == null) return "redirect:/loginmanager"; 
 
-        List<StaffAssignment> assignments = staffAssignmentService.getAssignmentsByStaff(currentStaff.getStaffId());
+        List<JobAssignment> assignments = staffAssignmentService.getAssignmentsByStaff(currentStaff.getStaffId());
         model.addAttribute("assignments", assignments);
         return "staffAssignmentList";
     }
@@ -72,9 +73,10 @@ public class HeadStaffController {
     // แสดงรายละเอียดของงานมอบหมายชิ้นที่เลือก
     @GetMapping("/staff/assignments/detail/{id}")
     public String viewAssignmentDetail(@PathVariable String id, Model model, HttpSession session) {
-        if (session.getAttribute("currentStaff") == null) return "redirect:/loginorganizer";
+        // ✅ แก้เป็น loginmanager
+        if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
 
-        StaffAssignment sa;
+        JobAssignment sa;
         if (id.startsWith("AN")) {
             sa = staffAssignmentService.getAssignmentById(id);
         } else {
@@ -104,7 +106,8 @@ public class HeadStaffController {
     @GetMapping("/staff/profile")
     public String showEditProfileForm(Model model, HttpSession session) {
         HeadStaff currentStaff = (HeadStaff) session.getAttribute("currentStaff");
-        if (currentStaff == null) return "redirect:/loginorganizer";
+        // ✅ แก้เป็น loginmanager
+        if (currentStaff == null) return "redirect:/loginmanager";
 
         HeadStaff staff = headStaffService.getHeadStaffById(currentStaff.getStaffId());
         model.addAttribute("staff", staff);
@@ -130,7 +133,8 @@ public class HeadStaffController {
     // แสดงหน้าจอสำหรับอัปเดตสถานะงาน
     @GetMapping("/staff/assignments/update-status/{bookingId}")
     public String showUpdateStatusForm(@PathVariable String bookingId, Model model, HttpSession session) {
-        if (session.getAttribute("currentStaff") == null) return "redirect:/loginorganizer";
+        // ✅ แก้เป็น loginmanager
+        if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
         
         BookingForm booking = bookingService.getBookingById(bookingId);
         model.addAttribute("b", booking);
@@ -143,7 +147,8 @@ public class HeadStaffController {
                                  @RequestParam String jobStatus,
                                  HttpSession session,
                                  RedirectAttributes ra) {
-        if (session.getAttribute("currentStaff") == null) return "redirect:/loginorganizer";
+        // ✅ แก้เป็น loginmanager
+        if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
         
         staffAssignmentService.updateJobStatus(bookingId, jobStatus);
         ra.addFlashAttribute("success", "อัปเดตสถานะงานสำเร็จ");

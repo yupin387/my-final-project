@@ -14,26 +14,26 @@
 
 <%-- ===== NAVBAR (matched exactly to bookingList.jsp) ===== --%>
 <nav class="navbar">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
              alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
         <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item active">รายการจอง</a>
-            <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/organizer/questions"  class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/manager/bookings"   class="nav-item active">รายการจอง</a>
+            <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a>
+            <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/manager/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
         </nav>
-        <div class="user-info" onclick="toggleDropdown()">
-            <div class="user-avatar">A</div>
+          <div class="user-info" onclick="toggleDropdown()">
+            <div class="user-avatar">M</div>
             <div class="user-detail">
-                <span class="user-name">Admin Organizer</span>
+                <span class="user-name">Manager</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
+                <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item danger">ออกจากระบบ</a>
             </div>
         </div>
     </div>
@@ -68,6 +68,11 @@
                 <span class="info-label">ประเภทพิธี</span>
                 <span class="info-value">${b.ceremony.ceremonyType}</span>
             </div>
+            <%-- ✅ จัดเรียงให้อยู่ต่อจากประเภทพิธีในแถวเดียวกัน --%>
+            <div class="info-cell">
+                <span class="info-label">รูปแบบการจอง</span>
+                <span class="info-value" >${b.ceremony.optionType}</span>
+            </div>
             <div class="info-cell">
                 <span class="info-label">วันจัดงาน</span>
                 <span class="info-value">
@@ -86,7 +91,8 @@
                 <span class="info-label">เบอร์โทร</span>
                 <span class="info-value">${b.member.phoneNumber}</span>
             </div>
-            <div class="info-cell full">
+            <%-- ✅ เอา class "full" ออก ให้ต่อแถวเดียวกับเบอร์โทรแทนที่จะขึ้นแถวใหม่เต็มความกว้าง --%>
+            <div class="info-cell">
                 <span class="info-label">สถานที่จัดงาน</span>
                 <span class="info-value">${b.eventAddress}</span>
             </div>
@@ -118,7 +124,7 @@
                 <div class="form-title-line"></div>
             </div>
 
-            <form action="${pageContext.request.contextPath}/organizer/assignments/save" method="post">
+            <form action="${pageContext.request.contextPath}/manager/assignments/save" method="post">
                 <input type="hidden" name="bookingId" value="${b.bookingId}">
                 <input type="hidden" name="mode"      value="${isChangeMode ? 'change' : ''}">
 
@@ -159,7 +165,7 @@
         <div class="footer-brand">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
                  alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+            <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
         </div>
         <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
     </div>

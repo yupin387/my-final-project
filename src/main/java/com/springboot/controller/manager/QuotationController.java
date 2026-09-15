@@ -1,4 +1,4 @@
-package com.springboot.controller.organizer;
+package com.springboot.controller.manager;
 
 import com.springboot.model.*;
 import com.springboot.repository.ItemRepository;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/organizer/quotation")
+@RequestMapping("/manager/quotation")
 public class QuotationController {
 
     private static final String MONK_INVITE_SERVICE_ITEM_NAME = "บริการประสานงานนิมนต์พระ";
@@ -34,8 +34,8 @@ public class QuotationController {
             Model model,
             HttpSession session) {
 
-        if (session.getAttribute("currentOrganizer") == null) {
-            return "redirect:/loginorganizer";
+        if (session.getAttribute("currentManager") == null) {
+            return "redirect:/loginmanager";
         }
 
         List<Quotation> quotations;
@@ -53,11 +53,11 @@ public class QuotationController {
 
     @GetMapping("/create/{bookingId}")
     public String createQuotationForm(@PathVariable String bookingId, Model model, HttpSession session) {
-        if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
+        if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
 
         BookingForm booking = bookingService.getBookingById(bookingId);
         if (booking == null) {
-            return "redirect:/organizer/bookings";
+            return "redirect:/manager/bookings";
         }
 
         List<BookingFormDetail> validDetails = buildValidDetails(booking);
@@ -67,7 +67,7 @@ public class QuotationController {
         model.addAttribute("additionalNote", extractAdditionalNote(booking));
 
         boolean isCustomRequest = booking.getCeremony() != null
-                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType());
         model.addAttribute("isCustomRequest", isCustomRequest);
 
         // 1. ดึงรายการสินค้าทั้งหมดในระบบ
@@ -113,21 +113,21 @@ public class QuotationController {
             bookingService.updateJobStatus(bookingId, "Approved");
 
             ra.addFlashAttribute("success", "สร้างใบเสนอราคาสำเร็จ");
-            return "redirect:/organizer/quotation/detail/" + created.getQuotationId();
+            return "redirect:/manager/quotation/detail/" + created.getQuotationId();
         } catch (Exception e) {
             e.printStackTrace();
             ra.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
-            return "redirect:/organizer/quotation/create/" + bookingId;
+            return "redirect:/manager/quotation/create/" + bookingId;
         }
     }
 
     @GetMapping("/detail/{id}")
     public String quotationDetail(@PathVariable String id, Model model, HttpSession session) {
-        if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
+        if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
 
         Quotation quotation = quotationService.getQuotationById(id);
         if (quotation == null) {
-            return "redirect:/organizer/quotation";
+            return "redirect:/manager/quotation";
         }
 
         List<QuotationDetail> details = quotationService.getDetailsByQuotationId(id);
@@ -137,14 +137,14 @@ public class QuotationController {
 
         BookingForm booking = quotation.getBookingForm();
         if (booking == null) {
-            return "redirect:/organizer/quotation";
+            return "redirect:/manager/quotation";
         }
 
         model.addAttribute("b", booking);
         model.addAttribute("additionalNote", extractAdditionalNote(booking));
 
         boolean isCustomRequest = booking.getCeremony() != null
-                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType());
 
         // ดึงรายการไอเทมในพิธี พร้อมของพระสงฆ์ (เพื่อให้ในใบสรุปแสดงของที่ให้อัตโนมัติด้วย)
         List<Item> ceremonyItems = getBaseCeremonyItemsWithMonkAdditions(booking, isCustomRequest);
@@ -157,11 +157,11 @@ public class QuotationController {
 
     @GetMapping("/edit/{id}")
     public String editQuotationForm(@PathVariable String id, Model model, HttpSession session) {
-        if (session.getAttribute("currentOrganizer") == null) return "redirect:/loginorganizer";
+        if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
 
         Quotation quotation = quotationService.getQuotationById(id);
         if (quotation == null) {
-            return "redirect:/organizer/quotation";
+            return "redirect:/manager/quotation";
         }
 
         List<QuotationDetail> details = quotationService.getDetailsByQuotationId(id);
@@ -171,11 +171,11 @@ public class QuotationController {
 
         BookingForm booking = quotation.getBookingForm();
         if (booking == null) {
-            return "redirect:/organizer/quotation";
+            return "redirect:/manager/quotation";
         }
 
         boolean isCustomRequest = booking.getCeremony() != null
-                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType());
         model.addAttribute("isCustomRequest", isCustomRequest);
 
         // 1. ดึงรายการสินค้าทั้งหมดในระบบ
@@ -220,11 +220,11 @@ public class QuotationController {
             quotationService.updateQuotation(quotationId, extraItemIds, extraQtys, extraPrices, note,
                                              bookingItemNames, bookingQtys, bookingPrices);
             ra.addFlashAttribute("success", "แก้ไขใบเสนอราคาเรียบร้อยแล้ว");
-            return "redirect:/organizer/quotation/detail/" + quotationId;
+            return "redirect:/manager/quotation/detail/" + quotationId;
         } catch (Exception e) {
             e.printStackTrace();
             ra.addFlashAttribute("error", "แก้ไขไม่สำเร็จ: " + e.getMessage());
-            return "redirect:/organizer/quotation/edit/" + quotationId;
+            return "redirect:/manager/quotation/edit/" + quotationId;
         }
     }
 
@@ -256,10 +256,9 @@ public class QuotationController {
         return validDetails;
     }
 
- // ดึงไอเทมของพิธี และบวกไอเทมพิเศษตามจำนวนพระสงฆ์ (สำหรับกรณี Custom Request)
+    // ดึงไอเทมของพิธี และบวกไอเทมพิเศษตามจำนวนพระสงฆ์ (สำหรับกรณี Custom Request)
     private List<Item> getBaseCeremonyItemsWithMonkAdditions(BookingForm booking, boolean isCustomRequest) {
         
-        // แก้ไขให้ตัวแปรคงที่ (Effectively Final) โดยใช้ .addAll() แทนการเขียนทับค่า
         List<Item> ceremonyItems = new ArrayList<>();
         if (booking.getCeremony() != null) {
             List<Item> itemsFromDb = quotationService.getItemsByCeremonyId(booking.getCeremony().getCeremonyId());
@@ -296,15 +295,10 @@ public class QuotationController {
                     });
                 }
 
-                // หมายเหตุ: บริการประสานงานนิมนต์พระต้องใส่เข้าไปในใบเสนอราคาเสมอเมื่อมีจำนวนพระสงฆ์
-                // แม้ลูกค้าจะเลือก "นิมนต์เอง" ก็ตาม เพราะจารย์ต้องการให้แสดงรายการนี้ไว้
-                // แต่คิดราคาเป็น 0.00 บาท (ไปจัดการเรื่องราคา 0 บาทที่ฝั่งหน้า JSP แทน
-                // โดยเช็คจากตัวแปร isMonkSelfInvite)
                 itemRepo.findByItemName(MONK_INVITE_SERVICE_ITEM_NAME).ifPresent(item -> {
                     if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
                 });
 
-                // ป้องกัน unused-variable warning และคงไว้เผื่อใช้ต่อยอด logic อื่นในอนาคต
                 if (isSelfInvite) {
                     // ไม่ต้องทำอะไรเพิ่มตรงนี้ - ราคา/ป้ายกำกับ "ฟรี" จัดการที่ JSP
                 }
@@ -313,7 +307,7 @@ public class QuotationController {
         return ceremonyItems;
     }
 
-    // คำนวณหา Item ที่จัดว่าเป็น "ของพื้นฐาน" เพื่อนำไปโชว์ให้ Organizer ดู (ตัดพวกปิ่นโต/สังฆทานออก)
+    // คำนวณหา Item ที่จัดว่าเป็น "ของพื้นฐาน" เพื่อนำไปโชว์ให้ Manager ดู (ตัดพวกปิ่นโต/สังฆทานออก)
     private List<Item> computePackageIncludedItems(List<Item> allItems) {
         List<Item> packageIncludedItems = new ArrayList<>();
         if (allItems != null) {

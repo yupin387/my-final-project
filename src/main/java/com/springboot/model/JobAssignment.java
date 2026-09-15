@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "staffassignment")
-public class StaffAssignment {
+public class JobAssignment {
 	@Id
 	@Column(name = "assignid", length = 50)
 	private String assignId;
@@ -33,11 +33,11 @@ public class StaffAssignment {
 	@JoinColumn(name = "staffid",nullable = false)
 	private HeadStaff headStaff; 
 
-	public StaffAssignment() {
+	public JobAssignment() {
 	}
 
     
-	public StaffAssignment(String assignId, Date assignDate, String reportNote, String reportImage, String jobStatus,
+	public JobAssignment(String assignId, Date assignDate, String reportNote, String reportImage, String jobStatus,
 			BookingForm bookingForm, HeadStaff headStaff) {
 		super();
 		this.assignId = assignId;

@@ -1,0 +1,257 @@
+/* ==========================================================
+   managerAssignmentDetail.css
+   หน้า "ดูรายละเอียดงานที่มอบหมาย" ฝั่ง Manager (read-only)
+   ใช้ CSS variables ชุดเดียวกับ bookingList.css (โทนกุหลาบ-ทอง)
+   ต้อง <link> ไฟล์ bookingList.css ไว้ก่อนไฟล์นี้เสมอ เพื่อให้
+   :root variables (--rose-*, --gold*, --accent-gold ฯลฯ) พร้อมใช้งาน
+   ========================================================== */
+
+/* ========== TOP ACTIONS ========== */
+.top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: 0 auto 20px;
+    padding: 0 4px;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: var(--rose-deep);
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 8px 6px;
+    transition: color 0.2s;
+}
+
+.btn-back:hover { color: var(--brown-dark); }
+
+/* ป้ายบอกสถานะ read-only ของฝั่ง Manager */
+.view-only-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--rose-pale);
+    color: var(--rose-deep);
+    border: 1.5px solid var(--rose-line);
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* ========== CARD ========== */
+.detail-card {
+    max-width: 1000px;
+    margin: 0 auto 40px;
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1.5px solid var(--rose-line);
+    box-shadow: 0 6px 32px var(--shadow-warm);
+    position: relative;
+}
+
+.detail-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent-gold);
+}
+
+.card-header-bar {
+    background: var(--rose-mid);
+    padding: 16px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 16px;
+    font-family: 'Sarabun', sans-serif;
+    border-bottom: 2px solid var(--rose-soft);
+}
+
+.card-header-bar .assign-id {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.card-body { padding: 28px 32px 34px; }
+
+/* ========== PROGRESS TRACKER ========== */
+.progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 560px;
+    margin: 6px auto 32px;
+    position: relative;
+}
+
+.progress-container::before {
+    content: '';
+    position: absolute;
+    top: 17px;
+    left: 40px;
+    right: 40px;
+    height: 2px;
+    background: var(--cream-border);
+    z-index: 0;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+}
+
+.step-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--cream-border);
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.step-circle.done {
+    background: var(--rose-deep);
+    border-color: var(--rose-deep);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px var(--shadow-rose);
+}
+
+.step-label {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* ========== SECTIONS ========== */
+.section-heading {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--rose-deep);
+    margin-bottom: 14px;
+    padding-left: 10px;
+    border-left: 4px solid var(--accent-gold);
+}
+
+.divider {
+    border: none;
+    border-top: 1.5px dashed var(--cream-border);
+    margin: 26px 0;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 28px;
+}
+
+.info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-group .label {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.info-group .value {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.address-box {
+    background: var(--rose-glow);
+    border: 1.5px solid var(--rose-line-light);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.6;
+}
+
+/* สถานะปัจจุบันของงาน (แสดงผลเฉยๆ ไม่มีปุ่มแก้ไข) */
+.status-readonly-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* รายงานความเสียหาย (แสดงเฉพาะถ้ามีข้อมูล) */
+.damage-report-box {
+    background: var(--error-bg);
+    border: 1.5px solid var(--error-border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    color: var(--error-text);
+    line-height: 1.6;
+}
+
+.damage-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.damage-images img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1.5px solid var(--error-border);
+}
+
+.empty-note {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13.5px;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .card-body { padding: 20px 18px 26px; }
+    .info-grid { grid-template-columns: 1fr; }
+    .progress-container { max-width: 100%; }
+    .step-label { font-size: 11px; }
+    .top-actions { flex-direction: column; align-items: flex-start; gap: 10px; }
+}

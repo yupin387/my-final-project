@@ -75,31 +75,32 @@
 </head>
 <body>
 
-<%-- ===== NAVBAR (คงเดิมตามระบบ Organizer) ===== --%>
+<%-- ===== NAVBAR ===== --%>
 <nav class="navbar">
-    <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/organizer/bookings" style="text-decoration: none;">
+    <a class="navbar-brand-wrap" href="${pageContext.request.contextPath}/manager/bookings" style="text-decoration: none;">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
              alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon" onerror="this.style.display='none'">
         <span class="nav-brand-text">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item active">รายการจอง</a>
-            <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/organizer/questions"  class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/manager/bookings"   class="nav-item active">รายการจอง</a>
+            <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a>
+            <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/manager/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
         </nav>
         <div class="dropdown-wrap">
-            <div class="user-info" onclick="toggleDropdown()">
-                <div class="user-avatar">A</div>
-                <div class="user-detail">
-                    <span class="user-name">Admin Organizer</span>
-                    <span class="user-role">ผู้จัดการ</span>
-                </div>
+              <div class="user-info" onclick="toggleDropdown()">
+            <div class="user-avatar">M</div>
+            <div class="user-detail">
+                <span class="user-name">Manager</span>
+                <span class="user-role">ผู้จัดการ</span>
+            </div>
                 <span class="arrow">▾</span>
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
+                <%-- ✅ แก้ไข: เปลี่ยนลิงก์ออกจากระบบเป็น /manager/logout --%>
+                <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item danger">ออกจากระบบ</a>
             </div>
         </div>
     </div>
@@ -109,7 +110,7 @@
 <div class="page-wrapper">
 
     <div class="back-link-row">
-        <a href="${pageContext.request.contextPath}/organizer/bookings" class="back-link"><i class="bi bi-arrow-left"></i> กลับรายการจอง</a>
+        <a href="${pageContext.request.contextPath}/manager/bookings" class="back-link"><i class="bi bi-arrow-left"></i> กลับรายการจอง</a>
     </div>
 
     <%-- กระดาษเอกสารใบสรุปการจอง --%>
@@ -237,7 +238,8 @@
 
         <%-- ตัวแปรควบคุมการแสดงผล --%>
         <c:set var="basePriceVal" value="${b.ceremony.basePrice}" />
-        <c:set var="isCustomRequest" value="${empty basePriceVal || basePriceVal == 0 || fn:indexOf(b.ceremony.ceremonyName, 'กรอกความต้องการ') ne -1}" />
+        <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
+        <c:set var="isCustomRequest" value="${empty basePriceVal || basePriceVal == 0 || fn:indexOf(b.ceremony.optionType, 'กรอกความต้องการ') ne -1}" />
 
         <c:set var="sanghaChoice" value="" />
         <c:forEach items="${b.details}" var="dd">
@@ -274,7 +276,8 @@
                                     <c:otherwise>ชื่อแพ็กเกจ</c:otherwise>
                                 </c:choose>
                             </span>
-                            <span class="info-value">${b.ceremony.ceremonyName}</span>
+                            <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
+                            <span class="info-value">${b.ceremony.optionType}</span>
                         </div>
                     </div>
                     <c:if test="${not isCustomRequest && not empty b.ceremony.basePrice}">
@@ -424,20 +427,20 @@
                 <c:choose>
                     <c:when test="${b.bookingStatus == 'Pending'}">
                         <button type="button" class="btn btn-approve"
-                            onclick="openApproveModal('${b.bookingId}', '${pageContext.request.contextPath}/organizer/bookings/approve/${b.bookingId}')">
+                            onclick="openApproveModal('${b.bookingId}', '${pageContext.request.contextPath}/manager/bookings/approve/${b.bookingId}')">
                             รับงานและเตรียมใบเสนอราคา
                         </button>
                         <button type="button" class="btn btn-reject"
-                            onclick="openRejectModal('${b.bookingId}', '${pageContext.request.contextPath}/organizer/bookings/reject/${b.bookingId}')">
+                            onclick="openRejectModal('${b.bookingId}', '${pageContext.request.contextPath}/manager/bookings/reject/${b.bookingId}')">
                             ปฏิเสธงาน
                         </button>
                     </c:when>
                     <c:when test="${b.bookingStatus == 'Approved' || b.bookingStatus == 'Quoted'}">
-                        <a href="${pageContext.request.contextPath}/organizer/quotation/create/${b.bookingId}" class="btn btn-approve text-decoration-none">จัดการใบเสนอราคา</a>
+                        <a href="${pageContext.request.contextPath}/manager/quotation/create/${b.bookingId}" class="btn btn-approve text-decoration-none">จัดการใบเสนอราคา</a>
                     </c:when>
                 </c:choose>
             </div>
-            <a href="${pageContext.request.contextPath}/organizer/bookings" class="btn-back">← กลับรายการจอง</a>
+            <a href="${pageContext.request.contextPath}/manager/bookings" class="btn-back">← กลับรายการจอง</a>
         </div>
     </div>
 </div>
@@ -557,7 +560,8 @@
 
         var basePriceRaw = "${b.ceremony.basePrice}";
         var basePrice = parseFloat(basePriceRaw) || 0;
-        var ceremonyName = "${fn:trim(b.ceremony.ceremonyName)}";
+        <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType ใน Script ด้วย --%>
+        var ceremonyName = "${fn:trim(b.ceremony.optionType)}";
         var isCustomRequest = (basePrice === 0) || (ceremonyName.indexOf('กรอกความต้องการ') !== -1);
 
         var answers = collectAnswers();

@@ -80,26 +80,26 @@
 <body>
 
     <nav class="navbar">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings"> 
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings"> 
             <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon"> 
             <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
         </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
-                <a href="${pageContext.request.contextPath}/organizer/bookings" class="nav-item">รายการจอง</a> 
-                <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a> 
-                <a href="${pageContext.request.contextPath}/organizer/questions" class="nav-item">จัดการพิธี</a> 
-                <a href="${pageContext.request.contextPath}/organizer/quotation" class="nav-item active">จัดการใบเสนอราคา</a>
+                <a href="${pageContext.request.contextPath}/manager/bookings" class="nav-item">รายการจอง</a> 
+                <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a> 
+                <a href="${pageContext.request.contextPath}/manager/questions" class="nav-item">จัดการพิธี</a> 
+                <a href="${pageContext.request.contextPath}/manager/quotation" class="nav-item active">จัดการใบเสนอราคา</a>
             </nav>
-            <div class="user-info" onclick="toggleDropdown()">
-                <div class="user-avatar">A</div>
-                <div class="user-detail">
-                    <span class="user-name">Admin Organizer</span> 
-                    <span class="user-role">ผู้จัดการ</span>
-                </div>
+               <div class="user-info" onclick="toggleDropdown()">
+            <div class="user-avatar">M</div>
+            <div class="user-detail">
+                <span class="user-name">Manager</span>
+                <span class="user-role">ผู้จัดการ</span>
+            </div>
                 <span class="arrow">▾</span>
                 <div class="dropdown-menu" id="dropdownMenu">
-                    <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
+                    <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item danger">ออกจากระบบ</a>
                 </div>
             </div>
         </div>
@@ -123,7 +123,7 @@
                 <c:if test="${fn:contains(d.question.questionsText,'จำนวนพระ')}"><c:set var="monkCount" value="${d.answer}" /></c:if>
             </c:forEach>
             <c:set var="isMonkSelfInvite" value="${fn:contains(monkInviteType,'นิมนต์เอง')}" />
-            <c:set var="isCustomRequest" value="${b.ceremony.ceremonyName == 'กรอกความต้องการเบื้องต้น'}" />
+            <c:set var="isCustomRequest" value="${b.ceremony.optionType == 'กรอกความต้องการเบื้องต้น'}" />
 
             <div class="doc-header">
                 <div class="company-info">
@@ -161,7 +161,7 @@
                             <td class="value">
                                 <c:choose>
                                     <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
-                                    <c:otherwise>${b.ceremony.ceremonyName}</c:otherwise>
+                                    <c:otherwise>${b.ceremony.optionType}</c:otherwise>
                                 </c:choose>
                             </td>
                         </tr>
@@ -220,7 +220,7 @@
     <tr class="static-row">
         <td class="text-center row-number"></td>
         <td>
-    <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
+    <strong>แพ็กเกจ: ${b.ceremony.optionType}</strong>
 </td>
         <td class="text-center">1</td>
         <td class="text-center">แพ็กเกจ</td>
@@ -256,7 +256,7 @@
                     <c:set var="equipBlock">
                         <c:set var="printedEquip" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                                 <c:if test="${!printedEquip}">
                                     <tr class="group-row">
                                         <td></td>
@@ -283,7 +283,7 @@
                     <c:set var="sangBlock">
                         <c:set var="printedSang" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                                 <c:if test="${!printedSang}">
                                     <tr class="group-row">
                                         <td></td>
@@ -312,7 +312,7 @@
                     <c:set var="foodBlock">
                         <c:set var="printedFood" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                                 <c:if test="${!printedFood}">
                                     <tr class="group-row">
                                         <td></td>
@@ -339,7 +339,7 @@
                     <c:set var="servBlock">
                         <c:set var="printedServ" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('บริการ')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('บริการ')}">
                                 <c:if test="${!printedServ}">
                                     <tr class="group-row">
                                         <td></td>
@@ -370,7 +370,7 @@
                     <c:set var="extraBlock">
                         <c:set var="printedExtra" value="false"/>
                         <c:forEach var="d" items="${details}">
-                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.ceremonyName) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+                            <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
                                 <c:if test="${!printedExtra}">
                                     <tr class="group-row">
                                         <td></td>
@@ -435,7 +435,7 @@
                     <c:forEach var="d" items="${details}">
                         <c:choose>
                             <%-- ข้ามชื่อแพ็กเกจ (ถ้ามี) --%>
-                            <c:when test="${!isCustomRequest && d.item != null && fn:trim(d.item.itemName) eq fn:trim(b.ceremony.ceremonyName)}">
+                            <c:when test="${!isCustomRequest && d.item != null && fn:trim(d.item.itemName) eq fn:trim(b.ceremony.optionType)}">
                             </c:when>
                             <c:otherwise>
                                 <c:set var="itemVal" value="${d.subtotal}" />
@@ -517,8 +517,8 @@
     </div>
 
   <div class="back-bottom-wrap no-print" style="display:flex; gap:12px; justify-content:center; align-items:center;">
-    <a href="${pageContext.request.contextPath}/organizer/quotation" class="btn-back-bottom">← กลับไปรายการใบเสนอราคา</a>
-    <a href="${pageContext.request.contextPath}/organizer/quotation/edit/${q.quotationId}" class="btn-blue-edit">✏️ แก้ไขใบเสนอราคา</a>
+    <a href="${pageContext.request.contextPath}/manager/quotation" class="btn-back-bottom">← กลับไปรายการใบเสนอราคา</a>
+    <a href="${pageContext.request.contextPath}/manager/quotation/edit/${q.quotationId}" class="btn-blue-edit">✏️ แก้ไขใบเสนอราคา</a>
 </div>
     
     <footer class="site-footer">

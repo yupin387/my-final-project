@@ -154,7 +154,7 @@ public class MemberController {
             if (booking.getCeremony() != null) {
                 int ceremonyId = booking.getCeremony().getCeremonyId();
                 List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
-                boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName());
+                boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType());
 
                 List<Item> packageIncludedItems = computePackageIncludedItems(allItems, isCustomRequest);
                 model.addAttribute("packageIncludedItems", packageIncludedItems);
@@ -180,7 +180,7 @@ public class MemberController {
                                        RedirectAttributes ra) {
         try {
             quotationService.submitMemberRevision(quotationId, memberNote);
-            ra.addFlashAttribute("success", "ส่งรายการแจ้งขอแก้ไขให้ออแกไนเซอร์เรียบร้อยแล้ว");
+            ra.addFlashAttribute("success", "ส่งรายการแจ้งขอแก้ไขให้ผู้จัดการเรียบร้อยแล้ว");
             return "redirect:/member/quotation/detail/" + quotationId;
         } catch (Exception e) {
             ra.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());

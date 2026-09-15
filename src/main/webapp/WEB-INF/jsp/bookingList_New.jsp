@@ -15,26 +15,26 @@
 
    <!-- ===== NAVBAR (same style as home) ===== -->
 <nav class="navbar">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
              alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
         <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/organizer/bookings"    class="nav-item active">รายการจอง</a>
-            <a href="${pageContext.request.contextPath}/organizer/head-staff"  class="nav-item">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/organizer/questions"   class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation"   class="nav-item">จัดการใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/manager/bookings"    class="nav-item active">รายการจอง</a>
+            <a href="${pageContext.request.contextPath}/manager/head-staff"  class="nav-item">หัวหน้างาน</a>
+            <a href="${pageContext.request.contextPath}/manager/questions"   class="nav-item">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/manager/quotation"   class="nav-item">จัดการใบเสนอราคา</a>
         </nav>
-        <div class="user-info" onclick="toggleDropdown()">
-            <div class="user-avatar">A</div>
+           <div class="user-info" onclick="toggleDropdown()">
+            <div class="user-avatar">M</div>
             <div class="user-detail">
-                <span class="user-name">Admin Organizer</span>
+                <span class="user-name">Manager</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
+                <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item danger">ออกจากระบบ</a>
             </div>
         </div>
     </div>
@@ -93,19 +93,19 @@
         </div>
 
         <div class="status-filter-dropdown" id="statusFilterDropdown">
-            <a href="${pageContext.request.contextPath}/organizer/bookings?status=All" class="status-filter-item ${currentStatus == 'All' ? 'selected' : ''}">
+            <a href="${pageContext.request.contextPath}/manager/bookings?status=All" class="status-filter-item ${currentStatus == 'All' ? 'selected' : ''}">
                 <span class="dot dot-all"></span> ทั้งหมด <span class="count-badge">${countAll}</span>
             </a>
-            <a href="${pageContext.request.contextPath}/organizer/bookings?status=Pending" class="status-filter-item ${currentStatus == 'Pending' ? 'selected' : ''}">
+            <a href="${pageContext.request.contextPath}/manager/bookings?status=Pending" class="status-filter-item ${currentStatus == 'Pending' ? 'selected' : ''}">
                 <span class="dot dot-pending"></span> งานใหม่ <span class="count-badge">${countPending}</span>
             </a>
-            <a href="${pageContext.request.contextPath}/organizer/bookings?status=Confirmed" class="status-filter-item ${currentStatus == 'Confirmed' ? 'selected' : ''}">
+            <a href="${pageContext.request.contextPath}/manager/bookings?status=Confirmed" class="status-filter-item ${currentStatus == 'Confirmed' ? 'selected' : ''}">
                 <span class="dot dot-confirmed"></span> ยืนยันแล้ว <span class="count-badge">${countConfirmed}</span>
             </a>
-            <a href="${pageContext.request.contextPath}/organizer/bookings?status=Completed" class="status-filter-item ${currentStatus == 'Completed' ? 'selected' : ''}">
+            <a href="${pageContext.request.contextPath}/manager/bookings?status=Completed" class="status-filter-item ${currentStatus == 'Completed' ? 'selected' : ''}">
                 <span class="dot dot-completed"></span> เสร็จสิ้นแล้ว <span class="count-badge">${countCompleted}</span>
             </a>
-            <a href="${pageContext.request.contextPath}/organizer/bookings?status=Rejected" class="status-filter-item ${currentStatus == 'Rejected' ? 'selected' : ''}">
+            <a href="${pageContext.request.contextPath}/manager/bookings?status=Rejected" class="status-filter-item ${currentStatus == 'Rejected' ? 'selected' : ''}">
                 <span class="dot dot-rejected"></span> ปฏิเสธ <span class="count-badge">${countRejected}</span>
             </a>
         </div>
@@ -164,8 +164,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/organizer/bookings/detail/${b.bookingId}"
-                                           class="btn-action btn-view"> ดูรายละเอียด</a>
+                                       <a href="${pageContext.request.contextPath}/manager/bookings/detail/${b.bookingId}" class="btn-action btn-view"> ดูรายละเอียด</a>
 
                                     </td>
                                 </tr>

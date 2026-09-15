@@ -15,26 +15,26 @@
 
 <!-- ===== NAVBAR (same style as bookingList) ===== -->
 <nav class="navbar">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
              alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
         <span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item">รายการจอง</a>
-            <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item active">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/organizer/questions"  class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/manager/bookings"   class="nav-item">รายการจอง</a>
+            <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item active">หัวหน้างาน</a>
+            <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/manager/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
         </nav>
-        <div class="user-info" onclick="toggleDropdown()">
-            <div class="user-avatar">A</div>
+          <div class="user-info" onclick="toggleDropdown()">
+            <div class="user-avatar">M</div>
             <div class="user-detail">
-                <span class="user-name">Admin Organizer</span>
+                <span class="user-name">Manager</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
+                <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item danger">ออกจากระบบ</a>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
             <p>ตรวจสอบและจัดการข้อมูลหัวหน้างานทั้งหมดในระบบ</p>
             <div class="gold-line"></div>
         </div>
-        <a href="${pageContext.request.contextPath}/organizer/head-staff/add" class="btn-add">
+        <a href="${pageContext.request.contextPath}/manager/head-staff/add" class="btn-add">
             + เพิ่มหัวหน้างาน
         </a>
     </div>
@@ -103,7 +103,7 @@
                         <td style="color:var(--text-muted);">${staff.formattedRegisteredDate}</td>
                         <td style="text-align:center;">
                             <form id="deleteForm-${staff.staffId}"
-                                  action="${pageContext.request.contextPath}/organizer/head-staff/delete/${staff.staffId}"
+                                  action="${pageContext.request.contextPath}/manager/head-staff/delete/${staff.staffId}"
                                   method="post">
                                 <button type="button" class="btn-delete"
                                         onclick="confirmDelete('${staff.staffId}', '${staff.staffFirstName} ${staff.staffLastName}')">
@@ -130,18 +130,7 @@
 
 </div>
 
-<!-- ===== FOOTER ===== -->
-<footer class="site-footer">
-    <div class="footer-content">
-        <div class="footer-brand">
-            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
-        </div>
-        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
-    </div>
-   
-</footer>
+
 
 <script src="${pageContext.request.contextPath}/static/js/headStaffList.js"></script>
 

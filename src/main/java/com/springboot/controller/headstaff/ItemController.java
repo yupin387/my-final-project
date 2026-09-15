@@ -42,8 +42,8 @@ public class ItemController {
             List<Ceremony> forType = allCeremonies.stream()
                 .filter(c -> type.equals(c.getCeremonyType()))
                 .sorted((a, b) -> {
-                    int ra = PACKAGE_ORDER.indexOf(a.getCeremonyName());
-                    int rb = PACKAGE_ORDER.indexOf(b.getCeremonyName());
+                    int ra = PACKAGE_ORDER.indexOf(a.getOptionType());
+                    int rb = PACKAGE_ORDER.indexOf(b.getOptionType());
                     if (ra < 0) ra = PACKAGE_ORDER.size();
                     if (rb < 0) rb = PACKAGE_ORDER.size();
                     return Integer.compare(ra, rb);
@@ -62,7 +62,7 @@ public class ItemController {
                            Model model, 
                            HttpSession session) {
         if (session.getAttribute("currentStaff") == null) {
-            return "redirect:/loginorganizer"; 
+            return "redirect:/loginmanager"; 
         }
 
         List<Item> items;
@@ -73,9 +73,6 @@ public class ItemController {
             items = itemService.getItemsByType(Integer.parseInt(typeId)); 
         }
 
-        // FIX: เพิ่มตัวกรองตามประเภทงานพิธี (ทำบุญบ้าน / ขึ้นบ้านใหม่ / ทำบุญบริษัทหรือออฟฟิศ)
-        // กรอง item ที่มี ceremonyItems ผูกกับ ceremony ที่ ceremonyType ตรงกับตัวที่เลือก
-        // ทำงานร่วมกับตัวกรองประเภท Item เดิมได้ (กรองซ้อนกันทั้งสองเงื่อนไข)
         if (ceremonyType != null && !ceremonyType.equals("all") && !ceremonyType.isEmpty()) {
             items = items.stream()
                 .filter(item -> item.getCeremonyItems() != null && item.getCeremonyItems().stream()
@@ -88,7 +85,6 @@ public class ItemController {
         model.addAttribute("itemTypes", itemService.getAllItemTypes());
         model.addAttribute("selectedType", typeId != null ? typeId : "all");
 
-        // FIX: ส่งค่าตัวกรองประเภทงานที่เลือกอยู่ และรายชื่อประเภทงานทั้ง 3 ให้ view ใช้สร้าง dropdown
         model.addAttribute("selectedCeremonyType", ceremonyType != null ? ceremonyType : "all");
         model.addAttribute("ceremonyTypeOrder", CEREMONY_TYPE_ORDER);
 
@@ -119,7 +115,7 @@ public class ItemController {
 
     @GetMapping("/add")
     public String showAddForm(Model model, HttpSession session) {
-        if (session.getAttribute("currentStaff") == null) return "redirect:/loginorganizer";
+        if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
         
         model.addAttribute("item", new Item());
         model.addAttribute("itemTypes", itemService.getAllItemTypes());
@@ -128,11 +124,9 @@ public class ItemController {
         return "addItem"; 
     }
 
-    // FIX: เพิ่ม selectedCeremonyQuantities — Map<ceremonyId, quantity>
-    // เพื่อให้ editItem.jsp pre-fill ช่องจำนวนเดิมที่เคยบันทึกไว้ ไม่ใช่ค่าว่าง/1 ทุกครั้ง
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model, HttpSession session) {
-        if (session.getAttribute("currentStaff") == null) return "redirect:/loginorganizer";
+        if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
         
         Item item = itemService.getItemById(id);
         
@@ -157,7 +151,6 @@ public class ItemController {
         return "editItem"; 
     }
 
-    // FIX: เพิ่มพารามิเตอร์ quantities รับจาก input ที่คู่กับแต่ละ checkbox
     @PostMapping("/save")
     public String saveItem(@ModelAttribute Item item,
                            @RequestParam int typeId,

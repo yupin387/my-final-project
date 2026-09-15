@@ -175,7 +175,7 @@
                          ถ้าไม่มี ceremonyId หรือไม่ตรงกับแพ็กเกจไหนเลย จะไม่แสดงการ์ดแพ็กเกจใด ๆ (การ์ดว่างเปล่า) --%>
                     <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
                         <c:if test="${not empty param.ceremonyId and param.ceremonyId == pkg.ceremonyId}">
-                            <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
+                            <c:set var="pkgNameSafe" value="${not empty pkg.optionType ? pkg.optionType : ''}"/>
                             <c:choose>
                                 <c:when test="${fn:contains(pkgNameSafe, 'พรีเมียม')}"><c:set var="pkgMonkCount" value="9"/></c:when>
                                 <c:when test="${fn:contains(pkgNameSafe, 'อิ่มบุญ')}"><c:set var="pkgMonkCount" value="7"/></c:when>
@@ -184,10 +184,10 @@
                             <label class="item-card">
                                 <input type="radio" name="ceremony.ceremonyId" value="${pkg.ceremonyId}" data-monkcount="${pkgMonkCount}" onchange="applyPackageMonkCount(this)" checked>
                                 <div class="item-card-thumb">
-                                    <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}" onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
+                                    <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.optionType}" onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
                                 </div>
                                 <div class="item-card-body">
-                                    <div class="item-card-name">${pkg.ceremonyName}</div>
+                                    <div class="item-card-name">${pkg.optionType}</div>
                                     <div class="item-card-desc">${pkg.ceremonyDetail}</div>
                                     <div class="item-card-price">฿<fmt:formatNumber value="${pkg.basePrice}" pattern="#,###"/></div>
                                 </div>

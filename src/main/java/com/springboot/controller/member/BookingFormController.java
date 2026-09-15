@@ -281,7 +281,7 @@ public class BookingFormController {
         // จะสูงเกินจริงสำหรับเคสนิมนต์เอง
         // ===================================================================
         if (booking.getCeremony() != null
-                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getCeremonyName())) {
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType())) {
 
             int monkCount = extractMonkCount(booking);
             boolean isSelfInvite = isMonkSelfInvite(booking);

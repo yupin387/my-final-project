@@ -55,26 +55,26 @@
 
 <!-- ========== NAVBAR ========== -->
 <div class="navbar">
-    <a href="${pageContext.request.contextPath}/organizer/bookings" class="navbar-brand">
+    <a href="${pageContext.request.contextPath}/manager/bookings" class="navbar-brand">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
              alt="บุญมีนำพา รับจัดงานบุญ" class="navbar-lotus">
         <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <nav class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item">รายการจอง</a>
-            <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item active">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/organizer/questions"  class="nav-item">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/manager/bookings"   class="nav-item">รายการจอง</a>
+            <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item active">หัวหน้างาน</a>
+            <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/manager/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
         </nav>
         <div class="user-info" onclick="toggleDropdown()">
-            <div class="user-avatar">A</div>
+            <div class="user-avatar">M</div>
             <div class="user-detail">
-                <span class="user-name">Admin Organizer</span>
+                <span class="user-name">Manager</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">
+                <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item danger">
                     ออกจากระบบ
                 </a>
             </div>
@@ -109,7 +109,7 @@
                 <div class="alert success">✓ ${success}</div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/organizer/head-staff/add"
+            <form action="${pageContext.request.contextPath}/manager/head-staff/add"
                   method="post" class="form-section" novalidate>
 
                 <div class="section-label">ข้อมูลส่วนตัว</div>
@@ -166,7 +166,7 @@
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">✓ ยืนยันการเพิ่มหัวหน้างาน</button>
                     <button type="button" class="btn-cancel"
-                            onclick="window.location.href='${pageContext.request.contextPath}/organizer/head-staff'">
+                            onclick="window.location.href='${pageContext.request.contextPath}/manager/head-staff'">
                         ยกเลิก
                     </button>
                 </div>

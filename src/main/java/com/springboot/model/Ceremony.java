@@ -19,10 +19,10 @@ public class Ceremony {
     // ทำบุญบริษัทหรือออฟฟิศ
     private String ceremonyType;
 
-    @Column(name = "ceremonyname", nullable = false, length = 100)
+    @Column(name = "optiontype", nullable = false, length = 100)
     // ชื่อแพ็กเกจ เช่น
     // มาตรฐาน, อิ่มบุญ, พรีเมียม, ประเมินตามความต้องการ
-    private String ceremonyName;
+    private String optionType;
 
     @Column(name = "ceremonydetail", length = 255)
     private String ceremonyDetail;
@@ -61,11 +61,11 @@ public class Ceremony {
 
     public Ceremony(
             String ceremonyType,
-            String ceremonyName,
+            String optionType,
             String ceremonyDetail,
             double basePrice) {
         this.ceremonyType = ceremonyType;
-        this.ceremonyName = ceremonyName;
+        this.optionType = optionType;
         this.ceremonyDetail = ceremonyDetail;
         this.basePrice = basePrice;
     }
@@ -90,12 +90,12 @@ public class Ceremony {
         this.ceremonyType = ceremonyType;
     }
 
-    public String getCeremonyName() {
-        return ceremonyName;
+    public String getOptionType() {
+        return optionType;
     }
 
-    public void setCeremonyName(String ceremonyName) {
-        this.ceremonyName = ceremonyName;
+    public void setOptionType(String optionType) {
+        this.optionType = optionType;
     }
 
     public String getCeremonyDetail() {

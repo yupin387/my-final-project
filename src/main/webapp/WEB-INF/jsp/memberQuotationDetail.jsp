@@ -85,8 +85,10 @@
 
     <div class="sheet">
 
-        <c:set var="packageName" value="${q.bookingForm.ceremony.ceremonyName}"/>
-        <c:set var="isCustomRequest" value="${q.bookingForm.ceremony.ceremonyName == 'กรอกความต้องการเบื้องต้น'}"/>
+        <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
+        <c:set var="packageName" value="${q.bookingForm.ceremony.optionType}"/>
+        <c:set var="isCustomRequest" value="${q.bookingForm.ceremony.optionType == 'กรอกความต้องการเบื้องต้น'}"/>
+        
         <c:set var="monkInviteType" value=""/>
         <c:set var="monkCount" value=""/>
         <c:forEach var="bd" items="${q.bookingForm.details}">
@@ -137,7 +139,8 @@
                             <td class="value">
                                 <c:choose>
                                     <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
-                                    <c:otherwise>${q.bookingForm.ceremony.ceremonyName}</c:otherwise>
+                                    <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
+                                    <c:otherwise>${q.bookingForm.ceremony.optionType}</c:otherwise>
                                 </c:choose>
                             </td>
                         </tr>
@@ -206,7 +209,8 @@
                     <tr class="static-row">
                         <td class="text-center row-number">1</td>
                         <td>
-                            <strong>แพ็กเกจ: ${b.ceremony.ceremonyName}</strong>
+                            <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
+                            <strong>แพ็กเกจ: ${b.ceremony.optionType}</strong>
                         </td>
                         <td class="text-center">1</td>
                         <td class="text-center">แพ็กเกจ</td>

@@ -55,11 +55,11 @@
 }
 
 /* ===== บังคับใช้ฟอนต์ Sarabun กับทุกส่วนประกอบในหน้าเว็บ ===== */
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
-    font-family: 'Sarabun', sans-serif; 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Sarabun', sans-serif;
 }
 
 /* บังคับ input, button ให้ใช้ฟอนต์ตามโครงสร้างหลักเสมอ */
@@ -125,9 +125,9 @@ body {
 
 .navbar-title {
     color: var(--nav-text-color);
-    font-family: 'Charmonman', cursive; 
-    font-size: 34px;                    
-    font-weight: 800;                   
+    font-family: 'Charmonman', cursive;
+    font-size: 34px;
+    font-weight: 800;
     letter-spacing: 0.5px;
     white-space: nowrap;
     text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
@@ -245,7 +245,7 @@ body {
     border: 1.5px solid var(--card-border);
     box-shadow: 0 10px 40px var(--shadow-soft);
     width: 100%;
-    max-width: 640px;
+    max-width: 860px;
     position: relative;
 }
 
@@ -256,7 +256,7 @@ body {
 /* ===== Card Header — ชมพู-กุหลาบเข้ม ให้เป็นชุดเดียวกับ nav-item.active/avatar ===== */
 .card-header {
     background: var(--accent-pink);
-    padding: 30px 36px;
+    padding: 38px 44px;
     text-align: center;
     border-bottom: 2px solid var(--accent-pink-mid);
     position: relative;
@@ -298,7 +298,7 @@ body {
 }
 
 .card-header h2 {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 700;
     margin: 0;
     color: #FFFFFF;
@@ -308,12 +308,12 @@ body {
 
 .card-header p {
     color: rgba(255, 255, 255, 0.88);
-    font-size: 13px;
+    font-size: 14px;
     margin-top: 6px;
 }
 
 /* Card Body */
-.card-body { padding: 32px 36px 36px; }
+.card-body { padding: 40px 44px 44px; }
 
 /* ===== ALERTS ===== */
 .alert-success {
@@ -344,13 +344,13 @@ body {
 form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 20px;
 }
 
 .form-group {
@@ -372,7 +372,7 @@ form {
 
 .form-control {
     width: 100%;
-    padding: 12px 16px;
+    padding: 13px 16px;
     border: 1.5px solid var(--card-border);
     border-radius: 10px;
     font-size: 14px;
@@ -409,7 +409,6 @@ form {
     align-items: center;
 }
 
-/* ===== ปุ่มบันทึก สีฟ้าทึบ (ไม่ไล่สี) ===== */
 /* ===== ปุ่มบันทึก สีทองทึบ (ไม่ไล่สี) ===== */
 .btn-submit {
     background: var(--accent-pink);

@@ -24,8 +24,8 @@ public class Run {
 		CeremonyRepository ceremonyRepo =
 				context.getBean(CeremonyRepository.class);
 
-		OrganizerRepository organizerRepo =
-				context.getBean(OrganizerRepository.class);
+		ManagerRepository managerRepo =
+				context.getBean(ManagerRepository.class);
 
 		HeadStaffRepository headStaffRepo =
 				context.getBean(HeadStaffRepository.class);
@@ -177,11 +177,11 @@ public class Run {
 
 
 			// =========================================================
-			// 2. ORGANIZER
+			// 2. MANAGER
 			// =========================================================
 
-			organizerRepo.saveAndFlush(
-					new Organizer(
+			managerRepo.saveAndFlush(
+					new Manager(
 							"admin17@gmail.com",
 							"12345678"
 					)

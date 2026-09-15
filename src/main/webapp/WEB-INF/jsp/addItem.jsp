@@ -129,7 +129,7 @@
 													data-group="grp_${entry.key}"
 													onchange="toggleQtyInput(this, 'qty_${c.ceremonyId}')">
 												<label for="cer_${c.ceremonyId}"
-													class="ceremony-check-label">${c.ceremonyName}</label>
+    class="ceremony-check-label">${c.optionType}</label>
 												<span class="qty-inline-wrap">
 													ใช้
 													<input type="number" name="quantities" id="qty_${c.ceremonyId}"

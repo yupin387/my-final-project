@@ -7,7 +7,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${ceremony.ceremonyName} - บุญมีรับจัดงานบุญ</title>
+    <%-- ✅ แก้ไข: เปลี่ยน ceremonyName เป็น optionType --%>
+    <title>${ceremony.optionType} - บุญมีรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/ceremonyDetail.css">
 </head>
@@ -188,14 +189,17 @@
       <div class="cd-package-grid">
 	    <c:set var="imageIndex" value="1" />
 	    <c:forEach items="${packages}" var="p">
-	        <c:if test="${p.ceremonyName != 'กรอกความต้องการเบื้องต้น'}">
+            <%-- ✅ แก้ไข: เปลี่ยน ceremonyName เป็น optionType --%>
+	        <c:if test="${p.optionType != 'กรอกความต้องการเบื้องต้น'}">
 	            <div class="cd-package-option">
 	                <div class="cd-package-img-container">
+                        <%-- ✅ แก้ไข: เปลี่ยน ceremonyName เป็น optionType --%>
 	                    <img src="${pageContext.request.contextPath}/static/images/p${imageIndex}.png" 
-	                         alt="${p.ceremonyName}">
+	                         alt="${p.optionType}">
 	                </div>
 	
-	                <div class="cd-package-option-name">${p.ceremonyName}</div>
+                    <%-- ✅ แก้ไข: เปลี่ยน ceremonyName เป็น optionType --%>
+	                <div class="cd-package-option-name">${p.optionType}</div>
 	                <div class="cd-package-option-price">
 	                    <fmt:formatNumber value="${p.basePrice}" type="number" groupingUsed="true" maxFractionDigits="0"/> บาท
 	                </div>
@@ -204,7 +208,8 @@
 	                <div id="detail-${p.ceremonyId}" class="cd-detail-collapsed" style="width:100%;">
 	                    <ul class="cd-condition-list" style="font-size:0.85rem; text-align:left; padding-left:18px; margin:0;">
 	                        <c:choose>
-							    <c:when test="${p.ceremonyName == 'แพ็กเกจมาตรฐาน'}">
+                                <%-- ✅ แก้ไข: เปลี่ยน ceremonyName เป็น optionType สำหรับเปรียบเทียบในเงื่อนไข --%>
+							    <c:when test="${p.optionType == 'แพ็กเกจมาตรฐาน'}">
 							        <li>ติดต่อวัด นิมนต์คณะพระภิกษุสงฆ์ 5 รูป</li>
 							        <li>ชุดโต๊ะหมู่บูชา และพระประธาน</li>
 							        <li>ชุดอาสนะพระภิกษุสงฆ์ จำนวน 5 ชุด</li>
@@ -214,7 +219,8 @@
 							        <li>ดอกไม้ ธูปเทียน สายสิญจน์ แป้งเจิม</li>
 							        <li>เจ้าหน้าที่จัดเตรียมงาน, พิธีกร ค่าขนส่งอุปกรณ์</li>
 							    </c:when>
-							    <c:when test="${p.ceremonyName == 'แพ็กเกจอิ่มบุญ'}">
+                                <%-- ✅ แก้ไข: เปลี่ยน ceremonyName เป็น optionType --%>
+							    <c:when test="${p.optionType == 'แพ็กเกจอิ่มบุญ'}">
 							        <li>ติดต่อวัด นิมนต์คณะพระภิกษุสงฆ์ 7 รูป</li>
 							        <li>ชุดโต๊ะหมู่บูชา และพระประธาน</li>
 							        <li>ชุดอาสนะพระภิกษุสงฆ์ จำนวน 7 ชุด</li>
@@ -225,7 +231,8 @@
 							        <li>ดอกไม้ ธูปเทียน พานพุ่ม สายสิญจน์ แป้งเจิม</li>
 							        <li>เจ้าหน้าที่จัดเตรียมงาน, พิธีกร ค่าขนส่งอุปกรณ์</li>
 							    </c:when>
-							    <c:when test="${p.ceremonyName == 'แพ็กเกจพรีเมียม'}">
+                                <%-- ✅ แก้ไข: เปลี่ยน ceremonyName เป็น optionType --%>
+							    <c:when test="${p.optionType == 'แพ็กเกจพรีเมียม'}">
 							        <li>ติดต่อวัด นิมนต์คณะพระภิกษุสงฆ์ 9 รูป</li>
 							        <li>ชุดโต๊ะหมู่บูชา และพระประธาน</li>
 							        <li>ชุดอาสนะพระภิกษุสงฆ์ จำนวน 9 ชุด</li>

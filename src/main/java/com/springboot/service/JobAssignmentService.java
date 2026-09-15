@@ -1,9 +1,9 @@
 package com.springboot.service;
 
-import com.springboot.model.StaffAssignment;
+import com.springboot.model.JobAssignment;
 import com.springboot.model.BookingForm;
 import com.springboot.model.HeadStaff;
-import com.springboot.repository.StaffAssignmentRepository;
+import com.springboot.repository.JobAssignmentRepository;
 import com.springboot.repository.BookingFormRepository;
 import com.springboot.repository.HeadStaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-public class StaffAssignmentService {
+public class JobAssignmentService {
 
     @Autowired
-    private StaffAssignmentRepository staffAssignmentRepo;
+    private JobAssignmentRepository staffAssignmentRepo;
 
     @Autowired
     private BookingFormRepository bookingRepo;
@@ -28,12 +28,12 @@ public class StaffAssignmentService {
     private HeadStaffRepository staffRepo;
 
     // ดึงรายการงานที่ได้รับมอบหมายทั้งหมดโดยกรองตามรหัสพนักงาน
-    public List<StaffAssignment> getAssignmentsByStaff(int staffId) {
+    public List<JobAssignment> getAssignmentsByStaff(int staffId) {
         return staffAssignmentRepo.findByHeadStaff_StaffId(staffId);
     }
     
  // ค้นหาข้อมูลการมอบหมายงานโดยระบุจาก Booking ID ของการจองนั้นๆ
-    public StaffAssignment getAssignmentByBookingId(String bookingId) {
+    public JobAssignment getAssignmentByBookingId(String bookingId) {
         return staffAssignmentRepo.findByBookingForm_BookingId(bookingId);
     }
 
@@ -49,7 +49,7 @@ public class StaffAssignmentService {
 
         String assignId = generateAssignId();
 
-        StaffAssignment sa = new StaffAssignment();
+        JobAssignment sa = new JobAssignment();
         sa.setAssignId(assignId);
         sa.setBookingForm(booking);
         sa.setHeadStaff(staff);
@@ -71,7 +71,7 @@ public class StaffAssignmentService {
     }
 
     // ดึงข้อมูลรายละเอียดการมอบหมายงานชิ้นที่ต้องการตามรหัส ID
-    public StaffAssignment getAssignmentById(String id) {
+    public JobAssignment getAssignmentById(String id) {
         return staffAssignmentRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("ไม่พบข้อมูลรหัส: " + id));
     }
@@ -83,7 +83,7 @@ public class StaffAssignmentService {
         booking.setBookingStatus(newStatus);
         bookingRepo.save(booking);
 
-        StaffAssignment assignment = staffAssignmentRepo.findByBookingForm_BookingId(bookingId);
+        JobAssignment assignment = staffAssignmentRepo.findByBookingForm_BookingId(bookingId);
         if (assignment != null) {
             assignment.setJobStatus(newStatus);
             staffAssignmentRepo.save(assignment); 
@@ -95,7 +95,7 @@ public class StaffAssignmentService {
     // ถ้าเคยมี reportNote อยู่แล้ว (ส่งไปแล้ว) จะโยน exception ทันที ไม่ทับข้อมูลเดิม
     @Transactional
     public void updateDamageReport(String assignId, String reportNote, MultipartFile[] files) throws IOException {
-        StaffAssignment sa = staffAssignmentRepo.findById(assignId).orElseThrow();
+        JobAssignment sa = staffAssignmentRepo.findById(assignId).orElseThrow();
 
         if (sa.getReportNote() != null && !sa.getReportNote().trim().isEmpty()) {
             throw new RuntimeException("งานนี้ถูกส่งรายงานความเสียหายไปแล้ว ไม่สามารถส่งซ้ำได้");

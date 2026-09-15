@@ -17,26 +17,26 @@
 
 <%-- ========== NAVBAR ========== --%>
 <nav class="navbar">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/organizer/bookings">
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
              alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
         <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
     </a>
     <div class="navbar-right">
         <div class="navbar-menu">
-            <a href="${pageContext.request.contextPath}/organizer/bookings"   class="nav-item">รายการจอง</a>
-            <a href="${pageContext.request.contextPath}/organizer/head-staff" class="nav-item">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/organizer/questions"  class="nav-item active">จัดการพิธี</a>
-            <a href="${pageContext.request.contextPath}/organizer/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
+            <a href="${pageContext.request.contextPath}/manager/bookings"   class="nav-item">รายการจอง</a>
+            <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a>
+            <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item active">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/manager/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
         </div>
-        <div class="user-info" onclick="toggleDropdown()">
-            <div class="user-avatar">A</div>
+           <div class="user-info" onclick="toggleDropdown()">
+            <div class="user-avatar">M</div>
             <div class="user-detail">
-                <span class="user-name">Admin Organizer</span>
+                <span class="user-name">Manager</span>
                 <span class="user-role">ผู้จัดการ</span>
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/organizer/logout" class="dropdown-item danger">ออกจากระบบ</a>
+                <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item danger">ออกจากระบบ</a>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
             <p>ดูแลและจัดการคำถามทั้งหมดที่ปรากฏในฟอร์มจองของลูกค้า</p>
             <div class="gold-line"></div>
         </div>
-        <a href="${pageContext.request.contextPath}/organizer/questions/add" class="btn-add" style="text-decoration: none;">+ เพิ่มคำถาม</a>
+        <a href="${pageContext.request.contextPath}/manager/questions/add" class="btn-add" style="text-decoration: none;">+ เพิ่มคำถาม</a>
     </div>
 
     <%-- ========== CEREMONY FILTER DROPDOWN ========== --%>
@@ -93,7 +93,7 @@
         </div>
 
         <div class="ceremony-filter-dropdown" id="ceremonyFilterDropdown">
-            <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=all"
+            <a href="${pageContext.request.contextPath}/manager/questions?ceremonyType=all"
                class="ceremony-filter-item ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'selected' : ''}">
                 <span class="ceremony-dot dot-all"></span> ทั้งหมด
             </a>
@@ -104,7 +104,7 @@
                     <c:when test="${t eq 'ทำบุญบริษัทหรือออฟฟิศ'}"><c:set var="tDotClass" value="dot-company"/></c:when>
                     <c:otherwise><c:set var="tDotClass" value="dot-all"/></c:otherwise>
                 </c:choose>
-                <a href="${pageContext.request.contextPath}/organizer/questions?ceremonyType=${t}"
+                <a href="${pageContext.request.contextPath}/manager/questions?ceremonyType=${t}"
                    class="ceremony-filter-item ${selectedCeremonyType eq t ? 'selected' : ''}">
                     <span class="ceremony-dot ${tDotClass}"></span> ${t}
                 </a>
@@ -189,7 +189,7 @@
                         </td>
                         <td>
                             <div class="action-links">
-                                <a href="${pageContext.request.contextPath}/organizer/questions/edit/${q.questionsId}" class="btn-edit" style="text-decoration: none;">แก้ไข</a>
+                                <a href="${pageContext.request.contextPath}/manager/questions/edit/${q.questionsId}" class="btn-edit" style="text-decoration: none;">แก้ไข</a>
                                 <button type="button" class="btn-del" onclick="confirmDelete('${q.questionsId}', '${fn:escapeXml(q.questionsText)}')">ลบ</button>
                             </div>
                         </td>

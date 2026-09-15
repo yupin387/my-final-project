@@ -1,4 +1,4 @@
-package com.springboot.controller.organizer;
+package com.springboot.controller.manager;
 
 import com.springboot.model.QuestionsDetail;
 import com.springboot.model.Ceremony;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/organizer/questions")
+@RequestMapping("/manager/questions") // ✅ แก้ไข: เปลี่ยนจาก organizer เป็น manager
 public class QuestionsController {
 
     @Autowired
@@ -31,8 +31,9 @@ public class QuestionsController {
     @GetMapping
     public String listQuestions(@RequestParam(required = false, defaultValue = "all") String ceremonyType,
                                 Model model, HttpSession session) {
-        if (session.getAttribute("currentOrganizer") == null) {
-            return "redirect:/loginorganizer";
+        // ✅ แก้ไข: เปลี่ยนเช็ค currentOrganizer เป็น currentManager และ redirect ไป loginmanager
+        if (session.getAttribute("currentManager") == null) {
+            return "redirect:/loginmanager";
         }
 
         List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
@@ -49,7 +50,6 @@ public class QuestionsController {
         if ("all".equals(ceremonyType)) {
             questions = allQuestions;
         } else {
-            // เช็คจาก list ของ ceremonies แทนที่จะเช็คตัวเดียว
             questions = allQuestions.stream()
                     .filter(q -> q.getCeremonies() != null
                             && q.getCeremonies().stream()
@@ -67,16 +67,15 @@ public class QuestionsController {
 
     @GetMapping("/add")
     public String showAddForm(Model model, HttpSession session) {
-        if (session.getAttribute("currentOrganizer") == null) {
-            return "redirect:/loginorganizer";
+        // ✅ แก้ไข: เปลี่ยนเช็ค currentOrganizer เป็น currentManager
+        if (session.getAttribute("currentManager") == null) {
+            return "redirect:/loginmanager";
         }
 
         model.addAttribute("ceremonyTypes", CEREMONY_TYPE_ORDER);
         return "addQuestion";
     }
 
-    // แก้ไข: รับ "หลายประเภทงาน" พร้อมกันจาก checkbox (name="ceremonyTypes" ซ้ำกันได้หลายค่า)
-    // required = false เพราะเลือกได้ 0 อัน (= คำถามกลาง ไม่ผูกกับประเภทงานไหนเลย)
     @PostMapping("/add")
     public String processAdd(@RequestParam String questionText,
                              @RequestParam(required = false) List<String> ceremonyTypes,
@@ -88,7 +87,8 @@ public class QuestionsController {
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
         }
-        return "redirect:/organizer/questions";
+        // ✅ แก้ไข: เปลี่ยน redirect ไป manager/questions
+        return "redirect:/manager/questions";
     }
 
     @GetMapping("/edit/{id}")
@@ -96,19 +96,17 @@ public class QuestionsController {
                                Model model,
                                HttpSession session,
                                RedirectAttributes redirectAttrs) {
-        if (session.getAttribute("currentOrganizer") == null) {
-            return "redirect:/loginorganizer";
+        // ✅ แก้ไข: เปลี่ยนเช็ค currentOrganizer เป็น currentManager
+        if (session.getAttribute("currentManager") == null) {
+            return "redirect:/loginmanager";
         }
 
         QuestionsDetail question = questionsService.getQuestionById(id);
         if (question == null) {
             redirectAttrs.addFlashAttribute("error", "ไม่พบข้อมูลคำถาม");
-            return "redirect:/organizer/questions";
+            return "redirect:/manager/questions";
         }
 
-        // แก้ไข: เดิมอ่านจาก question.getCeremony().getCeremonyType() ตัวเดียว หรือ
-        // เอาแค่ "ตัวแรก" จาก list — ตอนนี้เก็บ "ทุกประเภทงาน" ที่ผูกอยู่จริง (distinct)
-        // เพื่อเอาไปติ๊ก checkbox ในฟอร์มแก้ไขให้ตรงกับข้อมูลเดิมทั้งหมด
         List<String> selectedCeremonyTypes = new ArrayList<>();
         if (question.getCeremonies() != null) {
             selectedCeremonyTypes = question.getCeremonies().stream()
@@ -124,7 +122,6 @@ public class QuestionsController {
         return "editQuestion";
     }
 
-    // แก้ไข: รับ "หลายประเภทงาน" พร้อมกันจาก checkbox เหมือนหน้า add
     @PostMapping("/update")
     public String updateQuestion(@RequestParam int questionsId,
                                  @RequestParam String questionsText,
@@ -137,19 +134,22 @@ public class QuestionsController {
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
         }
-        return "redirect:/organizer/questions";
+        // ✅ แก้ไข: เปลี่ยน redirect ไป manager/questions
+        return "redirect:/manager/questions";
     }
 
     @PostMapping("/delete/{id}")
     public String deleteQuestion(@PathVariable int id,
                                  HttpSession session,
                                  RedirectAttributes redirectAttrs) {
-        if (session.getAttribute("currentOrganizer") == null) {
-            return "redirect:/loginorganizer";
+        // ✅ แก้ไข: เปลี่ยนเช็ค currentOrganizer เป็น currentManager
+        if (session.getAttribute("currentManager") == null) {
+            return "redirect:/loginmanager";
         }
 
         questionsService.deleteQuestion(id);
         redirectAttrs.addFlashAttribute("success", "ลบคำถามเรียบร้อยแล้ว");
-        return "redirect:/organizer/questions";
+        // ✅ แก้ไข: เปลี่ยน redirect ไป manager/questions
+        return "redirect:/manager/questions";
     }
 }

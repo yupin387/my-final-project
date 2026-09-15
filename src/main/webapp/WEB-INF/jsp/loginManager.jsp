@@ -10,7 +10,8 @@
     <!-- Bootstrap Icons สำหรับไอคอนรูปตา -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/loginOrganizer.css">
+    <%-- ✅ แก้ไข: เปลี่ยนชื่อไฟล์ CSS จาก loginOrganizer.css เป็น loginManager.css --%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/loginManager.css">
     <style>
         .error-message {
             color: #dc3545;
@@ -69,7 +70,8 @@
             <div class="card-lotus-top">🪷</div>
 
             <div class="card-header-section">
-                <h4 class="title-main">เข้าสู่ระบบผู้จัดงาน</h4>
+                <%-- ✅ แก้ไข: เปลี่ยนคำว่า ผู้จัดงาน เป็น ผู้จัดการและหัวหน้างาน --%>
+                <h4 class="title-main">เข้าสู่ระบบผู้จัดการ</h4>
                 <p class="subtitle-muted">โปรดระบุข้อมูลเพื่อจัดการระบบงานบุญ</p>
                 <div class="gold-line"></div>
             </div>
@@ -82,7 +84,7 @@
                 <div class="alert-success" style="font-size: 12px; padding: 10px; border-radius: 5px; margin-bottom: 15px;">${success}</div>
             </c:if>
 
-            <!-- Form Login (Organizer / Head Staff รวมกัน) -->
+            <!-- Form Login (Manager / Head Staff รวมกัน) -->
             <form id="form-login"
                   action="${pageContext.request.contextPath}/login"
                   method="post" class="login-form" onsubmit="return validateLoginForm();">

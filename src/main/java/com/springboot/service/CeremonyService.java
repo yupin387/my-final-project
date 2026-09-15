@@ -49,7 +49,7 @@ public class CeremonyService {
     public List<Ceremony> getCeremoniesByType(String ceremonyType) {
         return ceremonyRepo.findAll().stream()
                 .filter(c -> ceremonyType.equals(c.getCeremonyType()))
-                .filter(c -> !"กรอกความต้องการเบื้องต้น".equals(c.getCeremonyName())) // เอาเฉพาะ 3 แพ็กเกจหลัก ไม่รวมกำหนดเอง
+                .filter(c -> !"กรอกความต้องการเบื้องต้น".equals(c.getOptionType())) // เอาเฉพาะ 3 แพ็กเกจหลัก ไม่รวมกำหนดเอง
                 .sorted(java.util.Comparator.comparingDouble(Ceremony::getBasePrice))
                 .collect(java.util.stream.Collectors.toList());
     }
@@ -57,7 +57,7 @@ public class CeremonyService {
     public Ceremony getCustomCeremonyByType(String ceremonyType) {
         return ceremonyRepo.findAll().stream()
                 .filter(c -> ceremonyType.equals(c.getCeremonyType()))
-                .filter(c -> "กรอกความต้องการเบื้องต้น".equals(c.getCeremonyName()))
+                .filter(c -> "กรอกความต้องการเบื้องต้น".equals(c.getOptionType()))
                 .findFirst()
                 .orElse(null);
     }

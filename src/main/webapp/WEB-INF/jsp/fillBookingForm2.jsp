@@ -216,7 +216,8 @@
                 </p>
                 <div class="item-card-grid">
                     <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
-                        <c:set var="pkgNameSafe" value="${not empty pkg.ceremonyName ? pkg.ceremonyName : ''}"/>
+                        <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
+                        <c:set var="pkgNameSafe" value="${not empty pkg.optionType ? pkg.optionType : ''}"/>
                         <c:choose>
                             <c:when test="${fn:contains(pkgNameSafe, 'พรีเมียม')}">
                                 <c:set var="pkgMonkCount" value="9"/>
@@ -237,11 +238,13 @@
                                    onchange="applyPackageMonkCount(this)"
                                    ${isPkgSelected ? 'checked' : ''}>
                         <div class="item-card-thumb">
-    <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.ceremonyName}"
+    <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
+    <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.optionType}"
          onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
 </div>
                             <div class="item-card-body">
-                                <div class="item-card-name">${pkg.ceremonyName}</div>
+                                <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
+                                <div class="item-card-name">${pkg.optionType}</div>
                                 <div class="item-card-desc">${pkg.ceremonyDetail}</div>
                                 <div class="item-card-price">
                                     ฿<fmt:formatNumber value="${pkg.basePrice}" pattern="#,###"/>

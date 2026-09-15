@@ -120,6 +120,11 @@
                         <span class="label">ประเภทงาน</span>
                         <span class="value">${a.bookingForm.ceremony.ceremonyType}</span>
                     </div>
+                    <%-- ✅ เพิ่มรูปแบบการจอง ให้อยู่ในกลุ่มข้อมูลลูกค้า/การจอง --%>
+                    <div class="info-group">
+                        <span class="label">รูปแบบการจอง</span>
+                        <span class="value" >${a.bookingForm.ceremony.optionType}</span>
+                    </div>
                     <div class="info-group">
                         <span class="label">ลูกค้า</span>
                         <span class="value">${a.bookingForm.member.memberFirstName} ${a.bookingForm.member.memberLastName}</span>

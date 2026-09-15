@@ -312,7 +312,7 @@
 
         <%-- ===== ตัวแปรควบคุมการแสดงผล คำนวณล่วงหน้าก่อนเข้าส่วนที่ 3 ===== --%>
         <c:set var="basePriceVal" value="${booking.ceremony.basePrice}" />
-        <c:set var="isCustomRequest" value="${empty basePriceVal || basePriceVal == 0 || fn:indexOf(booking.ceremony.ceremonyName, 'กรอกความต้องการ') ne -1}" />
+        <c:set var="isCustomRequest" value="${empty basePriceVal || basePriceVal == 0 || fn:indexOf(booking.ceremony.optionType, 'กรอกความต้องการ') ne -1}" />
 
         <c:set var="sanghaChoice" value="" />
         <c:forEach items="${booking.details}" var="dd">
@@ -349,7 +349,7 @@
                                     <c:otherwise>ชื่อแพ็กเกจ</c:otherwise>
                                 </c:choose>
                             </span>
-                            <span class="info-value">${booking.ceremony.ceremonyName}</span>
+                            <span class="info-value">${booking.ceremony.optionType}</span>
                         </div>
                     </div>
                     <c:if test="${not isCustomRequest && not empty booking.ceremony.basePrice}">
@@ -403,7 +403,7 @@
 
             <hr class="divider">
             <div class="section" id="bookingDetailsSection">
-                <%-- เพิ่มหัวข้อ "รายการเพิ่มเติมนอกเหนือจากแพ็กเกจ" ไว้ด้านบนสุด ให้เหมือนฝั่ง Organizer โดยใช้สไตล์ section-title ของ Member --%>
+                <%-- เพิ่มหัวข้อ "รายการเพิ่มเติมนอกเหนือจากแพ็กเกจ" ไว้ด้านบนสุด ให้เหมือนฝั่ง Manager โดยใช้สไตล์ section-title ของ Member --%>
 				<c:if test="${not isCustomRequest}">
 				    <div class="section-title">
 				        <i class="bi bi-plus-circle"></i> รายการเพิ่มเติมนอกเหนือจากแพ็กเกจ
@@ -656,8 +656,8 @@
 
         var basePriceRaw = "${booking.ceremony.basePrice}";
         var basePrice = parseFloat(basePriceRaw) || 0;
-        var ceremonyName = "${fn:trim(booking.ceremony.ceremonyName)}";
-        var isCustomRequest = (basePrice === 0) || (ceremonyName.indexOf('กรอกความต้องการ') !== -1);
+        var optionType = "${fn:trim(booking.ceremony.optionType)}";
+        var isCustomRequest = (basePrice === 0) || (optionType.indexOf('กรอกความต้องการ') !== -1);
 
         var answers = collectAnswers();
 

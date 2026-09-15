@@ -172,6 +172,7 @@
                 <span class="arrow">▾</span>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="${pageContext.request.contextPath}/staff/profile" class="dropdown-item">โปรไฟล์</a>
+                    <%-- ✅ คงลิงก์ออกจากระบบเป็น /headstaff/logout ตามเดิมที่ถูกต้อง --%>
                     <a href="${pageContext.request.contextPath}/headstaff/logout" class="dropdown-item danger">ออกจากระบบ</a>
                 </div>
             </div>

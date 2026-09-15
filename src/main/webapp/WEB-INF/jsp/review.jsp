@@ -139,7 +139,7 @@
         <div class="review-card-header">
             <h2>รีวิวการจัดงานบุญ</h2>
             <div class="booking-badge">รหัสการจอง #${b.bookingId}</div>
-            <div class="ceremony-name">${b.ceremony.ceremonyName}</div>
+            <div class="ceremony-name">${b.ceremony.ceremonyType}</div>
         </div>
 
         <%-- Body --%>
