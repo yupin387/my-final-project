@@ -13,15 +13,9 @@ public class Ceremony {
     private int ceremonyId;
 
     @Column(name = "ceremonytype", nullable = false, length = 100)
-    // ค่าที่เป็นไปได้:
-    // ทำบุญบ้าน
-    // ขึ้นบ้านใหม่
-    // ทำบุญบริษัทหรือออฟฟิศ
     private String ceremonyType;
 
     @Column(name = "optiontype", nullable = false, length = 100)
-    // ชื่อแพ็กเกจ เช่น
-    // มาตรฐาน, อิ่มบุญ, พรีเมียม, ประเมินตามความต้องการ
     private String optionType;
 
     @Column(name = "ceremonydetail", length = 255)
@@ -30,11 +24,7 @@ public class Ceremony {
     @Column(name = "baseprice", nullable = false)
     private double basePrice;
 
-    /*
-     * รายการสินค้า/บริการที่อยู่ในแพ็กเกจ
-     * โดยมี CeremonyItem เป็นตารางกลาง
-     * เพื่อเก็บจำนวน (quantity) ของแต่ละรายการ
-     */
+
     @OneToMany(
         mappedBy = "ceremony",
         cascade = CascadeType.ALL,
@@ -42,12 +32,6 @@ public class Ceremony {
     )
     private List<CeremonyItem> ceremonyItems;
 
-    /*
-     * คำถามที่ใช้ถามลูกค้าสำหรับพิธีนี้
-     * Many-to-Many กับ QuestionsDetail (ฝั่งนี้เป็น owning side)
-     * ใช้ตารางกลาง ceremony_question เก็บแค่คู่ FK (ceremonyid, questionsid)
-     * ไม่มี attribute เพิ่มเติม จึงไม่ต้องมี Entity กลาง
-     */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "ceremony_question",
@@ -70,10 +54,7 @@ public class Ceremony {
         this.basePrice = basePrice;
     }
 
-    // =========================================================
-    // Getter / Setter
-    // =========================================================
-
+ 
     public int getCeremonyId() {
         return ceremonyId;
     }

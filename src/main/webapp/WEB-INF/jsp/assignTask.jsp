@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<%-- ===== NAVBAR (matched exactly to bookingList.jsp) ===== --%>
+
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"
@@ -58,7 +58,7 @@
             <p>${isChangeMode ? 'เลือกหัวหน้างานคนใหม่เพื่อรับผิดชอบงานนี้' : 'กำหนดหัวหน้างานที่จะดูแลพิธีนี้'}</p>
         </div>
 
-        <%-- Booking Info Grid --%>
+       
         <div class="booking-info-grid">
             <div class="info-cell">
                 <span class="info-label">ลูกค้า</span>
@@ -68,7 +68,7 @@
                 <span class="info-label">ประเภทพิธี</span>
                 <span class="info-value">${b.ceremony.ceremonyType}</span>
             </div>
-            <%-- ✅ จัดเรียงให้อยู่ต่อจากประเภทพิธีในแถวเดียวกัน --%>
+         
             <div class="info-cell">
                 <span class="info-label">รูปแบบการจอง</span>
                 <span class="info-value" >${b.ceremony.optionType}</span>
@@ -91,14 +91,14 @@
                 <span class="info-label">เบอร์โทร</span>
                 <span class="info-value">${b.member.phoneNumber}</span>
             </div>
-            <%-- ✅ เอา class "full" ออก ให้ต่อแถวเดียวกับเบอร์โทรแทนที่จะขึ้นแถวใหม่เต็มความกว้าง --%>
+          
             <div class="info-cell">
                 <span class="info-label">สถานที่จัดงาน</span>
                 <span class="info-value">${b.eventAddress}</span>
             </div>
         </div>
 
-        <%-- Current Staff Bar (Change Mode) --%>
+    
         <c:if test="${isChangeMode && not empty b.quotation.staff}">
             <div class="current-staff-bar">
                 <div class="current-staff-avatar">
@@ -159,7 +159,7 @@
     </div>
 </div>
 
-<%-- ===== FOOTER (matched exactly to bookingList.jsp) ===== --%>
+
 <footer class="site-footer">
     <div class="footer-content">
         <div class="footer-brand">

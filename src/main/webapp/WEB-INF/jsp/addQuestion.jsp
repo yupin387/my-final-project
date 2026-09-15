@@ -6,12 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>เพิ่มคำถามพิธี - บุญมีนำพา จัดงานบุญ</title>
-    <!-- เพิ่มฟอนต์ Charmonman ตรงนี้ครับ -->
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addQuestion.css">
     <style>
-    /* ===== FIX: เปลี่ยนจาก dropdown เลือกประเภทงานได้ทีละอัน เป็น checkbox
-       เลือกได้พร้อมกันหลายประเภท เพราะ 1 คำถามผูกได้กับหลายประเภทงานพร้อมกัน ===== */
     .ceremony-checkbox-group {
         display: flex;
         flex-direction: column;
@@ -119,8 +116,7 @@
                         required value="${param.questionText}" />
                 </div>
 
-                <%-- ===== FIX: checkbox หลายอัน แทน dropdown เดี่ยว
-                     ติ๊กได้พร้อมกันหลายประเภทงาน — ไม่ติ๊กเลย = คำถามกลาง ไม่ผูกกับประเภทงานไหน ===== --%>
+              
                 <div class="form-group">
                     <label>ประเภทงาน</label>
                     <p class="checkbox-group-hint">เลือกได้มากกว่า 1 ประเภท — คำถามข้อนี้จะถูกใช้กับทุกประเภทงานที่ติ๊กไว้</p>
@@ -162,11 +158,11 @@
                 </div>
 
             </form>
-        </div><%-- /card-body --%>
+        </div>
 
-    </div><%-- /form-container --%>
+    </div>
 
-</div><%-- /page-wrapper --%>
+</div>
 
 <!-- ===== FOOTER ===== -->
 <footer class="site-footer">
@@ -180,7 +176,7 @@
     </div>
 </footer>
 
-<!-- แก้ไขชื่อสคริปต์ให้ถูกต้อง -->
+
 <script src="${pageContext.request.contextPath}/static/js/addQuestion.js"></script>
 <script>
     function toggleDropdown() {

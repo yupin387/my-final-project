@@ -14,7 +14,14 @@ public class HeadStaffService {
     private HeadStaffRepository headStaffRepository;
 
     @Autowired
-    private EmailService emailService;   // ⬅️ เพิ่มบรรทัดนี้
+    private EmailService emailService;  
+    
+    @Autowired
+    private QuotationService quotationService;   
+
+    @Autowired
+    private JobAssignmentService jobAssignmentService;   
+
 
     // ตรวจสอบการเข้าสู่ระบบโดยเช็กอีเมล รหัสผ่าน และต้องมีสถานะบัญชีที่ยังใช้งานอยู่ (Active)
     public HeadStaff login(String email, String password) {
@@ -23,7 +30,6 @@ public class HeadStaffService {
     }
 
     // ตรวจสอบอีเมลซ้ำและบันทึกข้อมูลหัวหน้างานใหม่ลงในฐานข้อมูล
-    // FIX: หลัง save สำเร็จแล้ว ส่งอีเมลแจ้ง Username/Password ให้หัวหน้างานทันที
     public void addHeadStaff(String firstName, String lastName, String email, String password, String phone) {
         if (headStaffRepository.existsByStaffEmail(email)) {
             throw new IllegalArgumentException("อีเมลนี้ถูกใช้งานแล้ว");
@@ -53,14 +59,24 @@ public class HeadStaffService {
         return headStaffRepository.findById(id).orElse(null);
     }
 
-    // ทำการลบข้อมูลแบบ Soft Delete โดยเปลี่ยนสถานะการใช้งานเป็น false เพื่อรักษาประวัติข้อมูล
+   
+    // ตรวจสอบก่อนลบ: ถ้าไม่เคยมีใบเสนอราคา และไม่เคยถูกมอบหมายงานผูกอยู่เลย ลบออกจริง (Hard Delete)
+    // แต่ถ้ามีประวัติอย่างใดอย่างหนึ่งอยู่ Soft Delete เพื่อรักษาความสัมพันธ์ของข้อมูลเก่า
     @Transactional
     public void deleteHeadStaff(int id) {
         HeadStaff staff = headStaffRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ไม่พบข้อมูลพนักงานที่ต้องการลบ"));
 
-        staff.setActive(false); 
-        headStaffRepository.save(staff);
+        boolean hasQuotation  = quotationService.hasQuotationForStaff(id);
+        boolean hasAssignment = jobAssignmentService.hasAssignmentForStaff(id);
+
+        if (hasQuotation || hasAssignment) {
+            staff.setActive(false);
+            headStaffRepository.save(staff);
+        } else {
+           
+            headStaffRepository.delete(staff);
+        }
     }
 
     // ดึงรายชื่อเฉพาะหัวหน้างานที่ยังมีสถานะเปิดใช้งาน (Active) สำหรับนำไปมอบหมายงาน

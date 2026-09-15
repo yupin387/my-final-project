@@ -11,10 +11,8 @@
 <title>ปฏิทินฤกษ์ดี - บุญมีนำพา จัดงานบุญ</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/home.css?v=15">
-<%-- CSS เฉพาะหน้าปฏิทิน แยกไฟล์ออกมาจาก inline <style> เดิม --%>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/calendarPage.css?v=3">
-<%-- CSS เฉพาะส่วนปฏิทินล้านนา แยกไฟล์เดี่ยวๆ ไม่ผูกกับ home.css --%>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/lannaCalendar.css?v=2">
 </head>
@@ -24,11 +22,10 @@
 	<nav class="navbar-custom">
 		<a class="navbar-brand-wrap"
 			href="${pageContext.request.contextPath}/home"
-			style="text-decoration: none;">
-			<img src="${pageContext.request.contextPath}/static/images/logoo.png"
-				alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-			<span class="nav-brand-text">บุญมีนำพา
-				รับจัดงานบุญ</span>
+			style="text-decoration: none;"> <img
+			src="${pageContext.request.contextPath}/static/images/logoo.png"
+			alt="บุญมี รับจัดงานบุญ" class="lotus-icon"> <span
+			class="nav-brand-text">บุญมีนำพา รับจัดงานบุญ</span>
 		</a>
 		<div class="navbar-center">
 			<a href="${pageContext.request.contextPath}/home"
@@ -37,35 +34,38 @@
 			<%-- ตัดลิงก์ "แพ็กเกจงานบุญทั้งหมด" ออก เหลือแค่ 3 งานบุญหลัก --%>
 			<div class="nav-dropdown-wrap">
 				<a href="${pageContext.request.contextPath}/home#packagesSection"
-					class="nav-link-item nav-dropdown-toggle">
-					บริการ/แพ็กเกจ <span class="nav-caret">▾</span>
+					class="nav-link-item nav-dropdown-toggle"> บริการ/แพ็กเกจ <span
+					class="nav-caret">▾</span>
 				</a>
 				<div class="nav-dropdown-panel">
 					<c:forEach var="t" items="${ceremonyTypes}">
-						<a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
+						<a
+							href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
 							class="nav-dropdown-link">${t.mainName}</a>
 					</c:forEach>
 					<hr class="nav-dropdown-divider">
-					
+
 				</div>
 			</div>
 
 			<div class="nav-dropdown-wrap">
 				<a href="${pageContext.request.contextPath}/calendar"
-					class="nav-link-item nav-dropdown-toggle active">
-					ปฏิทิน <span class="nav-caret">▾</span>
+					class="nav-link-item nav-dropdown-toggle active"> ปฏิทิน <span
+					class="nav-caret">▾</span>
 				</a>
 				<div class="nav-dropdown-panel">
-					<a href="${pageContext.request.contextPath}/calendar#calendarSection"
-						class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
-					<a href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
+					<a
+						href="${pageContext.request.contextPath}/calendar#calendarSection"
+						class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a> <a
+						href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
 						class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
 				</div>
 			</div>
 
 			<c:if test="${not empty sessionScope.user}">
-				<a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">รายการจอง</a>
-			
+				<a href="${pageContext.request.contextPath}/myBookings"
+					class="nav-link-item">รายการจอง</a>
+
 			</c:if>
 			<a href="${pageContext.request.contextPath}/reviews"
 				class="nav-link-item">รีวิว</a>
@@ -103,11 +103,13 @@
 	     เดิมมีข้อความ (h1 + p) วางอยู่ในแถบนี้ เปลี่ยนมาใส่รูปภาพแทนตามที่ขอ
 	     TODO: เปลี่ยน src ด้านล่างเป็นไฟล์รูปจริงเมื่อเตรียมเสร็จ --%>
 	<div class="calendar-page-header">
-		<img src="${pageContext.request.contextPath}/static/images/calendar.png"
+		<img
+			src="${pageContext.request.contextPath}/static/images/calendar.png"
 			alt="ปฏิทินฤกษ์ดีจัดงานบุญ" class="calendar-page-header-img">
 		<div class="calendar-tabs">
-			<a href="#calendarSection" class="calendar-tab-link">ปฏิทิน (ฤกษ์ดี)</a>
-			<a href="#lannaCalendarSection" class="calendar-tab-link">ปฏิทิน (ล้านนา)</a>
+			<a href="#calendarSection" class="calendar-tab-link">ปฏิทิน
+				(ฤกษ์ดี)</a> <a href="#lannaCalendarSection" class="calendar-tab-link">ปฏิทิน
+				(ล้านนา)</a>
 		</div>
 	</div>
 
@@ -124,8 +126,7 @@
 			<div class="section-header">
 				<h2 class="section-title">ปฏิทินฤกษ์ดีจัดงานบุญ (ไทย)</h2>
 				<p class="section-subtitle">ดูวันว่าง วันมีงานแล้ว
-					พร้อมวันดี-วันฤกษ์มงคลของแต่ละวัน
-					</p>
+					พร้อมวันดี-วันฤกษ์มงคลของแต่ละวัน</p>
 				<div class="gold-line"></div>
 			</div>
 
@@ -133,16 +134,21 @@
 			<div class="cal-explain-box">
 				<h3 class="cal-explain-title">ฤกษ์ดี หมายถึงอะไร?</h3>
 				<p class="cal-explain-text">
-					<strong>ฤกษ์ดี</strong> หมายถึง คราวหรือเวลาที่กำหนดหรือคาดว่าจะให้ผลดี
+					<strong>ฤกษ์ดี</strong> หมายถึง
+					คราวหรือเวลาที่กำหนดหรือคาดว่าจะให้ผลดี
 					เป็นความเชื่อทางโหราศาสตร์ไทยที่สืบทอดกันมาแต่โบราณ
 					โดยอาศัยการคำนวณตำแหน่งของดวงดาวและการโคจรของดวงจันทร์ ดวงอาทิตย์
-					ประกอบกับวันทางจันทรคติและสุริยคติ เพื่อกำหนดว่าวันใดเหมาะสมกับการเริ่มต้นทำกิจการงานใด
+					ประกอบกับวันทางจันทรคติและสุริยคติ
+					เพื่อกำหนดว่าวันใดเหมาะสมกับการเริ่มต้นทำกิจการงานใด
 					ซึ่งส่วนใหญ่เราจะใช้คำนี้ในความหมายว่า <strong>"ฤกษ์ดีทำบุญ"</strong>
-					ในการจัดงานบุญต่างๆ เช่น งานทำบุญบ้าน งานขึ้นบ้านใหม่ งานเปิดสำนักงาน/เปิดออฟฟิศ
-					โดยส่วนใหญ่จะนิยมจัดงานให้ตรงกับวันฤกษ์ดี เพื่อความเป็นสิริมงคลแก่เจ้าภาพและผู้มาร่วมงาน
-					เชื่อกันว่าจะช่วยส่งเสริมให้กิจการงานนั้นราบรื่น เจริญรุ่งเรือง และประสบความสำเร็จ
+					ในการจัดงานบุญต่างๆ เช่น งานทำบุญบ้าน งานขึ้นบ้านใหม่
+					งานเปิดสำนักงาน/เปิดออฟฟิศ
+					โดยส่วนใหญ่จะนิยมจัดงานให้ตรงกับวันฤกษ์ดี
+					เพื่อความเป็นสิริมงคลแก่เจ้าภาพและผู้มาร่วมงาน
+					เชื่อกันว่าจะช่วยส่งเสริมให้กิจการงานนั้นราบรื่น เจริญรุ่งเรือง
+					และประสบความสำเร็จ
 				</p>
-				
+
 			</div>
 
 			<div class="calendar-card">
@@ -160,7 +166,8 @@
 					<div class="cal-day-label">ศ</div>
 					<div class="cal-day-label">ส</div>
 				</div>
-				<hr style="border: 0; border-top: 1px solid #f0e8c8; margin: 18px 0 14px;">
+				<hr
+					style="border: 0; border-top: 1px solid #f0e8c8; margin: 18px 0 14px;">
 				<div class="cal-legend">
 					<span><span class="legend-dot"
 						style="background: var(--cal-booked-bg); border: 1.5px solid var(--cal-booked-border);"></span>เต็มคิว/มีงานแล้ว</span>
@@ -172,17 +179,15 @@
 						style="background: var(--cal-today-bg); border: 1.5px solid var(--cal-today-border);"></span>วันนี้</span>
 					<span><span class="legend-star">★</span>ฤกษ์ดี</span>
 				</div>
-				<%-- เปลี่ยนข้อความ hint: ปฏิทินนี้ดูข้อมูลอย่างเดียว ไม่ใช้เลือกวันเพื่อจองแล้ว --%>
+		
 				<p class="cal-hint">ปฏิทินนี้แสดงสำหรับดูข้อมูลวันฤกษ์ดีและคิวว่างเท่านั้น
 					กรุณาไปที่หน้า "บริการ/แพ็กเกจ" เพื่อทำการจองงานบุญ</p>
 			</div>
 
-			<%-- ========== ความหมายฤกษ์ดี (ครบทั้ง 7 แบบ ตรงกับ KNOWN_LABELS ใน AuspiciousCalendarService)
-			     ปรับคำอธิบายให้เน้นเฉพาะ 3 บริการที่ระบบให้บริการจริง:
-			     ทำบุญขึ้นบ้านใหม่ / ทำบุญบ้าน / เปิดสำนักงาน-เปิดออฟฟิศ
-			     (ไม่รวมงานแต่งงาน/งานบวช เพราะระบบไม่ได้ให้บริการ) ========== --%>
 			<div class="meaning-block">
-				<h3 class="meaning-block-title">ความหมาย <span class="highlight">ฤกษ์ดี</span> จัดงานบุญ</h3>
+				<h3 class="meaning-block-title">
+					ความหมาย <span class="highlight">ฤกษ์ดี</span> จัดงานบุญ
+				</h3>
 				<div class="meaning-grid">
 					<div class="meaning-card">
 						<div class="meaning-card-title">วันราชาโชค</div>
@@ -206,12 +211,13 @@
 					</div>
 					<div class="meaning-card">
 						<div class="meaning-card-title">วันอธิบดี</div>
-						<div class="meaning-card-desc">ดีสำหรับงานสำคัญที่ต้องการความมั่นคง เป็นหลักฐาน เจริญก้าวหน้า
-							เหมาะกับการเปิดสำนักงาน/ออฟฟิศ</div>
+						<div class="meaning-card-desc">ดีสำหรับงานสำคัญที่ต้องการความมั่นคง
+							เป็นหลักฐาน เจริญก้าวหน้า เหมาะกับการเปิดสำนักงาน/ออฟฟิศ</div>
 					</div>
 					<div class="meaning-card">
 						<div class="meaning-card-title">วันธงชัย</div>
-						<div class="meaning-card-desc">ดีสำหรับงานมงคลที่มีการเคลื่อนย้ายที่อยู่ ให้ผลสำเร็จดี มีชัยชนะ
+						<div class="meaning-card-desc">ดีสำหรับงานมงคลที่มีการเคลื่อนย้ายที่อยู่
+							ให้ผลสำเร็จดี มีชัยชนะ
 							เหมาะกับพิธีขึ้นบ้านใหม่หรือย้ายที่ทำการสำนักงาน</div>
 					</div>
 					<div class="meaning-card">
@@ -223,31 +229,34 @@
 			</div>
 
 			<div class="yearly-summary-block">
-				<h3 class="meaning-block-title">สรุป <span class="highlight">ฤกษ์ดีทำบุญ ปี 2569</span></h3>
+				<h3 class="meaning-block-title">
+					สรุป <span class="highlight">ฤกษ์ดีทำบุญ ปี 2569</span>
+				</h3>
 				<p class="section-subtitle" style="margin-bottom: 24px;">
 					รวมวันฤกษ์ดีทั้ง 7 ประเภทของแต่ละเดือน ปี พ.ศ. 2569
-					(ข้อมูลอัปเดตล่วงหน้า โปรดตรวจสอบวันที่แน่นอนอีกครั้งในปฏิทินด้านบนก่อนทำการจอง)
-				</p>
+					(ข้อมูลอัปเดตล่วงหน้า
+					โปรดตรวจสอบวันที่แน่นอนอีกครั้งในปฏิทินด้านบนก่อนทำการจอง)</p>
 
 				<c:choose>
-    <c:when test="${not empty monthlyGoodDaysByWeekday}">
-        <div class="yearly-summary-grid">
-            <c:forEach var="month" items="${monthlyGoodDaysByWeekday}">
-                <div class="yearly-summary-card">
-                    <h4 class="yearly-summary-month">ฤกษ์ดีประจำเดือน ${month.monthName} 2569</h4>
-                    <ul class="yearly-summary-list">
-                        <c:forEach var="row" items="${month.weekdayRows}">
-                            <li>วัน${row.weekday} ${row.daysText}</li>
-                        </c:forEach>
-                    </ul>
-                </div>
-            </c:forEach>
-        </div>
-    </c:when>
-    <c:otherwise>
-        <p class="section-subtitle">ยังไม่มีข้อมูลฤกษ์ดีสรุปรายเดือนในขณะนี้</p>
-    </c:otherwise>
-</c:choose>
+					<c:when test="${not empty monthlyGoodDaysByWeekday}">
+						<div class="yearly-summary-grid">
+							<c:forEach var="month" items="${monthlyGoodDaysByWeekday}">
+								<div class="yearly-summary-card">
+									<h4 class="yearly-summary-month">ฤกษ์ดีประจำเดือน
+										${month.monthName} 2569</h4>
+									<ul class="yearly-summary-list">
+										<c:forEach var="row" items="${month.weekdayRows}">
+											<li>วัน${row.weekday} ${row.daysText}</li>
+										</c:forEach>
+									</ul>
+								</div>
+							</c:forEach>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<p class="section-subtitle">ยังไม่มีข้อมูลฤกษ์ดีสรุปรายเดือนในขณะนี้</p>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 	</section>
@@ -271,30 +280,32 @@
 				<div class="gold-line"></div>
 			</div>
 
-			<%-- ========== กล่องคำอธิบาย "ปฏิทินล้านนา คือ" ==========
-			     ย้ายออกมานอก .lc-calendar (ซึ่งถูกจำกัดความกว้างไว้ที่ 820px สำหรับตัวปฏิทิน)
-			     ให้กล่องนี้ใช้ความกว้างเต็ม container เหมือนกล่องอธิบายของปฏิทินฤกษ์ดี ไม่แคบตามปฏิทิน --%>
+			
 			<div class="lc-explain-box">
 				<h3 class="lc-explain-title">ปฏิทินล้านนา คืออะไร?</h3>
 				<p class="lc-explain-text">
-					<strong>ปฏิทินล้านนา</strong> คือระบบการนับวันเดือนปีแบบโบราณของชาวล้านนา
-					หรือชาวไทยภาคเหนือ ที่ใช้สืบทอดกันมาตั้งแต่สมัยอาณาจักรล้านนา
-					มีลักษณะเป็นปฏิทินแบบ <strong>สุริยคติผสมจันทรคติ</strong> กล่าวคือ
-					การขึ้นปีใหม่ (สงกรานต์ล้านนา) จะยึดตามการโคจรของดวงอาทิตย์ที่เคลื่อนจากราศีมีนเข้าสู่ราศีเมษ
+					<strong>ปฏิทินล้านนา</strong>
+					คือระบบการนับวันเดือนปีแบบโบราณของชาวล้านนา หรือชาวไทยภาคเหนือ
+					ที่ใช้สืบทอดกันมาตั้งแต่สมัยอาณาจักรล้านนา มีลักษณะเป็นปฏิทินแบบ <strong>สุริยคติผสมจันทรคติ</strong>
+					กล่าวคือ การขึ้นปีใหม่ (สงกรานต์ล้านนา)
+					จะยึดตามการโคจรของดวงอาทิตย์ที่เคลื่อนจากราศีมีนเข้าสู่ราศีเมษ
 					ในขณะที่การนับวันในแต่ละเดือนจะยึดตามข้างขึ้นข้างแรมของดวงจันทร์ตามคติทางพระพุทธศาสนา
 				</p>
 				<p class="lc-explain-text">
 					ปฏิทินล้านนาถูกนำมาใช้อย่างแพร่หลายในการกำหนด <strong>ฤกษ์ยาม</strong>
-					สำหรับประกอบพิธีกรรมและงานมงคลต่างๆ ของคนเมือง เช่น การทำบุญบ้าน การขึ้นบ้านใหม่
-					และการเปิดสำนักงาน/เปิดออฟฟิศ โดยแต่ละวันจะมีการกำกับด้วย "ชื่อวันไท"
-					ตามระบบนักษัตรล้านนา ควบคู่กับแท็กบอกลักษณะของวัน เช่น วันดี
-					ไปจนถึงวันที่ควรหลีกเลี่ยง เช่น วันเสีย วันมัจจุ วันวอดวาย วันไหม้ และวันเก้ากอง
+					สำหรับประกอบพิธีกรรมและงานมงคลต่างๆ ของคนเมือง เช่น การทำบุญบ้าน
+					การขึ้นบ้านใหม่ และการเปิดสำนักงาน/เปิดออฟฟิศ
+					โดยแต่ละวันจะมีการกำกับด้วย "ชื่อวันไท" ตามระบบนักษัตรล้านนา
+					ควบคู่กับแท็กบอกลักษณะของวัน เช่น วันดี ไปจนถึงวันที่ควรหลีกเลี่ยง
+					เช่น วันเสีย วันมัจจุ วันวอดวาย วันไหม้ และวันเก้ากอง
 					ซึ่งแต่ละแท็กจะมีความหมายและข้อควรระวังที่แตกต่างกันไปตามความเชื่อดั้งเดิม
 				</p>
 				<p class="lc-explain-text">
-					นอกจากนี้ปฏิทินล้านนายังบอกข้อมูลระดับปีด้วย เช่น ปีนักษัตรตามแบบล้านนา (ปีสะง้า)
+					นอกจากนี้ปฏิทินล้านนายังบอกข้อมูลระดับปีด้วย เช่น
+					ปีนักษัตรตามแบบล้านนา (ปีสะง้า)
 					พระธาตุประจำปีที่ควรไปนมัสการเพื่อความเป็นสิริมงคล ดอกไม้ประจำปี
-					และวันสำคัญในช่วงสงกรานต์ล้านนา ได้แก่ วันสังขานต์ล่อง วันเน่า และวันพญาวัน (วันขึ้นปีใหม่)
+					และวันสำคัญในช่วงสงกรานต์ล้านนา ได้แก่ วันสังขานต์ล่อง วันเน่า
+					และวันพญาวัน (วันขึ้นปีใหม่)
 					ซึ่งเป็นข้อมูลที่ใช้ประกอบการดูฤกษ์ยามและการเตรียมจัดงานบุญให้ถูกต้องตามธรรมเนียมปฏิบัติของชาวล้านนา
 				</p>
 			</div>
@@ -319,9 +330,12 @@
 					</div>
 
 					<div class="lc-legend">
-						<span><span class="lc-legend-dot" style="background: var(--lc-good-bg); border: 1.5px solid var(--lc-good-border);"></span>วันดี</span>
-						<span><span class="lc-legend-dot" style="background: var(--lc-bad-bg); border: 1.5px solid var(--lc-bad-border);"></span>วันควรเลี่ยง</span>
-						<span><span class="lc-legend-dot" style="background: var(--lc-today-bg); border: 1.5px solid var(--lc-today-border);"></span>วันนี้</span>
+						<span><span class="lc-legend-dot"
+							style="background: var(--lc-good-bg); border: 1.5px solid var(--lc-good-border);"></span>วันดี</span>
+						<span><span class="lc-legend-dot"
+							style="background: var(--lc-bad-bg); border: 1.5px solid var(--lc-bad-border);"></span>วันควรเลี่ยง</span>
+						<span><span class="lc-legend-dot"
+							style="background: var(--lc-today-bg); border: 1.5px solid var(--lc-today-border);"></span>วันนี้</span>
 					</div>
 				</div>
 
@@ -337,17 +351,18 @@
 	</section>
 
 	<%-- ========== FOOTER (ใหม่ — ไม่มีเมนู, สีตรงกับแถบเมนูบนสุด) ========== --%>
-<footer class="site-footer">
+	<footer class="site-footer">
 		<div class="footer-top">
 			<svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
 				style="display: block; width: 100%; height: 8px;">
             <rect width="1200" height="8" fill="url(#footerGrad)" />
             <defs>
-                <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%"
-					y2="0%">
+                <linearGradient id="footerGrad" x1="0%" y1="0%"
+					x2="100%" y2="0%">
                     <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
                     <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
-                    <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
+                    <stop offset="100%"
+					stop-color="rgba(217,164,65,0.15)" />
                 </linearGradient>
             </defs>
         </svg>
@@ -355,16 +370,17 @@
 		<div class="container footer-content footer-content-slim">
 			<div class="footer-col footer-brand-col">
 				<div class="footer-brand">
-					<img src="${pageContext.request.contextPath}/static/images/logoo.png"
-						alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-					<span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+					<img
+						src="${pageContext.request.contextPath}/static/images/logoo.png"
+						alt="บุญมี รับจัดงานบุญ" class="lotus-icon"> <span
+						class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
 				</div>
-				<p class="footer-tagline">รับจัดงานบุญ
-					ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
+				<p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ
+					ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
 				<div class="footer-social">
-					<a href="#" class="footer-social-link">📘 Facebook</a>
-					<a href="#" class="footer-social-link">▶️ YouTube</a>
-					<a href="#" class="footer-social-link">💬 LINE OA</a>
+					<a href="#" class="footer-social-link">📘 Facebook</a> <a href="#"
+						class="footer-social-link">▶️ YouTube</a> <a href="#"
+						class="footer-social-link">💬 LINE OA</a>
 				</div>
 			</div>
 
@@ -421,10 +437,9 @@
     </script>
 	<script src="${pageContext.request.contextPath}/static/js/home.js?v=13"></script>
 
-	<%-- ========== SCRIPT ZONE: ปฏิทินล้านนา ==========
-	     calendar.js รวม data layer (LannaCalendar) กับตัวแสดงผลแบบ grid ไว้ในไฟล์เดียว
-	     แล้วสั่ง init ทีเดียว — ไม่มี logic ฝังใน JSP อีกต่อไป --%>
-	<script src="${pageContext.request.contextPath}/static/js/calendar.js?v=2"></script>
+	
+	<script
+		src="${pageContext.request.contextPath}/static/js/calendar.js?v=2"></script>
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
 			initLannaCalendar('${pageContext.request.contextPath}/static/data');

@@ -44,6 +44,7 @@ public class ManagerController {
         return "loginManager";
     }
 
+    // ตรวจสอบการเข้าสู่ระบบโดยเช็คว่าเป็น Manager หรือ HeadStaff ก่อนพาไปหน้าที่เหมาะสมของแต่ละ role
     @PostMapping("/login")
     public ModelAndView login(@RequestParam String email,
                                @RequestParam String password,
@@ -82,6 +83,7 @@ public class ManagerController {
     // 2. จัดการรายชื่อหัวหน้างาน (Manager เป็นผู้ทำ)
     // ==========================================
     
+    // แสดงรายชื่อหัวหน้างานที่ยังใช้งานอยู่ (Active) ทั้งหมด
     @GetMapping("/manager/head-staff")
     public String listHeadStaff(Model model, HttpSession session) {
         if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
@@ -92,12 +94,14 @@ public class ManagerController {
         return "headStaffList";
     }
 
+    // แสดงหน้าฟอร์มสำหรับเพิ่มหัวหน้างานใหม่
     @GetMapping("/manager/head-staff/add")
     public String showAddStaffForm(HttpSession session) {
         if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
         return "addHeadStaff";
     }
 
+    // บันทึกข้อมูลหัวหน้างานใหม่ลงในระบบ
     @PostMapping("/manager/head-staff/add")
     public String addHeadStaff(@RequestParam String firstName, 
                                 @RequestParam String lastName,
@@ -117,6 +121,7 @@ public class ManagerController {
         }
     }
 
+    // ลบหัวหน้างานออกจากระบบ (Service จะตัดสินใจเองว่าจะ Hard Delete หรือ Soft Delete)
     @PostMapping("/manager/head-staff/delete/{id}")
     public String deleteHeadStaff(@PathVariable int id, HttpSession session, RedirectAttributes ra) {
         if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
@@ -133,6 +138,7 @@ public class ManagerController {
     // 3. จัดการรายการจอง
     // ==========================================
     
+    // แสดงรายการจองแบ่งตามสถานะ  พร้อมนับจำนวนของแต่ละสถานะ
     @GetMapping("/manager/bookings")
     public String listBookings(@RequestParam(name = "status", defaultValue = "Pending") String status,
                                Model model, HttpSession session) {
@@ -185,6 +191,7 @@ public class ManagerController {
         return "bookingList_New";
     }
 
+    // แสดงรายละเอียดการจองรายการเดียว พร้อมคำนวณรายการอุปกรณ์ในแพ็กเกจ
     @GetMapping("/manager/bookings/detail/{id}")
     public String bookingDetail(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
@@ -222,6 +229,7 @@ public class ManagerController {
         return "bookingDetail";
     }
 
+    // ดึงจำนวนพระสงฆ์จากคำตอบของคำถาม "จำนวนพระสงฆ์" ในรายละเอียดการจอง (ตัดตัวอักษรที่ไม่ใช่ตัวเลขทิ้ง)
     private int extractMonkCount(BookingForm booking) {
         if (booking.getDetails() == null) return 0;
 
@@ -240,6 +248,8 @@ public class ManagerController {
             .orElse(0);
     }
 
+    // เช็คว่าลูกค้าเลือก "นิมนต์เอง" หรือไม่ จากคำตอบของคำถาม "รูปแบบการนิมนต์พระสงฆ์"
+    // (ถ้านิมนต์เอง จะไม่คิดค่าบริการประสานงานนิมนต์พระ)
     private boolean isMonkSelfInvite(BookingForm booking) {
         if (booking.getDetails() == null) return false;
 
@@ -251,6 +261,8 @@ public class ManagerController {
             .orElse(false);
     }
 
+    // สร้างรายการอุปกรณ์ที่เกี่ยวข้องกับจำนวนพระสงฆ์แบบ dynamic (ใช้เฉพาะกรณี "กรอกความต้องการเบื้องต้น"
+    // ที่ไม่มี CeremonyItem ผูกไว้ล่วงหน้าตามจำนวนพระ) เช่น อาสนะ ตาลปัตร กรวยดอกไม้ ตามจำนวนพระที่ระบุ
     private List<CeremonyItem> buildMonkRelatedItems(Ceremony ceremony, int monkCount, boolean isSelfInvite) {
         List<CeremonyItem> result = new java.util.ArrayList<>();
 
@@ -274,10 +286,12 @@ public class ManagerController {
         return result;
     }
 
+    // ค้นหา Item จากรายการโดยอ้างอิงชื่อ Item แบบตรงตัว
     private java.util.Optional<Item> findItemByName(List<Item> items, String name) {
         return items.stream().filter(i -> name.equals(i.getItemName())).findFirst();
     }
 
+    // อนุมัติรับงานการจองรายการนี้ (เปลี่ยนสถานะเพื่อให้สามารถออกใบเสนอราคาต่อไปได้)
     @GetMapping("/manager/bookings/approve/{id}")
     public String approveBooking(@PathVariable String id, HttpSession session, RedirectAttributes ra) {
         if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
@@ -290,6 +304,7 @@ public class ManagerController {
         return "redirect:/manager/bookings/detail/" + id;
     }
 
+    // ปฏิเสธรายการจอง พร้อมบันทึกเหตุผลที่ปฏิเสธไว้ให้ลูกค้าเห็น
     @PostMapping("/manager/bookings/reject/{id}")
     public String rejectBooking(
             @PathVariable String id, 
@@ -315,6 +330,7 @@ public class ManagerController {
     // 4. มอบหมายงาน (Assign Staff)
     // ==========================================
 
+    // แสดงหน้าฟอร์มมอบหมายหัวหน้างานให้กับการจองรายการนี้ พร้อมรายชื่อพนักงานที่ว่างในวันงาน
     @GetMapping("/manager/assignments/assign/{bookingId}")
     public String showAssignForm(@PathVariable String bookingId, Model model, HttpSession session) {
 
@@ -332,6 +348,7 @@ public class ManagerController {
         return "assignTask";
     }
 
+     // บันทึกการมอบหมายหัวหน้างาน: ผูกพนักงานเข้ากับใบเสนอราคา อัปเดตสถานะการจอง
      @PostMapping("/manager/assignments/save")
      public String saveAssignment(@RequestParam String bookingId, 
                                    @RequestParam int staffId, 
@@ -354,6 +371,7 @@ public class ManagerController {
     // ==========================================
     // 5. ดูรายละเอียดงานที่มอบหมาย (View Assign Job)
     // ==========================================
+    // แสดงรายละเอียดงานที่ถูกมอบหมาย โดยรองรับการค้นหาทั้งจาก assignId (ขึ้นต้นด้วย "AN") และจาก bookingId
     @GetMapping("/manager/assignments/detail/{id}")
     public String viewAssignmentDetail(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";

@@ -79,10 +79,7 @@ public class AuspiciousCalendarService {
                     String cleanSummary = summary.replaceAll("[\\p{Cntrl}\\u00A0\\u200B\\uFEFF]", " ");
                     String[] labels = cleanSummary.split("[,\\/]");
 
-                    // *** จุดสำคัญของการแก้ไข ***
-                    // แทนที่จะอ่านแค่ DTSTART ตัวเดียวของ event
-                    // ให้ขยาย recurring event (ถ้ามี RRULE) ออกมาเป็นทุกวันจริง
-                    // ภายในช่วง range ที่กำหนดไว้ด้านบน
+              
                     PeriodList periods = event.calculateRecurrenceSet(range);
 
                     for (Object po : periods) {

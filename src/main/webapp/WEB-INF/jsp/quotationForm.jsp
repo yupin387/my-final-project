@@ -10,7 +10,7 @@
 <title>จัดทำใบเสนอราคา - บุญมีนำพา จัดงานบุญ</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=19">
 <style>
-    /* ===== รายชื่อ "รายการเพิ่มเติม" แสดงในวงเล็บใต้ label เหมือนหน้ารายละเอียดใบเสนอราคา ===== */
+   
     .tot-extra-detail{
         font-size: 12px;
         color: #888;
@@ -21,7 +21,7 @@
         line-height: 1.5;
     }
 
-    /* FIX: กันหัวคอลัมน์ "ลำดับ" ตัดคำขึ้นบรรทัดใหม่ (ให้ตรงกับหน้ารายละเอียดใบเสนอราคา) */
+   
     #mainQuotationTable thead th:first-child {
         white-space: nowrap;
     }

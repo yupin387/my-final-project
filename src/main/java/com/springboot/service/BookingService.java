@@ -26,9 +26,7 @@ public class BookingService {
     // ส่วนที่ 1: สำหรับ Member & Organizer (การจองเริ่มต้น จนถึง การพิจารณาอนุมัติ)
     // =================================================================================
  
-    /**
-     * สำหรับ Member: บันทึกการจองใหม่ เจน ID อัตโนมัติ และคัดกรองคำถาม
-     */
+    //สำหรับ Member: บันทึกการจองใหม่ เจน ID อัตโนมัติ และคัดกรองคำถาม
     @Transactional
     public BookingForm saveBooking(BookingForm booking) {
         booking.setBookingId(generateBookingId());
@@ -57,29 +55,19 @@ public class BookingService {
         return bookingRepo.save(booking);
     }
 
-    /**
-     * สำหรับ Member: ดูสถานะการจองล่าสุดของตนเอง
-     */
+    // สำหรับ Member: ดูสถานะการจองล่าสุดของตนเอง
     public BookingForm getLatestBookingByMember(int memberId) {
         List<BookingForm> results = bookingRepo.findLatestByMemberId(memberId);
         return (results != null && !results.isEmpty()) ? results.get(0) : null;
     }
 
-    /**
-     * สำหรับ Organizer: อนุมัติการจอง (เปลี่ยนสถานะเป็น Approved)
-     */
-    /**
-     * สำหรับ Organizer: อนุมัติการจอง (เปลี่ยนสถานะเป็น Approved)
-     */
+    // สำหรับ Organizer: อนุมัติการจอง (เปลี่ยนสถานะเป็น Approved)
     @Transactional
     public void approveBooking(String id) {
         updateStatus(id, "Approved");
     }
 
-    /**
-     * สำหรับ Organizer: ปฏิเสธการจอง (เปลี่ยนสถานะเป็น Rejected พร้อมระบุเหตุผล)
-     * (แก้ไขใหม่ รับค่า rejectDetail และ throw Exception)
-     */
+    // สำหรับ Organizer: ปฏิเสธการจอง (เปลี่ยนสถานะเป็น Rejected พร้อมระบุเหตุผล)
     @Transactional
     public void rejectBooking(String id, String rejectDetail) throws Exception {
         BookingForm booking = bookingRepo.findById(id)
@@ -91,9 +79,8 @@ public class BookingService {
         bookingRepo.save(booking);
     }
 
-    /**
-     * (Internal) สร้างรหัสการจองอัตโนมัติ BK + ตัวเลข 3 หลัก
-     */
+    //(Internal) สร้างรหัสการจองอัตโนมัติ BK + ตัวเลข 3 หลัก
+     
     private String generateBookingId() {
         String maxId = bookingRepo.findMaxBookingId();
         int nextNum = 1;
@@ -151,9 +138,7 @@ public class BookingService {
     }
     
     
-    /**
-     * สำหรับ Member: ดูรายการจองทั้งหมดของตนเอง (สำหรับหน้า list)
-     */
+    //สำหรับ Member: ดูรายการจองทั้งหมดของตนเอง (สำหรับหน้า list)
     public List<BookingForm> getBookingsByMember(int memberId) {
         return bookingRepo.findByMemberId(memberId);
     }
@@ -163,11 +148,9 @@ public class BookingService {
         BookingForm booking = bookingRepo.findById(bookingId).orElse(null);
         if (booking != null) {
             booking.setBookingStatus(status);
-            // ไม่ต้องสั่ง bookingRepo.save() ซ้ำก็ได้ เพราะอยู่ใน @Transactional 
-            // หรือจะใช้ bookingRepo.updateBookingStatus(bookingId, status) ก็ได้เช่นกัน
+            
         }
     }
-    //=================================================================================================
-    //================================================================================================
+  
   
 }

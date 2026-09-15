@@ -29,11 +29,10 @@ public class BookingForm {
 	@Column(name = "addressimage")
 	private String addressImage;
 	
-	// เพิ่มตัวแปรนี้ต่อจากฟิลด์อื่นๆ ในคลาส BookingForm
+
 	@Column(name = "rejectdetail", columnDefinition = "TEXT")
 	private String rejectDetail;
 
-	// ... (ฟิลด์อื่นๆ ที่มีอยู่เดิม)
 
 	
 
@@ -202,6 +201,6 @@ public class BookingForm {
 		this.details = details;
 	}
 	
-	//=================
+
 
 }

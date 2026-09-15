@@ -32,7 +32,7 @@ public class JobAssignmentService {
         return staffAssignmentRepo.findByHeadStaff_StaffId(staffId);
     }
     
- // ค้นหาข้อมูลการมอบหมายงานโดยระบุจาก Booking ID ของการจองนั้นๆ
+    // ค้นหาข้อมูลการมอบหมายงานโดยระบุจาก Booking ID ของการจองนั้นๆ
     public JobAssignment getAssignmentByBookingId(String bookingId) {
         return staffAssignmentRepo.findByBookingForm_BookingId(bookingId);
     }
@@ -91,8 +91,6 @@ public class JobAssignmentService {
     }
 
     // บันทึกรายงานความเสียหายหลังจบงาน พร้อมจัดการอัปโหลดรูปภาพหลักฐาน
-    // FIX: อนุญาตให้ส่งรายงานความเสียหายได้แค่ครั้งเดียวต่องานมอบหมายหนึ่งชิ้น
-    // ถ้าเคยมี reportNote อยู่แล้ว (ส่งไปแล้ว) จะโยน exception ทันที ไม่ทับข้อมูลเดิม
     @Transactional
     public void updateDamageReport(String assignId, String reportNote, MultipartFile[] files) throws IOException {
         JobAssignment sa = staffAssignmentRepo.findById(assignId).orElseThrow();
@@ -125,5 +123,11 @@ public class JobAssignmentService {
         }
 
         staffAssignmentRepo.save(sa);
+    }
+
+    //  เช็คว่าหัวหน้างานคนนี้เคยถูกมอบหมายงาน (JobAssignment) อยู่หรือไม่
+    // ตอนตัดสินใจว่าจะลบจริง (Hard Delete) หรือ Soft Delete
+    public boolean hasAssignmentForStaff(int staffId) {
+        return staffAssignmentRepo.existsByHeadStaff_StaffId(staffId);
     }
 }

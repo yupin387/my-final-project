@@ -16,140 +16,133 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/manager/questions") // ✅ แก้ไข: เปลี่ยนจาก organizer เป็น manager
+@RequestMapping("/manager/questions")
 public class QuestionsController {
 
-    @Autowired
-    private QuestionsService questionsService;
+	@Autowired
+	private QuestionsService questionsService;
 
-    @Autowired
-    private CeremonyService ceremonyService;
+	@Autowired
+	private CeremonyService ceremonyService;
 
-    private static final List<String> CEREMONY_TYPE_ORDER =
-        List.of("ทำบุญบ้าน", "ขึ้นบ้านใหม่", "ทำบุญบริษัทหรือออฟฟิศ");
+	// ลำดับการแสดงผลของประเภทงานบุญ (ใช้ในฟอร์มเพิ่ม/แก้ไขคำถาม)
+	private static final List<String> CEREMONY_TYPE_ORDER = List.of("ทำบุญบ้าน", "ขึ้นบ้านใหม่",
+			"ทำบุญบริษัทหรือออฟฟิศ");
 
-    @GetMapping
-    public String listQuestions(@RequestParam(required = false, defaultValue = "all") String ceremonyType,
-                                Model model, HttpSession session) {
-        // ✅ แก้ไข: เปลี่ยนเช็ค currentOrganizer เป็น currentManager และ redirect ไป loginmanager
-        if (session.getAttribute("currentManager") == null) {
-            return "redirect:/loginmanager";
-        }
+	// แสดงรายการคำถามทั้งหมด รองรับการกรองตามประเภทงานบุญ (ceremonyType)
+	@GetMapping
+	public String listQuestions(@RequestParam(required = false, defaultValue = "all") String ceremonyType, Model model,
+			HttpSession session) {
 
-        List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
+		if (session.getAttribute("currentManager") == null) {
+			return "redirect:/loginmanager";
+		}
 
-        List<String> ceremonyTypes = ceremonies.stream()
-                .map(Ceremony::getCeremonyType)
-                .filter(t -> t != null && !t.isBlank())
-                .distinct()
-                .collect(Collectors.toList());
+		List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
 
-        List<QuestionsDetail> allQuestions = questionsService.getAllQuestions();
-        List<QuestionsDetail> questions;
+		List<String> ceremonyTypes = ceremonies.stream().map(Ceremony::getCeremonyType)
+				.filter(t -> t != null && !t.isBlank()).distinct().collect(Collectors.toList());
 
-        if ("all".equals(ceremonyType)) {
-            questions = allQuestions;
-        } else {
-            questions = allQuestions.stream()
-                    .filter(q -> q.getCeremonies() != null
-                            && q.getCeremonies().stream()
-                                    .anyMatch(c -> ceremonyType.equals(c.getCeremonyType())))
-                    .collect(Collectors.toList());
-        }
+		List<QuestionsDetail> allQuestions = questionsService.getAllQuestions();
+		List<QuestionsDetail> questions;
 
-        model.addAttribute("selectedCeremonyType", ceremonyType);
-        model.addAttribute("ceremonyTypes", ceremonyTypes);
-        model.addAttribute("ceremonies", ceremonies);
-        model.addAttribute("questions", questions);
+		if ("all".equals(ceremonyType)) {
+			questions = allQuestions;
+		} else {
+			questions = allQuestions.stream()
+					.filter(q -> q.getCeremonies() != null
+							&& q.getCeremonies().stream().anyMatch(c -> ceremonyType.equals(c.getCeremonyType())))
+					.collect(Collectors.toList());
+		}
 
-        return "questionsList";
-    }
+		model.addAttribute("selectedCeremonyType", ceremonyType);
+		model.addAttribute("ceremonyTypes", ceremonyTypes);
+		model.addAttribute("ceremonies", ceremonies);
+		model.addAttribute("questions", questions);
 
-    @GetMapping("/add")
-    public String showAddForm(Model model, HttpSession session) {
-        // ✅ แก้ไข: เปลี่ยนเช็ค currentOrganizer เป็น currentManager
-        if (session.getAttribute("currentManager") == null) {
-            return "redirect:/loginmanager";
-        }
+		return "questionsList";
+	}
 
-        model.addAttribute("ceremonyTypes", CEREMONY_TYPE_ORDER);
-        return "addQuestion";
-    }
+	// แสดงหน้าฟอร์มสำหรับเพิ่มคำถามใหม่
+	@GetMapping("/add")
+	public String showAddForm(Model model, HttpSession session) {
+		// ✅ แก้ไข: เปลี่ยนเช็ค currentOrganizer เป็น currentManager
+		if (session.getAttribute("currentManager") == null) {
+			return "redirect:/loginmanager";
+		}
 
-    @PostMapping("/add")
-    public String processAdd(@RequestParam String questionText,
-                             @RequestParam(required = false) List<String> ceremonyTypes,
-                             RedirectAttributes redirectAttrs) {
-        try {
-            questionsService.addQuestion(questionText,
-                    ceremonyTypes != null ? ceremonyTypes : new ArrayList<>());
-            redirectAttrs.addFlashAttribute("success", "เพิ่มคำถามเรียบร้อยแล้ว");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
-        }
-        // ✅ แก้ไข: เปลี่ยน redirect ไป manager/questions
-        return "redirect:/manager/questions";
-    }
+		model.addAttribute("ceremonyTypes", CEREMONY_TYPE_ORDER);
+		return "addQuestion";
+	}
 
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable int id,
-                               Model model,
-                               HttpSession session,
-                               RedirectAttributes redirectAttrs) {
-        // ✅ แก้ไข: เปลี่ยนเช็ค currentOrganizer เป็น currentManager
-        if (session.getAttribute("currentManager") == null) {
-            return "redirect:/loginmanager";
-        }
+	// บันทึกคำถามใหม่ลงในระบบ พร้อมผูกกับประเภทงานบุญที่เลือก
+	@PostMapping("/add")
+	public String processAdd(@RequestParam String questionText,
+			@RequestParam(required = false) List<String> ceremonyTypes, RedirectAttributes redirectAttrs) {
+		try {
+			questionsService.addQuestion(questionText, ceremonyTypes != null ? ceremonyTypes : new ArrayList<>());
+			redirectAttrs.addFlashAttribute("success", "เพิ่มคำถามเรียบร้อยแล้ว");
+		} catch (Exception e) {
+			redirectAttrs.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
+		}
 
-        QuestionsDetail question = questionsService.getQuestionById(id);
-        if (question == null) {
-            redirectAttrs.addFlashAttribute("error", "ไม่พบข้อมูลคำถาม");
-            return "redirect:/manager/questions";
-        }
+		return "redirect:/manager/questions";
+	}
 
-        List<String> selectedCeremonyTypes = new ArrayList<>();
-        if (question.getCeremonies() != null) {
-            selectedCeremonyTypes = question.getCeremonies().stream()
-                    .map(Ceremony::getCeremonyType)
-                    .filter(t -> t != null && !t.isBlank())
-                    .distinct()
-                    .collect(Collectors.toList());
-        }
+	// แสดงหน้าฟอร์มแก้ไขคำถามที่มีอยู่แล้ว
+	// พร้อมดึงประเภทงานบุญที่คำถามนี้ถูกผูกไว้มาเติมล่วงหน้า
+	@GetMapping("/edit/{id}")
+	public String showEditForm(@PathVariable int id, Model model, HttpSession session,
+			RedirectAttributes redirectAttrs) {
 
-        model.addAttribute("question", question);
-        model.addAttribute("selectedCeremonyTypes", selectedCeremonyTypes);
-        model.addAttribute("ceremonyTypes", CEREMONY_TYPE_ORDER);
-        return "editQuestion";
-    }
+		if (session.getAttribute("currentManager") == null) {
+			return "redirect:/loginmanager";
+		}
 
-    @PostMapping("/update")
-    public String updateQuestion(@RequestParam int questionsId,
-                                 @RequestParam String questionsText,
-                                 @RequestParam(required = false) List<String> ceremonyTypes,
-                                 RedirectAttributes redirectAttrs) {
-        try {
-            questionsService.updateQuestion(questionsId, questionsText,
-                    ceremonyTypes != null ? ceremonyTypes : new ArrayList<>());
-            redirectAttrs.addFlashAttribute("success", "แก้ไขข้อมูลเรียบร้อยแล้ว");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
-        }
-        // ✅ แก้ไข: เปลี่ยน redirect ไป manager/questions
-        return "redirect:/manager/questions";
-    }
+		QuestionsDetail question = questionsService.getQuestionById(id);
+		if (question == null) {
+			redirectAttrs.addFlashAttribute("error", "ไม่พบข้อมูลคำถาม");
+			return "redirect:/manager/questions";
+		}
 
-    @PostMapping("/delete/{id}")
-    public String deleteQuestion(@PathVariable int id,
-                                 HttpSession session,
-                                 RedirectAttributes redirectAttrs) {
-        // ✅ แก้ไข: เปลี่ยนเช็ค currentOrganizer เป็น currentManager
-        if (session.getAttribute("currentManager") == null) {
-            return "redirect:/loginmanager";
-        }
+		List<String> selectedCeremonyTypes = new ArrayList<>();
+		if (question.getCeremonies() != null) {
+			selectedCeremonyTypes = question.getCeremonies().stream().map(Ceremony::getCeremonyType)
+					.filter(t -> t != null && !t.isBlank()).distinct().collect(Collectors.toList());
+		}
 
-        questionsService.deleteQuestion(id);
-        redirectAttrs.addFlashAttribute("success", "ลบคำถามเรียบร้อยแล้ว");
-        // ✅ แก้ไข: เปลี่ยน redirect ไป manager/questions
-        return "redirect:/manager/questions";
-    }
+		model.addAttribute("question", question);
+		model.addAttribute("selectedCeremonyTypes", selectedCeremonyTypes);
+		model.addAttribute("ceremonyTypes", CEREMONY_TYPE_ORDER);
+		return "editQuestion";
+	}
+
+	// บันทึกการแก้ไขคำถาม ทั้งข้อความคำถามและประเภทงานบุญที่ผูกอยู่
+	@PostMapping("/update")
+	public String updateQuestion(@RequestParam int questionsId, @RequestParam String questionsText,
+			@RequestParam(required = false) List<String> ceremonyTypes, RedirectAttributes redirectAttrs) {
+		try {
+			questionsService.updateQuestion(questionsId, questionsText,
+					ceremonyTypes != null ? ceremonyTypes : new ArrayList<>());
+			redirectAttrs.addFlashAttribute("success", "แก้ไขข้อมูลเรียบร้อยแล้ว");
+		} catch (Exception e) {
+			redirectAttrs.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
+		}
+
+		return "redirect:/manager/questions";
+	}
+
+	// ลบคำถามออกจากระบบตามรหัส id ที่ระบุ
+	@PostMapping("/delete/{id}")
+	public String deleteQuestion(@PathVariable int id, HttpSession session, RedirectAttributes redirectAttrs) {
+
+		if (session.getAttribute("currentManager") == null) {
+			return "redirect:/loginmanager";
+		}
+
+		questionsService.deleteQuestion(id);
+		redirectAttrs.addFlashAttribute("success", "ลบคำถามเรียบร้อยแล้ว");
+
+		return "redirect:/manager/questions";
+	}
 }

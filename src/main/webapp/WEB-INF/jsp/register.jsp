@@ -6,17 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>สมัครสมาชิกใหม่ - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons สำหรับไอคอนรูปตา -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/register.css">
     <style>
         .error-message {
             color: #dc3545;
-            font-size: 11px; /* ปรับขนาดตัวหนังสือให้เล็กเท่ากัน */
+            font-size: 11px; 
             margin-top: 4px;
             display: none;
-            font-weight: normal; /* เอาตัวหนาออกเพื่อให้ดูซอฟต์ลง */
+            font-weight: normal; 
         }
         .password-wrapper {
             position: relative;
@@ -71,7 +70,7 @@
                 <div class="gold-line"></div>
             </div>
 
-            <%-- แสดง error จาก Spring (ถ้ามี) --%>
+   
             <%
                 String errorMsg = (String) request.getAttribute("errorMsg");
                 if (errorMsg != null) {

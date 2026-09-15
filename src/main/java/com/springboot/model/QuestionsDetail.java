@@ -15,11 +15,7 @@ public class QuestionsDetail {
     @Column(name = "questionstext", nullable = false, unique = true)
     private String questionsText;
 
-    // =========================================================
-    // Many-to-Many กับ Ceremony
-    // (ฝั่งนี้เป็น "inverse side" ใช้ mappedBy เพราะฝั่งเจ้าของ
-    //  ความสัมพันธ์ (owning side) อยู่ที่ Ceremony.java)
-    // =========================================================
+
     @ManyToMany(mappedBy = "questions")
     private List<Ceremony> ceremonies;
 

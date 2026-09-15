@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+
 @Service
 public class QuotationService {
 
@@ -23,35 +24,44 @@ public class QuotationService {
 	@Autowired
 	private HeadStaffRepository staffRepo;
 
-	// เมธอดดึงข้อมูลพื้นฐาน (Read Operations)
+
+
+	// ดึงอุปกรณ์ทั้งหมดในระบบ (ใช้ประกอบตอนสร้าง/แก้ไขใบเสนอราคา)
 	public List<Item> getAllItems() {
 		return itemRepo.findAll();
 	}
 
+	// ดึงหัวหน้างานทั้งหมด (ใช้ตอนเลือกมอบหมายหัวหน้างานให้ใบเสนอราคา)
 	public List<HeadStaff> getAllStaff() {
 		return staffRepo.findAll();
 	}
 
+	// ดึงใบเสนอราคาตาม id คืนค่า null ถ้าไม่พบ
 	public Quotation getQuotationById(String id) {
 		return quotationRepo.findById(id).orElse(null);
 	}
 
+	// ดึงใบเสนอราคาทั้งหมดในระบบ
 	public List<Quotation> getAllQuotations() {
 		return quotationRepo.findAll();
 	}
 
+	// ดึงใบเสนอราคาทั้งหมดที่ตรงกับสถานะที่ระบุ (Pending / Confirmed / Revised ฯลฯ)
 	public List<Quotation> getQuotationsByStatus(String status) {
 		return quotationRepo.findByQuotationStatus(status);
 	}
 
+	// ดึงรายการย่อย (QuotationDetail) ทั้งหมดของใบเสนอราคาตาม id ที่ระบุ
 	public List<QuotationDetail> getDetailsByQuotationId(String id) {
 		return detailRepo.findByQuotation_QuotationId(id);
 	}
 
+	// ดึงอุปกรณ์ทั้งหมดที่ผูกอยู่กับพิธี (ceremony) ตาม id ที่ระบุ
 	public List<Item> getItemsByCeremonyId(int id) {
 		return itemRepo.findByCeremonies_CeremonyId(id);
 	}
 
+	// ดึงใบเสนอราคาล่าสุดของสมาชิกตาม memberId (เรียงตาม quotationId จากมากไปน้อย)
 	public Quotation getLatestQuotationByMemberId(Integer id) {
 		return quotationRepo.findFirstByBookingFormMemberMemberIdOrderByQuotationIdDesc(id);
 	}
@@ -106,6 +116,7 @@ public class QuotationService {
 
 	// ==========================================
 	// (คำนวณเงินและบันทึกตารางย่อย) — ไม่มี note ต่อรายการอีกต่อไป
+
 	// ==========================================
 	private void saveDetailsAndCalculateTotal(Quotation qt,
 	                                          List<Integer> itemIds, List<Integer> qtys, List<Double> extraPrices,
@@ -161,7 +172,7 @@ public class QuotationService {
 	    quotationRepo.save(qt);
 	}
 
-	// เปลี่ยนสถานะใบเสนอราคาเป็น Confirmed (ตกลงจ้าง)
+	// เปลี่ยนสถานะใบเสนอราคาเป็น Confirmed (ตกลงจ้าง) พร้อมอัปเดตสถานะการจองที่ผูกอยู่ให้ตรงกัน
 	@Transactional
 	public void confirmQuotation(String id) {
 		Quotation q = quotationRepo.findById(id).orElseThrow();
@@ -170,12 +181,12 @@ public class QuotationService {
 			q.getBookingForm().setBookingStatus("Confirmed");
 	}
 
-	// หาพนักงานที่ว่างในวันที่กำหนด
+	// หาพนักงาน (หัวหน้างาน) ที่ว่างในวันที่กำหนด สำหรับใช้เลือกมอบหมายงาน
 	public List<HeadStaff> findAvailableStaff(Date eventDate) {
 		return staffRepo.findAvailableStaff(eventDate);
 	}
 
-	// มอบหมายพนักงาน (Assign) ให้กับใบเสนอราคา
+	// มอบหมายพนักงาน (Assign) ให้กับใบเสนอราคา โดยอ้างอิงจาก bookingId
 	@Transactional
 	public void assignStaffToQuotation(String bookingId, Integer staffId) {
 		Quotation quotation = quotationRepo.findByBookingForm_BookingId(bookingId);
@@ -191,6 +202,7 @@ public class QuotationService {
 	// 2. ฝั่ง Member (ลูกค้าแจ้งแก้ไขรายการ)
 	// คอมเม้นตอนนี้เป็นแบบรวมทั้งใบ ไม่ต้องแยกรายชิ้นแล้ว
 	// ==========================================
+	// เปลี่ยนสถานะใบเสนอราคาเป็น Revised (ลูกค้าขอแก้ไข) พร้อมเก็บข้อความที่ลูกค้าแจ้งไว้ใน note
 	@Transactional
 	public void submitMemberRevision(String quotationId, String memberNote) {
 		Quotation qt = quotationRepo.findById(quotationId).orElseThrow();
@@ -201,5 +213,12 @@ public class QuotationService {
 		}
 
 		quotationRepo.save(qt);
+	}
+	
+	// เช็คว่าหัวหน้างานคนนี้เคยถูกผูกกับใบเสนอราคาใดๆ อยู่หรือไม่
+	// (ใช้ตอนจะลบหัวหน้างาน เพื่อตัดสินใจว่าจะ Hard Delete หรือ Soft Delete)
+	public boolean hasQuotationForStaff(int staffId) {
+	    List<Quotation> list = quotationRepo.findByStaff_StaffId(staffId);
+	    return list != null && !list.isEmpty();
 	}
 }

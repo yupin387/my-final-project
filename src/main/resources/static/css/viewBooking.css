@@ -885,4 +885,9 @@ body {
     background-color: #B71C1C;
     box-shadow: 0 6px 16px rgba(198, 40, 40, 0.35);
 }
+/* ให้ค่าที่ถูกตัดบรรทัดแล้วแสดงผลเป็นหลายบรรทัดได้ */
+.info-value.multiline-value {
+    white-space: pre-line;
+    line-height: 1.7;
+}
 /*ของหน้าviewBooking*/

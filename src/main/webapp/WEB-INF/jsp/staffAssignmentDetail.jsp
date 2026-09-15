@@ -47,9 +47,6 @@
         <div class="top-actions">
             <a href="${pageContext.request.contextPath}/staff/assignments" class="btn-back">← กลับหน้ารายการ</a>
 
-            <%-- FIX: รายงานความเสียหายได้แค่ครั้งเดียวเท่านั้น
-                 ถ้ามี a.reportNote อยู่แล้ว (ส่งไปแล้ว) ให้แสดงสถานะแทนปุ่ม
-                 แทนที่จะให้กดเปิด modal ส่งซ้ำได้อีก --%>
             <c:choose>
                 <c:when test="${not empty a.reportNote}">
                     <span class="btn-damage-sent" title="ส่งรายงานความเสียหายไปแล้ว ไม่สามารถส่งซ้ำได้">
@@ -65,9 +62,7 @@
         <div class="card">
             <div class="card-header-bar">
                 <span>รายละเอียดข้อมูลงาน</span>
-                <%-- FIX: เดิมเป็น <a> ลิงก์ไปหน้า updateStatus.jsp แยกต่างหาก
-                     ตอนนี้เปลี่ยนเป็นปุ่มเปิด modal dropdown ในหน้าเดียวกันแทน
-                     ไม่ต้องเปลี่ยนหน้าเลย --%>
+               
                 <button type="button" class="btn-update-status" onclick="openStatusModal()">🔄 อัปเดตสถานะงาน</button>
             </div>
 
@@ -155,7 +150,7 @@
         </div>
     </div>
     
-<%-- ===== Footer (สำหรับหัวหน้างาน) ===== --%>
+
 <footer class="site-footer">
 
     <%-- ===== ลายดอกบัวมุมล่างขวา (เกาะติด footer) ===== --%>
@@ -209,12 +204,7 @@
         </div>
     </div>
 
-    <%-- ========================================================
-         Modal อัปเดตสถานะงาน (FIX: ใหม่ — แทนที่การลิงก์ไปหน้า
-         updateStatus.jsp แยก ด้วย modal dropdown ในหน้านี้เลย
-         ฟอร์ม submit ปกติไปที่ endpoint เดิม (/update-status/save)
-         พร้อม field เดิมทุกตัว (bookingId, jobStatus) เพื่อไม่ต้อง
-         แก้ controller ========================================== --%>
+ 
     <div class="modal-overlay" id="statusModal">
         <div class="modal-box status-modal-box">
             <div class="modal-header status-modal-header">
@@ -253,8 +243,7 @@
 
     <script src="${pageContext.request.contextPath}/static/js/assignmentDetail.js"></script>
 
-    <%-- FIX: สคริปต์เฉพาะของ modal อัปเดตสถานะ ตั้งชื่อฟังก์ชันแยกจาก
-         assignmentDetail.js (openDamageModal/closeDamageModal) เพื่อไม่ชนกัน --%>
+
     <script>
         var statusHints = {
             'Assigned':    'พนักงานรับทราบงานแล้ว รอเริ่มดำเนินการ',

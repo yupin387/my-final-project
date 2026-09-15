@@ -30,12 +30,16 @@ public class ItemController {
     @Autowired
     private CeremonyService ceremonyService;
 
+    // ลำดับการแสดงผลของประเภทงานบุญ (ใช้จัดเรียงตอนแสดงในหน้าจอ)
     private static final List<String> CEREMONY_TYPE_ORDER =
         List.of("ทำบุญบ้าน", "ขึ้นบ้านใหม่", "ทำบุญบริษัทหรือออฟฟิศ");
 
+    // ลำดับการแสดงผลของแพ็กเกจภายในแต่ละประเภทงานบุญ
     private static final List<String> PACKAGE_ORDER =
         List.of("แพ็กเกจมาตรฐาน", "แพ็กเกจอิ่มบุญ", "แพ็กเกจพรีเมียม", "กรอกความต้องการเบื้องต้น");
 
+    // จัดกลุ่ม Ceremony ทั้งหมดตามประเภทงานบุญ พร้อมเรียงลำดับแพ็กเกจภายในกลุ่ม
+    // ใช้สำหรับแสดงตัวเลือก Ceremony แบบแบ่งหมวดหมู่ในหน้าเพิ่ม/แก้ไขอุปกรณ์
     private Map<String, List<Ceremony>> groupCeremoniesByType(List<Ceremony> allCeremonies) {
         Map<String, List<Ceremony>> grouped = new LinkedHashMap<>();
         for (String type : CEREMONY_TYPE_ORDER) {
@@ -56,6 +60,8 @@ public class ItemController {
         return grouped;
     }
 
+    // แสดงรายการอุปกรณ์ทั้งหมด รองรับการกรองตามประเภทอุปกรณ์ (typeId)
+    // และประเภทงานบุญ (ceremonyType) พร้อมคำนวณว่าอุปกรณ์แต่ละชิ้นถูกใช้ในงานบุญประเภทไหนบ้าง
     @GetMapping
     public String listItem(@RequestParam(required = false) String typeId,
                            @RequestParam(required = false) String ceremonyType,
@@ -88,6 +94,8 @@ public class ItemController {
         model.addAttribute("selectedCeremonyType", ceremonyType != null ? ceremonyType : "all");
         model.addAttribute("ceremonyTypeOrder", CEREMONY_TYPE_ORDER);
 
+        // สร้าง Map เก็บว่าอุปกรณ์แต่ละ id (key) ถูกใช้อยู่ในงานบุญประเภทใดบ้าง (value)
+        // เพื่อนำไปแสดงเป็น Badge/Tag ประกอบแถวอุปกรณ์ในตาราง
         Map<Integer, List<String>> itemCeremonyTypes = new LinkedHashMap<>();
         for (Item item : items) {
             List<CeremonyItem> ceremonyItems = item.getCeremonyItems();
@@ -113,6 +121,7 @@ public class ItemController {
         return "itemList";
     }
 
+    // แสดงหน้าฟอร์มสำหรับเพิ่มอุปกรณ์ใหม่ พร้อมรายการประเภทอุปกรณ์และ Ceremony ทั้งหมดให้เลือก
     @GetMapping("/add")
     public String showAddForm(Model model, HttpSession session) {
         if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
@@ -124,6 +133,8 @@ public class ItemController {
         return "addItem"; 
     }
 
+    // แสดงหน้าฟอร์มสำหรับแก้ไขอุปกรณ์ที่มีอยู่แล้ว โดยดึงข้อมูล Ceremony ที่อุปกรณ์นี้ถูกผูกอยู่
+    // (พร้อมจำนวนที่ตั้งไว้ในแต่ละ Ceremony) มาเติมลงฟอร์มล่วงหน้าเพื่อให้แก้ไขได้ง่าย
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model, HttpSession session) {
         if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
@@ -151,6 +162,7 @@ public class ItemController {
         return "editItem"; 
     }
 
+    // บันทึกข้อมูลอุปกรณ์ (ใช้ร่วมกันทั้งกรณีเพิ่มใหม่และแก้ไข) พร้อมผูก/อัปเดตความสัมพันธ์กับ Ceremony ที่เลือก
     @PostMapping("/save")
     public String saveItem(@ModelAttribute Item item,
                            @RequestParam int typeId,
@@ -167,6 +179,7 @@ public class ItemController {
         return "redirect:/staff/items";
     }
    
+    // ลบอุปกรณ์ออกจากระบบตามรหัส id ที่ระบุ
     @PostMapping("/delete/{id}")
     public String deleteItem(@PathVariable int id, RedirectAttributes ra) {
         try {

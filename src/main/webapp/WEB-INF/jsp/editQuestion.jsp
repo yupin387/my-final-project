@@ -9,9 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addQuestion.css">
     <style>
-    /* ===== FIX: เปลี่ยนจาก dropdown เลือกประเภทงานได้ทีละอัน เป็น checkbox
-       เลือกได้พร้อมกันหลายประเภท เพราะ 1 คำถามผูกได้กับหลายประเภทงานพร้อมกัน
-       (เหมือนหน้าเพิ่มคำถาม) — ค่าที่ติ๊กไว้มาจาก selectedCeremonyTypes ของ controller ===== */
+  
     .ceremony-checkbox-group {
         display: flex;
         flex-direction: column;

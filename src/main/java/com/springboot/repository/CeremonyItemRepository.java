@@ -17,6 +17,5 @@ public interface CeremonyItemRepository extends JpaRepository<CeremonyItem, Inte
     // 2. ค้นหารายการพิธีทั้งหมดที่มีการใช้ Item นั้นๆ
     List<CeremonyItem> findByItem(Item item);
     
-    // หมายเหตุ: เนื่องจาก extends JpaRepository แล้ว
-    // คุณสามารถใช้งาน .save(), .findById(), .delete(), .findAll() ได้ทันทีโดยไม่ต้องเขียนโค้ดเพิ่มครับ
+   
 }

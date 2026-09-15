@@ -7,17 +7,17 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
 @Repository
 public interface CeremonyRepository extends JpaRepository<Ceremony, Integer> {
 
-    // ✅ แก้ไข: เปลี่ยนจาก findByCeremonyNameContaining เป็น findByOptionTypeContaining
+    // ค้นหาพิธีที่ "รูปแบบตัวเลือก" (optionType) มีคำที่ระบุอยู่ (ค้นแบบ contains)
     List<Ceremony> findByOptionTypeContaining(String name);
 
-    // แก้ไข: เปลี่ยน c.items เป็น c.ceremonyItems และ Join ไปยัง item 
+    // ดึงพิธีทั้งหมดพร้อม fetch รายการอุปกรณ์ (ceremonyItems) และตัวสินค้า (item) มาด้วยในคราวเดียว
     @Query("SELECT DISTINCT c FROM Ceremony c LEFT JOIN FETCH c.ceremonyItems ci LEFT JOIN FETCH ci.item")
     List<Ceremony> findAllWithItems();
 
-    // เพิ่ม: ดึงแพ็กเกจทั้งหมดของ "ประเภทงาน" หนึ่ง ๆ (ทำบุญบ้าน/ขึ้นบ้านใหม่/ทำบุญออฟฟิศ)
-    // ใช้ตอนฟอร์มเพิ่ม/แก้คำถามส่งมาแค่ ceremonyType แล้วต้องเลือกแพ็กเกจแรกให้อัตโนมัติ
+    // ค้นหาพิธีทั้งหมดที่ตรงกับ "ประเภทพิธี" (ceremonyType) ที่ระบุ
     List<Ceremony> findByCeremonyType(String ceremonyType);
 }

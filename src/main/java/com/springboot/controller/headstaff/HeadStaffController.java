@@ -62,7 +62,6 @@ public class HeadStaffController {
     @GetMapping("/staff/assignments")
     public String listAssignments(Model model, HttpSession session) {
         HeadStaff currentStaff = (HeadStaff) session.getAttribute("currentStaff");
-        // ✅ แก้เป็น loginmanager
         if (currentStaff == null) return "redirect:/loginmanager"; 
 
         List<JobAssignment> assignments = staffAssignmentService.getAssignmentsByStaff(currentStaff.getStaffId());
@@ -73,7 +72,6 @@ public class HeadStaffController {
     // แสดงรายละเอียดของงานมอบหมายชิ้นที่เลือก
     @GetMapping("/staff/assignments/detail/{id}")
     public String viewAssignmentDetail(@PathVariable String id, Model model, HttpSession session) {
-        // ✅ แก้เป็น loginmanager
         if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
 
         JobAssignment sa;
@@ -106,7 +104,6 @@ public class HeadStaffController {
     @GetMapping("/staff/profile")
     public String showEditProfileForm(Model model, HttpSession session) {
         HeadStaff currentStaff = (HeadStaff) session.getAttribute("currentStaff");
-        // ✅ แก้เป็น loginmanager
         if (currentStaff == null) return "redirect:/loginmanager";
 
         HeadStaff staff = headStaffService.getHeadStaffById(currentStaff.getStaffId());
@@ -133,7 +130,6 @@ public class HeadStaffController {
     // แสดงหน้าจอสำหรับอัปเดตสถานะงาน
     @GetMapping("/staff/assignments/update-status/{bookingId}")
     public String showUpdateStatusForm(@PathVariable String bookingId, Model model, HttpSession session) {
-        // ✅ แก้เป็น loginmanager
         if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
         
         BookingForm booking = bookingService.getBookingById(bookingId);
@@ -147,7 +143,7 @@ public class HeadStaffController {
                                  @RequestParam String jobStatus,
                                  HttpSession session,
                                  RedirectAttributes ra) {
-        // ✅ แก้เป็น loginmanager
+    	
         if (session.getAttribute("currentStaff") == null) return "redirect:/loginmanager";
         
         staffAssignmentService.updateJobStatus(bookingId, jobStatus);

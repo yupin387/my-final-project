@@ -976,3 +976,8 @@ body {
     /* จอมือถือแคบ ลดเหลือ 1 คอลัมน์ */
     .package-items-grid { grid-template-columns: 1fr; }
 }
+/* ให้ค่าที่ถูกตัดบรรทัดแล้วแสดงผลเป็นหลายบรรทัดได้ */
+.info-value.multiline-value {
+    white-space: pre-line;
+    line-height: 1.7;
+}

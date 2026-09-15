@@ -34,7 +34,7 @@ public class Quotation {
 	public Quotation() {
 	}
 
-	// Getter & Setter
+
 	public String getQuotationId() {
 		return quotationId;
 	}

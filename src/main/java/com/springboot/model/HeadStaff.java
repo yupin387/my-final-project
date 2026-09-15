@@ -52,9 +52,12 @@ public class HeadStaff {
 	    this.registerDate = registerDate;
 	}
 
+
 	@PrePersist
 	protected void onCreate() {
-		this.registerDate = LocalDateTime.now();
+		if (this.registerDate == null) {
+			this.registerDate = LocalDateTime.now();
+		}
 	}
 
 	public int getStaffId() {
