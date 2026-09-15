@@ -97,10 +97,16 @@ public class MemberController {
     @PostMapping("/updateProfile")
     public String updateProfile(@ModelAttribute Member member,
                                 @RequestParam(value = "newPassword", required = false) String newPassword,
-                                HttpSession session) {
-        memberService.updateProfile(member, newPassword);
-        session.setAttribute("user", member);
-        return "redirect:/home";
+                                HttpSession session,
+                                RedirectAttributes ra) {
+        try {
+            memberService.updateProfile(member, newPassword);
+            session.setAttribute("user", member);
+            ra.addFlashAttribute("success", "บันทึกข้อมูลที่เปลี่ยนแปลงแล้ว");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "เกิดข้อผิดพลาด: " + e.getMessage());
+        }
+        return "redirect:/editProfile";
     }
 
     @GetMapping("/member/quotation/list")
