@@ -10,7 +10,9 @@ import java.util.List;
 public interface QuestionsRepository extends JpaRepository<QuestionsDetail, Integer> {
 
     // ดึงคำถามทั้งหมด พร้อม fetch ceremonies มาด้วย (กัน N+1 / lazy loading พัง)
-    @Query("SELECT DISTINCT q FROM QuestionsDetail q LEFT JOIN FETCH q.ceremonies")
+    // เรียงตาม questionsId (ลำดับการสร้าง) เพื่อให้คำถามที่เพิ่มใหม่ไปต่อท้ายเสมอ
+    // ไม่แทรกกลางแบบเรียงตัวอักษร
+    @Query("SELECT DISTINCT q FROM QuestionsDetail q LEFT JOIN FETCH q.ceremonies ORDER BY q.questionsId ASC")
     List<QuestionsDetail> findAllWithCeremony();
 
     // คำถามที่ผูกกับ ceremony นี้โดยตรง + คำถาม "กลาง" ที่ไม่ผูกกับ ceremony ไหนเลย (ceremonies ว่าง)
