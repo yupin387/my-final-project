@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/review.css">
-    <%-- TODO: ย้าย style ชุดนี้ไปไว้ใน review.css ทีหลัง (ใส่ inline ไว้ก่อนเพราะยังไม่มีไฟล์ review.css ให้แก้) --%>
+
     <style>
         #imagePreviewContainer.image-preview-grid {
             display: flex;

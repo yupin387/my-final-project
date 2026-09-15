@@ -141,17 +141,6 @@ public class ReviewController {
     }
 
     // 4. หน้าดูรีวิวทั้งหมด (รวมทุกงาน) + รองรับกรองตามประเภทงานผ่าน query param "type"
-    // และกรองตามจำนวนดาวผ่าน query param "rating"
-    // FIX: เดิมเมธอดนี้ไม่รับพารามิเตอร์ "type" เลย ทำให้ปุ่มกรอง (btn-filter) ใน
-    // viewReview.jsp ที่ลิงก์ไป /reviews?type=ทำบุญบ้าน ฯลฯ ไม่มีผลอะไร (แสดงรีวิวทั้งหมดเสมอ
-    // และ ${selectedCeremonyType} ก็ไม่เคยมีค่า ปุ่ม active-link เลยไม่ทำงานด้วย)
-    // FIX: เพิ่มพารามิเตอร์ "rating" เพื่อให้กดที่แถบสัดส่วนดาวใน summary-card แล้วกรอง
-    // เฉพาะรีวิวที่ได้คะแนนตามดาวนั้น ๆ ได้ (ใช้ร่วมกับ type พร้อมกันได้)
-    // FIX: avgRating / starCounts เดิมคำนวณจาก list ที่กรองด้วย rating ไปแล้ว ทำให้พอกด
-    // กรองดาวไหน แถบสัดส่วนของดาวอื่นกลายเป็น 0 และคะแนนเฉลี่ยก็เปลี่ยนไปเท่ากับดาวที่กรอง
-    // อยู่ ซึ่งไม่ถูกต้อง — ตอนนี้แยกเป็น reviewsForStats (กรองแค่ type) ใช้คำนวณ avg/starCounts
-    // ให้คงที่ตามประเภทงานที่เลือก ไม่ขึ้นกับ rating ที่กด ส่วน reviews (การ์ดที่แสดงจริง)
-    // ค่อยกรองต่อด้วย rating จาก reviewsForStats อีกที
     @GetMapping("/reviews")
     public String viewAllReviews(
             @RequestParam(value = "type", required = false) String type,
@@ -201,7 +190,7 @@ public class ReviewController {
         Map<Long, Long> starCounts = reviewsForStats.stream()
                 .collect(Collectors.groupingBy(r -> Math.round(r.getRating()), Collectors.counting()));
 
-        model.addAttribute("reviews", pagedReviews); // ใช้ list ที่ตัดแล้วแสดงผล
+        model.addAttribute("reviews", pagedReviews); 
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("avgRating", avg);
@@ -213,12 +202,7 @@ public class ReviewController {
         return "viewReview";
     }
 
-    /*
-     * ใช้ logic เดียวกับ buildCeremonyTypesForFooter() ใน BookingFormController /
-     * buildCeremonyTypes() ใน UserController: จัดกลุ่มพิธีตาม ceremonyType แล้วเลือก
-     * ตัวแทน (representative) ที่ราคาถูกที่สุดของแต่ละกลุ่ม เพื่อใช้เป็นลิงก์ไปหน้า
-     * /ceremony/detail/{id} ใน dropdown "บริการ/แพ็กเกจ"
-     */
+//จัดกลุ่มพิธีตาม ceremonyType แล้วเลือก ตัวแทน (representative) ที่ราคาถูกที่สุดของแต่ละกลุ่ม เพื่อใช้เป็นลิงก์ไปหน้า dropdown "บริการ/แพ็กเกจ"
     private List<Map<String, Object>> buildCeremonyTypesForFooter() {
         List<Ceremony> all = ceremonyService.getAllCeremonies();
         Map<String, List<Ceremony>> grouped = all.stream()

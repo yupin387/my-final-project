@@ -78,7 +78,7 @@
         <div class="ornament-diamond-sm"></div>
         <div class="ornament-line right"></div>
     </div>
-    <%-- ========== HEADER BAR (หัวข้อ + คะแนนเฉลี่ยรวม ในกรอบเดียวกัน หัวข้อชิดซ้าย คะแนนชิดขวา) ========== --%>
+    <%-- ========== HEADER BAR ) ========== --%>
     <div class="reviews-header-card">
         <div class="reviews-header-text">
             <h2 class="section-title">รีวิวจากผู้ใช้บริการ</h2>
@@ -99,9 +99,7 @@
         </div>
     </div>
 
-    <%-- ===== แถวตัวกรองด้านล่าง: [ดรอปดาวน์เลือกประเภทงาน รวม "ดูรีวิวทั้งหมด"] [กรองดาว 5-1]
-     FIX: กดปุ่มดาวที่กำลังกรองอยู่ซ้ำ (toggle) จะเอาตัวกรอง rating ออก
-     กลับไปแสดงทั้งหมด หรือทั้งหมดของประเภทงานที่เลือกอยู่ (ถ้ามีการกรอง type ค้างอยู่) ===== --%>
+
 	<div class="star-filter-row">
 	    <c:url var="urlAll" value="/reviews">
 	        <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>

@@ -40,6 +40,7 @@ import com.springboot.service.ReviewService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 
+
 @Controller
 public class BookingFormController {
 
@@ -61,10 +62,14 @@ public class BookingFormController {
     @Autowired
     private AuspiciousCalendarService auspiciousCalendarService;
 
+    // จำนวนทีมงานที่มีอยู่ ใช้คำนวณว่าวันไหนคิวเต็มแล้วในหน้าปฏิทินของฟอร์มจอง
     private static final int TEAM_COUNT = 2;
 
+    // แคชข้อมูล "คุณภาพของวัน" (ฤกษ์ดี/ไม่ดี) ที่โหลดมาจาก Google Calendar
     private Map<String, List<Map<String, String>>> dayQualityCache = new LinkedHashMap<>();
 
+    // ทำงานทันทีหลัง Controller ถูกสร้าง: ดึงข้อมูลวันฤกษ์ดีจาก Google Calendar มาเก็บไว้ใน
+    // cache พร้อมแปลง key ปี พ.ศ. (>= 2400) ให้เป็น ค.ศ. ก่อนเก็บ ถ้าดึงไม่สำเร็จจะเก็บเป็น map ว่าง
     @PostConstruct
     private void loadDayQuality() {
         try {
@@ -84,6 +89,8 @@ public class BookingFormController {
         }
     }
 
+    // เตรียมข้อมูลปฏิทิน (วันที่จองแล้ว, จำนวนการจองต่อวัน, จำนวนทีมงาน, วันฤกษ์ดี)
+    // ใส่ลง model เพื่อใช้ร่วมกันในหน้าฟอร์มจองทั้ง 3 แบบ (booking, booking2, booking3)
     private void addCalendarAttributes(Model model) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<String> confirmedDates = bookingService.getAllBookings().stream()
@@ -101,6 +108,7 @@ public class BookingFormController {
         model.addAttribute("dayQuality", dayQualityCache);
     }
     
+    // ลงทะเบียนตัวแปลงค่าวันที่ (String -> Date) รูปแบบ yyyy-MM-dd สำหรับการ bind ข้อมูลจากฟอร์ม
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -108,6 +116,7 @@ public class BookingFormController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
     
+    // แสดงฟอร์มจองสำหรับพิธี "ทำบุญบ้าน"
     @GetMapping("/booking")
     public String showBookingForm(Model model, HttpSession session) {
         Member loginUser = (Member) session.getAttribute("user");
@@ -133,6 +142,7 @@ public class BookingFormController {
         return "fillBookingForm";
     }
 
+    // แสดงฟอร์มจองสำหรับพิธี "ขึ้นบ้านใหม่"
     @GetMapping("/booking2")
     public String showBookingForm2(Model model, HttpSession session) {
         Member loginUser = (Member) session.getAttribute("user");
@@ -158,6 +168,7 @@ public class BookingFormController {
         return "fillBookingForm2";
     }
 
+    // แสดงฟอร์มจองสำหรับพิธี "ทำบุญบริษัทหรือออฟฟิศ"
     @GetMapping("/booking3")
     public String showBookingForm3(Model model, HttpSession session) {
         Member loginUser = (Member) session.getAttribute("user");
@@ -183,6 +194,8 @@ public class BookingFormController {
         return "fillBookingForm3";
     }
 
+    // จัดกลุ่มพิธีทั้งหมดตาม "ประเภทพิธี" แล้วเลือกแพ็กเกจราคาถูกสุดในแต่ละกลุ่มมาเป็นตัวแทน
+    // ใช้แสดงเมนู "บริการ/แพ็กเกจ" ใน navbar/footer ของหน้าต่างๆ ในไฟล์นี้
     private List<Map<String, Object>> buildCeremonyTypesForFooter() {
         List<Ceremony> all = ceremonyService.getAllCeremonies();
         Map<String, List<Ceremony>> grouped = all.stream()
@@ -205,6 +218,7 @@ public class BookingFormController {
         return result;
     }
 
+    // บันทึกการจองที่สมาชิกกรอกมา: ผูกพิธีและสมาชิกเจ้าของ, แปลงรูปที่อยู่จาก base64
     @PostMapping("/saveBooking")
     public String saveBooking(@ModelAttribute BookingForm booking,
     		                  @RequestParam Map<String, String> allParams,
@@ -255,6 +269,8 @@ public class BookingFormController {
         return "redirect:/viewBooking/" + saved.getBookingId();
     }
 
+    // แสดงหน้ารายละเอียดการจองตาม bookingId: เตรียมรายการอุปกรณ์ในแพ็กเกจ พร้อมเสริมรายการ
+    // ที่เกี่ยวกับจำนวนพระสงฆ์ (กรณีโหมดกรอกความต้องการเอง) และเช็คว่าเคยรีวิวงานนี้แล้วหรือยัง
     @GetMapping("/viewBooking/{id}")
     public String viewBooking(@PathVariable String id, Model model, HttpSession session) {
         BookingForm booking = bookingService.getBookingById(id);
@@ -269,17 +285,7 @@ public class BookingFormController {
                 .collect(Collectors.toList());
         }
 
-        // ===================================================================
-        // ถ้าเป็นแพ็กเกจ "กรอกความต้องการเบื้องต้น" ให้เพิ่มอุปกรณ์ที่ผูกกับ
-        // จำนวนพระสงฆ์แบบ dynamic ตามคำตอบที่ลูกค้ากรอกจริง (ไม่ใช่ค่าคงที่)
-        //
-        // FIX: ต้องเช็คด้วยว่าลูกค้าเลือก "นิมนต์เอง" หรือไม่ ถ้าเลือกนิมนต์เอง
-        // ต้อง "ไม่" เพิ่มค่า "บริการประสานงานนิมนต์พระ" (500 บาท/รูป) เข้าไป
-        // เพราะร้านไม่ได้เป็นคนนิมนต์พระให้ — ให้ตรงกับ logic เดียวกันกับฝั่ง
-        // Organizer (OrganizerController) และหน้า quotationCreate.jsp
-        // (isMonkSelfInvite) ไม่งั้นราคาที่ลูกค้าเห็นในหน้า viewBooking ของตัวเอง
-        // จะสูงเกินจริงสำหรับเคสนิมนต์เอง
-        // ===================================================================
+     
         if (booking.getCeremony() != null
                 && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType())) {
 
@@ -328,12 +334,7 @@ public class BookingFormController {
             .orElse(0);
     }
 
-    /**
-     * อ่านคำตอบของคำถาม "รูปแบบการนิมนต์พระสงฆ์" แล้วเช็คว่าลูกค้าเลือก
-     * "นิมนต์เอง" หรือไม่ (ตรงกับ logic fn:contains(monkInviteType,'นิมนต์เอง')
-     * ที่ใช้ในหน้า quotationCreate.jsp / quotationDetail.jsp และ
-     * OrganizerController ฝั่ง organizer)
-     */
+    //อ่านคำตอบของคำถาม "รูปแบบการนิมนต์พระสงฆ์" แล้วเช็คว่าลูกค้าเลือก
     private boolean isMonkSelfInvite(BookingForm booking) {
         if (booking.getDetails() == null) return false;
 
@@ -345,15 +346,8 @@ public class BookingFormController {
             .orElse(false);
     }
 
-    /**
-     * สร้างรายการอุปกรณ์ที่ quantity ขึ้นกับจำนวนพระสงฆ์จริง
-     * (ไม่ได้ save ลง DB แค่สร้างไว้แสดงผลชั่วคราวเท่านั้น)
-     *
-     * FIX: เพิ่มพารามิเตอร์ isSelfInvite — ถ้าลูกค้านิมนต์พระเอง จะไม่เพิ่ม
-     * "บริการประสานงานนิมนต์พระ" (ค่าบริการที่ร้านคิดเฉพาะตอนช่วยนิมนต์ให้)
-     * ส่วนอุปกรณ์พิธีอื่น (อาสนะ, ตาลปัตร, กรวยดอกไม้) ยังต้องเตรียมให้ตามจำนวน
-     * พระอยู่ดี ไม่ว่าใครจะเป็นคนนิมนต์
-     */
+    //สร้างรายการอุปกรณ์ที่ quantity ขึ้นกับจำนวนพระสงฆ์จริง
+    
     private List<CeremonyItem> buildMonkRelatedItems(Ceremony ceremony, int monkCount, boolean isSelfInvite) {
         List<CeremonyItem> result = new ArrayList<>();
 
@@ -377,11 +371,12 @@ public class BookingFormController {
         return result;
     }
 
-    
+    // ค้นหา Item ตัวแรกที่ชื่อตรงกับ name ที่ระบุ (ใช้ประกอบกับ buildMonkRelatedItems ด้านบน)
     private java.util.Optional<Item> findItemByName(List<Item> items, String name) {
         return items.stream().filter(i -> name.equals(i.getItemName())).findFirst();
     }
     
+    // ดูการจองล่าสุดของสมาชิกที่ล็อกอินอยู่: ถ้ามีให้เด้งไปหน้ารายละเอียด ถ้าไม่มีให้ไปหน้าจองใหม่
     @GetMapping("/latestBooking")
     public String viewLatestBooking(HttpSession session) {
         Member user = (Member) session.getAttribute("user");
@@ -396,6 +391,7 @@ public class BookingFormController {
         }
     }
     
+    // ยกเลิกการจองด้วยตัวเองโดยสมาชิก พร้อมบันทึกเหตุผลการยกเลิกอัตโนมัติ
     @GetMapping("/booking/cancel/{id}")
     public String cancelBooking(@PathVariable String id, HttpSession session, RedirectAttributes ra) {
         Member loginUser = (Member) session.getAttribute("user");
@@ -411,6 +407,7 @@ public class BookingFormController {
         return "redirect:/home";
     }
     
+    // แสดงรายการจองทั้งหมดของสมาชิกที่ล็อกอินอยู่ เรียงตาม bookingId จากน้อยไปมาก
     @GetMapping("/myBookings")
     public String myBookings(Model model, HttpSession session) {
         Member loginUser = (Member) session.getAttribute("user");
@@ -418,7 +415,7 @@ public class BookingFormController {
 
         List<BookingForm> bookings = bookingService.getBookingsByMember(loginUser.getMemberId());
         
-        // เรียงตาม bookingId จากน้อยไปมาก
+    
         bookings.sort(Comparator.comparing(BookingForm::getBookingId));
 
         model.addAttribute("bookings", bookings);

@@ -13,7 +13,7 @@
 <body>
 
 
-<!-- ===== NAVBAR (same style as bookingList) ===== -->
+<!-- ===== NAVBAR  ===== -->
 <nav class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings">
         <img src="${pageContext.request.contextPath}/static/images/logoo.png"

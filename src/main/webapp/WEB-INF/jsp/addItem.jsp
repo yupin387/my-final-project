@@ -62,9 +62,7 @@
 				<form action="${pageContext.request.contextPath}/staff/items/save"
 					method="post" class="form-section">
 
-					<%-- ===== ประเภทอุปกรณ์: dropdown
-					     ตัดตัวเลือก "แพ็กเกจ" ออกจากฟอร์มนี้ ห้ามเจ้าหน้าที่สร้างรายการ
-					     ประเภทแพ็กเกจเอง — backend มี validation กันซ้ำไว้ที่ ItemService --%>
+				
 					<div class="form-group">
 						<div class="section-label">ประเภทอุปกรณ์</div>
 						<select name="typeId" id="itemTypeSelect" class="form-select" required>
@@ -78,16 +76,7 @@
 						</select>
 					</div>
 
-					<%-- ===== ใช้กับพิธีไหนได้บ้าง: progressive disclosure
-					     แต่ละ checkbox มีช่องกรอก "ใช้ ... หน่วย" คู่กัน เพราะอุปกรณ์ตัวเดียวกัน
-					     ใช้จำนวนไม่เท่ากันได้ในแต่ละแพ็กเกจ ช่องนี้ disabled ไว้ก่อนถ้ายังไม่ติ๊ก
-					     checkbox — input ที่ disabled จะไม่ถูกส่งไปกับฟอร์มตอน submit ทำให้
-					     ceremonyIds[] กับ quantities[] ที่ backend รับมามีจำนวนสมาชิกและ
-					     ลำดับตรงกันเสมอ
-
-					     FIX: หัวแต่ละกลุ่มใช้ checkbox "เลือกทั้งหมด" แบบ select-all มาตรฐาน
-					     แทนปุ่ม เลือกทั้งหมด/ล้างการเลือก/นำออก — ไม่ติ๊กเลือกทั้งหมด = ล้างการติ๊ก
-					     ในกลุ่มนั้นทั้งหมด, ติ๊กครึ่งเดียว = แสดงสถานะ indeterminate --%>
+				
 					<div class="form-group">
 						<div class="section-label">ใช้กับพิธีไหนได้บ้าง</div>
 						<p class="field-hint">

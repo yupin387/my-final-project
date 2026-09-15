@@ -25,7 +25,7 @@ function confirmDelete(id, text) {
         if (result.isConfirmed) {
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = contextPath + '/organizer/questions/delete/' + id;
+            form.action = contextPath + '/manager/questions/delete/' + id;
             document.body.appendChild(form);
             form.submit();
         }

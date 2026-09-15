@@ -67,9 +67,7 @@
 
                     <div class="form-section">
 
-                        <%-- ===== ประเภทอุปกรณ์: dropdown
-                             ตัดตัวเลือก "แพ็กเกจ" ออก เหมือนหน้าเพิ่มอุปกรณ์
-                             backend มี validation กันไว้ที่ ItemService.saveItem() อยู่แล้ว --%>
+                      
                         <div class="form-group">
                             <div class="section-label">ประเภทอุปกรณ์</div>
                             <select name="typeId" id="itemTypeSelect" class="form-select" required>
@@ -83,13 +81,7 @@
                             </select>
                         </div>
 
-                        <%-- ===== ใช้กับพิธีไหนได้บ้าง: progressive disclosure
-                             กลุ่มที่มีพิธีถูกติ๊กไว้อยู่แล้ว (ของเดิม) โชว์ค้างไว้ตั้งแต่เปิดหน้า
-                             แต่ละ checkbox มีช่องกรอก "ใช้ ... หน่วย" คู่กัน pre-fill ด้วยค่าจาก
-                             selectedCeremonyQuantities (Map<ceremonyId, quantity>) จาก controller
-
-                             หัวแต่ละกลุ่มใช้ checkbox "เลือกทั้งหมด" แบบ select-all มาตรฐาน
-                             + ปุ่ม ✕ แยกไว้สำหรับปิดกลุ่มที่เผลอเปิด/ไม่ต้องการแล้ว --%>
+                     
                         <div class="form-group">
                             <div class="section-label">ใช้กับพิธีไหนได้บ้าง</div>
                             <p class="field-hint">

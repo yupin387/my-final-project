@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
+    // ชื่อประเภทอุปกรณ์ที่ห้ามสร้าง/แก้ไขผ่านฟอร์มอุปกรณ์ทั่วไป (ต้องจัดการแยกจากส่วนกลางเท่านั้น)
     private static final String RESTRICTED_ITEM_TYPE_NAME = "แพ็กเกจ";
 
     @Autowired
@@ -23,30 +24,33 @@ public class ItemService {
     @Autowired
     private CeremonyRepository ceremonyRepo;
 
+    // ดึงอุปกรณ์ที่ยัง active อยู่เท่านั้น (isActive = true)
     public List<Item> getAllActiveItems() {
         return itemRepo.findAllActive();
     }
 
+    // ดึงอุปกรณ์ทั้งหมดในระบบ (รวมที่ถูกปิดใช้งานแล้วด้วย)
     public List<Item> getAllItems() {
         return itemRepo.findAll();
     }
 
+    // ดึงประเภทอุปกรณ์ (ItemType) ทั้งหมด
     public List<ItemType> getAllItemTypes() {
         return itemTypeRepo.findAll();
     }
 
+    // ดึงอุปกรณ์ทั้งหมดที่อยู่ในประเภท (typeId) ที่ระบุ
     public List<Item> getItemsByType(int typeId) {
         return itemRepo.findByItemType_ItemTypeId(typeId);
     }
 
+    // ดึงอุปกรณ์ตาม id คืนค่า null ถ้าไม่พบ
     public Item getItemById(int id) {
         return itemRepo.findById(id).orElse(null);
     }
 
-    // บันทึกข้อมูลการเพิ่มหรือแก้ไขอุปกรณ์ พร้อมจัดการความสัมพันธ์ผ่าน CeremonyItem
-    // FIX: เพิ่มพารามิเตอร์ quantities — parallel array คู่กับ ceremonyIds
-    // (index ตรงกันเพราะฝั่ง JSP disable input ตอนไม่ติ๊ก checkbox ทำให้ browser
-    // ไม่ส่งค่าตัวที่ไม่ได้เลือกมาด้วย ลำดับที่เหลือจึงตรงกันเสมอ)
+
+    // บันทึก/แก้ไขอุปกรณ์ พร้อมผูกกับพิธี (ceremony) ที่เลือกและจำนวนของแต่ละพิธี
     @Transactional
     public void saveItem(Item item, int typeId, List<Integer> ceremonyIds, List<Integer> quantities) {
         ItemType type = itemTypeRepo.findById(typeId).orElse(null);
@@ -79,8 +83,7 @@ public class ItemService {
                     .orElse(null);
                 if (ceremony == null) continue;
 
-                // quantity คอลัมน์ nullable=false ต้องมีค่าเสมอ — กันกรณี list สั้นกว่า
-                // หรือค่าที่ส่งมาผิดปกติ (<1) ด้วยการ fallback เป็น 1
+            
                 int qty = 1;
                 if (quantities != null && idx < quantities.size() && quantities.get(idx) != null) {
                     qty = quantities.get(idx);
@@ -98,6 +101,7 @@ public class ItemService {
         itemRepo.save(item); 
     }
     
+    // ลบอุปกรณ์แบบ soft delete: ไม่ได้ลบออกจากฐานข้อมูลจริง แค่ตั้ง isActive เป็น false
     @Transactional
     public void deleteItem(int id) {
         Item item = itemRepo.findById(id).orElse(null);
@@ -107,10 +111,12 @@ public class ItemService {
         }
     }
 
+    // ดึงอุปกรณ์ทั้งหมดที่อยู่ในประเภทตามชื่อที่ระบุ (เช่น "สังฆทาน", "ภัตตาหารปิ่นโต")
     public List<Item> getItemsByTypeName(String typeName) {
         return itemRepo.findByItemType_ItemTypeName(typeName);
     }
     
+    // ดึงอุปกรณ์ทั้งหมดที่ผูกอยู่กับพิธี (ceremony) ตาม ceremonyId ที่ระบุ
     public List<Item> getItemsByCeremonyId(int ceremonyId) {
         Ceremony ceremony = ceremonyRepo.findById(ceremonyId).orElse(null);
         if (ceremony != null && ceremony.getCeremonyItems() != null) {

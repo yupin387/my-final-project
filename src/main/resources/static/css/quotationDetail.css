@@ -343,11 +343,10 @@ body {
 }
 
 .status-Confirmed {
-	background: var(--rose-pale);
-	color: var(--rose-mid);
-	border: 1px solid var(--rose-line);
+	background: #DCFCE7;
+	color: #15803D;
+	border: 1px solid #86EFAC;
 }
-
 .status-Approved {
 	background: var(--rose-pale);
 	color: var(--rose-mid);

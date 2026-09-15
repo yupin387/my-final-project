@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>เพิ่มหัวหน้างาน - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap Icons สำหรับไอคอนรูปตา -->
+   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addHeadStaff.css?v=2">
     <style>
@@ -148,7 +148,7 @@
                                 <i class="bi bi-eye-slash" id="eyeIcon"></i>
                             </button>
                         </div>
-                        <!-- ย้าย Error มาไว้ใน .form-group ใต้ .input-wrapper โดยตรง -->
+                       
                         <div id="passwordError" class="error-message"></div>
                     </div>
                     <div class="form-group">

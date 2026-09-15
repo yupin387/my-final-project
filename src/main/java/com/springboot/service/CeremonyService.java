@@ -20,7 +20,7 @@ public class CeremonyService {
         return ceremonyRepo.findAll();
     }
 
-    // แก้ไข: เปลี่ยนจาก String id เป็น int id
+
     public Ceremony getCeremonyById(int id) {
         return ceremonyRepo.findById(id).orElse(null);
     }
@@ -31,25 +31,21 @@ public class CeremonyService {
         ceremonyRepo.save(ceremony);
     }
 
-    // แก้ไข: เปลี่ยนจาก String id เป็น int id
+   // ลบข้อมูลพิธี
     @Transactional
     public void deleteCeremony(int id) {
         ceremonyRepo.deleteById(id);
     }
     
-    
-    //==============เพิ่มเมธอท
- // ใน CeremonyService.java
+
     public Ceremony findById(Long id) {
-        // แปลง Long เป็น int ถ้า ID ใน Repository ใช้ int
         return ceremonyRepo.findById(id.intValue()).orElse(null);
     }
     
- // เพิ่มใน CeremonyService.java
     public List<Ceremony> getCeremoniesByType(String ceremonyType) {
         return ceremonyRepo.findAll().stream()
                 .filter(c -> ceremonyType.equals(c.getCeremonyType()))
-                .filter(c -> !"กรอกความต้องการเบื้องต้น".equals(c.getOptionType())) // เอาเฉพาะ 3 แพ็กเกจหลัก ไม่รวมกำหนดเอง
+                .filter(c -> !"กรอกความต้องการเบื้องต้น".equals(c.getOptionType())) 
                 .sorted(java.util.Comparator.comparingDouble(Ceremony::getBasePrice))
                 .collect(java.util.stream.Collectors.toList());
     }

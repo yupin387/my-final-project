@@ -14,9 +14,9 @@
 </head>
 <body>
 
-    <!-- ===== NAVBAR (เหมือนหน้า bookingList ทุกจุด) ===== -->
+    <!-- ===== NAVBAR  ===== -->
     <nav class="navbar">
-        <%-- ✅ แก้ไข: เปลี่ยนจาก organizer เป็น manager --%>
+      
         <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
                  alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon">
@@ -24,7 +24,7 @@
         </a>
         <div class="navbar-right">
             <nav class="navbar-menu">
-                <%-- ✅ แก้ไข: เปลี่ยนลิงก์เมนูทั้งหมดจาก organizer เป็น manager --%>
+               
                 <a href="${pageContext.request.contextPath}/manager/bookings"   class="nav-item active">รายการจอง</a>
                 <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a>
                 <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการพิธี</a>
@@ -37,7 +37,7 @@
                     <span class="user-role">ผู้จัดการ</span>
                 </div>
                 <div class="dropdown-menu" id="dropdownMenu">
-                    <%-- ✅ แก้ไข: เปลี่ยนเป็น manager/logout --%>
+                   
                     <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item danger">ออกจากระบบ</a>
                 </div>
             </div>
@@ -84,7 +84,7 @@
 
             <div class="card-body">
 
-                <!-- Progress Tracker -->
+               
                 <c:set var="status" value="${a.jobStatus}"/>
                 <div class="progress-container">
                     <div class="progress-step">
@@ -161,7 +161,7 @@
                         <span class="label">ประเภทงาน</span>
                         <span class="value">${a.bookingForm.ceremony.ceremonyType}</span>
                     </div>
-                    <%-- ✅ เพิ่มรูปแบบการจอง --%>
+            
                     <div class="info-group">
                         <span class="label">รูปแบบการจอง</span>
                         <span class="value" >${a.bookingForm.ceremony.optionType}</span>
@@ -196,15 +196,6 @@
                     <div class="damage-report-box">
                         ${a.reportNote}
 
-                        <%-- ✅ FIX: แก้ path รูปไม่ขึ้น 2 จุด
-                             1) เดิม src มี "/uploads/report/" นำหน้า แต่ค่าใน
-                                a.reportImage ก็เก็บ "report/xxx.png" อยู่แล้ว
-                                (มาจาก service: reportImages.append("report/")...)
-                                ทำให้ path ซ้อนกันเป็น /uploads/report/report/xxx.png (404)
-                                → แก้เป็น /uploads/${img} เฉยๆ (ไม่ใส่ report/ ซ้ำ)
-                             2) เดิม render ${a.reportImage} ตรงๆ ทั้งก้อน ถ้ามีหลายรูป
-                                คั่นด้วย comma จะได้ src เดียวที่พัง (a.png,b.png)
-                                → ใช้ fn:split แยกเป็นรายรูปแล้ว forEach --%>
                         <c:if test="${not empty a.reportImage}">
                             <div class="damage-images">
                                 <c:forEach items="${fn:split(a.reportImage, ',')}" var="img">
@@ -225,7 +216,7 @@
         </div>
     </div>
 
-    <!-- ===== FOOTER (เหมือนหน้า bookingList ทุกจุด) ===== -->
+
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-brand">

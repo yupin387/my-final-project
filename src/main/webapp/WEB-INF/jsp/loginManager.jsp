@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>เข้าสู่ระบบ - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons สำหรับไอคอนรูปตา -->
+  
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <%-- ✅ แก้ไข: เปลี่ยนชื่อไฟล์ CSS จาก loginOrganizer.css เป็น loginManager.css --%>
+   
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/loginManager.css">
     <style>
         .error-message {
@@ -20,7 +20,7 @@
             display: none;
             font-weight: normal;
         }
-        /* จัดตำแหน่งกล่องรหัสผ่านและไอคอนรูปตา */
+  
         .password-wrapper {
             position: relative;
             display: flex;
@@ -28,7 +28,7 @@
         }
         .password-wrapper .login-input {
             width: 100%;
-            padding-right: 45px; /* เว้นที่ไว้สำหรับไอคอน */
+            padding-right: 45px; 
         }
         .toggle-password {
             position: absolute;
@@ -130,7 +130,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- สคริปต์ตรวจสอบฟอร์ม และฟังก์ชันสลับการแสดงรหัสผ่าน -->
+
     <script>
         // ฟังก์ชันสลับการแสดง/ซ่อนรหัสผ่าน
         function togglePasswordVisibility() {

@@ -1,6 +1,7 @@
 package com.springboot.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,36 +28,22 @@ public class Item {
     @Column(name = "isactive")
     private Boolean isActive = true;
 
-    // =========================================================
-    // ประเภท Item
-    // =========================================================
 
     @ManyToOne
     @JoinColumn(name = "itemtypeid", nullable = false)
     private ItemType itemType;
 
-    // =========================================================
-    // รายการ Ceremony ที่ Item นี้ถูกใช้
-    // ผ่านตารางกลาง CeremonyItem
-    // =========================================================
+   
 
-    @OneToMany(mappedBy = "item")
-    private List<CeremonyItem> ceremonyItems;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CeremonyItem> ceremonyItems = new ArrayList<>();
 
-    // =========================================================
-    // Constructor
-    // =========================================================
+
 
     public Item() {
     }
 
-    /*
-     * Constructor สำหรับสร้าง Item ใหม่
-     *
-     * ไม่ต้องส่ง ceremonyItems เข้ามา
-     * เพราะความสัมพันธ์กับ Ceremony
-     * จะถูกสร้างผ่าน CeremonyItem
-     */
+  
     public Item(
             String itemName,
             String itemDetail,
@@ -71,9 +58,7 @@ public class Item {
         this.itemType = itemType;
     }
 
-    // =========================================================
-    // Getter / Setter
-    // =========================================================
+
 
     public int getItemId() {
         return itemId;

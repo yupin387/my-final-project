@@ -28,6 +28,7 @@ public class QuotationController {
     @Autowired
     private ItemRepository itemRepo;
 
+    // แสดงรายการใบเสนอราคาทั้งหมด รองรับการกรองตามสถานะ (status)
     @GetMapping
     public String listAllQuotations(
             @RequestParam(name = "status", defaultValue = "All") String status,
@@ -51,6 +52,7 @@ public class QuotationController {
         return "quotationList";
     }
 
+    // แสดงหน้าฟอร์มสร้างใบเสนอราคาใหม่จากรายการจอง โดยเตรียมข้อมูลรายการอุปกรณ์ในแพ็กเกจ
     @GetMapping("/create/{bookingId}")
     public String createQuotationForm(@PathVariable String bookingId, Model model, HttpSession session) {
         if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
@@ -96,6 +98,7 @@ public class QuotationController {
         return "quotationForm";
     }
 
+    // บันทึกใบเสนอราคาใหม่ และอัปเดตสถานะการจองเป็น "Approved" หลังสร้างสำเร็จ
     @PostMapping("/save")
     public String saveQuotation(@RequestParam String bookingId,
                                 @RequestParam(required = false) List<Integer> extraItemIds,
@@ -121,6 +124,8 @@ public class QuotationController {
         }
     }
 
+    // แสดงรายละเอียดใบเสนอราคาที่มีอยู่แล้ว พร้อมรายการอุปกรณ์ในแพ็กเกจ (รวมของที่ให้ตามจำนวนพระสงฆ์)
+    // เพื่อให้ใบสรุปแสดงครบทุกรายการที่เกี่ยวข้อง
     @GetMapping("/detail/{id}")
     public String quotationDetail(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
@@ -155,6 +160,7 @@ public class QuotationController {
         return "quotationDetail";
     }
 
+    // แสดงหน้าฟอร์มแก้ไขใบเสนอราคาเดิม โดยเตรียมข้อมูลรายการเช่นเดียวกับตอนสร้างใหม่
     @GetMapping("/edit/{id}")
     public String editQuotationForm(@PathVariable String id, Model model, HttpSession session) {
         if (session.getAttribute("currentManager") == null) return "redirect:/loginmanager";
@@ -206,6 +212,7 @@ public class QuotationController {
         return "editQuotation";
     }
 
+    // บันทึกการแก้ไขใบเสนอราคา (ลบรายการเก่าออกแล้วบันทึกรายการใหม่ตามข้อมูลที่ส่งเข้ามา)
     @PostMapping("/update")
     public String updateQuotation(@RequestParam String quotationId,
                                   @RequestParam(required = false) List<Integer> extraItemIds,
@@ -228,6 +235,7 @@ public class QuotationController {
         }
     }
 
+    // API ภายใน: ดึงรายการอุปกรณ์ที่ผูกอยู่กับ Ceremony ตาม id ที่ระบุ 
     @GetMapping("/api/get-items-by-ceremony/{ceremonyId}")
     @ResponseBody
     public List<Item> getItemsByCeremony(@PathVariable int ceremonyId) {
@@ -238,6 +246,9 @@ public class QuotationController {
     // Helper Methods
     // ==========================================
 
+    // กรองรายละเอียดการจอง (BookingFormDetail) ให้เหลือเฉพาะคำถาม-คำตอบที่เกี่ยวข้องกับ
+    // ภัตตาหาร/สังฆทาน/อุปกรณ์/พระ และมีคำตอบที่ไม่ใช่ "ไม่ต้องการ"/"ไม่"/ตัวเลขล้วน
+    // เพื่อนำไปแสดงในหน้าสร้างใบเสนอราคา
     private List<BookingFormDetail> buildValidDetails(BookingForm booking) {
         List<BookingFormDetail> validDetails = new ArrayList<>();
         if (booking.getDetails() == null) return validDetails;
@@ -300,7 +311,7 @@ public class QuotationController {
                 });
 
                 if (isSelfInvite) {
-                    // ไม่ต้องทำอะไรเพิ่มตรงนี้ - ราคา/ป้ายกำกับ "ฟรี" จัดการที่ JSP
+                   
                 }
             }
         }
@@ -352,6 +363,7 @@ public class QuotationController {
         return filtered;
     }
 
+    // ดึงคำตอบของคำถาม "ความต้องการเพิ่มเติม" จากรายละเอียดการจอง (ถ้ามีและไม่ว่างเปล่า)
     private String extractAdditionalNote(BookingForm booking) {
         if (booking.getDetails() == null) return null;
         for (BookingFormDetail d : booking.getDetails()) {

@@ -28,7 +28,8 @@ import com.springboot.service.MemberService;
 import com.springboot.service.QuotationService;
 
 import jakarta.servlet.http.HttpSession;
- 
+
+
 @Controller
 public class MemberController {
     
@@ -41,19 +42,23 @@ public class MemberController {
     @Autowired
     private CeremonyService ceremonyService;
 
+    // แผนที่ (Map) สำหรับจับคู่ "ประเภทพิธี" กับ "รูปภาพประกอบ" ที่จะใช้แสดงในหน้าเว็บ
     private static final Map<String, String> TYPE_IMAGE_MAP = new LinkedHashMap<>();
     static {
         TYPE_IMAGE_MAP.put("ทำบุญบ้าน", "ceremony1.webp");
         TYPE_IMAGE_MAP.put("ขึ้นบ้านใหม่", "img11.jpg");
         TYPE_IMAGE_MAP.put("ทำบุญบริษัทหรือออฟฟิศ", "img12.jpg");
     }
+
     private static final String DEFAULT_TYPE_IMAGE = "ceremony1.webp";
- 
+
+    // แสดงหน้าล็อกอินสำหรับสมาชิก
     @GetMapping("/loginMember")
     public String loginPage() {
         return "loginMember";
     }
- 
+
+    // ประมวลผลการล็อกอิน: เช็คอีเมล/รหัสผ่าน ถ้าถูกต้องเก็บข้อมูลผู้ใช้ลง session แล้วพาไปหน้า home
     @PostMapping("/loginMember")
     public String processLogin(@RequestParam("memberemail") String email, 
                                @RequestParam("memberpassword") String password, 
@@ -71,12 +76,14 @@ public class MemberController {
         }
     }
     
+    // ออกจากระบบ: ล้าง session ทั้งหมดแล้วพากลับหน้า home
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/home";
     }
     
+    // แสดงหน้าแก้ไขโปรไฟล์: โหลดข้อมูลสมาชิกล่าสุดจากฐานข้อมูล (กันกรณีข้อมูลใน session เก่า)
     @GetMapping("/editProfile")
     public String editProfilePage(HttpSession session, Model model) {
         Member user = (Member) session.getAttribute("user");
@@ -93,7 +100,8 @@ public class MemberController {
         
         return "editProfile";
     }
- 
+
+    // บันทึกการแก้ไขโปรไฟล์ พร้อมอัปเดตข้อมูลใน session ให้ตรงกับข้อมูลล่าสุด
     @PostMapping("/updateProfile")
     public String updateProfile(@ModelAttribute Member member,
                                 @RequestParam(value = "newPassword", required = false) String newPassword,
@@ -109,6 +117,8 @@ public class MemberController {
         return "redirect:/editProfile";
     }
 
+    // ดูใบเสนอราคาล่าสุดของสมาชิกที่ล็อกอินอยู่ (ไม่ต้องระบุ quotationId)
+    // ถ้าไม่มีใบเสนอราคาเลย ให้ redirect ไปหน้ารายการจองแทน
     @GetMapping("/member/quotation/list")
     public String showLatestQuotation(HttpSession session, Model model) {
         Member user = (Member) session.getAttribute("user");
@@ -124,6 +134,7 @@ public class MemberController {
         return "memberQuotationDetail";
     }
 
+    // ดูใบเสนอราคาตาม quotationId ที่ระบุ พร้อมเช็คสิทธิ์ว่าเป็นเจ้าของใบเสนอราคาจริงหรือไม่
     @GetMapping("/member/quotation/detail/{quotationId}")
     public String showQuotationDetail(@PathVariable String quotationId, HttpSession session, Model model) {
         Member user = (Member) session.getAttribute("user");
@@ -145,6 +156,8 @@ public class MemberController {
         return "memberQuotationDetail";
     }
 
+    // เมธอดกลางสำหรับเตรียมข้อมูลทั้งหมดที่หน้า memberQuotationDetail ต้องใช้
+    // (ตัวใบเสนอราคา, รายละเอียดรายการ, ข้อมูลการจอง, รายการที่รวมอยู่ในแพ็กเกจ)
     private void populateQuotationDetailModel(Quotation q, Model model) {
         model.addAttribute("ceremonyTypes", buildCeremonyTypes());
 
@@ -168,6 +181,7 @@ public class MemberController {
         }
     }
     
+    // สมาชิกกดยืนยันการจองตามใบเสนอราคา: เปลี่ยนสถานะเป็น Confirmed แล้วพากลับหน้า home
     @PostMapping("/member/quotation/confirm")
     public String confirmQuotation(@RequestParam String quotationId, RedirectAttributes ra) {
         try {
@@ -180,6 +194,7 @@ public class MemberController {
         }
     }
     
+    // สมาชิกส่งข้อความแจ้งขอแก้ไขรายการในใบเสนอราคา ให้ผู้จัดการตรวจสอบ
     @PostMapping("/member/quotation/revise-all")
     public String memberReviseAllItems(@RequestParam String quotationId,
                                        @RequestParam(required = false) String memberNote,
@@ -194,6 +209,7 @@ public class MemberController {
         }
     }
 
+    // คัดกรองว่ารายการ (Item) ใดบ้างที่ "รวมอยู่ในแพ็กเกจ" แล้วโดยอัตโนมัติ
     private List<Item> computePackageIncludedItems(List<Item> allItems, boolean isCustomRequest) {
         List<Item> packageIncludedItems = new ArrayList<>();
         if (!isCustomRequest && allItems != null) {
@@ -213,6 +229,7 @@ public class MemberController {
         return packageIncludedItems;
     }
 
+    // จัดกลุ่มพิธีทั้งหมดตาม "ประเภทพิธี" (ceremonyType) แล้วเลือกแพ็กเกจราคาถูกสุดในแต่ละกลุ่มมาเป็นตัวแทน
     private List<Map<String, Object>> buildCeremonyTypes() {
         List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
 
@@ -243,6 +260,7 @@ public class MemberController {
         return ceremonyTypes;
     }
     
+    // สมัครสมาชิกใหม่: เช็คอีเมลซ้ำก่อน ถ้าไม่ซ้ำถึงจะสร้างสมาชิกใหม่และบันทึกลงฐานข้อมูล
     @PostMapping("/saveMember")
     public String saveMember(@RequestParam("memberFirstName") String firstName,
                              @RequestParam("memberLastName") String lastName,
@@ -252,11 +270,11 @@ public class MemberController {
                              Model model) {
         
         // 1. เช็คว่ามีอีเมลนี้ในระบบหรือยัง โดยเรียกผ่าน memberService
-        boolean isEmailExists = memberService.isEmailTaken(email); // สมมติว่ามีเมธอดนี้ใน MemberService
+        boolean isEmailExists = memberService.isEmailTaken(email); 
         
         if (isEmailExists) {
             model.addAttribute("errorMsg", "อีเมลนี้ถูกใช้งานในระบบแล้ว กรุณาใช้อีเมลอื่น");
-            return "register"; // ส่งกลับไปหน้าสมัครสมาชิกพร้อมแสดง error
+            return "register"; 
         }
         
         // 2. ถ้าไม่ซ้ำ สร้าง Object สมาชิกใหม่แล้วทำการบันทึกผ่าน Service
@@ -267,7 +285,7 @@ public class MemberController {
         member.setMemberEmail(email);
         member.setMemberPassword(password);
         
-        memberService.saveMember(member); // บันทึกลงฐานข้อมูลจริง
+        memberService.saveMember(member); 
         
         return "redirect:/loginMember";
     }

@@ -8,9 +8,9 @@ import java.util.Optional;
 @Repository
 public interface ManagerRepository extends JpaRepository<Manager, Integer> {
     
-    // ✅ ค้นหาผู้จัดการด้วยอีเมลและรหัสผ่านเพื่อตรวจสอบการล็อกอิน
+    //  ค้นหาผู้จัดการด้วยอีเมลและรหัสผ่านเพื่อตรวจสอบการล็อกอิน
     Optional<Manager> findByManagerEmailAndManagerPassword(String managerEmail, String managerPassword);
 
-    // ✅ ค้นหาผู้จัดการด้วยอีเมล (ใช้สำหรับการตรวจสอบอีเมลซ้ำ หรือดึงข้อมูลผู้จัดการ)
+    // ค้นหาผู้จัดการด้วยอีเมล (ใช้สำหรับการตรวจสอบอีเมลซ้ำ หรือดึงข้อมูลผู้จัดการ)
     Optional<Manager> findByManagerEmail(String managerEmail);
 }

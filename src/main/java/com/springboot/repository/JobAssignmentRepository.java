@@ -11,18 +11,21 @@ import java.util.List;
 
 @Repository
 public interface JobAssignmentRepository extends JpaRepository<JobAssignment, String> {
-    
+
     // ค้นหางานทั้งหมดของพนักงานคนนั้น
     List<JobAssignment> findByHeadStaff_StaffId(int staffId);
 
     // ค้นหางานโดยอ้างอิงจากรหัสการจอง
     JobAssignment findByBookingForm_BookingId(String bookingId);
 
-    // ✅ แก้ไขตรงนี้: เปลี่ยนเป็น JobAssignment
+    // ใช้ตอนลบหัวหน้างาน เพื่อตัดสินใจว่าจะ Hard Delete หรือ Soft Delete
+    boolean existsByHeadStaff_StaffId(int staffId);
+
+    // หารหัส assignId ที่มีค่ามากที่สุดในตาราง ใช้สำหรับ generate รหัสถัดไปแบบ running number
     @Query("SELECT MAX(sa.assignId) FROM JobAssignment sa")
     String findMaxAssignId();
 
-    // ✅ แก้ไขตรงนี้: เปลี่ยนเป็น JobAssignment
+    // ลบข้อมูลการมอบหมายงานทั้งหมดที่ผูกกับ bookingId ที่ระบุ (ใช้ตอนลบ/ยกเลิกการจองนั้น)
     @Modifying
     @Transactional
     @Query("DELETE FROM JobAssignment sa WHERE sa.bookingForm.bookingId = :bookingId")

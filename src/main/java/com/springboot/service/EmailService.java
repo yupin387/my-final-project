@@ -15,18 +15,15 @@ public class EmailService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    /**
-     * ส่งอีเมลแจ้ง Username/Password ให้หัวหน้างานที่ถูกเพิ่มใหม่
-     * FIX: ใช้ SimpleMailMessage (plain text) ก่อนเพื่อความง่าย/เสถียร
-     * ถ้าต้องการ HTML สวยๆ ทีหลังค่อยเปลี่ยนเป็น MimeMessage + Thymeleaf template
-     */
+    //ส่งอีเมลแจ้ง Username/Password ให้หัวหน้างานที่ถูกเพิ่มใหม่
+
     public void sendHeadStaffWelcomeEmail(String toEmail, String firstName, String lastName,
                                            String rawPassword) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
         message.setSubject("✅ บัญชีหัวหน้างานของคุณถูกสร้างแล้ว - บุญมีนำพา จัดงานบุญ");
 
-        String loginUrl = baseUrl + "/loginorganizer";
+        String loginUrl = baseUrl + "/loginmanager";
 
         String body = "เรียน คุณ" + firstName + " " + lastName + ",\n\n"
                 + "แอดมินได้สร้างบัญชีหัวหน้างานให้คุณเรียบร้อยแล้ว\n\n"
@@ -39,9 +36,7 @@ public class EmailService {
 
         message.setText(body);
 
-        // FIX: ห่อ try-catch กันเคส SMTP ล่ม/ตั้งค่าไม่ถูกต้อง ไม่ให้ทำให้
-        // การ "เพิ่มหัวหน้างาน" ทั้ง flow ล้มไปด้วย (บันทึกข้อมูลลง DB สำเร็จแล้ว
-        // แค่ส่งอีเมลไม่ได้ ไม่ควร throw จนธุรกรรมทั้งหมดพัง)
+  
         try {
             mailSender.send(message);
         } catch (Exception e) {

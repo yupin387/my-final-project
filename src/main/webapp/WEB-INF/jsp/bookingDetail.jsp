@@ -632,7 +632,25 @@
         document.getElementById('costTotalValue').textContent = fmtMoney(grandTotal);
     }
 
-    document.addEventListener('DOMContentLoaded', calcCostSummary);
+    <%-- ✅ ตัดบรรทัดรายชื่อวัด/พระสงฆ์ ให้ "รูปที่ 1", "รูปที่ 2" ขึ้นบรรทัดใหม่ --%>
+    function splitTempleLines() {
+        document.querySelectorAll('#bookingDetailsSection .info-row .info-value').forEach(function (el) {
+            var text = el.textContent.trim();
+
+            // ทำเฉพาะข้อความที่มี "รูปที่ <ตัวเลข>" ตั้งแต่ 2 ชุดขึ้นไป
+            var matches = text.match(/รูปที่\s*\d+/g);
+            if (!matches || matches.length < 2) return;
+
+            var replaced = text.replace(/\s*(รูปที่\s*\d+)/g, '\n$1').trim();
+            el.textContent = replaced;
+            el.classList.add('multiline-value');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        calcCostSummary();
+        splitTempleLines();
+    });
 })();
 </script>
 

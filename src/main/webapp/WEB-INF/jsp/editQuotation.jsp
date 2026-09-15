@@ -10,7 +10,7 @@
     <title>แก้ไขใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=18">
    <style>
-    /* ===== ปรับคอลัมน์ "จำนวน" (ปุ่ม +/-) ให้กว้างขึ้นและอยู่แถวเดียวกัน ===== */
+   
     #mainQuotationTable .qty-wrapper{
         display:flex;
         align-items:center;
@@ -64,7 +64,7 @@
         color:#FFFFFF;
     }
     
-    /* สไตล์สำหรับช่อง input ที่เป็น readonly ให้ดูเหมือนข้อความธรรมดา หรือดูแก้ไม่ได้ */
+   
     .price-input[readonly] {
         background-color: transparent;
         border: none;
@@ -73,7 +73,7 @@
         font-weight: 600;
     }
 
-    /* ===== สไตล์หัวข้อหมวดหมู่ให้เหมือนหน้าสร้างใบเสนอราคา (พร้อมปุ่ม + ในแถวเดียวกัน) ===== */
+   
     #mainQuotationTable tr.group-row td.category-header-text {
         text-align: left !important;
         padding-left: 8px !important;
@@ -86,7 +86,7 @@
         justify-content: space-between;
     }
     #mainQuotationTable tr.group-row td {
-        background-color: var(--rose-glow); /* สีพื้นหลังอ่อนๆ โทนกุหลาบให้เข้ากับธีมหมวดหมู่ */
+        background-color: var(--rose-glow); 
     }
     #mainQuotationTable .btn-add-group-inline{
         flex: 0 0 auto;
@@ -109,7 +109,7 @@
         transform: scale(1.05);
     }
 
-    /* ===== รายชื่อ "รายการเพิ่มเติม" แสดงในวงเล็บใต้ label เหมือนหน้ารายละเอียดใบเสนอราคา ===== */
+
     .tot-extra-detail{
         font-size: 12px;
         color: #888;
@@ -421,9 +421,7 @@
                     </tr>
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemType != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('บริการ')}">
-                            <%-- บริการประสานงานนิมนต์พระ: ถ้าลูกค้าเลือก "นิมนต์เอง" ให้แสดงรายการนี้ไว้เหมือนเดิม
-                                 แต่บังคับราคาที่แสดง (และค่าที่จะถูกส่งกลับไปบันทึก) เป็น 0.00 พร้อมป้ายกำกับ
-                                 (เหมือนแพทเทิร์นที่ใช้กับสังฆทานฟรีในหมวดสังฆทานด้านบน) --%>
+                          
                             <c:set var="isFreeMonkServiceEdit" value="${d.item.itemName == 'บริการประสานงานนิมนต์พระ' && isMonkSelfInvite}" />
                             <tr class="dynamic-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>

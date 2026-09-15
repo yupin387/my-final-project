@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 public class QuestionsService {
 
@@ -19,17 +20,18 @@ public class QuestionsService {
     @Autowired
     private CeremonyRepository ceremonyRepo;
 
+    // ดึงคำถามทั้งหมด พร้อมข้อมูลพิธีที่ผูกอยู่ (fetch ceremony มาด้วย)
     public List<QuestionsDetail> getAllQuestions() {
         return questionsRepo.findAllWithCeremony();
     }
 
+    // ดึงคำถามที่ใช้กับพิธีตาม ceremonyId ที่ระบุ รวมถึงคำถามที่เป็น "คำถามกลาง" (global) ด้วย
     public List<QuestionsDetail> getQuestionsByCeremony(int ceremonyId) {
         return questionsRepo.findByCeremonyIdIncludingGlobal(ceremonyId);
     }
 
-    // แก้ไข: รับ "หลายประเภทงาน" พร้อมกัน (ไม่ใช่แค่ตัวเดียวเหมือนเดิม)
-    // แต่ละ ceremonyType ผูกได้กับ "ทุกแพ็กเกจ" ของประเภทนั้น (many-to-many)
-    // ถ้า list ว่าง/null/มีแต่ ALL -> คืน list ว่าง = คำถาม "กลาง" ไม่ผูกกับ ceremony ไหนเลย
+    // แปลงรายชื่อ "ประเภทพิธี" (string) ให้เป็น list ของ Ceremony จริงในฐานข้อมูล
+    // ข้าม type ที่เป็น null, "ALL" หรือค่าว่าง — ถ้าระบุ type มาแต่หาไม่เจอเลยจะโยน exception
     private List<Ceremony> resolveCeremoniesByTypes(List<String> ceremonyTypes) {
         List<Ceremony> result = new ArrayList<>();
         if (ceremonyTypes == null || ceremonyTypes.isEmpty()) {
@@ -48,9 +50,8 @@ public class QuestionsService {
         return result;
     }
 
-    // แก้ไข: เพิ่มคำถามใหม่ ผูกได้กับหลายประเภทงานพร้อมกันในครั้งเดียว
-    // ยังคง save ฝั่ง Ceremony (owning side) เหมือนเดิม เพราะ QuestionsDetail
-    // เป็นแค่ mappedBy เฉยๆ ถ้าไปเซตฝั่ง question อย่างเดียวจะไม่ถูกบันทึกลง join table
+    // เพิ่มคำถามใหม่ แล้วผูกกับพิธีตามประเภทที่เลือก (ผูกได้หลายประเภทพร้อมกัน)
+    // save คำถามก่อนเพื่อให้มี id ก่อนนำไปผูกความสัมพันธ์กับ Ceremony
     @Transactional
     public void addQuestion(String questionText, List<String> ceremonyTypes) {
         QuestionsDetail question = new QuestionsDetail(questionText);
@@ -66,8 +67,7 @@ public class QuestionsService {
         ceremonyRepo.saveAll(ceremonies);
     }
 
-    // แก้ไข: ก่อนลบ ต้องเอาคำถามออกจากทุก ceremony ที่ผูกอยู่ก่อน (ฝั่งเจ้าของ join table)
-    // ไม่งั้นจะชน foreign key constraint ตอนลบแถวใน Questionsdetail
+    // ลบคำถามตาม id: ตัดความสัมพันธ์กับทุกพิธีที่ผูกอยู่ก่อน แล้วค่อยลบตัวคำถามออก
     @Transactional
     public void deleteQuestion(int id) {
         QuestionsDetail question = questionsRepo.findById(id).orElse(null);
@@ -87,11 +87,13 @@ public class QuestionsService {
         questionsRepo.deleteById(id);
     }
 
+    // ดึงคำถามตาม id คืนค่า null ถ้าไม่พบ
     public QuestionsDetail getQuestionById(int id) {
         return questionsRepo.findById(id).orElse(null);
     }
 
-    // แก้ไข: ล้างความสัมพันธ์เดิมทั้งหมด แล้วผูกใหม่ตามหลายประเภทงานที่เลือก
+    // แก้ไขคำถามที่มีอยู่: อัปเดตข้อความคำถาม แล้วล้างความสัมพันธ์กับพิธีเดิมทั้งหมด
+    // ก่อนผูกใหม่ตามรายการประเภทพิธีที่เลือกมาล่าสุด
     @Transactional
     public void updateQuestion(int id, String text, List<String> ceremonyTypes) {
         QuestionsDetail existing = questionsRepo.findById(id)

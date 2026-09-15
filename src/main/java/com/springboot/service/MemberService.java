@@ -9,6 +9,7 @@ import com.springboot.repository.MemberRepository;
 public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
+    
     // ล็อกอิน
     public Member login(String email, String password) {
         return memberRepository.findByMemberEmailAndMemberPassword(email, password)
@@ -18,7 +19,7 @@ public class MemberService {
     public void saveMember(Member member) {
         memberRepository.save(member);
     }
-    // ดึงข้อมูลสมาชิกด้วย ID (เปลี่ยนเป็น int)
+    // ดึงข้อมูลสมาชิกด้วย ID
     public Member getMemberById(int id) {
         return memberRepository.findById(id).orElse(null);
     }
@@ -26,7 +27,6 @@ public class MemberService {
     // อัปเดตข้อมูลโปรไฟล์
     @Transactional
     public void updateProfile(Member member, String newPassword) {
-        // ค้นหาด้วย int ID
         Member existingMember = memberRepository.findById(member.getMemberId()).orElse(null);
         if (existingMember != null) {
             existingMember.setMemberFirstName(member.getMemberFirstName());

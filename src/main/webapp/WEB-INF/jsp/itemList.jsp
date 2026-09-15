@@ -9,12 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/itemList.css?v=4">
 <style>
-/* =====================================================================
-   FIX: ตัวกรอง (ประเภทอุปกรณ์ / ประเภทงาน) เปลี่ยนจาก <select> ธรรมดา
-   เป็น dropdown แบบเดียวกับหน้ารายการจอง (bookingList) — กล่องคลิกเปิด/ปิด
-   พร้อมจุดสีบอกหมวด, ใช้ <a href="..."> ต่อรายการเพื่อคง state ของ
-   ตัวกรองอีกตัวไว้ (ไม่ล้างค่ากันเอง) ตรงตาม pattern เดิมของ bookingList
-   ===================================================================== */
+
 .filter-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -117,10 +112,7 @@
 .dot-type-all { background: var(--accent-pink); }
 .dot-type     { background: var(--gold-primary); }
 
-/* =====================================================================
-   FIX: Modal ยืนยันการลบ — เพิ่มกล่อง pill โชว์ชื่ออุปกรณ์ที่กำลังจะลบ
-   เพื่อกันผู้ใช้ลบผิดรายการ (ดึงชื่อมาจาก data-item-name ของฟอร์มที่กด)
-   ===================================================================== */
+
 .modal-box {
     text-align: center;
 }
@@ -172,7 +164,7 @@
                 <span class="arrow">▾</span>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="${pageContext.request.contextPath}/staff/profile" class="dropdown-item">โปรไฟล์</a>
-                    <%-- ✅ คงลิงก์ออกจากระบบเป็น /headstaff/logout ตามเดิมที่ถูกต้อง --%>
+                   
                     <a href="${pageContext.request.contextPath}/headstaff/logout" class="dropdown-item danger">ออกจากระบบ</a>
                 </div>
             </div>
@@ -380,9 +372,6 @@
 
 </footer>
 
-    <%-- ========== CONFIRM DELETE MODAL ==========
-         FIX: เพิ่ม modal-item-pill ไว้โชว์ชื่ออุปกรณ์ที่กำลังจะลบ
-         (JS จะเติมข้อความเข้า #modalItemName ตอนเปิด modal) --%>
     <div class="modal-overlay" id="confirmModal">
         <div class="modal-box">
             <div class="modal-title">ยืนยันการลบข้อมูล</div>
