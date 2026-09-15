@@ -120,6 +120,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>รหัสการจอง</th>
                     <th>วันจัดงาน</th>
                     <th>ชื่อลูกค้า</th>
                     <th>ประเภทพิธี</th>
@@ -131,6 +132,7 @@
             <tbody>
                 <c:forEach var="b" items="${bookings}">
                     <tr>
+                        <td><strong>${b.bookingId}</strong></td>
                         <td><strong><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></strong></td>
                         <td>
                             <span class="customer-name">${b.member.memberFirstName} ${b.member.memberLastName}</span>
@@ -181,7 +183,7 @@
 
                 <c:if test="${empty bookings}">
                     <tr>
-                        <td colspan="6">
+                        <td colspan="7">
                             <div class="empty-state">
                                 <div style="font-size:3rem;"></div>
                                 <p>ไม่มีรายการในสถานะนี้</p>

@@ -127,6 +127,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>รหัสการจอง</th>
                                 <th>วันที่จอง</th>
                                 <th>ชื่อลูกค้า / เบอร์โทร</th>
                                 <th>ประเภทพิธี</th>
@@ -138,6 +139,7 @@
                         <tbody>
                             <c:forEach var="b" items="${bookings}">
                                 <tr>
+                                    <td><strong>${b.bookingId}</strong></td>
                                     <td><fmt:formatDate value="${b.bookingDate}" pattern="dd/MM/yyyy"/></td>
                                     <td>
                                         <span class="customer-name">${b.member.memberFirstName} ${b.member.memberLastName}</span>

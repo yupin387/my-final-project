@@ -20,4 +20,7 @@ public interface QuotationDetailRepository extends JpaRepository<QuotationDetail
     @Transactional
     // ลบรายการไอเทมเดิมออก (ใช้บ่อยตอน Update ใบเสนอราคา)
     void deleteByQuotation_QuotationId(String quotationId);
+
+    // เช็คว่า item นี้เคยถูกใช้อยู่ใน QuotationDetail (ใบเสนอราคาใดๆ ก็ตาม) หรือไม่
+    boolean existsByItem_ItemId(int itemId);
 }

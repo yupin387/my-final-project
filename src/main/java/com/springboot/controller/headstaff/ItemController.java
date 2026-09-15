@@ -184,9 +184,9 @@ public class ItemController {
     public String deleteItem(@PathVariable int id, RedirectAttributes ra) {
         try {
             itemService.deleteItem(id);
-            ra.addFlashAttribute("success", "ลบอุปกรณ์เรียบร้อยแล้ว");
+            ra.addFlashAttribute("success", "ลบ/ปิดใช้งานอุปกรณ์เรียบร้อยแล้ว");
         } catch (Exception e) {
-            ra.addFlashAttribute("error", "เกิดข้อผิดพลาดในการลบอุปกรณ์");
+            ra.addFlashAttribute("error", "เกิดข้อผิดพลาดในการลบอุปกรณ์: " + e.getMessage());
         }
         return "redirect:/staff/items";
     }

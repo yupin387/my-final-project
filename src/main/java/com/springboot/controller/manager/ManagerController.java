@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -160,6 +161,7 @@ public class ManagerController {
         if ("All".equals(status)) {
             List<BookingForm> bookings = bookingService.getBookingsByStatuses(
                 Arrays.asList("Pending", "Confirmed", "Assigned", "Preparing", "In_Progress", "Completed", "Rejected"));
+            bookings.sort(Comparator.comparing(BookingForm::getBookingId));
             model.addAttribute("bookings", bookings);
             model.addAttribute("currentStatus", status);
             return "bookingList_New";
@@ -167,6 +169,7 @@ public class ManagerController {
 
         if ("Pending".equals(status)) {
             List<BookingForm> bookings = bookingService.findByStatus("Pending");
+            bookings.sort(Comparator.comparing(BookingForm::getBookingId));
             model.addAttribute("bookings", bookings);
             model.addAttribute("currentStatus", status);
             return "bookingList_New";
@@ -180,12 +183,14 @@ public class ManagerController {
             } else {
                 bookings = bookingService.findByStatus("Completed");
             }
+            bookings.sort(Comparator.comparing(BookingForm::getBookingId));
             model.addAttribute("bookings", bookings);
             model.addAttribute("currentStatus", status);
             return "bookingList_Confirmed";
         }
 
         List<BookingForm> bookings = bookingService.findByStatus(status);
+        bookings.sort(Comparator.comparing(BookingForm::getBookingId));
         model.addAttribute("bookings", bookings);
         model.addAttribute("currentStatus", status);
         return "bookingList_New";

@@ -17,23 +17,28 @@
 
 	<%-- ========== NAVBAR (เหมือนหน้า list) ========== --%>
 	<nav class="navbar">
-		<a class="navbar-brand" href="${pageContext.request.contextPath}/staff/assignments">
-			<img src="${pageContext.request.contextPath}/static/images/logoo.png"
-				 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
-			<span class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
+		<a class="navbar-brand"
+			href="${pageContext.request.contextPath}/staff/assignments"> <img
+			src="${pageContext.request.contextPath}/static/images/logoo.png"
+			alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon"> <span
+			class="navbar-title">บุญมีนำพา รับจัดงานบุญ</span>
 		</a>
 		<div class="navbar-right">
 			<nav class="navbar-menu">
-				<a href="${pageContext.request.contextPath}/staff/assignments" class="nav-item">งานที่ได้รับมอบหมาย</a>
-				<a href="${pageContext.request.contextPath}/staff/items" class="nav-item active">จัดการรายการอุปกรณ์</a>
+				<a href="${pageContext.request.contextPath}/staff/assignments"
+					class="nav-item">งานที่ได้รับมอบหมาย</a> <a
+					href="${pageContext.request.contextPath}/staff/items"
+					class="nav-item active">จัดการรายการอุปกรณ์</a>
 			</nav>
 			<div class="user-info" onclick="toggleDropdown()">
 				<div class="user-avatar">${sessionScope.currentStaff.staffFirstName.charAt(0)}</div>
-				<span class="user-name">${sessionScope.currentStaff.staffFirstName} ${sessionScope.currentStaff.staffLastName}</span>
-				<span class="arrow">▾</span>
+				<span class="user-name">${sessionScope.currentStaff.staffFirstName}
+					${sessionScope.currentStaff.staffLastName}</span> <span class="arrow">▾</span>
 				<div class="dropdown-menu" id="dropdownMenu">
-					<a href="${pageContext.request.contextPath}/staff/profile" class="dropdown-item">โปรไฟล์</a>
-					<a href="${pageContext.request.contextPath}/headstaff/logout" class="dropdown-item danger">ออกจากระบบ</a>
+					<a href="${pageContext.request.contextPath}/staff/profile"
+						class="dropdown-item">โปรไฟล์</a> <a
+						href="${pageContext.request.contextPath}/headstaff/logout"
+						class="dropdown-item danger">ออกจากระบบ</a>
 				</div>
 			</div>
 		</div>
@@ -62,11 +67,13 @@
 				<form action="${pageContext.request.contextPath}/staff/items/save"
 					method="post" class="form-section">
 
-				
+
 					<div class="form-group">
 						<div class="section-label">ประเภทอุปกรณ์</div>
-						<select name="typeId" id="itemTypeSelect" class="form-select" required>
-							<option value="" disabled ${empty param.typeId ? 'selected' : ''}>-- เลือกประเภทอุปกรณ์ --</option>
+						<select name="typeId" id="itemTypeSelect" class="form-select"
+							required>
+							<option value="" disabled ${emptyparam.typeId ? 'selected' : ''}>--
+								เลือกประเภทอุปกรณ์ --</option>
 							<c:forEach var="t" items="${itemTypes}">
 								<c:if test="${t.itemTypeName != 'แพ็กเกจ'}">
 									<option value="${t.itemTypeId}"
@@ -76,12 +83,13 @@
 						</select>
 					</div>
 
-				
+
 					<div class="form-group">
 						<div class="section-label">ใช้กับพิธีไหนได้บ้าง</div>
 						<p class="field-hint">
-							เลือกได้หลายประเภทงาน แต่ละแพ็กเกจกำหนดจำนวนอุปกรณ์ที่ใช้ได้ไม่เท่ากัน<br>
-							* ไม่เลือกเลย = เป็นรายการให้สมาชิกเลือกเพิ่มเองภายหลัง
+							เลือกได้หลายประเภทงาน
+							แต่ละแพ็กเกจกำหนดจำนวนอุปกรณ์ที่ใช้ได้ไม่เท่ากัน<br> *
+							ไม่เลือกเลย = เป็นรายการให้สมาชิกเลือกเพิ่มเองภายหลัง
 						</p>
 
 						<div class="ceremony-adder-row">
@@ -95,22 +103,23 @@
 
 						<div id="selectedCeremonyGroups">
 							<c:forEach var="entry" items="${groupedCeremonies}">
-								<div class="ceremony-type-group" id="grp_${entry.key}" style="display:none;">
+								<div class="ceremony-type-group" id="grp_${entry.key}"
+									style="display: none;">
 									<div class="ceremony-type-heading-row">
 										<div class="ceremony-type-heading">${entry.key}</div>
 										<div class="ceremony-heading-right">
-											<label class="ceremony-select-all-label">
-												<input type="checkbox" class="select-all-checkbox"
-													data-group="grp_${entry.key}"
-													onchange="onSelectAllChange(this)">
-												เลือกทั้งหมด
+											<label class="ceremony-select-all-label"> <input
+												type="checkbox" class="select-all-checkbox"
+												data-group="grp_${entry.key}"
+												onchange="onSelectAllChange(this)"> เลือกทั้งหมด
 											</label>
 											<button type="button" class="btn-close-group"
 												title="ปิดกลุ่มนี้ (ยกเลิกการเลือกทั้งหมด)"
 												onclick="closeGroup('grp_${entry.key}')">✕</button>
 										</div>
 									</div>
-									<div class="ceremony-type-options" data-group="grp_${entry.key}">
+									<div class="ceremony-type-options"
+										data-group="grp_${entry.key}">
 										<c:forEach var="c" items="${entry.value}">
 											<div class="ceremony-item">
 												<input type="checkbox" name="ceremonyIds"
@@ -118,11 +127,10 @@
 													data-group="grp_${entry.key}"
 													onchange="toggleQtyInput(this, 'qty_${c.ceremonyId}')">
 												<label for="cer_${c.ceremonyId}"
-    class="ceremony-check-label">${c.optionType}</label>
-												<span class="qty-inline-wrap">
-													ใช้
-													<input type="number" name="quantities" id="qty_${c.ceremonyId}"
-														class="qty-mini-input" min="1" value="1" disabled>
+													class="ceremony-check-label">${c.optionType}</label> <span
+													class="qty-inline-wrap"> ใช้ <input type="number"
+													name="quantities" id="qty_${c.ceremonyId}"
+													class="qty-mini-input" min="1" value="1" disabled>
 													หน่วย
 												</span>
 											</div>
@@ -131,8 +139,8 @@
 								</div>
 							</c:forEach>
 							<div id="ceremonyEmptyHint" class="ceremony-empty-hint">
-								ยังไม่ได้เพิ่มประเภทงานไหนเลย — เลือกจากช่องด้านบนเพื่อเริ่มผูกแพ็กเกจ
-							</div>
+								ยังไม่ได้เพิ่มประเภทงานไหนเลย —
+								เลือกจากช่องด้านบนเพื่อเริ่มผูกแพ็กเกจ</div>
 						</div>
 					</div>
 
@@ -159,12 +167,14 @@
 						<div class="form-row">
 							<div class="form-group">
 								<label>ราคาต่อหน่วย (บาท)</label> <input type="number"
-									name="pricePerUnit" placeholder="0.00" step="0.01" min="0" required
-									value="${param.pricePerUnit}">
-								<p class="field-hint">กรอกเป็นตัวเลข ทศนิยมได้ไม่เกิน 2 ตำแหน่ง เช่น 250.00</p>
+									name="pricePerUnit" placeholder="0.00" step="0.01" min="0"
+									required value="${param.pricePerUnit}">
+								<p class="field-hint">กรอกเป็นตัวเลข ทศนิยมได้ไม่เกิน 2
+									ตำแหน่ง เช่น 250.00</p>
 							</div>
 							<div class="form-group">
-								<label>หน่วยนับ</label> <select name="unit" required class="form-select">
+								<label>หน่วยนับ</label> <select name="unit" required
+									class="form-select">
 									<option value="">-- เลือกหน่วย --</option>
 									<option value="ชุด"
 										${param.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
@@ -191,6 +201,23 @@
 										${param.unit == 'ผืน'     ? 'selected' : ''}>ผืน</option>
 									<option value="ต้น"
 										${param.unit == 'ต้น'     ? 'selected' : ''}>ต้น</option>
+									<option value="ม้วน"
+										${param.unit == 'ม้วน'    ? 'selected' : ''}>ม้วน</option>
+									<option value="เส้น"
+										${param.unit == 'เส้น'    ? 'selected' : ''}>เส้น</option>
+									<option value="พวง"
+										${param.unit == 'พวง'     ? 'selected' : ''}>พวง</option>
+									<option value="กรวย"
+										${param.unit == 'กรวย'    ? 'selected' : ''}>กรวย</option>
+									<option value="พุ่ม"
+										${param.unit == 'พุ่ม'    ? 'selected' : ''}>พุ่ม</option>
+									<option value="หลัง"
+										${param.unit == 'หลัง'    ? 'selected' : ''}>หลัง</option>
+									<option value="ป้าย"
+										${param.unit == 'ป้าย'    ? 'selected' : ''}>ป้าย</option>
+									<option value="ครั้ง"
+										${param.unit == 'ครั้ง'   ? 'selected' : ''}>ครั้ง</option>
+									<option value="คน" ${param.unit == 'คน'      ? 'selected' : ''}>คน</option>
 								</select>
 							</div>
 						</div>
@@ -206,29 +233,32 @@
 			</div>
 		</div>
 	</div>
-	
-<%-- ===== Footer (สำหรับหัวหน้างาน) ===== --%>
-<footer class="site-footer">
 
-    <%-- ===== ลายดอกบัวมุมล่างขวา (เกาะติด footer) ===== --%>
-    <img src="${pageContext.request.contextPath}/static/images/lotus-corner.png"
-         alt="" class="lotus-decoration" aria-hidden="true">
+	<%-- ===== Footer (สำหรับหัวหน้างาน) ===== --%>
+	<footer class="site-footer">
 
-    <div class="footer-content">
-        <div class="footer-brand">
-            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
-                 alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
-        </div>
-        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
-    </div>
+		<%-- ===== ลายดอกบัวมุมล่างขวา (เกาะติด footer) ===== --%>
+		<img
+			src="${pageContext.request.contextPath}/static/images/lotus-corner.png"
+			alt="" class="lotus-decoration" aria-hidden="true">
 
-</footer>
+		<div class="footer-content">
+			<div class="footer-brand">
+				<img
+					src="${pageContext.request.contextPath}/static/images/logoo.png"
+					alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon footer-lotus-icon">
+				<span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+			</div>
+			<p class="footer-tagline">ระบบจัดการงานบุญสำหรับหัวหน้างาน</p>
+		</div>
+
+	</footer>
 
 	<script>
 		function toggleQtyInput(checkbox, qtyInputId) {
 			var qtyInput = document.getElementById(qtyInputId);
-			if (!qtyInput) return;
+			if (!qtyInput)
+				return;
 			qtyInput.disabled = !checkbox.checked;
 			if (checkbox.checked && !qtyInput.value) {
 				qtyInput.value = 1;
@@ -239,29 +269,41 @@
 		/* ===== select-all checkbox ต่อกลุ่ม ===== */
 		function onSelectAllChange(selectAllBox) {
 			var groupKey = selectAllBox.getAttribute('data-group');
-			var container = document.querySelector('.ceremony-type-options[data-group="' + groupKey + '"]');
-			if (!container) return;
+			var container = document
+					.querySelector('.ceremony-type-options[data-group="'
+							+ groupKey + '"]');
+			if (!container)
+				return;
 			var checked = selectAllBox.checked;
 			var boxes = container.querySelectorAll('input[type="checkbox"]');
-			boxes.forEach(function (cb) {
+			boxes.forEach(function(cb) {
 				cb.checked = checked;
 				var qtyInput = document.getElementById('qty_' + cb.value);
 				if (qtyInput) {
 					qtyInput.disabled = !checked;
-					if (checked && !qtyInput.value) qtyInput.value = 1;
+					if (checked && !qtyInput.value)
+						qtyInput.value = 1;
 				}
 			});
 			selectAllBox.indeterminate = false;
 		}
 
 		function syncSelectAllState(groupKey) {
-			var container = document.querySelector('.ceremony-type-options[data-group="' + groupKey + '"]');
-			var selectAllBox = document.querySelector('.select-all-checkbox[data-group="' + groupKey + '"]');
-			if (!container || !selectAllBox) return;
+			var container = document
+					.querySelector('.ceremony-type-options[data-group="'
+							+ groupKey + '"]');
+			var selectAllBox = document
+					.querySelector('.select-all-checkbox[data-group="'
+							+ groupKey + '"]');
+			if (!container || !selectAllBox)
+				return;
 			var boxes = container.querySelectorAll('input[type="checkbox"]');
 			var total = boxes.length;
 			var checkedCount = 0;
-			boxes.forEach(function (cb) { if (cb.checked) checkedCount++; });
+			boxes.forEach(function(cb) {
+				if (cb.checked)
+					checkedCount++;
+			});
 			if (checkedCount === 0) {
 				selectAllBox.checked = false;
 				selectAllBox.indeterminate = false;
@@ -279,11 +321,15 @@
 		   จะไม่มีผล เพราะกลุ่มถูกเปิดค้างอยู่แล้ว ต้องกดปุ่ม ✕ นี้แทน ===== */
 		function closeGroup(groupKey) {
 			var group = document.getElementById(groupKey);
-			if (!group) return;
-			var container = document.querySelector('.ceremony-type-options[data-group="' + groupKey + '"]');
+			if (!group)
+				return;
+			var container = document
+					.querySelector('.ceremony-type-options[data-group="'
+							+ groupKey + '"]');
 			if (container) {
-				var boxes = container.querySelectorAll('input[type="checkbox"]');
-				boxes.forEach(function (cb) {
+				var boxes = container
+						.querySelectorAll('input[type="checkbox"]');
+				boxes.forEach(function(cb) {
 					cb.checked = false;
 					var qtyInput = document.getElementById('qty_' + cb.value);
 					if (qtyInput) {
@@ -291,7 +337,9 @@
 					}
 				});
 			}
-			var selectAllBox = document.querySelector('.select-all-checkbox[data-group="' + groupKey + '"]');
+			var selectAllBox = document
+					.querySelector('.select-all-checkbox[data-group="'
+							+ groupKey + '"]');
 			if (selectAllBox) {
 				selectAllBox.checked = false;
 				selectAllBox.indeterminate = false;
@@ -302,22 +350,28 @@
 
 		function updateEmptyHint() {
 			var hint = document.getElementById('ceremonyEmptyHint');
-			var groups = document.querySelectorAll('#selectedCeremonyGroups .ceremony-type-group');
+			var groups = document
+					.querySelectorAll('#selectedCeremonyGroups .ceremony-type-group');
 			var hasVisible = false;
-			groups.forEach(function (g) {
-				if (g.style.display !== 'none') hasVisible = true;
+			groups.forEach(function(g) {
+				if (g.style.display !== 'none')
+					hasVisible = true;
 			});
-			if (hint) hint.style.display = hasVisible ? 'none' : 'block';
+			if (hint)
+				hint.style.display = hasVisible ? 'none' : 'block';
 		}
 
-		document.getElementById('ceremonyTypeAdder').addEventListener('change', function () {
-			var groupKey = this.value;
-			if (!groupKey) return;
-			var group = document.getElementById(groupKey);
-			if (group) group.style.display = 'block';
-			this.value = '';
-			updateEmptyHint();
-		});
+		document.getElementById('ceremonyTypeAdder').addEventListener('change',
+				function() {
+					var groupKey = this.value;
+					if (!groupKey)
+						return;
+					var group = document.getElementById(groupKey);
+					if (group)
+						group.style.display = 'block';
+					this.value = '';
+					updateEmptyHint();
+				});
 
 		document.addEventListener('DOMContentLoaded', updateEmptyHint);
 
@@ -334,7 +388,8 @@
 		   หายไปทันทีเมื่อแก้ไขจนถูกต้อง หรือออกจากช่อง (blur) ===== */
 
 		function isMinusKey(e) {
-			return e.key === '-' || e.key === 'Subtract' || e.keyCode === 189 || e.keyCode === 109;
+			return e.key === '-' || e.key === 'Subtract' || e.keyCode === 189
+					|| e.keyCode === 109;
 		}
 
 		function hasNegativeInput(inp) {
@@ -360,7 +415,8 @@
 
 		function showGroupError(qtyInput) {
 			var groupEl = qtyInput.closest('.ceremony-type-group');
-			if (!groupEl) return;
+			if (!groupEl)
+				return;
 			var el = getGroupErrorEl(groupEl);
 			el.textContent = 'ห้ามใส่เลขติดลบ';
 			el.style.display = 'block';
@@ -368,9 +424,11 @@
 
 		function hideGroupError(qtyInput) {
 			var groupEl = qtyInput.closest('.ceremony-type-group');
-			if (!groupEl) return;
+			if (!groupEl)
+				return;
 			var el = document.getElementById('negerr_' + groupEl.id);
-			if (el) el.style.display = 'none';
+			if (el)
+				el.style.display = 'none';
 		}
 
 		/* ---- (2) ช่องราคาต่อหน่วย: ข้อความอยู่ใต้ช่องนั้นเลย ---- */
@@ -398,64 +456,72 @@
 
 		function hideFieldError(inp) {
 			var el = document.getElementById('negerr_' + (inp.id || inp.name));
-			if (el) el.style.display = 'none';
+			if (el)
+				el.style.display = 'none';
 		}
 
 		function applyNoNegative() {
-			document.querySelectorAll('input[type="number"]').forEach(function (inp) {
-				if (inp.dataset.noNegativeBound) return; // กันผูก event ซ้ำ
-				inp.dataset.noNegativeBound = '1';
+			document.querySelectorAll('input[type="number"]').forEach(
+					function(inp) {
+						if (inp.dataset.noNegativeBound)
+							return; // กันผูก event ซ้ำ
+						inp.dataset.noNegativeBound = '1';
 
-				var isQty = inp.classList.contains('qty-mini-input');
-				var showFn = isQty ? showGroupError : showFieldError;
-				var hideFn = isQty ? hideGroupError : hideFieldError;
+						var isQty = inp.classList.contains('qty-mini-input');
+						var showFn = isQty ? showGroupError : showFieldError;
+						var hideFn = isQty ? hideGroupError : hideFieldError;
 
-				/* พิมพ์ - ปุ๊บ โชว์ทันที (ไม่ preventDefault แล้ว ปล่อยให้พิมพ์ได้) */
-				inp.addEventListener('keydown', function (e) {
-					if (isMinusKey(e)) {
-						showFn(this);
-					}
-				});
+						/* พิมพ์ - ปุ๊บ โชว์ทันที (ไม่ preventDefault แล้ว ปล่อยให้พิมพ์ได้) */
+						inp.addEventListener('keydown', function(e) {
+							if (isMinusKey(e)) {
+								showFn(this);
+							}
+						});
 
-				/* หลังค่าเปลี่ยน (พิมพ์เพิ่ม/ลบ/วาง) เช็คซ้ำว่ายังติดลบอยู่ไหม
-				   ถ้าแก้จนถูกต้องแล้ว -> ซ่อนทันที
-				   ถ้ายังไม่ถูก -> ค้างไว้ที่เดิม ไม่ซ่อนแม้ออกจากช่องไปแล้ว (ไม่มี blur-hide อีกต่อไป) */
-				inp.addEventListener('input', function () {
-					if (hasNegativeInput(this)) {
-						showFn(this);
-					} else {
-						hideFn(this);
-					}
-				});
+						/* หลังค่าเปลี่ยน (พิมพ์เพิ่ม/ลบ/วาง) เช็คซ้ำว่ายังติดลบอยู่ไหม
+						   ถ้าแก้จนถูกต้องแล้ว -> ซ่อนทันที
+						   ถ้ายังไม่ถูก -> ค้างไว้ที่เดิม ไม่ซ่อนแม้ออกจากช่องไปแล้ว (ไม่มี blur-hide อีกต่อไป) */
+						inp.addEventListener('input', function() {
+							if (hasNegativeInput(this)) {
+								showFn(this);
+							} else {
+								hideFn(this);
+							}
+						});
 
-				/* ปิดกล่องแจ้งเตือนสีส้ม/เหลืองของเบราว์เซอร์เอง (เช่น "Value must be
-				   greater than or equal to 1.") ไม่ต้องการให้ขึ้นซ้อนกับข้อความแดงของเรา
-				   ตัวช่องจะยัง invalid ตามปกติ (กันส่ง submit ได้เหมือนเดิม) แค่ไม่โชว์ popup */
-				inp.addEventListener('invalid', function (e) {
-					e.preventDefault();
-				});
-			});
+						/* ปิดกล่องแจ้งเตือนสีส้ม/เหลืองของเบราว์เซอร์เอง (เช่น "Value must be
+						   greater than or equal to 1.") ไม่ต้องการให้ขึ้นซ้อนกับข้อความแดงของเรา
+						   ตัวช่องจะยัง invalid ตามปกติ (กันส่ง submit ได้เหมือนเดิม) แค่ไม่โชว์ popup */
+						inp.addEventListener('invalid', function(e) {
+							e.preventDefault();
+						});
+					});
 		}
 
 		/* ===== กันกดบันทึกทั้งที่ยังมีค่าติดลบ/พิมพ์ค้างอยู่ในฟอร์ม
 		   ถ้าเจอ -> ไม่ให้ submit ไปไหน อยู่หน้าเดิม พร้อมโชว์ข้อความแจ้งเตือนทุกช่องที่ยังผิดค้างไว้ ===== */
 		function guardFormSubmit() {
 			var formEl = document.querySelector('form.form-section');
-			if (!formEl) return;
-			formEl.addEventListener('submit', function (e) {
+			if (!formEl)
+				return;
+			formEl.addEventListener('submit', function(e) {
 				var hasInvalid = false;
 				var firstInvalid = null;
-				document.querySelectorAll('input[type="number"]').forEach(function (inp) {
-					if (hasNegativeInput(inp)) {
-						hasInvalid = true;
-						if (!firstInvalid) firstInvalid = inp;
-						var isQty = inp.classList.contains('qty-mini-input');
-						(isQty ? showGroupError : showFieldError)(inp);
-					}
-				});
+				document.querySelectorAll('input[type="number"]').forEach(
+						function(inp) {
+							if (hasNegativeInput(inp)) {
+								hasInvalid = true;
+								if (!firstInvalid)
+									firstInvalid = inp;
+								var isQty = inp.classList
+										.contains('qty-mini-input');
+								(isQty ? showGroupError : showFieldError)(inp);
+							}
+						});
 				if (hasInvalid) {
 					e.preventDefault();
-					if (firstInvalid) firstInvalid.focus();
+					if (firstInvalid)
+						firstInvalid.focus();
 				}
 			});
 		}

@@ -176,12 +176,7 @@
         <line x1="0" y1="27" x2="860" y2="27" stroke="#F3B6C8" stroke-width="0.5" opacity="0.3"/>
     </svg>
 
-    <%-- ========== REVIEW CARDS ==========
-         หมายเหตุ: ปิด .page-wrapper ไว้ตรงนี้ก่อน แล้วเปิด .reviews-section ใหม่แยกออกมา
-         เพราะ .page-wrapper ล็อก max-width: 860px ไว้ ถ้าใส่ .reviews-grid ไว้ข้างในจะขยายกว้างกว่านั้นไม่ได้เลย
-         (เทคนิค 100vw full-bleed ที่เคยลองก่อนหน้านี้ ทำให้ล้นขอบจอ/เกิด scrollbar แนวนอน)
-         การแยกเป็น section ของตัวเองแบบนี้ทำให้กำหนดความกว้างได้ตรงๆ ด้วย max-width + margin:auto
-         โดยไม่ต้องพึ่ง viewport unit เลย ปลอดภัยกว่า ไม่ล้นจอ --%>
+   
 </div>
 
 <div class="reviews-section">

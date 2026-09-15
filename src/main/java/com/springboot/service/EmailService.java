@@ -2,9 +2,11 @@ package com.springboot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class EmailService {
@@ -15,14 +17,16 @@ public class EmailService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    //ส่งอีเมลแจ้ง Username/Password ให้หัวหน้างานที่ถูกเพิ่มใหม่
 
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
+
+    private static final String FROM_DISPLAY_NAME = "บุญมีนำพา จัดงานบุญ";
+
+  
     public void sendHeadStaffWelcomeEmail(String toEmail, String firstName, String lastName,
                                            String rawPassword) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("✅ บัญชีหัวหน้างานของคุณถูกสร้างแล้ว - บุญมีนำพา จัดงานบุญ");
-
         String loginUrl = baseUrl + "/loginmanager";
 
         String body = "เรียน คุณ" + firstName + " " + lastName + ",\n\n"
@@ -34,11 +38,18 @@ public class EmailService {
                 + loginUrl + "\n\n"
                 + "ทีมงานระบบบุญมีนำพา จัดงานบุญ";
 
-        message.setText(body);
-
-  
         try {
-            mailSender.send(message);
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+           
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+
+            
+            helper.setFrom(fromEmail, FROM_DISPLAY_NAME);
+            helper.setTo(toEmail);
+            helper.setSubject("✅ บัญชีหัวหน้างานของคุณถูกสร้างแล้ว - บุญมีนำพา จัดงานบุญ");
+            helper.setText(body, false);
+
+            mailSender.send(mimeMessage);
         } catch (Exception e) {
             System.err.println("[EmailService] ส่งอีเมลแจ้งหัวหน้างานไม่สำเร็จ: " + e.getMessage());
         }
