@@ -15,34 +15,8 @@
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/ceremonyDetail.css">
-<style>
-/* ===== จุดที่ต่างจากอีก 2 หน้า (บ้าน/ขึ้นบ้านใหม่) จริงๆ: การ์ดแพ็กเกจของหน้าบริษัทรูปใหญ่กว่าและ padding มากกว่า ===== */
-.cd-package-img-container {
-	height: 340px;
-}
-
-.cd-package-option {
-	padding: 24px;
-}
-
-@media ( max-width : 900px) {
-	.cd-package-grid {
-		grid-template-columns: repeat(2, 1fr);
-	}
-	.cd-package-img-container {
-		height: 260px;
-	}
-}
-
-@media ( max-width : 560px) {
-	.cd-package-grid {
-		grid-template-columns: 1fr;
-	}
-	.cd-package-img-container {
-		height: 280px;
-	}
-}
-</style>
+<%-- ✅ ขนาดการ์ดแพ็กเกจ (รูป/padding) ย้ายไปรวมไว้ใน ceremonyDetail.css แล้ว
+     เพื่อให้ทั้ง 3 หน้า (บ้าน/ขึ้นบ้านใหม่/บริษัท) ใช้ css ตัวเดียวกัน ขนาดเดียวกัน --%>
 </head>
 <body>
 
@@ -266,46 +240,17 @@
 								<ul class="cd-condition-list"
 									style="font-size: 0.85rem; text-align: left; padding-left: 18px; margin: 0;">
 									<c:choose>
-                                        <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType ในเงื่อนไข --%>
-										<c:when test="${p.optionType == 'แพ็กเกจมาตรฐาน'}">
-											<li>ติดต่อวัด นิมนต์คณะพระภิกษุสงฆ์ 5 รูป</li>
-											<li>ชุดโต๊ะหมู่บูชา และพระประธาน</li>
-											<li>ชุดอาสนะพระภิกษุสงฆ์ จำนวน 5 ชุด</li>
-											<li>เครื่องใช้ และอุปกรณ์ประกอบพิธีสงฆ์</li>
-											<li>พิธีกรดำเนินพิธีการสงฆ์</li>
-											<li>ชุดสังฆทาน ชุดมาตรฐาน ราคา 299 บาท/ชุด (จำนวน 5 ชุด)</li>
-											<li>ดอกไม้ ธูปเทียน สายสิญจน์ แป้งเจิม</li>
-											<li>เจ้าหน้าที่จัดเตรียมงาน, พิธีกร ค่าขนส่งอุปกรณ์</li>
-										</c:when>
-										<c:when test="${p.optionType == 'แพ็กเกจอิ่มบุญ'}">
-											<li>ติดต่อวัด นิมนต์คณะพระภิกษุสงฆ์ 7 รูป</li>
-											<li>ชุดโต๊ะหมู่บูชา และพระประธาน</li>
-											<li>ชุดอาสนะพระภิกษุสงฆ์ จำนวน 7 ชุด</li>
-											<li>เครื่องใช้ และอุปกรณ์ประกอบพิธีสงฆ์</li>
-											<li>พิธีกรดำเนินพิธีการสงฆ์</li>
-											<li>ชุดสังฆทาน ชุดมาตรฐาน ราคา 299 บาท/ชุด (จำนวน 7 ชุด)</li>
-											<li>ชุดไทยธรรม ถุงทองอุปโภค และบริโภค
-												พร้อมพวงมาลัยถวายคณะพระภิกษุสงฆ์ จำนวน 7 รูป</li>
-											<li>ดอกไม้ ธูปเทียน พานพุ่ม สายสิญจน์ แป้งเจิม</li>
-											<li>เจ้าหน้าที่จัดเตรียมงาน, พิธีกร ค่าขนส่งอุปกรณ์</li>
-										</c:when>
-										<c:when test="${p.optionType == 'แพ็กเกจพรีเมียม'}">
-											<li>ติดต่อวัด นิมนต์คณะพระภิกษุสงฆ์ 9 รูป</li>
-											<li>ชุดโต๊ะหมู่บูชา และพระประธาน</li>
-											<li>ชุดอาสนะพระภิกษุสงฆ์ จำนวน 9 ชุด</li>
-											<li>เครื่องใช้ และอุปกรณ์ประกอบพิธีสงฆ์</li>
-											<li>พิธีกรดำเนินพิธีการสงฆ์</li>
-											<li>ชุดสังฆทาน ชุดมาตรฐาน ราคา 299 บาท/ชุด (จำนวน 9 ชุด)</li>
-											<li>ชุดไทยธรรม ถุงทองอุปโภค และบริโภค
-												พร้อมพวงมาลัยถวายคณะพระภิกษุสงฆ์ จำนวน 9 รูป</li>
-											<li>ดอกไม้ ธูปเทียน พานพุ่ม สายสิญจน์ แป้งเดิม
-												และแผ่นทอง</li>
-											<li>เจ้าหน้าที่จัดเตรียมงาน, พิธีกร ค่าขนส่งอุปกรณ์</li>
-										</c:when>
-										<c:otherwise>
-											<li>รายละเอียดจะจัดเตรียมตามความต้องการของท่าน</li>
-										</c:otherwise>
-									</c:choose>
+	                                    <c:when test="${empty p.ceremonyItems}">
+	                                        <li>รายละเอียดจะจัดเตรียมตามความต้องการของท่าน</li>
+	                                    </c:when>
+	                                    <c:otherwise>
+	                                        <c:forEach items="${p.ceremonyItems}" var="ci">
+	                                            <li>
+	                                                ${ci.item.itemName}<c:if test="${ci.quantity > 1}"> จำนวน ${ci.quantity} ${ci.item.unit}</c:if>
+	                                            </li>
+	                                        </c:forEach>
+	                                    </c:otherwise>
+	                                </c:choose>
 								</ul>
 							</div>
 							<button type="button" class="cd-btn-view-detail"

@@ -520,7 +520,7 @@
                         <div class="form-group">
                             <label class="form-label">${q.questionsText}</label>
                             <p style="font-size:12px;color:#B0345A;margin-top:2px;">
-                                เช่น อุปกรณ์เพิ่มเติม เก้าอี้ ผ้าคลุมโต๊ะ หรือรายละเอียดอื่นๆ พร้อมกรอกจำนวนที่ต้องการ
+                                อุปกรณ์เสริมที่ทางร้านมีให้บริการ (เช่น เต็นท์, โต๊ะ, เก้าอี้, พัดลมไอเย็น, ไมโครโฟนไร้สาย, พรมทางเดิน)
                             </p>
                             <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
                             <textarea name="details[${detailIndex}].answer" class="form-control" rows="3"
