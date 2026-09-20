@@ -136,15 +136,23 @@
                     <div class="form-group">
                         <label>${isChangeMode ? 'เลือกหัวหน้างานคนใหม่' : 'ค้นหารายชื่อหัวหน้างาน'}</label>
                         <select name="staffId" id="staff-select" style="width:100%;" required>
-                            <option value="">-- พิมพ์ชื่อเพื่อค้นหา --</option>
-                            <c:forEach var="s" items="${staffList}">
-                                <c:if test="${b.quotation.staff.staffId != s.staffId}">
-                                    <option value="${s.staffId}">
-                                        ${s.staffFirstName} ${s.staffLastName} (${s.staffPhone})
-                                    </option>
-                                </c:if>
-                            </c:forEach>
-                        </select>
+    <option value="">-- พิมพ์ชื่อเพื่อค้นหา --</option>
+    <c:forEach var="s" items="${staffList}">
+        <c:if test="${b.quotation.staff.staffId != s.staffId}">
+            <option value="${s.staffId}">
+                ${s.staffFirstName} ${s.staffLastName} (${s.staffPhone})
+                <c:choose>
+                    <c:when test="${staffWorkload[s.staffId] > 0}">
+                        - มีงานค้าง ${staffWorkload[s.staffId]} งาน
+                    </c:when>
+                    <c:otherwise>
+                        - ว่าง
+                    </c:otherwise>
+                </c:choose>
+            </option>
+        </c:if>
+    </c:forEach>
+</select>
                     </div>
                 </div>
 

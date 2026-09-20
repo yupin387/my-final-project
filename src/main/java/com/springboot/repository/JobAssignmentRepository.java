@@ -30,4 +30,10 @@ public interface JobAssignmentRepository extends JpaRepository<JobAssignment, St
     @Transactional
     @Query("DELETE FROM JobAssignment sa WHERE sa.bookingForm.bookingId = :bookingId")
     void deleteByBookingId(@Param("bookingId") String bookingId);
+    
+ // นับจำนวนงานที่หัวหน้างานคนนี้ยังรับผิดชอบอยู่ (ยังไม่ Completed) เพื่อดูภาระงานตอนมอบหมาย
+    @Query("SELECT COUNT(sa) FROM JobAssignment sa " +
+           "WHERE sa.headStaff.staffId = :staffId " +
+           "AND sa.bookingForm.bookingStatus <> 'Completed'")
+    int countActiveAssignmentsByStaffId(@Param("staffId") int staffId);
 }

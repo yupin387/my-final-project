@@ -130,4 +130,9 @@ public class JobAssignmentService {
     public boolean hasAssignmentForStaff(int staffId) {
         return staffAssignmentRepo.existsByHeadStaff_StaffId(staffId);
     }
+    
+ // ดึงจำนวนงานค้างของหัวหน้างานคนนี้ ใช้แสดงตอนมอบหมายงาน
+    public int countActiveAssignments(int staffId) {
+        return staffAssignmentRepo.countActiveAssignmentsByStaffId(staffId);
+    }
 }

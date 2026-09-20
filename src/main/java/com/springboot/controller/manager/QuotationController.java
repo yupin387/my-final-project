@@ -27,6 +27,7 @@ public class QuotationController {
 
     @Autowired
     private ItemRepository itemRepo;
+    
 
     // แสดงรายการใบเสนอราคาทั้งหมด รองรับการกรองตามสถานะ (status)
     @GetMapping

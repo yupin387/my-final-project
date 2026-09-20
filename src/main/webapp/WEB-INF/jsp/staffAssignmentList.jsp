@@ -66,35 +66,37 @@
                 <span class="header-count">จำนวนทั้งหมด ${assignments.size()} รายการ</span>
             </div>
             <table>
-                <thead>
-                    <tr>
-                        <th width="15%">รหัสมอบหมาย</th>
-                        <th width="15%">วันที่มอบหมาย</th>
-                        <th width="20%">ประเภทพิธี</th>
-                        <th width="20%">ชื่อลูกค้า</th>
-                        <th width="15%">สถานะงาน</th>
-                        <th width="15%" style="text-align: center;">จัดการ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="a" items="${assignments}">
-                        <tr>
-                            <td><span class="assign-id">${a.assignId}</span></td>
-                            <td><fmt:formatDate value="${a.assignDate}" pattern="dd/MM/yyyy"/></td>
-                            <td><span class="ceremony-name">${a.bookingForm.ceremony.ceremonyType}</span></td>
-                            <td>${a.bookingForm.member.memberFirstName}</td>
-                            <td><span class="status-badge status-${a.jobStatus}">${a.jobStatus}</span></td>
-                            <td style="text-align: center;">
-                                <a href="${pageContext.request.contextPath}/staff/assignments/detail/${a.assignId}" class="btn-view">ดูรายละเอียด</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    <c:if test="${empty assignments}">
-                        <tr>
-                            <td colspan="6" class="empty-state">ไม่พบรายการงานมอบหมาย</td>
-                        </tr>
-                    </c:if>
-                </tbody>
+   <thead>
+    <tr>
+        <th width="13%">รหัสมอบหมาย</th>
+        <th width="13%">วันที่มอบหมาย</th>
+        <th width="13%">วันจัดงาน</th>
+        <th width="18%">ประเภทพิธี</th>
+        <th width="18%">ชื่อลูกค้า</th>
+        <th width="13%">สถานะงาน</th>
+        <th width="12%" style="text-align: center;">จัดการ</th>
+    </tr>
+</thead>
+<tbody>
+    <c:forEach var="a" items="${assignments}">
+        <tr>
+            <td><span class="assign-id">${a.assignId}</span></td>
+            <td><fmt:formatDate value="${a.assignDate}" pattern="dd/MM/yyyy"/></td>
+            <td><strong><fmt:formatDate value="${a.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></strong></td>
+            <td><span class="ceremony-name">${a.bookingForm.ceremony.ceremonyType}</span></td>
+            <td>${a.bookingForm.member.memberFirstName}</td>
+            <td><span class="status-badge status-${a.jobStatus}">${a.jobStatus}</span></td>
+            <td style="text-align: center;">
+                <a href="${pageContext.request.contextPath}/staff/assignments/detail/${a.assignId}" class="btn-view">ดูรายละเอียด</a>
+            </td>
+        </tr>
+    </c:forEach>
+    <c:if test="${empty assignments}">
+        <tr>
+            <td colspan="7" class="empty-state">ไม่พบรายการงานมอบหมาย</td>
+        </tr>
+    </c:if>
+</tbody>
             </table>
         </div>
 

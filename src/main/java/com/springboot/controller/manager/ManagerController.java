@@ -161,7 +161,7 @@ public class ManagerController {
         if ("All".equals(status)) {
             List<BookingForm> bookings = bookingService.getBookingsByStatuses(
                 Arrays.asList("Pending", "Confirmed", "Assigned", "Preparing", "In_Progress", "Completed", "Rejected"));
-            bookings.sort(Comparator.comparing(BookingForm::getBookingId));
+            bookings.sort(Comparator.comparing(BookingForm::getEventDate));
             model.addAttribute("bookings", bookings);
             model.addAttribute("currentStatus", status);
             return "bookingList_New";
@@ -169,7 +169,7 @@ public class ManagerController {
 
         if ("Pending".equals(status)) {
             List<BookingForm> bookings = bookingService.findByStatus("Pending");
-            bookings.sort(Comparator.comparing(BookingForm::getBookingId));
+            bookings.sort(Comparator.comparing(BookingForm::getEventDate));
             model.addAttribute("bookings", bookings);
             model.addAttribute("currentStatus", status);
             return "bookingList_New";
@@ -183,14 +183,14 @@ public class ManagerController {
             } else {
                 bookings = bookingService.findByStatus("Completed");
             }
-            bookings.sort(Comparator.comparing(BookingForm::getBookingId));
+            bookings.sort(Comparator.comparing(BookingForm::getEventDate));
             model.addAttribute("bookings", bookings);
             model.addAttribute("currentStatus", status);
             return "bookingList_Confirmed";
         }
 
         List<BookingForm> bookings = bookingService.findByStatus(status);
-        bookings.sort(Comparator.comparing(BookingForm::getBookingId));
+        bookings.sort(Comparator.comparing(BookingForm::getEventDate));
         model.addAttribute("bookings", bookings);
         model.addAttribute("currentStatus", status);
         return "bookingList_New";
@@ -344,7 +344,15 @@ public class ManagerController {
         BookingForm booking = bookingService.getBookingById(bookingId);
         model.addAttribute("b", booking);
 
-        model.addAttribute("staffList", quotationService.findAvailableStaff(booking.getEventDate()));
+        List<HeadStaff> staffList = quotationService.findAvailableStaff(booking.getEventDate());
+        model.addAttribute("staffList", staffList);
+
+        // นับงานค้างของแต่ละคน เก็บเป็น staffId -> จำนวนงาน
+        java.util.Map<Integer, Integer> staffWorkload = new java.util.HashMap<>();
+        for (HeadStaff s : staffList) {
+            staffWorkload.put(s.getStaffId(), staffAssignmentService.countActiveAssignments(s.getStaffId()));
+        }
+        model.addAttribute("staffWorkload", staffWorkload);
 
         boolean isChangeMode = booking.getQuotation() != null
                 && booking.getQuotation().getStaff() != null;
@@ -352,7 +360,6 @@ public class ManagerController {
 
         return "assignTask";
     }
-
      // บันทึกการมอบหมายหัวหน้างาน: ผูกพนักงานเข้ากับใบเสนอราคา อัปเดตสถานะการจอง
      @PostMapping("/manager/assignments/save")
      public String saveAssignment(@RequestParam String bookingId, 
