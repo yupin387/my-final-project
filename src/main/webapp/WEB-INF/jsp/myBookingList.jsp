@@ -9,8 +9,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>รายการจองของฉัน - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=15">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=16">
+
+    <%-- สไตล์เฉพาะของแท็บและปุ่มรีวิว (เขียนไว้ในหน้านี้เพื่อไม่ต้องแก้ไฟล์ CSS เดิม) --%>
+    <style>
+        .mybooking-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 14px 18px 0;
+            border-bottom: 1px solid #F2D9E2;
+            flex-wrap: wrap;
+        }
+        .mybooking-tab {
+            background: transparent;
+            border: 1px solid transparent;
+            border-bottom: none;
+            padding: 9px 18px;
+            border-radius: 10px 10px 0 0;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #9A6B7B;
+            cursor: pointer;
+            transition: all .15s ease;
+        }
+        .mybooking-tab:hover { color: #B0345A; background: #FDF1F5; }
+        .mybooking-tab.active {
+            color: #B0345A;
+            background: #FFFFFF;
+            border-color: #F2D9E2;
+            box-shadow: inset 0 3px 0 #E0577F;
+        }
+        .mybooking-tab .tab-count {
+            display: inline-block;
+            min-width: 20px;
+            margin-left: 6px;
+            padding: 1px 7px;
+            border-radius: 999px;
+            background: #FBD0DE;
+            color: #B0345A;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .mybooking-tab.active .tab-count { background: #E0577F; color: #FFFFFF; }
+        .mybooking-tab-panel { display: none; }
+        .mybooking-tab-panel.active { display: block; }
+
+        .btn-mybooking-review {
+            background: #D9A441;
+            color: #FFFFFF !important;
+            border: 1px solid #C08F2E;
+        }
+        .btn-mybooking-review:hover { background: #C08F2E; }
+        .btn-mybooking-reviewed {
+            background: #F3F3F3;
+            color: #999999 !important;
+            border: 1px solid #E5E5E5;
+            cursor: default;
+        }
+    </style>
 </head>
 <body>
 
@@ -54,7 +111,21 @@
     </div>
 </nav>
 
-<%-- ===== SECTION HEADER (แบบหน้า Home: มีรูปดอกบัวและเส้นคั่นทอง) ===== --%>
+<%-- ===== นับจำนวนของแต่ละแท็บไว้ก่อน เพื่อเอาไปแสดงบนหัวแท็บ ===== --%>
+<c:set var="activeCount" value="0"/>
+<c:set var="historyCount" value="0"/>
+<c:forEach var="b" items="${bookings}">
+    <c:choose>
+        <c:when test="${b.bookingStatus == 'Completed' or b.bookingStatus == 'Cancelled' or b.bookingStatus == 'Rejected'}">
+            <c:set var="historyCount" value="${historyCount + 1}"/>
+        </c:when>
+        <c:otherwise>
+            <c:set var="activeCount" value="${activeCount + 1}"/>
+        </c:otherwise>
+    </c:choose>
+</c:forEach>
+
+<%-- ===== SECTION HEADER ===== --%>
 <div class="page-wrapper">
     <div class="section-header-wrap" style="text-align: center; margin-top: 30px; margin-bottom: 30px;">
         <div class="header-lotus-icon" style="margin-bottom: 8px;">
@@ -66,66 +137,164 @@
             <span class="ornament-line right" style="width: 100px; height: 1px; background: #D9A441;"></span>
         </div>
         <h1 style="font-family: 'Sarabun', sans-serif; font-size: 2rem; font-weight: 700; color: #1A1A1A; margin-bottom: 6px;">รายการจองงานบุญ</h1>
-        <p style="color: #777777; font-size: 0.95rem;">ดูสถานะ รายละเอียด และใบเสนอราคาของการจองแต่ละรายการ</p>
+        <p style="color: #777777; font-size: 0.95rem;">ติดตามสถานะการจองที่กำลังดำเนินการ และดูประวัติงานบุญที่ผ่านมาของท่าน</p>
     </div>
 
     <div class="mybooking-card">
-        <div class="mybooking-card-header">
-            <span>รายการจองทั้งหมดของฉัน</span>
-            <span class="mybooking-count">พบทั้งหมด ${fn:length(bookings)} รายการ</span>
+
+        <%-- ===== แท็บ: กำลังดำเนินการ / ประวัติการจอง ===== --%>
+        <div class="mybooking-tabs">
+            <button type="button" class="mybooking-tab active" data-tab="tabActive" onclick="switchBookingTab('tabActive', this)">
+                กำลังดำเนินการ <span class="tab-count">${activeCount}</span>
+            </button>
+            <button type="button" class="mybooking-tab" data-tab="tabHistory" onclick="switchBookingTab('tabHistory', this)">
+                ประวัติการจอง <span class="tab-count">${historyCount}</span>
+            </button>
         </div>
 
-        <c:choose>
-        <c:when test="${empty bookings}">
-            <div class="mybooking-empty">
-                <p>คุณยังไม่มีรายการจอง</p>
-                <a href="${pageContext.request.contextPath}/home" class="btn-mybooking btn-mybooking-primary">จองงานบุญเลย</a>
+        <%-- ================= แท็บที่ 1: กำลังดำเนินการ ================= --%>
+        <div class="mybooking-tab-panel active" id="tabActive">
+            <div class="mybooking-card-header">
+                <span>รายการที่กำลังดำเนินการ</span>
+                <span class="mybooking-count">พบทั้งหมด ${activeCount} รายการ</span>
             </div>
-        </c:when>
-        <c:otherwise>
-        <div class="mybooking-table-wrap">
-            <table class="mybooking-table">
-                <thead>
-                    <tr>
-                        <th>รหัสจอง</th>
-                        <th>วันที่จอง</th>
-                        <th>วันจัดงาน</th>
-                        <th>ประเภทพิธี</th>
-                        <th>สถานะ</th>
-                        <th>ดำเนินการ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="b" items="${bookings}">
-                        <tr>
-                            <td><strong>${b.bookingId}</strong></td>
-                            <td><fmt:formatDate value="${b.bookingDate}" pattern="dd/MM/yyyy"/></td>
-                            <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
-                            <td>${b.ceremony.ceremonyType}</td>
-                            <td>
-                                <span class="mb-badge mb-badge-${b.bookingStatus}">${b.bookingStatus}</span>
-                            </td>
-                            <td class="mybooking-actions">
-                                <a href="${pageContext.request.contextPath}/viewBooking/${b.bookingId}"
-                                   class="btn-mybooking btn-mybooking-view">ดูรายละเอียด</a>
 
-                                <c:choose>
-                                    <c:when test="${not empty b.quotation}">
-                                        <a href="${pageContext.request.contextPath}/member/quotation/detail/${b.quotation.quotationId}"
-                                           class="btn-mybooking btn-mybooking-quote">ใบเสนอราคา</a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="btn-mybooking btn-mybooking-disabled">รอใบเสนอราคา</span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+            <c:choose>
+                <c:when test="${activeCount == 0}">
+                    <div class="mybooking-empty">
+                        <p>ขณะนี้ท่านไม่มีรายการจองที่กำลังดำเนินการ</p>
+                        <a href="${pageContext.request.contextPath}/home" class="btn-mybooking btn-mybooking-primary">จองงานบุญเลย</a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="mybooking-table-wrap">
+                        <table class="mybooking-table">
+                            <thead>
+                                <tr>
+                                    <th>รหัสจอง</th>
+                                    <th>วันที่จอง</th>
+                                    <th>วันจัดงาน</th>
+                                    <th>ประเภทพิธี</th>
+                                    <th>สถานะ</th>
+                                    <th>ดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="b" items="${bookings}">
+                                    <c:if test="${b.bookingStatus != 'Completed' and b.bookingStatus != 'Cancelled' and b.bookingStatus != 'Rejected'}">
+                                        <tr>
+                                            <td><strong>${b.bookingId}</strong></td>
+                                            <td><fmt:formatDate value="${b.bookingDate}" pattern="dd/MM/yyyy"/></td>
+                                            <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
+                                            <td>${b.ceremony.ceremonyType}</td>
+                                            <td>
+                                                <span class="mb-badge mb-badge-${b.bookingStatus}">
+                                                    <c:choose>
+                                                        <c:when test="${b.bookingStatus == 'Pending'}">รอดำเนินการ</c:when>
+                                                        <c:when test="${b.bookingStatus == 'Approved'}">อนุมัติแล้ว</c:when>
+                                                        <c:when test="${b.bookingStatus == 'Quoted'}">ออกใบเสนอราคาแล้ว</c:when>
+                                                        <c:when test="${b.bookingStatus == 'Confirmed'}">ยืนยันแล้ว</c:when>
+                                                        <c:otherwise>${b.bookingStatus}</c:otherwise>
+                                                    </c:choose>
+                                                </span>
+                                            </td>
+                                            <td class="mybooking-actions">
+                                                <a href="${pageContext.request.contextPath}/viewBooking/${b.bookingId}"
+                                                   class="btn-mybooking btn-mybooking-view">ดูรายละเอียด</a>
+
+                                                <c:choose>
+                                                    <c:when test="${not empty b.quotation}">
+                                                        <a href="${pageContext.request.contextPath}/member/quotation/detail/${b.quotation.quotationId}"
+                                                           class="btn-mybooking btn-mybooking-quote">ใบเสนอราคา</a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="btn-mybooking btn-mybooking-disabled">รอใบเสนอราคา</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
-        </c:otherwise>
-        </c:choose>
+
+        <%-- ================= แท็บที่ 2: ประวัติการจอง ================= --%>
+        <div class="mybooking-tab-panel" id="tabHistory">
+            <div class="mybooking-card-header">
+                <span>ประวัติการจองที่สิ้นสุดแล้ว</span>
+                <span class="mybooking-count">พบทั้งหมด ${historyCount} รายการ</span>
+            </div>
+
+            <c:choose>
+                <c:when test="${historyCount == 0}">
+                    <div class="mybooking-empty">
+                        <p>ยังไม่มีประวัติการจองที่สิ้นสุดแล้ว</p>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="mybooking-table-wrap">
+                        <table class="mybooking-table">
+                            <thead>
+                                <tr>
+                                    <th>รหัสจอง</th>
+                                    <th>วันที่จอง</th>
+                                    <th>วันจัดงาน</th>
+                                    <th>ประเภทพิธี</th>
+                                    <th>สถานะ</th>
+                                    <th>ดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="b" items="${bookings}">
+                                    <c:if test="${b.bookingStatus == 'Completed' or b.bookingStatus == 'Cancelled' or b.bookingStatus == 'Rejected'}">
+                                        <tr>
+                                            <td><strong>${b.bookingId}</strong></td>
+                                            <td><fmt:formatDate value="${b.bookingDate}" pattern="dd/MM/yyyy"/></td>
+                                            <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
+                                            <td>${b.ceremony.ceremonyType}</td>
+                                            <td>
+                                                <span class="mb-badge mb-badge-${b.bookingStatus}">
+                                                    <c:choose>
+                                                        <c:when test="${b.bookingStatus == 'Completed'}">เสร็จสิ้น</c:when>
+                                                        <c:when test="${b.bookingStatus == 'Cancelled'}">ยกเลิกแล้ว</c:when>
+                                                        <c:when test="${b.bookingStatus == 'Rejected'}">ปฏิเสธแล้ว</c:when>
+                                                        <c:otherwise>${b.bookingStatus}</c:otherwise>
+                                                    </c:choose>
+                                                </span>
+                                            </td>
+                                            <td class="mybooking-actions">
+                                                <a href="${pageContext.request.contextPath}/viewBooking/${b.bookingId}"
+                                                   class="btn-mybooking btn-mybooking-view">ดูรายละเอียด</a>
+
+                                                <%-- ปุ่มรีวิว: กดรีวิวได้จากหน้ารายการนี้เลย ไม่ต้องเข้าไปหน้ารายละเอียดก่อน --%>
+                                                <c:if test="${b.bookingStatus == 'Completed'}">
+                                                    <c:set var="isReviewed"
+                                                           value="${not empty reviewedBookingIds and reviewedBookingIds.contains(b.bookingId)}"/>
+                                                    <c:choose>
+                                                        <c:when test="${isReviewed}">
+                                                            <span class="btn-mybooking btn-mybooking-reviewed">รีวิวแล้ว</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="${pageContext.request.contextPath}/review/write/${b.bookingId}"
+                                                               class="btn-mybooking btn-mybooking-review">★ เขียนรีวิว</a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
     </div>
 </div>
 
@@ -185,6 +354,30 @@ document.addEventListener('click', function(e) {
     if (!e.target.closest('.nav-dropdown')) {
         var s = document.getElementById('serviceDropdownMenu');
         if (s) s.classList.remove('show');
+    }
+});
+
+// สลับแท็บ "กำลังดำเนินการ" / "ประวัติการจอง"
+function switchBookingTab(panelId, btn) {
+    document.querySelectorAll('.mybooking-tab-panel').forEach(function(p) {
+        p.classList.remove('active');
+    });
+    document.querySelectorAll('.mybooking-tab').forEach(function(t) {
+        t.classList.remove('active');
+    });
+    var panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
+    if (btn) btn.classList.add('active');
+    try { sessionStorage.setItem('myBookingTab', panelId); } catch (err) {}
+}
+
+// จำแท็บล่าสุดที่เปิดไว้ เวลากลับมาจากหน้ารายละเอียดจะได้อยู่แท็บเดิม
+document.addEventListener('DOMContentLoaded', function() {
+    var saved = null;
+    try { saved = sessionStorage.getItem('myBookingTab'); } catch (err) {}
+    if (saved) {
+        var btn = document.querySelector('.mybooking-tab[data-tab="' + saved + '"]');
+        if (btn) switchBookingTab(saved, btn);
     }
 });
 </script>

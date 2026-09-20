@@ -746,8 +746,8 @@ textarea.form-control {
 }
 
 .mini-cal-cell-booked {
-	background: #FBE3E7;
-	border-color: #E9A9B4;
+	background: #FDE7E7;
+	border-color: #F1A5A5;
 	cursor: not-allowed;
 }
 
@@ -804,8 +804,8 @@ textarea.form-control {
 }
 
 .mini-cal-dot-full {
-	background: #E0577F;
-	box-shadow: 0 0 0 2px #FBE3E7;
+	background: #E53935;
+	box-shadow: 0 0 0 2px #FDE7E7;
 }
 
 .mini-cal-selected-text {

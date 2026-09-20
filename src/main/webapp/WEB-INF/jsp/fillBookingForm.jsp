@@ -119,7 +119,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">เวลาเริ่มพิธี <span class="required" style="color:red;">*</span></label>
-                                <input type="time" name="eventTime" id="eventTimeInput" class="form-control" required>
+                                <input type="time" name="eventTime" id="eventTimeInput" class="form-control" value="07:00" required>
                             </div>
                         </div>
                     </div>
@@ -156,9 +156,9 @@
 
                     <div class="form-group">
                         <label class="form-label">📸 รูปภาพสถานที่จัดงาน <span class="required" style="color:red;">*</span></label>
-                        <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">อัปโหลดได้หลายรูป เพื่อให้ทีมงานเตรียมการได้ถูกต้อง</p>
+                        <p style="font-size:12px;color:#B0345A;margin-bottom:10px;">อัปโหลดได้สูงสุด 5 รูป เพื่อให้ทีมงานเตรียมการได้ถูกต้อง</p>
                         <div id="imagePreviewBox" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
-                        <button type="button" onclick="document.getElementById('imgPicker').click()" style="cursor:pointer;background:#FBD0DE;border:1px dashed #E0577F;padding:8px 16px;border-radius:8px;color:#B0345A;font-size:13px;">+ เพิ่มรูป</button>
+                        <button type="button" id="addImgBtn" onclick="document.getElementById('imgPicker').click()" style="cursor:pointer;background:#FBD0DE;border:1px dashed #E0577F;padding:8px 16px;border-radius:8px;color:#B0345A;font-size:13px;">+ เพิ่มรูป</button>
                         <input type="file" id="imgPicker" accept="image/*" style="display:none">
                         <div id="base64Container"></div>
                     </div>
@@ -235,7 +235,7 @@
                         <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
                             <div class="form-group" id="monkCountGroup" style="margin-top:14px; display:block;">
                                 <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
-                                <p style="font-size:12px;color:#B0345A;margin-top:2px;">ระบุจำนวนพระสงฆ์ที่ต้องการก่อน เพื่อให้ระบบแสดงช่องเลือกวัดให้ครบตามจำนวน</p>
+                                <p style="font-size:12px;color:#B0345A;margin-top:2px;">ระบุจำนวนพระสงฆ์ที่ต้องการ</p>
                                 <input type="hidden" name="details[${detailIndex}].question.questionsId" id="monkCountQuestionIdField" value="${q.questionsId}">
                                 <input type="number" name="details[${detailIndex}].answer" id="monkCountField" class="form-control" value="" placeholder="เช่น 5" min="1" required oninput="onMonkCountInputChange(this.value)">
                             </div>
@@ -262,21 +262,18 @@
                                 <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
                                 <div class="checkbox-group">
                                     <label class="checkbox-label">
-                                        <input type="radio" name="watType" value="ต่างวัด" onchange="toggleWatOwnField('watDiff', true); renderWatDropdowns('watDropdowns','watDiffAnswer', document.getElementById('monkCountField').value);">
-                                        <span>ระบุวัดที่ต้องการเป็นรายรูป <small style="color:#B0345A;">(เลือกได้ครบตามจำนวนพระสงฆ์)</small></span>
-                                    </label>
-                                    <label class="checkbox-label">
                                         <input type="radio" name="watType" value="ให้ร้านเลือกให้" onchange="toggleWatOwnField('watDiff', false); document.getElementById('watDiffAnswer').value='ให้ร้านเลือกให้';" checked>
                                         <span>ให้ทางร้านเลือกให้ทั้งหมด <small style="color:#B0345A;">(เลือกวัดใกล้พื้นที่จัดงาน)</small></span>
                                     </label>
+                                    <label class="checkbox-label">
+                                        <input type="radio" name="watType" value="ต่างวัด" onchange="toggleWatOwnField('watDiff', true); document.getElementById('watDiffAnswer').value='';">
+                                        <span>ระบุวัดที่ต้องการ <small style="color:#B0345A;">(ระบุชื่อวัด)</small></span>
+                                    </label>
                                 </div>
-                                <textarea name="details[${detailIndex}].answer" id="watDiffAnswer" class="form-control" style="display:none;">ให้ร้านเลือกให้</textarea>
                                 <p style="font-size:12px;color:red;margin:8px 0 0;">หมายเหตุ: วัดที่ระบุอาจมีการเปลี่ยนแปลงได้ตามความสะดวกของพระสงฆ์ในวันงาน</p>
                                 <div id="watDiff" style="display:none; margin-top:12px;">
-                                    <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">ระบุวัดที่ต้องการสำหรับพระแต่ละรูป</p>
-                                    <div id="watDropdowns">
-                                        <p class="wat-picker-empty">กรุณาระบุจำนวนพระสงฆ์ก่อน จึงจะแสดงช่องเลือกวัด</p>
-                                    </div>
+                                    <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">ระบุชื่อวัดที่ต้องการนิมนต์</p>
+                                    <textarea name="details[${detailIndex}].answer" id="watDiffAnswer" class="form-control" rows="2" placeholder="เช่น วัดเจดีย์หลวงวรวิหาร"></textarea>
                                 </div>
                             </div>
                             <c:set var="detailIndex" value="${detailIndex + 1}"/>
@@ -339,7 +336,7 @@
 </div>
 
         <div class="form-card">
-            <div class="card-header">ชุดภัตตาหารปิ่นโต</div>
+            <div class="card-header">ชุดภัตตาหารปิ่นโต (ไม่รวมในแพ็กเกจ)</div>
             <div class="card-body">
                 <c:forEach items="${questions}" var="q">
                     <c:if test="${fn:contains(q.questionsText, 'ต้องการชุดภัตตาหาร')}">
@@ -369,7 +366,9 @@
                             <div class="form-group" style="margin-bottom:14px;">
                                 <label class="form-label">${q.questionsText}<span class="required" style="color:red;">*</span></label>
                                 <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                <input type="number" name="details[${detailIndex}].answer" class="form-control pinto-qty" placeholder="ระบุจำนวนชุด..." min="1" required>
+                                <input type="number" name="details[${detailIndex}].answer" id="pintoQtyInput" class="form-control pinto-qty"
+                                       value="${startInCustomMode ? '' : (empty pkgMonkCount ? 7 : pkgMonkCount + 2)}"
+                                       placeholder="ระบุจำนวนชุด..." min="1" required oninput="this.dataset.userEdited = 'true';">
                             </div>
                             <c:set var="detailIndex" value="${detailIndex + 1}"/>
                         </c:if>
@@ -412,6 +411,7 @@
                             <p style="font-size:12px;color:#B0345A;margin-top:2px;">อุปกรณ์เสริมที่ทางร้านมีให้บริการ (เช่น เต็นท์, โต๊ะ, เก้าอี้, พัดลมไอเย็น, ไมโครโฟนไร้สาย, พรมทางเดิน)</p>
                             <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
                             <textarea name="details[${detailIndex}].answer" class="form-control" rows="3" placeholder="เช่น ต้องการเก้าอี้เพิ่ม 10 ตัว เป็นต้น"></textarea>
+                            <p style="font-size:12px;color:red;margin-top:4px;">หมายเหตุ: อาจมีค่าใช้จ่ายเพิ่มเติม</p>
                         </div>
                     </div>
                 </div>
@@ -522,6 +522,11 @@ var isCustomMode = ${startInCustomMode};
     imgPicker.addEventListener('change', function() {
         var file = this.files[0];
         if (!file) return;
+        if (imageList.length >= 5) {
+            alert('อัปโหลดรูปภาพได้สูงสุด 5 รูป');
+            this.value = '';
+            return;
+        }
         var reader = new FileReader();
         reader.onload = function(e) {
             imageList.push(e.target.result);
@@ -557,6 +562,13 @@ var isCustomMode = ${startInCustomMode};
             inp.name = 'imageBase64[' + i + ']';
             inp.value = imageList[i];
             container.appendChild(inp);
+        }
+        var addBtn = document.getElementById('addImgBtn');
+        if (addBtn) {
+            var atLimit = imageList.length >= 5;
+            addBtn.disabled = atLimit;
+            addBtn.style.opacity = atLimit ? '0.5' : '1';
+            addBtn.style.cursor = atLimit ? 'not-allowed' : 'pointer';
         }
     }
 })();
@@ -631,128 +643,10 @@ function toggleSection(id, show) {
     }
 }
 
-var watOptionList = [
-    "ให้ทางร้านเลือกให้",
-    "วัดพระสิงห์วรมหาวิหาร",
-    "วัดเจดีย์หลวงวรวิหาร",
-    "วัดสวนดอก (วัดบุพพาราม)",
-    "วัดเชียงมั่น",
-    "วัดพระธาตุดอยสุเทพราชวรวิหาร",
-    "วัดอุโมงค์ (สวนพุทธธรรม)",
-    "วัดโลกโมฬี",
-    "วัดพันเตา",
-    "วัดชัยมงคล",
-    "วัดดับภัย",
-    "วัดหมื่นล้าน",
-    "วัดเจ็ดยอด (วัดโพธารามมหาวิหาร)",
-    "อื่นๆ (ระบุวัดเอง)"
-];
-
-function renderWatDropdowns(containerId, textareaId, count) {
-    var container = document.getElementById(containerId);
-    var textarea = document.getElementById(textareaId);
-    if (!container || !textarea) return;
-
-    count = parseInt(count, 10);
-    if (!count || count < 1) {
-        container.innerHTML = '<p class="wat-picker-empty">กรุณาระบุจำนวนพระสงฆ์ก่อน จึงจะแสดงช่องเลือกวัด</p>';
-        textarea.value = '';
-        return;
-    }
-
-    container.innerHTML = '';
-    container.dataset.totalCount = count;
-
-    for (var i = 1; i <= count; i++) {
-        var row = document.createElement('div');
-        row.className = 'wat-picker-row';
-        row.style.marginBottom = '8px';
-        
-        var label = document.createElement('span');
-        label.className = 'wat-picker-label';
-        label.innerText = 'รูปที่ ' + i;
-        
-        var select = document.createElement('select');
-        select.className = 'form-select';
-        watOptionList.forEach(function(w) {
-            var opt = document.createElement('option');
-            opt.value = w;
-            opt.innerText = '▼ ' + w;
-            select.appendChild(opt);
-        });
-        
-        var customInputWrap = document.createElement('div');
-        customInputWrap.className = 'custom-wat-wrap';
-        customInputWrap.style.display = 'none';
-        customInputWrap.style.marginTop = '6px';
-        
-        var customInput = document.createElement('input');
-        customInput.type = 'text';
-        customInput.className = 'form-control custom-wat-input';
-        customInput.placeholder = 'พิมพ์ชื่อวัดที่ต้องการ...';
-        customInput.style.fontSize = '13px';
-        
-        var warningText = document.createElement('p');
-        warningText.style.fontSize = '12px';
-        warningText.style.color = '#c0392b';
-        warningText.style.margin = '4px 0 0 0';
-        warningText.innerText = '* วัดที่ระบุต้องอยู่บริเวณใกล้เคียงสถานที่จัดงานเท่านั้น และอาจมีการเปลี่ยนแปลงตามความสะดวกของพระสงฆ์';
-        
-        customInputWrap.appendChild(customInput);
-        customInputWrap.appendChild(warningText);
-
-        select.addEventListener('change', (function(currentWrap) {
-            return function() {
-                if (this.value === 'อื่นๆ (ระบุวัดเอง)') {
-                    currentWrap.style.display = 'block';
-                } else {
-                    currentWrap.style.display = 'none';
-                }
-                syncWatAnswer(containerId, textareaId);
-            };
-        })(customInputWrap));
-        
-        customInput.addEventListener('input', function() {
-            syncWatAnswer(containerId, textareaId);
-        });
-
-        row.appendChild(label);
-        row.appendChild(select);
-        row.appendChild(customInputWrap);
-        container.appendChild(row);
-    }
-
-    syncWatAnswer(containerId, textareaId);
-}
-
-function syncWatAnswer(containerId, textareaId) {
-    var container = document.getElementById(containerId);
-    var textarea = document.getElementById(textareaId);
-    if (!container || !textarea) return;
-    
-    var rows = container.querySelectorAll('.wat-picker-row');
-    var lines = [];
-    
-    rows.forEach(function(row, idx) {
-        var select = row.querySelector('select');
-        var customInput = row.querySelector('.custom-wat-input');
-        var val = select.value;
-        
-        if (val === 'อื่นๆ (ระบุวัดเอง)') {
-            val = customInput.value.trim() ? ('(อื่นๆ) ' + customInput.value.trim()) : '(อื่นๆ) ยังไม่ระบุ';
-        }
-        
-        lines.push('รูปที่ ' + (idx + 1) + ' ' + val);
-    });
-    
-    textarea.value = lines.join('\n');
-}
-
 function syncAllWatAnswersBeforeSubmit() {
-    var watTypeRadio = document.querySelector('input[name="watType"]:checked');
-    if (watTypeRadio && watTypeRadio.value === 'ต่างวัด') {
-        syncWatAnswer('watDropdowns', 'watDiffAnswer');
-    }
+    // ตอนนี้ "ระบุวัดที่ต้องการ" เป็นกล่อง text เดียว (watDiffAnswer) ที่ผูกกับ
+    // name attribute โดยตรงอยู่แล้ว จึงไม่ต้อง sync ค่าจากที่อื่นอีก เก็บฟังก์ชันนี้ไว้
+    // เผื่อจุดอื่นเรียกใช้อยู่ (handleFormSubmit)
     return true;
 }
 
@@ -761,24 +655,28 @@ function applyPackageMonkCount(radio) {
     if (input && radio.dataset.monkcount) {
         input.value = radio.dataset.monkcount;
     }
+    var monkVal = input ? parseInt(input.value, 10) : 5;
+    if (isNaN(monkVal)) monkVal = 5;
+
     var qtyInput = document.getElementById('sanghatanQtyInput');
     if (qtyInput && qtyInput.dataset.userEdited !== 'true') {
-        qtyInput.value = input ? input.value : 5;
+        qtyInput.value = monkVal;
     }
-    var watDiff = document.getElementById('watDiff');
-    if (watDiff && watDiff.style.display !== 'none') {
-        renderWatDropdowns('watDropdowns', 'watDiffAnswer', input ? input.value : 5);
+    var pintoInput = document.getElementById('pintoQtyInput');
+    if (pintoInput && pintoInput.dataset.userEdited !== 'true') {
+        pintoInput.value = monkVal + 2;
     }
 }
 
 function onMonkCountInputChange(value) {
-    var watDiff = document.getElementById('watDiff');
-    if (watDiff && watDiff.style.display !== 'none') {
-        renderWatDropdowns('watDropdowns', 'watDiffAnswer', value || 0);
-    }
     var sQty = document.getElementById('sanghatanQtyInput');
     if (sQty && sQty.dataset.userEdited !== 'true') {
         sQty.value = value;
+    }
+    var pintoInput = document.getElementById('pintoQtyInput');
+    if (pintoInput && pintoInput.dataset.userEdited !== 'true') {
+        var v = parseInt(value, 10);
+        pintoInput.value = isNaN(v) ? '' : (v + 2);
     }
 }
 

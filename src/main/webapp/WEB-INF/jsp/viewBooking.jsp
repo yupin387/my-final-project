@@ -624,28 +624,14 @@
 			<%-- Action Bar --%>
 			<div class="action-bar">
 				<div>
-					<c:choose>
-						<c:when test="${booking.bookingStatus == 'Completed'}">
-							<c:choose>
-								<c:when test="${empty hasReview || !hasReview}">
-									<a
-										href="${pageContext.request.contextPath}/review/write/${booking.bookingId}"
-										class="btn btn-review"> <i class="bi bi-star-fill me-1"></i>
-										เขียนรีวิวความประทับใจ
-									</a>
-								</c:when>
-								<c:otherwise>
-									<button class="btn btn-reviewed" disabled>คุณได้รีวิวงานนี้แล้ว</button>
-								</c:otherwise>
-							</c:choose>
-						</c:when>
-						<c:when test="${booking.bookingStatus == 'Pending'}">
-							<button type="button" class="btn btn-cancel"
-								onclick="showCancelModal('${booking.bookingId}')">
-								<i class="bi bi-x-circle me-1"></i> ยกเลิกรายการจอง
-							</button>
-						</c:when>
-					</c:choose>
+					<%-- ปุ่มเขียนรีวิวถูกย้ายไปอยู่ที่หน้ารายการจอง (myBookingList) แล้ว
+					     หน้านี้จึงเหลือเฉพาะปุ่มยกเลิกรายการจองกรณีที่ยังรอดำเนินการ --%>
+					<c:if test="${booking.bookingStatus == 'Pending'}">
+						<button type="button" class="btn btn-cancel"
+							onclick="showCancelModal('${booking.bookingId}')">
+							<i class="bi bi-x-circle me-1"></i> ยกเลิกรายการจอง
+						</button>
+					</c:if>
 				</div>
 				<a href="${pageContext.request.contextPath}/myBookings"
 					class="btn-back">← กลับหน้ารายการจอง</a>
