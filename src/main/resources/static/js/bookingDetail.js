@@ -14,7 +14,7 @@ document.addEventListener('click', function (e) {
 
 // ===== Modal Functions =====
 function openApproveModal(bookingId, approveUrl) {
-    document.getElementById('displayBookingId').textContent = 'รหัส: ' + bookingId;
+    document.getElementById('displayBookingId').textContent = 'รหัสการจอง: ' + bookingId;
     document.getElementById('confirmApproveLink').href = approveUrl;
     document.getElementById('approveModal').style.display = 'flex';
 }

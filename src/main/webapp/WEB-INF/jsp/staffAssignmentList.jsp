@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -8,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>จัดการการมอบหมายงาน - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/staffAssignmentList.css?v=4">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/staffAssignmentList.css?v=7">
 </head>
 <body>
 
@@ -60,44 +61,120 @@
             <div class="gold-line"></div>
         </div>
 
-        <div class="content-card">
-            <div class="card-header-bar">
-                <span>รายการงานทั้งหมด</span>
-                <span class="header-count">จำนวนทั้งหมด ${assignments.size()} รายการ</span>
+        <%-- ===== Tabbed Card: แท็บติดกับการ์ดเป็นชิ้นเดียว ===== --%>
+        <div class="tabbed-card">
+
+            <div class="tabs-attached">
+                <button type="button" class="tab-attached-btn active" data-tab="active" onclick="switchTab('active')">
+                    กำลังดำเนินการ <span class="tab-count">${fn:length(activeAssignments)}</span>
+                </button>
+                <button type="button" class="tab-attached-btn" data-tab="history" onclick="switchTab('history')">
+                    ประวัติการจอง <span class="tab-count">${fn:length(completedAssignments)}</span>
+                </button>
             </div>
-            <table>
-   <thead>
-    <tr>
-        <th width="13%">รหัสมอบหมาย</th>
-        <th width="13%">วันที่มอบหมาย</th>
-        <th width="13%">วันจัดงาน</th>
-        <th width="18%">ประเภทพิธี</th>
-        <th width="18%">ชื่อลูกค้า</th>
-        <th width="13%">สถานะงาน</th>
-        <th width="12%" style="text-align: center;">จัดการ</th>
-    </tr>
-</thead>
-<tbody>
-    <c:forEach var="a" items="${assignments}">
-        <tr>
-            <td><span class="assign-id">${a.assignId}</span></td>
-            <td><fmt:formatDate value="${a.assignDate}" pattern="dd/MM/yyyy"/></td>
-            <td><strong><fmt:formatDate value="${a.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></strong></td>
-            <td><span class="ceremony-name">${a.bookingForm.ceremony.ceremonyType}</span></td>
-            <td>${a.bookingForm.member.memberFirstName}</td>
-            <td><span class="status-badge status-${a.jobStatus}">${a.jobStatus}</span></td>
-            <td style="text-align: center;">
-                <a href="${pageContext.request.contextPath}/staff/assignments/detail/${a.assignId}" class="btn-view">ดูรายละเอียด</a>
-            </td>
-        </tr>
-    </c:forEach>
-    <c:if test="${empty assignments}">
-        <tr>
-            <td colspan="7" class="empty-state">ไม่พบรายการงานมอบหมาย</td>
-        </tr>
-    </c:if>
-</tbody>
-            </table>
+
+            <%-- ===== แท็บ: กำลังดำเนินการ ===== --%>
+            <div class="tab-panel show" id="tab-active">
+                <div class="card-header-bar">
+                    <span>รายการที่กำลังดำเนินการ</span>
+                    <span class="header-count">จำนวนทั้งหมด ${fn:length(activeAssignments)} รายการ</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="13%">รหัสมอบหมาย</th>
+                            <th width="13%">วันที่มอบหมาย</th>
+                            <th width="13%">วันจัดงาน</th>
+                            <th width="18%">ประเภทพิธี</th>
+                            <th width="18%">ชื่อลูกค้า</th>
+                            <th width="13%">สถานะงาน</th>
+                            <th width="12%" style="text-align: center;">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="a" items="${activeAssignments}">
+                            <tr>
+                                <td><span class="assign-id">${a.assignId}</span></td>
+                                <td><fmt:formatDate value="${a.assignDate}" pattern="dd/MM/yyyy"/></td>
+                                <td><strong><fmt:formatDate value="${a.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></strong></td>
+                                <td><span class="ceremony-name">${a.bookingForm.ceremony.ceremonyType}</span></td>
+                                <td>${a.bookingForm.member.memberFirstName}</td>
+                                <td>
+                                    <span class="status-badge status-${a.jobStatus}">
+                                        <c:choose>
+                                            <c:when test="${a.jobStatus == 'Assigned'}">มอบหมายแล้ว</c:when>
+                                            <c:when test="${a.jobStatus == 'Preparing'}">เตรียมงาน</c:when>
+                                            <c:when test="${a.jobStatus == 'In_Progress'}">กำลังดำเนินงาน</c:when>
+                                            <c:when test="${a.jobStatus == 'Completed'}">เสร็จสิ้น</c:when>
+                                            <c:otherwise>${a.jobStatus}</c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                </td>
+                                <td style="text-align: center;">
+                                    <a href="${pageContext.request.contextPath}/staff/assignments/detail/${a.assignId}" class="btn-view">ดูรายละเอียด</a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        <c:if test="${empty activeAssignments}">
+                            <tr>
+                                <td colspan="7" class="empty-state">ไม่มีงานที่กำลังดำเนินการ</td>
+                            </tr>
+                        </c:if>
+                    </tbody>
+                </table>
+            </div>
+
+            <%-- ===== แท็บ: ประวัติการจอง (Completed) ===== --%>
+            <div class="tab-panel" id="tab-history">
+                <div class="card-header-bar">
+                    <span>ประวัติการจองที่สิ้นสุดแล้ว</span>
+                    <span class="header-count">จำนวนทั้งหมด ${fn:length(completedAssignments)} รายการ</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="13%">รหัสมอบหมาย</th>
+                            <th width="13%">วันที่มอบหมาย</th>
+                            <th width="13%">วันจัดงาน</th>
+                            <th width="18%">ประเภทพิธี</th>
+                            <th width="18%">ชื่อลูกค้า</th>
+                            <th width="13%">สถานะงาน</th>
+                            <th width="12%" style="text-align: center;">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="a" items="${completedAssignments}">
+                            <tr>
+                                <td><span class="assign-id">${a.assignId}</span></td>
+                                <td><fmt:formatDate value="${a.assignDate}" pattern="dd/MM/yyyy"/></td>
+                                <td><strong><fmt:formatDate value="${a.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></strong></td>
+                                <td><span class="ceremony-name">${a.bookingForm.ceremony.ceremonyType}</span></td>
+                                <td>${a.bookingForm.member.memberFirstName}</td>
+                                <td>
+                                    <span class="status-badge status-${a.jobStatus}">
+                                        <c:choose>
+                                            <c:when test="${a.jobStatus == 'Assigned'}">มอบหมายแล้ว</c:when>
+                                            <c:when test="${a.jobStatus == 'Preparing'}">เตรียมงาน</c:when>
+                                            <c:when test="${a.jobStatus == 'In_Progress'}">กำลังดำเนินงาน</c:when>
+                                            <c:when test="${a.jobStatus == 'Completed'}">เสร็จสิ้น</c:when>
+                                            <c:otherwise>${a.jobStatus}</c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                </td>
+                                <td style="text-align: center;">
+                                    <a href="${pageContext.request.contextPath}/staff/assignments/detail/${a.assignId}" class="btn-view">ดูรายละเอียด</a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        <c:if test="${empty completedAssignments}">
+                            <tr>
+                                <td colspan="7" class="empty-state">ยังไม่มีประวัติการจองที่สิ้นสุดแล้ว</td>
+                            </tr>
+                        </c:if>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
     </div>
@@ -130,6 +207,15 @@
             document.getElementById('dropdownMenu').classList.remove('show');
         }
     });
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-attached-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.tab === tab);
+        });
+        document.querySelectorAll('.tab-panel').forEach(function(panel) {
+            panel.classList.toggle('show', panel.id === 'tab-' + tab);
+        });
+    }
     </script>
 </body>
 </html>

@@ -202,7 +202,7 @@
 						<p>โทร. 080-123-4567 | อีเมล: boonmee@gmail.com</p>
                 </div>
                 <div class="doc-title-box">
-                    <h1>แก้ไขใบเสนอราคา ${q.quotationId}</h1>
+                    <h1>แก้ไขใบเสนอราคา #${q.quotationId}</h1>
                     <p>(Quotation)</p>
                 </div>
             </div>
@@ -346,6 +346,12 @@
                 </c:set>
 
                 <!-- บล็อกสำหรับหมวดสังฆทาน -->
+                <%--
+                    FIX: ราคา/สถานะ "ฟรี" ของแต่ละรายการสังฆทาน ต้องอ่านจากราคาที่ถูกบันทึกไว้จริง
+                    (subtotal / quantity) ซึ่งคำนวณส่วนต่างมาแล้วอย่างถูกต้องตอนสร้างใบเสนอราคา
+                    (จาก QuotationService.calculateSanghatanLines) ไม่ใช่เทียบราคาสินค้าตรงๆ กับเลข 299
+                    ที่เป็นการเดาแบบตายตัวและผิดถ้าราคาสินค้าจริงไม่ตรง 299 พอดี
+                --%>
                 <c:set var="sangkathanBlockEdit">
                     <tr class="group-row">
                         <td class="no-index"></td>
@@ -357,11 +363,12 @@
                     </tr>
                     <c:forEach var="d" items="${details}">
                         <c:if test="${d.item != null && d.item.itemType != null && d.item.itemName != packageName && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
+                            <c:set var="sangUnitPriceEdit" value="${d.quantity > 0 ? (d.subtotal / d.quantity) : 0}" />
+                            <c:set var="isFreeSangEdit" value="${!isCustomRequest && sangUnitPriceEdit == 0}" />
                             <tr class="static-row" data-item-id="${d.item.itemId}">
                                 <td class="text-center row-number"></td>
                                 <td>
                                     ${d.item.itemName} 
-                                    <c:set var="isFreeSangEdit" value="${!isCustomRequest && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}" />
                                     <c:if test="${isFreeSangEdit}">
                                         <span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / รวมในแพ็กเกจ)</span>
                                     </c:if>
@@ -371,8 +378,10 @@
                                 <td><input type="number" name="bookingQtys" value="${d.quantity}" class="clean-input text-center qty-input" min="1" onchange="calculateGrandTotal()"></td>
                                 <td class="text-center">${d.item.unit}</td>
                                 <td>
-                                    <c:set var="sangPriceEdit" value="${isFreeSangEdit ? '0.00' : d.item.pricePerUnit}" />
-                                    <input type="number" name="bookingPrices" value="${sangPriceEdit}" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
+                                    <input type="number" name="bookingPrices"
+                                           value="<fmt:formatNumber value='${sangUnitPriceEdit}' pattern='0.00'/>"
+                                           step="0.01" min="0" class="clean-input text-right price-input"
+                                           onchange="calculateGrandTotal()" readonly>
                                 </td>
                                 <td class="text-right"><span class="subtotal">0.00</span></td>
                                 <td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>

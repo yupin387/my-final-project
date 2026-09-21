@@ -10,8 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/manager/quotation")
@@ -30,9 +36,10 @@ public class QuotationController {
     
 
     // แสดงรายการใบเสนอราคาทั้งหมด รองรับการกรองตามสถานะ (status)
+    // ค่าเริ่มต้นคือ "Pending" (รอยืนยัน) และเรียงวันจัดงานที่ใกล้ที่สุดไว้บนสุด
     @GetMapping
     public String listAllQuotations(
-            @RequestParam(name = "status", defaultValue = "All") String status,
+            @RequestParam(name = "status", defaultValue = "Pending") String status,
             Model model,
             HttpSession session) {
 
@@ -40,15 +47,36 @@ public class QuotationController {
             return "redirect:/loginmanager";
         }
 
+        List<Quotation> all = quotationService.getAllQuotations();
+
+        // นับจำนวนแต่ละสถานะ (ใช้แสดงในตัวกรองของหน้า JSP)
+        Map<String, Long> statusCounts = new HashMap<>();
+        statusCounts.put("All", (long) all.size());
+        for (String s : new String[]{"Pending", "Revised", "Confirmed"}) {
+            statusCounts.put(s, all.stream()
+                    .filter(q -> s.equalsIgnoreCase(q.getQuotationStatus()))
+                    .count());
+        }
+
+        // กรองตามสถานะ
         List<Quotation> quotations;
         if ("All".equalsIgnoreCase(status)) {
-            quotations = quotationService.getAllQuotations();
+            quotations = new ArrayList<>(all);
         } else {
-            quotations = quotationService.getQuotationsByStatus(status);
+            quotations = new ArrayList<>();
+            for (Quotation q : all) {
+                if (status.equalsIgnoreCase(q.getQuotationStatus())) {
+                    quotations.add(q);
+                }
+            }
         }
+
+        // เรียงวันจัดงานที่ใกล้ที่สุดขึ้นก่อน
+        quotations.sort(byNearestEventDate());
 
         model.addAttribute("quotations", quotations);
         model.addAttribute("currentStatus", status);
+        model.addAttribute("statusCounts", statusCounts);
 
         return "quotationList";
     }
@@ -95,6 +123,10 @@ public class QuotationController {
         }
 
         model.addAttribute("extraSelectableItems", extraSelectableItems);
+
+        // 5. ราคาชุดสังฆทานที่คำนวณตามกฎแพ็กเกจ (ส่วนต่างจากชุดที่รวมในแพ็กเกจ / เกินโควตาคิดเต็ม)
+        //    ใช้เป็นค่าเริ่มต้นของแถวสังฆทานในฟอร์ม Organizer ยังแก้ราคาเองได้
+        model.addAttribute("sanghatanLines", quotationService.calculateSanghatanLines(booking));
 
         return "quotationForm";
     }
@@ -246,6 +278,34 @@ public class QuotationController {
     // ==========================================
     // Helper Methods
     // ==========================================
+
+    // เรียงลำดับวันจัดงาน: งานที่ยังไม่ถึง (ใกล้สุดอยู่บน) → งานที่ผ่านไปแล้ว (ล่าสุดก่อน) → ไม่มีวันที่อยู่ท้ายสุด
+    private Comparator<Quotation> byNearestEventDate() {
+        LocalDate today = LocalDate.now();
+        return (a, b) -> {
+            LocalDate da = getEventLocalDate(a);
+            LocalDate db = getEventLocalDate(b);
+
+            if (da == null && db == null) return 0;
+            if (da == null) return 1;
+            if (db == null) return -1;
+
+            boolean pastA = da.isBefore(today);
+            boolean pastB = db.isBefore(today);
+            if (pastA != pastB) return pastA ? 1 : -1;      // งานที่ยังไม่ถึงอยู่ก่อน
+
+            return pastA ? db.compareTo(da)                  // งานที่ผ่านแล้ว: ล่าสุดก่อน
+                         : da.compareTo(db);                 // งานที่ยังไม่ถึง: ใกล้สุดก่อน
+        };
+    }
+
+    // แปลงวันจัดงานของใบเสนอราคาเป็น LocalDate (คืน null ถ้าไม่มีข้อมูล)
+    private LocalDate getEventLocalDate(Quotation q) {
+        if (q.getBookingForm() == null || q.getBookingForm().getEventDate() == null) return null;
+        return Instant.ofEpochMilli(q.getBookingForm().getEventDate().getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
 
     // กรองรายละเอียดการจอง (BookingFormDetail) ให้เหลือเฉพาะคำถาม-คำตอบที่เกี่ยวข้องกับ
     // ภัตตาหาร/สังฆทาน/อุปกรณ์/พระ และมีคำตอบที่ไม่ใช่ "ไม่ต้องการ"/"ไม่"/ตัวเลขล้วน

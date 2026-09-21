@@ -53,16 +53,14 @@
 	border: 1px solid #f5c6cb;
 }
 
-@
-keyframes alertFadeIn {from { opacity:0;
-	transform: translateY(-6px);
-}
-
-to {
-	opacity: 1;
-	transform: translateY(0);
-}
-
+@keyframes alertFadeIn {
+    from { opacity:0;
+	    transform: translateY(-6px);
+    }
+    to {
+	    opacity: 1;
+	    transform: translateY(0);
+    }
 }
 .remarks-box .remarks-header {
 	margin-bottom: 8px;
@@ -346,8 +344,9 @@ to {
 								</c:if>
 								<tr>
 									<td class="text-center row-number"></td>
-									<td>${d.item.itemName} <c:set var="isFreeSang"
-											value="${!isCustomRequest && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}" />
+									<td>${d.item.itemName}
+									<c:set var="isFreeSang"
+    value="${!isCustomRequest && d.quantity > 0 && d.subtotal == 0}" />
 										<c:if test="${isFreeSang}">
 											<span class="text-danger"
 												style="font-size: 12px; font-weight: bold;"> (ฟรี /
@@ -541,9 +540,9 @@ to {
 								<c:set var="itemVal" value="${d.subtotal}" />
 								<c:set var="isFreeInTotal" value="false" />
 
-								<%-- หักของฟรีในโหมดแพ็กเกจ (สังฆทานมาตรฐาน 299) --%>
+								<%-- หักของฟรีในโหมดแพ็กเกจ (เช็คจาก d.subtotal == 0) --%>
 								<c:if
-									test="${!isCustomRequest && d.item != null && d.item.itemType != null && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
+									test="${!isCustomRequest && d.item != null && d.item.itemType != null && d.item.itemType.itemTypeName.contains('สังฆทาน') && d.subtotal == 0}">
 									<c:set var="itemVal" value="0" />
 									<c:set var="isFreeInTotal" value="true" />
 								</c:if>

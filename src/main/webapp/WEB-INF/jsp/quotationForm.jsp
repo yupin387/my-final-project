@@ -239,12 +239,7 @@
                                 </c:forEach>
                             </tbody>
 
-                            <c:set var="sangQty" value="1" />
-                            <c:forEach var="d" items="${b.details}">
-                                <c:if test="${fn:contains(d.question.questionsText,'สังฆทาน') && fn:contains(d.question.questionsText,'จำนวน')}">
-                                    <c:if test="${not empty d.answer && d.answer != '0'}"><c:set var="sangQty" value="${d.answer}" /></c:if>
-                                </c:if>
-                            </c:forEach>
+                            <%-- หมวดสังฆทาน: วนตาม sanghatanLines ที่ Controller คำนวณไว้ (โหมดกรอกเอง = คิดราคาเต็มทุกชุด) --%>
                             <tbody id="group-sangkathan" data-category="สังฆทาน">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
@@ -254,33 +249,19 @@
                                     </td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
-                                <c:forEach var="detail" items="${validDetails}">
-                                    <c:if test="${fn:contains(detail.question.questionsText,'สังฆทาน') && fn:contains(detail.question.questionsText,'เลือก')}">
-                                        <c:set var="selectedSangName" value="${fn:trim(detail.answer)}" />
-                                        <c:forEach var="item" items="${items}">
-                                            <c:if test="${fn:trim(item.itemName) eq selectedSangName}">
-                                                <tr class="static-row">
-                                                    <td class="text-center row-number"></td>
-                                                    <td>
-                                                        ${item.itemName}
-                                                        <c:set var="isFreeSang" value="${!isCustomRequest && (item.pricePerUnit == 299.0 || item.pricePerUnit == 299)}" />
-                                                        <c:if test="${isFreeSang}">
-                                                            <span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / รวมในแพ็กเกจ)</span>
-                                                        </c:if>
-                                                        <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
-                                                        <input type="hidden" name="bookingItemNames" value="${item.itemName}">
-                                                    </td>
-                                                    <td class="text-center">${sangQty}<input type="hidden" name="bookingQtys" value="${sangQty}" class="qty-input"></td>
-                                                    <td class="text-center">${item.unit}</td>
-                                                    <td>
-                                                        <c:set var="sangPrice" value="${isFreeSang ? '0.00' : item.pricePerUnit}" />
-                                                        <input type="number" name="bookingPrices" value="<fmt:formatNumber value='${sangPrice}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
-                                                    </td>
-                                                    <td class="text-right"><span class="subtotal">0.00</span></td>
-                                                </tr>
-                                            </c:if>
-                                        </c:forEach>
-                                    </c:if>
+                                <c:forEach var="ln" items="${sanghatanLines}">
+                                    <tr class="static-row">
+                                        <td class="text-center row-number"></td>
+                                        <td>
+                                            ${ln.item.itemName}
+                                            <c:if test="${not empty ln.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${ln.item.itemDetail}</span></c:if>
+                                            <input type="hidden" name="bookingItemNames" value="${ln.item.itemName}">
+                                        </td>
+                                        <td class="text-center">${ln.qty}<input type="hidden" name="bookingQtys" value="${ln.qty}" class="qty-input"></td>
+                                        <td class="text-center">${ln.item.unit}</td>
+                                        <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${ln.unitPrice}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                        <td class="text-right"><span class="subtotal">0.00</span></td>
+                                    </tr>
                                 </c:forEach>
                             </tbody>
 
@@ -376,12 +357,10 @@
                         <%-- ============ โหมด: แพ็กเกจ ============ --%>
                         <c:otherwise>
 
-                            <c:set var="sangQty" value="1" />
-                            <c:forEach var="d" items="${b.details}">
-                                <c:if test="${fn:contains(d.question.questionsText,'สังฆทาน') && fn:contains(d.question.questionsText,'จำนวน')}">
-                                    <c:if test="${not empty d.answer && d.answer != '0'}"><c:set var="sangQty" value="${d.answer}" /></c:if>
-                                </c:if>
-                            </c:forEach>
+                            <%-- หมวดสังฆทาน: วนตาม sanghatanLines ที่ Controller คำนวณไว้
+                                 - ชุดในโควตาแพ็กเกจ: คิดเฉพาะส่วนต่างจากชุดที่รวมในแพ็กเกจ (ชุดเดียวกัน = ฟรี)
+                                 - ชุดที่เกินโควตา: คิดราคาเต็ม
+                                 หมายเหตุ: แถว "ฟรี" ใช้ class text-danger เพื่อให้ JS ไม่นำชื่อไปแสดงในวงเล็บ "รายการเพิ่มเติม" --%>
                             <tbody id="group-sangkathan" data-category="สังฆทาน">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
@@ -391,33 +370,28 @@
                                     </td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
-                                <c:forEach var="detail" items="${validDetails}">
-                                    <c:if test="${fn:contains(detail.question.questionsText,'สังฆทาน') && fn:contains(detail.question.questionsText,'เลือก')}">
-                                        <c:set var="selectedSangName" value="${fn:trim(detail.answer)}" />
-                                        <c:forEach var="item" items="${items}">
-                                            <c:if test="${fn:trim(item.itemName) eq selectedSangName}">
-                                                <tr class="static-row">
-                                                    <td class="text-center row-number"></td>
-                                                    <td>
-                                                        ${item.itemName}
-                                                        <c:set var="isFreeSang" value="${!isCustomRequest && (item.pricePerUnit == 299.0 || item.pricePerUnit == 299)}" />
-                                                        <c:if test="${isFreeSang}">
-                                                            <span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / รวมในแพ็กเกจ)</span>
-                                                        </c:if>
-                                                        <c:if test="${not empty item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${item.itemDetail}</span></c:if>
-                                                        <input type="hidden" name="bookingItemNames" value="${item.itemName}">
-                                                    </td>
-                                                    <td class="text-center">${sangQty}<input type="hidden" name="bookingQtys" value="${sangQty}" class="qty-input"></td>
-                                                    <td class="text-center">${item.unit}</td>
-                                                    <td>
-                                                        <c:set var="sangPrice" value="${isFreeSang ? '0.00' : item.pricePerUnit}" />
-                                                        <input type="number" name="bookingPrices" value="<fmt:formatNumber value='${sangPrice}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly>
-                                                    </td>
-                                                    <td class="text-right"><span class="subtotal">0.00</span></td>
-                                                </tr>
-                                            </c:if>
-                                        </c:forEach>
-                                    </c:if>
+                                <c:forEach var="ln" items="${sanghatanLines}">
+                                    <c:set var="isFreeLine" value="${ln.label == 'รวมในแพ็กเกจ'}" />
+                                    <tr class="static-row">
+                                        <td class="text-center row-number"></td>
+                                        <td>
+                                            ${ln.item.itemName}
+                                            <c:choose>
+                                                <c:when test="${isFreeLine}">
+                                                    <span class="text-danger" style="font-size:12px; font-weight:bold;"> (ฟรี / รวมในแพ็กเกจ)</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="font-size:12px; font-weight:bold; color:#B0345A;"> (${ln.label})</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <c:if test="${not empty ln.item.itemDetail}"><br><span class="text-muted" style="font-size:12px;">${ln.item.itemDetail}</span></c:if>
+                                            <input type="hidden" name="bookingItemNames" value="${ln.item.itemName}">
+                                        </td>
+                                        <td class="text-center">${ln.qty}<input type="hidden" name="bookingQtys" value="${ln.qty}" class="qty-input"></td>
+                                        <td class="text-center">${ln.item.unit}</td>
+                                        <td><input type="number" name="bookingPrices" value="<fmt:formatNumber value='${ln.unitPrice}' pattern='0.00'/>" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>
+                                        <td class="text-right"><span class="subtotal">0.00</span></td>
+                                    </tr>
                                 </c:forEach>
                             </tbody>
 
@@ -642,7 +616,8 @@
                     if (!isFreeItem) {
                         var nameCell = row.children[1];
                         var nameText = (nameCell && nameCell.childNodes[0]) ? nameCell.childNodes[0].textContent.trim() : '';
-                        if (nameText) extraItemNames.push(nameText);
+                        // กันชื่อซ้ำ (เช่น ชุดสังฆทานชุดเดียวกันที่แยกเป็น 2 แถว: ส่วนต่าง + เกินโควตา)
+                        if (nameText && extraItemNames.indexOf(nameText) === -1) extraItemNames.push(nameText);
                     }
                 }
             }

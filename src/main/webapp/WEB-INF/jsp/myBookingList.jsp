@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>รายการจองของฉัน - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=16">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=17">
 
     <%-- สไตล์เฉพาะของแท็บและปุ่มรีวิว (เขียนไว้ในหน้านี้เพื่อไม่ต้องแก้ไฟล์ CSS เดิม) --%>
     <style>
@@ -188,15 +188,19 @@
                                             <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
                                             <td>${b.ceremony.ceremonyType}</td>
                                             <td>
-                                                <span class="mb-badge mb-badge-${b.bookingStatus}">
-                                                    <c:choose>
-                                                        <c:when test="${b.bookingStatus == 'Pending'}">รอดำเนินการ</c:when>
-                                                        <c:when test="${b.bookingStatus == 'Approved'}">อนุมัติแล้ว</c:when>
-                                                        <c:when test="${b.bookingStatus == 'Quoted'}">ออกใบเสนอราคาแล้ว</c:when>
-                                                        <c:when test="${b.bookingStatus == 'Confirmed'}">ยืนยันแล้ว</c:when>
-                                                        <c:otherwise>${b.bookingStatus}</c:otherwise>
-                                                    </c:choose>
-                                                </span>
+                                              <span class="mb-badge mb-badge-${b.bookingStatus}">
+    <c:choose>
+        <c:when test="${b.bookingStatus == 'Pending'}">รอดำเนินการ</c:when>
+        <c:when test="${b.bookingStatus == 'Assigned'}">รับงานแล้ว</c:when>
+        <c:when test="${b.bookingStatus == 'Approved'}">อนุมัติแล้ว</c:when>
+        <c:when test="${b.bookingStatus == 'Quoted'}">ออกใบเสนอราคาแล้ว</c:when>
+        <c:when test="${b.bookingStatus == 'Confirmed'}">ยืนยันแล้ว</c:when>
+        <c:when test="${b.bookingStatus == 'Preparing'}">กำลังเตรียมงาน</c:when>
+        <c:when test="${b.bookingStatus == 'InProgress' or b.bookingStatus == 'In_Progress'}">กำลังดำเนินงาน</c:when>
+        <c:when test="${b.bookingStatus == 'Processing'}">กำลังดำเนินการ</c:when>
+        <c:otherwise>${b.bookingStatus}</c:otherwise>
+    </c:choose>
+</span>
                                             </td>
                                             <td class="mybooking-actions">
                                                 <a href="${pageContext.request.contextPath}/viewBooking/${b.bookingId}"
@@ -272,11 +276,15 @@
 
                                                 <%-- ปุ่มรีวิว: กดรีวิวได้จากหน้ารายการนี้เลย ไม่ต้องเข้าไปหน้ารายละเอียดก่อน --%>
                                                 <c:if test="${b.bookingStatus == 'Completed'}">
-                                                    <c:set var="isReviewed"
-                                                           value="${not empty reviewedBookingIds and reviewedBookingIds.contains(b.bookingId)}"/>
+                                                    <c:set var="isReviewed" value="${false}"/>
+                                                    <c:forEach var="rid" items="${reviewedBookingIds}">
+                                                        <c:if test="${rid == b.bookingId}">
+                                                            <c:set var="isReviewed" value="${true}"/>
+                                                        </c:if>
+                                                    </c:forEach>
                                                     <c:choose>
                                                         <c:when test="${isReviewed}">
-                                                            <span class="btn-mybooking btn-mybooking-reviewed">รีวิวแล้ว</span>
+                                                            <span class="btn-mybooking btn-mybooking-reviewed">✓ รีวิวแล้ว</span>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <a href="${pageContext.request.contextPath}/review/write/${b.bookingId}"

@@ -61,7 +61,7 @@
     </div>
 
     <%-- ========== STATUS FILTER (dropdown) ========== --%>
-    <c:set var="currentStatus" value="${empty param.status ? 'All' : param.status}" />
+    <c:set var="currentStatus" value="${empty param.status ? 'Pending' : param.status}" />
     <c:choose>
         <c:when test="${currentStatus == 'Pending'}">
             <c:set var="dotClass" value="dot-pending" />
@@ -173,9 +173,9 @@
                 <c:if test="${empty quotations}">
                     <tr>
                         <td colspan="6" class="empty-state">
-                            <p>ไม่พบรายการใบเสนอราคาในหมวด
-                               <strong>"${empty param.status ? 'ทั้งหมด' : param.status}"</strong>
-                            </p>
+                           <p>ไม่พบรายการใบเสนอราคาในหมวด
+   <strong>"${selectedText}"</strong>
+</p>
                             <a href="?status=All" class="empty-link">กลับไปดูรายการทั้งหมด</a>
                         </td>
                     </tr>

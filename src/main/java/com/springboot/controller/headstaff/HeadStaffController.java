@@ -72,28 +72,38 @@ public class HeadStaffController {
     }
 
     // แสดงรายการงานที่ได้รับมอบหมายทั้งหมดของหัวหน้างานที่ล็อกอินอยู่ เรียงตามวันจัดงานที่ใกล้ถึงที่สุด
- // แสดงรายการงานที่ได้รับมอบหมายทั้งหมดของหัวหน้างานที่ล็อกอินอยู่
- // เรียงงานที่ยังไม่เสร็จไว้บน (ตามวันจัดงานใกล้สุดก่อน) ส่วนงานที่ Completed แล้วจะถูกดันไปไว้ล่างสุดเสมอ
- @GetMapping("/staff/assignments")
- public String listAssignments(Model model, HttpSession session) {
-     HeadStaff currentStaff = (HeadStaff) session.getAttribute("currentStaff");
-     if (currentStaff == null) return "redirect:/loginmanager"; 
+    @GetMapping("/staff/assignments")
+    public String listAssignments(Model model, HttpSession session) {
+        HeadStaff currentStaff = (HeadStaff) session.getAttribute("currentStaff");
+        if (currentStaff == null) return "redirect:/loginmanager"; 
 
-     List<JobAssignment> assignments = staffAssignmentService.getAssignmentsByStaff(currentStaff.getStaffId());
+        List<JobAssignment> assignments = staffAssignmentService.getAssignmentsByStaff(currentStaff.getStaffId());
 
-     assignments.sort(
-         java.util.Comparator
-             .comparing((JobAssignment a) -> "Completed".equals(a.getJobStatus()) ? 1 : 0)
-             .thenComparing(
-                 a -> a.getBookingForm().getEventDate(),
-                 java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder())
-             )
-     );
+        assignments.sort(
+            java.util.Comparator
+                .comparing((JobAssignment a) -> "Completed".equals(a.getJobStatus()) ? 1 : 0)
+                .thenComparing(
+                    a -> a.getBookingForm().getEventDate(),
+                    java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder())
+                )
+        );
 
-     model.addAttribute("assignments", assignments);
-     return "staffAssignmentList";
- }
-    
+        // แยกเป็นกำลังดำเนินการ vs ประวัติ (Completed)
+        List<JobAssignment> activeAssignments = new ArrayList<>();
+        List<JobAssignment> completedAssignments = new ArrayList<>();
+        for (JobAssignment a : assignments) {
+            if ("Completed".equals(a.getJobStatus())) {
+                completedAssignments.add(a);
+            } else {
+                activeAssignments.add(a);
+            }
+        }
+
+        model.addAttribute("activeAssignments", activeAssignments);
+        model.addAttribute("completedAssignments", completedAssignments);
+        return "staffAssignmentList";
+    }
+
     // แสดงรายละเอียดของงานมอบหมายชิ้นที่เลือก พร้อมรายการอุปกรณ์แบบเดียวกับใบเสนอราคา
     @GetMapping("/staff/assignments/detail/{id}")
     public String viewAssignmentDetail(@PathVariable String id, Model model, HttpSession session) {

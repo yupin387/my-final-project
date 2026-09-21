@@ -523,3 +523,93 @@ tr:hover td { background: var(--peach-pale); }
     .list-header h1 { font-size: 1.6rem; }
     .footer-content { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
+/* ========== TABBED CARD (แท็บติดกับการ์ดเป็นชิ้นเดียว) ========== */
+.tabbed-card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px var(--shadow-soft);
+    margin-top: 4px;
+}
+
+/* แถวแท็บ — ไม่มีช่องว่าง ชิดกับ card-header-bar ด้านล่าง */
+.tabs-attached {
+    display: flex;
+    gap: 0;
+}
+
+.tab-attached-btn {
+    flex: 0 0 auto;
+    padding: 14px 28px;
+    border: none;
+    background: var(--accent-pink-pale);
+    color: var(--accent-pink);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    position: relative;
+    transition: background 0.2s, color 0.2s;
+}
+
+.tab-attached-btn + .tab-attached-btn {
+    border-top-left-radius: 0;
+}
+
+.tab-attached-btn.active {
+    background: var(--white);
+    color: var(--accent-pink);
+    box-shadow: 0 -2px 8px rgba(200, 53, 104, 0.08);
+    z-index: 2;
+}
+
+.tab-attached-btn:not(.active):hover {
+    background: #F7D9E4;
+}
+
+.tab-count {
+    display: inline-block;
+    margin-left: 6px;
+    background: var(--accent-pink);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 1px 9px;
+    border-radius: 10px;
+    vertical-align: middle;
+}
+
+.tab-attached-btn.active .tab-count {
+    background: var(--accent-pink);
+    color: var(--white);
+}
+
+/* เนื้อหาแต่ละแท็บ — ซ่อน/แสดง */
+.tab-panel {
+    display: none;
+    background: var(--white);
+    border: 1.5px solid var(--card-border);
+    border-top: none;
+}
+.tab-panel.show { display: block; }
+
+/* แถบสีชมพู "รายการที่กำลังดำเนินการ" / "ประวัติการจองที่สิ้นสุดแล้ว" — ติดขอบบนของเนื้อหาแท็บทันที */
+.tab-panel .card-header-bar {
+    background: var(--accent-pink-mid);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white);
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: 2px solid var(--accent-pink);
+}
+
+.tab-panel .header-count {
+    font-size: 13px;
+    opacity: 0.95;
+    font-weight: 600;
+    color: var(--white);
+}

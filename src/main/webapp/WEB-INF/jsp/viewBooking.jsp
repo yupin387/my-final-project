@@ -421,15 +421,40 @@
 			<c:set var="isCustomRequest"
 				value="${empty basePriceVal || basePriceVal == 0 || fn:indexOf(booking.ceremony.optionType, 'กรอกความต้องการ') ne -1}" />
 
+			<%-- อ่านชุดสังฆทานที่ลูกค้าเลือก และจำนวนชุดที่สั่ง --%>
 			<c:set var="sanghaChoice" value="" />
+			<c:set var="sanghaQtyRaw" value="0" />
 			<c:forEach items="${booking.details}" var="dd">
 				<c:if
 					test="${dd.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
 					<c:set var="sanghaChoice" value="${fn:trim(dd.answer)}" />
 				</c:if>
+				<c:if
+					test="${dd.question.questionsText eq 'จำนวนชุดสังฆทาน' && not empty fn:trim(dd.answer)}">
+					<c:set var="sanghaQtyRaw" value="${fn:trim(dd.answer)}" />
+				</c:if>
 			</c:forEach>
+
+			<%-- หาชุดสังฆทานที่ "รวมอยู่ในแพ็กเกจ" จาก CeremonyItem (โหมดกรอกเองจะไม่มี) --%>
+			<c:set var="includedName" value="" />
+			<c:set var="includedPrice" value="0" />
+			<c:set var="includedQty" value="0" />
+			<c:if test="${not isCustomRequest}">
+				<c:forEach items="${packageItems}" var="pk">
+					<c:if test="${pk.item.itemType.itemTypeName eq 'สังฆทาน'}">
+						<c:set var="includedName" value="${pk.item.itemName}" />
+						<c:set var="includedPrice" value="${pk.item.pricePerUnit}" />
+						<c:set var="includedQty" value="${pk.quantity}" />
+					</c:if>
+				</c:forEach>
+			</c:if>
+
+			<%-- สังฆทานอยู่ในแพ็กเกจทั้งหมด (ไม่ต้องคิดเงินเพิ่ม) = เลือกชุดเดียวกับที่รวมในแพ็กเกจ และจำนวนไม่เกินโควตา
+			     ถ้าไม่เข้าเงื่อนไข (เลือกชุดอื่น หรือสั่งเกินโควตา) จะแสดงในส่วน "รายการเพิ่มเติม" เพื่อคิดส่วนต่าง/ราคาเต็ม --%>
+			<c:set var="sanghaFullyIncluded"
+				value="${not isCustomRequest && not empty includedName && sanghaChoice eq includedName && sanghaQtyRaw <= includedQty}" />
 			<c:set var="showSanghaSeparately"
-				value="${isCustomRequest || (not empty sanghaChoice && sanghaChoice ne 'ชุดสังฆทานมาตรฐาน')}" />
+				value="${isCustomRequest || (not empty sanghaChoice && not sanghaFullyIncluded)}" />
 			<c:set var="hideSangha" value="${!showSanghaSeparately}" />
 
 			<%-- 3. รายละเอียดแพ็กเกจ / ความต้องการ --%>
@@ -478,17 +503,17 @@
 						<i class="bi bi-check-circle-fill" style="color: #28a745;"></i>
 						<c:choose>
 							<c:when test="${isCustomRequest}">รายการบริการพื้นฐานที่จัดให้ :</c:when>
-							<c:otherwise>สิ่งที่รวมอยู่ในแพ็กเกจ :</c:otherwise>
+							<c:otherwise>รายการในแพ็กเกจ :</c:otherwise>
 						</c:choose>
 					</div>
 
 					<c:choose>
 						<c:when test="${not empty packageItems}">
 							<div class="package-items-grid" id="packageItemsGrid">
+								<%-- แสดงชุดสังฆทานที่รวมในแพ็กเกจไว้เสมอ (ไม่ซ่อนแล้ว) เพราะราคาส่วนต่างของชุดที่อัปเกรดอ้างอิงจากชุดนี้ --%>
 								<c:forEach var="pi" items="${packageItems}">
 									<c:if
-										test="${pi.item.itemType.itemTypeId != 5 && pi.item.itemType.itemTypeId != 6
-                                              && !(showSanghaSeparately && pi.item.itemName eq 'ชุดสังฆทานมาตรฐาน')}">
+										test="${pi.item.itemType.itemTypeId != 5 && pi.item.itemType.itemTypeId != 6}">
 										<div class="package-item-chip"
 											data-price="${pi.item.pricePerUnit}"
 											data-qty="${pi.quantity}"
@@ -568,15 +593,14 @@
 										<c:when
 											test="${not empty d.answer and fn:trim(d.answer) ne ''}">
 											<c:out value="${d.answer}" />
+											<%-- ปิ่นโต: แสดงราคาต่อชุดตามเดิม
+											     สังฆทาน: ไม่ใส่ราคาตรงนี้ ให้ JavaScript ด้านล่างเติมหมายเหตุตามกฎแพ็กเกจ (ส่วนต่าง/ราคาเต็ม) --%>
 											<c:if
-												test="${d.question.questionsText eq 'เลือกชุดภัตตาหารปิ่นโต' or d.question.questionsText eq 'เลือกชุดสังฆทานที่ต้องการ'}">
+												test="${d.question.questionsText eq 'เลือกชุดภัตตาหารปิ่นโต'}">
 												<c:choose>
-													<c:when
-														test="${d.answer eq 'ปิ่นโตชุดประหยัด' or d.answer eq 'ชุดสังฆทานมาตรฐาน'}">(299 บาท)</c:when>
-													<c:when
-														test="${d.answer eq 'ปิ่นโตชุดมาตรฐาน' or d.answer eq 'ชุดสังฆทานพรีเมียม'}">(399 บาท)</c:when>
-													<c:when
-														test="${d.answer eq 'ปิ่นโตชุดพรีเมียม' or d.answer eq 'ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน'}">(499 บาท)</c:when>
+													<c:when test="${d.answer eq 'ปิ่นโตชุดประหยัด'}">(299 บาท)</c:when>
+													<c:when test="${d.answer eq 'ปิ่นโตชุดมาตรฐาน'}">(399 บาท)</c:when>
+													<c:when test="${d.answer eq 'ปิ่นโตชุดพรีเมียม'}">(499 บาท)</c:when>
 													<c:when test="${d.answer eq 'ปิ่นโตชุดพิเศษ'}">(599 บาท)</c:when>
 												</c:choose>
 											</c:if>
@@ -700,7 +724,7 @@
 
 
 					<div class="booking-code-badge mb-3">
-						รหัส: <span id="cancelBookingId">${booking.bookingId}</span>
+						รหัสการจอง: <span id="cancelBookingId">${booking.bookingId}</span>
 					</div>
 
 					<p class="text-muted small mb-4">
@@ -726,6 +750,7 @@
 	</script>
 	<script>
 		(function() {
+			// ราคาต่อชุด: ค่าตั้งต้น (สำรอง) แล้วถูกเขียนทับด้วยราคาจริงจากฐานข้อมูลด้านล่าง
 			var PRICE_MAP = {
 				"ปิ่นโตชุดประหยัด" : 299,
 				"ปิ่นโตชุดมาตรฐาน" : 399,
@@ -735,6 +760,19 @@
 				"ชุดสังฆทานพรีเมียม" : 399,
 				"ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน" : 499
 			};
+			<c:forEach items="${pintoItems}" var="pItem">
+			PRICE_MAP["${pItem.itemName}"] = ${pItem.pricePerUnit};
+			</c:forEach>
+			<c:forEach items="${sanghatharnItems}" var="sItem">
+			PRICE_MAP["${sItem.itemName}"] = ${sItem.pricePerUnit};
+			</c:forEach>
+
+			// ชุดสังฆทานที่รวมอยู่ในแพ็กเกจ (qty = 0 หมายถึงไม่มี เช่นโหมดกรอกเอง)
+			var INCLUDED_SANGHA = {
+				price : ${includedPrice},
+				qty : ${includedQty}
+			};
+			var IS_CUSTOM_REQUEST = ${isCustomRequest};
 
 			var SELF_INVITE_DISCOUNT = 1500;
 
@@ -760,30 +798,81 @@
 				return answers;
 			}
 
+			// คำนวณค่าสังฆทานตามกฎ:
+			//  - โหมดกรอกเอง / ไม่มีชุดที่รวมในแพ็กเกจ : ราคาเต็ม x จำนวนชุด
+			//  - โหมดแพ็กเกจ : ชุดในโควตา คิดเฉพาะส่วนต่างจากชุดที่รวมในแพ็กเกจ (ไม่ติดลบ)
+			//                  ชุดที่เกินโควตา คิดราคาเต็ม
+			function calcSanghaTotal(name, qty) {
+				var unit = PRICE_MAP[name] || 0;
+				if (IS_CUSTOM_REQUEST || INCLUDED_SANGHA.qty <= 0) {
+					return unit * qty;
+				}
+				var covered = Math.min(qty, INCLUDED_SANGHA.qty);
+				var extra = qty - covered;
+				var diff = Math.max(0, unit - INCLUDED_SANGHA.price);
+				return covered * diff + extra * unit;
+			}
+
+			// ข้อความหมายเหตุราคาต่อท้ายชื่อชุดสังฆทาน
+			function sanghaPriceNote(name, qty) {
+				var unit = PRICE_MAP[name];
+				if (unit === undefined)
+					return '';
+				if (IS_CUSTOM_REQUEST || INCLUDED_SANGHA.qty <= 0) {
+					return ' (' + unit.toLocaleString('th-TH') + ' บาท)';
+				}
+				var diff = Math.max(0, unit - INCLUDED_SANGHA.price);
+				var parts = [];
+				if (diff === 0) {
+					parts.push('รวมในแพ็กเกจ ' + INCLUDED_SANGHA.qty + ' ชุด');
+				} else {
+					parts.push('+' + diff.toLocaleString('th-TH')
+							+ ' บาท/ชุด จากชุดที่รวมในแพ็กเกจ');
+				}
+				if (qty > INCLUDED_SANGHA.qty) {
+					parts.push('ส่วนที่เกิน ' + (qty - INCLUDED_SANGHA.qty)
+							+ ' ชุด คิดชุดละ ' + unit.toLocaleString('th-TH')
+							+ ' บาท');
+				}
+				return ' (' + parts.join(', ') + ')';
+			}
+
 			function appendPricesToAnswers() {
+				var answers = collectAnswers();
 				document
 						.querySelectorAll(
 								'#bookingDetailsSection .info-row[data-qtext]')
 						.forEach(
 								function(row) {
 									var qText = row.getAttribute('data-qtext');
-									if (qText === 'เลือกชุดภัตตาหารปิ่นโต'
-											|| qText === 'เลือกชุดสังฆทานที่ต้องการ') {
-										var valueSpan = row
-												.querySelector('.info-value');
-										if (valueSpan) {
-											var choiceName = valueSpan.textContent
-													.trim();
-											if (PRICE_MAP[choiceName] !== undefined
-													&& choiceName.indexOf('(') === -1) {
-												var price = PRICE_MAP[choiceName];
-												valueSpan.textContent = choiceName
-														+ ' ('
-														+ price
-																.toLocaleString('th-TH')
-														+ ' บาท)';
-											}
-										}
+									var isPinto = (qText === 'เลือกชุดภัตตาหารปิ่นโต');
+									var isSangha = (qText === 'เลือกชุดสังฆทานที่ต้องการ');
+									if (!isPinto && !isSangha)
+										return;
+
+									var valueSpan = row
+											.querySelector('.info-value');
+									if (!valueSpan)
+										return;
+
+									var choiceName = valueSpan.textContent
+											.trim();
+									if (PRICE_MAP[choiceName] === undefined
+											|| choiceName.indexOf('(') !== -1)
+										return;
+
+									if (isSangha) {
+										var qty = parseInt(
+												answers['จำนวนชุดสังฆทาน'], 10) || 0;
+										valueSpan.textContent = choiceName
+												+ sanghaPriceNote(choiceName,
+														qty);
+									} else {
+										valueSpan.textContent = choiceName
+												+ ' ('
+												+ PRICE_MAP[choiceName]
+														.toLocaleString('th-TH')
+												+ ' บาท)';
 									}
 								});
 			}
@@ -812,13 +901,14 @@
 					pintoTotal = (PRICE_MAP[pintoName] || 0) * pintoQty;
 				}
 
+				// สังฆทาน: ถ้าอยู่ในแพ็กเกจทั้งหมด แถวจะถูกซ่อน (ไม่มีใน answers) จึงได้ 0
 				var sanghaTotal = 0;
 				var wantSangha = answers['ต้องการสังฆทานหรือไม่'];
 				var sanghaName = answers['เลือกชุดสังฆทานที่ต้องการ'];
 				var sanghaQty = parseInt(answers['จำนวนชุดสังฆทาน'], 10) || 0;
 				if (sanghaName && sanghaQty > 0
 						&& (!wantSangha || wantSangha.indexOf('ไม่') === -1)) {
-					sanghaTotal = (PRICE_MAP[sanghaName] || 0) * sanghaQty;
+					sanghaTotal = calcSanghaTotal(sanghaName, sanghaQty);
 				}
 
 				var additionalTotal = pintoTotal + sanghaTotal;

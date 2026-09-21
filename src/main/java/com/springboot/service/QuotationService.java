@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -220,5 +221,103 @@ public class QuotationService {
 	public boolean hasQuotationForStaff(int staffId) {
 	    List<Quotation> list = quotationRepo.findByStaff_StaffId(staffId);
 	    return list != null && !list.isEmpty();
+	}
+
+	// ==========================================
+	// 3. คำนวณราคาชุดสังฆทาน (ใช้ตั้งค่าเริ่มต้นในหน้าสร้างใบเสนอราคา)
+	// ==========================================
+	// กฎ:
+	//  - โหมดกรอกเอง (ไม่มีสังฆทานผูกกับ Ceremony): คิดราคาเต็มทุกชุด
+	//  - โหมดแพ็กเกจ: ชุดที่อยู่ในโควตาแพ็กเกจ (CeremonyItem.quantity) คิดเฉพาะ
+	//    "ราคาชุดที่เลือก - ราคาชุดที่รวมในแพ็กเกจ" (ไม่ติดลบ)
+	//    ชุดที่เกินโควตาคิดราคาเต็ม
+
+	// 1 บรรทัดราคาที่จะแสดง/ส่งเข้าฟอร์มใบเสนอราคา
+	public static class PriceLine {
+		private final Item item;
+		private final int qty;
+		private final double unitPrice;
+		private final String label;
+
+		public PriceLine(Item item, int qty, double unitPrice, String label) {
+			this.item = item;
+			this.qty = qty;
+			this.unitPrice = unitPrice;
+			this.label = label;
+		}
+
+		public Item getItem() { return item; }
+		public int getQty() { return qty; }
+		public double getUnitPrice() { return unitPrice; }
+		public String getLabel() { return label; }
+	}
+
+	// คำนวณบรรทัดราคาสังฆทานของ booking นี้ (คืนลิสต์ว่างถ้าลูกค้าไม่ได้เลือกสังฆทาน)
+	public List<PriceLine> calculateSanghatanLines(BookingForm booking) {
+		List<PriceLine> lines = new ArrayList<>();
+
+		String chosenName = answerOf(booking, "เลือกชุดสังฆทาน");
+		int orderedQty = intAnswerOf(booking, "จำนวนชุดสังฆทาน");
+		if (chosenName == null || orderedQty <= 0) return lines;
+
+		Item chosen = itemRepo.findByItemName(chosenName.trim()).orElse(null);
+		if (chosen == null) return lines;
+
+		double chosenPrice = chosen.getPricePerUnit();
+
+		// หาชุดสังฆทานที่รวมในแพ็กเกจ (โหมดกรอกเองจะไม่มี)
+		CeremonyItem included = null;
+		if (booking.getCeremony() != null && booking.getCeremony().getCeremonyItems() != null) {
+			for (CeremonyItem ci : booking.getCeremony().getCeremonyItems()) {
+				if (ci.getItem() != null && ci.getItem().getItemType() != null
+						&& "สังฆทาน".equals(ci.getItem().getItemType().getItemTypeName())) {
+					included = ci;
+					break;
+				}
+			}
+		}
+
+		// โหมดกรอกเอง: คิดราคาเต็มทุกชุด
+		if (included == null) {
+			lines.add(new PriceLine(chosen, orderedQty, chosenPrice, "ชุดสังฆทาน"));
+			return lines;
+		}
+
+		int covered = Math.min(orderedQty, included.getQuantity());
+		int extra = orderedQty - covered;
+		double diff = Math.max(0, chosenPrice - included.getItem().getPricePerUnit());
+
+		// ส่วนที่อยู่ในโควตาแพ็กเกจ: คิดเฉพาะส่วนต่าง
+		if (covered > 0) {
+			lines.add(new PriceLine(chosen, covered, diff,
+					diff == 0 ? "รวมในแพ็กเกจ" : "ส่วนต่างอัปเกรดจากชุดมาตรฐาน"));
+		}
+		// ส่วนที่เกินโควตา: คิดราคาเต็ม
+		if (extra > 0) {
+			lines.add(new PriceLine(chosen, extra, chosenPrice, "เกินจำนวนในแพ็กเกจ"));
+		}
+		return lines;
+	}
+
+	// อ่านคำตอบของคำถามที่ข้อความมี keyword ที่ระบุ (คืน null ถ้าไม่พบ)
+	private String answerOf(BookingForm b, String keyword) {
+		if (b.getDetails() == null) return null;
+		for (BookingFormDetail d : b.getDetails()) {
+			if (d.getQuestion() != null && d.getQuestion().getQuestionsText() != null
+					&& d.getQuestion().getQuestionsText().contains(keyword)) {
+				return d.getAnswer();
+			}
+		}
+		return null;
+	}
+
+	// อ่านคำตอบเป็นตัวเลข (คืน 0 ถ้าไม่พบหรือแปลงไม่ได้)
+	private int intAnswerOf(BookingForm b, String keyword) {
+		try {
+			String raw = answerOf(b, keyword);
+			return raw == null ? 0 : Integer.parseInt(raw.replaceAll("[^0-9]", ""));
+		} catch (NumberFormatException e) {
+			return 0;
+		}
 	}
 }

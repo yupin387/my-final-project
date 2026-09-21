@@ -332,8 +332,10 @@
 								<tr>
 									<td class="text-center">${count}</td>
 									<c:set var="count" value="${count + 1}" />
-									<td>${d.item.itemName} <c:set var="isFreeSang"
-											value="${!isCustomRequest && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}" />
+									<td>${d.item.itemName}
+										<%-- ✅ แก้ไข: ใช้ d.subtotal == 0 เช็คของฟรีแทน 299 --%>
+										<c:set var="isFreeSang"
+											value="${!isCustomRequest && d.quantity > 0 && d.subtotal == 0}" />
 										<c:if test="${isFreeSang}">
 											<span class="text-danger"
 												style="font-size: 12px; font-weight: bold;"> (ฟรี /
@@ -527,9 +529,9 @@
 										<c:set var="itemVal" value="${d.subtotal}" />
 										<c:set var="isFreeInTotal" value="false" />
 
-										<%-- หักลบของแถม (สังฆทานฟรี) สำหรับแพ็กเกจ --%>
+										<%-- ✅ แก้ไข: หักลบของแถม (สังฆทานฟรี) สำหรับแพ็กเกจ เช็คจาก d.subtotal == 0 --%>
 										<c:if
-											test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
+											test="${!isCustomRequest && d.item.itemType.itemTypeName.contains('สังฆทาน') && d.subtotal == 0}">
 											<c:set var="itemVal" value="0" />
 											<c:set var="isFreeInTotal" value="true" />
 										</c:if>

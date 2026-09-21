@@ -90,8 +90,6 @@
 
         <%-- =========================================================
              ข้อมูลร่วม (ใช้ทั้ง 2 โหมด) — วันเวลา / สถานที่
-             ปรับให้ตรงกับหน้าทำบุญบ้าน: ขวา = การ์ดเดียว "สถานที่จัดพิธี"
-             รวมที่อยู่ + ปักหมุดแผนที่ + รูปภาพ ไว้ด้วยกัน
              ========================================================= --%>
         <div class="form-grid">
             <div>
@@ -207,7 +205,7 @@
             </div>
         </div>
 
-        <%-- 1.1 เลือกแพ็กเกจ --%>
+        <%-- 1.1 เลือกแพ็กเกจ (แสดงเฉพาะโหมดแพ็กเกจ) --%>
         <div class="form-card" id="packageOnlyBlock" style="${startInCustomMode ? 'display:none;' : 'display:block;'}">
             <div class="card-header">แพ็กเกจที่เลือก</div>
             <div class="card-body">
@@ -216,7 +214,6 @@
                 </p>
                 <div class="item-card-grid">
                     <c:forEach items="${ceremonies}" var="pkg" varStatus="loop">
-                        <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
                         <c:set var="pkgNameSafe" value="${not empty pkg.optionType ? pkg.optionType : ''}"/>
                         <c:choose>
                             <c:when test="${fn:contains(pkgNameSafe, 'พรีเมียม')}">
@@ -231,6 +228,17 @@
                         </c:choose>
                         <c:set var="isPkgSelected"
                                value="${(not empty param.ceremonyId and param.ceremonyId == pkg.ceremonyId) or (empty param.ceremonyId and loop.first)}"/>
+
+                        <c:if test="${isPkgSelected}">
+                            <c:forEach items="${pkg.ceremonyItems}" var="ci">
+                                <c:if test="${ci.item.itemType.itemTypeName == 'สังฆทาน'}">
+                                    <c:set var="includedPrice" value="${ci.item.pricePerUnit}"/>
+                                    <c:set var="includedName" value="${ci.item.itemName}"/>
+                                    <c:set var="includedQty" value="${ci.quantity}"/>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+
                         <c:if test="${empty param.ceremonyId or param.ceremonyId == pkg.ceremonyId}">
                         <label class="item-card">
                             <input type="radio" name="ceremony.ceremonyId" value="${pkg.ceremonyId}"
@@ -238,12 +246,10 @@
                                    onchange="applyPackageMonkCount(this)"
                                    ${isPkgSelected ? 'checked' : ''}>
                         <div class="item-card-thumb">
-    <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
-    <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.optionType}"
-         onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
-</div>
+                            <img src="${pageContext.request.contextPath}/static/images/p${loop.index + 1}.png" alt="${pkg.optionType}"
+                                 onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
+                        </div>
                             <div class="item-card-body">
-                                <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
                                 <div class="item-card-name">${pkg.optionType}</div>
                                 <div class="item-card-desc">${pkg.ceremonyDetail}</div>
                                 <div class="item-card-price">
@@ -254,6 +260,12 @@
                         </c:if>
                     </c:forEach>
                 </div>
+
+                <c:if test="${not empty includedName}">
+                    <p style="font-size:12px;color:#B0345A;margin:14px 0 0;">
+                        ℹ️ รวมในแพ็กเกจ: ชุดเครื่องเสียง • โต๊ะหมู่บูชา • พระประธาน • ${includedName} ${includedQty} ชุด
+                    </p>
+                </c:if>
             </div>
         </div>
 
@@ -262,7 +274,6 @@
         </div>
 
         <%-- 1.2 การนิมนต์พระสงฆ์ --%>
-		<%-- 1.2 การนิมนต์พระสงฆ์ — ใช้ร่วมกันทั้ง 2 โหมด --%>
 		<div class="form-card">
 		    <div class="card-header">การนิมนต์พระสงฆ์</div>
 		    <div class="card-body">
@@ -282,21 +293,14 @@
 				                    <input type="radio" name="details[${detailIndex}].answer" id="selfInviteRadio"
 				                           value="${startInCustomMode ? 'นิมนต์เอง' : 'นิมนต์เอง (ลด ฿1,500)'}"
 				                           onchange="toggleWatDetailBlock('watDetail', false)">
-				                    <span>
-				                        นิมนต์เอง 
-				                        <c:if test="${!startInCustomMode}">
-				                            <small style="color:#2e7d32;"></small>
-				                        </c:if>
-				                    </span>
+				                    <span>นิมนต์เอง</span>
 				                </label>
 				            </div>
 				            
-				            <%-- 1. ข้อความเตือนรัศมี: จะแสดงเฉพาะตอนเริ่มต้นหรือตอนเลือก "ให้ทางร้านนิมนต์" เท่านั้น --%>
 				            <p id="shopInviteWarning" style="font-size:12px;color:red;margin-top:6px;display:block;">
 				                ⚠️ กรณีให้ทางร้านนิมนต์ให้ วัดที่นิมนต์ต้องอยู่ในรัศมีพื้นที่ให้บริการที่ทางร้านกำหนดเท่านั้น
 				            </p>
 				
-				            <%-- 2. ข้อความเตือนส่วนลด: จะแสดงเฉพาะ "แพ็กเกจ" + "นิมนต์เอง" เท่านั้น (ถ้ากรอกเองจะไม่สร้างบรรทัดนี้ขึ้นมาเลย) --%>
 				            <c:if test="${!startInCustomMode}">
 				                <p id="pkgSelfInviteWarning" style="font-size:12px;color:red;margin-top:6px;display:none;">
 				                    ⚠️ กรณีนิมนต์เอง จะมีส่วนลดให้ 1,500 บาท
@@ -307,7 +311,6 @@
 				    </c:if>
 				</c:forEach>
 		
-                <%-- ช่องจำนวนพระสงฆ์: จะแสดงเฉพาะกรณีจองแบบกรอกเอง (startInCustomMode) เท่านั้น แบบแพ็กเกจจะไม่เรนเดอร์ขึ้นมาเลย --%>
                 <c:if test="${startInCustomMode}">
                     <c:forEach items="${questions}" var="q">
                         <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
@@ -326,7 +329,6 @@
                     </c:forEach>
                 </c:if>
 
-                <%-- สำหรับแพ็กเกจ ซ่อน input จำนวนพระไว้เบื้องหลังเพื่อให้ระบบเลือกวัดทำงานได้โดยไม่ต้องแสดง UI ช่องกรอก --%>
                 <c:if test="${!startInCustomMode}">
                     <c:forEach items="${questions}" var="q">
                         <c:if test="${fn:contains(q.questionsText, 'จำนวนพระ')}">
@@ -379,6 +381,11 @@
                             <p style="font-size:12px;color:#B0345A;margin-top:2px;">
                                 ค่าเริ่มต้น = จำนวนพระสงฆ์ที่นิมนต์ไว้
                             </p>
+                            <c:if test="${!startInCustomMode}">
+                                <p style="font-size:12px;color:red;margin-top:2px;">
+                                    ⚠️ ชุดที่เกินจำนวนที่รวมในแพ็กเกจ (${empty includedQty ? pkgMonkCount : includedQty} ชุด) จะคิดราคาเต็มต่อชุด
+                                </p>
+                            </c:if>
                             <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
                             <input type="number" name="details[${detailIndex}].answer" id="sanghatanQtyInput"
                                    class="form-control" value="${startInCustomMode ? '' : (empty pkgMonkCount ? 5 : pkgMonkCount)}" min="1"
@@ -391,25 +398,40 @@
 
                 <c:forEach items="${questions}" var="q">
                     <c:if test="${fn:contains(q.questionsText, 'เลือกชุดสังฆทาน')}">
-                        <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                        <div class="item-card-grid">
-                            <c:forEach items="${sanghatharnItems}" var="item" varStatus="loop">
-                                <label class="item-card">
-                                    <input type="radio" name="details[${detailIndex}].answer"
-                                           value="${item.itemName}" ${loop.first ? 'checked' : ''}>
-                                    <div class="item-card-thumb">
-                                        <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/F${(loop.index % 3) + 1}.png" alt="${item.itemName}"
-                                             onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
-                                    </div>
-                                    <div class="item-card-body">
-                                        <div class="item-card-name">${item.itemName}</div>
-                                        <div class="item-card-desc">${item.itemDetail}</div>
-                                        <div class="item-card-price">
-                                            ฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}
+                        <div class="form-group">
+                            <label class="form-label">${q.questionsText} <span class="required" style="color:red;">*</span></label>
+                            <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+
+                            <div class="item-card-grid">
+                                <c:forEach items="${sanghatharnItems}" var="item" varStatus="loop">
+                                    <label class="item-card">
+                                        <input type="radio" name="details[${detailIndex}].answer" value="${item.itemName}"
+                                               ${(!startInCustomMode and not empty includedName) ? (item.itemName == includedName ? 'checked' : '') : (loop.first ? 'checked' : '')}>
+                                        <div class="item-card-thumb">
+                                            <img src="${pageContext.request.contextPath}/static/images/offeringsetimg/F${(loop.index % 3) + 1}.png" alt="${item.itemName}"
+                                                 onclick="event.preventDefault(); event.stopPropagation(); openLightbox(this);">
                                         </div>
-                                    </div>
-                                </label>
-                            </c:forEach>
+                                        <div class="item-card-body">
+                                            <div class="item-card-name">${item.itemName}</div>
+                                            <div class="item-card-desc">${item.itemDetail}</div>
+                                            <div class="item-card-price">
+                                                <c:choose>
+                                                    <c:when test="${startInCustomMode or empty includedPrice}">
+                                                        ฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}
+                                                    </c:when>
+                                                    <c:when test="${item.pricePerUnit <= includedPrice}">
+                                                        รวมในแพ็กเกจ (฿0)
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        +฿<fmt:formatNumber value="${item.pricePerUnit - includedPrice}" pattern="#,###"/> / ${item.unit}
+                                                        <small>(เพิ่มจากชุดมาตรฐาน)</small>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </c:forEach>
+                            </div>
                         </div>
                         <c:set var="detailIndex" value="${detailIndex + 1}"/>
                     </c:if>
@@ -457,6 +479,8 @@
                                 <input type="number" name="details[${detailIndex}].answer" id="pintoQtyInput" class="form-control pinto-qty"
                                        value="${startInCustomMode ? '' : (empty pkgMonkCount ? 7 : pkgMonkCount + 2)}"
                                        placeholder="ระบุจำนวนชุด..." min="1" required oninput="this.dataset.userEdited = 'true';">
+                                <%-- เพิ่มหมายเหตุตัวเล็กๆ สีแดงใต้ช่องกรอกจำนวนชุดภัตตาหาร --%>
+                                <p style="font-size:11px; color:red; margin-top:4px; margin-bottom:0;">* คำนวณจาก จำนวนพระทั้งหมด + มัคนายก + พระพุทธรูป</p>
                             </div>
                             <c:set var="detailIndex" value="${detailIndex + 1}"/>
                         </c:if>
@@ -532,8 +556,8 @@
             <defs>
                 <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
-<stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
-<stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
+                   <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
+                   <stop offset="100%" stop-color="rgba(217,164,65,0.15)" />
                 </linearGradient>
             </defs>
         </svg>
@@ -553,20 +577,16 @@
                 <a href="#" class="footer-social-link">💬 LINE OA</a>
             </div>
         </div>
-			<div class="footer-col footer-contact-col">
-				<h4 class="footer-heading">ติดต่อเรา</h4>
-				<p>📞 โทร. 08X-XXX-XXXX</p>
-				<p>💬 LINE OA: @boonmee</p>
-				<p>✉️ boonmee@gmail.com</p>
-				<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
-			</div>
-		</div>
-	</footer>
+        <div class="footer-col footer-contact-col">
+            <h4 class="footer-heading">ติดต่อเรา</h4>
+            <p>📞 โทร. 08X-XXX-XXXX</p>
+            <p>💬 LINE OA: @boonmee</p>
+            <p>✉️ boonmee@gmail.com</p>
+            <p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
+        </div>
+    </div>
+</footer>
 
-<%-- =========================================================================
-     item-card / mini-cal / map-picker ฯลฯ อยู่ใน bookingForm.css (v13) แล้ว
-     เหลือ inline ไว้เฉพาะ lightbox + nav-dropdown ที่ยังไม่มีในไฟล์ css หลัก
-     ========================================================================= --%>
 <style>
 .image-lightbox {
     display: none;
@@ -596,7 +616,6 @@
     font-weight: 400;
     cursor: pointer;
 }
-
 .nav-dropdown-wrap {
     position: relative;
     display: inline-block;
@@ -642,7 +661,6 @@
 .nav-dropdown-link:hover {
     background: var(--gold-pale, #fff8e1);
 }
-
 .item-card {
     position: relative;
 }
@@ -655,12 +673,10 @@
 }
 </style>
 
-<%-- ========== IMAGE LIGHTBOX ========== --%>
 <div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
     <span class="image-lightbox-close" onclick="closeLightbox()">&times;</span>
     <img id="lightboxImg" src="" alt="">
 </div>
-
 
 <script>
 (function() {
@@ -750,7 +766,6 @@ function toggleWatDetailBlock(id, show) {
     
     var monkCountGroup = document.getElementById('monkCountGroup');
     if (monkCountGroup) {
-        // ในกรณีจองแบบกรอกเอง (startInCustomMode = true) ให้โชว์ช่องจำนวนพระตลอดเวลา
         if (${startInCustomMode}) {
             monkCountGroup.style.display = 'block';
         } else {
@@ -764,7 +779,6 @@ function toggleWatDetailBlock(id, show) {
         }
     }
 
-    // จัดการการแสดงผลข้อความสีแดงแบบตรงจุด
     var shopWarning = document.getElementById('shopInviteWarning');
     var pkgSelfWarning = document.getElementById('pkgSelfInviteWarning');
     var isCustom = ${startInCustomMode};
@@ -786,9 +800,6 @@ function toggleSection(id, show) {
 }
 
 function syncAllWatAnswersBeforeSubmit() {
-    // ตอนนี้ "ระบุวัดที่ต้องการ" เป็นกล่อง text เดียว (watDiffAnswer) ที่ผูกกับ
-    // name attribute โดยตรงอยู่แล้ว จึงไม่ต้อง sync ค่าจากที่อื่นอีก เก็บฟังก์ชันนี้ไว้
-    // เผื่อจุดอื่นเรียกใช้อยู่ (handleFormSubmit)
     return true;
 }
 
@@ -860,11 +871,7 @@ function cleanupAndRenumberDetailsBeforeSubmit() {
     return true;
 }
 
-// -------------------------------------------------------------
-// ระบบตรวจสอบแบบฟอร์ม (Validation)
-// -------------------------------------------------------------
 function showError(element, message) {
-    // ลบ Error เก่าที่จุดเดียวกันถ้ามี
     if (element.nextElementSibling && element.nextElementSibling.classList.contains('custom-error-msg')) {
         element.nextElementSibling.remove();
     }
@@ -872,18 +879,16 @@ function showError(element, message) {
     var err = document.createElement('div');
     err.className = 'custom-error-msg';
     err.style.color = 'red';
-    err.style.fontSize = '11px'; // ปรับขนาดให้เล็กลงกว่าตัวอื่นๆ
+    err.style.fontSize = '11px';
     err.style.marginTop = '4px';
-    err.innerText = message; // เอาสัญลักษณ์ ❌ ออก
+    err.innerText = message;
 
-    // แทรกข้อความแจ้งเตือนต่อท้าย
     if(element.nextSibling) {
         element.parentNode.insertBefore(err, element.nextSibling);
     } else {
         element.parentNode.appendChild(err);
     }
 
-    // ไฮไลต์ขอบสีแดง
     if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
         element.style.borderColor = 'red';
         element.classList.add('validation-failed');
@@ -899,7 +904,6 @@ function showError(element, message) {
 }
 
 function handleFormSubmit(form) {
-    // ล้างแจ้งเตือน Error ทั้งหมดก่อน
     document.querySelectorAll('.custom-error-msg').forEach(function(e) { e.remove(); });
     form.querySelectorAll('.validation-failed').forEach(function(el) { el.style.borderColor = ''; el.classList.remove('validation-failed'); });
 
@@ -912,13 +916,11 @@ function handleFormSubmit(form) {
         if (!firstErrorElement) firstErrorElement = el;
     }
 
-    // 1. ตรวจสอบปฏิทิน
     var eventDateVal = document.getElementById('eventDateInput').value;
     if (!eventDateVal) {
         markError(document.getElementById('datePickerWrap'), 'กรุณาเลือกวันที่จัดงานจากปฏิทิน');
     }
 
-    // 2. ตรวจสอบช่องที่จำเป็นทั้งหมด (required)
     form.querySelectorAll('input[required], textarea[required], select[required]').forEach(function(el) {
         if (!isInHiddenBranch(el)) {
             if (!el.value.trim()) {
@@ -927,7 +929,6 @@ function handleFormSubmit(form) {
         }
     });
 
-    // 3. ตรวจสอบช่องจำนวนตัวเลข (ต้องมากกว่า 0)
     form.querySelectorAll('input[type="number"]').forEach(function(el) {
         if (!isInHiddenBranch(el) && el.value !== '') {
             if (parseFloat(el.value) <= 0) {
@@ -936,30 +937,27 @@ function handleFormSubmit(form) {
         }
     });
 
-    // 4. ตรวจสอบแผนที่
     var lat = document.getElementById('eventLat').value;
     if (!lat || lat === "") {
         markError(document.getElementById('locationMap'), 'กรุณาปักหมุดตำแหน่งที่จัดงานบนแผนที่');
     }
 
-    // 5. ตรวจสอบรูปภาพ
     var imgCount = document.querySelectorAll('#base64Container input').length;
     if (imgCount === 0) {
         markError(document.getElementById('imagePreviewBox'), 'กรุณาอัปโหลดรูปภาพสถานที่จัดงานอย่างน้อย 1 รูป');
     }
 
-    // หากไม่ผ่าน เลื่อนจอไปจุดแรกที่ Error
     if (!isValid) {
         if (firstErrorElement) {
             firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-        return false; // ระงับการส่งฟอร์ม
+        return false;
     }
 
     syncAllWatAnswersBeforeSubmit();
     cleanupAndRenumberDetailsBeforeSubmit();
 
-    return true; // ยืนยันการส่งข้อมูล
+    return true;
 }
 
 function syncInitialToggleStates() {
@@ -974,7 +972,6 @@ function syncInitialToggleStates() {
 document.addEventListener('DOMContentLoaded', syncInitialToggleStates);
 window.addEventListener('pageshow', syncInitialToggleStates);
 
-/* ===== ปฏิทินย่อสำหรับเลือกวันที่จัดงาน ===== */
 window.bookedDates = [
     <c:forEach var="d" items="${bookedDates}" varStatus="st">
         "${d}"<c:if test="${!st.last}">,</c:if>
@@ -997,7 +994,6 @@ window.dayQuality = {
 };
 </script>
 
-<%-- FIX: เพิ่ม Leaflet JS ให้ตรงกับหน้าทำบุญบ้าน — ต้องโหลดก่อน bookingForm.js --%>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>

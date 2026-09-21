@@ -11,6 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/assignmentDetail.css?v=6">
     <style>
+    * {
+    font-family: 'Sarabun', sans-serif;
+}
         .btn-damage-disabled {
             display: inline-flex;
             align-items: center;
@@ -185,18 +188,17 @@
                 <%-- ปุ่มอัปเดตสถานะ: กดแล้วไปสถานะถัดไปทันที ไม่มี modal --%>
                 <c:choose>
                     <c:when test="${status != 'Completed'}">
-                        <form action="${pageContext.request.contextPath}/staff/assignments/update-status/save"
-                              method="post" style="margin:0;"
-                              onsubmit="return confirm('ยืนยันอัปเดตสถานะงานไปขั้นตอนถัดไป?');">
-                            <input type="hidden" name="bookingId" value="${a.bookingForm.bookingId}">
-                            <button type="submit" class="btn-status-next">
-                                <c:choose>
-                                    <c:when test="${status == 'Assigned'}">➡️ เริ่มเตรียมงาน</c:when>
-                                    <c:when test="${status == 'Preparing'}">➡️ เริ่มดำเนินการ</c:when>
-                                    <c:when test="${status == 'In_Progress'}">✅ จบงาน (เสร็จสิ้น)</c:when>
-                                </c:choose>
-                            </button>
-                        </form>
+                       <form action="${pageContext.request.contextPath}/staff/assignments/update-status/save"
+      method="post" style="margin:0;">
+    <input type="hidden" name="bookingId" value="${a.bookingForm.bookingId}">
+    <button type="submit" class="btn-status-next">
+        <c:choose>
+            <c:when test="${status == 'Assigned'}">➡️ เริ่มเตรียมงาน</c:when>
+            <c:when test="${status == 'Preparing'}">➡️ เริ่มดำเนินการ</c:when>
+            <c:when test="${status == 'In_Progress'}">✅ จบงาน (เสร็จสิ้น)</c:when>
+        </c:choose>
+    </button>
+</form>
                     </c:when>
                     <c:otherwise>
                         <span class="status-done-badge">✅ งานเสร็จสิ้นแล้ว</span>
@@ -385,7 +387,7 @@
                                                 <tr class="qp-group-row"><td colspan="6">หมวดสังฆทาน</td></tr>
                                                 <c:set var="printedSang" value="true" />
                                             </c:if>
-                                            <c:set var="isFreeSang" value="${!isCustomRequest && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}" />
+                                            <c:set var="isFreeSang" value="${!isCustomRequest && d.quantity > 0 && d.subtotal == 0}" />
                                             <tr>
                                                 <td class="text-center"></td>
                                                 <td>${d.item.itemName}
@@ -482,7 +484,7 @@
                                         <c:set var="itemVal" value="${d.subtotal}" />
                                         <c:set var="isFreeInTotal" value="false" />
 
-                                        <c:if test="${!isCustomRequest && d.item != null && d.item.itemType != null && d.item.itemType.itemTypeName.contains('สังฆทาน') && (d.item.pricePerUnit == 299.0 || d.item.pricePerUnit == 299)}">
+                                        <c:if test="${!isCustomRequest && d.item != null && d.item.itemType != null && d.item.itemType.itemTypeName.contains('สังฆทาน') && d.subtotal == 0}">
                                             <c:set var="itemVal" value="0" />
                                             <c:set var="isFreeInTotal" value="true" />
                                         </c:if>

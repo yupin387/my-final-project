@@ -408,17 +408,24 @@ public class BookingFormController {
     }
     
     // แสดงรายการจองทั้งหมดของสมาชิกที่ล็อกอินอยู่ เรียงตาม bookingId จากน้อยไปมาก
+ // แสดงรายการจองทั้งหมดของสมาชิกที่ล็อกอินอยู่ เรียงตาม bookingId จากน้อยไปมาก
     @GetMapping("/myBookings")
     public String myBookings(Model model, HttpSession session) {
         Member loginUser = (Member) session.getAttribute("user");
         if (loginUser == null) return "redirect:/loginMember?error=pleaseLogin";
 
         List<BookingForm> bookings = bookingService.getBookingsByMember(loginUser.getMemberId());
-        
-    
         bookings.sort(Comparator.comparing(BookingForm::getBookingId));
 
+        // เช็คว่าการจองที่ Completed แล้วอันไหนถูกรีวิวไปแล้วบ้าง เพื่อเอาไปซ่อนปุ่ม "เขียนรีวิว"
+        List<String> reviewedBookingIds = bookings.stream()
+            .filter(b -> "Completed".equals(b.getBookingStatus()))
+            .map(BookingForm::getBookingId)
+            .filter(id -> reviewService.hasAlreadyReviewed(id))
+            .collect(Collectors.toList());
+
         model.addAttribute("bookings", bookings);
+        model.addAttribute("reviewedBookingIds", reviewedBookingIds);
         model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
 
         return "myBookingList";
