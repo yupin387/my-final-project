@@ -203,20 +203,20 @@
 
 	                <%-- ========== รายละเอียดแพ็กเกจ (ซ่อน/แสดงได้) ========== --%>
 	                <div id="detail-${p.ceremonyId}" class="cd-detail-collapsed" style="width:100%;">
-	                    <ul class="cd-condition-list" style="font-size:0.85rem; text-align:left; padding-left:18px; margin:0;">
+	                    <div class="cd-pkg-item-grid">
 	   <c:choose>
 							    <c:when test="${empty p.ceremonyItems}">
-							        <li>รายละเอียดจะจัดเตรียมตามความต้องการของท่าน</li>
+							        <span class="cd-pkg-item-empty">รายละเอียดจะจัดเตรียมตามความต้องการของท่าน</span>
 							    </c:when>
 							    <c:otherwise>
 							        <c:forEach items="${p.ceremonyItems}" var="ci">
-							            <li>
-							                ${ci.item.itemName} จำนวน ${ci.quantity} ${ci.item.unit}
-							            </li>
+							            <span class="cd-pkg-item-name">${ci.item.itemName}</span>
+							            <span class="cd-pkg-item-label">จำนวน</span>
+							            <span class="cd-pkg-item-qty">${ci.quantity} ${ci.item.unit}</span>
 							        </c:forEach>
 							    </c:otherwise>
 							</c:choose>
-	                    </ul>
+	                    </div>
 	                </div>
 	                <button type="button" class="cd-btn-view-detail" onclick="toggleDetail('${p.ceremonyId}', this)">
 	                    ดูรายละเอียดแพ็กเกจนี้ ▾

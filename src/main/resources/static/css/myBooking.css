@@ -325,7 +325,7 @@ img.lotus-icon {
     vertical-align: middle;
 }
 
-.mybooking-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.mybooking-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
 .btn-mybooking {
     display: inline-block;

@@ -395,6 +395,10 @@ body {
 	margin-bottom: 24px;
 }
 
+.form-grid > div {
+	min-width: 0;
+}
+
 .form-card {
 	background: #FFFFFF;
 	border-radius: 14px;
@@ -736,35 +740,43 @@ textarea.form-control {
 }
 
 .mini-cal-cell-free {
-	background: #E9F7EF;
-	border-color: #B7E4C7;
+	background: #27AE60;
+	border-color: #1E8449;
+	color: #FFFFFF;
+	font-weight: 700;
 }
 
 .mini-cal-cell-almost {
-	background: #FFF3D6;
-	border-color: var(--accent-gold-mid);
+	background: #E08E0B;
+	border-color: #B36F04;
+	color: #FFFFFF;
+	font-weight: 700;
 }
 
 .mini-cal-cell-booked {
-	background: #FDE7E7;
-	border-color: #F1A5A5;
+	background: #D32F2F;
+	border-color: #A52222;
+	color: #FFFFFF;
+	font-weight: 700;
 	cursor: not-allowed;
 }
 
 .mini-cal-cell-past {
-	background: #F0F0F0;
-	border-color: #DADADA;
+	background: #9E9E9E;
+	border-color: #757575;
 	cursor: not-allowed;
-	color: #B0B0B0;
+	color: #F0F0F0;
 }
 
 .mini-cal-cell-today {
-	outline: 2px solid var(--accent-gold);
+	outline: 2px dashed #FFFFFF;
+	outline-offset: -3px;
 }
 
 .mini-cal-cell-selected {
-	outline: 2px solid #B0345A;
-	box-shadow: 0 0 0 2px rgba(224, 87, 127, 0.25);
+	outline: 3px solid #7A2340;
+	box-shadow: 0 0 0 3px rgba(122, 35, 64, 0.4);
+	z-index: 1;
 }
 
 .mini-cal-legend {
@@ -895,6 +907,13 @@ textarea.form-control {
 	font-size: 12px;
 	font-weight: 700;
 	color: var(--accent-gold);
+}
+
+.item-card-extra-note {
+	font-size: 10.5px;
+	font-weight: 600;
+	color: var(--brown-mid);
+	margin-top: 2px;
 }
 
 .location-map-box {

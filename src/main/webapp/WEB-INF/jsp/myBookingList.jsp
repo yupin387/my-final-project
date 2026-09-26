@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>รายการจองของฉัน - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=17">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=19">
 
     <%-- สไตล์เฉพาะของแท็บและปุ่มรีวิว (เขียนไว้ในหน้านี้เพื่อไม่ต้องแก้ไฟล์ CSS เดิม) --%>
     <style>
@@ -202,7 +202,8 @@
     </c:choose>
 </span>
                                             </td>
-                                            <td class="mybooking-actions">
+                                            <td>
+                                                <div class="mybooking-actions">
                                                 <a href="${pageContext.request.contextPath}/viewBooking/${b.bookingId}"
                                                    class="btn-mybooking btn-mybooking-view">ดูรายละเอียด</a>
 
@@ -215,6 +216,7 @@
                                                         <span class="btn-mybooking btn-mybooking-disabled">รอใบเสนอราคา</span>
                                                     </c:otherwise>
                                                 </c:choose>
+                                                </div>
                                             </td>
                                         </tr>
                                     </c:if>
@@ -250,6 +252,7 @@
                                     <th>ประเภทพิธี</th>
                                     <th>สถานะ</th>
                                     <th>ดำเนินการ</th>
+                                    <th>รีวิว</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -270,10 +273,14 @@
                                                     </c:choose>
                                                 </span>
                                             </td>
-                                            <td class="mybooking-actions">
+                                            <td>
+                                                <div class="mybooking-actions">
                                                 <a href="${pageContext.request.contextPath}/viewBooking/${b.bookingId}"
                                                    class="btn-mybooking btn-mybooking-view">ดูรายละเอียด</a>
-
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="mybooking-actions">
                                                 <%-- ปุ่มรีวิว: กดรีวิวได้จากหน้ารายการนี้เลย ไม่ต้องเข้าไปหน้ารายละเอียดก่อน --%>
                                                 <c:if test="${b.bookingStatus == 'Completed'}">
                                                     <c:set var="isReviewed" value="${false}"/>
@@ -292,6 +299,7 @@
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </c:if>
+                                                </div>
                                             </td>
                                         </tr>
                                     </c:if>

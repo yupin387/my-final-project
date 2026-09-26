@@ -330,19 +330,20 @@
                                             <div class="item-card-name">${item.itemName}</div>
                                             <div class="item-card-desc">${item.itemDetail}</div>
                                             <div class="item-card-price">
-                                                <c:choose>
-                                                    <c:when test="${startInCustomMode or empty includedPrice}">
-                                                        ฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}
-                                                    </c:when>
-                                                    <c:when test="${item.pricePerUnit <= includedPrice}">
-                                                        รวมในแพ็กเกจ (฿0)
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        +฿<fmt:formatNumber value="${item.pricePerUnit - includedPrice}" pattern="#,###"/> / ${item.unit}
-                                                        <small>(เพิ่มจากชุดมาตรฐาน)</small>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> บาท / ${item.unit}
                                             </div>
+                                            <c:if test="${!startInCustomMode and !empty includedPrice}">
+                                                <div class="item-card-extra-note">
+                                                    <c:choose>
+                                                        <c:when test="${item.pricePerUnit <= includedPrice}">
+                                                            รวมในแพ็กเกจแล้ว ไม่ต้องจ่ายเพิ่ม
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            ต้องจ่ายเพิ่ม <fmt:formatNumber value="${item.pricePerUnit - includedPrice}" pattern="#,###"/> บาท จากชุดมาตรฐาน
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
+                                            </c:if>
                                         </div>
                                     </label>
                                 </c:forEach>
@@ -384,12 +385,11 @@
                         <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดภัตตาหาร')}">
                             <div class="form-group" style="margin-bottom:14px;">
                                 <label class="form-label">${q.questionsText}<span class="required" style="color:red;">*</span></label>
+                                <p style="font-size:11px; color:red; margin-top:4px; margin-bottom:0;">* คำนวณจาก จำนวนพระทั้งหมด + มัคนายก + พระพุทธรูป</p>
                                 <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
                                 <input type="number" name="details[${detailIndex}].answer" id="pintoQtyInput" class="form-control pinto-qty"
                                        value="${startInCustomMode ? '' : (empty pkgMonkCount ? 7 : pkgMonkCount + 2)}"
                                        placeholder="ระบุจำนวนชุด..." min="1" required oninput="this.dataset.userEdited = 'true';">
-                                <!-- หมายเหตุตัวน้อยๆ สีแดงใต้ช่องกรอกจำนวนชุดภัตตาหาร -->
-                                <p style="font-size:11px; color:red; margin-top:4px; margin-bottom:0;">* คำนวณจาก จำนวนพระทั้งหมด + มัคนายก + พระพุทธรูป</p>
                             </div>
                             <c:set var="detailIndex" value="${detailIndex + 1}"/>
                         </c:if>
@@ -409,7 +409,7 @@
                                             <div class="item-card-body">
                                                 <div class="item-card-name">${item.itemName}</div>
                                                 <div class="item-card-desc">${item.itemDetail}</div>
-                                                <div class="item-card-price">฿<fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> / ${item.unit}</div>
+                                                <div class="item-card-price"><fmt:formatNumber value="${item.pricePerUnit}" pattern="#,###"/> บาท / ${item.unit}</div>
                                             </div>
                                         </label>
                                     </c:if>

@@ -609,6 +609,54 @@ body {
     font-size: 0.7rem;
 }
 
+/* ========== รายการรายละเอียดในแต่ละแพ็กเกจ — จัดเป็นตาราง 3 คอลัมน์ ให้ตัวเลข/หน่วยตรงกันทุกแถว ========== */
+.cd-pkg-item-grid {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    column-gap: 10px;
+    row-gap: 7px;
+    width: 100%;
+    text-align: left;
+    font-size: 0.85rem;
+}
+
+.cd-pkg-item-name {
+    position: relative;
+    padding-left: 18px;
+    color: var(--text-body);
+    line-height: 1.5;
+}
+
+.cd-pkg-item-name::before {
+    content: "◆";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    color: var(--accent-gold);
+    font-size: 0.7rem;
+}
+
+.cd-pkg-item-label {
+    color: var(--text-muted);
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.cd-pkg-item-qty {
+    color: var(--accent-gold);
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: right;
+    line-height: 1.5;
+}
+
+.cd-pkg-item-empty {
+    grid-column: 1 / -1;
+    color: var(--text-body);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
 .conditions-grid-single {
     display: block;
 }
