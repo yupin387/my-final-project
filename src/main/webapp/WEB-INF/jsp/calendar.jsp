@@ -445,6 +445,5 @@
 			initLannaCalendar('${pageContext.request.contextPath}/static/data');
 		});
 	</script>
-
 </body>
 </html>
