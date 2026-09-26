@@ -130,7 +130,16 @@
 
 </div>
 
-
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png"
+                 alt="บุญมีนำพา รับจัดงานบุญ" class="footer-lotus-icon">
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
+        </div>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับผู้จัดการ</p>
+    </div>
+</footer>
 
 <script src="${pageContext.request.contextPath}/static/js/headStaffList.js"></script>
 

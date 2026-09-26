@@ -402,13 +402,15 @@
                     <c:forEach items="${questions}" var="q">
                         <c:if test="${fn:contains(q.questionsText, 'จำนวนชุดภัตตาหาร')}">
                             <div class="form-group" style="margin-bottom:14px;">
-                                <label class="form-label">${q.questionsText}<span class="required" style="color:red;">*</span></label>
-                                <p style="font-size:11px; color:red; margin-top:4px; margin-bottom:0;">* คำนวณจาก จำนวนพระทั้งหมด + มัคนายก + พระพุทธรูป</p>
-                                <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
-                                <input type="number" name="details[${detailIndex}].answer" id="pintoQtyInput" class="form-control pinto-qty"
-                                       value="${startInCustomMode ? '' : (empty pkgMonkCount ? 7 : pkgMonkCount + 2)}"
-                                       placeholder="ระบุจำนวนชุด..." min="1" required oninput="this.dataset.userEdited = 'true';">
-                            </div>
+    <label class="form-label" style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+        <span>${q.questionsText}<span class="required" style="color:red;">*</span></span>
+        <span style="font-size:11px; color:red; font-weight:400;">(คำนวณจาก จำนวนพระทั้งหมด + มัคนายก + พระพุทธรูป)</span>
+    </label>
+    <input type="hidden" name="details[${detailIndex}].question.questionsId" value="${q.questionsId}">
+    <input type="number" name="details[${detailIndex}].answer" id="pintoQtyInput" class="form-control pinto-qty"
+           value="${startInCustomMode ? '' : (empty pkgMonkCount ? 7 : pkgMonkCount + 2)}"
+           placeholder="ระบุจำนวนชุด..." min="1" required oninput="this.dataset.userEdited = 'true';">
+</div>
                             <c:set var="detailIndex" value="${detailIndex + 1}"/>
                         </c:if>
                     </c:forEach>

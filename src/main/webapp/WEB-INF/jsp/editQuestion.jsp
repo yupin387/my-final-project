@@ -166,7 +166,7 @@
                  alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
             <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
-        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับผู้จัดการ</p>
     </div>
    
 </footer>

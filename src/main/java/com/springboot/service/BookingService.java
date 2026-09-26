@@ -61,9 +61,20 @@ public class BookingService {
         return (results != null && !results.isEmpty()) ? results.get(0) : null;
     }
 
-    // สำหรับ Organizer: อนุมัติการจอง (เปลี่ยนสถานะเป็น Approved)
+
+ // สำหรับ Organizer: อนุมัติการจอง (เปลี่ยนสถานะเป็น Approved)
+    private static final int MAX_BOOKINGS_PER_DAY = 2;
+
     @Transactional
-    public void approveBooking(String id) {
+    public void approveBooking(String id) throws Exception {
+        BookingForm booking = bookingRepo.findById(id)
+                .orElseThrow(() -> new Exception("ไม่พบข้อมูลการจองรหัส: " + id));
+
+        int existingCount = bookingRepo.countActiveBookingsByEventDate(booking.getEventDate());
+        if (existingCount >= MAX_BOOKINGS_PER_DAY) {
+            throw new Exception("วันที่จัดงานนี้มีการจองครบ " + MAX_BOOKINGS_PER_DAY + " คิวแล้ว ไม่สามารถอนุมัติเพิ่มได้");
+        }
+
         updateStatus(id, "Approved");
     }
 

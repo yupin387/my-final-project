@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${isChangeMode ? 'เปลี่ยนหัวหน้างาน' : 'มอบหมายหัวหน้างาน'} - บุญมีนำพา จัดงานบุญ</title>
+    <title>${isChangeMode ? 'แก้ไขหัวหน้างาน' : 'มอบหมายหัวหน้างาน'} - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/assignStaff.css">
 </head>
@@ -54,7 +54,7 @@
                 <div class="h-orn-dot"></div>
                 <div class="h-orn-line r"></div>
             </div>
-            <h2>${isChangeMode ? 'เปลี่ยนหัวหน้างาน' : 'มอบหมายหัวหน้างาน'}</h2>
+            <h2>${isChangeMode ? 'แก้ไขหัวหน้างาน' : 'มอบหมายหัวหน้างาน'}</h2>
             <p>${isChangeMode ? 'เลือกหัวหน้างานคนใหม่เพื่อรับผิดชอบงานนี้' : 'กำหนดหัวหน้างานที่จะดูแลพิธีนี้'}</p>
         </div>
 
@@ -136,28 +136,29 @@
                     <div class="form-group">
                         <label>${isChangeMode ? 'เลือกหัวหน้างานคนใหม่' : 'ค้นหารายชื่อหัวหน้างาน'}</label>
                         <select name="staffId" id="staff-select" style="width:100%;" required>
-    <option value="">-- พิมพ์ชื่อเพื่อค้นหา --</option>
-    <c:forEach var="s" items="${staffList}">
-        <c:if test="${b.quotation.staff.staffId != s.staffId}">
-            <option value="${s.staffId}">
-                ${s.staffFirstName} ${s.staffLastName} (${s.staffPhone})
-                <c:choose>
-                    <c:when test="${staffWorkload[s.staffId] > 0}">
-                        - มีงานค้าง ${staffWorkload[s.staffId]} งาน
-                    </c:when>
-                    <c:otherwise>
-                        - ว่าง
-                    </c:otherwise>
-                </c:choose>
-            </option>
-        </c:if>
-    </c:forEach>
-</select>
+                            <option value="">-- พิมพ์ชื่อเพื่อค้นหา --</option>
+                            <c:forEach var="s" items="${staffList}">
+                                <c:if test="${b.quotation.staff.staffId != s.staffId}">
+                                    <option value="${s.staffId}"
+                                            data-workload="${staffWorkload[s.staffId]}">
+                                        ${s.staffFirstName} ${s.staffLastName} (${s.staffPhone})
+                                        <c:choose>
+                                            <c:when test="${staffWorkload[s.staffId] > 0}">
+                                                - มีงานค้าง ${staffWorkload[s.staffId]} งาน
+                                            </c:when>
+                                            <c:otherwise>
+                                                - ว่าง
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </option>
+                                </c:if>
+                            </c:forEach>
+                        </select>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-submit">
-                    ${isChangeMode ? 'ยืนยันการเปลี่ยนหัวหน้างาน' : 'ยืนยันการมอบหมายงาน'}
+                    ${isChangeMode ? 'ยืนยันการแก้ไข' : 'ยืนยันการมอบหมายงาน'}
                 </button>
 
                 <a href="javascript:history.back()" class="back-link">← ยกเลิกและกลับหน้าก่อนหน้า</a>
@@ -173,11 +174,10 @@
         <div class="footer-brand">
             <img src="${pageContext.request.contextPath}/static/images/logoo.png"
                  alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
-            <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
+            <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
-        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับผู้จัดการ</p>
     </div>
-
 </footer>
 
 
@@ -185,15 +185,5 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/assignStaff.js"></script>
 
-<script>
-function toggleDropdown() {
-    document.getElementById('dropdownMenu').classList.toggle('show');
-}
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.user-info')) {
-        document.getElementById('dropdownMenu').classList.remove('show');
-    }
-});
-</script>
 </body>
 </html>

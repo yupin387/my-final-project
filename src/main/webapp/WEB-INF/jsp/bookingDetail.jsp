@@ -109,6 +109,23 @@
 <%-- ===== PAGE WRAPPER ===== --%>
 <div class="page-wrapper">
 
+  <%-- ===== Flash Message (success / error) ===== --%>
+    <c:if test="${not empty success}">
+        <div style="background:#e8f5e9; border:1.5px solid #43a047; color:#1b5e20;
+                    padding:14px 20px; border-radius:10px; margin-bottom:18px;
+                    font-weight:600; font-size:0.92rem; display:flex; align-items:center; gap:10px;">
+            <i class="bi bi-check-circle-fill"></i> ${success}
+        </div>
+    </c:if>
+
+    <c:if test="${not empty error}">
+        <div style="background:#fdecea; border:1.5px solid #c62828; color:#8B0000;
+                    padding:14px 20px; border-radius:10px; margin-bottom:18px;
+                    font-weight:600; font-size:0.92rem; display:flex; align-items:center; gap:10px;">
+            <i class="bi bi-exclamation-triangle-fill"></i> ${error}
+        </div>
+    </c:if>
+
     <div class="back-link-row">
         <a href="${pageContext.request.contextPath}/manager/bookings" class="back-link"><i class="bi bi-arrow-left"></i> กลับรายการจอง</a>
     </div>
@@ -478,7 +495,7 @@
                  alt="บุญมีนำพา จัดงานบุญ" class="lotus-icon footer-lotus-icon">
             <span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
         </div>
-        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับทีมงานและผู้ดูแลระบบ</p>
+        <p class="footer-tagline">ระบบจัดการงานบุญสำหรับผู้จัดการ</p>
     </div>
 </footer>
 

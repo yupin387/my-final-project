@@ -344,14 +344,28 @@ public class ManagerController {
         BookingForm booking = bookingService.getBookingById(bookingId);
         model.addAttribute("b", booking);
 
-        List<HeadStaff> staffList = quotationService.findAvailableStaff(booking.getEventDate());
-        model.addAttribute("staffList", staffList);
+        List<HeadStaff> allActive = headStaffService.getAllActiveHeadStaff();
 
-        // นับงานค้างของแต่ละคน เก็บเป็น staffId -> จำนวนงาน
+        List<HeadStaff> staffList = new java.util.ArrayList<>();
         java.util.Map<Integer, Integer> staffWorkload = new java.util.HashMap<>();
-        for (HeadStaff s : staffList) {
+
+        for (HeadStaff s : allActive) {
+            // ตัดออกถ้ามีงานวันนี้อยู่แล้ว (กันไม่ให้คนเดียวถูกมอบ 2 งานวันเดียวกัน)
+            if (!staffAssignmentService.canAssignOnDate(s.getStaffId(), booking.getEventDate())) {
+                continue;
+            }
+            staffList.add(s);
             staffWorkload.put(s.getStaffId(), staffAssignmentService.countActiveAssignments(s.getStaffId()));
         }
+
+        // ว่าง (workload = 0) ขึ้นก่อน, มีงานค้าง (workload > 0) ไปอยู่ล่างสุด
+        staffList.sort(
+            java.util.Comparator
+                .comparing((HeadStaff s) -> staffWorkload.get(s.getStaffId()) > 0)
+                .thenComparing(HeadStaff::getStaffFirstName)
+        );
+
+        model.addAttribute("staffList", staffList);
         model.addAttribute("staffWorkload", staffWorkload);
 
         boolean isChangeMode = booking.getQuotation() != null

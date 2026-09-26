@@ -27,9 +27,15 @@ public interface BookingFormRepository extends JpaRepository<BookingForm, String
     @Query("SELECT b FROM BookingForm b WHERE b.member.memberId = :memberId ORDER BY b.bookingId DESC")
     List<BookingForm> findLatestByMemberId(@Param("memberId") Integer memberId);
     
- // หาการจองทั้งหมดของสมาชิกคนนี้ เรียงจากล่าสุดไปเก่าสุด
+    // หาการจองทั้งหมดของสมาชิกคนนี้ เรียงจากล่าสุดไปเก่าสุด
     @Query("SELECT b FROM BookingForm b WHERE b.member.memberId = :memberId ORDER BY b.bookingDate DESC")
     List<BookingForm> findByMemberId(@Param("memberId") Integer memberId);
-    
+
+    // นับจำนวน booking ที่ "รับเข้าระบบแล้ว" (ไม่นับ Pending ที่ยังไม่ตัดสินใจ และไม่นับ Rejected)
+    // ในวันจัดงานเดียวกัน ใช้เช็ค cap 2 คิว/วัน ตอนจะอนุมัติ
+    @Query("SELECT COUNT(b) FROM BookingForm b " +
+           "WHERE b.eventDate = :eventDate " +
+           "AND b.bookingStatus NOT IN ('Pending', 'Rejected')")
+    int countActiveBookingsByEventDate(@Param("eventDate") java.util.Date eventDate);
     
 }

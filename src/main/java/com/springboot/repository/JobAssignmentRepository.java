@@ -36,4 +36,14 @@ public interface JobAssignmentRepository extends JpaRepository<JobAssignment, St
            "WHERE sa.headStaff.staffId = :staffId " +
            "AND sa.bookingForm.bookingStatus <> 'Completed'")
     int countActiveAssignmentsByStaffId(@Param("staffId") int staffId);
+    
+ // นับจำนวนงาน "ที่ยังไม่จบ" ของหัวหน้างานคนนี้ ในวันจัดงานเดียวกัน
+ // (Completed และ Rejected ไม่นับ เพราะไม่ใช่ conflict จริง)
+ @Query("SELECT COUNT(sa) FROM JobAssignment sa " +
+        "WHERE sa.headStaff.staffId = :staffId " +
+        "AND sa.bookingForm.eventDate = :eventDate " +
+        "AND sa.bookingForm.bookingStatus IN ('Assigned', 'Preparing', 'In_Progress')")
+ int countAssignmentsByStaffAndDate(@Param("staffId") int staffId, @Param("eventDate") java.util.Date eventDate);
 }
+
+    

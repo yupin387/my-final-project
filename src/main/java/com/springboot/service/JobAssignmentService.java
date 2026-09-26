@@ -135,4 +135,9 @@ public class JobAssignmentService {
     public int countActiveAssignments(int staffId) {
         return staffAssignmentRepo.countActiveAssignmentsByStaffId(staffId);
     }
+    
+ // เช็คว่าหัวหน้างานคนนี้ว่างในวันนี้ไหม (1 คน รับได้แค่ 1 งาน/วัน)
+    public boolean canAssignOnDate(int staffId, java.util.Date eventDate) {
+        return staffAssignmentRepo.countAssignmentsByStaffAndDate(staffId, eventDate) == 0;
+    }
 }

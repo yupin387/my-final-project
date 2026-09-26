@@ -13,8 +13,11 @@
 	href="${pageContext.request.contextPath}/static/css/home.css?v=15">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/calendarPage.css?v=3">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/static/css/lannaCalendar.css?v=2">
+<style>
+.yearly-summary-hidden {
+    display: none;
+}
+</style>
 </head>
 <body>
 
@@ -39,7 +42,7 @@
 				</a>
 				<div class="nav-dropdown-panel">
 					<c:forEach var="t" items="${ceremonyTypes}">
-						<a
+						
 							href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
 							class="nav-dropdown-link">${t.mainName}</a>
 					</c:forEach>
@@ -54,11 +57,9 @@
 					class="nav-caret">▾</span>
 				</a>
 				<div class="nav-dropdown-panel">
-					<a
+					
 						href="${pageContext.request.contextPath}/calendar#calendarSection"
-						class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a> <a
-						href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
-						class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
+						class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
 				</div>
 			</div>
 
@@ -86,7 +87,7 @@
 					</div>
 					<div class="dropdown-menu-custom" id="dropdownMenu">
 						<a href="${pageContext.request.contextPath}/editProfile"
-							class="dropdown-link">โปรไฟล์ของฉัน</a> <a
+							class="dropdown-link">โปรไฟล์ของฉัน</a> 
 							href="${pageContext.request.contextPath}/logout"
 							class="dropdown-link danger">ออกจากระบบ</a>
 					</div>
@@ -98,20 +99,6 @@
 			</c:otherwise>
 		</c:choose>
 	</nav>
-
-	<%-- ========== หัวหน้าปฏิทิน (แถบสีชมพู) ==========
-	     เดิมมีข้อความ (h1 + p) วางอยู่ในแถบนี้ เปลี่ยนมาใส่รูปภาพแทนตามที่ขอ
-	     TODO: เปลี่ยน src ด้านล่างเป็นไฟล์รูปจริงเมื่อเตรียมเสร็จ --%>
-	<div class="calendar-page-header">
-		<img
-			src="${pageContext.request.contextPath}/static/images/calendar.png"
-			alt="ปฏิทินฤกษ์ดีจัดงานบุญ" class="calendar-page-header-img">
-		<div class="calendar-tabs">
-			<a href="#calendarSection" class="calendar-tab-link">ปฏิทิน
-				(ฤกษ์ดี)</a> <a href="#lannaCalendarSection" class="calendar-tab-link">ปฏิทิน
-				(ล้านนา)</a>
-		</div>
-	</div>
 
 	<%-- ========== CALENDAR (ฤกษ์ดี) ========== --%>
 	<section class="section-pad section-calendar" id="calendarSection">
@@ -240,8 +227,8 @@
 				<c:choose>
 					<c:when test="${not empty monthlyGoodDaysByWeekday}">
 						<div class="yearly-summary-grid">
-							<c:forEach var="month" items="${monthlyGoodDaysByWeekday}">
-								<div class="yearly-summary-card">
+							<c:forEach var="month" items="${monthlyGoodDaysByWeekday}" varStatus="mStatus">
+								<div class="yearly-summary-card${mStatus.index >= 4 ? ' yearly-summary-hidden' : ''}">
 									<h4 class="yearly-summary-month">ฤกษ์ดีประจำเดือน
 										${month.monthName} 2569</h4>
 									<ul class="yearly-summary-list">
@@ -252,6 +239,14 @@
 								</div>
 							</c:forEach>
 						</div>
+						<c:if test="${fn:length(monthlyGoodDaysByWeekday) > 4}">
+							<div style="text-align:center; margin-top:20px;">
+								<button type="button" id="yearlySummaryToggleBtn"
+										class="tab-btn" onclick="toggleYearlySummary()">
+									ดูเพิ่มเติม ▾
+								</button>
+							</div>
+						</c:if>
 					</c:when>
 					<c:otherwise>
 						<p class="section-subtitle">ยังไม่มีข้อมูลฤกษ์ดีสรุปรายเดือนในขณะนี้</p>
@@ -261,138 +256,6 @@
 		</div>
 	</section>
 
-	<%-- ========== THAI KANOK DIVIDER ========== --%>
-	<svg class="thai-divider" viewBox="0 0 1200 48"
-		xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-		style="display: block; background: #FFF8E1;">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#E8CC70"
-			stroke-width="1" opacity="0.6" />
-    <circle cx="600" cy="24" r="4" fill="#E8BB3A" />
-</svg>
-
-	<%-- ========== ปฏิทินล้านนา ========== --%>
-	<section class="section-pad section-calendar" id="lannaCalendarSection">
-		<div class="container">
-			<div class="section-header">
-				<h2 class="section-title">ปฏิทินล้านนา</h2>
-				<p class="section-subtitle">ฤกษ์ดีตามปฏิทินล้านนา
-					สำหรับผู้ที่ต้องการยึดตามธรรมเนียมคนเมือง</p>
-				<div class="gold-line"></div>
-			</div>
-
-			
-			<div class="lc-explain-box">
-				<h3 class="lc-explain-title">ปฏิทินล้านนา คืออะไร?</h3>
-				<p class="lc-explain-text">
-					<strong>ปฏิทินล้านนา</strong>
-					คือระบบการนับวันเดือนปีแบบโบราณของชาวล้านนา หรือชาวไทยภาคเหนือ
-					ที่ใช้สืบทอดกันมาตั้งแต่สมัยอาณาจักรล้านนา มีลักษณะเป็นปฏิทินแบบ <strong>สุริยคติผสมจันทรคติ</strong>
-					กล่าวคือ การขึ้นปีใหม่ (สงกรานต์ล้านนา)
-					จะยึดตามการโคจรของดวงอาทิตย์ที่เคลื่อนจากราศีมีนเข้าสู่ราศีเมษ
-					ในขณะที่การนับวันในแต่ละเดือนจะยึดตามข้างขึ้นข้างแรมของดวงจันทร์ตามคติทางพระพุทธศาสนา
-				</p>
-				<p class="lc-explain-text">
-					ปฏิทินล้านนาถูกนำมาใช้อย่างแพร่หลายในการกำหนด <strong>ฤกษ์ยาม</strong>
-					สำหรับประกอบพิธีกรรมและงานมงคลต่างๆ ของคนเมือง เช่น การทำบุญบ้าน
-					การขึ้นบ้านใหม่ และการเปิดสำนักงาน/เปิดออฟฟิศ
-					โดยแต่ละวันจะมีการกำกับด้วย "ชื่อวันไท" ตามระบบนักษัตรล้านนา
-					ควบคู่กับแท็กบอกลักษณะของวัน เช่น วันดี ไปจนถึงวันที่ควรหลีกเลี่ยง
-					เช่น วันเสีย วันมัจจุ วันวอดวาย วันไหม้ และวันเก้ากอง
-					ซึ่งแต่ละแท็กจะมีความหมายและข้อควรระวังที่แตกต่างกันไปตามความเชื่อดั้งเดิม
-				</p>
-				<p class="lc-explain-text">
-					นอกจากนี้ปฏิทินล้านนายังบอกข้อมูลระดับปีด้วย เช่น
-					ปีนักษัตรตามแบบล้านนา (ปีสะง้า)
-					พระธาตุประจำปีที่ควรไปนมัสการเพื่อความเป็นสิริมงคล ดอกไม้ประจำปี
-					และวันสำคัญในช่วงสงกรานต์ล้านนา ได้แก่ วันสังขานต์ล่อง วันเน่า
-					และวันพญาวัน (วันขึ้นปีใหม่)
-					ซึ่งเป็นข้อมูลที่ใช้ประกอบการดูฤกษ์ยามและการเตรียมจัดงานบุญให้ถูกต้องตามธรรมเนียมปฏิบัติของชาวล้านนา
-				</p>
-			</div>
-
-			<div class="lc-calendar">
-
-				<div class="lc-controls">
-					<button type="button" class="lc-nav-btn" id="lc-prev-month">&#8249;</button>
-					<div class="lc-month-title" id="lc-month-title"></div>
-					<button type="button" class="lc-nav-btn" id="lc-next-month">&#8250;</button>
-				</div>
-
-				<div class="lc-card">
-					<div class="lc-grid" id="lc-grid">
-						<div class="lc-day-label">อา</div>
-						<div class="lc-day-label">จ</div>
-						<div class="lc-day-label">อ</div>
-						<div class="lc-day-label">พ</div>
-						<div class="lc-day-label">พฤ</div>
-						<div class="lc-day-label">ศ</div>
-						<div class="lc-day-label">ส</div>
-					</div>
-
-					<div class="lc-legend">
-						<span><span class="lc-legend-dot"
-							style="background: var(--lc-good-bg); border: 1.5px solid var(--lc-good-border);"></span>วันดี</span>
-						<span><span class="lc-legend-dot"
-							style="background: var(--lc-bad-bg); border: 1.5px solid var(--lc-bad-border);"></span>วันควรเลี่ยง</span>
-						<span><span class="lc-legend-dot"
-							style="background: var(--lc-today-bg); border: 1.5px solid var(--lc-today-border);"></span>วันนี้</span>
-					</div>
-				</div>
-
-				<div class="lc-day-detail" id="lc-day-detail">
-					<p class="lc-day-detail-empty">คลิกวันที่ในตารางเพื่อดูรายละเอียดฤกษ์ของวันนั้น</p>
-				</div>
-
-				<%-- ========== ที่มา (ย้ายมาไว้ล่างสุดของปฏิทินล้านนา) ========== --%>
-				<div id="lc-year-source" class="lc-year-source"></div>
-
-			</div>
-		</div>
-	</section>
-
-	<%-- ========== FOOTER (ใหม่ — ไม่มีเมนู, สีตรงกับแถบเมนูบนสุด) ========== --%>
-	<footer class="site-footer">
-		<div class="footer-top">
-			<svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
-				style="display: block; width: 100%; height: 8px;">
-            <rect width="1200" height="8" fill="url(#footerGrad)" />
-            <defs>
-                <linearGradient id="footerGrad" x1="0%" y1="0%"
-					x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="rgba(217,164,65,0.15)" />
-                    <stop offset="50%" stop-color="rgba(217,164,65,0.9)" />
-                    <stop offset="100%"
-					stop-color="rgba(217,164,65,0.15)" />
-                </linearGradient>
-            </defs>
-        </svg>
-		</div>
-		<div class="container footer-content footer-content-slim">
-			<div class="footer-col footer-brand-col">
-				<div class="footer-brand">
-					<img
-						src="${pageContext.request.contextPath}/static/images/logoo.png"
-						alt="บุญมี รับจัดงานบุญ" class="lotus-icon"> <span
-						class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
-				</div>
-				<p class="footer-tagline">รับจัดงานบุญ ดูแลพิธีสงฆ์ให้คุณ
-					ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
-				<div class="footer-social">
-					<a href="#" class="footer-social-link">📘 Facebook</a> <a href="#"
-						class="footer-social-link">▶️ YouTube</a> <a href="#"
-						class="footer-social-link">💬 LINE OA</a>
-				</div>
-			</div>
-
-			<div class="footer-col footer-contact-col">
-				<h4 class="footer-heading">ติดต่อเรา</h4>
-				<p>📞 โทร. 08X-XXX-XXXX</p>
-				<p>💬 LINE OA: @boonmee</p>
-				<p>✉️ boonmee@gmail.com</p>
-				<p>📍 บริการในพื้นที่และจังหวัดใกล้เคียง</p>
-			</div>
-		</div>
-	</footer>
 	<%-- ========== SCRIPT ZONE: ปฏิทิน (ฤกษ์ดี) ========== --%>
 	<script>
     window.contextPath = "${pageContext.request.contextPath}";
@@ -434,16 +297,22 @@
             }<c:if test="${!st.last}">,</c:if>
         </c:forEach>
     ];
+
+    function toggleYearlySummary() {
+        var hiddenCards = document.querySelectorAll('.yearly-summary-hidden');
+        if (hiddenCards.length === 0) return;
+        var btn = document.getElementById('yearlySummaryToggleBtn');
+        var isCurrentlyHidden = window.getComputedStyle(hiddenCards[0]).display === 'none';
+
+        hiddenCards.forEach(function (card) {
+            card.style.display = isCurrentlyHidden ? 'block' : 'none';
+        });
+
+        btn.textContent = isCurrentlyHidden ? 'ย่อกลับ ▴' : 'ดูเพิ่มเติม ▾';
+    }
     </script>
 	<script src="${pageContext.request.contextPath}/static/js/home.js?v=13"></script>
-
-	
 	<script
 		src="${pageContext.request.contextPath}/static/js/calendar.js?v=2"></script>
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			initLannaCalendar('${pageContext.request.contextPath}/static/data');
-		});
-	</script>
 </body>
 </html>
