@@ -150,6 +150,5 @@
     document.getElementById('month-picker').addEventListener('change', (e) => renderMonth(e.target.value));
     initLannaPage();
 </script>
-
 </body>
 </html>
