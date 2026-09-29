@@ -5,12 +5,12 @@ function showBanner(type, title) {
 
     const banner = document.createElement('div');
     banner.id = 'flash-banner';
-    // FIX: เดิม className = `flash-banner ${type}` สร้าง 2 class แยกกัน
-    // (flash-banner กับ success/error) ซึ่งไม่ตรงกับ CSS ที่ประกาศไว้เป็น
-    // .flash-banner-success / .flash-banner-error (ขีดกลาง รวมเป็น class เดียว)
-    // เลยไม่มีสไตล์ใดๆ ถูกดึงมาใช้ ตอนนี้แก้ให้ต่อชื่อ class ให้ตรงกัน
+    // class ต้องตรงกับ CSS: .flash-banner-success / .flash-banner-error
     banner.className = `flash-banner flash-banner-${type}`;
-    banner.innerHTML = `<span>${title}</span>`;
+
+    const span = document.createElement('span');
+    span.textContent = title;   // ใช้ textContent กัน HTML injection
+    banner.appendChild(span);
 
     const pageWrapper = document.querySelector('.page-wrapper');
     if (pageWrapper) {
@@ -20,50 +20,82 @@ function showBanner(type, title) {
     }
 }
 
-// ===== ฟังก์ชันจัดการ Modal ยืนยันการลบข้อมูล =====
+// ===== Modal ยืนยันการลบข้อมูล =====
 let _pendingForm = null;
 
 function showDeleteModal(formEl) {
     _pendingForm = formEl;
 
-    const itemName = formEl.dataset.itemName || '';
     const nameEl = document.getElementById('modalItemName');
-    if (nameEl) {
-        nameEl.textContent = itemName;
-    }
+    if (nameEl) nameEl.textContent = formEl.dataset.itemName || '';
 
-    document.getElementById('confirmModal').classList.add('show');
+    const modal = document.getElementById('confirmModal');
+    if (modal) modal.classList.add('show');
 }
+
 function closeModal() {
-    document.getElementById('confirmModal').classList.remove('show');
+    const modal = document.getElementById('confirmModal');
+    if (modal) modal.classList.remove('show');
     _pendingForm = null;
 }
 
 function confirmDelete() {
-    if (_pendingForm) {
-        _pendingForm.submit();
-    }
+    if (_pendingForm) _pendingForm.submit();
     closeModal();
 }
 
-// ===== ฟังก์ชันจัดการเมนู Dropdown =====
+// ===== Dropdown เมนูผู้ใช้ =====
 function toggleDropdown() {
-    document.getElementById('dropdownMenu').classList.toggle('show');
+    const menu = document.getElementById('dropdownMenu');
+    if (menu) menu.classList.toggle('show');
 }
 
-// ===== Event Listener สำหรับปิด Dropdown และ Modal เมื่อคลิกพื้นที่อื่นภายนอก =====
+// ===== ตัวกรอง: เปิด/ปิด dropdown แบบเดียวกับหน้ารายการจอง =====
+function closeAllFilters() {
+    document.querySelectorAll('.status-filter-dropdown.show').forEach(function (el) {
+        el.classList.remove('show');
+    });
+    document.querySelectorAll('.status-filter-arrow').forEach(function (el) {
+        el.textContent = '▾';
+    });
+}
+
+function toggleFilter(dropdownId, arrowId) {
+    const dropdown = document.getElementById(dropdownId);
+    const arrow = document.getElementById(arrowId);
+    if (!dropdown) return;
+
+    const isOpen = dropdown.classList.contains('show');
+
+    // ปิดตัวกรองอื่นก่อนเสมอ กันเปิดซ้อนกัน
+    closeAllFilters();
+
+    if (!isOpen) {
+        dropdown.classList.add('show');
+        if (arrow) arrow.textContent = '▴';
+    }
+}
+
+// ===== listener เดียวรวมทุกอย่าง: คลิกนอกพื้นที่แล้วปิด dropdown / filter / modal =====
 document.addEventListener('click', function (e) {
-    const userInfo = document.querySelector('.user-info');
-    if (userInfo && !userInfo.contains(e.target)) {
+    // เมนูผู้ใช้
+    if (!e.target.closest('.user-info')) {
         const menu = document.getElementById('dropdownMenu');
         if (menu) menu.classList.remove('show');
     }
 
-    const overlay = document.getElementById('confirmModal');
-    if (e.target === overlay) closeModal();
+    // ตัวกรอง
+    if (!e.target.closest('.status-filter-group')) {
+        closeAllFilters();
+    }
+
+    // คลิกพื้นหลัง modal
+    if (e.target === document.getElementById('confirmModal')) {
+        closeModal();
+    }
 });
 
-// ===== ฟังก์ชันแสดง Banner แจ้งเตือนอัตโนมัติเมื่อโหลดหน้าเว็บ (จาก Flash Attribute) =====
+// ===== แสดง Banner อัตโนมัติเมื่อโหลดหน้า (จาก Flash Attribute) =====
 document.addEventListener('DOMContentLoaded', function () {
     const successEl = document.getElementById('flash-success');
     const errorEl   = document.getElementById('flash-error');

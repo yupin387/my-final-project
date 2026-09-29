@@ -10,116 +10,7 @@
     <title>ข้อมูลงาน - ${a.assignId}</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/assignmentDetail.css?v=6">
-    <style>
-    * {
-    font-family: 'Sarabun', sans-serif;
-}
-        .btn-damage-disabled {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border-radius: 6px;
-            background-color: #f1f5f9;
-            color: #94a3b8;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: not-allowed;
-            border: 1.5px dashed #cbd5e1;
-        }
-        .btn-status-next {
-            background-color: #2563eb;
-            color: #fff;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .btn-status-next:hover { background-color: #1d4ed8; }
-        .status-done-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border-radius: 6px;
-            background-color: #dcfce7;
-            color: #15803d;
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-        /* ===== สไตล์ตารางรายการ "ต้องเตรียม" แบบใบเสนอราคา (แยก scope ไม่ชนกับ CSS อื่น) ===== */
-        .quote-preview {
-            border: 1px solid #e9d9b8;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 12px;
-            background: #fffdf8;
-        }
-        .qp-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13.5px;
-        }
-        .qp-table th, .qp-table td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #eee0c4;
-        }
-        .qp-table thead th {
-            background-color: #f6ecd4;
-            color: #6b4f1d;
-            font-weight: 700;
-        }
-        .qp-table .text-center { text-align: center; }
-        .qp-table .text-left { text-align: left; }
-        .qp-table .text-right { text-align: right; }
-        .qp-table .text-muted { color: #9b9b9b; }
-        .qp-table .text-danger { color: #c0392b; }
-        .qp-group-row td {
-            background-color: #f6ecd4;
-            font-weight: 700;
-            color: #6b4f1d;
-            text-align: left;
-            padding-left: 8px;
-            white-space: nowrap;
-        }
-        .qp-package-row td {
-            background-color: #fbf5e6;
-        }
-        .qp-indented {
-            padding-left: 20px !important;
-        }
-        .qp-totals-wrap {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 16px;
-        }
-        .qp-totals-table {
-            width: 320px;
-            border-collapse: collapse;
-        }
-        .qp-totals-table td {
-            padding: 8px 10px;
-            font-size: 13.5px;
-        }
-        .qp-tot-label { color: #555; }
-        .qp-tot-value { text-align: right; font-weight: 600; }
-        .qp-extra-detail {
-            font-size: 11.5px;
-            color: #9b9b9b;
-            font-style: italic;
-            margin-top: 3px;
-        }
-        .qp-grand-total td {
-            border-top: 2px solid #e9d9b8;
-            font-size: 16px;
-            font-weight: 800;
-            color: #b7791f;
-            padding-top: 12px;
-        }
-    </style>
+  
 </head>
 <body>
 
@@ -252,11 +143,13 @@
                     </div>
                     <div class="info-group">
                         <span class="label">ประเภทงาน</span>
-                        <span class="value">${a.bookingForm.ceremony.ceremonyType}</span>
+                        <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                        <span class="value">${a.bookingForm.packageEntity.packageType}</span>
                     </div>
                     <div class="info-group">
                         <span class="label">รูปแบบการจอง</span>
-                        <span class="value" >${a.bookingForm.ceremony.optionType}</span>
+                        <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                        <span class="value" >${a.bookingForm.packageEntity.optionType}</span>
                     </div>
                     <div class="info-group">
                         <span class="label">ลูกค้า</span>
@@ -326,11 +219,13 @@
                                     <c:if test="${!isCustomRequest}">
                                         <tr class="qp-package-row">
                                             <td class="text-center"></td>
-                                            <td><strong>แพ็กเกจ: ${a.bookingForm.ceremony.optionType}</strong></td>
+                                            <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                                            <td><strong>แพ็กเกจ: ${a.bookingForm.packageEntity.optionType}</strong></td>
                                             <td class="text-center">1</td>
                                             <td class="text-center">แพ็กเกจ</td>
-                                            <td class="text-right"><fmt:formatNumber value="${a.bookingForm.ceremony.basePrice}" minFractionDigits="2"/></td>
-                                            <td class="text-right"><fmt:formatNumber value="${a.bookingForm.ceremony.basePrice}" minFractionDigits="2"/></td>
+                                            <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                                            <td class="text-right"><fmt:formatNumber value="${a.bookingForm.packageEntity.basePrice}" minFractionDigits="2"/></td>
+                                            <td class="text-right"><fmt:formatNumber value="${a.bookingForm.packageEntity.basePrice}" minFractionDigits="2"/></td>
                                         </tr>
                                     </c:if>
 
@@ -359,7 +254,8 @@
                                     <%-- ---- หมวดอุปกรณ์พิธีกรรม ---- --%>
                                     <c:set var="printedEquip" value="false" />
                                     <c:forEach var="d" items="${details}">
-                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.ceremony.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
+                                        <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
                                             <c:if test="${!printedEquip}">
                                                 <tr class="qp-group-row"><td colspan="6">หมวดอุปกรณ์พิธีกรรม</td></tr>
                                                 <c:set var="printedEquip" value="true" />
@@ -382,7 +278,8 @@
                                     <%-- ---- หมวดสังฆทาน ---- --%>
                                     <c:set var="printedSang" value="false" />
                                     <c:forEach var="d" items="${details}">
-                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.ceremony.optionType) && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
+                                        <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
                                             <c:if test="${!printedSang}">
                                                 <tr class="qp-group-row"><td colspan="6">หมวดสังฆทาน</td></tr>
                                                 <c:set var="printedSang" value="true" />
@@ -407,7 +304,8 @@
                                     <%-- ---- หมวดภัตตาหารปิ่นโต ---- --%>
                                     <c:set var="printedFood" value="false" />
                                     <c:forEach var="d" items="${details}">
-                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.ceremony.optionType) && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
+                                        <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
                                             <c:if test="${!printedFood}">
                                                 <tr class="qp-group-row"><td colspan="6">หมวดภัตตาหารปิ่นโต</td></tr>
                                                 <c:set var="printedFood" value="true" />
@@ -430,7 +328,8 @@
                                     <%-- ---- หมวดบริการและการดำเนินการ ---- --%>
                                     <c:set var="printedServ" value="false" />
                                     <c:forEach var="d" items="${details}">
-                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.ceremony.optionType) && d.item.itemType.itemTypeName.contains('บริการ')}">
+                                        <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('บริการ')}">
                                             <c:if test="${!printedServ}">
                                                 <tr class="qp-group-row"><td colspan="6">หมวดบริการและการดำเนินการ</td></tr>
                                                 <c:set var="printedServ" value="true" />
@@ -452,7 +351,8 @@
                                     <%-- ---- หมวดอุปกรณ์เสริม ---- --%>
                                     <c:set var="printedExtra" value="false" />
                                     <c:forEach var="d" items="${details}">
-                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.ceremony.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+                                        <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                                        <c:if test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(a.bookingForm.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
                                             <c:if test="${!printedExtra}">
                                                 <tr class="qp-group-row"><td colspan="6">หมวดอุปกรณ์เสริม</td></tr>
                                                 <c:set var="printedExtra" value="true" />
@@ -473,12 +373,14 @@
 
                             <%-- ===== กล่องสรุปยอด (คำนวณเหมือนหน้าใบเสนอราคาต้นฉบับ) ===== --%>
                             <c:set var="sumExtra" value="0" />
-                            <c:set var="sumPackage" value="${isCustomRequest ? 0 : a.bookingForm.ceremony.basePrice}" />
+                            <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                            <c:set var="sumPackage" value="${isCustomRequest ? 0 : a.bookingForm.packageEntity.basePrice}" />
                             <c:set var="extraItemsList" value="" />
 
                             <c:forEach var="d" items="${details}">
                                 <c:choose>
-                                    <c:when test="${!isCustomRequest && d.item != null && fn:trim(d.item.itemName) eq fn:trim(a.bookingForm.ceremony.optionType)}">
+                                    <%-- แก้: bookingForm.pkg -> bookingForm.packageEntity --%>
+                                    <c:when test="${!isCustomRequest && d.item != null && fn:trim(d.item.itemName) eq fn:trim(a.bookingForm.packageEntity.optionType)}">
                                     </c:when>
                                     <c:otherwise>
                                         <c:set var="itemVal" value="${d.subtotal}" />
@@ -615,15 +517,6 @@
 
     <script src="${pageContext.request.contextPath}/static/js/assignmentDetail.js"></script>
 
-    <script>
-        function toggleDropdown() {
-            document.getElementById('dropdownMenu').classList.toggle('show');
-        }
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.user-info')) {
-                document.getElementById('dropdownMenu').classList.remove('show');
-            }
-        });
-    </script>
+
 </body>
 </html>

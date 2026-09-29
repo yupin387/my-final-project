@@ -33,8 +33,8 @@
 		<div class="navbar-right">
 			<nav class="navbar-menu">
 				<a href="${pageContext.request.contextPath}/staff/assignments"
-					class="nav-item">งานที่ได้รับมอบหมาย</a> <a
-					href="${pageContext.request.contextPath}/staff/items"
+					class="nav-item">งานที่ได้รับมอบหมาย</a>
+				<a href="${pageContext.request.contextPath}/staff/items"
 					class="nav-item active">จัดการรายการอุปกรณ์</a>
 			</nav>
 			<div class="user-info" onclick="toggleDropdown()">
@@ -43,8 +43,8 @@
 					${sessionScope.currentStaff.staffLastName}</span> <span class="arrow">▾</span>
 				<div class="dropdown-menu" id="dropdownMenu">
 					<a href="${pageContext.request.contextPath}/staff/profile"
-						class="dropdown-item">โปรไฟล์</a> <a
-						href="${pageContext.request.contextPath}/staff/logout"
+						class="dropdown-item">โปรไฟล์</a>
+					<a href="${pageContext.request.contextPath}/headstaff/logout"
 						class="dropdown-item danger">ออกจากระบบ</a>
 				</div>
 			</div>
@@ -103,18 +103,21 @@
 							<div class="ceremony-adder-row">
 								<select id="ceremonyTypeAdder" class="form-select">
 									<option value="">-- เลือกประเภทงานเพื่อเพิ่ม --</option>
-									<c:forEach var="entry" items="${groupedCeremonies}">
+                                    <%-- แก้ไขชื่อตัวแปรเป็น groupedPackages --%>
+									<c:forEach var="entry" items="${groupedPackages}">
 										<option value="grp_${entry.key}">${entry.key}</option>
 									</c:forEach>
 								</select>
 							</div>
 
 							<div id="selectedCeremonyGroups">
-								<c:forEach var="entry" items="${groupedCeremonies}">
+                                <%-- แก้ไขชื่อตัวแปรเป็น groupedPackages --%>
+								<c:forEach var="entry" items="${groupedPackages}">
 									<c:set var="groupHasSelected" value="false" />
 									<c:forEach var="c" items="${entry.value}">
-										<c:forEach var="selectedId" items="${selectedCeremonyIds}">
-											<c:if test="${selectedId == c.ceremonyId}">
+                                        <%-- แก้ไขชื่อตัวแปรเป็น selectedPackageIds --%>
+										<c:forEach var="selectedId" items="${selectedPackageIds}">
+											<c:if test="${selectedId == c.packageId}">
 												<c:set var="groupHasSelected" value="true" />
 											</c:if>
 										</c:forEach>
@@ -140,23 +143,25 @@
 											<c:forEach var="c" items="${entry.value}">
 												<c:set var="isChecked" value="false" />
 												<c:set var="existingQty" value="1" />
-												<c:forEach var="selectedId" items="${selectedCeremonyIds}">
-													<c:if test="${selectedId == c.ceremonyId}">
+                                                <%-- แก้ไขชื่อตัวแปรเป็น selectedPackageIds --%>
+												<c:forEach var="selectedId" items="${selectedPackageIds}">
+													<c:if test="${selectedId == c.packageId}">
 														<c:set var="isChecked" value="true" />
+                                                        <%-- แก้ไขชื่อตัวแปรเป็น selectedPackageQuantities --%>
 														<c:set var="existingQty"
-															value="${selectedCeremonyQuantities[c.ceremonyId]}" />
+															value="${selectedPackageQuantities[c.packageId]}" />
 													</c:if>
 												</c:forEach>
 												<div class="ceremony-item">
-													<input type="checkbox" name="ceremonyIds"
-														value="${c.ceremonyId}" id="cer_${c.ceremonyId}"
+													<input type="checkbox" name="packageIds"
+														value="${c.packageId}" id="cer_${c.packageId}"
 														data-group="grp_${entry.key}"
 														${isChecked ? 'checked' : ''}
-														onchange="toggleQtyInput(this, 'qty_${c.ceremonyId}')">
-													<label for="cer_${c.ceremonyId}"
+														onchange="toggleQtyInput(this, 'qty_${c.packageId}')">
+													<label for="cer_${c.packageId}"
 														class="ceremony-check-label">${c.optionType}</label> <span
 														class="qty-inline-wrap"> ใช้ <input type="number"
-														name="quantities" id="qty_${c.ceremonyId}"
+														name="quantities" id="qty_${c.packageId}"
 														class="qty-mini-input" min="1"
 														value="${not empty existingQty ? existingQty : 1}"
 														${isChecked ? '' : 'disabled'}> หน่วย
@@ -205,49 +210,49 @@
 										class="form-select">
 										<option value="">-- เลือกหน่วย --</option>
 										<option value="ชุด"
-											${param.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
+											${item.unit == 'ชุด'     ? 'selected' : ''}>ชุด</option>
 										<option value="ชิ้น"
-											${param.unit == 'ชิ้น'    ? 'selected' : ''}>ชิ้น</option>
+											${item.unit == 'ชิ้น'    ? 'selected' : ''}>ชิ้น</option>
 										<option value="โหล"
-											${param.unit == 'โหล'     ? 'selected' : ''}>โหล</option>
+											${item.unit == 'โหล'     ? 'selected' : ''}>โหล</option>
 										<option value="เครื่อง"
-											${param.unit == 'เครื่อง' ? 'selected' : ''}>เครื่อง</option>
+											${item.unit == 'เครื่อง' ? 'selected' : ''}>เครื่อง</option>
 										<option value="รูป"
-											${param.unit == 'รูป'     ? 'selected' : ''}>รูป</option>
+											${item.unit == 'รูป'     ? 'selected' : ''}>รูป</option>
 										<option value="ตัว"
-											${param.unit == 'ตัว'     ? 'selected' : ''}>ตัว</option>
+											${item.unit == 'ตัว'     ? 'selected' : ''}>ตัว</option>
 										<option value="ใบ"
-											${param.unit == 'ใบ'      ? 'selected' : ''}>ใบ</option>
+											${item.unit == 'ใบ'      ? 'selected' : ''}>ใบ</option>
 										<option value="เถา"
-											${param.unit == 'เถา'     ? 'selected' : ''}>เถา</option>
+											${item.unit == 'เถา'     ? 'selected' : ''}>เถา</option>
 										<option value="อัน"
-											${param.unit == 'อัน'     ? 'selected' : ''}>อัน</option>
+											${item.unit == 'อัน'     ? 'selected' : ''}>อัน</option>
 										<option value="คู่"
-											${param.unit == 'คู่'     ? 'selected' : ''}>คู่</option>
+											${item.unit == 'คู่'     ? 'selected' : ''}>คู่</option>
 										<option value="องค์"
-											${param.unit == 'องค์'    ? 'selected' : ''}>องค์</option>
+											${item.unit == 'องค์'    ? 'selected' : ''}>องค์</option>
 										<option value="ผืน"
-											${param.unit == 'ผืน'     ? 'selected' : ''}>ผืน</option>
+											${item.unit == 'ผืน'     ? 'selected' : ''}>ผืน</option>
 										<option value="ต้น"
-											${param.unit == 'ต้น'     ? 'selected' : ''}>ต้น</option>
+											${item.unit == 'ต้น'     ? 'selected' : ''}>ต้น</option>
 										<option value="ม้วน"
-											${param.unit == 'ม้วน'    ? 'selected' : ''}>ม้วน</option>
+											${item.unit == 'ม้วน'    ? 'selected' : ''}>ม้วน</option>
 										<option value="เส้น"
-											${param.unit == 'เส้น'    ? 'selected' : ''}>เส้น</option>
+											${item.unit == 'เส้น'    ? 'selected' : ''}>เส้น</option>
 										<option value="พวง"
-											${param.unit == 'พวง'     ? 'selected' : ''}>พวง</option>
+											${item.unit == 'พวง'     ? 'selected' : ''}>พวง</option>
 										<option value="กรวย"
-											${param.unit == 'กรวย'    ? 'selected' : ''}>กรวย</option>
+											${item.unit == 'กรวย'    ? 'selected' : ''}>กรวย</option>
 										<option value="พุ่ม"
-											${param.unit == 'พุ่ม'    ? 'selected' : ''}>พุ่ม</option>
+											${item.unit == 'พุ่ม'    ? 'selected' : ''}>พุ่ม</option>
 										<option value="หลัง"
-											${param.unit == 'หลัง'    ? 'selected' : ''}>หลัง</option>
+											${item.unit == 'หลัง'    ? 'selected' : ''}>หลัง</option>
 										<option value="ป้าย"
-											${param.unit == 'ป้าย'    ? 'selected' : ''}>ป้าย</option>
+											${item.unit == 'ป้าย'    ? 'selected' : ''}>ป้าย</option>
 										<option value="ครั้ง"
-											${param.unit == 'ครั้ง'   ? 'selected' : ''}>ครั้ง</option>
+											${item.unit == 'ครั้ง'   ? 'selected' : ''}>ครั้ง</option>
 										<option value="คน"
-											${param.unit == 'คน'      ? 'selected' : ''}>คน</option>
+											${item.unit == 'คน'      ? 'selected' : ''}>คน</option>
 									</select>
 								</div>
 							</div>
@@ -285,301 +290,6 @@
 
 	</footer>
 
-	<script>
-		function toggleQtyInput(checkbox, qtyInputId) {
-			var qtyInput = document.getElementById(qtyInputId);
-			if (!qtyInput)
-				return;
-			qtyInput.disabled = !checkbox.checked;
-			if (checkbox.checked && !qtyInput.value) {
-				qtyInput.value = 1;
-			}
-			syncSelectAllState(checkbox.getAttribute('data-group'));
-		}
-
-		/* ===== select-all checkbox ต่อกลุ่ม ===== */
-		function onSelectAllChange(selectAllBox) {
-			var groupKey = selectAllBox.getAttribute('data-group');
-			var container = document
-					.querySelector('.ceremony-type-options[data-group="'
-							+ groupKey + '"]');
-			if (!container)
-				return;
-			var checked = selectAllBox.checked;
-			var boxes = container.querySelectorAll('input[type="checkbox"]');
-			boxes.forEach(function(cb) {
-				cb.checked = checked;
-				var qtyInput = document.getElementById('qty_' + cb.value);
-				if (qtyInput) {
-					qtyInput.disabled = !checked;
-					if (checked && !qtyInput.value)
-						qtyInput.value = 1;
-				}
-			});
-			selectAllBox.indeterminate = false;
-		}
-
-		function syncSelectAllState(groupKey) {
-			var container = document
-					.querySelector('.ceremony-type-options[data-group="'
-							+ groupKey + '"]');
-			var selectAllBox = document
-					.querySelector('.select-all-checkbox[data-group="'
-							+ groupKey + '"]');
-			if (!container || !selectAllBox)
-				return;
-			var boxes = container.querySelectorAll('input[type="checkbox"]');
-			var total = boxes.length;
-			var checkedCount = 0;
-			boxes.forEach(function(cb) {
-				if (cb.checked)
-					checkedCount++;
-			});
-			if (checkedCount === 0) {
-				selectAllBox.checked = false;
-				selectAllBox.indeterminate = false;
-			} else if (checkedCount === total) {
-				selectAllBox.checked = true;
-				selectAllBox.indeterminate = false;
-			} else {
-				selectAllBox.checked = false;
-				selectAllBox.indeterminate = true;
-			}
-		}
-
-		/* ===== ปิดกลุ่ม: ยกเลิกการติ๊กทั้งหมดในกลุ่ม แล้วซ่อนกลุ่มนั้นกลับไป
-		   ใช้กับกลุ่มที่เผลอเปิด หรือกลุ่มเดิมที่ผูกไว้แต่ไม่ต้องการแล้ว
-		   (ถ้าเป็นกลุ่มเดิมที่มีข้อมูลอยู่ก่อน การกดปิดจะล้างการติ๊กทั้งหมด — ต้องกดบันทึก
-		   การแก้ไขอีกครั้งเพื่อให้มีผลจริงกับฐานข้อมูล) ===== */
-		function closeGroup(groupKey) {
-			var group = document.getElementById(groupKey);
-			if (!group)
-				return;
-			var container = document
-					.querySelector('.ceremony-type-options[data-group="'
-							+ groupKey + '"]');
-			if (container) {
-				var boxes = container
-						.querySelectorAll('input[type="checkbox"]');
-				boxes.forEach(function(cb) {
-					cb.checked = false;
-					var qtyInput = document.getElementById('qty_' + cb.value);
-					if (qtyInput) {
-						qtyInput.disabled = true;
-					}
-				});
-			}
-			var selectAllBox = document
-					.querySelector('.select-all-checkbox[data-group="'
-							+ groupKey + '"]');
-			if (selectAllBox) {
-				selectAllBox.checked = false;
-				selectAllBox.indeterminate = false;
-			}
-			group.style.display = 'none';
-			updateEmptyHint();
-		}
-
-		function updateEmptyHint() {
-			var hint = document.getElementById('ceremonyEmptyHint');
-			var groups = document
-					.querySelectorAll('#selectedCeremonyGroups .ceremony-type-group');
-			var hasVisible = false;
-			groups.forEach(function(g) {
-				if (g.style.display !== 'none')
-					hasVisible = true;
-			});
-			if (hint)
-				hint.style.display = hasVisible ? 'none' : 'block';
-		}
-
-		document.getElementById('ceremonyTypeAdder').addEventListener('change',
-				function() {
-					var groupKey = this.value;
-					if (!groupKey)
-						return;
-					var group = document.getElementById(groupKey);
-					if (group)
-						group.style.display = 'block';
-					this.value = '';
-					updateEmptyHint();
-				});
-
-		/* ===== ตอนโหลดหน้า: sync สถานะ select-all ของทุกกลุ่มที่มีข้อมูลเดิมติ๊กไว้อยู่แล้ว ===== */
-		document.addEventListener('DOMContentLoaded', function() {
-			updateEmptyHint();
-			document.querySelectorAll('.select-all-checkbox').forEach(
-					function(box) {
-						syncSelectAllState(box.getAttribute('data-group'));
-					});
-		});
-
-		/* ===== แจ้งเตือนเลขติดลบแบบเรียลไทม์ (เหมือนหน้า addItem ทุกจุด)
-
-		   หมายเหตุสำคัญ: input type="number" ของเบราว์เซอร์ ถ้าพิมพ์ "-" เดี่ยวๆ
-		   (ยังไม่ตามด้วยตัวเลข) ค่า .value จะเป็นค่าว่างเสมอ (เพราะยังไม่ใช่ตัวเลขที่สมบูรณ์)
-		   ต้องเช็ค this.validity.badInput ร่วมด้วยถึงจะจับได้ว่าเขาพิมพ์ - อยู่จริง
-
-		   1) ช่อง "ใช้...หน่วย" (qty-mini-input) -> ข้อความขึ้นท้ายกรอบใหญ่ของกลุ่มพิธีนั้น
-		   2) ช่อง "ราคาต่อหน่วย" (pricePerUnit)   -> ข้อความขึ้นใต้ช่องนั้นเลย
-
-		   ทั้งคู่: ไม่บล็อกการพิมพ์ - โชว์ทันทีตอนพิมพ์ (keydown) และค้างอยู่ที่เดิม
-		   จนกว่าจะแก้ไขจนถูกต้อง (ไม่มี blur-hide) และกันกดบันทึกทั้งที่ยังผิดค้างอยู่ ===== */
-
-		function isMinusKey(e) {
-			return e.key === '-' || e.key === 'Subtract' || e.keyCode === 189
-					|| e.keyCode === 109;
-		}
-
-		function hasNegativeInput(inp) {
-			return inp.value.indexOf('-') !== -1 || inp.validity.badInput;
-		}
-
-		/* ---- (1) กลุ่ม qty: ข้อความอยู่ท้ายกรอบใหญ่ของกลุ่มพิธีนั้น ---- */
-		function getGroupErrorEl(groupEl) {
-			var id = 'negerr_' + groupEl.id;
-			var el = document.getElementById(id);
-			if (!el) {
-				el = document.createElement('div');
-				el.id = id;
-				el.className = 'no-negative-error-group';
-				el.style.color = '#d32f2f';
-				el.style.fontSize = '12px';
-				el.style.margin = '4px 0 8px';
-				el.style.display = 'none';
-				groupEl.insertAdjacentElement('afterend', el);
-			}
-			return el;
-		}
-
-		function showGroupError(qtyInput) {
-			var groupEl = qtyInput.closest('.ceremony-type-group');
-			if (!groupEl)
-				return;
-			var el = getGroupErrorEl(groupEl);
-			el.textContent = 'ห้ามใส่เลขติดลบ';
-			el.style.display = 'block';
-		}
-
-		function hideGroupError(qtyInput) {
-			var groupEl = qtyInput.closest('.ceremony-type-group');
-			if (!groupEl)
-				return;
-			var el = document.getElementById('negerr_' + groupEl.id);
-			if (el)
-				el.style.display = 'none';
-		}
-
-		/* ---- (2) ช่องราคาต่อหน่วย: ข้อความอยู่ใต้ช่องนั้นเลย ---- */
-		function getFieldErrorEl(inp) {
-			var id = 'negerr_' + (inp.id || inp.name);
-			var el = document.getElementById(id);
-			if (!el) {
-				el = document.createElement('div');
-				el.id = id;
-				el.className = 'no-negative-error';
-				el.style.color = '#d32f2f';
-				el.style.fontSize = '12px';
-				el.style.marginTop = '2px';
-				el.style.display = 'none';
-				inp.insertAdjacentElement('afterend', el);
-			}
-			return el;
-		}
-
-		function showFieldError(inp) {
-			var el = getFieldErrorEl(inp);
-			el.textContent = 'ห้ามใส่เลขติดลบ';
-			el.style.display = 'block';
-		}
-
-		function hideFieldError(inp) {
-			var el = document.getElementById('negerr_' + (inp.id || inp.name));
-			if (el)
-				el.style.display = 'none';
-		}
-
-		function applyNoNegative() {
-			document.querySelectorAll('input[type="number"]').forEach(
-					function(inp) {
-						if (inp.dataset.noNegativeBound)
-							return; // กันผูก event ซ้ำ
-						inp.dataset.noNegativeBound = '1';
-
-						var isQty = inp.classList.contains('qty-mini-input');
-						var showFn = isQty ? showGroupError : showFieldError;
-						var hideFn = isQty ? hideGroupError : hideFieldError;
-
-						/* พิมพ์ - ปุ๊บ โชว์ทันที (ไม่ preventDefault แล้ว ปล่อยให้พิมพ์ได้) */
-						inp.addEventListener('keydown', function(e) {
-							if (isMinusKey(e)) {
-								showFn(this);
-							}
-						});
-
-						/* หลังค่าเปลี่ยน (พิมพ์เพิ่ม/ลบ/วาง) เช็คซ้ำว่ายังติดลบอยู่ไหม
-						   ถ้าแก้จนถูกต้องแล้ว -> ซ่อนทันที
-						   ถ้ายังไม่ถูก -> ค้างไว้ที่เดิม ไม่ซ่อนแม้ออกจากช่องไปแล้ว (ไม่มี blur-hide) */
-						inp.addEventListener('input', function() {
-							if (hasNegativeInput(this)) {
-								showFn(this);
-							} else {
-								hideFn(this);
-							}
-						});
-
-						/* ปิดกล่องแจ้งเตือนสีส้ม/เหลืองของเบราว์เซอร์เอง (เช่น "Value must be
-						   greater than or equal to 1.") ไม่ต้องการให้ขึ้นซ้อนกับข้อความแดงของเรา
-						   ตัวช่องจะยัง invalid ตามปกติ (กันส่ง submit ได้เหมือนเดิม) แค่ไม่โชว์ popup */
-						inp.addEventListener('invalid', function(e) {
-							e.preventDefault();
-						});
-					});
-		}
-
-		/* ===== กันกดบันทึกทั้งที่ยังมีค่าติดลบ/พิมพ์ค้างอยู่ในฟอร์ม
-		   ถ้าเจอ -> ไม่ให้ submit ไปไหน อยู่หน้าเดิม พร้อมโชว์ข้อความแจ้งเตือนทุกช่องที่ยังผิดค้างไว้ ===== */
-		function guardFormSubmit() {
-			var formEl = document.querySelector('form');
-			if (!formEl)
-				return;
-			formEl.addEventListener('submit', function(e) {
-				var hasInvalid = false;
-				var firstInvalid = null;
-				document.querySelectorAll('input[type="number"]').forEach(
-						function(inp) {
-							if (hasNegativeInput(inp)) {
-								hasInvalid = true;
-								if (!firstInvalid)
-									firstInvalid = inp;
-								var isQty = inp.classList
-										.contains('qty-mini-input');
-								(isQty ? showGroupError : showFieldError)(inp);
-							}
-						});
-				if (hasInvalid) {
-					e.preventDefault();
-					if (firstInvalid)
-						firstInvalid.focus();
-				}
-			});
-		}
-
-		document.addEventListener('DOMContentLoaded', applyNoNegative);
-		document.addEventListener('DOMContentLoaded', guardFormSubmit);
-	</script>
-
-	<script src="${pageContext.request.contextPath}/static/js/editItem.js"></script>
-	<script>
-		function toggleDropdown() {
-			document.getElementById('dropdownMenu').classList.toggle('show');
-		}
-		document.addEventListener('click', function(e) {
-			if (!e.target.closest('.user-info')) {
-				document.getElementById('dropdownMenu').classList
-						.remove('show');
-			}
-		});
-	</script>
+	<script src="${pageContext.request.contextPath}/static/js/editItem.js?v=8"></script>
 </body>
 </html>

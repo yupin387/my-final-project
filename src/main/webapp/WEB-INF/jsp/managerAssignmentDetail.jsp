@@ -27,7 +27,7 @@
                
                 <a href="${pageContext.request.contextPath}/manager/bookings"   class="nav-item active">รายการจอง</a>
                 <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a>
-                <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการพิธี</a>
+                <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการแพ็กเกจ</a>
                 <a href="${pageContext.request.contextPath}/manager/quotation"  class="nav-item">จัดการใบเสนอราคา</a>
             </nav>
             <div class="user-info" onclick="toggleDropdown()">
@@ -159,12 +159,14 @@
                     </div>
                     <div class="info-group">
                         <span class="label">ประเภทงาน</span>
-                        <span class="value">${a.bookingForm.ceremony.ceremonyType}</span>
+                        <%-- เปลี่ยนจาก a.bookingForm.pkg.packageType เป็น a.bookingForm.packageEntity.packageType --%>
+                        <span class="value">${a.bookingForm.packageEntity.packageType}</span>
                     </div>
             
                     <div class="info-group">
                         <span class="label">รูปแบบการจอง</span>
-                        <span class="value" >${a.bookingForm.ceremony.optionType}</span>
+                        <%-- เปลี่ยนจาก a.bookingForm.pkg.optionType เป็น a.bookingForm.packageEntity.optionType --%>
+                        <span class="value" >${a.bookingForm.packageEntity.optionType}</span>
                     </div>
                     <div class="info-group">
                         <span class="label">ลูกค้า</span>

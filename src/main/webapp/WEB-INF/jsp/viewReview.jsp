@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -28,7 +28,7 @@
             <div class="nav-dropdown">
                 <button type="button" class="nav-item nav-dropdown-toggle">บริการ/แพ็กเกจ <span class="caret">▾</span></button>
                 <div class="nav-dropdown-menu">
-                    <c:forEach var="t" items="${ceremonyTypes}">
+                    <c:forEach var="t" items="${packageTypes}">
                         <a href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}">${t.mainName}</a>
                     </c:forEach>
                 </div>
@@ -118,24 +118,24 @@
 	    </c:url>
 
 	    <c:choose>
-	        <c:when test="${empty selectedCeremonyType}"><c:set var="ceremonyLabel" value="ดูรีวิวทั้งหมด"/></c:when>
-	        <c:when test="${selectedCeremonyType == 'ทำบุญบ้าน'}"><c:set var="ceremonyLabel" value="งานทำบุญบ้าน"/></c:when>
-	        <c:when test="${selectedCeremonyType == 'ขึ้นบ้านใหม่'}"><c:set var="ceremonyLabel" value="งานขึ้นบ้านใหม่"/></c:when>
+	        <c:when test="${empty selectedPackageType}"><c:set var="ceremonyLabel" value="ดูรีวิวทั้งหมด"/></c:when>
+	        <c:when test="${selectedPackageType == 'ทำบุญบ้าน'}"><c:set var="ceremonyLabel" value="งานทำบุญบ้าน"/></c:when>
+	        <c:when test="${selectedPackageType == 'ขึ้นบ้านใหม่'}"><c:set var="ceremonyLabel" value="งานขึ้นบ้านใหม่"/></c:when>
 	        <c:otherwise><c:set var="ceremonyLabel" value="งานทำบุญออฟฟิศ"/></c:otherwise>
 	    </c:choose>
 
 	    <div class="ceremony-dropdown">
 	        <button type="button"
-	                class="ceremony-dropdown-toggle ${not empty selectedCeremonyType ? 'active-link' : ''}"
+	                class="ceremony-dropdown-toggle ${not empty selectedPackageType ? 'active-link' : ''}"
 	                onclick="toggleCeremonyDropdown(event)">
 	            <span>${ceremonyLabel}</span>
 	            <span class="ceremony-dropdown-arrow">▾</span>
 	        </button>
 	        <div class="ceremony-dropdown-menu" id="ceremonyDropdownMenu">
-	            <a href="${urlAll}" class="ceremony-dropdown-item ${empty selectedCeremonyType ? 'is-selected' : ''}">ดูรีวิวทั้งหมด</a>
-	            <a href="${urlHome}" class="ceremony-dropdown-item ${selectedCeremonyType == 'ทำบุญบ้าน' ? 'is-selected' : ''}">งานทำบุญบ้าน</a>
-	            <a href="${urlNewHouse}" class="ceremony-dropdown-item ${selectedCeremonyType == 'ขึ้นบ้านใหม่' ? 'is-selected' : ''}">งานขึ้นบ้านใหม่</a>
-	            <a href="${urlCompany}" class="ceremony-dropdown-item ${selectedCeremonyType == 'ทำบุญบริษัทหรือออฟฟิศ' ? 'is-selected' : ''}">งานทำบุญออฟฟิศ</a>
+	            <a href="${urlAll}" class="ceremony-dropdown-item ${empty selectedPackageType ? 'is-selected' : ''}">ดูรีวิวทั้งหมด</a>
+	            <a href="${urlHome}" class="ceremony-dropdown-item ${selectedPackageType == 'ทำบุญบ้าน' ? 'is-selected' : ''}">งานทำบุญบ้าน</a>
+	            <a href="${urlNewHouse}" class="ceremony-dropdown-item ${selectedPackageType == 'ขึ้นบ้านใหม่' ? 'is-selected' : ''}">งานขึ้นบ้านใหม่</a>
+	            <a href="${urlCompany}" class="ceremony-dropdown-item ${selectedPackageType == 'ทำบุญบริษัทหรือออฟฟิศ' ? 'is-selected' : ''}">งานทำบุญออฟฟิศ</a>
 	        </div>
 	    </div>
 
@@ -145,7 +145,7 @@
 	        <c:set var="isActiveStar" value="${selectedRating == star}"/>
 	
 	        <c:url var="urlStarBtn" value="/reviews">
-	            <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+	            <c:if test="${not empty selectedPackageType}"><c:param name="type" value="${selectedPackageType}"/></c:if>
 	            <c:if test="${!isActiveStar}"><c:param name="rating" value="${star}"/></c:if>
 	        </c:url>
 	
@@ -201,7 +201,8 @@
                         <fmt:formatDate value="${r.reviewDate}" pattern="dd MMM yyyy"/>
                     </div>
                 </div>
-                <div class="ceremony-badge">🪷 ประเภทงาน: ${r.bookingForm.ceremony.ceremonyType}</div>
+                <%-- เปลี่ยนจาก r.bookingForm.pkg.packageType เป็น r.bookingForm.packageEntity.packageType --%>
+                <div class="ceremony-badge">🪷 ประเภทงาน: ${r.bookingForm.packageEntity.packageType}</div>
                 <div class="review-body">
                     <div class="review-content">
                         <p class="review-text">"${r.comment}"</p>
@@ -229,9 +230,9 @@
         <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; gap: 8px; margin: 40px 0 10px;">
             
             <%-- ปุ่มย้อนกลับ (Previous) --%>
-            <c:url var="prevUrl" value="${selectedCeremonyId != null ? '/reviews/'.concat(selectedCeremonyId) : '/reviews'}">
+            <c:url var="prevUrl" value="${selectedPackageId != null ? '/reviews/'.concat(selectedPackageId) : '/reviews'}">
                 <c:param name="page" value="${currentPage - 1}"/>
-                <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+                <c:if test="${not empty selectedPackageType}"><c:param name="type" value="${selectedPackageType}"/></c:if>
                 <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
             </c:url>
             <a href="${prevUrl}" class="page-btn ${currentPage == 1 ? 'disabled' : ''}" style="padding: 8px 14px; border: 1px solid #C9944A; border-radius: 8px; text-decoration: none; color: ${currentPage == 1 ? '#ccc' : '#C9944A'}; pointer-events: ${currentPage == 1 ? 'none' : 'auto'}; background-color: #fff;">
@@ -240,9 +241,9 @@
 
             <%-- วนลูปแสดงเลขหน้า --%>
             <c:forEach begin="1" end="${totalPages}" var="i">
-                <c:url var="pageUrl" value="${selectedCeremonyId != null ? '/reviews/'.concat(selectedCeremonyId) : '/reviews'}">
+                <c:url var="pageUrl" value="${selectedPackageId != null ? '/reviews/'.concat(selectedPackageId) : '/reviews'}">
                     <c:param name="page" value="${i}"/>
-                    <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+                    <c:if test="${not empty selectedPackageType}"><c:param name="type" value="${selectedPackageType}"/></c:if>
                     <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
                 </c:url>
                 <a href="${pageUrl}" class="page-btn ${i == currentPage ? 'active' : ''}" style="padding: 8px 14px; border: 1px solid #C9944A; border-radius: 8px; text-decoration: none; background-color: ${i == currentPage ? '#C9944A' : '#fff'}; color: ${i == currentPage ? '#fff' : '#C9944A'}; font-weight: ${i == currentPage ? 'bold' : 'normal'};">
@@ -251,9 +252,9 @@
             </c:forEach>
 
             <%-- ปุ่มถัดไป (Next) --%>
-            <c:url var="nextUrl" value="${selectedCeremonyId != null ? '/reviews/'.concat(selectedCeremonyId) : '/reviews'}">
+            <c:url var="nextUrl" value="${selectedPackageId != null ? '/reviews/'.concat(selectedPackageId) : '/reviews'}">
                 <c:param name="page" value="${currentPage + 1}"/>
-                <c:if test="${not empty selectedCeremonyType}"><c:param name="type" value="${selectedCeremonyType}"/></c:if>
+                <c:if test="${not empty selectedPackageType}"><c:param name="type" value="${selectedPackageType}"/></c:if>
                 <c:if test="${not empty selectedRating}"><c:param name="rating" value="${selectedRating}"/></c:if>
             </c:url>
             <a href="${nextUrl}" class="page-btn ${currentPage == totalPages ? 'disabled' : ''}" style="padding: 8px 14px; border: 1px solid #C9944A; border-radius: 8px; text-decoration: none; color: ${currentPage == totalPages ? '#ccc' : '#C9944A'}; pointer-events: ${currentPage == totalPages ? 'none' : 'auto'}; background-color: #fff;">
@@ -300,7 +301,7 @@
 				<div class="footer-brand">
 					<img src="${pageContext.request.contextPath}/static/images/logoo.png"
 						alt="บุญมี รับจัดงานบุญ" class="lotus-icon">
-					<span class="footer-brand-text">บุญมีนำพา รับจัดงานบุญ</span>
+					<span class="footer-brand-text">บุญมีนำพา จัดงานบุญ</span>
 				</div>
 				<p class="footer-tagline">รับจัดงานบุญ
 					ดูแลพิธีสงฆ์ให้คุณ ถูกหลักพิธีการตามประเพณีภาคเหนือ</p>
@@ -323,62 +324,6 @@
 
 	</footer>
 
-<script>
-document.querySelectorAll('.nav-dropdown-toggle').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var dropdown = btn.closest('.nav-dropdown');
-        document.querySelectorAll('.nav-dropdown.show').forEach(function (d) {
-            if (d !== dropdown) d.classList.remove('show');
-        });
-        dropdown.classList.toggle('show');
-    });
-});
-document.addEventListener('click', function () {
-    document.querySelectorAll('.nav-dropdown.show').forEach(function (d) {
-        d.classList.remove('show');
-    });
-});
-
-// ===== Lightbox คลิกขยายภาพรีวิว =====
-function openReviewImageLightbox(src) {
-    const overlay = document.getElementById('reviewImageLightbox');
-    const img = document.getElementById('reviewImageLightboxImg');
-    if (!overlay || !img) return;
-    img.src = src;
-    overlay.classList.add('show');
-}
-
-function closeReviewImageLightbox() {
-    const overlay = document.getElementById('reviewImageLightbox');
-    if (overlay) overlay.classList.remove('show');
-}
-
-document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeReviewImageLightbox();
-});
-
-// กันไม่ให้คลิกบนรูปในกล่อง lightbox แล้วปิดตัวเอง (ต้องคลิกพื้นหลังหรือปุ่ม × เท่านั้น)
-document.getElementById('reviewImageLightboxImg')?.addEventListener('click', function (e) {
-    e.stopPropagation();
-});
-
-// ===== Dropdown ตัวกรองประเภทงาน (หน้ารีวิว) =====
-function toggleCeremonyDropdown(event) {
-    if (event) event.stopPropagation();
-    document.getElementById('ceremonyDropdownMenu')?.classList.toggle('show');
-    event.currentTarget.classList.toggle('menu-open');
-}
-
-document.addEventListener('click', function (e) {
-    const wrap = document.querySelector('.ceremony-dropdown');
-    const menu = document.getElementById('ceremonyDropdownMenu');
-    const toggleBtn = document.querySelector('.ceremony-dropdown-toggle');
-    if (menu && wrap && !wrap.contains(e.target)) {
-        menu.classList.remove('show');
-        toggleBtn?.classList.remove('menu-open');
-    }
-});
-</script>
+<script src="${pageContext.request.contextPath}/static/js/viewReview.js?v=1"></script>
 </body>
 </html>

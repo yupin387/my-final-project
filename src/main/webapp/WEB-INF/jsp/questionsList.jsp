@@ -71,10 +71,11 @@
     </div>
 
     <%-- ========== CEREMONY FILTER DROPDOWN ========== --%>
+    <%-- ใช้ selectedPackageType / packageTypes ให้ตรงกับ QuestionsController.listQuestions() --%>
     <c:choose>
-        <c:when test="${selectedCeremonyType eq 'ทำบุญบ้าน'}"><c:set var="currentDotClass" value="dot-home"/></c:when>
-        <c:when test="${selectedCeremonyType eq 'ขึ้นบ้านใหม่'}"><c:set var="currentDotClass" value="dot-newhome"/></c:when>
-        <c:when test="${selectedCeremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}"><c:set var="currentDotClass" value="dot-company"/></c:when>
+        <c:when test="${selectedPackageType eq 'ทำบุญบ้าน'}"><c:set var="currentDotClass" value="dot-home"/></c:when>
+        <c:when test="${selectedPackageType eq 'ขึ้นบ้านใหม่'}"><c:set var="currentDotClass" value="dot-newhome"/></c:when>
+        <c:when test="${selectedPackageType eq 'ทำบุญบริษัทหรือออฟฟิศ'}"><c:set var="currentDotClass" value="dot-company"/></c:when>
         <c:otherwise><c:set var="currentDotClass" value="dot-all"/></c:otherwise>
     </c:choose>
 
@@ -85,27 +86,27 @@
             <span class="ceremony-filter-current">
                 <span class="ceremony-dot ${currentDotClass}"></span>
                 <c:choose>
-                    <c:when test="${empty selectedCeremonyType or selectedCeremonyType eq 'all'}">ทั้งหมด</c:when>
-                    <c:otherwise>${selectedCeremonyType}</c:otherwise>
+                    <c:when test="${empty selectedPackageType or selectedPackageType eq 'all'}">ทั้งหมด</c:when>
+                    <c:otherwise>${selectedPackageType}</c:otherwise>
                 </c:choose>
             </span>
             <span class="ceremony-filter-arrow" id="ceremonyFilterArrow">▾</span>
         </div>
 
         <div class="ceremony-filter-dropdown" id="ceremonyFilterDropdown">
-            <a href="${pageContext.request.contextPath}/manager/questions?ceremonyType=all"
-               class="ceremony-filter-item ${(empty selectedCeremonyType or selectedCeremonyType eq 'all') ? 'selected' : ''}">
+            <a href="${pageContext.request.contextPath}/manager/questions?packageType=all"
+               class="ceremony-filter-item ${(empty selectedPackageType or selectedPackageType eq 'all') ? 'selected' : ''}">
                 <span class="ceremony-dot dot-all"></span> ทั้งหมด
             </a>
-            <c:forEach var="t" items="${ceremonyTypes}">
+            <c:forEach var="t" items="${packageTypes}">
                 <c:choose>
                     <c:when test="${t eq 'ทำบุญบ้าน'}"><c:set var="tDotClass" value="dot-home"/></c:when>
                     <c:when test="${t eq 'ขึ้นบ้านใหม่'}"><c:set var="tDotClass" value="dot-newhome"/></c:when>
                     <c:when test="${t eq 'ทำบุญบริษัทหรือออฟฟิศ'}"><c:set var="tDotClass" value="dot-company"/></c:when>
                     <c:otherwise><c:set var="tDotClass" value="dot-all"/></c:otherwise>
                 </c:choose>
-                <a href="${pageContext.request.contextPath}/manager/questions?ceremonyType=${t}"
-                   class="ceremony-filter-item ${selectedCeremonyType eq t ? 'selected' : ''}">
+                <a href="${pageContext.request.contextPath}/manager/questions?packageType=${t}"
+                   class="ceremony-filter-item ${selectedPackageType eq t ? 'selected' : ''}">
                     <span class="ceremony-dot ${tDotClass}"></span> ${t}
                 </a>
             </c:forEach>
@@ -117,8 +118,8 @@
         <div class="card-header-bar">
             <span>
                 <c:choose>
-                    <c:when test="${empty selectedCeremonyType or selectedCeremonyType eq 'all'}">แสดงทุกประเภทพิธี</c:when>
-                    <c:otherwise>พิธี${selectedCeremonyType}</c:otherwise>
+                    <c:when test="${empty selectedPackageType or selectedPackageType eq 'all'}">แสดงทุกประเภทพิธี</c:when>
+                    <c:otherwise>พิธี${selectedPackageType}</c:otherwise>
                 </c:choose>
             </span>
             <span class="header-count">จำนวนทั้งหมด ${questions.size()} รายการ</span>
@@ -140,46 +141,57 @@
                         <td class="question-text">${q.questionsText}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${not empty q.ceremonies}">
+                                <c:when test="${not empty q.packages}">
                                     <c:choose>
-                                        <c:when test="${not empty selectedCeremonyType and selectedCeremonyType ne 'all'}">
+
+                                        <%-- กรองประเภทอยู่: แสดงจุดของประเภทที่เลือกจุดเดียว --%>
+                                        <c:when test="${not empty selectedPackageType and selectedPackageType ne 'all'}">
                                             <c:choose>
-                                                <c:when test="${selectedCeremonyType eq 'ทำบุญบ้าน'}">
-                                                    <span class="ceremony-dot ceremony-dot-lg dot-home" title="${selectedCeremonyType}"></span>
+                                                <c:when test="${selectedPackageType eq 'ทำบุญบ้าน'}">
+                                                    <span class="ceremony-dot ceremony-dot-lg dot-home" title="${selectedPackageType}"></span>
                                                 </c:when>
-                                                <c:when test="${selectedCeremonyType eq 'ขึ้นบ้านใหม่'}">
-                                                    <span class="ceremony-dot ceremony-dot-lg dot-newhome" title="${selectedCeremonyType}"></span>
+                                                <c:when test="${selectedPackageType eq 'ขึ้นบ้านใหม่'}">
+                                                    <span class="ceremony-dot ceremony-dot-lg dot-newhome" title="${selectedPackageType}"></span>
                                                 </c:when>
-                                                <c:when test="${selectedCeremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
-                                                    <span class="ceremony-dot ceremony-dot-lg dot-company" title="${selectedCeremonyType}"></span>
+                                                <c:when test="${selectedPackageType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                                    <span class="ceremony-dot ceremony-dot-lg dot-company" title="${selectedPackageType}"></span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <span class="ceremony-dot ceremony-dot-lg dot-all" title="${selectedCeremonyType}"></span>
+                                                    <span class="ceremony-dot ceremony-dot-lg dot-all" title="${selectedPackageType}"></span>
                                                 </c:otherwise>
                                             </c:choose>
                                         </c:when>
+
+                                        <%-- แสดงทั้งหมด: วนตามลำดับ packageTypes (ที่ controller เรียงไว้แล้ว)
+                                             แล้วเช็กว่าคำถามนี้ผูกกับประเภทนั้นไหม จุดจึงเรียงเหมือนกันทุกแถว --%>
                                         <c:otherwise>
-                                            <c:set var="shownTypes" value="|" />
-                                            <c:forEach var="cm" items="${q.ceremonies}">
-                                                <c:if test="${not fn:contains(shownTypes, '|'.concat(cm.ceremonyType).concat('|'))}">
+                                            <c:forEach var="typeName" items="${packageTypes}">
+                                                <c:set var="hasType" value="false" />
+                                                <c:forEach var="pkg" items="${q.packages}">
+                                                    <c:if test="${pkg.packageType eq typeName}">
+                                                        <c:set var="hasType" value="true" />
+                                                    </c:if>
+                                                </c:forEach>
+
+                                                <c:if test="${hasType}">
                                                     <c:choose>
-                                                        <c:when test="${cm.ceremonyType eq 'ทำบุญบ้าน'}">
-                                                            <span class="ceremony-dot ceremony-dot-lg dot-home" title="${cm.ceremonyType}"></span>
+                                                        <c:when test="${typeName eq 'ทำบุญบ้าน'}">
+                                                            <span class="ceremony-dot ceremony-dot-lg dot-home" title="${typeName}"></span>
                                                         </c:when>
-                                                        <c:when test="${cm.ceremonyType eq 'ขึ้นบ้านใหม่'}">
-                                                            <span class="ceremony-dot ceremony-dot-lg dot-newhome" title="${cm.ceremonyType}"></span>
+                                                        <c:when test="${typeName eq 'ขึ้นบ้านใหม่'}">
+                                                            <span class="ceremony-dot ceremony-dot-lg dot-newhome" title="${typeName}"></span>
                                                         </c:when>
-                                                        <c:when test="${cm.ceremonyType eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
-                                                            <span class="ceremony-dot ceremony-dot-lg dot-company" title="${cm.ceremonyType}"></span>
+                                                        <c:when test="${typeName eq 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                                            <span class="ceremony-dot ceremony-dot-lg dot-company" title="${typeName}"></span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span class="ceremony-dot ceremony-dot-lg dot-all" title="${cm.ceremonyType}"></span>
+                                                            <span class="ceremony-dot ceremony-dot-lg dot-all" title="${typeName}"></span>
                                                         </c:otherwise>
                                                     </c:choose>
-                                                    <c:set var="shownTypes" value="${shownTypes}${cm.ceremonyType}|" />
                                                 </c:if>
                                             </c:forEach>
                                         </c:otherwise>
+
                                     </c:choose>
                                 </c:when>
                                 <c:otherwise>
@@ -220,23 +232,11 @@
 
 <%-- ========== SCRIPTS ========== --%>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<%-- ต้องอยู่ใน JSP เพราะใช้ EL ค่า contextPath ให้ questionList.js เรียกใช้ --%>
 <script>
     const contextPath = "${pageContext.request.contextPath}";
-
-    function toggleCeremonyFilter() {
-        var dropdown = document.getElementById('ceremonyFilterDropdown');
-        var arrow = document.getElementById('ceremonyFilterArrow');
-        dropdown.classList.toggle('show');
-        arrow.textContent = dropdown.classList.contains('show') ? '▴' : '▾';
-    }
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.ceremony-filter-wrapper')) {
-            document.getElementById('ceremonyFilterDropdown').classList.remove('show');
-            document.getElementById('ceremonyFilterArrow').textContent = '▾';
-        }
-    });
 </script>
-<!-- เติม ?v=1 ต่อท้ายเพื่อบังคับอัปเดต cache -->
-<script src="${pageContext.request.contextPath}/static/js/questionList.js?v=1"></script>
+<!-- เติม ?v=2 ต่อท้ายเพื่อบังคับอัปเดต cache -->
+<script src="${pageContext.request.contextPath}/static/js/questionList.js?v=2"></script>
 </body>
 </html>

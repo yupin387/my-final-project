@@ -27,17 +27,17 @@ public class QuotationService {
 
 
 
-	// ดึงอุปกรณ์ทั้งหมดในระบบ (ใช้ประกอบตอนสร้าง/แก้ไขใบเสนอราคา)
+	// ดึงอุปกรณ์ทั้งหมดในระบบ
 	public List<Item> getAllItems() {
 		return itemRepo.findAll();
 	}
 
-	// ดึงหัวหน้างานทั้งหมด (ใช้ตอนเลือกมอบหมายหัวหน้างานให้ใบเสนอราคา)
+	// ดึงหัวหน้างานทั้งหมด
 	public List<HeadStaff> getAllStaff() {
 		return staffRepo.findAll();
 	}
 
-	// ดึงใบเสนอราคาตาม id คืนค่า null ถ้าไม่พบ
+	// ดึงใบเสนอราคาตาม id (ไม่พบคืน null)
 	public Quotation getQuotationById(String id) {
 		return quotationRepo.findById(id).orElse(null);
 	}
@@ -47,32 +47,31 @@ public class QuotationService {
 		return quotationRepo.findAll();
 	}
 
-	// ดึงใบเสนอราคาทั้งหมดที่ตรงกับสถานะที่ระบุ (Pending / Confirmed / Revised ฯลฯ)
+	// ดึงใบเสนอราคาตามสถานะที่ระบุ
 	public List<Quotation> getQuotationsByStatus(String status) {
 		return quotationRepo.findByQuotationStatus(status);
 	}
 
-	// ดึงรายการย่อย (QuotationDetail) ทั้งหมดของใบเสนอราคาตาม id ที่ระบุ
+	// ดึงรายการย่อยทั้งหมดของใบเสนอราคาตาม id
 	public List<QuotationDetail> getDetailsByQuotationId(String id) {
 		return detailRepo.findByQuotation_QuotationId(id);
 	}
 
-	// ดึงอุปกรณ์ทั้งหมดที่ผูกอยู่กับพิธี (ceremony) ตาม id ที่ระบุ
-	public List<Item> getItemsByCeremonyId(int id) {
-		return itemRepo.findByCeremonies_CeremonyId(id);
+	// ดึงอุปกรณ์ทั้งหมดที่ผูกกับแพ็กเกจตาม id
+	public List<Item> getItemsByPackageId(int id) {
+		return itemRepo.findByPackageItems_PackageEntity_PackageId(id);
 	}
 
-	// ดึงใบเสนอราคาล่าสุดของสมาชิกตาม memberId (เรียงตาม quotationId จากมากไปน้อย)
+	// ดึงใบเสนอราคาล่าสุดของสมาชิกตาม memberId
 	public Quotation getLatestQuotationByMemberId(Integer id) {
 		return quotationRepo.findFirstByBookingFormMemberMemberIdOrderByQuotationIdDesc(id);
 	}
 
 	// ==========================================
-	// 1. ฝั่ง Organizer (สร้าง/แก้ไขใบเสนอราคา)
+	// 1. ฝั่ง Manager (สร้าง/แก้ไขใบเสนอราคา)
 	// ==========================================
 
 	// สร้างใบเสนอราคาใหม่จากการจอง
-	// note เปลี่ยนจาก List<String> (ต่อรายการ) เป็น String เดี่ยว (คอมเม้นรวมทั้งใบ)
 	@Transactional
 	public Quotation createQuotation(String bookingId,
 	                                 List<Integer> itemIds, List<Integer> qtys, List<Double> extraPrices,
@@ -95,7 +94,7 @@ public class QuotationService {
 	    return quotationRepo.save(qt);
 	}
 
-	// แก้ไขใบเสนอราคาเดิม โดยลบรายการเก่าออกแล้วสร้างใหม่
+	// แก้ไขใบเสนอราคาเดิมโดยลบรายการเก่าแล้วสร้างใหม่
 	@Transactional
 	public void updateQuotation(String quotationId,
 	                            List<Integer> itemIds, List<Integer> qtys, List<Double> extraPrices,
@@ -115,10 +114,7 @@ public class QuotationService {
 	    saveDetailsAndCalculateTotal(qt, itemIds, qtys, extraPrices, bNames, bQtys, bPrices);
 	}
 
-	// ==========================================
-	// (คำนวณเงินและบันทึกตารางย่อย) — ไม่มี note ต่อรายการอีกต่อไป
-
-	// ==========================================
+	// คำนวณยอดรวมและบันทึกรายการย่อยของใบเสนอราคา
 	private void saveDetailsAndCalculateTotal(Quotation qt,
 	                                          List<Integer> itemIds, List<Integer> qtys, List<Double> extraPrices,
 	                                          List<String> bNames, List<Integer> bQtys, List<Double> bPrices) {
@@ -173,7 +169,7 @@ public class QuotationService {
 	    quotationRepo.save(qt);
 	}
 
-	// เปลี่ยนสถานะใบเสนอราคาเป็น Confirmed (ตกลงจ้าง) พร้อมอัปเดตสถานะการจองที่ผูกอยู่ให้ตรงกัน
+	// เปลี่ยนสถานะใบเสนอราคาเป็น Confirmed และอัปเดตสถานะการจองให้ตรงกัน
 	@Transactional
 	public void confirmQuotation(String id) {
 		Quotation q = quotationRepo.findById(id).orElseThrow();
@@ -182,12 +178,12 @@ public class QuotationService {
 			q.getBookingForm().setBookingStatus("Confirmed");
 	}
 
-	// หาพนักงาน (หัวหน้างาน) ที่ว่างในวันที่กำหนด สำหรับใช้เลือกมอบหมายงาน
+	// หาหัวหน้างานที่ว่างในวันที่กำหนด
 	public List<HeadStaff> findAvailableStaff(Date eventDate) {
 		return staffRepo.findAvailableStaff(eventDate);
 	}
 
-	// มอบหมายพนักงาน (Assign) ให้กับใบเสนอราคา โดยอ้างอิงจาก bookingId
+	// มอบหมายหัวหน้างานให้ใบเสนอราคาโดยอ้างอิง bookingId
 	@Transactional
 	public void assignStaffToQuotation(String bookingId, Integer staffId) {
 		Quotation quotation = quotationRepo.findByBookingForm_BookingId(bookingId);
@@ -201,9 +197,9 @@ public class QuotationService {
 
 	// ==========================================
 	// 2. ฝั่ง Member (ลูกค้าแจ้งแก้ไขรายการ)
-	// คอมเม้นตอนนี้เป็นแบบรวมทั้งใบ ไม่ต้องแยกรายชิ้นแล้ว
 	// ==========================================
-	// เปลี่ยนสถานะใบเสนอราคาเป็น Revised (ลูกค้าขอแก้ไข) พร้อมเก็บข้อความที่ลูกค้าแจ้งไว้ใน note
+
+	// เปลี่ยนสถานะเป็น Revised และเก็บข้อความที่ลูกค้าขอแก้ไว้ใน note
 	@Transactional
 	public void submitMemberRevision(String quotationId, String memberNote) {
 		Quotation qt = quotationRepo.findById(quotationId).orElseThrow();
@@ -216,8 +212,7 @@ public class QuotationService {
 		quotationRepo.save(qt);
 	}
 	
-	// เช็คว่าหัวหน้างานคนนี้เคยถูกผูกกับใบเสนอราคาใดๆ อยู่หรือไม่
-	// (ใช้ตอนจะลบหัวหน้างาน เพื่อตัดสินใจว่าจะ Hard Delete หรือ Soft Delete)
+	// เช็คว่าหัวหน้างานคนนี้เคยถูกผูกกับใบเสนอราคาหรือไม่
 	public boolean hasQuotationForStaff(int staffId) {
 	    List<Quotation> list = quotationRepo.findByStaff_StaffId(staffId);
 	    return list != null && !list.isEmpty();
@@ -226,11 +221,7 @@ public class QuotationService {
 	// ==========================================
 	// 3. คำนวณราคาชุดสังฆทาน (ใช้ตั้งค่าเริ่มต้นในหน้าสร้างใบเสนอราคา)
 	// ==========================================
-	// กฎ:
-	//  - โหมดกรอกเอง (ไม่มีสังฆทานผูกกับ Ceremony): คิดราคาเต็มทุกชุด
-	//  - โหมดแพ็กเกจ: ชุดที่อยู่ในโควตาแพ็กเกจ (CeremonyItem.quantity) คิดเฉพาะ
-	//    "ราคาชุดที่เลือก - ราคาชุดที่รวมในแพ็กเกจ" (ไม่ติดลบ)
-	//    ชุดที่เกินโควตาคิดราคาเต็ม
+	
 
 	// 1 บรรทัดราคาที่จะแสดง/ส่งเข้าฟอร์มใบเสนอราคา
 	public static class PriceLine {
@@ -252,7 +243,7 @@ public class QuotationService {
 		public String getLabel() { return label; }
 	}
 
-	// คำนวณบรรทัดราคาสังฆทานของ booking นี้ (คืนลิสต์ว่างถ้าลูกค้าไม่ได้เลือกสังฆทาน)
+	// คำนวณบรรทัดราคาสังฆทานของ booking (ไม่ได้เลือกสังฆทานคืนลิสต์ว่าง)
 	public List<PriceLine> calculateSanghatanLines(BookingForm booking) {
 		List<PriceLine> lines = new ArrayList<>();
 
@@ -266,12 +257,12 @@ public class QuotationService {
 		double chosenPrice = chosen.getPricePerUnit();
 
 		// หาชุดสังฆทานที่รวมในแพ็กเกจ (โหมดกรอกเองจะไม่มี)
-		CeremonyItem included = null;
-		if (booking.getCeremony() != null && booking.getCeremony().getCeremonyItems() != null) {
-			for (CeremonyItem ci : booking.getCeremony().getCeremonyItems()) {
-				if (ci.getItem() != null && ci.getItem().getItemType() != null
-						&& "สังฆทาน".equals(ci.getItem().getItemType().getItemTypeName())) {
-					included = ci;
+		PackageItem included = null;
+		if (booking.getPackageEntity() != null && booking.getPackageEntity().getPackageItems() != null) {
+			for (PackageItem pi : booking.getPackageEntity().getPackageItems()) {
+				if (pi.getItem() != null && pi.getItem().getItemType() != null
+						&& "สังฆทาน".equals(pi.getItem().getItemType().getItemTypeName())) {
+					included = pi;
 					break;
 				}
 			}
@@ -299,7 +290,7 @@ public class QuotationService {
 		return lines;
 	}
 
-	// อ่านคำตอบของคำถามที่ข้อความมี keyword ที่ระบุ (คืน null ถ้าไม่พบ)
+	// อ่านคำตอบของคำถามที่มี keyword ที่ระบุ (ไม่พบคืน null)
 	private String answerOf(BookingForm b, String keyword) {
 		if (b.getDetails() == null) return null;
 		for (BookingFormDetail d : b.getDetails()) {
@@ -311,7 +302,7 @@ public class QuotationService {
 		return null;
 	}
 
-	// อ่านคำตอบเป็นตัวเลข (คืน 0 ถ้าไม่พบหรือแปลงไม่ได้)
+	// อ่านคำตอบเป็นตัวเลข (ไม่พบหรือแปลงไม่ได้คืน 0)
 	private int intAnswerOf(BookingForm b, String keyword) {
 		try {
 			String raw = answerOf(b, keyword);

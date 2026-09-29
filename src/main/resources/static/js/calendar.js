@@ -1,48 +1,4 @@
-/* ============================================================
-   calendar.js
-   ไฟล์เดียวรวมปฏิทินล้านนาทั้งหมด (เดิมแยกเป็น LannaCalendar.js
-   กับ lannaCalendarRender.js สองไฟล์ ตอนนี้รวมเป็นไฟล์เดียว):
 
-     ส่วนที่ 1: LannaCalendar        - data layer โหลด/ค้นข้อมูล JSON
-     ส่วนที่ 2: initLannaCalendar    - ตัวแสดงผลตาราง grid รายเดือน
-
-   ใช้ในหน้า JSP:
-     <script src=".../calendar.js"></script>
-     <script>
-       document.addEventListener('DOMContentLoaded', function () {
-         initLannaCalendar('${pageContext.request.contextPath}/static/data');
-       });
-     </script>
-
-   UPDATE: เดิมส่วนหัวปฏิทินล้านนาโชว์กล่อง #lc-year-card (ข้อมูลปีมะเมีย/
-   นักษัตร/ที่มา ฯลฯ) แบบเต็ม ตอนนี้ย้าย "ที่มา" ไปแสดงที่ท้ายปฏิทินแทน
-   ผ่าน element #lc-year-source ส่วนหัวปฏิทินเปลี่ยนไปใช้กล่องคำอธิบาย
-   ".lc-explain-box" แบบ static ที่เขียนไว้ใน JSP โดยตรง จึงตัดฟังก์ชัน
-   renderYearCard() ที่ไม่ใช้แล้วออก และเพิ่ม renderYearSource() แทน
-   ============================================================ */
-
-/* ============================================================
-   ส่วนที่ 1: LannaCalendar (data layer)
-   -----------------------------------------------------------------------
-   Query layer over the extracted Lanna (Lan Na) calendar data for
-   พ.ศ. 2569 (ค.ศ. 2026), sourced from the CMU / Creative Lanna / ACCL
-   printed calendar (คำนวณโดย สนั่น ธรรมธิ).
-
-   Data files expected in the base path passed to LannaCalendar.load():
-     - year_2569.json            (year-level metadata)
-     - monthly_notes_2026.json   (reliable per-month day-number lists)
-     - daily_2026_01.json ... daily_2026_12.json
-                                  (fully populated daily records for every
-                                   month — lunar date, ฟ้าตีแส่งเศษ, วันไท
-                                   name, tags)
-     - day_tag_glossary.json     (static meaning of each day tag)
-
-   NOTE ON COVERAGE: all 12 months now have full day-by-day records
-   (daily_2026_01.json through daily_2026_12.json). If a new year's data
-   is added later, follow the same schema and register the new files by
-   updating the year/number range this loader iterates over.
-   -----------------------------------------------------------------------
-   ============================================================ */
 
 class LannaCalendar {
   constructor({ year, monthlyNotes, dailyByMonth, glossary }) {

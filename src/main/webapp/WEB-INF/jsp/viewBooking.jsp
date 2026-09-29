@@ -19,146 +19,7 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/viewBooking.css?v=28">
-<style>
-.cost-summary-wrapper {
-	display: flex;
-	justify-content: flex-end;
-	margin-top: 20px;
-}
 
-.cost-summary-box {
-	border: 2px solid var(--accent-gold, #d4af37);
-	border-radius: 14px;
-	overflow: hidden;
-	background: #fff;
-	width: 100%;
-	max-width: 380px;
-}
-
-.cost-summary-title {
-	background: var(--cream-warm, #fdf3e7);
-	padding: 10px 16px;
-	font-weight: 700;
-	font-size: 0.92rem;
-	color: var(--accent-brown, #7a4a1e);
-	border-bottom: 1px solid var(--accent-gold-pale, #e8d3a0);
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.cost-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 9px 16px;
-	border-bottom: 1px dashed var(--cream-border-soft, #eee2cf);
-	font-size: 0.86rem;
-}
-
-.cost-row:last-child {
-	border-bottom: none;
-}
-
-.cost-row .cost-label {
-	color: var(--text-mid, #555);
-}
-
-.cost-row .cost-value {
-	font-weight: 600;
-	color: #222;
-}
-
-.cost-row.cost-discount .cost-value {
-	color: #d9534f;
-}
-
-.cost-row.cost-total {
-	background: #fff8f0;
-	padding: 11px 16px;
-}
-
-.cost-row.cost-total .cost-label {
-	font-weight: 700;
-	color: var(--accent-brown, #7a4a1e);
-	font-size: 0.86rem;
-}
-
-.cost-row.cost-total .cost-value {
-	font-size: 1.05rem;
-	font-weight: 800;
-	color: #d9534f;
-}
-
-.cost-summary-note {
-	padding: 6px 16px 10px;
-	font-size: 0.74rem;
-	color: #999;
-	font-style: italic;
-}
-
-@media ( max-width : 868px) {
-	.cost-summary-wrapper {
-		justify-content: stretch;
-	}
-	.cost-summary-box {
-		max-width: 100%;
-	}
-}
-
-.booking-notice.notice-rejected {
-	border-color: #f2b8b5;
-	background: #fff5f5;
-}
-
-.booking-notice.notice-rejected .notice-icon {
-	color: #ffffff;
-	background: #c62828;
-}
-
-.booking-notice.notice-rejected .notice-content strong {
-	color: #c62828;
-}
-
-.booking-notice.notice-rejected .notice-content p {
-	color: #7a3b3b;
-}
-
-.notice-reject-reason {
-	margin-top: 6px;
-	padding: 8px 12px;
-	background: #ffffff;
-	border: 1px solid #f2b8b5;
-	border-radius: 8px;
-	font-size: 0.85rem;
-	color: #5c2b2b;
-	line-height: 1.5;
-}
-
-.notice-reject-reason strong {
-	color: #c62828;
-}
-
-/* ===== กล่องแจ้งเตือน "ยกเลิกรายการจองแล้ว" (โทนเทา-น้ำเงิน แยกจากโทนแดงของ rejected
-             เพื่อให้สมาชิกแยกออกว่ายกเลิกเองกับถูกผู้จัดการปฏิเสธเป็นคนละเหตุการณ์กัน) ===== */
-.booking-notice.notice-cancelled {
-	border-color: #cfd8dc;
-	background: #f5f7f8;
-}
-
-.booking-notice.notice-cancelled .notice-icon {
-	color: #ffffff;
-	background: #607d8b;
-}
-
-.booking-notice.notice-cancelled .notice-content strong {
-	color: #455a64;
-}
-
-.booking-notice.notice-cancelled .notice-content p {
-	color: #546e7a;
-}
-</style>
 </head>
 <body>
 
@@ -417,9 +278,10 @@
 			<hr class="divider">
 
 			<%-- ===== ตัวแปรควบคุมการแสดงผล คำนวณล่วงหน้าก่อนเข้าส่วนที่ 3 ===== --%>
-			<c:set var="basePriceVal" value="${booking.ceremony.basePrice}" />
+			<%-- ✅ แก้ไข: ceremony -> packageEntity --%>
+			<c:set var="basePriceVal" value="${booking.packageEntity.basePrice}" />
 			<c:set var="isCustomRequest"
-				value="${empty basePriceVal || basePriceVal == 0 || fn:indexOf(booking.ceremony.optionType, 'กรอกความต้องการ') ne -1}" />
+				value="${empty basePriceVal || basePriceVal == 0 || fn:indexOf(booking.packageEntity.optionType, 'กรอกความต้องการ') ne -1}" />
 
 			<%-- อ่านชุดสังฆทานที่ลูกค้าเลือก และจำนวนชุดที่สั่ง --%>
 			<c:set var="sanghaChoice" value="" />
@@ -435,7 +297,7 @@
 				</c:if>
 			</c:forEach>
 
-			<%-- หาชุดสังฆทานที่ "รวมอยู่ในแพ็กเกจ" จาก CeremonyItem (โหมดกรอกเองจะไม่มี) --%>
+			<%-- หาชุดสังฆทานที่ "รวมอยู่ในแพ็กเกจ" จาก PackageItem (โหมดกรอกเองจะไม่มี) --%>
 			<c:set var="includedName" value="" />
 			<c:set var="includedPrice" value="0" />
 			<c:set var="includedQty" value="0" />
@@ -471,8 +333,9 @@
 					<div class="row g-3">
 						<div class="col-md-6">
 							<div class="info-row mb-0">
+								<%-- ✅ แก้ไข: Package ไม่มี field ceremonyType ใช้ packageType แทน --%>
 								<span class="info-label">ประเภทงานบุญ</span> <span
-									class="info-value">${booking.ceremony.ceremonyType}</span>
+									class="info-value">${booking.packageEntity.packageType}</span>
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -481,16 +344,19 @@
 										<c:when test="${isCustomRequest}">รูปแบบบริการ</c:when>
 										<c:otherwise>ชื่อแพ็กเกจ</c:otherwise>
 									</c:choose>
-								</span> <span class="info-value">${booking.ceremony.optionType}</span>
+								</span>
+								<%-- ✅ แก้ไข: ceremony -> packageEntity --%>
+								<span class="info-value">${booking.packageEntity.optionType}</span>
 							</div>
 						</div>
+						<%-- ✅ แก้ไข: ceremony -> packageEntity --%>
 						<c:if
-							test="${not isCustomRequest && not empty booking.ceremony.basePrice}">
+							test="${not isCustomRequest && not empty booking.packageEntity.basePrice}">
 							<div class="col-12 mt-2 pt-2 border-top">
 								<div class="info-row mb-0">
 									<span class="info-label">ราคาเริ่มต้นแพ็กเกจ</span> <span
 										class="info-value price-text"> ฿<fmt:formatNumber
-											value="${booking.ceremony.basePrice}" pattern="#,###" />
+											value="${booking.packageEntity.basePrice}" pattern="#,###" />
 									</span>
 								</div>
 							</div>
@@ -594,7 +460,7 @@
 											test="${not empty d.answer and fn:trim(d.answer) ne ''}">
 											<c:out value="${d.answer}" />
 											<%-- ปิ่นโต: แสดงราคาต่อชุดตามเดิม
-											     สังฆทาน: ไม่ใส่ราคาตรงนี้ ให้ JavaScript ด้านล่างเติมหมายเหตุตามกฎแพ็กเกจ (ส่วนต่าง/ราคาเต็ม) --%>
+											     สังฆทาน: ไม่ใส่ราคาตรงนี้ ให้ JavaScript (viewBooking.js) เติมหมายเหตุตามกฎแพ็กเกจ (ส่วนต่าง/ราคาเต็ม) --%>
 											<c:if
 												test="${d.question.questionsText eq 'เลือกชุดภัตตาหารปิ่นโต'}">
 												<c:choose>
@@ -745,257 +611,34 @@
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+	<%-- ส่วนนี้ต้องอยู่ใน JSP เพราะใช้ค่าจากเซิร์ฟเวอร์ (EL/JSTL)
+	     ส่งต่อให้ viewBooking.js ผ่าน contextPath และ VIEW_BOOKING_CONFIG
+	     ตรรกะคำนวณทั้งหมดอยู่ใน viewBooking.js --%>
 	<script>
 		const contextPath = "${pageContext.request.contextPath}";
-	</script>
-	<script>
-		(function() {
-			// ราคาต่อชุด: ค่าตั้งต้น (สำรอง) แล้วถูกเขียนทับด้วยราคาจริงจากฐานข้อมูลด้านล่าง
-			var PRICE_MAP = {
-				"ปิ่นโตชุดประหยัด" : 299,
-				"ปิ่นโตชุดมาตรฐาน" : 399,
-				"ปิ่นโตชุดพรีเมียม" : 499,
-				"ปิ่นโตชุดพิเศษ" : 599,
-				"ชุดสังฆทานมาตรฐาน" : 299,
-				"ชุดสังฆทานพรีเมียม" : 399,
-				"ชุดสังฆทานพร้อมผ้าไตรมาตรฐาน" : 499
-			};
-			<c:forEach items="${pintoItems}" var="pItem">
-			PRICE_MAP["${pItem.itemName}"] = ${pItem.pricePerUnit};
-			</c:forEach>
-			<c:forEach items="${sanghatharnItems}" var="sItem">
-			PRICE_MAP["${sItem.itemName}"] = ${sItem.pricePerUnit};
-			</c:forEach>
 
+		window.VIEW_BOOKING_CONFIG = {
+			// ราคาจริงจากฐานข้อมูล (เขียนทับราคาตั้งต้นใน viewBooking.js)
+			priceOverrides : {},
 			// ชุดสังฆทานที่รวมอยู่ในแพ็กเกจ (qty = 0 หมายถึงไม่มี เช่นโหมดกรอกเอง)
-			var INCLUDED_SANGHA = {
+			includedSangha : {
 				price : ${includedPrice},
 				qty : ${includedQty}
-			};
-			var IS_CUSTOM_REQUEST = ${isCustomRequest};
-
-			var SELF_INVITE_DISCOUNT = 1500;
-
-			function fmtMoney(n) {
-				n = Math.round((n || 0) * 100) / 100;
-				return '฿' + n.toLocaleString('th-TH', {
-					minimumFractionDigits : 2,
-					maximumFractionDigits : 2
-				});
-			}
-
-			function collectAnswers() {
-				var answers = {};
-				document.querySelectorAll(
-						'#bookingDetailsSection .info-row[data-qtext]')
-						.forEach(function(row) {
-							var q = row.getAttribute('data-qtext');
-							var a = row.getAttribute('data-answer');
-							if (q && !(q in answers)) {
-								answers[q] = a;
-							}
-						});
-				return answers;
-			}
-
-			// คำนวณค่าสังฆทานตามกฎ:
-			//  - โหมดกรอกเอง / ไม่มีชุดที่รวมในแพ็กเกจ : ราคาเต็ม x จำนวนชุด
-			//  - โหมดแพ็กเกจ : ชุดในโควตา คิดเฉพาะส่วนต่างจากชุดที่รวมในแพ็กเกจ (ไม่ติดลบ)
-			//                  ชุดที่เกินโควตา คิดราคาเต็ม
-			function calcSanghaTotal(name, qty) {
-				var unit = PRICE_MAP[name] || 0;
-				if (IS_CUSTOM_REQUEST || INCLUDED_SANGHA.qty <= 0) {
-					return unit * qty;
-				}
-				var covered = Math.min(qty, INCLUDED_SANGHA.qty);
-				var extra = qty - covered;
-				var diff = Math.max(0, unit - INCLUDED_SANGHA.price);
-				return covered * diff + extra * unit;
-			}
-
-			// ข้อความหมายเหตุราคาต่อท้ายชื่อชุดสังฆทาน
-			function sanghaPriceNote(name, qty) {
-				var unit = PRICE_MAP[name];
-				if (unit === undefined)
-					return '';
-				if (IS_CUSTOM_REQUEST || INCLUDED_SANGHA.qty <= 0) {
-					return ' (' + unit.toLocaleString('th-TH') + ' บาท)';
-				}
-				var diff = Math.max(0, unit - INCLUDED_SANGHA.price);
-				var parts = [];
-				if (diff === 0) {
-					parts.push('รวมในแพ็กเกจ ' + INCLUDED_SANGHA.qty + ' ชุด');
-				} else {
-					parts.push('+' + diff.toLocaleString('th-TH')
-							+ ' บาท/ชุด จากชุดที่รวมในแพ็กเกจ');
-				}
-				if (qty > INCLUDED_SANGHA.qty) {
-					parts.push('ส่วนที่เกิน ' + (qty - INCLUDED_SANGHA.qty)
-							+ ' ชุด คิดชุดละ ' + unit.toLocaleString('th-TH')
-							+ ' บาท');
-				}
-				return ' (' + parts.join(', ') + ')';
-			}
-
-			function appendPricesToAnswers() {
-				var answers = collectAnswers();
-				document
-						.querySelectorAll(
-								'#bookingDetailsSection .info-row[data-qtext]')
-						.forEach(
-								function(row) {
-									var qText = row.getAttribute('data-qtext');
-									var isPinto = (qText === 'เลือกชุดภัตตาหารปิ่นโต');
-									var isSangha = (qText === 'เลือกชุดสังฆทานที่ต้องการ');
-									if (!isPinto && !isSangha)
-										return;
-
-									var valueSpan = row
-											.querySelector('.info-value');
-									if (!valueSpan)
-										return;
-
-									var choiceName = valueSpan.textContent
-											.trim();
-									if (PRICE_MAP[choiceName] === undefined
-											|| choiceName.indexOf('(') !== -1)
-										return;
-
-									if (isSangha) {
-										var qty = parseInt(
-												answers['จำนวนชุดสังฆทาน'], 10) || 0;
-										valueSpan.textContent = choiceName
-												+ sanghaPriceNote(choiceName,
-														qty);
-									} else {
-										valueSpan.textContent = choiceName
-												+ ' ('
-												+ PRICE_MAP[choiceName]
-														.toLocaleString('th-TH')
-												+ ' บาท)';
-									}
-								});
-			}
-
-			function calcCostSummary() {
-				var box = document.getElementById('costSummaryBox');
-				if (!box)
-					return;
-
-				appendPricesToAnswers();
-
-				var basePriceRaw = "${booking.ceremony.basePrice}";
-				var basePrice = parseFloat(basePriceRaw) || 0;
-				var optionType = "${fn:trim(booking.ceremony.optionType)}";
-				var isCustomRequest = (basePrice === 0)
-						|| (optionType.indexOf('กรอกความต้องการ') !== -1);
-
-				var answers = collectAnswers();
-
-				var pintoTotal = 0;
-				var wantPinto = answers['ต้องการชุดภัตตาหารปิ่นโตหรือไม่'];
-				var pintoName = answers['เลือกชุดภัตตาหารปิ่นโต'];
-				var pintoQty = parseInt(answers['จำนวนชุดภัตตาหารปิ่นโต'], 10) || 0;
-				if (pintoName && pintoQty > 0
-						&& (!wantPinto || wantPinto.indexOf('ไม่') === -1)) {
-					pintoTotal = (PRICE_MAP[pintoName] || 0) * pintoQty;
-				}
-
-				// สังฆทาน: ถ้าอยู่ในแพ็กเกจทั้งหมด แถวจะถูกซ่อน (ไม่มีใน answers) จึงได้ 0
-				var sanghaTotal = 0;
-				var wantSangha = answers['ต้องการสังฆทานหรือไม่'];
-				var sanghaName = answers['เลือกชุดสังฆทานที่ต้องการ'];
-				var sanghaQty = parseInt(answers['จำนวนชุดสังฆทาน'], 10) || 0;
-				if (sanghaName && sanghaQty > 0
-						&& (!wantSangha || wantSangha.indexOf('ไม่') === -1)) {
-					sanghaTotal = calcSanghaTotal(sanghaName, sanghaQty);
-				}
-
-				var additionalTotal = pintoTotal + sanghaTotal;
-
-				var inviteAnswer = answers['รูปแบบการนิมนต์พระสงฆ์'] || '';
-				var isSelfInvite = inviteAnswer.indexOf('นิมนต์เอง') !== -1;
-
-				var packageLabel, packageValue, discount = 0;
-
-				if (isCustomRequest) {
-					var fixedItemsTotal = 0;
-					document
-							.querySelectorAll(
-									'#packageItemsGrid .package-item-chip[data-price]')
-							.forEach(
-									function(chip) {
-										if (chip.getAttribute('data-name') === 'ชุดสังฆทานมาตรฐาน')
-											return;
-										var price = parseFloat(chip
-												.getAttribute('data-price')) || 0;
-										var qty = parseFloat(chip
-												.getAttribute('data-qty')) || 0;
-										fixedItemsTotal += price * qty;
-									});
-
-					packageLabel = 'ค่าบริการพื้นฐาน (ตามรายการที่จัดให้):';
-					packageValue = fixedItemsTotal;
-					discount = 0;
-				} else {
-					packageLabel = 'ราคาแพ็กเกจ:';
-					packageValue = basePrice;
-					discount = isSelfInvite ? SELF_INVITE_DISCOUNT : 0;
-				}
-
-				var grandTotal = packageValue + additionalTotal - discount;
-				if (grandTotal < 0)
-					grandTotal = 0;
-
-				document.getElementById('costPackageLabel').textContent = packageLabel;
-				document.getElementById('costPackageValue').textContent = fmtMoney(packageValue);
-
-				var addRow = document.getElementById('costAdditionalRow');
-				if (additionalTotal > 0) {
-					addRow.style.display = '';
-					document.getElementById('costAdditionalValue').textContent = fmtMoney(additionalTotal);
-				} else {
-					addRow.style.display = 'none';
-				}
-
-				var discRow = document.getElementById('costDiscountRow');
-				if (discount > 0) {
-					discRow.style.display = '';
-					document.getElementById('costDiscountValue').textContent = '- '
-							+ fmtMoney(discount);
-				} else {
-					discRow.style.display = 'none';
-				}
-
-				document.getElementById('costTotalValue').textContent = fmtMoney(grandTotal);
-			}
-
-			function splitTempleLines() {
-				document.querySelectorAll(
-						'#bookingDetailsSection .info-row .info-value')
-						.forEach(
-								function(el) {
-									var text = el.textContent.trim();
-									// ทำเฉพาะข้อความที่มี "รูปที่ <ตัวเลข>" ตั้งแต่ 2 ชุดขึ้นไป
-									var matches = text.match(/รูปที่\s*\d+/g);
-									if (!matches || matches.length < 2)
-										return;
-
-									var replaced = text.replace(
-											/\s*(รูปที่\s*\d+)/g, '\n$1')
-											.trim();
-									el.textContent = replaced;
-									el.classList.add('multiline-value');
-								});
-			}
-
-			document.addEventListener('DOMContentLoaded', function() {
-				calcCostSummary();
-				splitTempleLines();
-			});
-		})();
+			},
+			isCustomRequest : ${isCustomRequest},
+			<%-- ✅ แก้ไข: ceremony -> packageEntity (ทั้ง basePrice และ optionType) --%>
+			basePrice : "${booking.packageEntity.basePrice}",
+			optionType : "${fn:trim(booking.packageEntity.optionType)}"
+		};
+		<c:forEach items="${pintoItems}" var="pItem">
+		VIEW_BOOKING_CONFIG.priceOverrides["${pItem.itemName}"] = ${pItem.pricePerUnit};
+		</c:forEach>
+		<c:forEach items="${sanghatharnItems}" var="sItem">
+		VIEW_BOOKING_CONFIG.priceOverrides["${sItem.itemName}"] = ${sItem.pricePerUnit};
+		</c:forEach>
 	</script>
 	<script
-		src="${pageContext.request.contextPath}/static/js/viewBooking.js?v=28"></script>
+		src="${pageContext.request.contextPath}/static/js/viewBooking.js?v=29"></script>
 </body>
 </html>

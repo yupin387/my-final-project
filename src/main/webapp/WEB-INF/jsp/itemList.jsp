@@ -8,133 +8,7 @@
 <title>รายการอุปกรณ์ - บุญมีนำพา จัดงานบุญ</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/itemList.css?v=4">
-<style>
 
-.filter-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-bottom: 24px;
-}
-
-.status-filter-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--white);
-    border: 1.5px solid var(--card-border);
-    border-radius: 30px;
-    padding: 8px 18px;
-    box-shadow: 0 3px 10px var(--shadow-soft);
-}
-
-.status-filter-label {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--brown-muted);
-    white-space: nowrap;
-}
-
-.status-filter-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    min-width: 190px;
-    padding: 8px 16px;
-    background: var(--peach-pale);
-    border: 1.5px solid var(--accent-pink);
-    border-radius: 22px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--brown-text);
-    user-select: none;
-    transition: box-shadow 0.2s;
-}
-.status-filter-box:hover { box-shadow: 0 3px 10px var(--shadow-soft); }
-
-.status-filter-current {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.status-filter-arrow {
-    font-size: 10px;
-    color: var(--accent-pink);
-    flex-shrink: 0;
-}
-
-.status-filter-dropdown {
-    display: none;
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    min-width: 240px;
-    background: var(--white);
-    border: 1.5px solid var(--card-border);
-    border-radius: 14px;
-    box-shadow: 0 10px 28px var(--shadow-soft);
-    z-index: 500;
-    overflow: hidden;
-}
-.status-filter-dropdown.show { display: block; }
-
-.status-filter-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 16px;
-    text-decoration: none;
-    color: var(--brown-text);
-    font-size: 14px;
-    font-weight: 600;
-    border-bottom: 1px solid var(--bg-light);
-    transition: background 0.15s;
-}
-.status-filter-item:last-child { border-bottom: none; }
-.status-filter-item:hover { background: var(--peach-pale); }
-.status-filter-item.selected {
-    background: var(--accent-pink-pale);
-    color: var(--accent-pink);
-    font-weight: 700;
-}
-
-.dot-sm {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    display: inline-block;
-    flex-shrink: 0;
-}
-.dot-type-all { background: var(--accent-pink); }
-.dot-type     { background: var(--gold-primary); }
-
-
-.modal-box {
-    text-align: center;
-}
-
-.modal-item-pill {
-    display: inline-block;
-    margin: 4px auto 10px;
-    padding: 8px 20px;
-    background: var(--peach-pale);
-    border: 1.5px solid var(--accent-pink);
-    border-radius: 30px;
-    color: var(--accent-pink);
-    font-weight: 700;
-    font-size: 15px;
-}
-
-.modal-desc-sub {
-    font-size: 13px;
-    color: var(--brown-muted, #999);
-    margin-bottom: 16px;
-}
-</style>
 </head>
 <body>
 
@@ -193,7 +67,7 @@
 
         <%-- ========== FILTER (แบบเดียวกับหน้ารายการจอง) ========== --%>
         <c:set var="curType" value="${empty selectedType ? 'all' : selectedType}" />
-        <c:set var="curCeremony" value="${empty selectedCeremonyType ? 'all' : selectedCeremonyType}" />
+        <c:set var="curPackage" value="${empty selectedPackageType ? 'all' : selectedPackageType}" />
 
         <div class="filter-wrapper">
 
@@ -218,12 +92,12 @@
                     <span class="status-filter-arrow" id="typeArrow">▾</span>
                 </div>
                 <div class="status-filter-dropdown" id="typeDropdown">
-                    <a href="${pageContext.request.contextPath}/staff/items?typeId=all&ceremonyType=${curCeremony}"
+                    <a href="${pageContext.request.contextPath}/staff/items?typeId=all&packageType=${curPackage}"
                        class="status-filter-item ${curType == 'all' ? 'selected' : ''}">
                         <span class="dot-sm dot-type-all"></span> ทั้งหมด
                     </a>
                     <c:forEach var="t" items="${itemTypes}">
-                        <a href="${pageContext.request.contextPath}/staff/items?typeId=${t.itemTypeId}&ceremonyType=${curCeremony}"
+                        <a href="${pageContext.request.contextPath}/staff/items?typeId=${t.itemTypeId}&packageType=${curPackage}"
                            class="status-filter-item ${curType.toString() == t.itemTypeId.toString() ? 'selected' : ''}">
                             <span class="dot-sm dot-type"></span> ${t.itemTypeName}
                         </a>
@@ -237,48 +111,48 @@
                 <div class="status-filter-box" onclick="toggleFilter('ceremonyDropdown', 'ceremonyArrow')">
                     <span class="status-filter-current">
                         <c:choose>
-                            <c:when test="${curCeremony == 'all'}">
+                            <c:when test="${curPackage == 'all'}">
                                 <span class="dot-sm dot-type-all"></span> ทั้งหมด
                             </c:when>
-                            <c:when test="${curCeremony == 'ทำบุญบ้าน'}">
-                                <span class="dot-sm dot-home"></span> ${curCeremony}
+                            <c:when test="${curPackage == 'ทำบุญบ้าน'}">
+                                <span class="dot-sm dot-home"></span> ${curPackage}
                             </c:when>
-                            <c:when test="${curCeremony == 'ขึ้นบ้านใหม่'}">
-                                <span class="dot-sm dot-newhome"></span> ${curCeremony}
+                            <c:when test="${curPackage == 'ขึ้นบ้านใหม่'}">
+                                <span class="dot-sm dot-newhome"></span> ${curPackage}
                             </c:when>
-                            <c:when test="${curCeremony == 'ทำบุญบริษัทหรือออฟฟิศ'}">
-                                <span class="dot-sm dot-company"></span> ${curCeremony}
+                            <c:when test="${curPackage == 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                <span class="dot-sm dot-company"></span> ${curPackage}
                             </c:when>
                             <c:otherwise>
-                                <span class="dot-sm dot-type"></span> ${curCeremony}
+                                <span class="dot-sm dot-type"></span> ${curPackage}
                             </c:otherwise>
                         </c:choose>
                     </span>
                     <span class="status-filter-arrow" id="ceremonyArrow">▾</span>
                 </div>
                 <div class="status-filter-dropdown" id="ceremonyDropdown">
-                    <a href="${pageContext.request.contextPath}/staff/items?typeId=${curType}&ceremonyType=all"
-                       class="status-filter-item ${curCeremony == 'all' ? 'selected' : ''}">
+                    <a href="${pageContext.request.contextPath}/staff/items?typeId=${curType}&packageType=all"
+                       class="status-filter-item ${curPackage == 'all' ? 'selected' : ''}">
                         <span class="dot-sm dot-type-all"></span> ทั้งหมด
                     </a>
-                    <c:forEach var="cType" items="${ceremonyTypeOrder}">
-                        <a href="${pageContext.request.contextPath}/staff/items?typeId=${curType}&ceremonyType=${cType}"
-                           class="status-filter-item ${curCeremony == cType ? 'selected' : ''}">
+                    <c:forEach var="pType" items="${packageTypeOrder}">
+                        <a href="${pageContext.request.contextPath}/staff/items?typeId=${curType}&packageType=${pType}"
+                           class="status-filter-item ${curPackage == pType ? 'selected' : ''}">
                             <c:choose>
-                                <c:when test="${cType == 'ทำบุญบ้าน'}">
+                                <c:when test="${pType == 'ทำบุญบ้าน'}">
                                     <span class="dot-sm dot-home"></span>
                                 </c:when>
-                                <c:when test="${cType == 'ขึ้นบ้านใหม่'}">
+                                <c:when test="${pType == 'ขึ้นบ้านใหม่'}">
                                     <span class="dot-sm dot-newhome"></span>
                                 </c:when>
-                                <c:when test="${cType == 'ทำบุญบริษัทหรือออฟฟิศ'}">
+                                <c:when test="${pType == 'ทำบุญบริษัทหรือออฟฟิศ'}">
                                     <span class="dot-sm dot-company"></span>
                                 </c:when>
                                 <c:otherwise>
                                     <span class="dot-sm dot-type"></span>
                                 </c:otherwise>
                             </c:choose>
-                            ${cType}
+                            ${pType}
                         </a>
                     </c:forEach>
                 </div>
@@ -307,7 +181,7 @@
                             <td class="item-name">${item.itemName}</td>
                             <td><span class="type-badge">${item.itemType.itemTypeName}</span></td>
                             <td>
-                                <c:forEach var="t" items="${itemCeremonyTypes[item.itemId]}">
+                                <c:forEach var="t" items="${itemPackageTypes[item.itemId]}">
                                     <c:choose>
                                         <c:when test="${t eq 'ทำบุญบ้าน'}">
                                             <span class="ceremony-dot ceremony-dot-lg dot-home" title="${t}"></span>
@@ -323,7 +197,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
-                                <c:if test="${empty itemCeremonyTypes[item.itemId]}">
+                                <c:if test="${empty itemPackageTypes[item.itemId]}">
                                     <span class="ceremony-tag ceremony-tag-none">ยังไม่ผูกกับพิธี</span>
                                 </c:if>
                             </td>
@@ -332,8 +206,6 @@
                                     <a href="${pageContext.request.contextPath}/staff/items/edit/${item.itemId}"
                                         class="btn-edit">แก้ไข</a>
 
-                                    <%-- FIX: เพิ่ม data-item-name เพื่อส่งชื่ออุปกรณ์ไปให้ modal
-                                         ยืนยันการลบ แสดงชื่อรายการที่กำลังจะลบให้ผู้ใช้เห็นชัดเจน --%>
                                     <form action="${pageContext.request.contextPath}/staff/items/delete/${item.itemId}"
                                           method="post" style="display:inline;"
                                           data-item-name="${item.itemName}"
@@ -387,45 +259,6 @@
 
  
     <script src="${pageContext.request.contextPath}/static/js/itemList.js"></script>
-    <script>
-    function toggleDropdown() {
-        document.getElementById('dropdownMenu').classList.toggle('show');
-    }
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.user-info')) {
-            document.getElementById('dropdownMenu').classList.remove('show');
-        }
-    });
 
-    /* ===== ตัวกรอง: เปิด/ปิด dropdown แบบเดียวกับหน้ารายการจอง ===== */
-    function toggleFilter(dropdownId, arrowId) {
-        var dropdown = document.getElementById(dropdownId);
-        var arrow = document.getElementById(arrowId);
-        var isOpen = dropdown.classList.contains('show');
-
-        // ปิด dropdown ตัวกรองอื่นก่อนเสมอ กันเปิดซ้อนกันสองอัน
-        document.querySelectorAll('.status-filter-dropdown.show').forEach(function (el) {
-            el.classList.remove('show');
-        });
-        document.querySelectorAll('.status-filter-arrow').forEach(function (el) {
-            el.textContent = '▾';
-        });
-
-        if (!isOpen) {
-            dropdown.classList.add('show');
-            arrow.textContent = '▴';
-        }
-    }
-    document.addEventListener('click', function (e) {
-        if (!e.target.closest('.status-filter-group')) {
-            document.querySelectorAll('.status-filter-dropdown.show').forEach(function (el) {
-                el.classList.remove('show');
-            });
-            document.querySelectorAll('.status-filter-arrow').forEach(function (el) {
-                el.textContent = '▾';
-            });
-        }
-    });
-    </script>
 </body>
 </html>

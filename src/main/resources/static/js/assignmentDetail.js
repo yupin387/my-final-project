@@ -1,18 +1,23 @@
 // ===== Dropdown =====
 function toggleDropdown() {
-    document.getElementById('dropdownMenu').classList.toggle('show');
+    const menu = document.getElementById('dropdownMenu');
+    if (menu) menu.classList.toggle('show');
 }
 
+// Global Click Listener (Handles both Dropdown and Modal Overlay)
 document.addEventListener('click', function (e) {
+    // Close dropdown if clicking outside user-info
     const userInfo = document.querySelector('.user-info');
     if (userInfo && !userInfo.contains(e.target)) {
         const menu = document.getElementById('dropdownMenu');
         if (menu) menu.classList.remove('show');
     }
 
-    // ปิด modal เมื่อคลิก overlay
+    // Close modal when clicking on the background overlay
     const overlay = document.getElementById('damageModal');
-    if (e.target === overlay) closeDamageModal();
+    if (e.target === overlay) {
+        closeDamageModal();
+    }
 });
 
 // ===== Modal =====
@@ -24,19 +29,23 @@ function closeDamageModal() {
     document.getElementById('damageModal').classList.remove('show');
 }
 
-// ===== Flash Banner =====
+// ===== Flash Banner (Toast) =====
 function showToast(type, msg) {
     const container = document.getElementById('flash-banner-container');
     if (!container) return;
 
-    container.innerHTML = '';
+    container.innerHTML = ''; // Clear existing toasts
 
     const banner = document.createElement('div');
-    banner.className = 'flash-banner flash-banner-' + type;
+    banner.className = `flash-banner flash-banner-${type}`;
     banner.textContent = msg; 
 
     container.appendChild(banner);
-
+    
+    // Optional: Auto-remove the toast after 3 seconds
+    setTimeout(() => {
+        banner.remove();
+    }, 3000);
 }
 
 // ===== Submit Report via AJAX =====
@@ -57,14 +66,19 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'POST',
             body: formData
         })
-        .then(() => {
+        .then(response => {
+            // Fetch only rejects on network failure. We must check response.ok for HTTP errors.
+            if (!response.ok) {
+                throw new Error('Server error');
+            }
             closeDamageModal();
             form.reset();
             document.getElementById('uploadPreview').innerHTML = '';
             document.getElementById('uploadPlaceholder').style.display = 'flex';
             showToast('success', 'ส่งรายงานความเสียหายเรียบร้อยแล้ว');
         })
-        .catch(() => {
+        .catch((error) => {
+            console.error('Submission error:', error);
             showToast('error', 'ไม่สามารถส่งรายงานได้ กรุณาลองใหม่');
         })
         .finally(() => {

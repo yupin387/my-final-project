@@ -9,117 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=18">
-   <style>
-   
-    #mainQuotationTable .qty-wrapper{
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-wrap:nowrap;
-        white-space:nowrap;
-        gap:6px;
-    }
-    #mainQuotationTable .btn-qty-minus,
-    #mainQuotationTable .btn-qty-plus{
-        flex:0 0 auto;
-        width:26px;
-        height:26px;
-        border:1px solid var(--rose-deep);
-        background:#FFFFFF;
-        color:var(--rose-deep);
-        border-radius:4px;
-        font-size:15px;
-        line-height:1;
-        cursor:pointer;
-    }
-    #mainQuotationTable .btn-qty-minus:hover,
-    #mainQuotationTable .btn-qty-plus:hover{
-        background:var(--rose-glow);
-    }
-    #mainQuotationTable .qty-wrapper .qty-input{
-        flex:0 0 auto;
-        width:52px;
-        text-align:center;
-    }
-    /* ===== ปุ่มลบ (ถังขยะ) ให้เล็กและเป็นสีแดง (คงสีแดงไว้เพื่อสื่อความหมาย "ลบ") ===== */
-    #mainQuotationTable td.delete-col{
-        padding:4px !important;
-        text-align:center;
-    }
-    #mainQuotationTable .btn-remove{
-        width:26px;
-        height:26px;
-        padding:0;
-        border:1px solid #FCA5A5;
-        background:#FEE2E2;
-        color:#DC2626;
-        border-radius:6px;
-        font-size:13px;
-        line-height:1;
-        cursor:pointer;
-    }
-    #mainQuotationTable .btn-remove:hover{
-        background:#DC2626;
-        border-color:#DC2626;
-        color:#FFFFFF;
-    }
-    
-   
-    .price-input[readonly] {
-        background-color: transparent;
-        border: none;
-        outline: none;
-        color: #333;
-        font-weight: 600;
-    }
-
-   
-    #mainQuotationTable tr.group-row td.category-header-text {
-        text-align: left !important;
-        padding-left: 8px !important;
-        padding-right: 12px !important;
-        white-space: nowrap;
-        color: var(--rose-deep);
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    #mainQuotationTable tr.group-row td {
-        background-color: var(--rose-glow); 
-    }
-    #mainQuotationTable .btn-add-group-inline{
-        flex: 0 0 auto;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        border: 1px solid var(--rose-deep);
-        background: #FFFFFF;
-        color: var(--rose-deep);
-        font-size: 14px;
-        line-height: 1;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-    }
-    #mainQuotationTable .btn-add-group-inline:hover{
-        background: #FFFFFF;
-        transform: scale(1.05);
-    }
-
-
-    .tot-extra-detail{
-        font-size: 12px;
-        color: #888;
-        font-weight: 400;
-        font-style: italic;
-        text-align: left;
-        margin-top: 4px;
-        line-height: 1.5;
-    }
-</style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationEdit.css?v=1">
 </head>
 <body>
 
@@ -133,7 +23,7 @@
         <nav class="navbar-menu">
             <a href="${pageContext.request.contextPath}/manager/bookings"   class="nav-item">รายการจอง</a>
             <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a>
-            <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการพิธี</a>
+            <a href="${pageContext.request.contextPath}/manager/questions"  class="nav-item">จัดการแพ็กเกจ</a>
             <a href="${pageContext.request.contextPath}/manager/quotation"  class="nav-item active">จัดการใบเสนอราคา</a>
         </nav>
           <div class="user-info" onclick="toggleDropdown()">
@@ -156,7 +46,8 @@
           method="post" onsubmit="return validateForm()">
         <input type="hidden" name="quotationId" value="${q.quotationId}">
 
-        <c:set var="packageName" value="${q.bookingForm.ceremony.optionType}"/>
+        <%-- แก้ไขจาก q.bookingForm.pkg.optionType เป็น q.bookingForm.packageEntity.optionType --%>
+        <c:set var="packageName" value="${q.bookingForm.packageEntity.optionType}"/>
         <c:set var="isCustomRequest" value="${packageName == 'กรอกความต้องการเบื้องต้น'}" />
 
         <c:set var="monkInviteType" value=""/>
@@ -189,7 +80,8 @@
                 <c:set var="packageDisplayPrice" value="0.00"/>
             </c:when>
             <c:otherwise>
-                <c:set var="packageDisplayPrice" value="${q.bookingForm.ceremony.basePrice}"/>
+                <%-- แก้ไขจาก q.bookingForm.pkg.basePrice เป็น q.bookingForm.packageEntity.basePrice --%>
+                <c:set var="packageDisplayPrice" value="${q.bookingForm.packageEntity.basePrice}"/>
             </c:otherwise>
         </c:choose>
 
@@ -198,8 +90,8 @@
             <div class="doc-header">
                 <div class="company-info">
                     <h2>บริษัท บุญมีนำพา จัดงานบุญ </h2>
-						<p>รับจัดพิธีสงฆ์ นิมนต์พระ สังฆทาน และงานบุญครบวงจร</p>
-						<p>โทร. 080-123-4567 | อีเมล: boonmee@gmail.com</p>
+                    <p>รับจัดพิธีสงฆ์ นิมนต์พระ สังฆทาน และงานบุญครบวงจร</p>
+                    <p>โทร. 080-123-4567 | อีเมล: boonmee@gmail.com</p>
                 </div>
                 <div class="doc-title-box">
                     <h1>แก้ไขใบเสนอราคา #${q.quotationId}</h1>
@@ -222,9 +114,10 @@
                             <td class="label">วันที่จัดงาน:</td>
                             <td class="value"><fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy" /> เวลา ${q.bookingForm.eventTime} น.</td>
                         </tr>
-                           <tr>
+                        <tr>
                             <td class="label">รูปแบบพิธี:</td>
-                            <td class="value">${q.bookingForm.ceremony.ceremonyType}</td>
+                            <%-- แก้ไขจาก q.bookingForm.pkg.packageType เป็น q.bookingForm.packageEntity.packageType --%>
+                            <td class="value">${q.bookingForm.packageEntity.packageType}</td>
                         </tr>
                         <tr>
                             <td class="label">รูปแบบการจอง:</td>
@@ -346,12 +239,6 @@
                 </c:set>
 
                 <!-- บล็อกสำหรับหมวดสังฆทาน -->
-                <%--
-                    FIX: ราคา/สถานะ "ฟรี" ของแต่ละรายการสังฆทาน ต้องอ่านจากราคาที่ถูกบันทึกไว้จริง
-                    (subtotal / quantity) ซึ่งคำนวณส่วนต่างมาแล้วอย่างถูกต้องตอนสร้างใบเสนอราคา
-                    (จาก QuotationService.calculateSanghatanLines) ไม่ใช่เทียบราคาสินค้าตรงๆ กับเลข 299
-                    ที่เป็นการเดาแบบตายตัวและผิดถ้าราคาสินค้าจริงไม่ตรง 299 พอดี
-                --%>
                 <c:set var="sangkathanBlockEdit">
                     <tr class="group-row">
                         <td class="no-index"></td>
@@ -520,7 +407,7 @@
                             </td>
                             <td class="tot-value">฿ <span id="summaryPackage">0.00</span></td>
                         </tr>
-                        <%-- เอาบรรทัดนี้แสดงเสมอ ไม่ต้องดักด้วย c:if --%>
+                        <%-- แสดงบรรทัดนี้เสมอ ไม่ต้องดักด้วย c:if --%>
                         <tr>
                             <td class="tot-label">
                                 รายการเพิ่มเติม:
@@ -551,8 +438,8 @@
 </div>
 
 <div id="itemDataStore" style="display: none;">
-    <%-- ดึงประเภทงาน (ceremonyType) จากตัวแปร q (หน้าแก้ไข) --%>
-    <c:set var="currentCeremonyType" value="${not empty q ? q.bookingForm.ceremony.ceremonyType : ''}" />
+    <%-- แก้ไขจาก q.bookingForm.pkg.packageType เป็น q.bookingForm.packageEntity.packageType --%>
+    <c:set var="currentCeremonyType" value="${not empty q ? q.bookingForm.packageEntity.packageType : ''}" />
     
     <c:forEach var="item" items="${extraSelectableItems}">
         <c:set var="skipItem" value="false" />
@@ -621,204 +508,11 @@
     </div>
 </footer>
 
-<script src="${pageContext.request.contextPath}/static/js/quotationEdit.js"></script>
+<%-- ค่าที่ต้องส่งจาก server ให้ JS (ต้องอยู่ใน JSP เพราะใช้ EL) --%>
 <script>
     window.CEREMONY_MONK_COUNT = ${empty monkCount ? 0 : monkCount};
-    window.IS_CUSTOM_REQUEST = ${isCustomRequest};
-
-    // ป้ายหมวดหมู่ (สำหรับตั้งชื่อหัวข้อป๊อปอัพ ให้เหมือนหน้าสร้าง)
-    var CATEGORY_LABELS_EDIT = {
-        'อุปกรณ์พิธีกรรม': 'อุปกรณ์พิธีกรรม',
-        'ภัตตาหาร':        'ภัตตาหารปิ่นโต',
-        'สังฆทาน':         'สังฆทาน',
-        'บริการ':          'บริการและดำเนินการ',
-        'อุปกรณ์เสริม':     'อุปกรณ์เสริม'
-    };
-
-    // หมวดหมู่ที่กำลังเปิดป๊อปอัพอยู่ ณ ขณะนี้ (แทนที่การใช้แท็บแบบเดิม ให้เหมือนหน้าสร้างที่กดปุ่ม + ในแต่ละหมวดโดยตรง)
-    var currentEditCategory = null;
-
-    // เปิดป๊อปอัพเพิ่มรายการ โดยระบุหมวดหมู่ตรงจากปุ่ม + ของแต่ละหมวด (เหมือนหน้าสร้างใบเสนอราคา)
-    window.openItemModal = function (category) {
-        currentEditCategory = category || null;
-
-        var title = document.getElementById('itemModalTitle');
-        if (title) {
-            title.textContent = currentEditCategory
-                ? 'เพิ่มรายการหมวด: ' + (CATEGORY_LABELS_EDIT[currentEditCategory] || currentEditCategory)
-                : 'เลือกรายการเพิ่มเติม';
-        }
-
-        renderItemPicker(currentEditCategory);
-        document.getElementById('itemSelectionModal').style.display = 'flex';
-    };
-
-    window.closeItemModal = function () {
-        document.getElementById('itemSelectionModal').style.display = 'none';
-        selectedItemIds.clear();
-        currentEditCategory = null;
-    };
-
-    // ให้ toggleSelectAllVisible / updateSelectAllState (ในไฟล์ quotationEdit.js) อ้างอิงหมวดหมู่ปัจจุบันจากตัวแปรนี้แทนแท็บ
-    window.getCurrentCategory = function () {
-        return currentEditCategory;
-    };
-
-    // อัปเดตฟังก์ชันสร้างหัวข้อให้หน้าตาเหมือนหน้าสร้างใบเสนอราคา (เว้นช่องแรกให้สีและโครงสร้างตรงกัน)
-    window.ensureGroupHeader = function(tbody) {
-        if (!tbody) return;
-        if (tbody.querySelector('.group-row')) return;
-        var GROUP_LABELS = {
-            'group-equipment':  'หมวดอุปกรณ์พิธีกรรม',
-            'group-food':       'หมวดภัตตาหารปิ่นโต',
-            'group-sangkathan': 'หมวดสังฆทาน',
-            'group-service':    'หมวดบริการและการดำเนินการ',
-            'group-extra':      'หมวดอุปกรณ์เสริม'
-        };
-        var category = {
-            'group-equipment':  'อุปกรณ์พิธีกรรม',
-            'group-food':       'ภัตตาหาร',
-            'group-sangkathan': 'สังฆทาน',
-            'group-service':    'บริการ',
-            'group-extra':      'อุปกรณ์เสริม'
-        }[tbody.id] || '';
-        var label = GROUP_LABELS[tbody.id] || '';
-        var headerRow = document.createElement('tr');
-        headerRow.className = 'group-row';
-        headerRow.innerHTML = '<td class="no-index"></td><td class="category-header-text">' + label +
-            (category ? ' <button type="button" class="btn-add-group-inline" onclick="openItemModal(\'' + category + '\')" title="เพิ่มรายการหมวดนี้">+</button>' : '') +
-            '</td><td></td><td></td><td></td><td></td><td class="delete-col"></td>';
-        tbody.prepend(headerRow);
-    };
-
-    window.addSelectedItemsToTable = function() {
-        if (selectedItemIds.size === 0) {
-            alert('กรุณาเลือกรายการอย่างน้อย 1 รายการ');
-            return;
-        }
-
-        var dataStore = document.getElementById('itemDataStore');
-
-        selectedItemIds.forEach(function(itemId) {
-            var dataEl = dataStore.querySelector('.item-data[data-id="' + itemId + '"]');
-            if (!dataEl) return;
-
-            var itemName = dataEl.getAttribute('data-name');
-            var itemDesc = dataEl.getAttribute('data-detail') || '';
-            var price    = parseFloat(dataEl.getAttribute('data-price')) || 0;
-            var unit     = dataEl.getAttribute('data-unit');
-            var itemType = dataEl.getAttribute('data-type') || '';
-
-            var scalesByMonk = itemName.includes('ต่อรูป') || itemDesc.includes('ต่อรูป');
-            var monkCount    = parseInt(window.CEREMONY_MONK_COUNT, 10) || 1;
-            var initialQty   = scalesByMonk ? monkCount : 1;
-
-            var targetBody = document.getElementById('group-service');
-            var isEquipment = itemType.includes('อุปกรณ์พิธีกรรม');
-
-            if (isEquipment) targetBody = document.getElementById('group-equipment');
-            else if (itemType.includes('อุปกรณ์เสริม')) targetBody = document.getElementById('group-extra');
-            else if (itemType.includes('ภัตตาหาร')) targetBody = document.getElementById('group-food');
-            else if (itemType.includes('สังฆทาน'))  targetBody = document.getElementById('group-sangkathan');
-
-            if (!targetBody) return; // หมวดนี้ไม่มีในโหมดปัจจุบัน (เช่น แพ็กเกจไม่มีหมวดอุปกรณ์พิธีกรรม/บริการ)
-
-            ensureGroupHeader(targetBody);
-
-            var tr = document.createElement('tr');
-            tr.className = 'dynamic-row';
-            tr.setAttribute('data-item-id', itemId);
-
-            // ซ่อนรายละเอียด (itemDesc) สำหรับหมวดอุปกรณ์พิธีกรรม บริการ และอุปกรณ์เสริม
-            var showDesc = itemType.includes('ภัตตาหาร') || itemType.includes('สังฆทาน');
-            var descHtml = (itemDesc && showDesc) ? '<br><span class="text-muted" style="font-size:12px;">' + itemDesc + '</span>' : '';
-
-            // ใช้ buildQtyCell (มีปุ่ม +/-) จาก quotationEdit.js เพื่อให้แถวที่เพิ่มใหม่หน้าตาเหมือนแถวเดิมทุกประการ
-            var qtyCellHtml = (typeof buildQtyCell === 'function')
-                ? buildQtyCell(initialQty, 'extraQtys')
-                : '<input type="number" name="extraQtys" value="' + initialQty + '" min="1" class="clean-input text-center qty-input" onchange="calculateGrandTotal()">';
-
-            tr.innerHTML = 
-                '<td class="text-center row-number"></td>' +
-                '<td>' + itemName + descHtml + '<input type="hidden" name="extraItemIds" value="' + itemId + '"></td>' +
-                '<td>' + qtyCellHtml + '</td>' +
-                '<td class="text-center">' + unit + '</td>' +
-                '<td><input type="number" name="extraPrices" value="' + price.toFixed(2) + '" step="0.01" min="0" class="clean-input text-right price-input" onchange="calculateGrandTotal()" readonly></td>' +
-                '<td class="text-right"><span class="subtotal">0.00</span></td>' +
-                '<td class="text-center delete-col"><button type="button" class="btn-remove" onclick="removeRow(this)">🗑️</button></td>';
-
-            targetBody.appendChild(tr);
-        });
-        
-        selectedItemIds.clear();
-        closeItemModal();
-        if(typeof reIndexRows === 'function') reIndexRows();
-        calculateGrandTotal();
-    };
-
-    window.calculateGrandTotal = function() {
-        var packageTotal = 0.0;
-        var extraTotal = 0.0;
-        var discount = parseFloat(document.getElementById('discountValue').value) || 0;
-        var isCustomRequest = window.IS_CUSTOM_REQUEST === true;
-        var extraItemNames = [];
-
-        document.querySelectorAll('.static-row, .dynamic-row').forEach(function(row) {
-            if (row.classList.contains('package-included-row')) return;
-
-            var qInput = row.querySelector('input[name="extraQtys"], input[name="bookingQtys"]');
-            var pInput = row.querySelector('input[name="extraPrices"], input[name="bookingPrices"]');
-
-            if (qInput && pInput) {
-                var qty = parseFloat(qInput.value) || 0;
-                var price = parseFloat(pInput.value) || 0;
-                var subtotal = qty * price;
-
-                var subtotalSpan = row.querySelector('.subtotal');
-                if (subtotalSpan) subtotalSpan.innerText = subtotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-
-                var parentTbody = row.closest('tbody');
-                var isManuallyAddedExtra = parentTbody && parentTbody.id === 'group-extra';
-
-                if (row.classList.contains('package-main-row')) {
-                    packageTotal += subtotal;
-                } else if (isCustomRequest && !isManuallyAddedExtra) {
-                    /* กรอกความต้องการเอง: รายการอุปกรณ์/สังฆทาน/อาหาร/บริการที่มาจากคำตอบ ถือเป็น "รายการหลัก" ไม่ใช่ของเพิ่มเติม */
-                    packageTotal += subtotal;
-                } else {
-                    extraTotal += subtotal;
-
-                    // เก็บชื่อรายการไว้แสดงในวงเล็บใต้ label "รายการเพิ่มเติม" (ข้ามรายการที่ฟรี/รวมในแพ็กเกจ)
-                    var isFreeItem = !!row.querySelector('.text-danger');
-                    if (!isFreeItem) {
-                        var nameCell = row.children[1];
-                        var nameText = (nameCell && nameCell.childNodes[0]) ? nameCell.childNodes[0].textContent.trim() : '';
-                        if (nameText) extraItemNames.push(nameText);
-                    }
-                }
-            }
-        });
-
-        var summaryPackage = document.getElementById('summaryPackage');
-        if (summaryPackage) summaryPackage.innerText = packageTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-
-        var summaryExtra = document.getElementById('summaryExtra');
-        if (summaryExtra) summaryExtra.innerText = extraTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-
-        var extraDetailDiv = document.getElementById('extraItemsDetail');
-        if (extraDetailDiv) extraDetailDiv.innerText = extraItemNames.length ? ('(' + extraItemNames.join(', ') + ')') : '';
-
-        var grandTotal = packageTotal + extraTotal - discount;
-        if (grandTotal < 0) grandTotal = 0;
-
-        var grandTotalSpan = document.getElementById('grandTotal');
-        if (grandTotalSpan) grandTotalSpan.innerText = grandTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-    };
-
-    document.addEventListener('DOMContentLoaded', function () {
-        calculateGrandTotal();
-    });
-    
+    window.IS_CUSTOM_REQUEST   = ${isCustomRequest};
 </script>
+<script src="${pageContext.request.contextPath}/static/js/quotationEdit.js?v=1"></script>
 </body>
 </html>

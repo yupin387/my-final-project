@@ -8,19 +8,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
 <title>${ceremony.optionType}-บุญมีรับจัดงานบุญ</title>
 <link
 	href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/ceremonyDetail.css">
-<%-- ✅ ขนาดการ์ดแพ็กเกจ (รูป/padding) ย้ายไปรวมไว้ใน ceremonyDetail.css แล้ว
-     เพื่อให้ทั้ง 3 หน้า (บ้าน/ขึ้นบ้านใหม่/บริษัท) ใช้ css ตัวเดียวกัน ขนาดเดียวกัน --%>
 </head>
 <body>
 
-	<%-- ========== NAVBAR (ตรงกับหน้า home ทุกจุด: dropdown บริการ/แพ็กเกจ, ปฏิทิน, สถานะล็อกอิน) ========== --%>
+	<%-- ========== NAVBAR ========== --%>
 	<nav class="navbar-custom">
 		<a class="navbar-brand-wrap"
 			href="${pageContext.request.contextPath}/home"
@@ -40,7 +37,7 @@
 				</a>
 				<div class="nav-dropdown-panel">
 					<c:forEach var="t" items="${ceremonyTypes}">
-						<a
+						
 							href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
 							class="nav-dropdown-link">${t.mainName}</a>
 					</c:forEach>
@@ -54,17 +51,18 @@
 					class="nav-caret">▾</span>
 				</a>
 				<div class="nav-dropdown-panel">
-					<a
-						href="${pageContext.request.contextPath}/calendar#calendarSection"
-						class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a> <a
-						href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
-						class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
+
+					href="${pageContext.request.contextPath}/calendar#calendarSection"
+					class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
+					href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
+					class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
 				</div>
 			</div>
 
 			<c:if test="${not empty sessionScope.user}">
-				<a href="${pageContext.request.contextPath}/myBookings" class="nav-link-item">รายการจอง</a>
-				
+				<a href="${pageContext.request.contextPath}/myBookings"
+					class="nav-link-item">รายการจอง</a>
+
 			</c:if>
 			<a href="${pageContext.request.contextPath}/reviews"
 				class="nav-link-item">รีวิว</a>
@@ -85,9 +83,9 @@
 					</div>
 					<div class="dropdown-menu-custom" id="dropdownMenu">
 						<a href="${pageContext.request.contextPath}/editProfile"
-							class="dropdown-link">โปรไฟล์ของฉัน</a> <a
-							href="${pageContext.request.contextPath}/logout"
-							class="dropdown-link danger">ออกจากระบบ</a>
+							class="dropdown-link">โปรไฟล์ของฉัน</a>
+						href="${pageContext.request.contextPath}/logout"
+						class="dropdown-link danger">ออกจากระบบ</a>
 					</div>
 				</div>
 			</c:when>
@@ -98,7 +96,7 @@
 		</c:choose>
 	</nav>
 
-	<%-- ========== HEADER: เหลือแค่ชื่องาน + วันที่เลือก ========== --%>
+	<%-- ========== HEADER ========== --%>
 	<div class="cd-hero"
 		style="background-image:url('${pageContext.request.contextPath}/static/images/Hero-banner/cover7.png');">
 		<div class="cd-hero-overlay"></div>
@@ -113,8 +111,7 @@
 		</div>
 	</div>
 
-	<%-- ========== HERO แนะนำงานทำบุญบริษัท: ข้อความซ้าย + รูปขวา + การ์ดลอย "รู้จักงานทำบุญออฟฟิศ"
-	     (โครงสร้างเดียวกับหน้าทำบุญบ้าน .cd-intro-hero เพื่อให้ธีม/เลย์เอาต์ตรงกัน) ========== --%>
+	<%-- ========== HERO แนะนำงานทำบุญบริษัท ========== --%>
 	<section class="cd-intro-hero">
 		<div class="cd-intro-hero-petal cd-intro-hero-petal--tr"></div>
 		<div class="cd-intro-hero-petal cd-intro-hero-petal--bl"></div>
@@ -123,49 +120,62 @@
 			<div class="cd-intro-hero-text">
 				<div class="cd-intro-hero-icon">
 					<svg width="40" height="40" viewBox="0 0 48 34">
-						<path d="M24 4 C24 4 20 12 24 20 C28 12 24 4 24 4 Z" fill="#E0577F"/>
-						<path d="M24 8 C24 8 16 13 15 22 C21 20 24 14 24 8 Z" fill="#F49CB9"/>
-						<path d="M24 8 C24 8 32 13 33 22 C27 20 24 14 24 8 Z" fill="#F49CB9"/>
-						<path d="M14 22 C14 22 22 24 24 30 C16 30 14 26 14 22 Z" fill="#E0577F"/>
-						<path d="M34 22 C34 22 26 24 24 30 C32 30 34 26 34 22 Z" fill="#E0577F"/>
+						<path d="M24 4 C24 4 20 12 24 20 C28 12 24 4 24 4 Z"
+							fill="#E0577F" />
+						<path d="M24 8 C24 8 16 13 15 22 C21 20 24 14 24 8 Z"
+							fill="#F49CB9" />
+						<path d="M24 8 C24 8 32 13 33 22 C27 20 24 14 24 8 Z"
+							fill="#F49CB9" />
+						<path d="M14 22 C14 22 22 24 24 30 C16 30 14 26 14 22 Z"
+							fill="#E0577F" />
+						<path d="M34 22 C34 22 26 24 24 30 C32 30 34 26 34 22 Z"
+							fill="#E0577F" />
 					</svg>
 				</div>
 
-				<h2 class="cd-intro-hero-title">พิธีทำบุญบริษัท เพื่อความเป็นสิริมงคลและความเจริญก้าวหน้าขององค์กร</h2>
+				<h2 class="cd-intro-hero-title">พิธีทำบุญบริษัท
+					เพื่อความเป็นสิริมงคลและความเจริญก้าวหน้าขององค์กร</h2>
 
-				<p class="cd-intro-hero-desc">
-					การทำบุญบริษัทหรือออฟฟิศ เป็นโอกาสในการเสริมสิริมงคลให้กับสถานที่ทำงาน
-					และผู้ที่ปฏิบัติงานภายในองค์กร หลายบริษัทนิยมจัดพิธีทำบุญเพื่อสร้างขวัญและกำลังใจ
+				<p class="cd-intro-hero-desc">การทำบุญบริษัทหรือออฟฟิศ
+					เป็นโอกาสในการเสริมสิริมงคลให้กับสถานที่ทำงาน
+					และผู้ที่ปฏิบัติงานภายในองค์กร
+					หลายบริษัทนิยมจัดพิธีทำบุญเพื่อสร้างขวัญและกำลังใจ
 					รวมถึงเป็นการเริ่มต้นช่วงเวลาใหม่ ๆ ด้วยความเป็นสิริมงคล
 					อีกทั้งยังช่วยสร้างความสามัคคีและความสัมพันธ์อันดีระหว่างผู้บริหารและพนักงาน
 				</p>
 
 				<div class="cd-intro-hero-ornament">
 					<svg width="60" height="20" viewBox="0 0 60 20">
-						<line x1="0" y1="10" x2="20" y2="10" stroke="#D9A441" stroke-width="1"/>
-						<line x1="40" y1="10" x2="60" y2="10" stroke="#D9A441" stroke-width="1"/>
-						<path d="M30 4 C27 8 27 12 30 16 C33 12 33 8 30 4 Z" fill="#E0577F"/>
-						<path d="M24 10 C26 8 28 8 30 10 C28 12 26 12 24 10 Z" fill="#D9A441"/>
-						<path d="M36 10 C34 8 32 8 30 10 C32 12 34 12 36 10 Z" fill="#D9A441"/>
+						<line x1="0" y1="10" x2="20" y2="10" stroke="#D9A441"
+							stroke-width="1" />
+						<line x1="40" y1="10" x2="60" y2="10" stroke="#D9A441"
+							stroke-width="1" />
+						<path d="M30 4 C27 8 27 12 30 16 C33 12 33 8 30 4 Z"
+							fill="#E0577F" />
+						<path d="M24 10 C26 8 28 8 30 10 C28 12 26 12 24 10 Z"
+							fill="#D9A441" />
+						<path d="M36 10 C34 8 32 8 30 10 C32 12 34 12 36 10 Z"
+							fill="#D9A441" />
 					</svg>
 				</div>
 			</div>
 
 			<div class="cd-intro-hero-photo-wrap">
 				<img src="${pageContext.request.contextPath}/static/images/b3.jpg"
-					 alt="ทีมงานให้คำปรึกษาการจัดงานทำบุญบริษัท" class="cd-intro-hero-photo">
+					alt="ทีมงานให้คำปรึกษาการจัดงานทำบุญบริษัท"
+					class="cd-intro-hero-photo">
 
 				<div class="cd-intro-float-card">
 					<div class="cd-intro-float-card-icon">🏢</div>
 					<div class="cd-intro-float-card-body">
 						<div class="cd-intro-float-card-title">รู้จักงานทำบุญออฟฟิศ</div>
-						<p class="cd-intro-float-card-desc">
-							งานทำบุญออฟฟิศหรือบริษัท คือการนิมนต์พระสงฆ์มาประกอบพิธีสงฆ์ในสถานที่ทำงาน
+						<p class="cd-intro-float-card-desc">งานทำบุญออฟฟิศหรือบริษัท
+							คือการนิมนต์พระสงฆ์มาประกอบพิธีสงฆ์ในสถานที่ทำงาน
 							เพื่อความเป็นสิริมงคลในการดำเนินธุรกิจ นิยมจัดเมื่อเปิดบริษัทใหม่
-							ย้ายสำนักงาน หรือทำบุญประจำปีของกิจการ เชื่อว่าจะช่วยเสริมดวงการงาน
-							สร้างขวัญกำลังใจให้พนักงาน และเป็นการแสดงความเคารพต่อสถานที่ทำงาน
-							ก่อนเริ่มดำเนินกิจการหรือช่วงเวลาสำคัญของบริษัท
-						</p>
+							ย้ายสำนักงาน หรือทำบุญประจำปีของกิจการ
+							เชื่อว่าจะช่วยเสริมดวงการงาน สร้างขวัญกำลังใจให้พนักงาน
+							และเป็นการแสดงความเคารพต่อสถานที่ทำงาน
+							ก่อนเริ่มดำเนินกิจการหรือช่วงเวลาสำคัญของบริษัท</p>
 					</div>
 				</div>
 			</div>
@@ -173,32 +183,51 @@
 	</section>
 
 	<%-- ========== KANOK DIVIDER ========== --%>
-<svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:48px;background:#FFF5F8;">
-    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F0A9C1" stroke-width="1" opacity="0.6"/>
+	<svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg"
+		preserveAspectRatio="none"
+		style="display: block; width: 100%; height: 48px; background: #FFF5F8;">
+    <line x1="0" y1="24" x2="1200" y2="24" stroke="#F0A9C1"
+			stroke-width="1" opacity="0.6" />
     <g fill="#E0577F" opacity="0.5">
-        <ellipse cx="600" cy="24" rx="18" ry="6" transform="rotate(-30 600 24)"/>
-        <ellipse cx="600" cy="24" rx="18" ry="6" transform="rotate(30 600 24)"/>
-        <ellipse cx="600" cy="24" rx="18" ry="6"/>
-        <circle  cx="600" cy="24" r="4"   fill="#D9A441"/>
-        <ellipse cx="480" cy="24" rx="14" ry="5" transform="rotate(-30 480 24)"/>
-        <ellipse cx="480" cy="24" rx="14" ry="5" transform="rotate(30 480 24)"/>
-        <circle  cx="480" cy="24" r="3"   fill="#D9A441"/>
-        <ellipse cx="720" cy="24" rx="14" ry="5" transform="rotate(-30 720 24)"/>
-        <ellipse cx="720" cy="24" rx="14" ry="5" transform="rotate(30 720 24)"/>
-        <circle  cx="720" cy="24" r="3"   fill="#D9A441"/>
-        <ellipse cx="360" cy="24" rx="10" ry="4" transform="rotate(-30 360 24)"/>
-        <ellipse cx="360" cy="24" rx="10" ry="4" transform="rotate(30 360 24)"/>
-        <circle  cx="360" cy="24" r="2.5" fill="#D9A441"/>
-        <ellipse cx="840" cy="24" rx="10" ry="4" transform="rotate(-30 840 24)"/>
-        <ellipse cx="840" cy="24" rx="10" ry="4" transform="rotate(30 840 24)"/>
-        <circle  cx="840" cy="24" r="2.5" fill="#D9A441"/>
-        <ellipse cx="240" cy="24" rx="7"  ry="3" transform="rotate(-30 240 24)"/>
-        <ellipse cx="240" cy="24" rx="7"  ry="3" transform="rotate(30 240 24)"/>
-        <ellipse cx="960" cy="24" rx="7"  ry="3" transform="rotate(-30 960 24)"/>
-        <ellipse cx="960" cy="24" rx="7"  ry="3" transform="rotate(30 960 24)"/>
+        <ellipse cx="600" cy="24" rx="18" ry="6"
+			transform="rotate(-30 600 24)" />
+        <ellipse cx="600" cy="24" rx="18" ry="6"
+			transform="rotate(30 600 24)" />
+        <ellipse cx="600" cy="24" rx="18" ry="6" />
+        <circle cx="600" cy="24" r="4" fill="#D9A441" />
+        <ellipse cx="480" cy="24" rx="14" ry="5"
+			transform="rotate(-30 480 24)" />
+        <ellipse cx="480" cy="24" rx="14" ry="5"
+			transform="rotate(30 480 24)" />
+        <circle cx="480" cy="24" r="3" fill="#D9A441" />
+        <ellipse cx="720" cy="24" rx="14" ry="5"
+			transform="rotate(-30 720 24)" />
+        <ellipse cx="720" cy="24" rx="14" ry="5"
+			transform="rotate(30 720 24)" />
+        <circle cx="720" cy="24" r="3" fill="#D9A441" />
+        <ellipse cx="360" cy="24" rx="10" ry="4"
+			transform="rotate(-30 360 24)" />
+        <ellipse cx="360" cy="24" rx="10" ry="4"
+			transform="rotate(30 360 24)" />
+        <circle cx="360" cy="24" r="2.5" fill="#D9A441" />
+        <ellipse cx="840" cy="24" rx="10" ry="4"
+			transform="rotate(-30 840 24)" />
+        <ellipse cx="840" cy="24" rx="10" ry="4"
+			transform="rotate(30 840 24)" />
+        <circle cx="840" cy="24" r="2.5" fill="#D9A441" />
+        <ellipse cx="240" cy="24" rx="7" ry="3"
+			transform="rotate(-30 240 24)" />
+        <ellipse cx="240" cy="24" rx="7" ry="3"
+			transform="rotate(30 240 24)" />
+        <ellipse cx="960" cy="24" rx="7" ry="3"
+			transform="rotate(-30 960 24)" />
+        <ellipse cx="960" cy="24" rx="7" ry="3"
+			transform="rotate(30 960 24)" />
     </g>
-    <line x1="0" y1="6"  x2="1200" y2="6"  stroke="#F0A9C1" stroke-width="0.5" opacity="0.35"/>
-    <line x1="0" y1="42" x2="1200" y2="42" stroke="#F0A9C1" stroke-width="0.5" opacity="0.35"/>
+    <line x1="0" y1="6" x2="1200" y2="6" stroke="#F0A9C1"
+			stroke-width="0.5" opacity="0.35" />
+    <line x1="0" y1="42" x2="1200" y2="42" stroke="#F0A9C1"
+			stroke-width="0.5" opacity="0.35" />
 </svg>
 
 	<%-- ========== MAIN CONTENT ========== --%>
@@ -217,7 +246,6 @@
 			<div class="cd-package-grid">
 				<c:set var="imageIndex" value="1" />
 				<c:forEach items="${packages}" var="p">
-                    <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
 					<c:if test="${p.optionType != 'กรอกความต้องการเบื้องต้น'}">
 						<div class="cd-package-option">
 							<div class="cd-package-img-container">
@@ -226,7 +254,6 @@
 									alt="${p.optionType}">
 							</div>
 
-                            <%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
 							<div class="cd-package-option-name">${p.optionType}</div>
 							<div class="cd-package-option-price">
 								<fmt:formatNumber value="${p.basePrice}" type="number"
@@ -235,31 +262,34 @@
 							</div>
 
 							<%-- ========== รายละเอียดแพ็กเกจ (ซ่อน/แสดงได้) ========== --%>
-							<div id="detail-${p.ceremonyId}" class="cd-detail-collapsed"
+							<%-- ✅ แก้ไข: p.ceremonyId -> p.packageId (ตรงกับ Package entity) --%>
+							<div id="detail-${p.packageId}" class="cd-detail-collapsed"
 								style="width: 100%;">
 								<div class="cd-pkg-item-grid">
 									<c:choose>
-	                                    <c:when test="${empty p.ceremonyItems}">
-	                                        <span class="cd-pkg-item-empty">รายละเอียดจะจัดเตรียมตามความต้องการของท่าน</span>
-	                                    </c:when>
-	                                    <c:otherwise>
-	                                        <c:forEach items="${p.ceremonyItems}" var="ci">
-	                                            <span class="cd-pkg-item-name">${ci.item.itemName}</span>
-	                                            <span class="cd-pkg-item-label">จำนวน</span>
-	                                            <span class="cd-pkg-item-qty">${ci.quantity} ${ci.item.unit}</span>
-	                                        </c:forEach>
-	                                    </c:otherwise>
-	                                </c:choose>
+										<%-- ✅ แก้ไข: p.ceremonyItems -> p.packageItems (ตรงกับ Package entity) --%>
+										<c:when test="${empty p.packageItems}">
+											<span class="cd-pkg-item-empty">รายละเอียดจะจัดเตรียมตามความต้องการของท่าน</span>
+										</c:when>
+										<c:otherwise>
+											<c:forEach items="${p.packageItems}" var="ci">
+												<span class="cd-pkg-item-name">${ci.item.itemName}</span>
+												<span class="cd-pkg-item-label">จำนวน</span>
+												<span class="cd-pkg-item-qty">${ci.quantity}
+													${ci.item.unit}</span>
+											</c:forEach>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 							<button type="button" class="cd-btn-view-detail"
-								onclick="toggleDetail('${p.ceremonyId}', this)">
+								data-package-id="${p.packageId}">
 								ดูรายละเอียดแพ็กเกจนี้ ▾</button>
 
-							<%-- ปุ่มจอง --%>
-							<a
-								href="${pageContext.request.contextPath}/booking3?ceremonyId=${p.ceremonyId}"
-								class="cd-btn-select-package">เลือกจองแพ็กเกจนี้</a>
+							<%-- ปุ่มจอง — ✅ แก้ไข: ceremonyId -> packageId --%>
+
+							href="${pageContext.request.contextPath}/booking3?packageId=${p.packageId}"
+							class="cd-btn-select-package">เลือกจองแพ็กเกจนี้</a>
 
 							<c:set var="imageIndex" value="${imageIndex + 1}" />
 						</div>
@@ -286,11 +316,13 @@
 
 				<li>✅ มัคนายกดำเนินพิธี</li>
 
-				<li>
-					✅ เลือกสินค้าและบริการเพิ่มเติมได้ เช่น ชุดสังฆทาน ชุดปิ่นโต
+				<li>✅ เลือกสินค้าและบริการเพิ่มเติมได้ เช่น ชุดสังฆทาน
+					ชุดปิ่นโต
 					<div class="cd-important-note">
-						<strong>หมายเหตุ:</strong> ชุดสังฆทานที่รวมอยู่ในแพ็กเกจเป็นชุดมาตรฐานราคา
-						ตามจำนวนพระสงฆ์ของแพ็กเกจที่เลือก หากลูกค้าต้องการเปลี่ยนเป็นชุดสังฆทานราคาอื่นที่นอกเหนือจากชุดมาตรฐานนี้
+						<strong>หมายเหตุ:</strong>
+						ชุดสังฆทานที่รวมอยู่ในแพ็กเกจเป็นชุดมาตรฐานราคา
+						ตามจำนวนพระสงฆ์ของแพ็กเกจที่เลือก
+						หากลูกค้าต้องการเปลี่ยนเป็นชุดสังฆทานราคาอื่นที่นอกเหนือจากชุดมาตรฐานนี้
 						ทางร้านจะคิดค่าใช้จ่ายส่วนต่างเพิ่มเติมจากราคาแพ็กเกจที่ระบุไว้
 					</div>
 				</li>
@@ -312,13 +344,14 @@
 			<div class="cd-footer-note">
 				<span>ไม่อยากเลือกแพ็กเกจสำเร็จรูป? กรอกรายละเอียดเองได้</span>
 			</div>
-			<a
-				href="${pageContext.request.contextPath}/booking3?ceremonyId=${ceremony.ceremonyId}&custom=true"
-				class="cd-btn-book">จองเเบบระบุเอง (ทำบุญบริษัท)</a>
+			<%-- ✅ แก้ไข: ceremony.ceremonyId -> ceremony.packageId --%>
+
+			href="${pageContext.request.contextPath}/booking3?packageId=${ceremony.packageId}&custom=true"
+			class="cd-btn-book">จองเเบบระบุเอง (ทำบุญบริษัท)</a>
 		</div>
 	</div>
 
-	<%-- ========== FOOTER (คัดลอกจาก home.jsp ให้ตรงกันเป๊ะ: แบรนด์ + โซเชียล + ติดต่อเรา) ========== --%>
+	<%-- ========== FOOTER ========== --%>
 	<footer class="site-footer">
 		<div class="footer-top">
 			<svg viewBox="0 0 1200 8" xmlns="http://www.w3.org/2000/svg"
@@ -355,7 +388,6 @@
 
 			<div class="footer-col footer-contact-col">
 				<h4 class="footer-heading">ติดต่อเรา</h4>
-				<%-- TODO: ใส่เบอร์โทร / LINE OA / อีเมลจริงของร้านแทนที่ตรงนี้ --%>
 				<p>📞 โทร. 08X-XXX-XXXX</p>
 				<p>💬 LINE OA: @boonmee</p>
 				<p>✉️ boonmee.booking@gmail.com</p>
@@ -364,28 +396,6 @@
 		</div>
 	</footer>
 
-	<script>
-		function toggleDetail(id, btn) {
-			var el = document.getElementById('detail-' + id);
-			el.classList.toggle('cd-detail-collapsed');
-			btn.textContent = el.classList.contains('cd-detail-collapsed') ? 'ดูรายละเอียดแพ็กเกจนี้ ▾'
-					: 'ซ่อนรายละเอียด ▴';
-		}
-
-		document.addEventListener('DOMContentLoaded', function() {
-			var pill = document.querySelector('.user-profile-pill');
-			var menu = document.getElementById('dropdownMenu');
-			if (pill && menu) {
-				pill.addEventListener('click', function(e) {
-					e.stopPropagation();
-					menu.classList.toggle('show');
-				});
-				document.addEventListener('click', function() {
-					menu.classList.remove('show');
-				});
-			}
-		});
-	</script>
 
 	<script
 		src="${pageContext.request.contextPath}/static/js/ceremonyDetail.js"></script>

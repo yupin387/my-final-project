@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.springboot.model.BookingForm;
-import com.springboot.model.Ceremony;
+import com.springboot.model.Package;
 import com.springboot.model.Review;
 import com.springboot.service.BookingService;
-import com.springboot.service.CeremonyService;
+import com.springboot.service.PackageService;
 import com.springboot.service.ReviewService;
 
 import jakarta.servlet.http.HttpSession;
@@ -37,12 +37,11 @@ public class ReviewController {
     @Autowired
     private BookingService bookingService;
 
-    // เพิ่มเข้ามาเพื่อดึง ceremonyTypes ให้ dropdown "บริการ/แพ็กเกจ" ใน navbar
-    // และเพื่อ map ระหว่าง ceremonyType (string) กับ representativeId ตอนสร้างเมนู
-    @Autowired
-    private CeremonyService ceremonyService;
 
-    // 1. หน้าเขียนรีวิว
+    @Autowired
+    private PackageService packageService;
+
+    // หน้าเขียนรีวิว: ต้องล็อกอิน + งานต้อง Completed + ยังไม่เคยรีวิว ไม่งั้น redirect ออก
     @GetMapping("/review/write/{bookingId}")
     public String writeReview(@PathVariable String bookingId, Model model, HttpSession session) {
         if (session.getAttribute("user") == null) return "redirect:/loginMember";
@@ -58,6 +57,7 @@ public class ReviewController {
         return "review";
     }
 
+    // บันทึกรีวิว: ผูกกับ booking, ตั้งวันที่, อัปโหลดรูปหลายไฟล์ (เก็บชื่อไฟล์คั่นด้วย comma) แล้ว redirect ไปหน้า /reviews
     @PostMapping("/review/save")
     public String save(@ModelAttribute Review review,
                        @RequestParam String bookingId,
@@ -93,7 +93,7 @@ public class ReviewController {
         return "redirect:/reviews";
     }
 
-    // 3. หน้าดูรีวิวของประเภทงานนั้นๆ (แยกตาม ceremonyId เดี่ยว ๆ)
+    // หน้าดูรีวิวตามแพ็กเกจ (ceremonyId): กรองตามดาว, แบ่งหน้าละ 9, คำนวณคะแนนเฉลี่ย + จำนวนแต่ละดาว
     @GetMapping("/reviews/{ceremonyId}")
     public String viewReviewsByCeremony(@PathVariable int ceremonyId,
                                          @RequestParam(value = "rating", required = false) Integer rating,
@@ -102,7 +102,7 @@ public class ReviewController {
         List<Review> allReviews = reviewService.getAllReviews();
 
         List<Review> reviewsForStats = allReviews.stream()
-            .filter(r -> r.getBookingForm().getCeremony().getCeremonyId() == ceremonyId)
+            .filter(r -> r.getBookingForm().getPackageEntity().getPackageId() == ceremonyId)
             .collect(Collectors.toList());
 
         List<Review> reviews = reviewsForStats;
@@ -140,7 +140,7 @@ public class ReviewController {
         return "viewReview";
     }
 
-    // 4. หน้าดูรีวิวทั้งหมด (รวมทุกงาน) + รองรับกรองตามประเภทงานผ่าน query param "type"
+    // หน้าดูรีวิวทั้งหมด: กรองตามประเภทงาน (type) และดาว (rating) ได้, แบ่งหน้าละ 9, คำนวณคะแนนเฉลี่ย + จำนวนแต่ละดาว
     @GetMapping("/reviews")
     public String viewAllReviews(
             @RequestParam(value = "type", required = false) String type,
@@ -155,11 +155,11 @@ public class ReviewController {
             String typeTrimmed = type.trim();
             reviewsForStats = reviewsForStats.stream()
                 .filter(r -> r.getBookingForm() != null
-                        && r.getBookingForm().getCeremony() != null
+                        && r.getBookingForm().getPackageEntity() != null
                         && typeTrimmed.equals(
-                            r.getBookingForm().getCeremony().getCeremonyType() == null
+                            r.getBookingForm().getPackageEntity().getPackageType() == null
                                 ? ""
-                                : r.getBookingForm().getCeremony().getCeremonyType().trim()))
+                                : r.getBookingForm().getPackageEntity().getPackageType().trim()))
                 .collect(Collectors.toList());
         }
 
@@ -202,28 +202,28 @@ public class ReviewController {
         return "viewReview";
     }
 
-//จัดกลุ่มพิธีตาม ceremonyType แล้วเลือก ตัวแทน (representative) ที่ราคาถูกที่สุดของแต่ละกลุ่ม เพื่อใช้เป็นลิงก์ไปหน้า dropdown "บริการ/แพ็กเกจ"
+    // จัดกลุ่มแพ็กเกจตาม packageType แล้วเลือกตัวแทนที่ราคาถูกที่สุดของแต่ละกลุ่ม ไว้ทำลิงก์ใน footer/dropdown "บริการ/แพ็กเกจ"
     private List<Map<String, Object>> buildCeremonyTypesForFooter() {
-        List<Ceremony> all = ceremonyService.getAllCeremonies();
-        Map<String, List<Ceremony>> grouped = all.stream()
+        List<Package> all = packageService.getAllPackages();
+        Map<String, List<Package>> grouped = all.stream()
             .collect(Collectors.groupingBy(
-                c -> c.getCeremonyType() == null ? "" : c.getCeremonyType().trim(),
+                c -> c.getPackageType() == null ? "" : c.getPackageType().trim(),
                 LinkedHashMap::new,
                 Collectors.toList()
             ));
         List<Map<String, Object>> result = new ArrayList<>();
-        for (Map.Entry<String, List<Ceremony>> entry : grouped.entrySet()) {
-            List<Ceremony> packages = entry.getValue();
-            packages.sort(Comparator.comparingDouble(Ceremony::getBasePrice));
-            Ceremony representative = packages.get(0);
+        for (Map.Entry<String, List<Package>> entry : grouped.entrySet()) {
+            List<Package> packages = entry.getValue();
+            packages.sort(Comparator.comparingDouble(Package::getBasePrice));
+            Package representative = packages.get(0);
 
             Map<String, Object> m = new LinkedHashMap<>();
             m.put("mainName", entry.getKey());
-            m.put("representativeId", representative.getCeremonyId());
+            m.put("representativeId", representative.getPackageId());
             result.add(m);
         }
         return result;
     }
 
-    //======================
+  
 }

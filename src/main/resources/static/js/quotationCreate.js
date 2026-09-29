@@ -1,5 +1,12 @@
 // ===== quotationCreate.js =====
 
+// ค่าจาก server (JSP ส่งมาทาง #pageConfig)
+(function readPageConfig() {
+    const cfg = document.getElementById('pageConfig');
+    window.CEREMONY_MONK_COUNT = cfg ? (parseInt(cfg.dataset.monkCount, 10) || 0) : 0;
+    window.IS_CUSTOM_REQUEST   = cfg ? cfg.dataset.customRequest === 'true' : false;
+})();
+
 const CATEGORY_LABELS = {
     'อุปกรณ์พิธีกรรม': 'อุปกรณ์พิธีกรรม',
     'ภัตตาหาร':        'ภัตตาหารปิ่นโต',
@@ -42,7 +49,6 @@ function buildQtyCell(value, inputName, isEditable) {
 }
 
 // สลับโหมด: กดปากกา -> โชว์ปุ่ม -/+ , กดซ้ำ -> กลับเป็นตัวเลขเฉยๆ
-// แก้แค่ attribute data-mode บน wrapper แล้วปล่อยให้ CSS เป็นคนคุมการโชว์/ซ่อนทั้งหมด
 function toggleQtyEdit(btn) {
     const wrapper = btn.closest('.qty-wrapper');
     const isEditing = wrapper.getAttribute('data-mode') === 'edit';
@@ -138,8 +144,7 @@ function renderItemPicker(category) {
         count++;
         const isExist   = existingIds.has(itemId);
         const isChecked = selectedItemIds.has(itemId);
-        
-        // กำหนดให้โชว์รายละเอียดเฉพาะหมวดที่กำหนดไว้เท่านั้น
+
         const showDesc  = !!itemDesc && allowDescForCategory;
 
         const card = document.createElement('label');
@@ -159,7 +164,6 @@ function renderItemPicker(category) {
                 <div class="item-pick-header">
                     <span class="item-pick-name">${itemName}</span>
                 </div>
-                <!-- แสดง Detail เฉพาะหมวดที่ผ่านเงื่อนไข showDesc -->
                 ${showDesc ? `<span class="item-pick-desc">${itemDesc}</span>` : ''}
                 <div class="item-pick-meta">
                     <span class="item-pick-unit">หน่วย: ${unit}</span>
@@ -256,10 +260,9 @@ function addSelectedItemsToTable() {
 
     const dataStore = document.getElementById('itemDataStore');
 
-    // โชว์รายละเอียด (itemDetail) เฉพาะหมวดสังฆทานกับภัตตาหาร (ปิ่นโต) เท่านั้น หมวดอื่นไม่ต้องโชว์
     const allowDescForCategory = CATEGORIES_WITH_DESC.includes(currentModalCategory);
 
-    // กำหนดให้ "ทุกรายการที่เพิ่มผ่านปุ่ม +" สามารถแก้ไขจำนวนได้เสมอ
+    // ทุกรายการที่เพิ่มผ่านปุ่ม + สามารถแก้ไขจำนวนได้เสมอ
     const canEditQty = true;
 
     selectedItemIds.forEach(itemId => {
@@ -313,39 +316,50 @@ function reIndexRows() {
     });
 }
 
+// คำนวณยอดรวม + แสดงรายชื่อ "รายการเพิ่มเติม" ในวงเล็บใต้ label (เหมือนหน้ารายละเอียดใบเสนอราคา)
 function calculateGrandTotal() {
     let packageTotal = 0.0;
     let extraTotal = 0.0;
+    const extraItemNames = [];
 
     const discountEl = document.getElementById('discountValue');
     const discount = discountEl ? (parseFloat(discountEl.value) || 0) : 0;
     const isCustomRequest = window.IS_CUSTOM_REQUEST === true;
 
-    document.querySelectorAll('.static-row, .dynamic-row').forEach(row => {
-        if (row.classList.contains('package-included-row')) return;
+    document.querySelectorAll('#mainQuotationTable tbody tr').forEach(row => {
+        if (row.classList.contains('package-included-row') || row.classList.contains('group-row')) return;
 
         const qInput = row.querySelector('input[name="extraQtys"], input[name="bookingQtys"]');
         const pInput = row.querySelector('input[name="extraPrices"], input[name="bookingPrices"]');
+        if (!qInput || !pInput) return;
 
-        if (qInput && pInput) {
-            const qty      = parseFloat(qInput.value) || 0;
-            const price    = parseFloat(pInput.value) || 0;
-            const subtotal = qty * price;
+        const qty      = parseFloat(qInput.value) || 0;
+        const price    = parseFloat(pInput.value) || 0;
+        const subtotal = qty * price;
 
-            const subtotalSpan = row.querySelector('.subtotal');
-            if (subtotalSpan) {
-                subtotalSpan.innerText = subtotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-            }
+        const subtotalSpan = row.querySelector('.subtotal');
+        if (subtotalSpan) {
+            subtotalSpan.innerText = subtotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+        }
 
-            const parentTbody = row.closest('tbody');
-            const isManuallyAddedExtra = parentTbody && parentTbody.id === 'group-extra';
+        const parentTbody = row.closest('tbody');
+        const isManuallyAddedExtra = parentTbody && parentTbody.id === 'group-extra';
 
-            if (row.classList.contains('package-main-row')) {
-                packageTotal += subtotal;
-            } else if (isCustomRequest && !isManuallyAddedExtra) {
-                packageTotal += subtotal;
-            } else {
-                extraTotal += subtotal;
+        if (row.classList.contains('package-main-row')) {
+            packageTotal += subtotal;
+        } else if (isCustomRequest && !isManuallyAddedExtra) {
+            // กรอกความต้องการเอง: รายการที่มาจากคำตอบ ถือเป็น "รายการหลัก" ไม่ใช่ของเพิ่มเติม
+            packageTotal += subtotal;
+        } else {
+            extraTotal += subtotal;
+
+            // เก็บชื่อรายการ (ข้ามรายการที่ฟรี/รวมในแพ็กเกจ ซึ่งใช้ class text-danger)
+            const isFreeItem = !!row.querySelector('.text-danger');
+            if (!isFreeItem) {
+                const nameCell = row.children[1];
+                const nameText = (nameCell && nameCell.childNodes[0]) ? nameCell.childNodes[0].textContent.trim() : '';
+                // กันชื่อซ้ำ (เช่น สังฆทานชุดเดียวกันที่แยกเป็น 2 แถว)
+                if (nameText && extraItemNames.indexOf(nameText) === -1) extraItemNames.push(nameText);
             }
         }
     });
@@ -355,6 +369,9 @@ function calculateGrandTotal() {
 
     const summaryExtra = document.getElementById('summaryExtra');
     if (summaryExtra) summaryExtra.innerText = extraTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
+
+    const extraDetailDiv = document.getElementById('extraItemsDetail');
+    if (extraDetailDiv) extraDetailDiv.innerText = extraItemNames.length ? ('(' + extraItemNames.join(', ') + ')') : '';
 
     let grandTotal = packageTotal + extraTotal - discount;
     if (grandTotal < 0) grandTotal = 0;

@@ -12,18 +12,17 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
     
+    // ดึงรีวิวทั้งหมดในระบบ
     public List<Review> getAllReviews() {
         return reviewRepository.findAll();
     }
  
+    // บันทึกรีวิวใหม่
     @Transactional
     public void saveReview(Review review) { reviewRepository.save(review); }
  
+    // เช็คว่าการจองนี้เคยรีวิวแล้วหรือยัง
     public boolean hasAlreadyReviewed(String bookingId) {
         return reviewRepository.findByBookingForm_BookingId(bookingId) != null;
-    }
-
-    public List<Review> getTop2RecentReviews() {
-        return reviewRepository.findTop2ByOrderByReviewIdDesc();
     }
 }

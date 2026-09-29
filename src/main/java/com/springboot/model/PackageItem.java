@@ -4,22 +4,22 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(
-    name = "ceremonyitem",
+    name = "packageitem",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"ceremonyid", "itemid"})
+        @UniqueConstraint(columnNames = {"packageid", "itemid"})
     }
 )
-public class CeremonyItem {
+public class PackageItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ceremonyitemid")
-    private int ceremonyItemId;
+    @Column(name = "packageitemid")
+    private int packageItemId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ceremonyid", nullable = false)
-    private Ceremony ceremony;
+    @JoinColumn(name = "packageid", nullable = false)
+    private Package packageEntity;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,32 +32,32 @@ public class CeremonyItem {
 
 
 
-    public CeremonyItem() {
+    public PackageItem() {
     }
 
 
-    public CeremonyItem(Ceremony ceremony, Item item, int quantity) {
-        this.ceremony = ceremony;
+    public PackageItem(Package packageEntity, Item item, int quantity) {
+        this.packageEntity = packageEntity;
         this.item = item;
         this.quantity = quantity;
     }
 
 
 
-    public int getCeremonyItemId() {
-        return ceremonyItemId;
+    public int getPackageItemId() {
+        return packageItemId;
     }
 
-    public void setCeremonyItemId(int ceremonyItemId) {
-        this.ceremonyItemId = ceremonyItemId;
+    public void setPackageItemId(int packageItemId) {
+        this.packageItemId = packageItemId;
     }
 
-    public Ceremony getCeremony() {
-        return ceremony;
+    public Package getPackageEntity() {
+        return packageEntity;
     }
 
-    public void setCeremony(Ceremony ceremony) {
-        this.ceremony = ceremony;
+    public void setPackageEntity(Package packageEntity) {
+        this.packageEntity = packageEntity;
     }
 
     public Item getItem() {

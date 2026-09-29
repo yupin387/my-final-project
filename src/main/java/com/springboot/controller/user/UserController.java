@@ -16,18 +16,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.springboot.model.Ceremony;
-import com.springboot.model.CeremonyItem;
+import com.springboot.model.Package;
+import com.springboot.model.PackageItem;
 import com.springboot.model.Item;
 import com.springboot.model.Member;
 import com.springboot.service.AuspiciousCalendarService;
 import com.springboot.service.BookingService;
-import com.springboot.service.CeremonyService;
+import com.springboot.service.PackageService;
 import com.springboot.service.MemberService;
 import com.springboot.service.ReviewService;
 
-// ===== Controller หลักฝั่งผู้ใช้ทั่วไป (User/Guest) =====
-// จัดการ: หน้าแรก, สมัครสมาชิก, ปฏิทิน (ทั่วไป/ล้านนา + วันฤกษ์ดี), รายละเอียดพิธี/แพ็กเกจ
+
 @Controller
 public class UserController {
 
@@ -36,7 +35,7 @@ public class UserController {
     private BookingService bookingService;
 
     @Autowired
-    private CeremonyService ceremonyService;
+    private PackageService packageService;
 
     @Autowired
     private AuspiciousCalendarService auspiciousCalendarService;
@@ -124,7 +123,7 @@ public class UserController {
     // แสดงหน้าปฏิทินล้านนา
     @GetMapping("/lanna-calendar")
     public String lannaCalendarPage(Model model) {
-        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        model.addAttribute("ceremonyTypes", buildPackageTypes());
         return "lannaCalendar";
     }
 
@@ -138,7 +137,7 @@ public class UserController {
     // แสดงหน้าแรกของเว็บไซต์
     @GetMapping("/home")
     public String home(Model model) {
-        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        model.addAttribute("ceremonyTypes", buildPackageTypes());
         return "home";
     }
 
@@ -146,7 +145,7 @@ public class UserController {
     // จำนวนการจองต่อวัน, จำนวนทีมงาน, ข้อมูลวันฤกษ์ดี และตารางสรุปวันฤกษ์ดีรายเดือน
     @GetMapping("/calendar")
     public String calendarPage(Model model) {
-        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        model.addAttribute("ceremonyTypes", buildPackageTypes());
 
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
         List<String> confirmedBookingDates = bookingService.getAllBookings().stream()
@@ -173,36 +172,36 @@ public class UserController {
         return "calendar";
     }
 
-    // จัดกลุ่มพิธีทั้งหมดตาม "ประเภทพิธี" (ceremonyType) แล้วเลือกแพ็กเกจราคาถูกสุดในแต่ละกลุ่มมาเป็นตัวแทน
+    // จัดกลุ่มแพ็กเกจทั้งหมดตาม "ประเภทพิธี" (packageType) แล้วเลือกแพ็กเกจราคาถูกสุดในแต่ละกลุ่มมาเป็นตัวแทน
     // ใช้สำหรับแสดงเมนู "บริการ/แพ็กเกจ" ใน navbar และหน้าอื่นๆ
-    private List<Map<String, Object>> buildCeremonyTypes() {
-        List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
+    private List<Map<String, Object>> buildPackageTypes() {
+        List<Package> packages = packageService.getAllPackages();
 
-        Map<String, List<Ceremony>> grouped = ceremonies.stream()
+        Map<String, List<Package>> grouped = packages.stream()
             .collect(Collectors.groupingBy(
-                c -> c.getCeremonyType() == null ? "" : c.getCeremonyType().trim(),
+                c -> c.getPackageType() == null ? "" : c.getPackageType().trim(),
                 LinkedHashMap::new,
                 Collectors.toList()
             ));
 
-        List<Map<String, Object>> ceremonyTypes = new ArrayList<>();
-        for (Map.Entry<String, List<Ceremony>> entry : grouped.entrySet()) {
-            List<Ceremony> packages = entry.getValue();
-            packages.sort(Comparator.comparingDouble(Ceremony::getBasePrice));
-            Ceremony representative = packages.get(0);
+        List<Map<String, Object>> packageTypes = new ArrayList<>();
+        for (Map.Entry<String, List<Package>> entry : grouped.entrySet()) {
+            List<Package> group = entry.getValue();
+            group.sort(Comparator.comparingDouble(Package::getBasePrice));
+            Package representative = group.get(0);
 
             String mainName = entry.getKey();
             String image = TYPE_IMAGE_MAP.getOrDefault(mainName, DEFAULT_TYPE_IMAGE);
 
             Map<String, Object> typeMap = new LinkedHashMap<>();
             typeMap.put("mainName", mainName);
-            typeMap.put("representativeId", representative.getCeremonyId());
+            typeMap.put("representativeId", representative.getPackageId());
             typeMap.put("image", image);
-            typeMap.put("priceFrom", packages.get(0).getBasePrice());
-            typeMap.put("packageCount", packages.size());
-            ceremonyTypes.add(typeMap);
+            typeMap.put("priceFrom", group.get(0).getBasePrice());
+            typeMap.put("packageCount", group.size());
+            packageTypes.add(typeMap);
         }
-        return ceremonyTypes;
+        return packageTypes;
     }
 
     // ตัดคำนำหน้า "วัน" ออกจากชื่อฤกษ์ (เช่น "วันชัยโชค" -> "ชัยโชค") เพื่อใช้เทียบ label แบบไม่สนใจคำนำหน้า
@@ -272,7 +271,7 @@ public class UserController {
         return result;
     }
 
-    // แสดงหน้ารายละเอียดพิธี/แพ็กเกจตาม ceremonyId ที่เลือก
+    // แสดงหน้ารายละเอียดพิธี/แพ็กเกจตาม packageId ที่เลือก
     // แยกรายการอุปกรณ์/บริการ/ปิ่นโต/สังฆทานตามประเภท แล้วเลือก view ที่จะ render
     // ตาม "ประเภทพิธีหลัก" (ทำบุญบ้าน / ขึ้นบ้านใหม่ / ทำบุญบริษัทหรือออฟฟิศ)
     @GetMapping("/ceremony/detail/{id}")
@@ -281,16 +280,16 @@ public class UserController {
             @RequestParam(value = "dates", required = false) String dates,
             Model model) {
 
-        Ceremony ceremony = ceremonyService.getCeremonyById(id);
-        if (ceremony == null) return "redirect:/home";
+        Package pkg = packageService.getPackageById(id);
+        if (pkg == null) return "redirect:/home";
         
-        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        model.addAttribute("ceremonyTypes", buildPackageTypes());
 
-        String mainType = ceremony.getCeremonyType() == null ? "" : ceremony.getCeremonyType().trim();
+        String mainType = pkg.getPackageType() == null ? "" : pkg.getPackageType().trim();
 
-        List<Ceremony> siblingPackages = ceremonyService.getAllCeremonies().stream()
-            .filter(c -> mainType.equals(c.getCeremonyType() == null ? "" : c.getCeremonyType().trim()))
-            .sorted(Comparator.comparingDouble(Ceremony::getBasePrice))
+        List<Package> siblingPackages = packageService.getAllPackages().stream()
+            .filter(c -> mainType.equals(c.getPackageType() == null ? "" : c.getPackageType().trim()))
+            .sorted(Comparator.comparingDouble(Package::getBasePrice))
             .collect(Collectors.toList());
 
         model.addAttribute("mainType", mainType);
@@ -301,9 +300,9 @@ public class UserController {
         List<Item> pintoItems       = new ArrayList<>();
         List<Item> sangkhathanItems = new ArrayList<>();
 
-        if (ceremony.getCeremonyItems() != null) {
-            for (CeremonyItem ci : ceremony.getCeremonyItems()) {
-                Item item = ci.getItem();
+        if (pkg.getPackageItems() != null) {
+            for (PackageItem pi : pkg.getPackageItems()) {
+                Item item = pi.getItem();
                 if (item != null && item.getItemType() != null) {
                     String typeName = item.getItemType().getItemTypeName();
 
@@ -320,7 +319,7 @@ public class UserController {
             }
         }
 
-        model.addAttribute("ceremony",         ceremony);
+        model.addAttribute("ceremony",         pkg);
         model.addAttribute("equipments",       equipmentList);
         model.addAttribute("services",         serviceList);
         model.addAttribute("pintoItems",       pintoItems);

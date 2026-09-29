@@ -85,7 +85,6 @@ public class AuspiciousCalendarService {
                     for (Object po : periods) {
                         Period p = (Period) po;
                         String rawDate = p.getStart().toString();
-                        // รองรับทั้งกรณี date-only (yyyyMMdd) และ date-time (yyyyMMdd'T'HHmmss...)
                         String datePart = rawDate.length() >= 8 ? rawDate.substring(0, 8) : rawDate;
                         LocalDate date = LocalDate.parse(datePart, DateTimeFormatter.BASIC_ISO_DATE);
                         String dateKey = date.toString();

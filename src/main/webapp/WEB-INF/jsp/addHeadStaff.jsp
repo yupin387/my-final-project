@@ -10,46 +10,7 @@
    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addHeadStaff.css?v=2">
-    <style>
-        .error-message {
-            color: #dc3545;
-            font-size: 11px;
-            margin-top: 4px;
-            display: none;
-            font-weight: normal;
-        }
-        .field-error {
-            color: #c62828;
-            font-size: 11px;
-            display: block;
-            margin-top: 4px;
-        }
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .input-wrapper input {
-            width: 100%;
-            padding-right: 45px;
-        }
-        .toggle-visibility {
-            position: absolute;
-            right: 15px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #888;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-        }
-        .toggle-visibility:hover {
-            color: #333;
-        }
-    </style>
+
 </head>
 <body>
 

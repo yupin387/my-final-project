@@ -8,119 +8,106 @@ import java.util.List;
 @Table(name = "item")
 public class Item {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "itemid")
-    private int itemId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "itemid")
+	private int itemId;
 
-    @Column(name = "itemname", nullable = false, length = 100)
-    private String itemName;
+	@Column(name = "itemname", nullable = false, length = 100)
+	private String itemName;
 
-    @Column(name = "itemdetail")
-    private String itemDetail;
+	@Column(name = "itemdetail")
+	private String itemDetail;
 
-    @Column(name = "unit", nullable = false, length = 20)
-    private String unit;
+	@Column(name = "unit", nullable = false, length = 20)
+	private String unit;
 
-    @Column(name = "priceperunit", nullable = false)
-    private double pricePerUnit;
+	@Column(name = "priceperunit", nullable = false)
+	private double pricePerUnit;
 
-    @Column(name = "isactive")
-    private Boolean isActive = true;
+	@Column(name = "isactive")
+	private Boolean isActive = true;
 
+	@ManyToOne
+	@JoinColumn(name = "itemtypeid", nullable = false)
+	private ItemType itemType;
 
-    @ManyToOne
-    @JoinColumn(name = "itemtypeid", nullable = false)
-    private ItemType itemType;
+	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PackageItem> packageItems = new ArrayList<>();
 
-   
+	public Item() {
+	}
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CeremonyItem> ceremonyItems = new ArrayList<>();
+	public Item(String itemName, String itemDetail, String unit, double pricePerUnit, ItemType itemType) {
 
+		this.itemName = itemName;
+		this.itemDetail = itemDetail;
+		this.unit = unit;
+		this.pricePerUnit = pricePerUnit;
+		this.itemType = itemType;
+	}
 
+	public int getItemId() {
+		return itemId;
+	}
 
-    public Item() {
-    }
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
+	}
 
-  
-    public Item(
-            String itemName,
-            String itemDetail,
-            String unit,
-            double pricePerUnit,
-            ItemType itemType) {
+	public String getItemName() {
+		return itemName;
+	}
 
-        this.itemName = itemName;
-        this.itemDetail = itemDetail;
-        this.unit = unit;
-        this.pricePerUnit = pricePerUnit;
-        this.itemType = itemType;
-    }
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
 
+	public String getItemDetail() {
+		return itemDetail;
+	}
 
+	public void setItemDetail(String itemDetail) {
+		this.itemDetail = itemDetail;
+	}
 
-    public int getItemId() {
-        return itemId;
-    }
+	public String getUnit() {
+		return unit;
+	}
 
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
-    }
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
 
-    public String getItemName() {
-        return itemName;
-    }
+	public double getPricePerUnit() {
+		return pricePerUnit;
+	}
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
+	public void setPricePerUnit(double pricePerUnit) {
+		this.pricePerUnit = pricePerUnit;
+	}
 
-    public String getItemDetail() {
-        return itemDetail;
-    }
+	public Boolean getIsActive() {
+		return isActive;
+	}
 
-    public void setItemDetail(String itemDetail) {
-        this.itemDetail = itemDetail;
-    }
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 
-    public String getUnit() {
-        return unit;
-    }
+	public ItemType getItemType() {
+		return itemType;
+	}
 
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
+	public void setItemType(ItemType itemType) {
+		this.itemType = itemType;
+	}
 
-    public double getPricePerUnit() {
-        return pricePerUnit;
-    }
+	public List<PackageItem> getPackageItems() {
+		return packageItems;
+	}
 
-    public void setPricePerUnit(double pricePerUnit) {
-        this.pricePerUnit = pricePerUnit;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public ItemType getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(ItemType itemType) {
-        this.itemType = itemType;
-    }
-
-    public List<CeremonyItem> getCeremonyItems() {
-        return ceremonyItems;
-    }
-
-    public void setCeremonyItems(List<CeremonyItem> ceremonyItems) {
-        this.ceremonyItems = ceremonyItems;
-    }
+	public void setPackageItems(List<PackageItem> packageItems) {
+		this.packageItems = packageItems;
+	}
 }

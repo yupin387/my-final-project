@@ -7,14 +7,13 @@ import jakarta.persistence.*;
 @IdClass(BookingFormDetailId.class)
 public class BookingFormDetail {
 
-
 	@Id
 	@ManyToOne(fetch = FetchType.EAGER) // เพิ่มการดึงแบบ EAGER เพื่อให้คำถามโชว์แน่นอน
 	@JoinColumn(name = "bookingid", referencedColumnName = "bookingid")
 	private BookingForm bookingForm;
 
 	@Id
-	@ManyToOne(fetch = FetchType.EAGER) 
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "questionsid", referencedColumnName = "questionsid")
 	private QuestionsDetail question;
 
@@ -23,7 +22,6 @@ public class BookingFormDetail {
 
 	public BookingFormDetail() {
 	}
-	
 
 	public BookingFormDetail(BookingForm bookingForm, QuestionsDetail question, String answer) {
 		super();
@@ -31,8 +29,6 @@ public class BookingFormDetail {
 		this.question = question;
 		this.answer = answer;
 	}
-
-
 
 	public BookingForm getBookingForm() {
 		return bookingForm;

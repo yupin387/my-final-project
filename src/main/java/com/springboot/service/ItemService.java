@@ -1,6 +1,7 @@
 package com.springboot.service;
 
 import com.springboot.model.*;
+import com.springboot.model.Package;
 import com.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class ItemService {
     private ItemTypeRepository itemTypeRepo;
 
     @Autowired
-    private CeremonyRepository ceremonyRepo;
+    private PackageRepository packageRepo;
     
     @Autowired
     private QuotationDetailRepository quotationDetailRepo;
@@ -57,7 +58,7 @@ public class ItemService {
 
    
     @Transactional
-    public void saveItem(Item item, int typeId, List<Integer> ceremonyIds, List<Integer> quantities) {
+    public void saveItem(Item item, int typeId, List<Integer> packageIds, List<Integer> quantities) {
         ItemType type = itemTypeRepo.findById(typeId).orElse(null);
 
         if (type != null && RESTRICTED_ITEM_TYPE_NAME.equals(type.getItemTypeName())) {
@@ -72,8 +73,8 @@ public class ItemService {
             // ---- กรณีเพิ่มอุปกรณ์ใหม่: ไม่มีของเดิมให้ diff เพิ่มได้ตรง ๆ ----
             item.setItemType(type);
             item.setIsActive(true);
-            item.setCeremonyItems(new ArrayList<>());
-            addCeremonyItems(item, item.getCeremonyItems(), ceremonyIds, quantities);
+            item.setPackageItems(new ArrayList<>());
+            addPackageItems(item, item.getPackageItems(), packageIds, quantities);
             itemRepo.save(item);
             return;
         }
@@ -83,50 +84,50 @@ public class ItemService {
                 .orElseThrow(() -> new IllegalArgumentException("ไม่พบอุปกรณ์ที่ต้องการแก้ไข"));
 
         Map<Integer, Integer> newQtyMap = new LinkedHashMap<>();
-        if (ceremonyIds != null) {
-            for (int idx = 0; idx < ceremonyIds.size(); idx++) {
-                Integer cId = ceremonyIds.get(idx);
-                if (cId == null) continue;
+        if (packageIds != null) {
+            for (int idx = 0; idx < packageIds.size(); idx++) {
+                Integer pId = packageIds.get(idx);
+                if (pId == null) continue;
 
                 int qty = 1;
                 if (quantities != null && idx < quantities.size() && quantities.get(idx) != null) {
                     qty = quantities.get(idx);
                     if (qty < 1) qty = 1;
                 }
-                newQtyMap.put(cId, qty);
+                newQtyMap.put(pId, qty);
             }
         }
 
-        if (existingItem.getCeremonyItems() == null) {
-            existingItem.setCeremonyItems(new ArrayList<>());
+        if (existingItem.getPackageItems() == null) {
+            existingItem.setPackageItems(new ArrayList<>());
         }
-        List<CeremonyItem> existingCeremonyItems = existingItem.getCeremonyItems();
+        List<PackageItem> existingPackageItems = existingItem.getPackageItems();
 
-        Iterator<CeremonyItem> it = existingCeremonyItems.iterator();
+        Iterator<PackageItem> it = existingPackageItems.iterator();
         while (it.hasNext()) {
-            CeremonyItem ci = it.next();
-            if (ci.getCeremony() == null) {
+            PackageItem pi = it.next();
+            if (pi.getPackageEntity() == null) {
                 continue;
             }
-            int cId = ci.getCeremony().getCeremonyId();
+            int pId = pi.getPackageEntity().getPackageId();
 
-            if (newQtyMap.containsKey(cId)) {
-                ci.setQuantity(newQtyMap.get(cId));
-                newQtyMap.remove(cId);
+            if (newQtyMap.containsKey(pId)) {
+                pi.setQuantity(newQtyMap.get(pId));
+                newQtyMap.remove(pId);
             } else {
                 it.remove(); 
             }
         }
 
-        // 2) ที่เหลือใน newQtyMap คือ ceremonyId ใหม่ที่ยังไม่เคยผูกกับอุปกรณ์นี้มาก่อน -> เพิ่มเป็นแถวใหม่
+        // 2) ที่เหลือใน newQtyMap คือ packageId ใหม่ที่ยังไม่เคยผูกกับอุปกรณ์นี้มาก่อน -> เพิ่มเป็นแถวใหม่
         if (!newQtyMap.isEmpty()) {
-            List<Ceremony> ceremonies = ceremonyRepo.findAllById(newQtyMap.keySet());
-            for (Ceremony ceremony : ceremonies) {
-                CeremonyItem ci = new CeremonyItem();
-                ci.setItem(existingItem);
-                ci.setCeremony(ceremony);
-                ci.setQuantity(newQtyMap.get(ceremony.getCeremonyId()));
-                existingCeremonyItems.add(ci);
+            List<Package> packages = packageRepo.findAllById(newQtyMap.keySet());
+            for (Package pkg : packages) {
+                PackageItem pi = new PackageItem();
+                pi.setItem(existingItem);
+                pi.setPackageEntity(pkg);
+                pi.setQuantity(newQtyMap.get(pkg.getPackageId()));
+                existingPackageItems.add(pi);
             }
         }
 
@@ -141,22 +142,22 @@ public class ItemService {
         itemRepo.save(existingItem);
     }
 
-    // เพิ่ม CeremonyItem ใหม่ทั้งหมดเข้าไปใน targetList (ใช้เฉพาะตอนสร้างอุปกรณ์ใหม่ที่ยังไม่มีของเดิม)
-    private void addCeremonyItems(Item item, List<CeremonyItem> targetList,
-                                   List<Integer> ceremonyIds, List<Integer> quantities) {
-        if (ceremonyIds == null || ceremonyIds.isEmpty()) return;
+    // เพิ่ม PackageItem ใหม่ทั้งหมดเข้าไปใน targetList (ใช้เฉพาะตอนสร้างอุปกรณ์ใหม่ที่ยังไม่มีของเดิม)
+    private void addPackageItems(Item item, List<PackageItem> targetList,
+                                   List<Integer> packageIds, List<Integer> quantities) {
+        if (packageIds == null || packageIds.isEmpty()) return;
 
-        List<Ceremony> ceremonies = ceremonyRepo.findAllById(ceremonyIds);
+        List<Package> packages = packageRepo.findAllById(packageIds);
 
-        for (int idx = 0; idx < ceremonyIds.size(); idx++) {
-            Integer cId = ceremonyIds.get(idx);
-            if (cId == null) continue;
+        for (int idx = 0; idx < packageIds.size(); idx++) {
+            Integer pId = packageIds.get(idx);
+            if (pId == null) continue;
 
-            Ceremony ceremony = ceremonies.stream()
-                    .filter(c -> c.getCeremonyId() == cId)
+            Package pkg = packages.stream()
+                    .filter(c -> c.getPackageId() == pId)
                     .findFirst()
                     .orElse(null);
-            if (ceremony == null) continue;
+            if (pkg == null) continue;
 
             int qty = 1;
             if (quantities != null && idx < quantities.size() && quantities.get(idx) != null) {
@@ -164,11 +165,11 @@ public class ItemService {
                 if (qty < 1) qty = 1;
             }
 
-            CeremonyItem ci = new CeremonyItem();
-            ci.setItem(item);
-            ci.setCeremony(ceremony);
-            ci.setQuantity(qty);
-            targetList.add(ci);
+            PackageItem pi = new PackageItem();
+            pi.setItem(item);
+            pi.setPackageEntity(pkg);
+            pi.setQuantity(qty);
+            targetList.add(pi);
         }
     }
 
@@ -196,13 +197,13 @@ public class ItemService {
         return itemRepo.findByItemType_ItemTypeName(typeName);
     }
 
-    // ดึงอุปกรณ์ทั้งหมดที่ผูกอยู่กับพิธี (ceremony) ตาม ceremonyId ที่ระบุ
-    public List<Item> getItemsByCeremonyId(int ceremonyId) {
-        Ceremony ceremony = ceremonyRepo.findById(ceremonyId).orElse(null);
-        if (ceremony != null && ceremony.getCeremonyItems() != null) {
-            return ceremony.getCeremonyItems().stream()
-                .filter(ci -> ci.getItem() != null)
-                .map(CeremonyItem::getItem)
+    // ดึงอุปกรณ์ทั้งหมดที่ผูกอยู่กับแพ็กเกจ (package) ตาม packageId ที่ระบุ
+    public List<Item> getItemsByPackageId(int packageId) {
+        Package pkg = packageRepo.findById(packageId).orElse(null);
+        if (pkg != null && pkg.getPackageItems() != null) {
+            return pkg.getPackageItems().stream()
+                .filter(pi -> pi.getItem() != null)
+                .map(PackageItem::getItem)
                 .collect(Collectors.toList());
         }
         return new ArrayList<>();

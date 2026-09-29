@@ -6,45 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>เข้าสู่ระบบสมาชิก - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-   
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/loginMember.css">
-    <style>
-        .error-message {
-            color: #dc3545;
-            font-size: 11px; 
-            margin-top: 4px;
-            display: none;
-            font-weight: normal; 
-        }
-        /* จัดตำแหน่งกล่องรหัสผ่านและไอคอนรูปตา */
-        .password-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .password-wrapper .login-input {
-            width: 100%;
-            padding-right: 45px; 
-        }
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #888;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-        }
-        .toggle-password:hover {
-            color: #333;
-        }
-    </style>
+
 </head>
 <body>
 
@@ -83,7 +49,7 @@
             <% } %>
 
             <!-- FORM -->
-            <form action="${pageContext.request.contextPath}/loginMember" method="post" class="login-form" onsubmit="return validateLoginForm();">
+            <form id="form-login" action="${pageContext.request.contextPath}/loginMember" method="post" class="login-form">
 
                 <!-- อีเมล (memberemail) -->
                 <div class="form-group">
@@ -97,7 +63,7 @@
                     <label class="login-label">รหัสผ่าน</label>
                     <div class="password-wrapper">
                         <input type="password" id="memberpassword" name="memberpassword" class="login-input" placeholder="รหัสผ่าน 8-16 ตัวอักษร">
-                        <button type="button" id="togglePasswordBtn" class="toggle-password" onclick="togglePasswordVisibility()">
+                        <button type="button" id="togglePasswordBtn" class="toggle-password">
                             <i class="bi bi-eye-slash" id="eyeIcon"></i>
                         </button>
                     </div>
@@ -133,81 +99,6 @@
     </svg>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- สคริปต์ตรวจสอบฟอร์ม และฟังก์ชันสลับการแสดงรหัสผ่าน -->
-    <script>
-        // ฟังก์ชันสลับการแสดง/ซ่อนรหัสผ่าน
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('memberpassword');
-            const eyeIcon = document.getElementById('eyeIcon');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.classList.remove('bi-eye-slash');
-                eyeIcon.classList.add('bi-eye'); // เปลี่ยนเป็นรูปตาเปิด
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.classList.remove('bi-eye');
-                eyeIcon.classList.add('bi-eye-slash'); // เปลี่ยนเป็นรูปตาปิด
-            }
-        }
-
-        function validateLoginForm() {
-            const emailInput = document.getElementById('memberemail').value.trim();
-            const passwordInput = document.getElementById('memberpassword').value;
-            
-            const emailError = document.getElementById('emailError');
-            const passwordError = document.getElementById('passwordError');
-
-            // เคลียร์ข้อความแจ้งเตือนเดิมก่อนตรวจสอบ
-            emailError.style.display = 'none';
-            emailError.innerHTML = '';
-            passwordError.style.display = 'none';
-            passwordError.innerHTML = '';
-
-            let isValid = true;
-
-            // --- 1. ตรวจสอบอีเมล (memberemail) ---
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            const hasNumberInEmail = /\d/.test(emailInput);
-
-            if (emailInput === "") {
-                emailError.innerHTML = "กรุณากรอกอีเมล";
-                emailError.style.display = 'block';
-                isValid = false;
-            } else if (/\s/.test(emailInput)) {
-                emailError.innerHTML = "อีเมลต้องไม่มีช่องว่าง";
-                emailError.style.display = 'block';
-                isValid = false;
-            } else if (!emailRegex.test(emailInput) || !hasNumberInEmail) {
-                emailError.innerHTML = "อีเมลต้องประกอบด้วยตัวอักษรภาษาอังกฤษ ตัวเลข และอักขระพิเศษที่ถูกต้อง(@, .)";
-                emailError.style.display = 'block';
-                isValid = false;
-            }
-
-            // --- 2. ตรวจสอบรหัสผ่าน (memberpassword) ---
-            const passwordRegex = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/;
-
-            if (passwordInput === "") {
-                passwordError.innerHTML = "กรุณากรอกรหัสผ่าน";
-                passwordError.style.display = 'block';
-                isValid = false;
-            } else if (/\s/.test(passwordInput)) {
-                passwordError.innerHTML = "รหัสผ่านต้องไม่มีเว้นวรรค หรือช่องว่าง";
-                passwordError.style.display = 'block';
-                isValid = false;
-            } else if (passwordInput.length < 8 || passwordInput.length > 16) {
-                passwordError.innerHTML = "รหัสผ่านต้องมีความยาวตั้งแต่ 8 ตัวอักษร และไม่เกิน 16 ตัวอักษร";
-                passwordError.style.display = 'block';
-                isValid = false;
-            } else if (!passwordRegex.test(passwordInput)) {
-                passwordError.innerHTML = "ต้องเป็นตัวอักษรภาษาอังกฤษหรือตัวเลข รวมอักขระพิเศษได้เท่านั้น";
-                passwordError.style.display = 'block';
-                isValid = false;
-            }
-
-            return isValid;
-        }
-    </script>
+    <script src="${pageContext.request.contextPath}/static/js/loginMember.js"></script>
 </body>
 </html>

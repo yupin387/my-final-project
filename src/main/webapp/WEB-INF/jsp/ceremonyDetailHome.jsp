@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${ceremony.optionType} - บุญมีรับจัดงานบุญ</title>
+    <title>${mainType} - บุญมีรับจัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/ceremonyDetail.css">
 </head>
@@ -202,14 +202,14 @@
 	                </div>
 
 	                <%-- ========== รายละเอียดแพ็กเกจ (ซ่อน/แสดงได้) ========== --%>
-	                <div id="detail-${p.ceremonyId}" class="cd-detail-collapsed" style="width:100%;">
+	                <div id="detail-${p.packageId}" class="cd-detail-collapsed" style="width:100%;">
 	                    <div class="cd-pkg-item-grid">
 	   <c:choose>
-							    <c:when test="${empty p.ceremonyItems}">
+							    <c:when test="${empty p.packageItems}">
 							        <span class="cd-pkg-item-empty">รายละเอียดจะจัดเตรียมตามความต้องการของท่าน</span>
 							    </c:when>
 							    <c:otherwise>
-							        <c:forEach items="${p.ceremonyItems}" var="ci">
+							        <c:forEach items="${p.packageItems}" var="ci">
 							            <span class="cd-pkg-item-name">${ci.item.itemName}</span>
 							            <span class="cd-pkg-item-label">จำนวน</span>
 							            <span class="cd-pkg-item-qty">${ci.quantity} ${ci.item.unit}</span>
@@ -218,12 +218,12 @@
 							</c:choose>
 	                    </div>
 	                </div>
-	                <button type="button" class="cd-btn-view-detail" onclick="toggleDetail('${p.ceremonyId}', this)">
-	                    ดูรายละเอียดแพ็กเกจนี้ ▾
-	                </button>
+	                <button type="button" class="cd-btn-view-detail" data-package-id="${p.packageId}">
+    ดูรายละเอียดแพ็กเกจนี้ ▾
+</button>
 
 	                <%-- ปุ่มจอง --%>
-	                <a href="${pageContext.request.contextPath}/booking?ceremonyId=${p.ceremonyId}"
+	                <a href="${pageContext.request.contextPath}/booking?packageId=${p.packageId}"
 	                   class="cd-btn-select-package">เลือกจองแพ็กเกจนี้</a>
 
 	                <c:set var="imageIndex" value="${imageIndex + 1}" />
@@ -325,31 +325,21 @@
 		</div>
 	</footer>
 
-<script>
-    function toggleDetail(id, btn) {
-        var el = document.getElementById('detail-' + id);
-        el.classList.toggle('cd-detail-collapsed');
-        btn.textContent = el.classList.contains('cd-detail-collapsed')
-            ? 'ดูรายละเอียดแพ็กเกจนี้ ▾'
-            : 'ซ่อนรายละเอียด ▴';
-    }
-
-    // เปิด/ปิด dropdown เมนูโปรไฟล์ (ให้พฤติกรรมตรงกับ home.js)
-    document.addEventListener('DOMContentLoaded', function () {
-        var pill = document.querySelector('.user-profile-pill');
-        var menu = document.getElementById('dropdownMenu');
-        if (pill && menu) {
-            pill.addEventListener('click', function (e) {
-                e.stopPropagation();
-                menu.classList.toggle('show');
-            });
-            document.addEventListener('click', function () {
-                menu.classList.remove('show');
-            });
-        }
-    });
-    
-</script>
 <script src="${pageContext.request.contextPath}/static/js/ceremonyDetail.js"></script>
 </body>
 </html>
+
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	

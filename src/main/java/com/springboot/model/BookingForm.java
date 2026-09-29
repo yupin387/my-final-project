@@ -24,17 +24,12 @@ public class BookingForm {
 
 	@Column(name = "eventaddress", nullable = false)
 	private String eventAddress;
-	
 
 	@Column(name = "addressimage")
 	private String addressImage;
-	
 
 	@Column(name = "rejectdetail", columnDefinition = "TEXT")
 	private String rejectDetail;
-
-
-	
 
 	@Column(name = "bookingstatus", nullable = false)
 	private String bookingStatus;
@@ -44,12 +39,12 @@ public class BookingForm {
 	private Member member;
 
 	@ManyToOne
-	@JoinColumn(name = "ceremonyid", nullable = false)
-	private Ceremony ceremony;
+	@JoinColumn(name = "packageid", nullable = false)
+	private Package packageEntity;
 
 	@OneToOne(mappedBy = "bookingForm")
 	private Quotation quotation;
-	
+
 	@Column(name = "eventlat")
 	private Double eventLat;
 
@@ -63,9 +58,8 @@ public class BookingForm {
 
 	}
 
-
 	public BookingForm(String bookingId, Date bookingDate, Date eventDate, String eventTime, String eventAddress,
-			String addressImage, String rejectDetail, String bookingStatus, Member member, Ceremony ceremony,
+			String addressImage, String rejectDetail, String bookingStatus, Member member, Package packageEntity,
 			Quotation quotation, Double eventLat, Double eventLng, List<BookingFormDetail> details) {
 		super();
 		this.bookingId = bookingId;
@@ -77,13 +71,12 @@ public class BookingForm {
 		this.rejectDetail = rejectDetail;
 		this.bookingStatus = bookingStatus;
 		this.member = member;
-		this.ceremony = ceremony;
+		this.packageEntity = packageEntity;
 		this.quotation = quotation;
 		this.eventLat = eventLat;
 		this.eventLng = eventLng;
 		this.details = details;
 	}
-
 
 	public String getBookingId() {
 		return bookingId;
@@ -124,8 +117,6 @@ public class BookingForm {
 	public void setEventAddress(String eventAddress) {
 		this.eventAddress = eventAddress;
 	}
-	
-	
 
 	public String getAddressImage() {
 		return addressImage;
@@ -134,15 +125,15 @@ public class BookingForm {
 	public void setAddressImage(String addressImage) {
 		this.addressImage = addressImage;
 	}
-	
-	// เพิ่ม Getter และ Setter
-		public String getRejectDetail() {
-		    return rejectDetail;
-		}
 
-		public void setRejectDetail(String rejectDetail) {
-		    this.rejectDetail = rejectDetail;
-		}
+	// เพิ่ม Getter และ Setter
+	public String getRejectDetail() {
+		return rejectDetail;
+	}
+
+	public void setRejectDetail(String rejectDetail) {
+		this.rejectDetail = rejectDetail;
+	}
 
 	public String getBookingStatus() {
 		return bookingStatus;
@@ -160,12 +151,12 @@ public class BookingForm {
 		this.member = member;
 	}
 
-	public Ceremony getCeremony() {
-		return ceremony;
+	public Package getPackageEntity() {
+		return packageEntity;
 	}
 
-	public void setCeremony(Ceremony ceremony) {
-		this.ceremony = ceremony;
+	public void setPackageEntity(Package packageEntity) {
+		this.packageEntity = packageEntity;
 	}
 
 	public Quotation getQuotation() {
@@ -175,7 +166,7 @@ public class BookingForm {
 	public void setQuotation(Quotation quotation) {
 		this.quotation = quotation;
 	}
-	
+
 	public Double getEventLat() {
 		return eventLat;
 	}
@@ -196,11 +187,8 @@ public class BookingForm {
 		return details;
 	}
 
-	
 	public void setDetails(List<BookingFormDetail> details) {
 		this.details = details;
 	}
-	
-
 
 }

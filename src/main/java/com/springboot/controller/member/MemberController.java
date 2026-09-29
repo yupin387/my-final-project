@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.model.BookingForm;
-import com.springboot.model.Ceremony;
+import com.springboot.model.Package;
 import com.springboot.model.Item;
 import com.springboot.model.Member;
 import com.springboot.model.Quotation;
 import com.springboot.model.QuotationDetail;
-import com.springboot.service.CeremonyService;
+import com.springboot.service.PackageService;
 import com.springboot.service.MemberService;
 import com.springboot.service.QuotationService;
 
@@ -40,7 +40,7 @@ public class MemberController {
     private QuotationService quotationService;
     
     @Autowired
-    private CeremonyService ceremonyService;
+    private PackageService packageService;
 
     // แผนที่ (Map) สำหรับจับคู่ "ประเภทพิธี" กับ "รูปภาพประกอบ" ที่จะใช้แสดงในหน้าเว็บ
     private static final Map<String, String> TYPE_IMAGE_MAP = new LinkedHashMap<>();
@@ -96,7 +96,7 @@ public class MemberController {
             latestData = user;
         }
         model.addAttribute("member", latestData);
-        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        model.addAttribute("ceremonyTypes", buildPackageTypes());
         
         return "editProfile";
     }
@@ -159,7 +159,7 @@ public class MemberController {
     // เมธอดกลางสำหรับเตรียมข้อมูลทั้งหมดที่หน้า memberQuotationDetail ต้องใช้
     // (ตัวใบเสนอราคา, รายละเอียดรายการ, ข้อมูลการจอง, รายการที่รวมอยู่ในแพ็กเกจ)
     private void populateQuotationDetailModel(Quotation q, Model model) {
-        model.addAttribute("ceremonyTypes", buildCeremonyTypes());
+        model.addAttribute("ceremonyTypes", buildPackageTypes());
 
         List<QuotationDetail> details = quotationService.getDetailsByQuotationId(q.getQuotationId());
 
@@ -170,10 +170,10 @@ public class MemberController {
         if (booking != null) {
             model.addAttribute("b", booking);
 
-            if (booking.getCeremony() != null) {
-                int ceremonyId = booking.getCeremony().getCeremonyId();
-                List<Item> allItems = quotationService.getItemsByCeremonyId(ceremonyId);
-                boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType());
+            if (booking.getPackageEntity() != null) {
+                int packageId = booking.getPackageEntity().getPackageId();
+                List<Item> allItems = quotationService.getItemsByPackageId(packageId);
+                boolean isCustomRequest = "กรอกความต้องการเบื้องต้น".equals(booking.getPackageEntity().getOptionType());
 
                 List<Item> packageIncludedItems = computePackageIncludedItems(allItems, isCustomRequest);
                 model.addAttribute("packageIncludedItems", packageIncludedItems);
@@ -229,35 +229,35 @@ public class MemberController {
         return packageIncludedItems;
     }
 
-    // จัดกลุ่มพิธีทั้งหมดตาม "ประเภทพิธี" (ceremonyType) แล้วเลือกแพ็กเกจราคาถูกสุดในแต่ละกลุ่มมาเป็นตัวแทน
-    private List<Map<String, Object>> buildCeremonyTypes() {
-        List<Ceremony> ceremonies = ceremonyService.getAllCeremonies();
+    // จัดกลุ่มแพ็กเกจทั้งหมดตาม "ประเภทพิธี" (packageType) แล้วเลือกแพ็กเกจราคาถูกสุดในแต่ละกลุ่มมาเป็นตัวแทน
+    private List<Map<String, Object>> buildPackageTypes() {
+        List<Package> packages = packageService.getAllPackages();
 
-        Map<String, List<Ceremony>> grouped = ceremonies.stream()
+        Map<String, List<Package>> grouped = packages.stream()
             .collect(Collectors.groupingBy(
-                c -> c.getCeremonyType() == null ? "" : c.getCeremonyType().trim(),
+                c -> c.getPackageType() == null ? "" : c.getPackageType().trim(),
                 LinkedHashMap::new,
                 Collectors.toList()
             ));
 
-        List<Map<String, Object>> ceremonyTypes = new ArrayList<>();
-        for (Map.Entry<String, List<Ceremony>> entry : grouped.entrySet()) {
-            List<Ceremony> packages = entry.getValue();
-            packages.sort(Comparator.comparingDouble(Ceremony::getBasePrice));
-            Ceremony representative = packages.get(0);
+        List<Map<String, Object>> packageTypes = new ArrayList<>();
+        for (Map.Entry<String, List<Package>> entry : grouped.entrySet()) {
+            List<Package> group = entry.getValue();
+            group.sort(Comparator.comparingDouble(Package::getBasePrice));
+            Package representative = group.get(0);
 
             String mainName = entry.getKey();
             String image = TYPE_IMAGE_MAP.getOrDefault(mainName, DEFAULT_TYPE_IMAGE);
 
             Map<String, Object> typeMap = new LinkedHashMap<>();
             typeMap.put("mainName", mainName);
-            typeMap.put("representativeId", representative.getCeremonyId());
+            typeMap.put("representativeId", representative.getPackageId());
             typeMap.put("image", image);
-            typeMap.put("priceFrom", packages.get(0).getBasePrice());
-            typeMap.put("packageCount", packages.size());
-            ceremonyTypes.add(typeMap);
+            typeMap.put("priceFrom", group.get(0).getBasePrice());
+            typeMap.put("packageCount", group.size());
+            packageTypes.add(typeMap);
         }
-        return ceremonyTypes;
+        return packageTypes;
     }
     
     // สมัครสมาชิกใหม่: เช็คอีเมลซ้ำก่อน ถ้าไม่ซ้ำถึงจะสร้างสมาชิกใหม่และบันทึกลงฐานข้อมูล

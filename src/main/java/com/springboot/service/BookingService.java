@@ -1,5 +1,5 @@
 package com.springboot.service;
- 
+
 import com.springboot.model.*;
 import com.springboot.repository.BookingFormRepository;
 import com.springboot.repository.QuestionsRepository;
@@ -9,24 +9,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
- 
+
 @Service
 public class BookingService {
- 
+
     @Autowired
     private BookingFormRepository bookingRepo;
-    
+
     @Autowired
     private QuestionsRepository questionsRepo;
 
+    // จำนวนคิวสูงสุดที่รับได้ต่อวันจัดงาน
+    private static final int MAX_BOOKINGS_PER_DAY = 2;
+
     // =================================================================================
-    // ส่วนที่ 1: สำหรับ Member & Organizer (การจองเริ่มต้น จนถึง การพิจารณาอนุมัติ)
+    // ส่วนที่ 1: สำหรับ Member & Manager (การจองเริ่มต้น จนถึง การพิจารณาอนุมัติ)
     // =================================================================================
- 
-    //สำหรับ Member: บันทึกการจองใหม่ เจน ID อัตโนมัติ และคัดกรองคำถาม
+
+    // Member: บันทึกการจองใหม่ สร้าง ID อัตโนมัติ ตั้งสถานะ Pending และคัดคำตอบซ้ำของคำถามเดียวกันออก
     @Transactional
     public BookingForm saveBooking(BookingForm booking) {
         booking.setBookingId(generateBookingId());
@@ -34,14 +37,16 @@ public class BookingService {
         booking.setBookingStatus("Pending");
 
         if (booking.getDetails() != null) {
-            
+
+            // เก็บคำตอบล่าสุดของแต่ละคำถาม (questionsId ซ้ำจะถูกทับ)
             Map<Integer, BookingFormDetail> uniqueMap = new LinkedHashMap<>();
             for (BookingFormDetail d : booking.getDetails()) {
                 if (d.getQuestion() != null) {
                     uniqueMap.put(d.getQuestion().getQuestionsId(), d);
                 }
             }
-            
+
+            // ผูกคำตอบเข้ากับ Question จริงจาก DB และผูกกลับมาที่ booking
             List<BookingFormDetail> filteredDetails = new ArrayList<>(uniqueMap.values());
             for (BookingFormDetail detail : filteredDetails) {
                 QuestionsDetail realQ = questionsRepo.findById(detail.getQuestion().getQuestionsId()).orElse(null);
@@ -55,16 +60,13 @@ public class BookingService {
         return bookingRepo.save(booking);
     }
 
-    // สำหรับ Member: ดูสถานะการจองล่าสุดของตนเอง
+    // Member: ดึงการจองล่าสุดของตนเอง (คืน null ถ้าไม่มี)
     public BookingForm getLatestBookingByMember(int memberId) {
         List<BookingForm> results = bookingRepo.findLatestByMemberId(memberId);
         return (results != null && !results.isEmpty()) ? results.get(0) : null;
     }
 
-
- // สำหรับ Organizer: อนุมัติการจอง (เปลี่ยนสถานะเป็น Approved)
-    private static final int MAX_BOOKINGS_PER_DAY = 2;
-
+    // Manager: อนุมัติการจอง (เช็คคิวเต็มต่อวันก่อน แล้วเปลี่ยนสถานะเป็น Approved)
     @Transactional
     public void approveBooking(String id) throws Exception {
         BookingForm booking = bookingRepo.findById(id)
@@ -78,20 +80,19 @@ public class BookingService {
         updateStatus(id, "Approved");
     }
 
-    // สำหรับ Organizer: ปฏิเสธการจอง (เปลี่ยนสถานะเป็น Rejected พร้อมระบุเหตุผล)
+    // Manager/Member: ปฏิเสธหรือยกเลิกการจอง (เปลี่ยนสถานะเป็น Rejected พร้อมเหตุผล)
     @Transactional
     public void rejectBooking(String id, String rejectDetail) throws Exception {
         BookingForm booking = bookingRepo.findById(id)
                 .orElseThrow(() -> new Exception("ไม่พบข้อมูลการจองรหัส: " + id));
-        
+
         booking.setBookingStatus("Rejected");
-        booking.setRejectDetail(rejectDetail); // เซ็ตเหตุผลที่ปฏิเสธ
-        
+        booking.setRejectDetail(rejectDetail);
+
         bookingRepo.save(booking);
     }
 
-    //(Internal) สร้างรหัสการจองอัตโนมัติ BK + ตัวเลข 3 หลัก
-     
+    // (Internal) สร้างรหัสการจองอัตโนมัติ BK + ตัวเลข 3 หลัก เช่น BK001
     private String generateBookingId() {
         String maxId = bookingRepo.findMaxBookingId();
         int nextNum = 1;
@@ -101,67 +102,52 @@ public class BookingService {
         return String.format("BK%03d", nextNum);
     }
 
-
     // =================================================================================
-    // ส่วนที่ 2: สำหรับ Organizer (ช่วงปลาย) & Head Staff (รายการยืนยัน และงานหน้างาน)
-    
+    // ส่วนที่ 2: สำหรับ Manager (ช่วงปลาย) & Head Staff (รายการยืนยัน และงานหน้างาน)
     // =================================================================================
 
-    //  ดึงรายการตามกลุ่มสถานะ (เช่น ดึงเฉพาะที่ Approved เพื่อเตรียมออกใบเสนอราคา)
+    // ดึงรายการตามหลายสถานะพร้อมกัน (เช่น Confirmed, Assigned, Preparing, In_Progress)
     public List<BookingForm> getBookingsByStatuses(List<String> statuses) {
         return bookingRepo.findByStatusIn(statuses);
     }
 
-    // สำหรับค้นหาตามสถานะเดี่ยว
+    // ดึงรายการตามสถานะเดียว
     public List<BookingForm> findByStatus(String status) {
         return bookingRepo.findByStatus(status);
     }
 
-    // สำหรับดูรายละเอียดการจองรายบุคคล
+    // ดึงรายละเอียดการจองรายตัว (คืน null ถ้าไม่พบ)
     public BookingForm getBookingById(String id) {
         return bookingRepo.findById(id).orElse(null);
     }
 
-    // สำหรับเปลี่ยนสถานะเป็น Assigned เมื่อมอบหมายพนักงานในหน้าใบเสนอราคาเสร็จสิ้น
+    // เปลี่ยนสถานะเป็น Assigned เมื่อมอบหมายหัวหน้างานเสร็จสิ้น
     @Transactional
     public void assignStaffToBooking(String id) {
         updateStatus(id, "Assigned");
     }
- 
-    // สำหรับอัปเดตสถานะงาน (เช่น In Progress, Completed)
+
+    // อัปเดตสถานะการจองตามที่ระบุ (ใช้ตอนสร้างใบเสนอราคาเสร็จ เพื่อตั้งเป็น Approved)
     @Transactional
     public void updateJobStatus(String id, String newStatus) {
         updateStatus(id, newStatus);
     }
 
-    // เมทธอดกลางสำหรับอัปเดตสถานะ (ใช้ระบบ Dirty Checking)
+    // ดึงรายการจองทั้งหมดจากฐานข้อมูล
+    public List<BookingForm> getAllBookings() {
+        return bookingRepo.findAll();
+    }
+
+    // Member: ดึงรายการจองทั้งหมดของตนเอง (ใช้ในหน้า list)
+    public List<BookingForm> getBookingsByMember(int memberId) {
+        return bookingRepo.findByMemberId(memberId);
+    }
+
+    // เมธอดกลางสำหรับอัปเดตสถานะ (อาศัย Dirty Checking ของ JPA ภายใน @Transactional)
     private void updateStatus(String id, String status) {
         BookingForm booking = bookingRepo.findById(id).orElse(null);
         if (booking != null) {
             booking.setBookingStatus(status);
-            
         }
     }
-    
-    // สำหรับดึงรายการจองทั้งหมดจากฐานข้อมูล
-    public List<BookingForm> getAllBookings() {
-        return bookingRepo.findAll(); 
-    }
-    
-    
-    //สำหรับ Member: ดูรายการจองทั้งหมดของตนเอง (สำหรับหน้า list)
-    public List<BookingForm> getBookingsByMember(int memberId) {
-        return bookingRepo.findByMemberId(memberId);
-    }
-    
-    @Transactional
-    public void updateStatusOnly(String bookingId, String status) {
-        BookingForm booking = bookingRepo.findById(bookingId).orElse(null);
-        if (booking != null) {
-            booking.setBookingStatus(status);
-            
-        }
-    }
-  
-  
 }

@@ -137,7 +137,8 @@
                         <td>
                             <span class="customer-name">${b.member.memberFirstName} ${b.member.memberLastName}</span>
                         </td>
-                        <td>${b.ceremony.ceremonyType}</td>
+                        <%-- แก้ไขตรงนี้จาก b.pkg.packageType เป็น b.packageEntity.packageType --%>
+                        <td>${b.packageEntity.packageType}</td>
                         <td>
                             <c:choose>
                                 <c:when test="${not empty b.quotation.staff}">
@@ -174,7 +175,7 @@
             <a href="${pageContext.request.contextPath}/manager/assignments/detail/${b.bookingId}"
        class="btn-action btn-view">ดูรายละเอียด</a>
             <a href="${pageContext.request.contextPath}/manager/assignments/assign/${b.bookingId}?mode=change"
-               class="btn-action btn-change">เปลี่ยนตัว</a>
+               class="btn-action btn-change">เเก้ไขหัวหน้างาน</a>
         </c:otherwise>
     </c:choose>
 </td>
@@ -208,29 +209,8 @@
     </div>
 
 </footer>
+<script src="${pageContext.request.contextPath}/static/js/bookingList.js"></script>
 
-<script>
-function toggleStatusFilter() {
-    var dropdown = document.getElementById('statusFilterDropdown');
-    var arrow = document.getElementById('statusFilterArrow');
-    dropdown.classList.toggle('show');
-    arrow.textContent = dropdown.classList.contains('show') ? '▴' : '▾';
-}
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.status-filter-wrapper')) {
-        document.getElementById('statusFilterDropdown').classList.remove('show');
-        document.getElementById('statusFilterArrow').textContent = '▾';
-    }
-});
 
-function toggleDropdown() {
-    document.getElementById('dropdownMenu').classList.toggle('show');
-}
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.user-info')) {
-        document.getElementById('dropdownMenu').classList.remove('show');
-    }
-});
-</script>
 </body>
 </html>

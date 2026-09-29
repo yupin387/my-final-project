@@ -7,47 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>เพิ่มคำถามพิธี - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addQuestion.css">
-    <style>
-    .ceremony-checkbox-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .ceremony-checkbox-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 16px;
-        border: 1.5px solid var(--card-border, #F3C4D5);
-        border-radius: 10px;
-        background: #FFFFFF;
-        cursor: pointer;
-        transition: border-color 0.2s, background 0.2s;
-    }
-    .ceremony-checkbox-item:hover {
-        border-color: #EC6E96;
-        background: #FEF6F9;
-    }
-    .ceremony-checkbox-item input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-        accent-color: #EC6E96;
-        flex-shrink: 0;
-    }
-    .ceremony-checkbox-item label {
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        flex: 1;
-    }
-    .checkbox-group-hint {
-        font-size: 12px;
-        color: #8A7666;
-        margin: -4px 0 4px;
-    }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addQuestion.css?v=2">
 </head>
 <body>
 
@@ -121,9 +81,10 @@
                     <label>ประเภทงาน</label>
                     <p class="checkbox-group-hint">เลือกได้มากกว่า 1 ประเภท — คำถามข้อนี้จะถูกใช้กับทุกประเภทงานที่ติ๊กไว้</p>
                     <div class="ceremony-checkbox-group">
-                        <c:forEach var="type" items="${ceremonyTypes}">
+                        <%-- แก้ไขเฉพาะส่วนที่ดึงข้อมูล EL เป็น packageTypes --%>
+                        <c:forEach var="type" items="${packageTypes}">
                             <div class="ceremony-checkbox-item">
-                                <input type="checkbox" name="ceremonyTypes" value="${type}" id="ct_${type}">
+                                <input type="checkbox" name="packageTypes" value="${type}" id="ct_${type}">
                                 <label for="ct_${type}">${type}</label>
                             </div>
                         </c:forEach>
@@ -176,18 +137,7 @@
     </div>
 </footer>
 
-
-<script src="${pageContext.request.contextPath}/static/js/addQuestion.js"></script>
-<script>
-    function toggleDropdown() {
-        document.getElementById('dropdownMenu').classList.toggle('show');
-    }
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.user-info')) {
-            document.getElementById('dropdownMenu').classList.remove('show');
-        }
-    });
-</script>
+<script src="${pageContext.request.contextPath}/static/js/addQuestion.js?v=2"></script>
 
 </body>
 </html>

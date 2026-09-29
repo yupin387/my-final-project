@@ -66,12 +66,12 @@
             </div>
             <div class="info-cell">
                 <span class="info-label">ประเภทพิธี</span>
-                <span class="info-value">${b.ceremony.ceremonyType}</span>
+                <span class="info-value">${b.packageEntity.packageType}</span>
             </div>
          
             <div class="info-cell">
                 <span class="info-label">รูปแบบการจอง</span>
-                <span class="info-value" >${b.ceremony.optionType}</span>
+                <span class="info-value" >${b.packageEntity.optionType}</span>
             </div>
             <div class="info-cell">
                 <span class="info-label">วันจัดงาน</span>

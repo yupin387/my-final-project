@@ -17,7 +17,7 @@ public class QuestionsDetail {
 
 
     @ManyToMany(mappedBy = "questions")
-    private List<Ceremony> ceremonies;
+    private List<Package> packages;
 
     public QuestionsDetail() {}
 
@@ -41,11 +41,11 @@ public class QuestionsDetail {
         this.questionsText = questionsText;
     }
 
-    public List<Ceremony> getCeremonies() {
-        return ceremonies;
+    public List<Package> getPackages() {
+        return packages;
     }
 
-    public void setCeremonies(List<Ceremony> ceremonies) {
-        this.ceremonies = ceremonies;
+    public void setPackages(List<Package> packages) {
+        this.packages = packages;
     }
 }

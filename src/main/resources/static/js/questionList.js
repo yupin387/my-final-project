@@ -1,3 +1,5 @@
+// หมายเหตุ: ตัวแปร contextPath ถูกประกาศไว้ใน questionList.jsp (ต้องใช้ EL) ก่อนโหลดไฟล์นี้
+
 // ===== ฟังก์ชันแสดง SweetAlert2 ยืนยันการลบคำถาม =====
 function confirmDelete(id, text) {
     Swal.fire({
@@ -45,5 +47,24 @@ document.addEventListener('click', function(e) {
     const menu = document.getElementById('dropdownMenu');
     if (menu && userInfo && !userInfo.contains(e.target)) {
         menu.classList.remove('show');
+    }
+});
+
+// ===== Dropdown กรองประเภทพิธี =====
+function toggleCeremonyFilter() {
+    var dropdown = document.getElementById('ceremonyFilterDropdown');
+    var arrow = document.getElementById('ceremonyFilterArrow');
+    if (!dropdown || !arrow) return;
+    dropdown.classList.toggle('show');
+    arrow.textContent = dropdown.classList.contains('show') ? '▴' : '▾';
+}
+
+document.addEventListener('click', function(e) {
+    var dropdown = document.getElementById('ceremonyFilterDropdown');
+    var arrow = document.getElementById('ceremonyFilterArrow');
+    if (!dropdown || !arrow) return;
+    if (!e.target.closest('.ceremony-filter-wrapper')) {
+        dropdown.classList.remove('show');
+        arrow.textContent = '▾';
     }
 });

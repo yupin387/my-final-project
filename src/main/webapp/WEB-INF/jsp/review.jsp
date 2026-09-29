@@ -12,80 +12,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/review.css">
 
-    <style>
-        #imagePreviewContainer.image-preview-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .preview-thumb-wrap {
-            position: relative;
-            width: 90px;
-            height: 90px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #C9944A;
-            flex-shrink: 0;
-        }
-        .preview-thumb-wrap .preview-thumb {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .preview-remove-btn {
-            position: absolute;
-            top: 3px;
-            right: 3px;
-            width: 20px;
-            height: 20px;
-            border: none;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #E0577F, #EC6E96);
-            color: #fff;
-            font-size: 14px;
-            line-height: 1;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-        }
-        .preview-remove-btn:hover {
-            filter: brightness(1.05);
-        }
-        .add-more-tile {
-            width: 90px;
-            height: 90px;
-            border-radius: 10px;
-            border: 2px dashed #C9944A;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
-            color: #C83568;
-            font-size: 26px;
-            font-weight: 600;
-        }
-        .add-more-tile:hover {
-            background: #FDF1F5;
-        }
-        .image-count-label {
-            margin-top: 8px;
-            font-size: 13px;
-            color: #63263E;
-            display: none;
-        }
-        #submitReviewBtn:disabled {
-            background: #d9a4b4;
-            cursor: not-allowed;
-            opacity: 1;
-        }
-        #submitReviewBtn:disabled:hover {
-            background: #d9a4b4;
-        }
-    </style>
+
 </head>
 <body>
 
@@ -139,7 +66,8 @@
         <div class="review-card-header">
             <h2>รีวิวการจัดงานบุญ</h2>
             <div class="booking-badge">รหัสการจอง #${b.bookingId}</div>
-            <div class="ceremony-name">${b.ceremony.ceremonyType}</div>
+            <%-- แก้ไขจาก b.pkg.packageType เป็น b.packageEntity.packageType --%>
+            <div class="ceremony-name">${b.packageEntity.packageType}</div>
         </div>
 
         <%-- Body --%>

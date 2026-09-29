@@ -11,63 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/myBooking.css?v=19">
 
-    <%-- สไตล์เฉพาะของแท็บและปุ่มรีวิว (เขียนไว้ในหน้านี้เพื่อไม่ต้องแก้ไฟล์ CSS เดิม) --%>
-    <style>
-        .mybooking-tabs {
-            display: flex;
-            gap: 8px;
-            padding: 14px 18px 0;
-            border-bottom: 1px solid #F2D9E2;
-            flex-wrap: wrap;
-        }
-        .mybooking-tab {
-            background: transparent;
-            border: 1px solid transparent;
-            border-bottom: none;
-            padding: 9px 18px;
-            border-radius: 10px 10px 0 0;
-            font-family: 'Sarabun', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #9A6B7B;
-            cursor: pointer;
-            transition: all .15s ease;
-        }
-        .mybooking-tab:hover { color: #B0345A; background: #FDF1F5; }
-        .mybooking-tab.active {
-            color: #B0345A;
-            background: #FFFFFF;
-            border-color: #F2D9E2;
-            box-shadow: inset 0 3px 0 #E0577F;
-        }
-        .mybooking-tab .tab-count {
-            display: inline-block;
-            min-width: 20px;
-            margin-left: 6px;
-            padding: 1px 7px;
-            border-radius: 999px;
-            background: #FBD0DE;
-            color: #B0345A;
-            font-size: 0.78rem;
-            font-weight: 700;
-        }
-        .mybooking-tab.active .tab-count { background: #E0577F; color: #FFFFFF; }
-        .mybooking-tab-panel { display: none; }
-        .mybooking-tab-panel.active { display: block; }
 
-        .btn-mybooking-review {
-            background: #D9A441;
-            color: #FFFFFF !important;
-            border: 1px solid #C08F2E;
-        }
-        .btn-mybooking-review:hover { background: #C08F2E; }
-        .btn-mybooking-reviewed {
-            background: #F3F3F3;
-            color: #999999 !important;
-            border: 1px solid #E5E5E5;
-            cursor: default;
-        }
-    </style>
 </head>
 <body>
 
@@ -86,7 +30,7 @@
                 บริการ/แพ็กเกจ ▾
             </a>
             <div class="dropdown-menu-custom" id="serviceDropdownMenu">
-                <c:forEach var="ct" items="${ceremonyTypes}">
+                <c:forEach var="ct" items="${packageTypes}">
                     <a href="${pageContext.request.contextPath}/ceremony/detail/${ct.representativeId}"
                        class="dropdown-link">${ct.mainName}</a>
                 </c:forEach>
@@ -186,7 +130,8 @@
                                             <td><strong>${b.bookingId}</strong></td>
                                             <td><fmt:formatDate value="${b.bookingDate}" pattern="dd/MM/yyyy"/></td>
                                             <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
-                                            <td>${b.ceremony.ceremonyType}</td>
+                                            <%-- แก้ไขจาก b.pkg.packageType เป็น b.packageEntity.packageType --%>
+                                            <td>${b.packageEntity.packageType}</td>
                                             <td>
                                               <span class="mb-badge mb-badge-${b.bookingStatus}">
     <c:choose>
@@ -262,7 +207,8 @@
                                             <td><strong>${b.bookingId}</strong></td>
                                             <td><fmt:formatDate value="${b.bookingDate}" pattern="dd/MM/yyyy"/></td>
                                             <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
-                                            <td>${b.ceremony.ceremonyType}</td>
+                                            <%-- แก้ไขจาก b.pkg.packageType เป็น b.packageEntity.packageType --%>
+                                            <td>${b.packageEntity.packageType}</td>
                                             <td>
                                                 <span class="mb-badge mb-badge-${b.bookingStatus}">
                                                     <c:choose>
@@ -354,48 +300,6 @@
     </div>
 </footer>
 
-<script>
-function toggleDropdown() {
-    document.getElementById('dropdownMenu').classList.toggle('show');
-}
-function toggleServiceDropdown(e) {
-    e.stopPropagation();
-    document.getElementById('serviceDropdownMenu').classList.toggle('show');
-}
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.user-profile-pill')) {
-        var m = document.getElementById('dropdownMenu');
-        if (m) m.classList.remove('show');
-    }
-    if (!e.target.closest('.nav-dropdown')) {
-        var s = document.getElementById('serviceDropdownMenu');
-        if (s) s.classList.remove('show');
-    }
-});
-
-// สลับแท็บ "กำลังดำเนินการ" / "ประวัติการจอง"
-function switchBookingTab(panelId, btn) {
-    document.querySelectorAll('.mybooking-tab-panel').forEach(function(p) {
-        p.classList.remove('active');
-    });
-    document.querySelectorAll('.mybooking-tab').forEach(function(t) {
-        t.classList.remove('active');
-    });
-    var panel = document.getElementById(panelId);
-    if (panel) panel.classList.add('active');
-    if (btn) btn.classList.add('active');
-    try { sessionStorage.setItem('myBookingTab', panelId); } catch (err) {}
-}
-
-// จำแท็บล่าสุดที่เปิดไว้ เวลากลับมาจากหน้ารายละเอียดจะได้อยู่แท็บเดิม
-document.addEventListener('DOMContentLoaded', function() {
-    var saved = null;
-    try { saved = sessionStorage.getItem('myBookingTab'); } catch (err) {}
-    if (saved) {
-        var btn = document.querySelector('.mybooking-tab[data-tab="' + saved + '"]');
-        if (btn) switchBookingTab(saved, btn);
-    }
-});
-</script>
+<script src="${pageContext.request.contextPath}/static/js/myBooking.js?v=1"></script>
 </body>
 </html>

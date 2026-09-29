@@ -34,9 +34,7 @@ public class HeadStaffController {
 
     @Autowired
     private JobAssignmentService staffAssignmentService;
-    
-    @Autowired
-    private BookingService bookingService;
+
 
     @Autowired
     private QuotationService quotationService;
@@ -130,12 +128,12 @@ public class HeadStaffController {
             model.addAttribute("q", quotation);
             model.addAttribute("details", details);
 
-            boolean isCustomRequest = booking.getCeremony() != null
-                    && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType());
+            boolean isCustomRequest = booking.getPackageEntity() != null
+                    && "กรอกความต้องการเบื้องต้น".equals(booking.getPackageEntity().getOptionType());
             model.addAttribute("isCustomRequest", isCustomRequest);
 
-            List<Item> ceremonyItems = getBaseCeremonyItemsWithMonkAdditions(booking, isCustomRequest);
-            List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems);
+            List<Item> packageItems = getBasePackageItemsWithMonkAdditions(booking, isCustomRequest);
+            List<Item> packageIncludedItems = computePackageIncludedItems(packageItems);
             model.addAttribute("packageIncludedItems", packageIncludedItems);
 
             // เช็คว่าลูกค้าเลือก "นิมนต์เอง" หรือไม่ (ใช้คำนวณส่วนลด/ราคาฟรีในตาราง)
@@ -227,21 +225,21 @@ public class HeadStaffController {
         return "redirect:/staff/assignments/detail/" + bookingId;
     }
 
-    // ==========================================
-    // Helper Methods (ก็อปปี้มาจาก QuotationController เพื่อคำนวณรายการ/หมวดหมู่แบบเดียวกัน)
-    // TODO: ในอนาคตควรย้ายไปไว้ใน QuotationService แล้วเรียกใช้ร่วมกันทั้งสองฝั่ง
-    // ==========================================
 
+ // ดึง details แบบปลอดภัย ถ้า null คืนลิสต์ว่าง
     private List<BookingFormDetail> safeDetails(BookingForm booking) {
         return (booking != null && booking.getDetails() != null) ? booking.getDetails() : new ArrayList<>();
     }
 
-    private List<Item> getBaseCeremonyItemsWithMonkAdditions(BookingForm booking, boolean isCustomRequest) {
-        List<Item> ceremonyItems = new ArrayList<>();
-        if (booking.getCeremony() != null) {
-            List<Item> itemsFromDb = quotationService.getItemsByCeremonyId(booking.getCeremony().getCeremonyId());
+    // ดึงรายการ Item ของแพ็กเกจ + เพิ่มของสำหรับพระสงฆ์ (กรณี custom)
+    private List<Item> getBasePackageItemsWithMonkAdditions(BookingForm booking, boolean isCustomRequest) {
+        List<Item> packageItems = new ArrayList<>();
+
+        // โหลด Item ของแพ็กเกจจาก DB
+        if (booking.getPackageEntity() != null) {
+            List<Item> itemsFromDb = quotationService.getItemsByPackageId(booking.getPackageEntity().getPackageId());
             if (itemsFromDb != null) {
-                ceremonyItems.addAll(itemsFromDb);
+                packageItems.addAll(itemsFromDb);
             }
         }
 
@@ -251,11 +249,13 @@ public class HeadStaffController {
 
             for (BookingFormDetail d : safeDetails(booking)) {
                 if (d.getQuestion() != null) {
+                    // อ่านจำนวนพระสงฆ์จากคำตอบ (เอาเฉพาะตัวเลข)
                     if ("จำนวนพระสงฆ์".equals(d.getQuestion().getQuestionsText())) {
                         try {
                             monkCount = Integer.parseInt(d.getAnswer().replaceAll("[^0-9]", ""));
                         } catch (Exception e) {}
                     }
+                    // เช็คว่าลูกค้านิมนต์พระเองหรือไม่
                     if ("รูปแบบการนิมนต์พระสงฆ์".equals(d.getQuestion().getQuestionsText())
                             && d.getAnswer() != null && d.getAnswer().contains("นิมนต์เอง")) {
                         isSelfInvite = true;
@@ -263,21 +263,24 @@ public class HeadStaffController {
                 }
             }
 
+            // ถ้ามีพระ เพิ่มอุปกรณ์พระสงฆ์ (ถ้ายังไม่มี)
             if (monkCount > 0) {
                 String[] monkItemNames = {"อาสนะพระสงฆ์", "ตาลปัตรพร้อมขาตั้ง", "กรวยดอกไม้ถวายพระสงฆ์"};
                 for (String name : monkItemNames) {
                     itemRepo.findByItemName(name).ifPresent(item -> {
-                        if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
+                        if (!packageItems.contains(item)) packageItems.add(item);
                     });
                 }
+                // เพิ่มรายการค่าบริการนิมนต์พระ
                 itemRepo.findByItemName(MONK_INVITE_SERVICE_ITEM_NAME).ifPresent(item -> {
-                    if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
+                    if (!packageItems.contains(item)) packageItems.add(item);
                 });
             }
         }
-        return ceremonyItems;
+        return packageItems;
     }
 
+    // คัดเฉพาะ Item ที่ "รวมอยู่ในแพ็กเกจ" (ตัดแพ็กเกจ/ภัตตาหาร/สังฆทาน/อุปกรณ์เสริมออก)
     private List<Item> computePackageIncludedItems(List<Item> allItems) {
         List<Item> packageIncludedItems = new ArrayList<>();
         if (allItems != null) {
@@ -288,6 +291,7 @@ public class HeadStaffController {
                     boolean isFoodOrSangkathan = "ภัตตาหารปิ่นโต".equals(typeName) || "สังฆทาน".equals(typeName);
                     boolean isOptionalExtra = "อุปกรณ์เสริม (เลือกเพิ่มเอง)".equals(typeName);
 
+                
                     if (!isPackage && !isFoodOrSangkathan && !isOptionalExtra) {
                         packageIncludedItems.add(it);
                     }

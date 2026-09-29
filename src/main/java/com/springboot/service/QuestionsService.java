@@ -1,9 +1,9 @@
 package com.springboot.service;
 
 import com.springboot.model.QuestionsDetail;
-import com.springboot.model.Ceremony;
+import com.springboot.model.Package;
 import com.springboot.repository.QuestionsRepository;
-import com.springboot.repository.CeremonyRepository;
+import com.springboot.repository.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,30 +18,29 @@ public class QuestionsService {
     @Autowired
     private QuestionsRepository questionsRepo;
     @Autowired
-    private CeremonyRepository ceremonyRepo;
+    private PackageRepository packageRepo;
 
-    // ดึงคำถามทั้งหมด พร้อมข้อมูลพิธีที่ผูกอยู่ (fetch ceremony มาด้วย)
+    // ดึงคำถามทั้งหมดพร้อมข้อมูลแพ็กเกจที่ผูกอยู่
     public List<QuestionsDetail> getAllQuestions() {
-        return questionsRepo.findAllWithCeremony();
+        return questionsRepo.findAllWithPackage();
     }
 
-    // ดึงคำถามที่ใช้กับพิธีตาม ceremonyId ที่ระบุ รวมถึงคำถามที่เป็น "คำถามกลาง" (global) ด้วย
-    public List<QuestionsDetail> getQuestionsByCeremony(int ceremonyId) {
-        return questionsRepo.findByCeremonyIdIncludingGlobal(ceremonyId);
+    // ดึงคำถามของแพ็กเกจที่ระบุ รวมคำถามกลาง (global)
+    public List<QuestionsDetail> getQuestionsByPackage(int packageId) {
+        return questionsRepo.findByPackageIdIncludingGlobal(packageId);
     }
 
-    // แปลงรายชื่อ "ประเภทพิธี" (string) ให้เป็น list ของ Ceremony จริงในฐานข้อมูล
-    // ข้าม type ที่เป็น null, "ALL" หรือค่าว่าง — ถ้าระบุ type มาแต่หาไม่เจอเลยจะโยน exception
-    private List<Ceremony> resolveCeremoniesByTypes(List<String> ceremonyTypes) {
-        List<Ceremony> result = new ArrayList<>();
-        if (ceremonyTypes == null || ceremonyTypes.isEmpty()) {
+    // แปลงรายชื่อประเภทพิธีเป็น Package จริงในฐานข้อมูล (ไม่พบจะโยน exception)
+    private List<Package> resolvePackagesByTypes(List<String> packageTypes) {
+        List<Package> result = new ArrayList<>();
+        if (packageTypes == null || packageTypes.isEmpty()) {
             return result;
         }
-        for (String type : ceremonyTypes) {
+        for (String type : packageTypes) {
             if (type == null || type.equals("ALL") || type.isEmpty()) {
                 continue;
             }
-            List<Ceremony> options = ceremonyRepo.findByCeremonyType(type);
+            List<Package> options = packageRepo.findByPackageType(type);
             if (options.isEmpty()) {
                 throw new IllegalArgumentException("ไม่พบประเภทพิธีที่ระบุ: " + type);
             }
@@ -50,24 +49,23 @@ public class QuestionsService {
         return result;
     }
 
-    // เพิ่มคำถามใหม่ แล้วผูกกับพิธีตามประเภทที่เลือก (ผูกได้หลายประเภทพร้อมกัน)
-    // save คำถามก่อนเพื่อให้มี id ก่อนนำไปผูกความสัมพันธ์กับ Ceremony
+    // เพิ่มคำถามใหม่และผูกกับแพ็กเกจตามประเภทที่เลือก
     @Transactional
-    public void addQuestion(String questionText, List<String> ceremonyTypes) {
+    public void addQuestion(String questionText, List<String> packageTypes) {
         QuestionsDetail question = new QuestionsDetail(questionText);
         questionsRepo.saveAndFlush(question); // save ก่อนเพื่อให้มี id
 
-        List<Ceremony> ceremonies = resolveCeremoniesByTypes(ceremonyTypes);
-        for (Ceremony c : ceremonies) {
-            if (c.getQuestions() == null) {
-                c.setQuestions(new ArrayList<>());
+        List<Package> packages = resolvePackagesByTypes(packageTypes);
+        for (Package p : packages) {
+            if (p.getQuestions() == null) {
+                p.setQuestions(new ArrayList<>());
             }
-            c.getQuestions().add(question);
+            p.getQuestions().add(question);
         }
-        ceremonyRepo.saveAll(ceremonies);
+        packageRepo.saveAll(packages);
     }
 
-    // ลบคำถามตาม id: ตัดความสัมพันธ์กับทุกพิธีที่ผูกอยู่ก่อน แล้วค่อยลบตัวคำถามออก
+    // ลบคำถามตาม id โดยตัดความสัมพันธ์กับแพ็กเกจก่อน
     @Transactional
     public void deleteQuestion(int id) {
         QuestionsDetail question = questionsRepo.findById(id).orElse(null);
@@ -75,51 +73,63 @@ public class QuestionsService {
             return;
         }
 
-        if (question.getCeremonies() != null) {
-            for (Ceremony c : new ArrayList<>(question.getCeremonies())) {
-                if (c.getQuestions() != null) {
-                    c.getQuestions().remove(question);
+        if (question.getPackages() != null) {
+            for (Package p : new ArrayList<>(question.getPackages())) {
+                if (p.getQuestions() != null) {
+                    p.getQuestions().removeIf(q -> q.getQuestionsId() == question.getQuestionsId());
                 }
             }
-            ceremonyRepo.saveAll(question.getCeremonies());
+            packageRepo.saveAll(question.getPackages());
         }
 
         questionsRepo.deleteById(id);
     }
 
-    // ดึงคำถามตาม id คืนค่า null ถ้าไม่พบ
+    // ดึงคำถามตาม id (ไม่พบคืน null)
     public QuestionsDetail getQuestionById(int id) {
         return questionsRepo.findById(id).orElse(null);
     }
 
-    // แก้ไขคำถามที่มีอยู่: อัปเดตข้อความคำถาม แล้วล้างความสัมพันธ์กับพิธีเดิมทั้งหมด
-    // ก่อนผูกใหม่ตามรายการประเภทพิธีที่เลือกมาล่าสุด
+    // แก้ไขข้อความคำถามและผูกแพ็กเกจใหม่ตามประเภทที่เลือก
     @Transactional
-    public void updateQuestion(int id, String text, List<String> ceremonyTypes) {
+    public void updateQuestion(int id, String text, List<String> packageTypes) {
         QuestionsDetail existing = questionsRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("ไม่พบคำถาม ID: " + id));
 
         existing.setQuestionsText(text);
 
-        // ล้างความสัมพันธ์เดิมทั้งหมดก่อน (ฝั่งเจ้าของคือ Ceremony) ไม่ว่าจะผูกกับกี่ประเภทงานอยู่ก็ตาม
-        if (existing.getCeremonies() != null) {
-            for (Ceremony c : new ArrayList<>(existing.getCeremonies())) {
-                if (c.getQuestions() != null) {
-                    c.getQuestions().remove(existing);
-                }
+        // ล้างความสัมพันธ์เดิมทั้งหมดก่อน (ฝั่งเจ้าของคือ Package)
+        List<Package> oldPackages = existing.getPackages() != null
+                ? new ArrayList<>(existing.getPackages()) : new ArrayList<>();
+        for (Package p : oldPackages) {
+            if (p.getQuestions() != null) {
+                p.getQuestions().removeIf(q -> q.getQuestionsId() == existing.getQuestionsId());
             }
         }
 
         // ผูกความสัมพันธ์ใหม่ตามหลายประเภทงานที่เลือกมา
-        List<Ceremony> newCeremonies = resolveCeremoniesByTypes(ceremonyTypes);
-        for (Ceremony c : newCeremonies) {
-            if (c.getQuestions() == null) {
-                c.setQuestions(new ArrayList<>());
+        List<Package> newPackages = resolvePackagesByTypes(packageTypes);
+        for (Package p : newPackages) {
+            if (p.getQuestions() == null) {
+                p.setQuestions(new ArrayList<>());
             }
-            c.getQuestions().add(existing);
+            boolean alreadyLinked = p.getQuestions().stream()
+                    .anyMatch(q -> q.getQuestionsId() == existing.getQuestionsId());
+            if (!alreadyLinked) {
+                p.getQuestions().add(existing);
+            }
         }
 
-        ceremonyRepo.saveAll(newCeremonies);
+        // รวม package เก่า + ใหม่ (ไม่ซ้ำ) แล้ว save ทั้งหมด
+        List<Package> toSave = new ArrayList<>(oldPackages);
+        for (Package p : newPackages) {
+            boolean alreadyInList = toSave.stream()
+                    .anyMatch(x -> x.getPackageId() == p.getPackageId());
+            if (!alreadyInList) {
+                toSave.add(p);
+            }
+        }
+        packageRepo.saveAll(toSave);
         questionsRepo.save(existing);
     }
 }

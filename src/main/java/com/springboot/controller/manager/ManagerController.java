@@ -1,6 +1,7 @@
 package com.springboot.controller.manager;
 
 import com.springboot.model.*;
+import com.springboot.model.Package;
 import com.springboot.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -208,20 +209,20 @@ public class ManagerController {
         List<Item> pintoItems = itemService.getItemsByTypeName("ภัตตาหารปิ่นโต");
         List<Item> sanghatharnItems = itemService.getItemsByTypeName("สังฆทาน");
 
-        List<CeremonyItem> packageItems = new java.util.ArrayList<>();
-        if (booking.getCeremony() != null && booking.getCeremony().getCeremonyItems() != null) {
-            packageItems.addAll(booking.getCeremony().getCeremonyItems());
+        List<PackageItem> packageItems = new java.util.ArrayList<>();
+        if (booking.getPackageEntity() != null && booking.getPackageEntity().getPackageItems() != null) {
+            packageItems.addAll(booking.getPackageEntity().getPackageItems());
         }
 
-        if (booking.getCeremony() != null
-                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType())) {
+        if (booking.getPackageEntity() != null
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getPackageEntity().getOptionType())) {
 
             int monkCount = extractMonkCount(booking);
             boolean isSelfInvite = isMonkSelfInvite(booking);
 
             if (monkCount > 0) {
-                List<CeremonyItem> monkRelatedItems =
-                        buildMonkRelatedItems(booking.getCeremony(), monkCount, isSelfInvite);
+                List<PackageItem> monkRelatedItems =
+                        buildMonkRelatedItems(booking.getPackageEntity(), monkCount, isSelfInvite);
                 packageItems.addAll(monkRelatedItems);
             }
         }
@@ -267,26 +268,26 @@ public class ManagerController {
     }
 
     // สร้างรายการอุปกรณ์ที่เกี่ยวข้องกับจำนวนพระสงฆ์แบบ dynamic (ใช้เฉพาะกรณี "กรอกความต้องการเบื้องต้น"
-    // ที่ไม่มี CeremonyItem ผูกไว้ล่วงหน้าตามจำนวนพระ) เช่น อาสนะ ตาลปัตร กรวยดอกไม้ ตามจำนวนพระที่ระบุ
-    private List<CeremonyItem> buildMonkRelatedItems(Ceremony ceremony, int monkCount, boolean isSelfInvite) {
-        List<CeremonyItem> result = new java.util.ArrayList<>();
+    // ที่ไม่มี PackageItem ผูกไว้ล่วงหน้าตามจำนวนพระ) เช่น อาสนะ ตาลปัตร กรวยดอกไม้ ตามจำนวนพระที่ระบุ
+    private List<PackageItem> buildMonkRelatedItems(Package packageEntity, int monkCount, boolean isSelfInvite) {
+        List<PackageItem> result = new java.util.ArrayList<>();
 
         List<Item> serviceItems = itemService.getItemsByTypeName("บริการ");
         List<Item> ritualItems = itemService.getItemsByTypeName("อุปกรณ์พิธีกรรม");
 
         if (!isSelfInvite) {
             findItemByName(serviceItems, "บริการประสานงานนิมนต์พระ")
-                .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+                .ifPresent(item -> result.add(new PackageItem(packageEntity, item, monkCount)));
         }
 
         findItemByName(ritualItems, "อาสนะพระสงฆ์")
-            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+            .ifPresent(item -> result.add(new PackageItem(packageEntity, item, monkCount)));
 
         findItemByName(ritualItems, "ตาลปัตรพร้อมขาตั้ง")
-            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+            .ifPresent(item -> result.add(new PackageItem(packageEntity, item, monkCount)));
 
         findItemByName(ritualItems, "กรวยดอกไม้ถวายพระสงฆ์")
-            .ifPresent(item -> result.add(new CeremonyItem(ceremony, item, monkCount)));
+            .ifPresent(item -> result.add(new PackageItem(packageEntity, item, monkCount)));
 
         return result;
     }
@@ -350,7 +351,6 @@ public class ManagerController {
         java.util.Map<Integer, Integer> staffWorkload = new java.util.HashMap<>();
 
         for (HeadStaff s : allActive) {
-            // ตัดออกถ้ามีงานวันนี้อยู่แล้ว (กันไม่ให้คนเดียวถูกมอบ 2 งานวันเดียวกัน)
             if (!staffAssignmentService.canAssignOnDate(s.getStaffId(), booking.getEventDate())) {
                 continue;
             }
@@ -358,7 +358,6 @@ public class ManagerController {
             staffWorkload.put(s.getStaffId(), staffAssignmentService.countActiveAssignments(s.getStaffId()));
         }
 
-        // ว่าง (workload = 0) ขึ้นก่อน, มีงานค้าง (workload > 0) ไปอยู่ล่างสุด
         staffList.sort(
             java.util.Comparator
                 .comparing((HeadStaff s) -> staffWorkload.get(s.getStaffId()) > 0)

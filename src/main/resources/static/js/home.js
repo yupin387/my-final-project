@@ -1,27 +1,31 @@
 /* ============================================================
-   home.js (v14)
+   home.js (v15)
    ปฏิทินแบบ inline (ไม่มี modal สำหรับตัวปฏิทิน) — เลือกได้ทีละ 1 วัน
    แสดงวันดี/วันควรเลี่ยงในตารางเลย
    คลิกวันที่ว่างปุ๊บ -> เด้ง popup เลือกประเภทงานบุญทันที (ไม่ต้องกดปุ่มยืนยันแล้ว)
 
-   v14 changes:
-   - เพิ่มกากบาท (✕) มุมขวาบนของช่องวันที่ "เต็มคิว" (isFull && !isPast)
-     ผ่าน class cal-full-mark เพื่อให้เห็นชัดเจนว่าวันนั้นจองไม่ได้แล้ว
-   - หมายเหตุ: ปัญหา ★/▲ ไม่ขึ้นในปฏิทิน แก้ที่ฝั่ง backend แล้ว
-     (UserController.normalizeYearKeys ทำให้ key วันที่เป็น ค.ศ. เสมอ
-     ตรงกับ key ที่ home.js สร้างจาก Date จริงฝั่ง JS)
 
-   v13 changes:
-   - เปลี่ยนจากเลือกได้หลายวัน (Set) เป็นเลือกได้ทีละ 1 วัน (ตัวแปรเดี่ยว selectedDate)
-   - ตัดปุ่ม/แถบ "เลือกประเภทงานบุญ" ที่ต้องกดยืนยันออก คลิกวันที่แล้วเปิด popup ทันที
-   - คลิกวันที่เลือกอยู่ซ้ำ = ยกเลิกการเลือกและปิด popup
 
-   v12 changes:
-   - วันที่ผ่านมาแล้ว (ก่อนวันนี้) ล็อกไม่ให้คลิกเลือก และให้พื้นหลังทึบสีเทา
-     (ไม่ใช่แค่กรอบ) ผ่าน class cal-cell-past
-   - ลำดับความสำคัญของสีสถานะ: ผ่านมาแล้ว(เทา) > เต็มคิว(แดง) > วันนี้(เหลือง)
-     > เหลือคิวสุดท้าย(ส้ม) > ว่าง(เขียว)
-   ============================================================ */
+/* ===== Page data (มาจาก #pageData ใน JSP) =====
+   ทำงานเฉพาะหน้าที่มี #pageData เช่น home.jsp
+   หน้าอื่นที่ตั้ง window.contextPath / window.ceremonyTypes เองจะไม่ถูกทับ */
+(function initPageData() {
+	const el = document.getElementById("pageData");
+	if (!el) return;
+
+	window.contextPath = el.dataset.contextPath || "";
+	window.ceremonyTypes = Array.prototype.map.call(
+		el.querySelectorAll(".page-data-ceremony"),
+		function (s) {
+			return {
+				id: Number(s.dataset.id),
+				name: s.dataset.name,
+				image: window.contextPath + "/static/images/" + s.dataset.image,
+				packageCount: Number(s.dataset.packageCount)
+			};
+		}
+	);
+})();
 
 const MONTH_NAMES_TH = [
 	"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
@@ -259,6 +263,64 @@ function loadGalleryImages() {
 	});
 }
 
+/* ===== Hero slider (สไลด์รูปพื้นหลังหน้าแรก เปลี่ยนทุก 5 วินาที) ===== */
+
+function initHeroSlider() {
+	const heroSlides = document.querySelectorAll("#heroSlider .hero-slide");
+	if (!heroSlides.length) return;
+
+	let heroCurrent = 0;
+	setInterval(function () {
+		heroSlides[heroCurrent].classList.remove("active");
+		heroCurrent = (heroCurrent + 1) % heroSlides.length;
+		heroSlides[heroCurrent].classList.add("active");
+	}, 5000);
+}
+
+/* ===== Banner slider (มีจุดกดเลือกสไลด์ เปลี่ยนทุก 4 วินาที)
+   ทำงานเฉพาะหน้าที่มี #bannerSlider และ #bannerDots ===== */
+
+function initBannerSlider() {
+	const slides = document.querySelectorAll("#bannerSlider .banner-slide");
+	const dotsWrap = document.getElementById("bannerDots");
+	if (!slides.length || !dotsWrap) return;
+
+	let current = 0;
+	let timer = null;
+
+	slides.forEach(function (_, i) {
+		const dot = document.createElement("button");
+		dot.className = "banner-dot" + (i === 0 ? " active" : "");
+		dot.setAttribute("aria-label", "สไลด์ที่ " + (i + 1));
+		dot.addEventListener("click", function () {
+			goTo(i);
+			restartTimer();
+		});
+		dotsWrap.appendChild(dot);
+	});
+
+	const dots = dotsWrap.querySelectorAll(".banner-dot");
+
+	function goTo(index) {
+		slides[current].classList.remove("active");
+		dots[current].classList.remove("active");
+		current = index;
+		slides[current].classList.add("active");
+		dots[current].classList.add("active");
+	}
+
+	function next() {
+		goTo((current + 1) % slides.length);
+	}
+
+	function restartTimer() {
+		if (timer) clearInterval(timer);
+		timer = setInterval(next, 4000);
+	}
+
+	restartTimer();
+}
+
 /* ===== Init ===== */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -295,6 +357,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			if (e.target === ceremonyOverlay) closeCeremonyModal();
 		});
 	}
+
+	// สไลด์
+	initHeroSlider();
+	initBannerSlider();
 
 	// ปฏิทิน + แกลเลอรี
 	renderCalendar();

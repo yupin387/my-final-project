@@ -11,80 +11,7 @@
 <title>ใบเสนอราคา #${q.quotationId} - บุญมีนำพา จัดงานบุญ</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/static/css/quotationDetail.css?v=2">
-<style>
-.standard-table tr.group-row td.category-header-text {
-	text-align: left !important;
-	padding-left: 8px !important;
-	white-space: nowrap;
-	color: var(--text-dark);
-	font-weight: bold;
-}
 
-.standard-table tr.group-row td {
-	background-color: var(--gold-pale);
-}
-
-.flash-banner {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	width: fit-content;
-	max-width: 90%;
-	margin: 0 auto 20px;
-	padding: 13px 28px;
-	border-radius: 4px;
-	text-align: center;
-	font-weight: 700;
-	font-size: 14px;
-	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-	animation: alertFadeIn 0.3s ease;
-}
-
-.flash-banner-success {
-	background-color: #DCFCE7;
-	color: #15803D;
-	border: 1.5px solid #86EFAC;
-}
-
-.flash-banner-error {
-	background-color: #f8d7da;
-	color: #721c24;
-	border: 1px solid #f5c6cb;
-}
-
-@keyframes alertFadeIn {
-    from { opacity:0;
-	    transform: translateY(-6px);
-    }
-    to {
-	    opacity: 1;
-	    transform: translateY(0);
-    }
-}
-.remarks-box .remarks-header {
-	margin-bottom: 8px;
-}
-
-.remarks-box .remarks-header strong {
-	color: var(--text-dark);
-}
-
-.remarks-box .note-empty {
-	color: var(--text-muted);
-	font-style: normal;
-}
-
-.tot-extra-detail {
-	font-size: 12px;
-	color: var(--text-muted);
-	font-weight: 400;
-	font-style: italic;
-	text-align: left;
-	margin-top: 4px;
-	line-height: 1.5;
-}
-</style>
 </head>
 <body>
 
@@ -146,8 +73,9 @@
 			</c:forEach>
 			<c:set var="isMonkSelfInvite"
 				value="${fn:contains(monkInviteType,'นิมนต์เอง')}" />
+			<%-- ✅ แก้ไข: ceremony -> packageEntity --%>
 			<c:set var="isCustomRequest"
-				value="${b.ceremony.optionType == 'กรอกความต้องการเบื้องต้น'}" />
+				value="${b.packageEntity.optionType == 'กรอกความต้องการเบื้องต้น'}" />
 
 			<div class="doc-header">
 				<div class="company-info">
@@ -180,13 +108,14 @@
 						</tr>
 						<tr>
 							<td class="label">รูปแบบพิธี:</td>
-							<td class="value">${b.ceremony.ceremonyType}</td>
+							<%-- ✅ แก้ไข: Package ไม่มี field ceremonyType ใช้ packageType แทน --%>
+							<td class="value">${b.packageEntity.packageType}</td>
 						</tr>
 						<tr>
 							<td class="label">รูปแบบการจอง:</td>
 							<td class="value"><c:choose>
 									<c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
-									<c:otherwise>${b.ceremony.optionType}</c:otherwise>
+									<c:otherwise>${b.packageEntity.optionType}</c:otherwise>
 								</c:choose></td>
 						</tr>
 					</table>
@@ -251,13 +180,14 @@
 					<c:if test="${!isCustomRequest}">
 						<tr class="static-row">
 							<td class="text-center row-number"></td>
-							<td><strong>แพ็กเกจ: ${b.ceremony.optionType}</strong></td>
+							<%-- ✅ แก้ไข: ceremony -> packageEntity --%>
+							<td><strong>แพ็กเกจ: ${b.packageEntity.optionType}</strong></td>
 							<td class="text-center">1</td>
 							<td class="text-center">แพ็กเกจ</td>
 							<td class="text-right"><fmt:formatNumber
-									value="${b.ceremony.basePrice}" minFractionDigits="2" /></td>
+									value="${b.packageEntity.basePrice}" minFractionDigits="2" /></td>
 							<td class="text-right"><fmt:formatNumber
-									value="${b.ceremony.basePrice}" minFractionDigits="2" /></td>
+									value="${b.packageEntity.basePrice}" minFractionDigits="2" /></td>
 						</tr>
 					</c:if>
 
@@ -288,11 +218,12 @@
 						</c:forEach>
 					</c:if>
 
+					<%-- ✅ แก้ไข: b.ceremony.optionType -> b.packageEntity.optionType --%>
 					<c:set var="equipBlock">
 						<c:set var="printedEquip" value="false" />
 						<c:forEach var="d" items="${details}">
 							<c:if
-								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
+								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์พิธีกรรม')}">
 								<c:if test="${!printedEquip}">
 									<tr class="group-row">
 										<td></td>
@@ -326,11 +257,12 @@
 						</c:forEach>
 					</c:set>
 
+					<%-- ✅ แก้ไข: b.ceremony.optionType -> b.packageEntity.optionType --%>
 					<c:set var="sangBlock">
 						<c:set var="printedSang" value="false" />
 						<c:forEach var="d" items="${details}">
 							<c:if
-								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
+								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('สังฆทาน')}">
 								<c:if test="${!printedSang}">
 									<tr class="group-row">
 										<td></td>
@@ -372,11 +304,12 @@
 						</c:forEach>
 					</c:set>
 
+					<%-- ✅ แก้ไข: b.ceremony.optionType -> b.packageEntity.optionType --%>
 					<c:set var="foodBlock">
 						<c:set var="printedFood" value="false" />
 						<c:forEach var="d" items="${details}">
 							<c:if
-								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
+								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('ภัตตาหาร')}">
 								<c:if test="${!printedFood}">
 									<tr class="group-row">
 										<td></td>
@@ -410,11 +343,12 @@
 						</c:forEach>
 					</c:set>
 
+					<%-- ✅ แก้ไข: b.ceremony.optionType -> b.packageEntity.optionType --%>
 					<c:set var="servBlock">
 						<c:set var="printedServ" value="false" />
 						<c:forEach var="d" items="${details}">
 							<c:if
-								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('บริการ')}">
+								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('บริการ')}">
 								<c:if test="${!printedServ}">
 									<tr class="group-row">
 										<td></td>
@@ -455,11 +389,12 @@
 						</c:forEach>
 					</c:set>
 
+					<%-- ✅ แก้ไข: b.ceremony.optionType -> b.packageEntity.optionType --%>
 					<c:set var="extraBlock">
 						<c:set var="printedExtra" value="false" />
 						<c:forEach var="d" items="${details}">
 							<c:if
-								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.ceremony.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
+								test="${d.item != null && d.item.itemType != null && fn:trim(d.item.itemName) ne fn:trim(b.packageEntity.optionType) && d.item.itemType.itemTypeName.contains('อุปกรณ์เสริม')}">
 								<c:if test="${!printedExtra}">
 									<tr class="group-row">
 										<td></td>
@@ -526,15 +461,16 @@
 				<div class="totals-box" style="width: 350px;">
 					<c:set var="sumExtra" value="0" />
 					<%-- สำหรับโหมดกรอกเอง ให้หาราคาของรายการพื้นฐาน (ที่ไม่ได้มาจากหมวดอุปกรณ์เสริม) เอาไว้เป็นราคาตามรายการ --%>
+					<%-- ✅ แก้ไข: ceremony -> packageEntity --%>
 					<c:set var="sumPackage"
-						value="${isCustomRequest ? 0 : b.ceremony.basePrice}" />
+						value="${isCustomRequest ? 0 : b.packageEntity.basePrice}" />
 					<c:set var="extraItemsList" value="" />
 
 					<c:forEach var="d" items="${details}">
 						<c:choose>
-							<%-- ข้ามชื่อแพ็กเกจ (ถ้ามี) --%>
+							<%-- ข้ามชื่อแพ็กเกจ (ถ้ามี) — ✅ แก้ไข: ceremony -> packageEntity --%>
 							<c:when
-								test="${!isCustomRequest && d.item != null && fn:trim(d.item.itemName) eq fn:trim(b.ceremony.optionType)}">
+								test="${!isCustomRequest && d.item != null && fn:trim(d.item.itemName) eq fn:trim(b.packageEntity.optionType)}">
 							</c:when>
 							<c:otherwise>
 								<c:set var="itemVal" value="${d.subtotal}" />
@@ -641,36 +577,6 @@
 		</div>
 	</footer>
 
-	<script>
-		function toggleDropdown() {
-			document.getElementById('dropdownMenu').classList.toggle('show');
-		}
-		document.addEventListener('click', function(e) {
-			if (!e.target.closest('.user-info'))
-				document.getElementById('dropdownMenu').classList
-						.remove('show');
-		});
-
-		document
-				.addEventListener(
-						'DOMContentLoaded',
-						function() {
-							var rows = document
-									.querySelectorAll('.standard-table tbody tr:not(.group-row):not(.package-included-row)');
-							var count = 1;
-							rows.forEach(function(row) {
-								var numCell = row.querySelector('.row-number');
-								if (numCell)
-									numCell.innerText = count++;
-							});
-
-							setTimeout(function() {
-								var banner = document
-										.getElementById('flashBanner');
-								if (banner)
-									banner.style.display = 'none';
-							}, 5000);
-						});
-	</script>
+	<script src="${pageContext.request.contextPath}/static/js/quotationDetail.js?v=1"></script>
 </body>
 </html>

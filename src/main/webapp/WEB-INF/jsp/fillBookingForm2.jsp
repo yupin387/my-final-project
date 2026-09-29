@@ -227,10 +227,10 @@
                             </c:otherwise>
                         </c:choose>
                         <c:set var="isPkgSelected"
-                               value="${(not empty param.ceremonyId and param.ceremonyId == pkg.ceremonyId) or (empty param.ceremonyId and loop.first)}"/>
+                               value="${(not empty param.packageId and param.packageId == pkg.packageId) or (empty param.packageId and loop.first)}"/>
 
                         <c:if test="${isPkgSelected}">
-                            <c:forEach items="${pkg.ceremonyItems}" var="ci">
+                            <c:forEach items="${pkg.packageItems}" var="ci">
                                 <c:if test="${ci.item.itemType.itemTypeName == 'สังฆทาน'}">
                                     <c:set var="includedPrice" value="${ci.item.pricePerUnit}"/>
                                     <c:set var="includedName" value="${ci.item.itemName}"/>
@@ -239,9 +239,9 @@
                             </c:forEach>
                         </c:if>
 
-                        <c:if test="${empty param.ceremonyId or param.ceremonyId == pkg.ceremonyId}">
+                        <c:if test="${empty param.packageId or param.packageId == pkg.packageId}">
                         <label class="item-card">
-                            <input type="radio" name="ceremony.ceremonyId" value="${pkg.ceremonyId}"
+                            <input type="radio" name="packageEntity.packageId" value="${pkg.packageId}"
                                    data-monkcount="${pkgMonkCount}"
                                    onchange="applyPackageMonkCount(this)"
                                    ${isPkgSelected ? 'checked' : ''}>
@@ -251,7 +251,7 @@
                         </div>
                             <div class="item-card-body">
                                 <div class="item-card-name">${pkg.optionType}</div>
-                                <div class="item-card-desc">${pkg.ceremonyDetail}</div>
+                                <div class="item-card-desc">${pkg.packageDetail}</div>
                                 <div class="item-card-price">
                                     ฿<fmt:formatNumber value="${pkg.basePrice}" pattern="#,###"/>
                                 </div>
@@ -263,8 +263,8 @@
             </div>
         </div>
 
-        <div id="customCeremonyWrap" style="${startInCustomMode ? 'display:block;' : 'display:none;'}">
-            <input type="hidden" name="ceremony.ceremonyId" id="customCeremonyId" value="${defaultCeremonyId}">
+        <div id="customPackageWrap" style="${startInCustomMode ? 'display:block;' : 'display:none;'}">
+            <input type="hidden" name="packageEntity.packageId" id="customPackageId" value="${defaultCeremonyId}">
         </div>
 
         <%-- 1.2 การนิมนต์พระสงฆ์ --%>
@@ -673,321 +673,27 @@
     <img id="lightboxImg" src="" alt="">
 </div>
 
-<script>
-(function() {
-    var imgPicker = document.getElementById('imgPicker');
-    if (!imgPicker) return;
-    var imageList = [];
-    imgPicker.addEventListener('change', function() {
-        var file = this.files[0];
-        if (!file) return;
-        if (imageList.length >= 5) {
-            alert('อัปโหลดรูปภาพได้สูงสุด 5 รูป');
-            this.value = '';
-            return;
-        }
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            imageList.push(e.target.result);
-            var box = document.getElementById('imagePreviewBox');
-            var wrapper = document.createElement('div');
-            wrapper.style.cssText = 'position:relative;width:80px;height:80px;';
-            var img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #E0577F;';
-            var del = document.createElement('button');
-            del.type = 'button'; del.innerText = 'x';
-            del.style.cssText = 'position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.5);color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;';
-            var idx = imageList.length - 1;
-            del.onclick = function() {
-                imageList.splice(idx, 1);
-                box.removeChild(wrapper);
-                updateInputs();
-            };
-            wrapper.appendChild(img);
-            wrapper.appendChild(del);
-            box.appendChild(wrapper);
-            updateInputs();
-        };
-        reader.readAsDataURL(file);
-        this.value = '';
-    });
-    function updateInputs() {
-        var container = document.getElementById('base64Container');
-        container.innerHTML = '';
-        for (var i = 0; i < imageList.length; i++) {
-            var inp = document.createElement('input');
-            inp.type = 'hidden';
-            inp.name = 'imageBase64[' + i + ']';
-            inp.value = imageList[i];
-            container.appendChild(inp);
-        }
-        var addBtn = document.getElementById('addImgBtn');
-        if (addBtn) {
-            var atLimit = imageList.length >= 5;
-            addBtn.disabled = atLimit;
-            addBtn.style.opacity = atLimit ? '0.5' : '1';
-            addBtn.style.cursor = atLimit ? 'not-allowed' : 'pointer';
-        }
-    }
-})();
-
-function toggleWatOwnField(id, show) {
-    var el = document.getElementById(id);
-    if (el) el.style.display = show ? 'block' : 'none';
-}
-
-function openLightbox(imgEl) {
-    var lb = document.getElementById('imageLightbox');
-    var lbImg = document.getElementById('lightboxImg');
-    if (!lb || !lbImg) return;
-    lbImg.src = imgEl.src;
-    lbImg.alt = imgEl.alt || '';
-    lb.style.display = 'flex';
-}
-
-function closeLightbox() {
-    var lb = document.getElementById('imageLightbox');
-    if (lb) lb.style.display = 'none';
-}
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeLightbox();
-});
-
-function toggleWatDetailBlock(id, show) {
-    var el = document.getElementById(id);
-    if (el) el.style.display = show ? 'block' : 'none';
-    
-    var monkCountGroup = document.getElementById('monkCountGroup');
-    if (monkCountGroup) {
-        if (${startInCustomMode}) {
-            monkCountGroup.style.display = 'block';
-        } else {
-            monkCountGroup.style.display = show ? 'none' : 'block';
-            if (show) {
-                var checkedPkg = document.querySelector('input[name="ceremony.ceremonyId"]:checked');
-                if (checkedPkg && checkedPkg.dataset.monkcount) {
-                    onMonkCountInputChange(checkedPkg.dataset.monkcount);
-                }
-            }
-        }
-    }
-
-    var shopWarning = document.getElementById('shopInviteWarning');
-    var pkgSelfWarning = document.getElementById('pkgSelfInviteWarning');
-    var isCustom = ${startInCustomMode};
-
-    if (show) {
-        if (shopWarning) shopWarning.style.display = 'block';
-        if (pkgSelfWarning) pkgSelfWarning.style.display = 'none';
-    } else {
-        if (shopWarning) shopWarning.style.display = 'none';
-        if (!isCustom && pkgSelfWarning) {
-            pkgSelfWarning.style.display = 'block';
-        }
-    }
-}
-
-function toggleSection(id, show) {
-    var el = document.getElementById(id);
-    if (el) el.style.display = show ? 'block' : 'none';
-}
-
-function syncAllWatAnswersBeforeSubmit() {
-    return true;
-}
-
-function applyPackageMonkCount(radio) {
-    var input = document.getElementById('monkCountField');
-    if (input && radio.dataset.monkcount) {
-        input.value = radio.dataset.monkcount;
-    }
-    var monkVal = input ? parseInt(input.value, 10) : 5;
-    if (isNaN(monkVal)) monkVal = 5;
-
-    var qtyInput = document.getElementById('sanghatanQtyInput');
-    if (qtyInput && qtyInput.dataset.userEdited !== 'true') {
-        qtyInput.value = monkVal;
-    }
-    var pintoInput = document.getElementById('pintoQtyInput');
-    if (pintoInput && pintoInput.dataset.userEdited !== 'true') {
-        pintoInput.value = monkVal + 2;
-    }
-}
-
-function onMonkCountInputChange(value) {
-    var sQty = document.getElementById('sanghatanQtyInput');
-    if (sQty && sQty.dataset.userEdited !== 'true') {
-        sQty.value = value;
-    }
-    var pintoInput = document.getElementById('pintoQtyInput');
-    if (pintoInput && pintoInput.dataset.userEdited !== 'true') {
-        var v = parseInt(value, 10);
-        pintoInput.value = isNaN(v) ? '' : (v + 2);
-    }
-}
-
-function isInHiddenBranch(el) {
-    var node = el.parentElement;
-    while (node && node !== document.body) {
-        if (node.style && node.style.display === 'none') return true;
-        node = node.parentElement;
-    }
-    return false;
-}
-
-function cleanupAndRenumberDetailsBeforeSubmit() {
-    var form = document.querySelector('form');
-
-    form.querySelectorAll('input, select, textarea').forEach(function(el) {
-        if (isInHiddenBranch(el)) el.disabled = true;
-    });
-
-    var monkCountField = document.getElementById('monkCountField');
-    var monkCountQId = document.getElementById('monkCountQuestionIdField');
-    if (monkCountField) monkCountField.disabled = false;
-    if (monkCountQId) monkCountQId.disabled = false;
-
-    var pattern = /^details\[(\d+)\]\.(answer|question\.questionsId)$/;
-    var order = [];
-    var seen = {};
-    form.querySelectorAll('input:not([disabled]), select:not([disabled]), textarea:not([disabled])').forEach(function(el) {
-        var m = el.name && el.name.match(pattern);
-        if (m && !seen[m[1]]) { seen[m[1]] = true; order.push(m[1]); }
-    });
-    var remap = {};
-    order.forEach(function(oldIdx, i) { remap[oldIdx] = i; });
-    form.querySelectorAll('input:not([disabled]), select:not([disabled]), textarea:not([disabled])').forEach(function(el) {
-        var m = el.name && el.name.match(pattern);
-        if (m) el.name = 'details[' + remap[m[1]] + '].' + m[2];
-    });
-
-    return true;
-}
-
-function showError(element, message) {
-    if (element.nextElementSibling && element.nextElementSibling.classList.contains('custom-error-msg')) {
-        element.nextElementSibling.remove();
-    }
-
-    var err = document.createElement('div');
-    err.className = 'custom-error-msg';
-    err.style.color = 'red';
-    err.style.fontSize = '11px';
-    err.style.marginTop = '4px';
-    err.innerText = message;
-
-    if(element.nextSibling) {
-        element.parentNode.insertBefore(err, element.nextSibling);
-    } else {
-        element.parentNode.appendChild(err);
-    }
-
-    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
-        element.style.borderColor = 'red';
-        element.classList.add('validation-failed');
-
-        var removeError = function() {
-            element.style.borderColor = '';
-            element.classList.remove('validation-failed');
-            if (err.parentNode) err.parentNode.removeChild(err);
-        };
-        element.addEventListener('input', removeError, {once: true});
-        element.addEventListener('change', removeError, {once: true});
-    }
-}
-
-function handleFormSubmit(form) {
-    document.querySelectorAll('.custom-error-msg').forEach(function(e) { e.remove(); });
-    form.querySelectorAll('.validation-failed').forEach(function(el) { el.style.borderColor = ''; el.classList.remove('validation-failed'); });
-
-    let isValid = true;
-    let firstErrorElement = null;
-
-    function markError(el, msg) {
-        showError(el, msg);
-        isValid = false;
-        if (!firstErrorElement) firstErrorElement = el;
-    }
-
-    var eventDateVal = document.getElementById('eventDateInput').value;
-    if (!eventDateVal) {
-        markError(document.getElementById('datePickerWrap'), 'กรุณาเลือกวันที่จัดงานจากปฏิทิน');
-    }
-
-    form.querySelectorAll('input[required], textarea[required], select[required]').forEach(function(el) {
-        if (!isInHiddenBranch(el)) {
-            if (!el.value.trim()) {
-                markError(el, 'กรุณากรอกข้อมูลในช่องนี้ให้ครบถ้วน');
-            }
-        }
-    });
-
-    form.querySelectorAll('input[type="number"]').forEach(function(el) {
-        if (!isInHiddenBranch(el) && el.value !== '') {
-            if (parseFloat(el.value) <= 0) {
-                markError(el, 'จำนวนต้องมากกว่า 0 และห้ามติดลบ');
-            }
-        }
-    });
-
-    var lat = document.getElementById('eventLat').value;
-    if (!lat || lat === "") {
-        markError(document.getElementById('locationMap'), 'กรุณาปักหมุดตำแหน่งที่จัดงานบนแผนที่');
-    }
-
-    var imgCount = document.querySelectorAll('#base64Container input').length;
-    if (imgCount === 0) {
-        markError(document.getElementById('imagePreviewBox'), 'กรุณาอัปโหลดรูปภาพสถานที่จัดงานอย่างน้อย 1 รูป');
-    }
-
-    if (!isValid) {
-        if (firstErrorElement) {
-            firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        return false;
-    }
-
-    syncAllWatAnswersBeforeSubmit();
-    cleanupAndRenumberDetailsBeforeSubmit();
-
-    return true;
-}
-
-function syncInitialToggleStates() {
-    document.querySelectorAll('input[type="radio"]:checked').forEach(function(radio) {
-        if (isInHiddenBranch(radio)) return;
-        var code = radio.getAttribute('onchange');
-        if (code) {
-            try { new Function(code).call(radio); } catch (e) {}
-        }
-    });
-}
-document.addEventListener('DOMContentLoaded', syncInitialToggleStates);
-window.addEventListener('pageshow', syncInitialToggleStates);
-
-window.bookedDates = [
-    <c:forEach var="d" items="${bookedDates}" varStatus="st">
-        "${d}"<c:if test="${!st.last}">,</c:if>
+<%-- ========== ข้อมูลจากเซิร์ฟเวอร์ส่งให้ bookingForm.js อ่าน (แทน <script> inline เดิม) ==========
+     ต้องอยู่ก่อน <script src="bookingForm.js"> เพราะ bookingForm.js อ่านค่านี้ตอนโหลด
+     แล้วตั้ง isCustomMode, window.teamCount, window.bookedDates, window.bookingsPerDate,
+     window.dayQuality ให้ miniBookingCalendar.js ใช้ต่อ --%>
+<div id="bookingPageData" style="display:none;"
+     data-custom-mode="${startInCustomMode}"
+     data-team-count="${empty teamCount ? 2 : teamCount}">
+    <c:forEach var="d" items="${bookedDates}">
+        <span data-booked="<c:out value='${d}'/>"></span>
     </c:forEach>
-];
-window.teamCount = ${empty teamCount ? 2 : teamCount};
-window.bookingsPerDate = {
-    <c:forEach var="e" items="${bookingsPerDate}" varStatus="st">
-        "${e.key}": ${e.value}<c:if test="${!st.last}">,</c:if>
+    <c:forEach var="e" items="${bookingsPerDate}">
+        <span data-bookings-date="<c:out value='${e.key}'/>" data-count="<c:out value='${e.value}'/>"></span>
     </c:forEach>
-};
-window.dayQuality = {
-    <c:forEach var="e" items="${dayQuality}" varStatus="st">
-        "${e.key}": [
-            <c:forEach var="tag" items="${e.value}" varStatus="st2">
-                {type:"${tag.type}",label:"${tag.label}"}<c:if test="${!st2.last}">,</c:if>
+    <c:forEach var="e" items="${dayQuality}">
+        <div data-quality-date="<c:out value='${e.key}'/>">
+            <c:forEach var="tag" items="${e.value}">
+                <span data-type="<c:out value='${tag.type}'/>" data-label="<c:out value='${tag.label}'/>"></span>
             </c:forEach>
-        ]<c:if test="${!st.last}">,</c:if>
+        </div>
     </c:forEach>
-};
-</script>
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="

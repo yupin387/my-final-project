@@ -1,6 +1,7 @@
 // ===== ฟังก์ชันจัดการการเปิด-ปิดเมนู Dropdown และปิดอัตโนมัติเมื่อคลิกพื้นที่อื่นภายนอก =====
 function toggleDropdown() {
-    document.getElementById('dropdownMenu').classList.toggle('show');
+    const menu = document.getElementById('dropdownMenu');
+    if (menu) menu.classList.toggle('show');
 }
 
 document.addEventListener('click', function (e) {
@@ -11,7 +12,17 @@ document.addEventListener('click', function (e) {
     }
 });
 
-// ซ่อน flash banner อัตโนมัติหลัง 3 วินาที
+// ===== ฟังก์ชันเปลี่ยนแท็บ (Switch Tab) =====
+function switchTab(tab) {
+    document.querySelectorAll('.tab-attached-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+    document.querySelectorAll('.tab-panel').forEach(function(panel) {
+        panel.classList.toggle('show', panel.id === 'tab-' + tab);
+    });
+}
+
+// ===== ซ่อน flash banner อัตโนมัติหลัง 3 วินาที =====
 setTimeout(function() {
     const banners = document.querySelectorAll('.flash-banner');
     banners.forEach(function(el) {

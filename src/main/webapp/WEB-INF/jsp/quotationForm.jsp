@@ -8,46 +8,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>จัดทำใบเสนอราคา - บุญมีนำพา จัดงานบุญ</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=19">
-<style>
-   
-    .tot-extra-detail{
-        font-size: 12px;
-        color: #888;
-        font-weight: 400;
-        font-style: italic;
-        text-align: left;
-        margin-top: 4px;
-        line-height: 1.5;
-    }
-
-   
-    #mainQuotationTable thead th:first-child {
-        white-space: nowrap;
-    }
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/quotationCreate.css?v=20">
 </head>
 <body>
 
 	<%-- ===== NAVBAR ===== --%>
 	<nav class="navbar">
-		<a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings"> 
-            <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon"> 
+		<a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings">
+            <img src="${pageContext.request.contextPath}/static/images/logoo.png" alt="บุญมีนำพา รับจัดงานบุญ" class="lotus-icon">
             <span class="navbar-title">บุญมีนำพา จัดงานบุญ</span>
 		</a>
 		<div class="navbar-right">
 			<nav class="navbar-menu">
-				<a href="${pageContext.request.contextPath}/manager/bookings" class="nav-item">รายการจอง</a> 
-                <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a> 
-                <a href="${pageContext.request.contextPath}/manager/questions" class="nav-item">จัดการพิธี</a> 
+				<a href="${pageContext.request.contextPath}/manager/bookings" class="nav-item">รายการจอง</a>
+                <a href="${pageContext.request.contextPath}/manager/head-staff" class="nav-item">หัวหน้างาน</a>
+                <a href="${pageContext.request.contextPath}/manager/questions" class="nav-item">จัดการพิธี</a>
                 <a href="${pageContext.request.contextPath}/manager/quotation" class="nav-item active">จัดการใบเสนอราคา</a>
 			</nav>
-			   <div class="user-info" onclick="toggleDropdown()">
-            <div class="user-avatar">M</div>
-            <div class="user-detail">
-                <span class="user-name">Manager</span>
-                <span class="user-role">ผู้จัดการ</span>
-            </div>
+			<div class="user-info" onclick="toggleDropdown()">
+				<div class="user-avatar">M</div>
+				<div class="user-detail">
+					<span class="user-name">Manager</span>
+					<span class="user-role">ผู้จัดการ</span>
+				</div>
 				<span class="arrow">▾</span>
 				<div class="dropdown-menu" id="dropdownMenu">
 					<a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item">ออกจากระบบ</a>
@@ -89,19 +72,19 @@
 								<td class="label">วันที่จัดงาน:</td>
 								<td class="value"><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy" /> เวลา ${b.eventTime} น.</td>
 							</tr>
-							   <tr>
-                            <td class="label">รูปแบบพิธี:</td>
-                            <td class="value">${b.ceremony.ceremonyType}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">รูปแบบการจอง:</td>
-                            <td class="value">
-                                <c:choose>
-                                    <c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
-                                    <c:otherwise>${b.ceremony.optionType}</c:otherwise>
-                                </c:choose>
-                            </td>
-                        </tr>
+							<tr>
+								<td class="label">รูปแบบพิธี:</td>
+								<td class="value">${b.packageEntity.packageType}</td>
+							</tr>
+							<tr>
+								<td class="label">รูปแบบการจอง:</td>
+								<td class="value">
+									<c:choose>
+										<c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
+										<c:otherwise>${b.packageEntity.optionType}</c:otherwise>
+									</c:choose>
+								</td>
+							</tr>
 						</table>
 					</div>
 					<div class="meta-box-right">
@@ -124,12 +107,12 @@
 
 				<table id="mainQuotationTable" class="standard-table">
                     <colgroup>
-                        <col style="width: 60px;">  
-                        <col style="width: auto;">  
-                        <col style="width: 130px;">  
-                        <col style="width: 80px;">  
-                        <col style="width: 110px;"> 
-                        <col style="width: 110px;"> 
+                        <col style="width: 60px;">
+                        <col style="width: auto;">
+                        <col style="width: 130px;">
+                        <col style="width: 80px;">
+                        <col style="width: 110px;">
+                        <col style="width: 110px;">
                     </colgroup>
 					<thead>
 						<tr>
@@ -148,17 +131,17 @@
 						<c:if test="${fn:contains(d.question.questionsText,'รูปแบบการนิมนต์')}"><c:set var="monkInviteType" value="${d.answer}" /></c:if>
 						<c:if test="${fn:contains(d.question.questionsText,'จำนวนพระ')}"><c:set var="monkCount" value="${d.answer}" /></c:if>
 					</c:forEach>
-                    
+
                     <c:set var="isMonkSelfInvite" value="${fn:contains(monkInviteType,'นิมนต์เอง')}" />
                     <c:set var="discountValue" value="0" />
-                    
-                    <c:set var="isCustomRequest" value="${fn:contains(b.ceremony.optionType, 'ความต้องการเบื้องต้น')}" />
+
+                    <c:set var="isCustomRequest" value="${fn:contains(b.packageEntity.optionType, 'ความต้องการเบื้องต้น')}" />
                     <c:choose>
                         <c:when test="${isCustomRequest}">
                             <c:set var="packageDisplayPrice" value="0.00" />
                         </c:when>
                         <c:otherwise>
-                            <c:set var="packageDisplayPrice" value="${b.ceremony.basePrice}" />
+                            <c:set var="packageDisplayPrice" value="${b.packageEntity.basePrice}" />
                             <c:if test="${isMonkSelfInvite}">
                                 <c:set var="discountValue" value="1500" />
                             </c:if>
@@ -170,8 +153,8 @@
 						<tr class="static-row package-main-row no-qty-convert">
 							<td class="text-center row-number">1</td>
 							<td>
-								<strong>แพ็กเกจ: ${b.ceremony.optionType}</strong>
-								<input type="hidden" name="bookingItemNames" value="${b.ceremony.optionType}">
+								<strong>แพ็กเกจ: ${b.packageEntity.optionType}</strong>
+								<input type="hidden" name="bookingItemNames" value="${b.packageEntity.optionType}">
 							</td>
 							<td class="text-center">1<input type="hidden" name="bookingQtys" value="1" class="qty-input"></td>
 							<td class="text-center">แพ็กเกจ</td>
@@ -181,11 +164,11 @@
 						</c:if>
 
 						<c:if test="${not empty packageIncludedItems && !isCustomRequest}">
-    <tr class="package-included-row no-qty-convert static-row">
-        <td></td>
-        <td class="package-includes-title" style="padding-left: 20px !important;">ประกอบไปด้วยรายการดังนี้:</td>
-        <td></td><td></td><td></td><td></td>
-    </tr>
+							<tr class="package-included-row no-qty-convert static-row">
+								<td></td>
+								<td class="package-includes-title" style="padding-left: 20px !important;">ประกอบไปด้วยรายการดังนี้:</td>
+								<td></td><td></td><td></td><td></td>
+							</tr>
 							<c:forEach var="pkgItem" items="${packageIncludedItems}">
 								<tr class="package-included-row no-qty-convert static-row">
 									<td class="no-index"></td>
@@ -211,10 +194,7 @@
                             <tbody id="group-equipment" data-category="อุปกรณ์พิธีกรรม">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดอุปกรณ์พิธีกรรม
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('อุปกรณ์พิธีกรรม')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
+                                    <td class="category-header-text">หมวดอุปกรณ์พิธีกรรม</td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
                                 <%-- ดึงรายการพื้นฐานมาแสดงอัตโนมัติ --%>
@@ -223,7 +203,7 @@
                                         <tr class="static-row">
                                             <td class="text-center row-number"></td>
                                             <td>
-                                                ${item.itemName} 
+                                                ${item.itemName}
                                                 <input type="hidden" name="bookingItemNames" value="${item.itemName}">
                                             </td>
                                             <c:set var="qty" value="1" />
@@ -243,10 +223,7 @@
                             <tbody id="group-sangkathan" data-category="สังฆทาน">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดสังฆทาน
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('สังฆทาน')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
+                                    <td class="category-header-text">หมวดสังฆทาน</td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
                                 <c:forEach var="ln" items="${sanghatanLines}">
@@ -274,10 +251,7 @@
                             <tbody id="group-food" data-category="ภัตตาหาร">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดภัตตาหารปิ่นโต
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('ภัตตาหาร')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
+                                    <td class="category-header-text">หมวดภัตตาหารปิ่นโต</td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
                                 <c:forEach var="detail" items="${validDetails}">
@@ -305,18 +279,13 @@
                             <tbody id="group-service" data-category="บริการ">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดบริการและการดำเนินการ
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('บริการ')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
+                                    <td class="category-header-text">หมวดบริการและการดำเนินการ</td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
                                 <%-- ดึงรายการบริการพื้นฐานมาแสดงอัตโนมัติ --%>
                                 <c:forEach var="item" items="${packageIncludedItems}">
                                     <c:if test="${item.itemType.itemTypeName == 'บริการ'}">
-                                        <%-- เช็คว่าเป็นบริการประสานงานนิมนต์พระหรือไม่ ถ้าลูกค้าเลือก "นิมนต์เอง"
-                                             ให้ยังคงแสดงรายการนี้ไว้ในใบเสนอราคา แต่คิดราคาเป็น 0.00 บาท
-                                             พร้อมขึ้นป้ายกำกับให้ทราบ --%>
+                                        <%-- บริการประสานงานนิมนต์พระ: ถ้าลูกค้าเลือก "นิมนต์เอง" ยังแสดงรายการ แต่คิดราคา 0.00 บาท พร้อมป้ายกำกับ --%>
                                         <c:set var="isMonkInviteService" value="${item.itemName == 'บริการประสานงานนิมนต์พระ'}" />
                                         <tr class="static-row">
                                             <td class="text-center row-number"></td>
@@ -341,6 +310,7 @@
                                 </c:forEach>
                             </tbody>
 
+                            <%-- หมวดอุปกรณ์เสริม: มีปุ่ม + เฉพาะหมวดนี้ --%>
                             <tbody id="group-extra" data-category="อุปกรณ์เสริม">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
@@ -364,10 +334,7 @@
                             <tbody id="group-sangkathan" data-category="สังฆทาน">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดสังฆทาน
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('สังฆทาน')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
+                                    <td class="category-header-text">หมวดสังฆทาน</td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
                                 <c:forEach var="ln" items="${sanghatanLines}">
@@ -404,10 +371,7 @@
                             <tbody id="group-food" data-category="ภัตตาหาร">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
-                                    <td class="category-header-text">
-                                        หมวดภัตตาหารปิ่นโต
-                                        <button type="button" class="btn-add-group-inline" onclick="openItemModal('ภัตตาหาร')" title="เพิ่มรายการหมวดนี้">+</button>
-                                    </td>
+                                    <td class="category-header-text">หมวดภัตตาหารปิ่นโต</td>
                                     <td></td><td></td><td></td><td></td>
                                 </tr>
                                 <c:forEach var="detail" items="${validDetails}">
@@ -432,6 +396,7 @@
                                 </c:forEach>
                             </tbody>
 
+                            <%-- หมวดอุปกรณ์เสริม: มีปุ่ม + เฉพาะหมวดนี้ --%>
                             <tbody id="group-extra" data-category="อุปกรณ์เสริม">
                                 <tr class="group-row">
                                     <td class="no-index"></td>
@@ -455,11 +420,10 @@
                         </div>
 						<textarea name="note" class="remarks-textarea" placeholder="ระบุความต้องการเพิ่มเติมที่นี่...">${additionalNote}</textarea>
 					</div>
-					
+
                     <div class="totals-box">
                         <input type="hidden" id="discountValue" value="${discountValue}">
 						<table class="totals-table">
-                          
                             <tr>
                                 <td class="tot-label">
                                     <c:choose>
@@ -469,7 +433,6 @@
                                 </td>
                                 <td class="tot-value">฿ <span id="summaryPackage">0.00</span></td>
                             </tr>
-                            <%-- นำ c:if ออก เพื่อให้บรรทัดนี้แสดงผลในโหมดกรอกเองด้วย --%>
                             <tr>
                                 <td class="tot-label">
                                     รายการเพิ่มเติม:
@@ -499,13 +462,13 @@
 		</form>
 	</div>
 
+	<%-- ข้อมูลรายการที่เลือกเพิ่มได้ (ใช้โดย popup ของปุ่ม + ในหมวดอุปกรณ์เสริม) --%>
 	<div id="itemDataStore" style="display: none;">
-        <%-- ดึงประเภทงาน (ceremonyType) จากตัวแปร b (หน้าสร้าง) --%>
-        <c:set var="currentCeremonyType" value="${not empty b ? b.ceremony.ceremonyType : ''}" />
-        
+        <c:set var="currentCeremonyType" value="${not empty b ? b.packageEntity.packageType : ''}" />
+
         <c:forEach var="item" items="${extraSelectableItems}">
             <c:set var="skipItem" value="false" />
-            
+
             <%-- กรองอุปกรณ์พิธีกรรมให้ตรงกับประเภทงาน --%>
             <c:if test="${item.itemType.itemTypeName == 'อุปกรณ์พิธีกรรม'}">
                 <c:choose>
@@ -526,14 +489,14 @@
                     </c:when>
                 </c:choose>
             </c:if>
-            
+
             <c:if test="${!skipItem}">
-                <div class="item-data" 
-                     data-id="${item.itemId}" 
-                     data-name="${item.itemName}" 
-                     data-detail="${item.itemDetail}" 
-                     data-unit="${item.unit}" 
-                     data-price="${item.pricePerUnit}" 
+                <div class="item-data"
+                     data-id="${item.itemId}"
+                     data-name="${item.itemName}"
+                     data-detail="${item.itemDetail}"
+                     data-unit="${item.unit}"
+                     data-price="${item.pricePerUnit}"
                      data-type="${item.itemType.itemTypeName}"></div>
             </c:if>
         </c:forEach>
@@ -558,7 +521,7 @@
 			</div>
 		</div>
 	</div>
-	
+
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-brand">
@@ -570,78 +533,11 @@
         </div>
     </footer>
 
-<script>
-    window.CEREMONY_MONK_COUNT = ${empty monkCount ? 0 : monkCount};
-    window.IS_CUSTOM_REQUEST = ${isCustomRequest};
-</script>
+	<%-- ค่าจาก server ส่งให้ JS ผ่าน data-attribute (ไม่ต้องมี <script> ฝังในหน้านี้) --%>
+	<div id="pageConfig" hidden
+	     data-monk-count="${empty monkCount ? 0 : monkCount}"
+	     data-custom-request="${isCustomRequest ? 'true' : 'false'}"></div>
 
-<script src="${pageContext.request.contextPath}/static/js/quotationCreate.js"></script>
-
-<script>
-    // Override เพื่อเพิ่มวงเล็บรายชื่อ "รายการเพิ่มเติม" ให้เหมือนหน้ารายละเอียดใบเสนอราคา
-    window.calculateGrandTotal = function() {
-        var packageTotal = 0.0;
-        var extraTotal = 0.0;
-        var discount = parseFloat(document.getElementById('discountValue').value) || 0;
-        var isCustomRequest = window.IS_CUSTOM_REQUEST === true;
-        var extraItemNames = [];
-
-        document.querySelectorAll('#mainQuotationTable tbody tr').forEach(function(row) {
-            if (row.classList.contains('package-included-row') || row.classList.contains('group-row')) return;
-
-            var qInput = row.querySelector('input[name="extraQtys"], input[name="bookingQtys"]');
-            var pInput = row.querySelector('input[name="extraPrices"], input[name="bookingPrices"]');
-
-            if (qInput && pInput) {
-                var qty = parseFloat(qInput.value) || 0;
-                var price = parseFloat(pInput.value) || 0;
-                var subtotal = qty * price;
-
-                var subtotalSpan = row.querySelector('.subtotal');
-                if (subtotalSpan) subtotalSpan.innerText = subtotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-
-                var parentTbody = row.closest('tbody');
-                var isManuallyAddedExtra = parentTbody && parentTbody.id === 'group-extra';
-
-                if (row.classList.contains('package-main-row')) {
-                    packageTotal += subtotal;
-                } else if (isCustomRequest && !isManuallyAddedExtra) {
-                    /* กรอกความต้องการเอง: รายการอุปกรณ์/สังฆทาน/อาหาร/บริการที่มาจากคำตอบ ถือเป็น "รายการหลัก" ไม่ใช่ของเพิ่มเติม */
-                    packageTotal += subtotal;
-                } else {
-                    extraTotal += subtotal;
-
-                    // เก็บชื่อรายการไว้แสดงในวงเล็บใต้ label "รายการเพิ่มเติม" (ข้ามรายการที่ฟรี/รวมในแพ็กเกจ)
-                    var isFreeItem = !!row.querySelector('.text-danger');
-                    if (!isFreeItem) {
-                        var nameCell = row.children[1];
-                        var nameText = (nameCell && nameCell.childNodes[0]) ? nameCell.childNodes[0].textContent.trim() : '';
-                        // กันชื่อซ้ำ (เช่น ชุดสังฆทานชุดเดียวกันที่แยกเป็น 2 แถว: ส่วนต่าง + เกินโควตา)
-                        if (nameText && extraItemNames.indexOf(nameText) === -1) extraItemNames.push(nameText);
-                    }
-                }
-            }
-        });
-
-        var summaryPackage = document.getElementById('summaryPackage');
-        if (summaryPackage) summaryPackage.innerText = packageTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-
-        var summaryExtra = document.getElementById('summaryExtra');
-        if (summaryExtra) summaryExtra.innerText = extraTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-
-        var extraDetailDiv = document.getElementById('extraItemsDetail');
-        if (extraDetailDiv) extraDetailDiv.innerText = extraItemNames.length ? ('(' + extraItemNames.join(', ') + ')') : '';
-
-        var grandTotal = packageTotal + extraTotal - discount;
-        if (grandTotal < 0) grandTotal = 0;
-
-        var grandTotalSpan = document.getElementById('grandTotal');
-        if (grandTotalSpan) grandTotalSpan.innerText = grandTotal.toLocaleString('th-TH', {minimumFractionDigits: 2});
-    };
-
-    document.addEventListener('DOMContentLoaded', function () {
-        if (typeof calculateGrandTotal === 'function') calculateGrandTotal();
-    });
-</script>
+<script src="${pageContext.request.contextPath}/static/js/quotationCreate.js?v=20"></script>
 </body>
 </html>

@@ -21,9 +21,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     // ค้นหารายการสินค้าตามชื่อประเภทสินค้า
     List<Item> findByItemType_ItemTypeName(String typeName);
     
-    // ค้นหารายการสินค้าที่ผูกอยู่กับพิธีกรรมผ่าน CeremonyItem
-    @Query("SELECT ci.item FROM CeremonyItem ci WHERE ci.ceremony.ceremonyId = :ceremonyId")
-    List<Item> findByCeremonies_CeremonyId(@Param("ceremonyId") int ceremonyId);
+    // ค้นหารายการสินค้าที่ผูกอยู่กับแพ็กเกจผ่าน PackageItem
+    @Query("SELECT pi.item FROM PackageItem pi WHERE pi.packageEntity.packageId = :packageId")
+    List<Item> findByPackageItems_PackageEntity_PackageId(@Param("packageId") int packageId);
     
     // ค้นหารายการสินค้าโดยระบุชื่อรายการ
     Optional<Item> findByItemName(String itemName);

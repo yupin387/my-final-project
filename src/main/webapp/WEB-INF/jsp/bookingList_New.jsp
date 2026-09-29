@@ -146,7 +146,8 @@
                                         <span class="customer-phone">${b.member.phoneNumber}</span>
                                     </td>
                                     <td>
-                                        <span class="ceremony-badge">${b.ceremony.ceremonyType}</span>
+                                        <%-- เปลี่ยนจาก b.pkg.packageType เป็น b.packageEntity.packageType --%>
+                                        <span class="ceremony-badge">${b.packageEntity.packageType}</span>
                                     </td>
                                     <td><fmt:formatDate value="${b.eventDate}" pattern="dd/MM/yyyy"/></td>
                                     <td>
@@ -194,28 +195,6 @@
     </footer>
 
     <script src="${pageContext.request.contextPath}/static/js/bookingList.js"></script>
-    <script>
-        function toggleStatusFilter() {
-            var dropdown = document.getElementById('statusFilterDropdown');
-            var arrow = document.getElementById('statusFilterArrow');
-            dropdown.classList.toggle('show');
-            arrow.textContent = dropdown.classList.contains('show') ? '▴' : '▾';
-        }
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.status-filter-wrapper')) {
-                document.getElementById('statusFilterDropdown').classList.remove('show');
-                document.getElementById('statusFilterArrow').textContent = '▾';
-            }
-        });
 
-        function toggleDropdown() {
-            document.getElementById('dropdownMenu').classList.toggle('show');
-        }
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.user-info')) {
-                document.getElementById('dropdownMenu').classList.remove('show');
-            }
-        });
-    </script>
 </body>
 </html>

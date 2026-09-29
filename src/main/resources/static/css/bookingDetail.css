@@ -513,6 +513,7 @@ body {
 
 /* ==========================================================================
    สรุปค่าใช้จ่ายโดยประมาณ
+   (ชุดกฎด้านล่างถูกเขียนทับด้วยบล็อก "สรุปค่าใช้จ่าย (ย้ายมาจาก JSP)" ท้ายไฟล์)
    ========================================================================== */
 .cost-summary-wrap,
 .cost-summary-wrapper {
@@ -980,4 +981,71 @@ body {
 .info-value.multiline-value {
     white-space: pre-line;
     line-height: 1.7;
+}
+
+/* ==========================================================================
+   ส่วนที่ย้ายมาจาก <style> ในไฟล์ bookingDetail.jsp
+   (วางไว้ท้ายไฟล์เพื่อให้ลำดับการเขียนทับเหมือนเดิม: เดิม <style> ใน JSP อยู่หลัง <link>)
+   ========================================================================== */
+
+/* ซ่อนดอกไม้/ใบบัวตกแต่งที่อาจบังข้อความ */
+.sheet-header .lotus-overlay,
+.document-title-box::after,
+.document-title-box::before,
+.sheet-header::after {
+    display: none !important;
+}
+
+/* ===== สรุปค่าใช้จ่าย (ย้ายมาจาก JSP — ทับชุดกฎด้านบน) ===== */
+.cost-summary-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+.cost-summary-box {
+    border: 2px solid var(--accent-gold, #d4af37);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    width: 100%;
+    max-width: 380px;
+}
+.cost-summary-title {
+    background: var(--cream-warm, #fdf3e7);
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--accent-brown, #7a4a1e);
+    border-bottom: 1px solid var(--accent-gold-pale, #e8d3a0);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cost-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 16px;
+    border-bottom: 1px dashed var(--cream-border-soft, #eee2cf);
+    font-size: 0.86rem;
+}
+.cost-row:last-child { border-bottom: none; }
+.cost-row .cost-label { color: var(--text-mid, #555); }
+.cost-row .cost-value { font-weight: 600; color: #222; }
+.cost-row.cost-discount .cost-value { color: #d9534f; }
+.cost-row.cost-total {
+    background: #fff8f0;
+    padding: 11px 16px;
+}
+.cost-row.cost-total .cost-label { font-weight: 700; color: var(--accent-brown, #7a4a1e); font-size: 0.86rem; }
+.cost-row.cost-total .cost-value { font-size: 1.05rem; font-weight: 800; color: #d9534f; }
+.cost-summary-note {
+    padding: 6px 16px 10px;
+    font-size: 0.74rem;
+    color: #999;
+    font-style: italic;
+}
+@media (max-width: 868px) {
+    .cost-summary-wrapper { justify-content: stretch; }
+    .cost-summary-box { max-width: 100%; }
 }

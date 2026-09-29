@@ -9,14 +9,16 @@ import java.util.List;
 
 public interface QuestionsRepository extends JpaRepository<QuestionsDetail, Integer> {
 
-    // ดึงคำถามทั้งหมด พร้อม fetch ceremonies มาด้วย (กัน N+1 / lazy loading พัง)
+    // ดึงคำถามทั้งหมด 
     // เรียงตาม questionsId (ลำดับการสร้าง) เพื่อให้คำถามที่เพิ่มใหม่ไปต่อท้ายเสมอ
-    // ไม่แทรกกลางแบบเรียงตัวอักษร
-    @Query("SELECT DISTINCT q FROM QuestionsDetail q LEFT JOIN FETCH q.ceremonies ORDER BY q.questionsId ASC")
-    List<QuestionsDetail> findAllWithCeremony();
+    @Query("SELECT DISTINCT q FROM QuestionsDetail q LEFT JOIN FETCH q.packages ORDER BY q.questionsId ASC")
+    List<QuestionsDetail> findAllWithPackage();
 
-    // คำถามที่ผูกกับ ceremony นี้โดยตรง + คำถาม "กลาง" ที่ไม่ผูกกับ ceremony ไหนเลย (ceremonies ว่าง)
-    @Query("SELECT DISTINCT q FROM QuestionsDetail q LEFT JOIN q.ceremonies c " +
-           "WHERE c.ceremonyId = :ceremonyId OR q.ceremonies IS EMPTY")
-    List<QuestionsDetail> findByCeremonyIdIncludingGlobal(@Param("ceremonyId") int ceremonyId);
+    // คำถามที่ผูกกับ package นี้โดยตรง + คำถาม "กลาง" ที่ไม่ผูกกับ package ไหนเลย (packages ว่าง)
+    @Query("SELECT DISTINCT q FROM QuestionsDetail q LEFT JOIN q.packages c " +
+           "WHERE c.packageId = :packageId OR q.packages IS EMPTY")
+    List<QuestionsDetail> findByPackageIdIncludingGlobal(@Param("packageId") int packageId);
+    
+   
+
 }

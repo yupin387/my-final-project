@@ -148,7 +148,8 @@
                             </span>
                         </td>
                         <td>
-                            <span class="customer-name">${q.bookingForm.ceremony.ceremonyType}</span>
+                            <%-- แก้ไขจาก q.bookingForm.pkg.packageType เป็น q.bookingForm.packageEntity.packageType --%>
+                            <span class="customer-name">${q.bookingForm.packageEntity.packageType}</span>
                         </td>
                         <td class="date-cell">
                             <fmt:formatDate value="${q.bookingForm.eventDate}" pattern="dd/MM/yyyy"/>

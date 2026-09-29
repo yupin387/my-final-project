@@ -14,17 +14,7 @@
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/memberQuotationDetail.css?v=13">
-<style>
-.tot-extra-detail {
-	font-size: 12px;
-	color: #888;
-	font-weight: 400;
-	font-style: italic;
-	text-align: left;
-	margin-top: 4px;
-	line-height: 1.5;
-}
-</style>
+
 </head>
 <body>
 
@@ -108,10 +98,10 @@
 
 		<div class="sheet">
 
-			<%-- ✅ แก้ไข: เปลี่ยนจาก ceremonyName เป็น optionType --%>
-			<c:set var="packageName" value="${q.bookingForm.ceremony.optionType}" />
+			<%-- ✅ แก้ไข: เปลี่ยนจาก ceremony เป็น packageEntity (ตรงกับ BookingForm ที่เปลี่ยนไปใช้ Package แล้ว) --%>
+			<c:set var="packageName" value="${q.bookingForm.packageEntity.optionType}" />
 			<c:set var="isCustomRequest"
-				value="${q.bookingForm.ceremony.optionType == 'กรอกความต้องการเบื้องต้น'}" />
+				value="${q.bookingForm.packageEntity.optionType == 'กรอกความต้องการเบื้องต้น'}" />
 
 			<c:set var="monkInviteType" value="" />
 			<c:set var="monkCount" value="" />
@@ -161,14 +151,15 @@
 						</tr>
 						<tr>
 							<td class="label">รูปแบบพิธี:</td>
-							<td class="value">${q.bookingForm.ceremony.ceremonyType}</td>
+							<%-- ✅ แก้ไข: Package ไม่มี field ceremonyType ใช้ packageType แทน --%>
+							<td class="value">${q.bookingForm.packageEntity.packageType}</td>
 						</tr>
 						<tr>
 							<td class="label">รูปแบบการจอง:</td>
 							<td class="value"><c:choose>
 									<c:when test="${isCustomRequest}">กรอกความต้องการเอง</c:when>
 
-									<c:otherwise>${q.bookingForm.ceremony.optionType}</c:otherwise>
+									<c:otherwise>${q.bookingForm.packageEntity.optionType}</c:otherwise>
 								</c:choose></td>
 						</tr>
 					</table>
@@ -235,15 +226,16 @@
 						<tr class="static-row">
 							<td class="text-center row-number">1</td>
 							<td>
+							<%-- ✅ แก้ไข: เดิมใช้ตัวแปร b ซึ่งไม่เคยถูก set ในหน้านี้ (บั๊ก) เปลี่ยนมาใช้ q.bookingForm.packageEntity --%>
 							<strong>แพ็กเกจ:
-									${b.ceremony.optionType}</strong>
+									${q.bookingForm.packageEntity.optionType}</strong>
 							</td>
 							<td class="text-center">1</td>
 							<td class="text-center">แพ็กเกจ</td>
 							<td class="text-right"><fmt:formatNumber
-									value="${b.ceremony.basePrice}" minFractionDigits="2" /></td>
+									value="${q.bookingForm.packageEntity.basePrice}" minFractionDigits="2" /></td>
 							<td class="text-right"><fmt:formatNumber
-									value="${b.ceremony.basePrice}" minFractionDigits="2" /></td>
+									value="${q.bookingForm.packageEntity.basePrice}" minFractionDigits="2" /></td>
 						</tr>
 					
 						<c:set var="count" value="2" />
@@ -514,8 +506,9 @@
 				<div class="totals-wrap">
 					<div class="totals-box">
 						<c:set var="sumExtra" value="0" />
+						<%-- ✅ แก้ไข: ceremony -> packageEntity --%>
 						<c:set var="sumPackage"
-							value="${isCustomRequest ? 0 : q.bookingForm.ceremony.basePrice}" />
+							value="${isCustomRequest ? 0 : q.bookingForm.packageEntity.basePrice}" />
 						<c:set var="extraItemsList" value="" />
 
 						<c:forEach var="d" items="${details}">
@@ -702,120 +695,6 @@
 			</div>
 		</div>
 	</footer>
-
-	<script>
-    function packAndSubmitReviseForm() {
-        const noteInput = document.getElementById('memberNoteInput');
-        const note = noteInput ? noteInput.value.trim() : "";
-        if (note === "") {
-            alert('กรุณากรอกข้อความแจ้งขอแก้ไข');
-            return;
-        }
-        document.getElementById('memberNoteHidden').value = note;
-        document.getElementById('cleanSubmitForm').submit();
-    }
-    function showConfirmModal() { document.getElementById('confirmModal').style.display = 'flex'; }
-    function closeConfirmModal() { document.getElementById('confirmModal').style.display = 'none'; }
-    setTimeout(function() { const banner = document.getElementById('flashBanner'); if(banner) { banner.style.display = 'none'; } }, 5000);
-
-    function showAjaxConfirmBanner() {
-        const banner = document.getElementById('ajaxConfirmBanner');
-        if (!banner) return;
-        banner.style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(function () { banner.style.display = 'none'; }, 5000);
-    }
-
-    function lockQuotationAsConfirmed() {
-        const statusPill = document.querySelector('.status-pill');
-        if (statusPill) {
-            statusPill.className = 'status-pill status-Confirmed';
-            statusPill.innerText = '✓ ยืนยันรายการแล้ว';
-        }
-
-        const actionSection = document.querySelector('.action-section');
-        if (actionSection) {
-            actionSection.innerHTML = '';
-            const lockMsg = document.createElement('div');
-            lockMsg.className = 'lock-message';
-            const title = document.createElement('div');
-            title.className = 'lock-title';
-            title.innerText = 'ขอบคุณสำหรับการยืนยันการจอง';
-            const desc = document.createElement('p');
-            desc.className = 'lock-desc';
-            desc.innerText = 'ทางเราได้รับข้อมูลของท่านแล้ว และกำลังจัดเตรียมอุปกรณ์พร้อมเจ้าหน้าที่เพื่อให้บริการท่านอย่างดีที่สุด';
-            lockMsg.appendChild(title);
-            lockMsg.appendChild(desc);
-            actionSection.appendChild(lockMsg);
-        }
-
-        const noteSection = document.querySelector('.member-note-section.no-print');
-        if (noteSection) {
-            const textarea = document.getElementById('memberNoteInput');
-            const noteVal = textarea ? textarea.value.trim() : '';
-            noteSection.classList.remove('no-print');
-            noteSection.innerHTML = '';
-            if (noteVal !== '') {
-                const label = document.createElement('label');
-                label.innerText = 'หมายเหตุ';
-                const p = document.createElement('p');
-                p.style.margin = '0';
-                p.innerText = noteVal;
-                noteSection.appendChild(label);
-                noteSection.appendChild(p);
-            } else {
-                noteSection.remove();
-            }
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        var toggle = document.getElementById('userProfileToggle');
-        var menu = document.getElementById('dropdownMenu');
-        if (toggle && menu) {
-            toggle.addEventListener('click', function (e) {
-                e.stopPropagation();
-                menu.classList.toggle('show');
-            });
-            document.addEventListener('click', function () {
-                menu.classList.remove('show');
-            });
-        }
-
-        var confirmForm = document.getElementById('confirmQuotationForm');
-        if (confirmForm) {
-            confirmForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                var submitBtn = confirmForm.querySelector('.btn-confirm-final');
-                if (submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.innerText = 'กำลังยืนยัน...';
-                }
-                fetch(confirmForm.action, {
-                    method: 'POST',
-                    body: new FormData(confirmForm)
-                }).then(function (res) {
-                    if (res.ok) {
-                        closeConfirmModal();
-                        lockQuotationAsConfirmed();
-                        showAjaxConfirmBanner();
-                    } else {
-                        alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerText = 'ยืนยันรายการ';
-                        }
-                    }
-                }).catch(function () {
-                    alert('เชื่อมต่อไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
-                    if (submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.innerText = 'ยืนยันรายการ';
-                    }
-                });
-            });
-        }
-    });
-</script>
+    <script src="${pageContext.request.contextPath}/js/memberQuotationDetail.js?v=1"></script>
 </body>
 </html>

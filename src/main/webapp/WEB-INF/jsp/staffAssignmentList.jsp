@@ -97,7 +97,7 @@
                                 <td><span class="assign-id">${a.assignId}</span></td>
                                 <td><fmt:formatDate value="${a.assignDate}" pattern="dd/MM/yyyy"/></td>
                                 <td><strong><fmt:formatDate value="${a.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></strong></td>
-                                <td><span class="ceremony-name">${a.bookingForm.ceremony.ceremonyType}</span></td>
+                                <td><span class="ceremony-name">${a.bookingForm.packageEntity.packageType}</span></td>
                                 <td>${a.bookingForm.member.memberFirstName}</td>
                                 <td>
                                     <span class="status-badge status-${a.jobStatus}">
@@ -148,7 +148,7 @@
                                 <td><span class="assign-id">${a.assignId}</span></td>
                                 <td><fmt:formatDate value="${a.assignDate}" pattern="dd/MM/yyyy"/></td>
                                 <td><strong><fmt:formatDate value="${a.bookingForm.eventDate}" pattern="dd/MM/yyyy"/></strong></td>
-                                <td><span class="ceremony-name">${a.bookingForm.ceremony.ceremonyType}</span></td>
+                                <td><span class="ceremony-name">${a.bookingForm.packageEntity.packageType}</span></td>
                                 <td>${a.bookingForm.member.memberFirstName}</td>
                                 <td>
                                     <span class="status-badge status-${a.jobStatus}">
@@ -179,7 +179,6 @@
 
     </div>
 
-
 <footer class="site-footer">
 
     <%-- ===== ลายดอกบัวมุมล่างขวา (เกาะติด footer) ===== --%>
@@ -198,24 +197,5 @@
 </footer>
 
     <script src="${pageContext.request.contextPath}/static/js/staffAssignmentList.js"></script>
-    <script>
-    function toggleDropdown() {
-        document.getElementById('dropdownMenu').classList.toggle('show');
-    }
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.user-info')) {
-            document.getElementById('dropdownMenu').classList.remove('show');
-        }
-    });
-
-    function switchTab(tab) {
-        document.querySelectorAll('.tab-attached-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.tab === tab);
-        });
-        document.querySelectorAll('.tab-panel').forEach(function(panel) {
-            panel.classList.toggle('show', panel.id === 'tab-' + tab);
-        });
-    }
-    </script>
 </body>
 </html>

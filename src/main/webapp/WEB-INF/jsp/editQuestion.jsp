@@ -8,50 +8,9 @@
     <title>แก้ไขคำถาม - บุญมีนำพา จัดงานบุญ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Noto+Serif+Thai:wght@400;600;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/addQuestion.css">
-    <style>
-  
-    .ceremony-checkbox-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .ceremony-checkbox-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 16px;
-        border: 1.5px solid var(--card-border, #F3C4D5);
-        border-radius: 10px;
-        background: #FFFFFF;
-        cursor: pointer;
-        transition: border-color 0.2s, background 0.2s;
-    }
-    .ceremony-checkbox-item:hover {
-        border-color: #EC6E96;
-        background: #FEF6F9;
-    }
-    .ceremony-checkbox-item input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-        accent-color: #EC6E96;
-        flex-shrink: 0;
-    }
-    .ceremony-checkbox-item label {
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        flex: 1;
-    }
-    .checkbox-group-hint {
-        font-size: 12px;
-        color: #8A7666;
-        margin: -4px 0 4px;
-    }
-    </style>
 </head>
 <body>
- 
+
 <!-- Navbar -->
 <div class="navbar">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/manager/bookings" style="text-decoration: none;">
@@ -66,7 +25,7 @@
             <a href="${pageContext.request.contextPath}/manager/questions" class="nav-item active">จัดการพิธี</a>
             <a href="${pageContext.request.contextPath}/manager/quotation" class="nav-item">จัดการใบเสนอราคา</a>
         </nav>
-           <div class="user-info" onclick="toggleDropdown()">
+        <div class="user-info" onclick="toggleDropdown()">
             <div class="user-avatar">M</div>
             <div class="user-detail">
                 <span class="user-name">Manager</span>
@@ -74,18 +33,17 @@
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
                 <a href="${pageContext.request.contextPath}/manager/logout" class="dropdown-item danger">
-                     ออกจากระบบ
+                    ออกจากระบบ
                 </a>
             </div>
         </div>
     </div>
 </div>
 
-
 <!-- Content -->
 <div class="page-wrapper">
     <div class="form-container">
- 
+
         <!-- Card Header -->
         <div class="card-header-bar">
             <div class="header-ornament">
@@ -95,55 +53,54 @@
                 <span class="orn-diamond-sm"></span>
                 <span class="orn-line"></span>
             </div>
-            
+
             <h1>แก้ไขคำถาม</h1>
             <p>ปรับปรุงข้อความคำถามหรือเปลี่ยนประเภทพิธี</p>
             <div class="header-gold-line"></div>
         </div>
- 
+
         <!-- Form Body -->
         <div class="card-body">
- 
+
             <c:if test="${not empty error}">
                 <div class="alert alert-error">${error}</div>
             </c:if>
- 
+
             <form action="${pageContext.request.contextPath}/manager/questions/update"
                   method="post" class="form-section">
- 
+
                 <input type="hidden" name="questionsId" value="${question.questionsId}">
- 
+
                 <div class="section-label">ข้อมูลคำถาม</div>
- 
+
                 <div class="form-group">
                     <label for="questionsText">ข้อความคำถาม</label>
                     <input type="text" id="questionsText" name="questionsText"
                            value="${question.questionsText}" required/>
                 </div>
 
-                <%-- ===== FIX: checkbox หลายอัน แทน dropdown เดี่ยว
-                     ติ๊กตาม selectedCeremonyTypes ที่ controller ส่งมา (ทุกประเภทที่ผูกอยู่จริง
-                     ไม่ใช่แค่ตัวแรกเหมือนเดิม) ===== --%>
+                <%-- ใช้ packageTypes / selectedPackageTypes ให้ตรงกับ
+                     QuestionsController.showEditForm() ที่ส่ง model attribute มา --%>
                 <div class="form-group">
                     <label>ประเภทงาน</label>
                     <p class="checkbox-group-hint">เลือกได้มากกว่า 1 ประเภท — คำถามข้อนี้จะถูกใช้กับทุกประเภทงานที่ติ๊กไว้</p>
                     <div class="ceremony-checkbox-group">
-                        <c:forEach var="type" items="${ceremonyTypes}">
+                        <c:forEach var="type" items="${packageTypes}">
                             <c:set var="isChecked" value="false" />
-                            <c:forEach var="selType" items="${selectedCeremonyTypes}">
+                            <c:forEach var="selType" items="${selectedPackageTypes}">
                                 <c:if test="${selType == type}">
                                     <c:set var="isChecked" value="true" />
                                 </c:if>
                             </c:forEach>
                             <div class="ceremony-checkbox-item">
-                                <input type="checkbox" name="ceremonyTypes" value="${type}" id="ct_${type}"
+                                <input type="checkbox" name="packageTypes" value="${type}" id="pt_${type}"
                                     ${isChecked ? 'checked' : ''}>
-                                <label for="ct_${type}">${type}</label>
+                                <label for="pt_${type}">${type}</label>
                             </div>
                         </c:forEach>
                     </div>
                 </div>
- 
+
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">บันทึกการแก้ไข</button>
                     <button type="button" class="btn-cancel"
@@ -151,10 +108,10 @@
                         ยกเลิก
                     </button>
                 </div>
- 
+
             </form>
         </div>
- 
+
     </div>
 </div>
 
@@ -168,19 +125,8 @@
         </div>
         <p class="footer-tagline">ระบบจัดการงานบุญสำหรับผู้จัดการ</p>
     </div>
-   
 </footer>
- 
-<script src="${pageContext.request.contextPath}/static/js/addHeadStaff.js"></script>
-<script>
-    function toggleDropdown() {
-        document.getElementById('dropdownMenu').classList.toggle('show');
-    }
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.user-info')) {
-            document.getElementById('dropdownMenu').classList.remove('show');
-        }
-    });
-</script>
+
+<script src="${pageContext.request.contextPath}/static/js/editQuestion.js"></script>
 </body>
 </html>

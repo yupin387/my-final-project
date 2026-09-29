@@ -901,3 +901,141 @@ body {
     line-height: 1.7;
 }
 /*ของหน้าviewBooking*/
+.cost-summary-wrapper {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 20px;
+}
+
+.cost-summary-box {
+	border: 2px solid var(--accent-gold, #d4af37);
+	border-radius: 14px;
+	overflow: hidden;
+	background: #fff;
+	width: 100%;
+	max-width: 380px;
+}
+
+.cost-summary-title {
+	background: var(--cream-warm, #fdf3e7);
+	padding: 10px 16px;
+	font-weight: 700;
+	font-size: 0.92rem;
+	color: var(--accent-brown, #7a4a1e);
+	border-bottom: 1px solid var(--accent-gold-pale, #e8d3a0);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.cost-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 9px 16px;
+	border-bottom: 1px dashed var(--cream-border-soft, #eee2cf);
+	font-size: 0.86rem;
+}
+
+.cost-row:last-child {
+	border-bottom: none;
+}
+
+.cost-row .cost-label {
+	color: var(--text-mid, #555);
+}
+
+.cost-row .cost-value {
+	font-weight: 600;
+	color: #222;
+}
+
+.cost-row.cost-discount .cost-value {
+	color: #d9534f;
+}
+
+.cost-row.cost-total {
+	background: #fff8f0;
+	padding: 11px 16px;
+}
+
+.cost-row.cost-total .cost-label {
+	font-weight: 700;
+	color: var(--accent-brown, #7a4a1e);
+	font-size: 0.86rem;
+}
+
+.cost-row.cost-total .cost-value {
+	font-size: 1.05rem;
+	font-weight: 800;
+	color: #d9534f;
+}
+
+.cost-summary-note {
+	padding: 6px 16px 10px;
+	font-size: 0.74rem;
+	color: #999;
+	font-style: italic;
+}
+
+@media ( max-width : 868px) {
+	.cost-summary-wrapper {
+		justify-content: stretch;
+	}
+	.cost-summary-box {
+		max-width: 100%;
+	}
+}
+
+.booking-notice.notice-rejected {
+	border-color: #f2b8b5;
+	background: #fff5f5;
+}
+
+.booking-notice.notice-rejected .notice-icon {
+	color: #ffffff;
+	background: #c62828;
+}
+
+.booking-notice.notice-rejected .notice-content strong {
+	color: #c62828;
+}
+
+.booking-notice.notice-rejected .notice-content p {
+	color: #7a3b3b;
+}
+
+.notice-reject-reason {
+	margin-top: 6px;
+	padding: 8px 12px;
+	background: #ffffff;
+	border: 1px solid #f2b8b5;
+	border-radius: 8px;
+	font-size: 0.85rem;
+	color: #5c2b2b;
+	line-height: 1.5;
+}
+
+.notice-reject-reason strong {
+	color: #c62828;
+}
+
+/* ===== กล่องแจ้งเตือน "ยกเลิกรายการจองแล้ว" (โทนเทา-น้ำเงิน แยกจากโทนแดงของ rejected
+             เพื่อให้สมาชิกแยกออกว่ายกเลิกเองกับถูกผู้จัดการปฏิเสธเป็นคนละเหตุการณ์กัน) ===== */
+.booking-notice.notice-cancelled {
+	border-color: #cfd8dc;
+	background: #f5f7f8;
+}
+
+.booking-notice.notice-cancelled .notice-icon {
+	color: #ffffff;
+	background: #607d8b;
+}
+
+.booking-notice.notice-cancelled .notice-content strong {
+	color: #455a64;
+}
+
+.booking-notice.notice-cancelled .notice-content p {
+	color: #546e7a;
+}

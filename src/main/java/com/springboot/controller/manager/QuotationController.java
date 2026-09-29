@@ -36,7 +36,6 @@ public class QuotationController {
     
 
     // แสดงรายการใบเสนอราคาทั้งหมด รองรับการกรองตามสถานะ (status)
-    // ค่าเริ่มต้นคือ "Pending" (รอยืนยัน) และเรียงวันจัดงานที่ใกล้ที่สุดไว้บนสุด
     @GetMapping
     public String listAllQuotations(
             @RequestParam(name = "status", defaultValue = "Pending") String status,
@@ -49,7 +48,7 @@ public class QuotationController {
 
         List<Quotation> all = quotationService.getAllQuotations();
 
-        // นับจำนวนแต่ละสถานะ (ใช้แสดงในตัวกรองของหน้า JSP)
+ 
         Map<String, Long> statusCounts = new HashMap<>();
         statusCounts.put("All", (long) all.size());
         for (String s : new String[]{"Pending", "Revised", "Confirmed"}) {
@@ -58,7 +57,6 @@ public class QuotationController {
                     .count());
         }
 
-        // กรองตามสถานะ
         List<Quotation> quotations;
         if ("All".equalsIgnoreCase(status)) {
             quotations = new ArrayList<>(all);
@@ -97,26 +95,26 @@ public class QuotationController {
         model.addAttribute("validDetails", validDetails);
         model.addAttribute("additionalNote", extractAdditionalNote(booking));
 
-        boolean isCustomRequest = booking.getCeremony() != null
-                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType());
+        boolean isCustomRequest = booking.getPackageEntity() != null
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getPackageEntity().getOptionType());
         model.addAttribute("isCustomRequest", isCustomRequest);
 
         // 1. ดึงรายการสินค้าทั้งหมดในระบบ
         List<Item> allSystemItems = itemRepo.findAll();
         model.addAttribute("items", allSystemItems);
 
-        // 2. ดึงรายการสินค้าเฉพาะของพิธี (และเพิ่มอุปกรณ์พระสงฆ์อัตโนมัติหากเป็นเคสกรอกเอง)
-        List<Item> ceremonyItems = getBaseCeremonyItemsWithMonkAdditions(booking, isCustomRequest);
+        // 2. ดึงรายการสินค้าเฉพาะของแพ็กเกจ (และเพิ่มอุปกรณ์พระสงฆ์อัตโนมัติหากเป็นเคสกรอกเอง)
+        List<Item> packageItems = getBasePackageItemsWithMonkAdditions(booking, isCustomRequest);
 
         // 3. คำนวณรายการที่รวมในแพ็กเกจ
-        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems);
+        List<Item> packageIncludedItems = computePackageIncludedItems(packageItems);
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
         // 4. รายการที่สามารถเลือกเพิ่มใน Popup Modal
-        String ceremonyType = booking.getCeremony() != null ? booking.getCeremony().getCeremonyType() : null;
+        String packageType = booking.getPackageEntity() != null ? booking.getPackageEntity().getPackageType() : null;
         List<Item> extraSelectableItems = new ArrayList<>(allSystemItems);
         extraSelectableItems.removeAll(packageIncludedItems);
-        extraSelectableItems = filterItemsByCeremonyType(extraSelectableItems, ceremonyType);
+        extraSelectableItems = filterItemsByPackageType(extraSelectableItems, packageType);
 
         if (isCustomRequest) {
             extraSelectableItems.removeIf(i -> MONK_INVITE_SERVICE_ITEM_NAME.equals(i.getItemName()));
@@ -125,7 +123,6 @@ public class QuotationController {
         model.addAttribute("extraSelectableItems", extraSelectableItems);
 
         // 5. ราคาชุดสังฆทานที่คำนวณตามกฎแพ็กเกจ (ส่วนต่างจากชุดที่รวมในแพ็กเกจ / เกินโควตาคิดเต็ม)
-        //    ใช้เป็นค่าเริ่มต้นของแถวสังฆทานในฟอร์ม Organizer ยังแก้ราคาเองได้
         model.addAttribute("sanghatanLines", quotationService.calculateSanghatanLines(booking));
 
         return "quotationForm";
@@ -181,12 +178,12 @@ public class QuotationController {
         model.addAttribute("b", booking);
         model.addAttribute("additionalNote", extractAdditionalNote(booking));
 
-        boolean isCustomRequest = booking.getCeremony() != null
-                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType());
+        boolean isCustomRequest = booking.getPackageEntity() != null
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getPackageEntity().getOptionType());
 
-        // ดึงรายการไอเทมในพิธี พร้อมของพระสงฆ์ (เพื่อให้ในใบสรุปแสดงของที่ให้อัตโนมัติด้วย)
-        List<Item> ceremonyItems = getBaseCeremonyItemsWithMonkAdditions(booking, isCustomRequest);
-        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems);
+
+        List<Item> packageItems = getBasePackageItemsWithMonkAdditions(booking, isCustomRequest);
+        List<Item> packageIncludedItems = computePackageIncludedItems(packageItems);
         
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
@@ -213,28 +210,28 @@ public class QuotationController {
             return "redirect:/manager/quotation";
         }
 
-        boolean isCustomRequest = booking.getCeremony() != null
-                && "กรอกความต้องการเบื้องต้น".equals(booking.getCeremony().getOptionType());
+        boolean isCustomRequest = booking.getPackageEntity() != null
+                && "กรอกความต้องการเบื้องต้น".equals(booking.getPackageEntity().getOptionType());
         model.addAttribute("isCustomRequest", isCustomRequest);
 
         // 1. ดึงรายการสินค้าทั้งหมดในระบบ
         List<Item> allSystemItems = itemRepo.findAll();
         model.addAttribute("items", allSystemItems);
 
-        // 2. ดึงรายการสินค้าเฉพาะของพิธี พร้อมอุปกรณ์ที่ให้ตามจำนวนพระสงฆ์
-        List<Item> ceremonyItems = getBaseCeremonyItemsWithMonkAdditions(booking, isCustomRequest);
+        // 2. ดึงรายการสินค้าเฉพาะของแพ็กเกจ พร้อมอุปกรณ์ที่ให้ตามจำนวนพระสงฆ์
+        List<Item> packageItems = getBasePackageItemsWithMonkAdditions(booking, isCustomRequest);
 
         model.addAttribute("additionalNote", extractAdditionalNote(booking));
 
         // 3. คำนวณรายการในแพ็กเกจ
-        List<Item> packageIncludedItems = computePackageIncludedItems(ceremonyItems);
+        List<Item> packageIncludedItems = computePackageIncludedItems(packageItems);
         model.addAttribute("packageIncludedItems", packageIncludedItems);
 
         // 4. รายการสำหรับเลือกใน Modal
-        String ceremonyType = booking.getCeremony() != null ? booking.getCeremony().getCeremonyType() : null;
+        String packageType = booking.getPackageEntity() != null ? booking.getPackageEntity().getPackageType() : null;
         List<Item> extraSelectableItems = new ArrayList<>(allSystemItems);
         extraSelectableItems.removeAll(packageIncludedItems);
-        extraSelectableItems = filterItemsByCeremonyType(extraSelectableItems, ceremonyType);
+        extraSelectableItems = filterItemsByPackageType(extraSelectableItems, packageType);
 
         if (isCustomRequest) {
             extraSelectableItems.removeIf(i -> MONK_INVITE_SERVICE_ITEM_NAME.equals(i.getItemName()));
@@ -268,11 +265,11 @@ public class QuotationController {
         }
     }
 
-    // API ภายใน: ดึงรายการอุปกรณ์ที่ผูกอยู่กับ Ceremony ตาม id ที่ระบุ 
-    @GetMapping("/api/get-items-by-ceremony/{ceremonyId}")
+    // API ภายใน: ดึงรายการอุปกรณ์ที่ผูกอยู่กับ Package ตาม id ที่ระบุ 
+    @GetMapping("/api/get-items-by-package/{packageId}")
     @ResponseBody
-    public List<Item> getItemsByCeremony(@PathVariable int ceremonyId) {
-        return quotationService.getItemsByCeremonyId(ceremonyId);
+    public List<Item> getItemsByPackage(@PathVariable int packageId) {
+        return quotationService.getItemsByPackageId(packageId);
     }
 
     // ==========================================
@@ -292,10 +289,10 @@ public class QuotationController {
 
             boolean pastA = da.isBefore(today);
             boolean pastB = db.isBefore(today);
-            if (pastA != pastB) return pastA ? 1 : -1;      // งานที่ยังไม่ถึงอยู่ก่อน
+            if (pastA != pastB) return pastA ? 1 : -1;      
 
-            return pastA ? db.compareTo(da)                  // งานที่ผ่านแล้ว: ล่าสุดก่อน
-                         : da.compareTo(db);                 // งานที่ยังไม่ถึง: ใกล้สุดก่อน
+            return pastA ? db.compareTo(da)                  
+                         : da.compareTo(db);                
         };
     }
 
@@ -307,7 +304,7 @@ public class QuotationController {
                 .toLocalDate();
     }
 
-    // กรองรายละเอียดการจอง (BookingFormDetail) ให้เหลือเฉพาะคำถาม-คำตอบที่เกี่ยวข้องกับ
+    // กรองรายละเอียดการจองให้เหลือเฉพาะคำถาม-คำตอบที่เกี่ยวข้องกับ
     // ภัตตาหาร/สังฆทาน/อุปกรณ์/พระ และมีคำตอบที่ไม่ใช่ "ไม่ต้องการ"/"ไม่"/ตัวเลขล้วน
     // เพื่อนำไปแสดงในหน้าสร้างใบเสนอราคา
     private List<BookingFormDetail> buildValidDetails(BookingForm booking) {
@@ -328,14 +325,14 @@ public class QuotationController {
         return validDetails;
     }
 
-    // ดึงไอเทมของพิธี และบวกไอเทมพิเศษตามจำนวนพระสงฆ์ (สำหรับกรณี Custom Request)
-    private List<Item> getBaseCeremonyItemsWithMonkAdditions(BookingForm booking, boolean isCustomRequest) {
+    // ดึงไอเทมของแพ็กเกจ และบวกไอเทมพิเศษตามจำนวนพระสงฆ์ (สำหรับกรณี Custom Request)
+    private List<Item> getBasePackageItemsWithMonkAdditions(BookingForm booking, boolean isCustomRequest) {
         
-        List<Item> ceremonyItems = new ArrayList<>();
-        if (booking.getCeremony() != null) {
-            List<Item> itemsFromDb = quotationService.getItemsByCeremonyId(booking.getCeremony().getCeremonyId());
+        List<Item> packageItems = new ArrayList<>();
+        if (booking.getPackageEntity() != null) {
+            List<Item> itemsFromDb = quotationService.getItemsByPackageId(booking.getPackageEntity().getPackageId());
             if (itemsFromDb != null) {
-                ceremonyItems.addAll(itemsFromDb);
+                packageItems.addAll(itemsFromDb);
             }
         }
 
@@ -363,12 +360,12 @@ public class QuotationController {
                 String[] monkItemNames = {"อาสนะพระสงฆ์", "ตาลปัตรพร้อมขาตั้ง", "กรวยดอกไม้ถวายพระสงฆ์"};
                 for (String name : monkItemNames) {
                     itemRepo.findByItemName(name).ifPresent(item -> {
-                        if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
+                        if (!packageItems.contains(item)) packageItems.add(item);
                     });
                 }
 
                 itemRepo.findByItemName(MONK_INVITE_SERVICE_ITEM_NAME).ifPresent(item -> {
-                    if (!ceremonyItems.contains(item)) ceremonyItems.add(item);
+                    if (!packageItems.contains(item)) packageItems.add(item);
                 });
 
                 if (isSelfInvite) {
@@ -376,7 +373,7 @@ public class QuotationController {
                 }
             }
         }
-        return ceremonyItems;
+        return packageItems;
     }
 
     // คำนวณหา Item ที่จัดว่าเป็น "ของพื้นฐาน" เพื่อนำไปโชว์ให้ Manager ดู (ตัดพวกปิ่นโต/สังฆทานออก)
@@ -399,23 +396,23 @@ public class QuotationController {
         return packageIncludedItems;
     }
 
-    // กรอง item ให้เหลือเฉพาะที่เกี่ยวข้องกับ "ประเภทพิธี" (ceremonyType) ของ booking นี้
-    private List<Item> filterItemsByCeremonyType(List<Item> allItems, String ceremonyType) {
+    // กรอง item ให้เหลือเฉพาะที่เกี่ยวข้องกับ "ประเภทงานบุญ" (packageType) ของ booking นี้
+    private List<Item> filterItemsByPackageType(List<Item> allItems, String packageType) {
         List<Item> filtered = new ArrayList<>();
         if (allItems == null) return filtered;
 
         for (Item it : allItems) {
-            List<CeremonyItem> cis = it.getCeremonyItems();
+            List<PackageItem> pis = it.getPackageItems();
 
-            if (cis == null || cis.isEmpty()) {
+            if (pis == null || pis.isEmpty()) {
                 filtered.add(it);
                 continue;
             }
 
-            boolean matchesType = cis.stream()
-                    .filter(ci -> ci.getCeremony() != null)
-                    .anyMatch(ci -> ceremonyType == null
-                            || ceremonyType.equals(ci.getCeremony().getCeremonyType()));
+            boolean matchesType = pis.stream()
+                    .filter(pi -> pi.getPackageEntity() != null)
+                    .anyMatch(pi -> packageType == null
+                            || packageType.equals(pi.getPackageEntity().getPackageType()));
 
             if (matchesType) {
                 filtered.add(it);

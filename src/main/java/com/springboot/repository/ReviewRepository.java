@@ -11,6 +11,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     //  ค้นหารีวิวผ่าน Booking ID (ซึ่งเป็น String)
     Review findByBookingForm_BookingId(String bookingId);
     
- //  ดึงรีวิว 2 อันล่าสุด โดยเรียงตาม reviewId จากมากไปน้อย
-    List<Review> findTop2ByOrderByReviewIdDesc();
+
 }

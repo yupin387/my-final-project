@@ -1,3 +1,44 @@
+// ===== bookingForm.js =====
+// สคริปต์ของหน้าจองงานบุญ (รวมโค้ดที่เคยฝังใน bookingForm.jsp ไว้ที่นี่แล้ว)
+// ต้องโหลดไฟล์นี้ "ก่อน" miniBookingCalendar.js
+
+// ===== ข้อมูลจาก server (JSP ส่งมาทาง #bookingPageData) =====
+// ตั้งค่า window.* ชุดเดิมที่ miniBookingCalendar.js ใช้อ่าน
+var isCustomMode = false;
+
+(function readBookingPageData() {
+    var root = document.getElementById('bookingPageData');
+    if (!root) return;
+
+    isCustomMode = root.dataset.customMode === 'true';
+
+    var teamCount = parseInt(root.dataset.teamCount, 10);
+    window.teamCount = isNaN(teamCount) ? 2 : teamCount;
+
+    // วันที่มีงานแล้ว: ["2026-01-05", ...]
+    window.bookedDates = Array.prototype.map.call(
+        root.querySelectorAll('[data-booked]'),
+        function (el) { return el.dataset.booked; }
+    );
+
+    // จำนวนงานต่อวัน: { "2026-01-05": 2, ... }
+    window.bookingsPerDate = {};
+    root.querySelectorAll('[data-bookings-date]').forEach(function (el) {
+        window.bookingsPerDate[el.dataset.bookingsDate] = Number(el.dataset.count) || 0;
+    });
+
+    // แท็กคุณภาพวัน: { "2026-01-05": [{ type, label }, ...], ... }
+    window.dayQuality = {};
+    root.querySelectorAll('[data-quality-date]').forEach(function (dayEl) {
+        window.dayQuality[dayEl.dataset.qualityDate] = Array.prototype.map.call(
+            dayEl.querySelectorAll('[data-label]'),
+            function (tagEl) {
+                return { type: tagEl.dataset.type, label: tagEl.dataset.label };
+            }
+        );
+    });
+})();
+
 // ===== Dropdown Toggle =====
 function toggleDropdown() {
     const menu = document.getElementById('dropdownMenu');
@@ -92,9 +133,19 @@ function toggleWatDetail(radio) {
 }
 
 // ===== Toggle Section (ปิ่นโต / สังฆทาน) =====
-function toggleSection(sectionId, show) {
-    const el = document.getElementById(sectionId);
-    if (el) el.style.display = show ? 'block' : 'none';
+// ซ่อนส่วนที่ปิด พร้อมล้างข้อความ error ของช่องในส่วนนั้น
+function toggleSection(id, show) {
+    var el = document.getElementById(id);
+    if (el) {
+        el.style.display = show ? 'block' : 'none';
+        el.querySelectorAll('input, select, textarea').forEach(function(input) {
+            if(!show) {
+                input.classList.remove('validation-failed');
+                var err = input.nextElementSibling;
+                if(err && err.classList.contains('custom-error-msg')) err.remove();
+            }
+        });
+    }
 }
 
 // ===== Sync hidden answer กับ radio (ใช้ใน form2) =====
@@ -102,6 +153,315 @@ function syncAnswer(hiddenId, value) {
     const el = document.getElementById(hiddenId);
     if (el) el.value = value;
 }
+
+// ===== อัปโหลดรูปสถานที่จัดงาน (สูงสุด 5 รูป, เก็บเป็น base64) =====
+(function() {
+    var imgPicker = document.getElementById('imgPicker');
+    if (!imgPicker) return;
+    var imageList = [];
+    imgPicker.addEventListener('change', function() {
+        var file = this.files[0];
+        if (!file) return;
+        if (imageList.length >= 5) {
+            alert('อัปโหลดรูปภาพได้สูงสุด 5 รูป');
+            this.value = '';
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            imageList.push(e.target.result);
+            var box = document.getElementById('imagePreviewBox');
+            var wrapper = document.createElement('div');
+            wrapper.style.cssText = 'position:relative;width:80px;height:80px;';
+            var img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #E0577F;';
+            var del = document.createElement('button');
+            del.type = 'button'; del.innerText = 'x';
+            del.style.cssText = 'position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.5);color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;';
+            var idx = imageList.length - 1;
+            del.onclick = function() {
+                imageList.splice(idx, 1);
+                box.removeChild(wrapper);
+                updateInputs();
+            };
+            wrapper.appendChild(img);
+            wrapper.appendChild(del);
+            box.appendChild(wrapper);
+            updateInputs();
+        };
+        reader.readAsDataURL(file);
+        this.value = '';
+    });
+    function updateInputs() {
+        var container = document.getElementById('base64Container');
+        container.innerHTML = '';
+        for (var i = 0; i < imageList.length; i++) {
+            var inp = document.createElement('input');
+            inp.type = 'hidden';
+            inp.name = 'imageBase64[' + i + ']';
+            inp.value = imageList[i];
+            container.appendChild(inp);
+        }
+        var addBtn = document.getElementById('addImgBtn');
+        if (addBtn) {
+            var atLimit = imageList.length >= 5;
+            addBtn.disabled = atLimit;
+            addBtn.style.opacity = atLimit ? '0.5' : '1';
+            addBtn.style.cursor = atLimit ? 'not-allowed' : 'pointer';
+        }
+    }
+})();
+
+// ===== การนิมนต์พระสงฆ์ =====
+function toggleWatOwnField(id, show) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = show ? 'block' : 'none';
+}
+
+// ===== Lightbox ขยายรูป =====
+function openLightbox(imgEl) {
+    var lb = document.getElementById('imageLightbox');
+    var lbImg = document.getElementById('lightboxImg');
+    if (!lb || !lbImg) return;
+    lbImg.src = imgEl.src;
+    lbImg.alt = imgEl.alt || '';
+    lb.style.display = 'flex';
+}
+
+function closeLightbox() {
+    var lb = document.getElementById('imageLightbox');
+    if (lb) lb.style.display = 'none';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+});
+
+function toggleWatDetailBlock(id, show) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = show ? 'block' : 'none';
+    
+    var monkCountGroup = document.getElementById('monkCountGroup');
+    if (monkCountGroup) {
+        if (isCustomMode) {
+            monkCountGroup.style.display = 'block';
+        } else {
+            monkCountGroup.style.display = show ? 'none' : 'block';
+            if (show) {
+                var checkedPkg = document.querySelector('input[name="packageEntity.packageId"]:checked');
+                if (checkedPkg && checkedPkg.dataset.monkcount) {
+                    onMonkCountInputChange(checkedPkg.dataset.monkcount);
+                }
+            }
+        }
+    }
+
+    var shopWarning = document.getElementById('shopInviteWarning');
+    var pkgSelfWarning = document.getElementById('pkgSelfInviteWarning');
+
+    if (show) {
+        if (shopWarning) shopWarning.style.display = 'block';
+        if (pkgSelfWarning) pkgSelfWarning.style.display = 'none';
+    } else {
+        if (shopWarning) shopWarning.style.display = 'none';
+        if (!isCustomMode && pkgSelfWarning) {
+            pkgSelfWarning.style.display = 'block';
+        }
+    }
+}
+
+function syncAllWatAnswersBeforeSubmit() {
+    return true;
+}
+
+// ===== จำนวนพระ -> จำนวนชุดสังฆทาน / ปิ่นโต =====
+function applyPackageMonkCount(radio) {
+    var input = document.getElementById('monkCountField');
+    if (input && radio.dataset.monkcount) {
+        input.value = radio.dataset.monkcount;
+    }
+    var monkVal = input ? parseInt(input.value, 10) : 5;
+    if (isNaN(monkVal)) monkVal = 5;
+
+    var qtyInput = document.getElementById('sanghatanQtyInput');
+    if (qtyInput && qtyInput.dataset.userEdited !== 'true') {
+        qtyInput.value = monkVal;
+    }
+    var pintoInput = document.getElementById('pintoQtyInput');
+    if (pintoInput && pintoInput.dataset.userEdited !== 'true') {
+        pintoInput.value = monkVal + 2;
+    }
+}
+
+function onMonkCountInputChange(value) {
+    var sQty = document.getElementById('sanghatanQtyInput');
+    if (sQty && sQty.dataset.userEdited !== 'true') {
+        sQty.value = value;
+    }
+    var pintoInput = document.getElementById('pintoQtyInput');
+    if (pintoInput && pintoInput.dataset.userEdited !== 'true') {
+        var v = parseInt(value, 10);
+        pintoInput.value = isNaN(v) ? '' : (v + 2);
+    }
+}
+
+// ===== เตรียมข้อมูลก่อนส่งฟอร์ม =====
+function isInHiddenBranch(el) {
+    var node = el.parentElement;
+    while (node && node !== document.body) {
+        if (node.style && node.style.display === 'none') return true;
+        node = node.parentElement;
+    }
+    return false;
+}
+
+function cleanupAndRenumberDetailsBeforeSubmit() {
+    var form = document.querySelector('form');
+
+    form.querySelectorAll('input, select, textarea').forEach(function(el) {
+        if (isInHiddenBranch(el)) el.disabled = true;
+    });
+
+    var monkCountField = document.getElementById('monkCountField');
+    var monkCountQId = document.getElementById('monkCountQuestionIdField');
+    if (monkCountField) monkCountField.disabled = false;
+    if (monkCountQId) monkCountQId.disabled = false;
+
+    var pattern = /^details\[(\d+)\]\.(answer|question\.questionsId)$/;
+    var order = [];
+    var seen = {};
+    form.querySelectorAll('input:not([disabled]), select:not([disabled]), textarea:not([disabled])').forEach(function(el) {
+        var m = el.name && el.name.match(pattern);
+        if (m && !seen[m[1]]) { seen[m[1]] = true; order.push(m[1]); }
+    });
+    var remap = {};
+    order.forEach(function(oldIdx, i) { remap[oldIdx] = i; });
+    form.querySelectorAll('input:not([disabled]), select:not([disabled]), textarea:not([disabled])').forEach(function(el) {
+        var m = el.name && el.name.match(pattern);
+        if (m) el.name = 'details[' + remap[m[1]] + '].' + m[2];
+    });
+
+    return true;
+}
+
+// ===== ตรวจสอบฟอร์มตอนกดบันทึก =====
+function showError(element, message) {
+    if (element.nextElementSibling && element.nextElementSibling.classList.contains('custom-error-msg')) {
+        element.nextElementSibling.remove();
+    }
+    
+    var err = document.createElement('div');
+    err.className = 'custom-error-msg';
+    err.style.color = 'red';
+    err.style.fontSize = '11px';
+    err.style.marginTop = '4px';
+    err.innerText = message;
+    
+    if(element.nextSibling) {
+        element.parentNode.insertBefore(err, element.nextSibling);
+    } else {
+        element.parentNode.appendChild(err);
+    }
+    
+    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
+        element.style.borderColor = 'red';
+        element.classList.add('validation-failed');
+        
+        var removeError = function() {
+            element.style.borderColor = '';
+            element.classList.remove('validation-failed');
+            if (err.parentNode) err.parentNode.removeChild(err);
+        };
+        element.addEventListener('input', removeError, {once: true});
+        element.addEventListener('change', removeError, {once: true});
+    }
+}
+
+function handleFormSubmit(form) {
+    document.querySelectorAll('.custom-error-msg').forEach(function(e) { e.remove(); });
+    form.querySelectorAll('.validation-failed').forEach(function(el) { el.style.borderColor = ''; el.classList.remove('validation-failed'); });
+
+    let isValid = true;
+    let firstErrorElement = null;
+
+    function markError(el, msg) {
+        showError(el, msg);
+        isValid = false;
+        if (!firstErrorElement) firstErrorElement = el;
+    }
+
+    var eventDateVal = document.getElementById('eventDateInput').value;
+    if (!eventDateVal) {
+        markError(document.getElementById('datePickerWrap'), 'กรุณาเลือกวันที่จัดงานจากปฏิทิน');
+    }
+
+    form.querySelectorAll('input[required], textarea[required], select[required]').forEach(function(el) {
+        if (!isInHiddenBranch(el)) {
+            if (!el.value.trim()) {
+                markError(el, 'กรุณากรอกข้อมูลในช่องนี้ให้ครบถ้วน');
+            }
+        }
+    });
+
+    form.querySelectorAll('input[type="number"]').forEach(function(el) {
+        if (!isInHiddenBranch(el) && el.value !== '') {
+            if (parseFloat(el.value) <= 0) {
+                markError(el, 'จำนวนต้องมากกว่า 0 และห้ามติดลบ');
+            }
+        }
+    });
+
+    var lat = document.getElementById('eventLat').value;
+    if (!lat || lat === "") {
+        markError(document.getElementById('locationMap'), 'กรุณาปักหมุดตำแหน่งที่จัดงานบนแผนที่');
+    }
+
+    var imgCount = document.querySelectorAll('#base64Container input').length;
+    if (imgCount === 0) {
+        markError(document.getElementById('imagePreviewBox'), 'กรุณาอัปโหลดรูปภาพสถานที่จัดงานอย่างน้อย 1 รูป');
+    }
+
+    if (!isValid) {
+        if (firstErrorElement) {
+            firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return false;
+    }
+
+    syncAllWatAnswersBeforeSubmit();
+    cleanupAndRenumberDetailsBeforeSubmit();
+
+    return true;
+}
+
+// ===== ตอนโหลดหน้า / กลับมาที่หน้านี้ (back-forward cache) =====
+// รัน onchange ของ radio ที่ติ๊กอยู่แล้ว เพื่อให้การแสดง/ซ่อนส่วนต่างๆ ตรงกับค่าที่เลือกไว้
+function syncInitialToggleStates() {
+    document.querySelectorAll('input[type="radio"]:checked').forEach(function(radio) {
+        if (isInHiddenBranch(radio)) return;
+        var code = radio.getAttribute('onchange');
+        if (code) {
+            try { new Function(code).call(radio); } catch (e) {}
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    syncInitialToggleStates();
+    
+    document.querySelectorAll('input[type="number"]').forEach(function(inp) {
+        inp.addEventListener('input', function() {
+            if (this.value !== '') {
+                var val = parseFloat(this.value);
+                if (val <= 0) {
+                    this.value = '';
+                }
+            }
+        });
+    });
+});
+window.addEventListener('pageshow', syncInitialToggleStates);
 
 /* ===== ปักหมุดตำแหน่งที่จัดงาน (Leaflet + OpenStreetMap) ===== */
 var locationMap, locationMarker;
@@ -467,7 +827,7 @@ function useCurrentLocationOnMap() {
     navigator.geolocation.getCurrentPosition(function(pos) {
         setMapPin(pos.coords.latitude, pos.coords.longitude);
     }, function() {
-        alert('ไม่สามารถเข้าถึงตำแหน่งปัจจุบันได้ กรุณาปักหมุดบนแผนที่เอง');
+        alert('ไม่สามารถเข้าถึงตำแหน่งปัจจุบันได้ กรุณาปักหมุดเองบนแผนที่');
     });
 }
 
