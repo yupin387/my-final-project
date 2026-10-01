@@ -217,6 +217,7 @@ public class BookingFormController {
 			result.add(m);
 		}
 		return result;
+		
 	}
 
 	// บันทึกการจองที่สมาชิกกรอกมา: ผูกพิธีและสมาชิกเจ้าของ, แปลงรูปที่อยู่จาก
