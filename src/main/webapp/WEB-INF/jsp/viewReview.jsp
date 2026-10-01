@@ -34,12 +34,13 @@
                 </div>
             </div>
 
-            <div class="nav-dropdown">
-                <button type="button" class="nav-item nav-dropdown-toggle">ปฏิทิน <span class="caret">▾</span></button>
-                <div class="nav-dropdown-menu">
-                    <a href="${pageContext.request.contextPath}/calendar">ปฏิทินคิวงาน</a>
-                </div>
-            </div>
+       <div class="nav-dropdown">
+    <button type="button" class="nav-item nav-dropdown-toggle">ปฏิทิน <span class="caret">▾</span></button>
+    <div class="nav-dropdown-menu">
+        <a href="${pageContext.request.contextPath}/calendar#calendarSection">ปฏิทิน (ฤกษ์ดี)</a>
+        <a href="${pageContext.request.contextPath}/calendar#lannaCalendarSection">ปฏิทิน (ล้านนา)</a>
+    </div>
+</div>
 
             <c:if test="${not empty sessionScope.user}">
                <a href="${pageContext.request.contextPath}/myBookings" class="nav-item">รายการจอง</a>

@@ -428,7 +428,7 @@ public class BookingFormController {
 
 		model.addAttribute("bookings", bookings);
 		model.addAttribute("reviewedBookingIds", reviewedBookingIds);
-		model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
+		model.addAttribute("packageTypes", buildCeremonyTypesForFooter());
 
 		return "myBookingList";
 	}

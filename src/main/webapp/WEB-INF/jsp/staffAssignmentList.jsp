@@ -69,7 +69,7 @@
                     กำลังดำเนินการ <span class="tab-count">${fn:length(activeAssignments)}</span>
                 </button>
                 <button type="button" class="tab-attached-btn" data-tab="history" onclick="switchTab('history')">
-                    ประวัติการจอง <span class="tab-count">${fn:length(completedAssignments)}</span>
+                    ประวัติงานที่เคยได้รับมอบหมาย <span class="tab-count">${fn:length(completedAssignments)}</span>
                 </button>
             </div>
 

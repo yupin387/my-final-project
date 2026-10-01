@@ -25,4 +25,6 @@ public class ReviewService {
     public boolean hasAlreadyReviewed(String bookingId) {
         return reviewRepository.findByBookingForm_BookingId(bookingId) != null;
     }
+    
+    //---------------------------------------------
 }

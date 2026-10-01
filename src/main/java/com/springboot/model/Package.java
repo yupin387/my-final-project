@@ -12,9 +12,11 @@ public class Package {
     @Column(name = "packageid")
     private int packageId;
 
+    // 3 พิธี
     @Column(name = "packagetype", nullable = false, length = 100)
     private String packageType;
 
+    // 3 เเพกเกจ 1 ลูกค้ากรอกความต้องการเอง
     @Column(name = "optiontype", nullable = false, length = 100)
     private String optionType;
 

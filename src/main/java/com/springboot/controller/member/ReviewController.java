@@ -37,7 +37,6 @@ public class ReviewController {
     @Autowired
     private BookingService bookingService;
 
-
     @Autowired
     private PackageService packageService;
 
@@ -82,7 +81,7 @@ public class ReviewController {
                     savedFileNames.add(fileName);
                 }
             }
-            
+
             // ถ้าฐานข้อมูลเก็บเป็น string เดียวรวมกัน ให้ใช้เครื่องหมายจุลภาคคั่น เช่น "img1.jpg,img2.jpg"
             if (!savedFileNames.isEmpty()) {
                 review.setReviewImage(String.join(",", savedFileNames));
@@ -133,9 +132,9 @@ public class ReviewController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("avgRating", avg);
         model.addAttribute("starCounts", starCounts);
-        model.addAttribute("selectedCeremonyId", ceremonyId);
+        model.addAttribute("selectedPackageId", ceremonyId);   // ชื่อตรงกับที่ viewReview.jsp ใช้
         model.addAttribute("selectedRating", rating);
-        model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
+        model.addAttribute("packageTypes", buildCeremonyTypesForFooter());   // ชื่อตรงกับที่ viewReview.jsp ใช้
 
         return "viewReview";
     }
@@ -190,14 +189,14 @@ public class ReviewController {
         Map<Long, Long> starCounts = reviewsForStats.stream()
                 .collect(Collectors.groupingBy(r -> Math.round(r.getRating()), Collectors.counting()));
 
-        model.addAttribute("reviews", pagedReviews); 
+        model.addAttribute("reviews", pagedReviews);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("avgRating", avg);
         model.addAttribute("starCounts", starCounts);
-        model.addAttribute("selectedCeremonyType", type);
+        model.addAttribute("selectedPackageType", type);   
         model.addAttribute("selectedRating", rating);
-        model.addAttribute("ceremonyTypes", buildCeremonyTypesForFooter());
+        model.addAttribute("packageTypes", buildCeremonyTypesForFooter());   
 
         return "viewReview";
     }
@@ -225,5 +224,4 @@ public class ReviewController {
         return result;
     }
 
-  
 }

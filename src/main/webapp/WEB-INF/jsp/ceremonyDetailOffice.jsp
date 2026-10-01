@@ -37,7 +37,7 @@
 				</a>
 				<div class="nav-dropdown-panel">
 					<c:forEach var="t" items="${ceremonyTypes}">
-						
+						<a
 							href="${pageContext.request.contextPath}/ceremony/detail/${t.representativeId}"
 							class="nav-dropdown-link">${t.mainName}</a>
 					</c:forEach>
@@ -51,11 +51,11 @@
 					class="nav-caret">▾</span>
 				</a>
 				<div class="nav-dropdown-panel">
-
-					href="${pageContext.request.contextPath}/calendar#calendarSection"
-					class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a>
-					href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
-					class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
+					<a
+						href="${pageContext.request.contextPath}/calendar#calendarSection"
+						class="nav-dropdown-link">ปฏิทิน (ฤกษ์ดี)</a> <a
+						href="${pageContext.request.contextPath}/calendar#lannaCalendarSection"
+						class="nav-dropdown-link">ปฏิทิน (ล้านนา)</a>
 				</div>
 			</div>
 
@@ -83,9 +83,9 @@
 					</div>
 					<div class="dropdown-menu-custom" id="dropdownMenu">
 						<a href="${pageContext.request.contextPath}/editProfile"
-							class="dropdown-link">โปรไฟล์ของฉัน</a>
-						href="${pageContext.request.contextPath}/logout"
-						class="dropdown-link danger">ออกจากระบบ</a>
+							class="dropdown-link">โปรไฟล์ของฉัน</a> <a
+							href="${pageContext.request.contextPath}/logout"
+							class="dropdown-link danger">ออกจากระบบ</a>
 					</div>
 				</div>
 			</c:when>
@@ -287,9 +287,9 @@
 								ดูรายละเอียดแพ็กเกจนี้ ▾</button>
 
 							<%-- ปุ่มจอง — ✅ แก้ไข: ceremonyId -> packageId --%>
-
-							href="${pageContext.request.contextPath}/booking3?packageId=${p.packageId}"
-							class="cd-btn-select-package">เลือกจองแพ็กเกจนี้</a>
+							<a
+								href="${pageContext.request.contextPath}/booking3?packageId=${p.packageId}"
+								class="cd-btn-select-package">เลือกจองแพ็กเกจนี้</a>
 
 							<c:set var="imageIndex" value="${imageIndex + 1}" />
 						</div>
@@ -345,9 +345,9 @@
 				<span>ไม่อยากเลือกแพ็กเกจสำเร็จรูป? กรอกรายละเอียดเองได้</span>
 			</div>
 			<%-- ✅ แก้ไข: ceremony.ceremonyId -> ceremony.packageId --%>
-
-			href="${pageContext.request.contextPath}/booking3?packageId=${ceremony.packageId}&custom=true"
-			class="cd-btn-book">จองเเบบระบุเอง (ทำบุญบริษัท)</a>
+			<a
+				href="${pageContext.request.contextPath}/booking3?packageId=${ceremony.packageId}&custom=true"
+				class="cd-btn-book">จองเเบบระบุเอง (ทำบุญบริษัท)</a>
 		</div>
 	</div>
 

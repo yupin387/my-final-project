@@ -7,8 +7,8 @@
     <version>3.4.5</version>
   </parent>
   
-  <groupId>ceremony_yy</groupId>
-  <artifactId>ceremony_yy</artifactId>
+  <groupId>ceremonySystem</groupId>
+  <artifactId>ceremonySystem</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <build>

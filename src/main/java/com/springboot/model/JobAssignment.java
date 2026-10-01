@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "staffassignment")
+@Table(name = "jobassignment")
 public class JobAssignment {
 	@Id
 	@Column(name = "assignid", length = 50)
